@@ -1,0 +1,13 @@
+<help>
+Nick Protection allows registered players to protect their nick from being taken by other players.
+
+You have to be logged in GreenCoins to use any of the commands. If you are, you can protect up to 3 nicks. If you already have protected too much nicks, but want to protect a new one, you may /unlocknick one.
+
+If a player joins with a protected nick, he will be asked to change it or login (if he is the one who is authorized to use it) within 60 seconds. After that, if the player is still using the nick without authorization, he will be kicked. 
+
+Commands:
+
+/locknick		- Protects the nick you currently have.
+/unlocknick		- Unprotects the nick you currently have. This nick will then be free for use and also protecting by other players.
+
+</help>

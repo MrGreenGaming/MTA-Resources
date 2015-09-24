@@ -1,0 +1,23 @@
+<settings>
+	<!-- example:
+		<server
+			host="81.171.82.30"
+			nick="nickname"
+			channels="#channel1,#channel2 password" put ',' between channels and ' ' between a channel & a password first channel is the echochannel
+			port="6667" (optional default: 6667)
+			password="server password" (optional)
+			secure="false" (optional default: false)
+			
+			nickservpass="password" if your nick is registered on the nickserver put it here (optional)
+		/>
+		add as many servers as you want
+	-->
+	
+		<server
+			host="maple.nl.eu.gtanet.com"
+			nick="MrGreenMTA"
+			channels="#mrgreen.race,#mrgreen,#mrgreen.mta"
+			port="6667"
+			nickservpass="poeppoep"
+		/>
+</settings>

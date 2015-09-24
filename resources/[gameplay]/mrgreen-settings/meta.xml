@@ -1,0 +1,276 @@
+<meta>
+	<!-- Include Resources -->
+    <include resource="fonts"/>
+    <include resource="race"/>
+	<include resource="gc"/>
+	<include resource="fps"/>
+	<include resource="speed-o-meter"/>
+	<include resource="race_sphud"/>
+	<include resource="messages"/>
+	<include resource="gus"/>
+	<include resource="race_delay_indicator"/>
+	<include resource="race_traffic_sensor"/>
+	<include resource="race_rank"/>
+	<include resource="race_progress"/>
+
+    <!-- Include Shader Resources, all prefixed by -shaders- -->
+    <include resource="-shaders-bloom_fix"/>
+    <include resource="-shaders-car_paint_fix"/>
+    <include resource="-shaders-car_paint_reflect"/>
+    <include resource="-shaders-contrast"/>
+    <include resource="-shaders-depth_of_field"/>
+    <include resource="-shaders-dynamic_sky"/>
+    <include resource="-shaders-nitro"/>
+    <include resource="-shaders-palette"/>
+    <include resource="-shaders-radial_blur"/>
+    <include resource="-shaders-SkyBox_ALT"/>
+    <include resource="-shaders-watershine"/>
+
+	<!-- Images -->
+	
+	<file src="img/dot_white.png"></file>
+    <file src="img/sprite.png"></file>
+
+	<!--Scripts -->
+	<script src="gui.lua" type="client" />
+    <script src="visual.lua" type="client" />
+    <script src="sound.lua" type="client" />
+    
+    <script src="userinterface.lua" type="client" />
+    <script src="s_userinterface.lua" type="server" />
+
+    <script src="social.lua" type="client" />
+    <script src="s_social.lua" type="server" />
+
+    
+    <!-- tooltip script by "Aibo" -->
+    <script src="tooltips.lua" type="client" />
+
+
+    <!-- Color Picker -->
+    <script src="cpicker/picker_client.lua" type="client" />
+    <file src="cpicker/cursor.png" />
+    <file src="cpicker/h.png" />
+    <file src="cpicker/sv.png" />
+    <file src="cpicker/blank.png" />
+
+    <!-- Shaders -->
+
+
+
+
+        <!-- Roadshine -->
+<!--     <script src="shaderstuff/roadshine/c_roadshine3.lua" type="client" />
+    <file src="shaderstuff/roadshine/roadshine3.fx" type="client" />
+    <file src="shaderstuff/roadshine/mta-helper.fx" type="client" /> -->
+
+
+
+
+
+
+
+	<!-- Radar shader -->
+	<script src="radar.lua" type="client" />
+	<file src="data/texreplace.fx" type="client" />
+	<file src="sattelite/sattelite_0_0.jpeg"/>
+    <file src="sattelite/sattelite_0_1.jpeg"/>
+    <file src="sattelite/sattelite_0_2.jpeg"/>
+    <file src="sattelite/sattelite_0_3.jpeg"/>
+    <file src="sattelite/sattelite_0_4.jpeg"/>
+    <file src="sattelite/sattelite_0_5.jpeg"/>
+    <file src="sattelite/sattelite_0_6.jpeg"/>
+    <file src="sattelite/sattelite_0_7.jpeg"/>
+    <file src="sattelite/sattelite_0_8.jpeg"/>
+    <file src="sattelite/sattelite_0_9.jpeg"/>
+    <file src="sattelite/sattelite_0_10.jpeg"/>
+    <file src="sattelite/sattelite_0_11.jpeg"/>
+    <file src="sattelite/sattelite_1_0.jpeg"/>
+    <file src="sattelite/sattelite_1_1.jpeg"/>
+    <file src="sattelite/sattelite_1_2.jpeg"/>
+    <file src="sattelite/sattelite_1_3.jpeg"/>
+    <file src="sattelite/sattelite_1_4.jpeg"/>
+    <file src="sattelite/sattelite_1_5.jpeg"/>
+    <file src="sattelite/sattelite_1_6.jpeg"/>
+    <file src="sattelite/sattelite_1_7.jpeg"/>
+    <file src="sattelite/sattelite_1_8.jpeg"/>
+    <file src="sattelite/sattelite_1_9.jpeg"/>
+    <file src="sattelite/sattelite_1_10.jpeg"/>
+    <file src="sattelite/sattelite_1_11.jpeg"/>
+    <file src="sattelite/sattelite_2_0.jpeg"/>
+    <file src="sattelite/sattelite_2_1.jpeg"/>
+    <file src="sattelite/sattelite_2_2.jpeg"/>
+    <file src="sattelite/sattelite_2_3.jpeg"/>
+    <file src="sattelite/sattelite_2_4.jpeg"/>
+    <file src="sattelite/sattelite_2_5.jpeg"/>
+    <file src="sattelite/sattelite_2_6.jpeg"/>
+    <file src="sattelite/sattelite_2_7.jpeg"/>
+    <file src="sattelite/sattelite_2_8.jpeg"/>
+    <file src="sattelite/sattelite_2_9.jpeg"/>
+    <file src="sattelite/sattelite_2_10.jpeg"/>
+    <file src="sattelite/sattelite_2_11.jpeg"/>
+    <file src="sattelite/sattelite_3_0.jpeg"/>
+    <file src="sattelite/sattelite_3_1.jpeg"/>
+    <file src="sattelite/sattelite_3_2.jpeg"/>
+    <file src="sattelite/sattelite_3_3.jpeg"/>
+    <file src="sattelite/sattelite_3_4.jpeg"/>
+    <file src="sattelite/sattelite_3_5.jpeg"/>
+    <file src="sattelite/sattelite_3_6.jpeg"/>
+    <file src="sattelite/sattelite_3_7.jpeg"/>
+    <file src="sattelite/sattelite_3_8.jpeg"/>
+    <file src="sattelite/sattelite_3_9.jpeg"/>
+    <file src="sattelite/sattelite_3_10.jpeg"/>
+    <file src="sattelite/sattelite_3_11.jpeg"/>
+    <file src="sattelite/sattelite_4_0.jpeg"/>
+    <file src="sattelite/sattelite_4_1.jpeg"/>
+    <file src="sattelite/sattelite_4_2.jpeg"/>
+    <file src="sattelite/sattelite_4_3.jpeg"/>
+    <file src="sattelite/sattelite_4_4.jpeg"/>
+    <file src="sattelite/sattelite_4_5.jpeg"/>
+    <file src="sattelite/sattelite_4_6.jpeg"/>
+    <file src="sattelite/sattelite_4_7.jpeg"/>
+    <file src="sattelite/sattelite_4_8.jpeg"/>
+    <file src="sattelite/sattelite_4_9.jpeg"/>
+    <file src="sattelite/sattelite_4_10.jpeg"/>
+    <file src="sattelite/sattelite_4_11.jpeg"/>
+    <file src="sattelite/sattelite_5_0.jpeg"/>
+    <file src="sattelite/sattelite_5_1.jpeg"/>
+    <file src="sattelite/sattelite_5_2.jpeg"/>
+    <file src="sattelite/sattelite_5_3.jpeg"/>
+    <file src="sattelite/sattelite_5_4.jpeg"/>
+    <file src="sattelite/sattelite_5_5.jpeg"/>
+    <file src="sattelite/sattelite_5_6.jpeg"/>
+    <file src="sattelite/sattelite_5_7.jpeg"/>
+    <file src="sattelite/sattelite_5_8.jpeg"/>
+    <file src="sattelite/sattelite_5_9.jpeg"/>
+    <file src="sattelite/sattelite_5_10.jpeg"/>
+    <file src="sattelite/sattelite_5_11.jpeg"/>
+    <file src="sattelite/sattelite_6_0.jpeg"/>
+    <file src="sattelite/sattelite_6_1.jpeg"/>
+    <file src="sattelite/sattelite_6_2.jpeg"/>
+    <file src="sattelite/sattelite_6_3.jpeg"/>
+    <file src="sattelite/sattelite_6_4.jpeg"/>
+    <file src="sattelite/sattelite_6_5.jpeg"/>
+    <file src="sattelite/sattelite_6_6.jpeg"/>
+    <file src="sattelite/sattelite_6_7.jpeg"/>
+    <file src="sattelite/sattelite_6_8.jpeg"/>
+    <file src="sattelite/sattelite_6_9.jpeg"/>
+    <file src="sattelite/sattelite_6_10.jpeg"/>
+    <file src="sattelite/sattelite_6_11.jpeg"/>
+    <file src="sattelite/sattelite_7_0.jpeg"/>
+    <file src="sattelite/sattelite_7_1.jpeg"/>
+    <file src="sattelite/sattelite_7_2.jpeg"/>
+    <file src="sattelite/sattelite_7_3.jpeg"/>
+    <file src="sattelite/sattelite_7_4.jpeg"/>
+    <file src="sattelite/sattelite_7_5.jpeg"/>
+    <file src="sattelite/sattelite_7_6.jpeg"/>
+    <file src="sattelite/sattelite_7_7.jpeg"/>
+    <file src="sattelite/sattelite_7_8.jpeg"/>
+    <file src="sattelite/sattelite_7_9.jpeg"/>
+    <file src="sattelite/sattelite_7_10.jpeg"/>
+    <file src="sattelite/sattelite_7_11.jpeg"/>
+    <file src="sattelite/sattelite_8_0.jpeg"/>
+    <file src="sattelite/sattelite_8_1.jpeg"/>
+    <file src="sattelite/sattelite_8_2.jpeg"/>
+    <file src="sattelite/sattelite_8_3.jpeg"/>
+    <file src="sattelite/sattelite_8_4.jpeg"/>
+    <file src="sattelite/sattelite_8_5.jpeg"/>
+    <file src="sattelite/sattelite_8_6.jpeg"/>
+    <file src="sattelite/sattelite_8_7.jpeg"/>
+    <file src="sattelite/sattelite_8_8.jpeg"/>
+    <file src="sattelite/sattelite_8_9.jpeg"/>
+    <file src="sattelite/sattelite_8_10.jpeg"/>
+    <file src="sattelite/sattelite_8_11.jpeg"/>
+    <file src="sattelite/sattelite_9_0.jpeg"/>
+    <file src="sattelite/sattelite_9_1.jpeg"/>
+    <file src="sattelite/sattelite_9_2.jpeg"/>
+    <file src="sattelite/sattelite_9_3.jpeg"/>
+    <file src="sattelite/sattelite_9_4.jpeg"/>
+    <file src="sattelite/sattelite_9_5.jpeg"/>
+    <file src="sattelite/sattelite_9_6.jpeg"/>
+    <file src="sattelite/sattelite_9_7.jpeg"/>
+    <file src="sattelite/sattelite_9_8.jpeg"/>
+    <file src="sattelite/sattelite_9_9.jpeg"/>
+    <file src="sattelite/sattelite_9_10.jpeg"/>
+    <file src="sattelite/sattelite_9_11.jpeg"/>
+    <file src="sattelite/sattelite_10_0.jpeg"/>
+    <file src="sattelite/sattelite_10_1.jpeg"/>
+    <file src="sattelite/sattelite_10_2.jpeg"/>
+    <file src="sattelite/sattelite_10_3.jpeg"/>
+    <file src="sattelite/sattelite_10_4.jpeg"/>
+    <file src="sattelite/sattelite_10_5.jpeg"/>
+    <file src="sattelite/sattelite_10_6.jpeg"/>
+    <file src="sattelite/sattelite_10_7.jpeg"/>
+    <file src="sattelite/sattelite_10_8.jpeg"/>
+    <file src="sattelite/sattelite_10_9.jpeg"/>
+    <file src="sattelite/sattelite_10_10.jpeg"/>
+    <file src="sattelite/sattelite_10_11.jpeg"/>
+    <file src="sattelite/sattelite_11_0.jpeg"/>
+    <file src="sattelite/sattelite_11_1.jpeg"/>
+    <file src="sattelite/sattelite_11_2.jpeg"/>
+    <file src="sattelite/sattelite_11_3.jpeg"/>
+    <file src="sattelite/sattelite_11_4.jpeg"/>
+    <file src="sattelite/sattelite_11_5.jpeg"/>
+    <file src="sattelite/sattelite_11_6.jpeg"/>
+    <file src="sattelite/sattelite_11_7.jpeg"/>
+    <file src="sattelite/sattelite_11_8.jpeg"/>
+    <file src="sattelite/sattelite_11_9.jpeg"/>
+    <file src="sattelite/sattelite_11_10.jpeg"/>
+    <file src="sattelite/sattelite_11_11.jpeg"/>
+
+    <!-- Chrome wheels added by KaliBwoy -->
+    <script src="chromewheels.lua" type="client" />
+	<file src="wheels/chrome/wheel_gn1.dff" />
+	<file src="wheels/chrome/wheel_gn2.dff" />
+	<file src="wheels/chrome/wheel_gn3.dff" />
+	<file src="wheels/chrome/wheel_gn4.dff" />
+	<file src="wheels/chrome/wheel_gn5.dff" />
+	<file src="wheels/chrome/wheel_lr1.dff" />
+	<file src="wheels/chrome/wheel_lr2.dff" />
+	<file src="wheels/chrome/wheel_lr3.dff" />
+	<file src="wheels/chrome/wheel_lr4.dff" />
+	<file src="wheels/chrome/wheel_lr5.dff" />
+	<file src="wheels/chrome/wheel_or1.dff" />
+	<file src="wheels/chrome/wheel_sr1.dff" />
+	<file src="wheels/chrome/wheel_sr2.dff" />
+	<file src="wheels/chrome/wheel_sr3.dff" />
+	<file src="wheels/chrome/wheel_sr4.dff" />
+	<file src="wheels/chrome/wheel_sr5.dff" />
+	<file src="wheels/chrome/wheel_sr6.dff" />
+
+    <!-- BT wheels added by KaliBwoy -->
+    <script src="btwheel.lua" type="client" />
+    <file src="wheels/bt/j2_wheels.txd" />
+    <file src="wheels/bt/wheel_gn1.dff" />
+    <file src="wheels/bt/wheel_gn2.dff" />
+    <file src="wheels/bt/wheel_gn3.dff" />
+    <file src="wheels/bt/wheel_gn4.dff" />
+    <file src="wheels/bt/wheel_gn5.dff" />
+    <file src="wheels/bt/wheel_lr1.dff" />
+    <file src="wheels/bt/wheel_lr2.dff" />
+    <file src="wheels/bt/wheel_lr3.dff" />
+    <file src="wheels/bt/wheel_lr4.dff" />
+    <file src="wheels/bt/wheel_lr5.dff" />
+    <file src="wheels/bt/wheel_or1.dff" />
+    <file src="wheels/bt/wheel_sr1.dff" />
+    <file src="wheels/bt/wheel_sr2.dff" />
+    <file src="wheels/bt/wheel_sr3.dff" />
+    <file src="wheels/bt/wheel_sr4.dff" />
+    <file src="wheels/bt/wheel_sr5.dff" />
+    <file src="wheels/bt/wheel_sr6.dff" />
+
+    <!-- Exports -->
+    <export function="isPlayerIgnoredPM" type="client" />
+
+
+
+
+    
+</meta>
+    
+    <info name="MrGreen Settings" author="KaliBwoy" version="1.0.1" description="A central place to set all settings"></info>
+    <settings>
+    </settings>
+</meta>
+
+

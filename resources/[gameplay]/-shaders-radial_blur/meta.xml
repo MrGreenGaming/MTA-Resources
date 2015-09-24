@@ -1,0 +1,15 @@
+<meta>
+	<info description="Shader - Radial blur" version="0.0.3" author="ccw" type="script" />
+	<min_mta_version client="1.3.0" server="1.3.0" />
+
+	<script src="s_radial_blur.lua" type="server" />
+
+	<script src="matrix/complex.lua" type="client" />
+	<script src="matrix/matrix.lua" type="client" />
+	<script src="c_radial_blur.lua" type="client" />
+	<script src="c_switch.lua" type="client" />
+
+	<file src="fx/radial_blur.fx" type="client" />
+	<file src="fx/mta-helper.fx" type="client" />
+	<file src="images/radial_mask.tga" type="client" />
+</meta>

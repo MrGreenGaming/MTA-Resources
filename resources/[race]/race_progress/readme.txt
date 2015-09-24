@@ -1,0 +1,1 @@
+To install the Race Progress Bar, just put it into your resources folder. You may change the defaultSettings.lua file if you want to change the default settings.

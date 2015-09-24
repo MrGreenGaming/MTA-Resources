@@ -1,0 +1,19 @@
+<meta>
+    <file src="oil.txd"></file>
+    <file src="pics/effect.png"></file>
+    <file src="pics/barrel.png"></file>
+    <file src="pics/hay.png"></file>
+    <file src="pics/magnet.png"></file>
+    <file src="pics/repair.png"></file>
+    <file src="pics/rocket.png"></file>
+    <file src="pics/speedboost.png"></file>
+    <file src="pics/spikes.png"></file>
+    <file src="pics/oil.png"></file>
+	
+    <script src="client.lua" type="client"></script>
+    <script src="server.lua" type="server"></script>
+    <script src="utilites_s.lua" type="server"></script>
+	<script src="utilites_c.lua" type="client"></script>
+
+<info author="AleksCore" name="Core Markers" description="Pickups with random power-ups by AleksCore" version="0.4" type="script" />
+</meta>

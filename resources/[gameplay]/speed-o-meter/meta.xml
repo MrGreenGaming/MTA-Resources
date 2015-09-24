@@ -1,0 +1,9 @@
+<meta>
+	<info name="speed-o-meter" description="Show speed of players" author="BinSlayer" type="script" version="1.0"  />
+	<script src="script.lua" type="client" />
+	<config src="help.xml" type="client" />
+	 <!-- Exports for settings resource  KaliBwoy -->
+    <export function="setKMH" type="client"/>
+    <export function="setMPH" type="client"/>
+    <export function="setNone" type="client"/>
+</meta>

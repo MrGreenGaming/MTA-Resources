@@ -1,0 +1,9 @@
+<meta>		
+	<info name="MrGreenGaming Welcome/Help/Settings Menu" author="warp., SDK, KaliBwoy" version="0.0.1" />
+	<script src="helpmenu_s.lua" type="server" />	
+	<script src="helpmenu.lua" type="client" />	
+	
+	<file src="img/logo.png" />
+	<file src="commands.txt"/>
+	<include resource="mrgreen-settings" />
+</meta>

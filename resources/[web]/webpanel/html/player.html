@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script type="text/javascript" src="/webpanel/html/includes/ajax.js"></script>
+		<script type="text/javascript" src="/webpanel/html/includes/json.js"></script>
+		<script type="text/javascript" src="/webpanel/html/includes/functions.js"></script>
+		<link rel="stylesheet" type="text/css" href="/webpanel/html/includes/main.css" />
+		<title>Player management</title>
+		<script type='text/javascript'>
+			function updatePlr() {
+				document.getElementById("loadingimg").style.display = "block";
+				document.getElementById("refreshb").disabled = "disabled";
+				
+				getAllPlayers (
+					function ( players ) {
+						var playerElement = document.getElementById ( "plr" );
+						playerElement.innerHTML = "";
+						
+						if ( typeof ( players ) == "undefined") {
+							var childrentd = document.createElement("td");
+							childrentd.innerHTML = "There aren't any players.";
+							childrentd.setAttribute("colspan", "7");
+
+							var children = document.createElement("tr");
+							children.appendChild(childrentd);
+							
+							playerElement.appendChild(children);
+							document.getElementById("loadingimg").style.display = "none";
+							document.getElementById("refreshb").disabled = "";
+							return;
+						}
+					
+						playerElement.innerHTML = players;
+						
+						document.getElementById("loadingimg").style.display = "none";
+						document.getElementById("refreshb").disabled = "";
+					}
+				);
+			}
+
+			function confrmPlayers() {
+				var kicks = "";
+				var bans = "";
+				
+				var j = 0;
+				while ( true ) {
+					if ( document.getElementById("player_" + j + "_ban") == null ) {
+						break;
+					} else {
+						if (document.getElementById("player_"+ j + "_kick").checked) {
+							if (kicks == "") { kicks = document.getElementById("player_"+ j + "_kick").value; }
+							else { kicks = kicks + ", " + document.getElementById("player_"+ j + "_kick").value; }
+						}
+						if (document.getElementById("player_"+ j + "_ban").checked) {
+							if (bans == "") { bans = document.getElementById("player_"+ j + "_ban").value; }
+							else { bans = bans + ", " + document.getElementById("player_"+ j + "_ban").value; }
+						}
+					}
+					j = j + 1;
+				}
+
+				if ( kicks == "" && bans == "" ) { return; }
+				var czyTak = confirm ( "Are you sure you want to kick (" + kicks + ") and ban (" + bans + ")?" );
+				if (czyTak) {
+					var reason = document.getElementById("reason").value;
+					
+					var i = 0;
+					while ( true ) {
+						if ( document.getElementById("player_" + i + "_ban") == null ) {
+							break;
+						} else {
+							if (document.getElementById("player_"+ i + "_kick").checked) {
+								kickPlr ( document.getElementById("player_"+ i + "_kick").value, reason, user, 
+									function ( returnv ) { 
+
+									}
+								);
+							}
+							if (document.getElementById("player_"+ i + "_ban").checked) {
+								banPlr ( document.getElementById("player_"+ i + "_ban").value, reason, user, 
+									function ( returnv ) { 
+
+									}
+								);
+							}
+						}
+						i = i + 1;
+					}
+					setTimeout("updatePlr ();",1500);
+				}
+			}
+		</script>
+	</head>
+	<body onload="updatePlr();">
+		<div id="toparea">This page show all players. <input id="refreshb" class="refresh" type="button" value="Refresh" onclick="updatePlr();" /> <input id="proceed" class="refresh" type="button" value="Proceed bans/kicks" onclick="confrmPlayers();" /><img id="loadingimg" src="/webpanel/html/images/loading.gif" style="display: none;" /></div>
+		<div id="contentarea">
+			<table>
+				<thead>
+					<tr>
+						<th>Nick</th>
+						<th>Account</th>
+						<th>IP</th>
+						<th>Serial</th>
+						<th>Kick</th>
+						<th>Ban</th>
+						<th>-</th>
+					</tr>
+					<tr>
+						<th colspan="7">Reason for kicks/bans: <input id="reason" value="" size="32" maxlength="48" type="text" />
+					</tr>
+				</thead>
+
+				<tbody id="plr">
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
+
+<*
+	if not ( hasObjectPermissionTo ( "user."..getAccountName ( user ), "general.webpanel_player", false ) ) then
+		httpClear()
+		httpWrite("<p>Your account does not have required permission.</p>")
+	end
+*>

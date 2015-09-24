@@ -1,0 +1,16 @@
+<meta>
+	<info name="Race Progress Bar" longname="Race Progress Bar" description="Progress Bar addon for Race (displays a bar with all player's race progress)" author="driver2" type="script" addon="race" version="1.1" />
+
+	<file src="corner.png" type="client" />
+	<script src="defaultSettings.lua" type="client" />
+	<script src="script.lua" type="server" />
+	<script src="var_dump.lua" type="client" />
+	<script src="Settings.lua" type="client" />
+	<script src="client_util.lua" type="client" />
+	<script src="Xml.lua" type="client" />
+	<script src="client.lua" type="client" />
+	
+	<config src="help.xml" type="client" />
+	<!-- Exports for settings resource  KaliBwoy -->
+    <export function="toggleGui" type="client"/>
+</meta>

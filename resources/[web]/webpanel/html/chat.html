@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script type="text/javascript" src="/webpanel/html/includes/ajax.js"></script>
+		<script type="text/javascript" src="/webpanel/html/includes/json.js"></script>
+		<script type="text/javascript" src="/webpanel/html/includes/functions.js"></script>
+		<link rel="stylesheet" type="text/css" href="/webpanel/html/includes/main.css" />
+		<title>Chat</title>
+		<script type='text/javascript'>
+			function updateChat() {
+				document.getElementById("loadingimg").style.display = "block";
+
+				getAll (
+					function ( msgs ) {
+						var msgElement = document.getElementById ( "msg" );
+						msgElement.innerHTML = "";
+						
+						if ( typeof ( msgs[0] ) == "undefined") {
+							var childrentd = document.createElement("td");
+							childrentd.innerHTML = "There aren't any messages.";
+							childrentd.setAttribute("colspan", "5");
+							
+							var children = document.createElement("tr");
+							children.appendChild(childrentd);
+							
+							msgElement.appendChild(children);
+							document.getElementById("loadingimg").style.display = "none";
+							return;
+						}
+						
+						msgs.reverse();
+						
+						var i = 0;
+						
+						while ( typeof ( msgs[i] ) == "string" ) {
+							msgElement.innerHTML = msgElement.innerHTML + msgs[i];
+							i++;
+						}
+						document.getElementById("loadingimg").style.display = "none";
+					}
+				);
+			}
+
+			function sendFunc () {
+				var msgElement = document.getElementById ( "message" );
+				var nickElement = document.getElementById ( "nick" );
+				
+				if ( nickElement.value == "Nick" ) {
+					alert ( "Type a nick!" );
+					return;
+				}
+				
+				if ( msgElement.value == "Message" ) {
+					alert ( "Type your message to send!" );
+					return;
+				}
+				
+				if ( nickElement.value != "" && msgElement.value != "" ) {
+					sendMessageToAllPlayers ( nickElement.value, msgElement.value, function ( returnval ) {});
+					msgElement.value = "";
+				} else {
+					alert ( "Type your message to send!" );
+				}
+				return;
+			}
+			
+			function onChatLoad () {
+				updateChat();
+				setInterval ( "updateChat();" , 2000 );
+				
+				var msgElement = document.getElementById ( "message" );
+			
+				msgElement.onfocus = function() {
+					if ( msgElement.getAttribute("value") == "Message" ) {
+						msgElement.setAttribute("value", "");
+					}
+				}
+				
+				msgElement.onblur = function() {
+					if ( msgElement.getAttribute("value") == '' ) {
+						msgElement.setAttribute("value", "Message");
+					}
+				}
+				
+				msgElement.onkeypress = function(event){
+					if (event.which == 13) sendFunc();
+				}
+				
+				var nickElement = document.getElementById ( "nick" );
+				
+				nickElement.onfocus = function() {
+					if ( nickElement.getAttribute("value") == "Nick" ) {
+						nickElement.setAttribute("value", "");
+					}
+				};
+				
+				nickElement.onblur = function() {
+					if ( nickElement.getAttribute("value") == '' ) {
+						nickElement.setAttribute("value", "Nick");
+					}
+				};
+			}
+		</script>
+	</head>
+	<body onload="onChatLoad();">
+		<div id="toparea">This page show players last actions.<img id="loadingimg" src="/webpanel/html/images/loading.gif" style="display: none;" /></div>
+		<div id="contentarea">
+			<table>
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Player nick</th>
+						<th>Team</th>
+						<th>Mode</th>
+						<th>Message</th>
+					</tr>
+					<tr>
+						<th colspan="5"><input id="nick" value="Nick" size="15" maxlength="15" type="text"/>&nbsp;<input id="message" value="Message" size="25" maxlength="70" type="text"/>&nbsp;<input id="send" value="Send" type="button" onclick="sendFunc()" /></th>
+					</tr>
+				</thead>
+				
+				<tbody id="msg">
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
+
+<*
+	if not ( hasObjectPermissionTo ( "user."..getAccountName ( user ), "general.webpanel_chat", false ) ) then
+		httpClear()
+		httpWrite("<p>Your account does not have required permission.</p>")
+	end
+*>

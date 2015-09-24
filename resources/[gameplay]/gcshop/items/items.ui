@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>itemsWidget</class>
+ <widget class="QWidget" name="itemsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>780</width>
+    <height>2000</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QScrollArea" name="scrollAreaItems">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>661</width>
+     <height>375</height>
+    </rect>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>659</width>
+      <height>373</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="labelTitle_1">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>200</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>1. Bike trials</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelInfo_1">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>481</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>This perk allows you to do stunts on your bike while airborn. You can do tricks by pressing 1-5 and do 360° turns in the air.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBuyPerk_1">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>10</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Price:
+1000 GC</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBuyPerk_2">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>120</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Price:
+1000 GC</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelInfo_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>481</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Respawn time will be limited to 1 second. 
+If you hit a checkpoint, it will be chosen as the respawn point much faster now (normally 5 seconds) but you will keep your health.
+Expires after 30 days</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelTitle_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>200</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>2. Faster respawn for 30 days</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBuyPerk_3">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>230</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Price:
+1000 GC</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelTitle_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>230</y>
+       <width>200</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>3. HP Regen for 30 days</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelInfo_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>250</y>
+       <width>481</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Regenerate your health. When damaged, this perk will automatically regenerate your health untill you're back at 100% again.
+
+Expires after 30 days</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelTitle_4">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>340</y>
+       <width>200</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>4. Custom paintjob</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBuyPerk_4">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>340</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Price:
+1000 GC</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelInfo_4">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>360</y>
+       <width>481</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Upload your own custom paintjob images for vehicles with paintjobs! You will be able to do this in the modshop tab. One custom paintjob can be set for all vehicles at the same time. You can buy this multiple times so you can add multiple paintjobs to use.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelTitle_5">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>450</y>
+       <width>200</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>5. Voice</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBuyPerk_5">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>450</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Price:
+1000 GC</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelInfo_5">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>470</y>
+       <width>481</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Put that mic to good use, this grants you the right to speak freely on the server.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBuyPerk_6">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>560</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Price:
+1000 GC</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelInfo_6">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>580</y>
+       <width>481</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>This perk will extend the burnup time of your vehicle with 50%.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelTitle_6">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>560</y>
+       <width>200</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>6. Longer burnup time</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBuyPerk_7">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>670</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Price:
+1000 GC</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelTitle_7">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>670</y>
+       <width>200</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>7. Extra long burnup time</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelInfo_7">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>690</y>
+       <width>481</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>This perk will extend the burnup time of your vehicle to a total of 100%.
+
+Requires perk 6: Longer burnup time
+Expires after 30 days</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBuyPerk_8">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>780</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Price:
+1000 GC</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelTitle_8">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>780</y>
+       <width>200</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>8. Health transfer</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelInfo_8">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>800</y>
+       <width>481</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>The classic fire transfer script. If you're on fire, hit someone and you will steal his health.
+
+Requires perk 6: Longer burnup time
+Expires after 30 days</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnExtendScrollarea">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>1020</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Price:
+1000 GC</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

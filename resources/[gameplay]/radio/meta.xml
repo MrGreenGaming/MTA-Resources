@@ -1,0 +1,10 @@
+<meta>
+<info name="Radio Manager" author="BinSlayer" version="1.0" description="Manage your own Radio Streams" type="script" />
+	<script src="main_decompiled.lua" type="client" />
+	<file src="pause1.png" />
+	<file src="pause2.png" />
+	<file src="stop1.png" />
+	<file src="stop2.png" />
+	<file src="play1.png" />
+	<file src="play2.png" />
+</meta>

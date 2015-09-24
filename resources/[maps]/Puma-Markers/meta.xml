@@ -1,0 +1,30 @@
+<meta>
+    <info type="script" name="Puma-Markers" author="Puma, SDK" version="2.2"></info>
+    <script src="Puma-Markers.lua" type="client" />
+    <file src="Icons/Teleport.png"></file>
+    <file src="Icons/TeleportD.png"></file>
+    <file src="Icons/SlowDown.png"></file>
+    <file src="Icons/SpeedUp.png"></file>
+    <file src="Icons/Stop.png"></file>
+    <file src="Icons/Fire.png"></file>
+    <file src="Icons/BlowUp.png"></file>
+    <file src="Icons/Jump.png"></file>
+    <file src="Icons/Flip.png"></file>
+    <file src="Icons/Reverse.png"></file>
+    <file src="Icons/Rotate.png"></file>
+    <file src="Icons/CarsFly.png"></file>
+    <file src="Icons/CarsSwim.png"></file>
+    <file src="Icons/Gravity.png"></file>
+    <file src="Icons/Magnet.png"></file>
+    <file src="Icons/Beer.png"></file>
+    <file src="Icons/Camera.png"></file>
+    <file src="Icons/FlatTires.png"></file>
+    <file src="Icons/Freeze.png"></file>
+    <file src="Icons/GameSpeed.png"></file>
+    <file src="Icons/Color.png"></file>
+    <file src="Icons/Weather.png"></file>
+    <file src="Icons/Time.png"></file>
+    <file src="Icons/Text.png"></file>
+    <file src="Icons/AntiSC.png"></file>
+    <file src="Icons/X.png"></file>
+</meta>

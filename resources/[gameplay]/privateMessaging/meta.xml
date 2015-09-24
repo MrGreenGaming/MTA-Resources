@@ -1,0 +1,9 @@
+<meta>
+	<info author="~CG~FatalTerror edits by BinSlayer, SDK" version="1.0.0" type="script" name="MrGchat" />
+	<script src="server.lua"/>
+	<script src="client.lua" type="client"/>
+	<file src="image/chat-icon.png" type="client"/>
+	<file src="image/mtalogo.png" type="client"/>
+	<file src="image/shruk.png" type="client"/>
+	<config src="help.xml" type="client" />
+</meta>

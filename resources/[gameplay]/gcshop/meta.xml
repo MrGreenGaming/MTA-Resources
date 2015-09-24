@@ -1,0 +1,238 @@
+<meta>
+    <info author="SDK" version="1.5" type="script" />
+    <min_mta_version server="1.3.0-9.03772" client="1.3.0-9.03772"></min_mta_version>
+    
+    <script src="gcshop_s.lua" />
+    <script src="gcshop_c.lua" type="client" protected="true" />
+    <script src="gcshop_gui.lua" type="client" protected="true" />
+    <include resource="gc" />
+
+    
+    <settings>
+        <!-- allows to override the mysql connection data to test stuff on a local server (also applies to autologin in gc resource)-->
+        <setting name="*host"/>
+        <!-- /srun set('*gcshop.host','localhost') -->
+        <setting name="*name"/>
+        <!-- /srun set('*gcshop.user','mrgreen_mtasrvs') -->
+        <setting name="*user"/>
+        <!-- /srun set('*gcshop.user','root') -->
+        <setting name="*pass"/>
+        <!-- /srun set('*gcshop.pass','root') -->
+    </settings>
+    
+    <!-- srun set('*gcshop.host','localhost') set('*gcshop.user','mrgreen_mtasrvs') set('*gcshop.user','root') set('*gcshop.pass','root') -->
+    
+    <!-- Item's	 -->
+    
+    <script src="items\items_s.lua" type="server" />
+    <script src="items\items_c.lua" type="client" />
+    <script src="items\items_gui.lua" type="client" />
+    <file src="items\voice.png" />
+    
+    <script src="items\paintjob\paintjob_s.lua" type="server" />
+    <script src="items\paintjob\paintjob_c.lua" type="client" />
+    <file src="items\paintjob\paintjob.fx" type="client" />
+    <file src="readme_paintjob.txt" type="client" />
+    <file src="sultan.bmp" type="client" />
+    <file src="infernushow.png" type="client" />
+    <file src="sultanhow.png" type="client" />
+    <script src="items\trials\gctrials_s.lua" type="server" />
+    <script src="items\trials\gctrials_c.lua" type="client" />
+    <script src="items\respawn\gcrespawn.lua" type="server" />
+    <script src="items\regen\regen_s.lua" type="server" />
+    <script src="items\regen\regen_c.lua" type="client" />
+    <script src="items\voice\gcvoice_s.lua" type="server" />
+    <script src="items\burn\burn_s.lua" type="server" />
+    <script src="items\burn\burn_c.lua" type="client" />
+   
+    
+    
+    <!-- Modshop -->
+    
+    <script src="modshop\modshop_s.lua" type="server" />
+    <script src="modshop\modshop_c.lua" type="client" />
+    <script src="modshop\modshop_GUI.lua" type="client" />
+    <map src="modshop\modshop.map" />
+    <script src="colorpicker\colorpicker.lua" type="client" />
+    <file src="colorpicker\palette.png" />
+    <file src="colorpicker\alpha.png" />
+    <file src="modshop\drug_green.dff" />
+    <file src="modshop\drug_orange.dff" />
+    <file src="modshop\drug_red.dff" />
+    <file src="modshop\drug_aqua.dff" />
+    <file src="modshop\drug_yellow.dff" />
+    
+    
+    <!-- Locknick by Kali -->
+    <script src="lockednicks\lockednicks_c.lua" type="client" />
+    <script src="lockednicks\lockednicks.lua" type="server" />
+    
+    <!-- Skins by BinSlayer    -->
+    
+    <script src="skin\skins_client.lua" type="client" />
+    <script src="skin\skins_server.lua" type="server" />
+    <file src="skin\skins.xml" type="client" />
+    
+    
+	
+    <!-- Maps by BinSlayer    -->
+	
+	<script src='maps\maps_server.lua' type='server' />
+	<script src='maps\maps_client.lua' type='client' />
+	<file   src='maps\search.png' />	
+	<export function='getCurrentMapQueued' type='server' />
+	<export function='isAnyMapQueued' type='server' />
+    
+	
+	
+    <!-- Custom horns by BinSlayer     -->
+    
+    <script src="horns\horns_c.lua" type="client" />
+    <script src="horns\horns_s.lua" type="server" />
+    <file src="horns\files\1.wav" />
+    <file src="horns\files\2.wav" />
+    <file src="horns\files\3.wav" />
+    <file src="horns\files\4.wav" />
+    <file src="horns\files\5.wav" />
+    <file src="horns\files\6.wav" />
+    <file src="horns\files\7.wav" />
+    <file src="horns\files\8.wav" />
+    <file src="horns\files\9.wav" />
+    <file src="horns\files\10.wav" />
+    <file src="horns\files\11.wav" />
+    <file src="horns\files\12.wav" />
+    <file src="horns\files\13.mp3" />
+    <file src="horns\files\14.wav" />
+    <file src="horns\files\15.wav" />
+    <file src="horns\files\16.ogg" />
+    <file src="horns\files\17.mp3" />
+    <file src="horns\files\18.mp3" />
+    <file src="horns\files\19.mp3" />
+    <file src="horns\files\20.wav" />
+    <file src="horns\files\21.wav" />
+    <file src="horns\files\22.wav" />
+    <file src="horns\files\23.wav" />
+    <file src="horns\files\24.wav" />
+    <file src="horns\files\25.wav" />
+    <file src="horns\files\26.mp3" />
+    <file src="horns\files\27.wav" />
+    <file src="horns\files\28.wav" />
+    <file src="horns\files\29.mp3" />
+    <file src="horns\files\30.mp3" />
+    <file src="horns\files\31.mp3" />
+    <file src="horns\files\32.wav" />
+    <file src="horns\files\33.mp3" />
+    <file src="horns\files\34.wav" />
+    <file src="horns\files\35.wav" />
+    <file src="horns\files\36.mp3" />
+    <file src="horns\files\37.mp3" />
+    <file src="horns\files\38.wav" />
+    <file src="horns\files\39.mp3" />
+    <file src="horns\files\40.mp3" />
+    <file src="horns\files\41.wav" />
+    <file src="horns\files\42.mp3" />
+    <file src="horns\files\43.mp3" />
+    <file src="horns\files\44.mp3" />
+    <file src="horns\files\45.mp3" />
+    <file src="horns\files\46.mp3" />
+    <file src="horns\files\47.mp3" />
+    <file src="horns\files\48.mp3" />
+    <file src="horns\files\49.wav" />
+    <file src="horns\files\50.wav" />
+    <file src="horns\files\51.mp3" />
+    <file src="horns\files\52.wav" />
+    <file src="horns\files\53.mp3" />
+    <file src="horns\files\54.wav" />
+    <file src="horns\files\55.mp3" />
+    <file src="horns\files\56.mp3" />
+    <file src="horns\files\57.mp3" />
+    <file src="horns\files\58.mp3" />
+    <file src="horns\files\59.mp3" />
+    <file src="horns\files\60.mp3" />
+    <file src="horns\files\61.mp3" />
+    <file src="horns\files\62.mp3" />
+    <file src="horns\files\63.mp3" />
+    <file src="horns\files\64.mp3" />
+    <file src="horns\files\65.mp3" />
+    <file src="horns\files\66.mp3" />
+    <file src="horns\files\67.mp3" />
+    <file src="horns\files\68.mp3" />
+    <file src="horns\files\69.mp3" />
+    <file src="horns\files\70.mp3" />
+    <file src="horns\files\71.mp3" />
+    <file src="horns\files\72.mp3" />
+    <file src="horns\files\73.mp3" />
+    <file src="horns\files\74.mp3" />
+    <file src="horns\files\75.mp3" />
+    <file src="horns\files\76.mp3" />
+    <file src="horns\files\77.mp3" />
+    <file src="horns\files\78.mp3" />
+    <file src="horns\files\79.mp3" />
+    <file src="horns\files\80.mp3" />
+    <file src="horns\files\81.mp3" />
+    <file src="horns\files\82.mp3" />
+    <file src="horns\files\83.mp3" />
+    <file src="horns\files\84.mp3" />
+    <file src="horns\files\85.mp3" />
+    <file src="horns\files\86.mp3" />
+    <file src="horns\files\87.mp3" />
+    <file src="horns\files\88.mp3" />
+    <file src="horns\files\89.mp3" />
+    <file src="horns\files\90.mp3" />
+    <file src="horns\files\91.mp3" />
+    <file src="horns\files\92.mp3" />
+    <file src="horns\files\93.mp3" />
+    <file src="horns\files\94.mp3" />
+    <file src="horns\files\95.mp3" />
+    <file src="horns\files\96.mp3" />
+    <file src="horns\files\97.mp3" />
+    <file src="horns\files\98.mp3" />
+    <file src="horns\files\99.mp3" />
+    <file src="horns\files\100.mp3" />
+    <file src="horns\files\101.mp3" />
+    <file src="horns\files\102.mp3" />
+	<file src="horns\files\103.mp3" />
+    <file src="horns\files\104.mp3" />
+    <file src="horns\files\105.mp3" />
+    <file src="horns\files\106.mp3" />
+    <file src="horns\files\107.mp3" />
+    <file src="horns\files\108.mp3" />
+    <file src="horns\files\109.mp3" />
+    <file src="horns\files\110.mp3" />
+    <file src="horns\files\111.mp3" />
+    <file src="horns\files\112.mp3" />
+    <file src="horns\files\113.mp3" />
+    <file src="horns\files\114.mp3" />
+    <file src="horns\files\115.mp3" />
+    <file src="horns\files\116.mp3" />
+    <file src="horns\files\117.mp3" />
+    <file src="horns\files\118.mp3" />
+    <file src="horns\files\119.mp3" />
+    <file src="horns\files\120.mp3" />
+    <file src="horns\files\121.mp3" />
+    <file src="horns\files\122.mp3" />
+    <file src="horns\files\123.mp3" />
+    <file src="horns\files\124.mp3" />
+    <file src="horns\files\125.mp3" />
+    <file src="horns\files\126.mp3" />
+    <file src="horns\files\127.mp3" />
+    <file src="horns\files\128.mp3" />
+    <file src="horns\files\129.mp3" />
+    <file src="horns\files\130.mp3" />
+    <file src="horns\files\131.mp3" />
+    <file src="horns\files\132.mp3" />
+    <file src="horns\files\133.mp3" />
+    <file src="horns\files\134.mp3" />
+    <file src="horns\files\135.mp3" />
+    <file src="horns\files\136.mp3" />
+    <file src="horns\files\137.mp3" />
+    <file src="horns\files\138.mp3" />
+    <file src="horns\files\139.mp3" />
+    <file src="horns\files\140.mp3" />
+    <file src="horns\files\141.mp3" />
+    <file src="horns\files\142.mp3" />
+    <file src="horns\files\143.mp3" />
+    <file src="horns\files\144.mp3" />
+	<file src="horns\icon.png" />
+	
+</meta>

@@ -1,0 +1,9 @@
+<meta>
+    <info author="SDK" type="script" description="GeoIP based ip2country tool" />
+    <script src="geoloc.lua" />
+    <export function="getIPCountryCode" />
+    <export function="getIPCountryName" />
+    <export function="getPlayerCountry" />
+    <export function="getPlayerCountryName" />
+    <export function="getCache" />
+</meta>

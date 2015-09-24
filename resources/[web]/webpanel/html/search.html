@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script type="text/javascript" src="/webpanel/html/includes/ajax.js"></script>
+		<script type="text/javascript" src="/webpanel/html/includes/json.js"></script>
+		<script type="text/javascript" src="/webpanel/html/includes/functions.js"></script>
+		<link rel="stylesheet" type="text/css" href="/webpanel/html/includes/main.css" />
+		<title>Ban management</title>
+		<script type='text/javascript'>
+			var actual_page = 1;
+			
+			function showResult (str) {
+				document.getElementById("loadingimg").style.display = "block";
+				
+				var dpelement = document.getElementById ( "dropdown" );
+				while ( dpelement.hasChildNodes() ) {
+					dpelement.removeChild ( dpelement.firstChild );
+				}
+				
+				if (str.length==0) {
+					document.getElementById("results").innerHTML="";
+					document.getElementById("dropdown").disabled = "disabled";
+					document.getElementById("loadingimg").style.display = "none";
+				} else {
+					var i = 0;
+					var input;
+					
+					for (i=0; i<=4; i++) {
+						if(document.getElementsByName("group")[i].checked) {
+							input = document.getElementsByName("group")[i].value;
+							break;
+						}
+					}
+					
+					getBansSearch( 
+						str,
+						input,
+						actual_page,
+						function ( output, pages, time ) { 
+							var i = 1
+							var childrens = new Array();
+							
+							document.getElementById("gentime").innerHTML= time + " ms";
+							document.getElementById("results").innerHTML= "";
+							
+							if (pages == 0) {
+								dpelement.disabled = "disabled";
+								document.getElementById("loadingimg").style.display = "none";
+							} else {
+							
+								for(i = 1; i<=pages; i++) {
+									childrens[i] = document.createElement("option");
+									childrens[i].value = i;
+									childrens[i].innerHTML = i;
+									dpelement.appendChild(childrens[i]);
+								}
+								
+								if (i < actual_page) {
+									actual_page = 1;
+								}
+								
+								dpelement.value = actual_page;
+								dpelement.disabled = "";
+
+								document.getElementById("results").innerHTML= output;
+								document.getElementById("loadingimg").style.display = "none";
+							}
+						}
+					);
+				}
+			}
+			
+			function banPage(val) {
+				val.disabled = 'disabled';
+				actual_page = val.value;
+				showResult(document.getElementById('inputbox').value);
+			}
+			
+			function banChange() {
+				showResult(document.getElementById('inputbox').value);
+			}
+			
+			function confrm (id) {
+				var czyTak = confirm("Are you sure you want to remove this ban?");
+				
+				if (czyTak == true) {
+					confirmunban(id);
+				}
+			}
+
+			function confirmunban(id) {
+				unban (id, user, 
+					function ( returnv ) { 
+						if ( returnv == true ) {
+							alert ( "Unban successfully." );
+							setTimeout("showResult(document.getElementById('inputbox').value);",100);
+						} else {
+							alert ( "Unban not successfully!" );
+						}
+					}
+				);
+			}
+		</script>
+	</head>
+	<body>
+		<div id="toparea"><img id="loadingimg" src="/webpanel/html/images/loading.gif" style="display: none;" />
+			Define type of searching: 
+			<input type="radio" name="group" value="IP" onclick="banChange();" checked> IP
+			<input type="radio" name="group" value="Serial" onclick="banChange();"> Serial
+			<input type="radio" name="group" value="Reason" onclick="banChange();"> Reason
+			<input type="radio" name="group" value="Admin" onclick="banChange();"> Admin
+			<input type="radio" name="group" value="Nick" onclick="banChange();"> Nick
+			<input id="inputbox" type="text" size="30" onkeyup="showResult(this.value)" />
+			<strong>Page: </strong>
+			<select id="dropdown" name="dropdown" onchange="banPage(this);" disabled="disabled"></select>
+		</div>
+
+		<div id="contentarea">
+			<table>
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>IP</th>
+						<th>Serial</th>
+						<th>Reason</th>
+						<th>Admin</th>
+						<th>Nick</th>
+						<th>Delete</th>
+					</tr>
+					<tr>
+						<th colspan="7"><div id="gentime">Time</div></th>
+					</tr>
+				</thead>
+				<tbody id="results">
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
+<*
+	if not ( hasObjectPermissionTo ( "user."..getAccountName ( user ), "general.webpanel_ban", false ) ) then
+		httpClear()
+		httpWrite("<p>Your account does not have required permission.</p>")
+	end
+*>

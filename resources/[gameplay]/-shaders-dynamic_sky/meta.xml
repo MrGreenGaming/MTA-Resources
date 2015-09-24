@@ -1,0 +1,34 @@
+<meta>
+        <info name="Shader Dynamic Sky" description="Shader Dynamic Sky" author="Ren712" version="0.73" type="script" />
+	<script src="c_shader_dyn_sky.lua" type="client" />
+	<script src="c_current_moon.lua" type="client" />
+	<file src="shaders/shader_skybox.fx" type="client" />
+	<file src="shaders/shader_clear.fx" type="client" />
+	<file src="shaders/darken_shader.fx" type="client" />
+	<file src="shaders/mta-helper.fx" type="client" />
+	<file src="textures/skybox.dds" type="client" />
+	<file src="textures/clouds.dds" type="client" />
+	<file src="textures/moon/0.jpg" type="client" />
+	<file src="textures/moon/1.jpg" type="client" />
+	<file src="textures/moon/10.jpg" type="client" />
+	<file src="textures/moon/11.jpg" type="client" />
+	<file src="textures/moon/12.jpg" type="client" />
+	<file src="textures/moon/13.jpg" type="client" />
+	<file src="textures/moon/14.jpg" type="client" />
+	<file src="textures/moon/15.jpg" type="client" />
+	<file src="textures/moon/16.jpg" type="client" />
+	<file src="textures/moon/17.jpg" type="client" />
+	<file src="textures/moon/18.jpg" type="client" />
+	<file src="textures/moon/19.jpg" type="client" />
+	<file src="textures/moon/2.jpg" type="client" />
+	<file src="textures/moon/20.jpg" type="client" />
+	<file src="textures/moon/3.jpg" type="client" />
+	<file src="textures/moon/4.jpg" type="client" />
+	<file src="textures/moon/5.jpg" type="client" />
+	<file src="textures/moon/6.jpg" type="client" />
+	<file src="textures/moon/7.jpg" type="client" />
+	<file src="textures/moon/8.jpg" type="client" />
+	<file src="textures/moon/9.jpg" type="client" />
+	<file src="models/skybox_model.dff" type="client" />
+	<file src="models/skybox_model.txd" type="client" />
+</meta>

@@ -1,0 +1,8 @@
+<meta>
+	<info name="Ranking board" addon='race' description="Shows ranking board" author='SDK, Ruff' version='1.0' type='script' />
+	<script src='board_s.lua' />
+	<script src='board_c.lua' type='client' />
+	<!-- Exports for settings resource  KaliBwoy -->
+    <export function="showBoard" type="client"/>
+    <export function="hideBoard" type="client"/>
+</meta>

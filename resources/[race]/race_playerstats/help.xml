@@ -1,0 +1,19 @@
+<help title="Player Stats">
+Commands:
+---------------
+/stats - displays stats panel for current player
+
+/stats &lt;nick&gt; - displays stats panel for specified player
+
+
+Binds:
+---------------
+F6 - Toggle stats panel
+
+
+Admin Commands:
+---------------
+/delete_player_stats &lt;nick&gt; - deletes stats for specified player
+
+/reset_stats - deletes all stats
+</help>

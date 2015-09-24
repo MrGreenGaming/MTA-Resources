@@ -1,0 +1,820 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>modshopWidget</class>
+ <widget class="QWidget" name="modshopWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>654</width>
+    <height>417</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QTabWidget" name="modshopTabs">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>20</y>
+     <width>641</width>
+     <height>381</height>
+    </rect>
+   </property>
+   <property name="tabPosition">
+    <enum>QTabWidget::North</enum>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="tabBuyVehicle">
+    <attribute name="title">
+     <string>Buy vehicles</string>
+    </attribute>
+    <widget class="QTableWidget" name="carsTable">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>24</y>
+       <width>321</width>
+       <height>311</height>
+      </rect>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>false</bool>
+     </property>
+     <property name="columnCount">
+      <number>2</number>
+     </property>
+     <column>
+      <property name="text">
+       <string>Vehicle</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>ID</string>
+      </property>
+     </column>
+    </widget>
+    <widget class="QPushButton" name="buyVehicleButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>60</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Buy vehicle</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelPrice">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>30</y>
+       <width>141</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Current price : 550 GC</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>240</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Headlight colors</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelUpgradeOptions">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>190</y>
+       <width>121</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Available upgrades:</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>260</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Customized rims</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_3">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>280</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Body mods</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_4">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>220</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Vehicle colors: 1</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_5">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>300</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Paintjobs: 3</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="upgradeVehicleButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>100</y>
+       <width>131</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Upgrade this vehicle</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="viewVehicleButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>140</y>
+       <width>131</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>View current vehicle</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabVehicleColors">
+    <attribute name="title">
+     <string>Colors + Paintjobs</string>
+    </attribute>
+    <widget class="QLabel" name="lblCol1">
+     <property name="geometry">
+      <rect>
+       <x>35</x>
+       <y>100</y>
+       <width>51</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Paint 1:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="editCol1">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>100</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="maxLength">
+      <number>11</number>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="editCol2">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>140</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="maxLength">
+      <number>11</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblCol2">
+     <property name="geometry">
+      <rect>
+       <x>35</x>
+       <y>140</y>
+       <width>51</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Paint 2:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblVehColText">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>271</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>You can change vehicles' two different paint colors and their headlight color.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnApplyColor">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>230</y>
+       <width>111</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Save colors</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblPaintjobText">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>20</y>
+       <width>271</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>A few cars have paintjobs, usually 3 variants.
+Custom paintjobs also work on most vehicles without paintjobs, but are randomly aligned, be warned!</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblPaintjobNote">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>270</y>
+       <width>271</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Copy custom paintjob images into this map:
+C:\\Program Files\\MTA San Andreas\\mods\\deathmatch\\resources\\gcshop\\</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="tabelPaintjob">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>100</y>
+       <width>131</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>93</number>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>21</number>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>21</number>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>93</number>
+     </attribute>
+     <row>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>2</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>3</string>
+      </property>
+     </row>
+     <column>
+      <property name="text">
+       <string>Paintjob</string>
+      </property>
+     </column>
+     <item row="0" column="0">
+      <property name="text">
+       <string>No paintjob</string>
+      </property>
+     </item>
+     <item row="1" column="0">
+      <property name="text">
+       <string>Paintjob 1</string>
+      </property>
+     </item>
+     <item row="2" column="0">
+      <property name="text">
+       <string>Paintjob 2</string>
+      </property>
+     </item>
+     <item row="3" column="0">
+      <property name="text">
+       <string>Paintjob 3</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QPushButton" name="btnApplyPaintjob">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>230</y>
+       <width>121</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Save Paintjob</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblLight">
+     <property name="geometry">
+      <rect>
+       <x>35</x>
+       <y>180</y>
+       <width>51</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Light :</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="editLight">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>180</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="maxLength">
+      <number>11</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnCol1">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>100</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnCol2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>140</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnLight">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>180</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnApplyColor_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>270</y>
+       <width>141</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Save colors for all</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnUploadPaintjob">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>510</x>
+       <y>230</y>
+       <width>121</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Upload Paintjob</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="editFilename">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>200</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>file.bmp</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabUpgrades">
+    <attribute name="title">
+     <string>Rims + Upgrades</string>
+    </attribute>
+    <widget class="QPushButton" name="addUpgradeButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>120</y>
+       <width>111</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add upgrade</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="upgradeTable">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>24</y>
+       <width>321</width>
+       <height>311</height>
+      </rect>
+     </property>
+     <property name="sortingEnabled">
+      <bool>false</bool>
+     </property>
+     <property name="rowCount">
+      <number>0</number>
+     </property>
+     <property name="columnCount">
+      <number>2</number>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Upgrade name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Upgrade ID</string>
+      </property>
+     </column>
+    </widget>
+    <widget class="QPushButton" name="delUpgradeButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>150</y>
+       <width>111</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Remove upgrade</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabNeonlights">
+    <attribute name="title">
+     <string>Neon lights</string>
+    </attribute>
+    <widget class="QPushButton" name="btnNeonGreen">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>170</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Green</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnNeonOrange">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>170</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Orange</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnNeonRed">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>170</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Red</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnNeonYellow">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>230</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Yellow</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnNeonAqua">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>230</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Aqua</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnNeonRemove">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>244</x>
+       <y>300</y>
+       <width>111</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Remove neon</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>30</y>
+       <width>491</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Click on the buttons with the corresponding colors you want for the neon lights. Click on the remove button to remove the neon lights.
+
+If the buttons are not clickable, then it means you can not add neon to this vehicle.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabCustomHorns">
+    <attribute name="title">
+     <string>Custom horns</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tabBuyExtras">
+    <attribute name="title">
+     <string>Enable extra mods!</string>
+    </attribute>
+    <widget class="QPushButton" name="btnEnableExtras">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>70</y>
+       <width>431</width>
+       <height>201</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Enable the extra mods for some new features in the modshop.
+
+- Custom horns
+- Neon lights
+
+
+Price: &lt;extras_price&gt;</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="labelCurrentVehicle">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>0</y>
+     <width>311</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Currently modding: N/A</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

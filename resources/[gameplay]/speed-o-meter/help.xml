@@ -1,0 +1,5 @@
+<help>
+Basic Speed-O-Meter showing the speed you drive your vehicles at.
+It is default set to KM/h , but you can change this to MP/h by typing /mode mph and change it back to KM/h using /mode kmh.
+If you should choose to not view it, type /mode none 
+</help>

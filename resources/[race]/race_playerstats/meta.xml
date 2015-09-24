@@ -1,0 +1,84 @@
+<meta>
+	<info name="Stats" author="AcidbRain" version="0.1.9" description="Manages and stores player race statistics" type="script" addon="race" />
+	
+	<script src="common.lua" type="server" />
+	<script src="s_util.lua" type="server" />
+	<script src="s_settings.lua" type="server" />
+	<script src="s_database.lua" type="server" />
+	<script src="s_main.lua" type="server" />
+	<script src="s_commands.lua" type="server" />
+	<script src="common.lua" type="client" />
+	<script src="c_main.lua" type="client" />
+	<script src="c_gui.lua" type="client" />
+
+	<config src="help.xml" type="client" />
+	
+	<export function="IncrementPlayerStat" type="server"/>
+	<export function="GetPlayerStatsTable" type="server"/>
+	<export function="GetPlayerStatValue" type="server"/>
+	<export function="SetPlayerStatValue" type="server"/>
+	<export function="ClearPlayerStats" type="server"/>
+	<export function="GetPlayerList" type="server"/>
+	
+	<export function="AddStatColumn" type="client" />
+
+	<settings>
+	
+		<setting
+			name="*welcomeMessage"
+			friendlyname="Welcome message"
+			group="Chatbox"
+			desc="Message shown to each player after joining the server."
+			accept="string"
+			examples="Welcome to the server. Type /stats to see your stats."
+			value=""
+			/>
+
+		<setting
+			name="*messageColor"
+			friendlyname="Message color"
+			group="Chatbox"
+			desc="Html color code of resource chat messages."
+			accept="Html color code"
+			examples="#FFFFFF, #00FF00"
+			value="#FFF7A0"
+			/>
+			
+		<setting
+			name="*showStatsOnMapFinish"
+			friendlyname="Display stats panel when race finishes"
+			group="GUI"
+			accept="true|false"
+			value="false"
+			/>
+			
+		<setting
+			name="*countMidraceJoinAsRacestart"
+			friendlyname="Count mid-race join as race start"
+			desc="Sets whether to consider a mid-race join as a race start"
+			group="Behavior"
+			accept="true|false"
+			value="true"
+			/>
+			
+		<setting
+			name="*countPostFinishDeath"
+			friendlyname="Count post-finish death"
+			desc="Sets whether to count player death after they finish a race"
+			group="Behavior"
+			accept="true|false"
+			value="true"
+			/>
+			
+		<setting
+			name="*vehicleWreckHealthLimit"
+			friendlyname="Vehicle wreck health limit"
+			desc="Count vehicle wrecks only when vehicle health is below this value"
+			group="Behavior"
+			accept="0-1000"
+			value="250"
+			/>
+			
+			
+	</settings>
+</meta>

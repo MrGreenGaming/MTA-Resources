@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script type="text/javascript" src="/webpanel/html/includes/ajax.js"></script>
+		<script type="text/javascript" src="/webpanel/html/includes/json.js"></script>
+		<script type="text/javascript" src="/webpanel/html/includes/functions.js"></script>
+		<link rel="stylesheet" type="text/css" href="/webpanel/html/includes/main.css" />
+		<title>Settings page</title>
+	</head>
+	<body>
+		<div id="toparea">This page showing current settings. </div>
+		<div id="contentarea">
+			<table>
+				<thead>
+					<tr>
+						<th>Setting name</th>
+						<th>Setting value</th>
+					</tr>
+				</thead>
+				
+				<tbody id="setting">
+					<tr>
+						<td>Server name</td>
+						<td><* = getServerName () or "" *></td>
+					</tr>
+					
+					<tr>
+						<td>Server password</td>
+						<td><* = getServerPassword () or "None" *></td>
+					</tr>
+					
+					<tr>
+						<td>Server version</td>
+						<td><* = tostring(getVersion ()["mta"]) or "1.0" *></td>
+					</tr>
+					
+					<tr>
+						<td>Players online / Max players</td>
+						<td><* = tostring(getPlayerCount()) or "0" *> / <* = tostring(getMaxPlayers()) or "0" *></td>
+					</tr>
+					
+					<tr>
+						<td>Actual gametype</td>
+						<td><* = getGameType () or "None" *></td>
+					</tr>
+					
+					<tr>
+						<td>Actual map</td>
+						<td><* = getMapName () or "None" *></td>
+					</tr>
+					
+					<tr>
+						<td>Game speed</td>
+						<td><* = tostring(getGameSpeed()) or "1" *></td>
+					</tr>
+					
+					<tr>
+						<td>Game gravity</td>
+						<td><* = tostring(getGravity()) *></td>
+					</tr>
+					
+					<tr>
+						<td>Game time</td>
+						<td><* h,m = getTime() if(h<10)then h="0"..h end if(m<10)then m="0"..m end httpWrite(h..":"..m) *></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
+
+<*
+	if not ( hasObjectPermissionTo ( "user."..getAccountName ( user ), "general.webpanel_settings", false ) ) then
+		httpClear()
+		httpWrite("<p>Your account does not have required permission.</p>")
+	end
+*>

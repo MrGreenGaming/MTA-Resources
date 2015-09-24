@@ -1,0 +1,10 @@
+<meta>
+	<info name="Shader Skybox Alternative" author="Ren712" version="0.46" type="script" />
+	<script src="c_shader_skybox_alt.lua" type="client" />
+	<script src="c_switch.lua" type="client" />
+	<file src="shaders/shader_skydome.fx" type="client" />
+	<file src="shaders/shader_null.fx" type="client" />
+	<file src="textures/skydome.jpg" type="client" />
+	<file src="models/skybox_model.dff" type="client" />
+	<file src="models/skybox_model.txd" type="client" />
+</meta>

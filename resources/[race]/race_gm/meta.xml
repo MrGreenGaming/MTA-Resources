@@ -1,0 +1,11 @@
+<meta>
+	<info name="Start ghostmode" addon='race' description="Add ghostmode and dimension racing for a few checkpoints" author='BinSlayer, SDK' version='1.5' type='script' />
+	<script src='gm.lua' />
+	<script src='gm_c.lua' type='client' protected="true" />
+	<script src='gm_dd_c.lua' type='client' protected="true" />
+	<file   src='icon.png' />
+
+	<script src="dim_cl.lua"  type="client" protected="true"/>
+	<script src="dim.lua" type="server" />
+	
+</meta>

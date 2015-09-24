@@ -1,0 +1,27 @@
+<meta>
+	<info author="SDK" description="Serverchat" type="script" version="1.0" />
+	
+	<!-- sending stuff -->
+	<script src="send.lua" type="server" />
+	<script src="redirect_c.lua" type="client" />
+	
+	<!-- receiving stuff -->
+	<script src="receive.lua" type="server" />
+	<export function="playerRedirect" http="true" />
+	<export function="playerChatBoxRemote" http="true" />
+	<export function="sendPlayerNames" http="true" />
+	<export function="sendAdminNames" http="true" />
+	<export function="outputMapRemote" http="true" />
+	<export function="greencoinsLogin" http="true" />
+	<export function="aAddSerialUnmuteTimer" http="true" />
+	<export function="addSyncBan" http="true" />
+	<export function="testConnection" http="true" />
+	
+	 <settings>
+			<setting name="*this_server" 		value="Race" 					friendlyname="Short name for this server"	/>
+			<setting name="*other_server" 		value="Mix" 					friendlyname="Short name for other server"	/>
+			<setting name="*other_ip" 			value="87.238.173.119" 			friendlyname="IP of other server"	/>
+			<setting name="*other_port" 		value="23003" 					friendlyname="Game port for other server"	/>
+			<setting name="*other_http_port" 	value="23005" 					friendlyname="HTTP port other server"	/>
+	 </settings>
+</meta>

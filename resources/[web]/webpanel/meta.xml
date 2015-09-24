@@ -1,0 +1,39 @@
+<meta>
+	<info author="Mawej" version="5.1.0" type="misc" name="Web Admin panel" showInResourceBrowser="true" description="WebAdmin panel" pages="html/ban.html|Manage bans,html/player.html|Manage players,html/chat.html|Show chat,html/settings.html|Show settings" />
+	
+	<script src="script/global.lua" />
+	<script src="script/ban.lua" />
+	<script src="script/player.lua" />
+	<script src="script/chat.lua" />
+	
+	<html src="html/ban.html" />
+	<html src="html/search.html" />
+	<html src="html/player.html" />
+	<html src="html/chat.html" default="true" />
+	<html src="html/settings.html" />
+	
+	<html src="html/includes/functions.js" />
+	<html src="html/includes/json.js" raw="true" />
+	<html src="html/includes/ajax.js" raw="true" />
+	<html src="html/includes/main.css" raw="true" />
+	<html src="html/images/delete.png" raw="true" />
+	<html src="html/images/loading.gif" raw="true" />
+	
+	<export function="getAllBans" http="true" />
+	<export function="getAllBansPages" http="true" />
+	<export function="getAllPlayers" http="true" />
+	<export function="getAll" http="true" />
+	<export function="getBansSearch" http="true" />
+	
+	<export function="banPlr" http="true" />
+	<export function="kickPlr" http="true" />
+	<export function="unban" http="true" />
+	<export function="sendMessageToAllPlayers" http="true" />
+	
+	<export function="addChatMsg" />
+	
+	<settings>
+		<setting name="@webpanel.max_bansPerPage" value="10"/>
+		<setting name="@webpanel.max_chatMsgs" value="20"/>
+	</settings>
+</meta>

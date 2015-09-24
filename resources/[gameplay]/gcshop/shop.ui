@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainGCShopWindow</class>
+ <widget class="QMainWindow" name="mainGCShopWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>750</width>
+    <height>525</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Left4Green Green-Coins Shop!</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="shopTabs">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>55</y>
+      <width>730</width>
+      <height>460</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="tab_home">
+     <attribute name="title">
+      <string>Home</string>
+     </attribute>
+     <widget class="QScrollArea" name="scrollAreaHome">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>30</y>
+        <width>621</width>
+        <height>360</height>
+       </rect>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>602</width>
+         <height>358</height>
+        </rect>
+       </property>
+       <widget class="QLabel" name="labelHome">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>581</width>
+          <height>251</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="text">
+         <string>Hello and welcome to the Grand Guide to Green-Coins!
+
+WTF are Green-Coins?
+--------------------
+They are a currency used by the Mr. Green community. We created a global database where players can connect their Green-Coins to one account, and use them on different game servers.
+
+What can I do with Green-Coins in MTA?
+-------------------------------
+You can buy car mods, skins, or other fancy stuff that you can use ingame!
+
+What do I need to get Green-Coins?
+----------------------------------
+You need to register a Green-Coins account, go to the &quot;Register&quot; tab for more info.
+
+How do I get Green-Coins?
+------------------------------------------
+</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QTabWidget" name="tabDonate">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>270</y>
+          <width>281</width>
+          <height>251</height>
+         </rect>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="tab_Donate">
+         <attribute name="title">
+          <string>Donate</string>
+         </attribute>
+         <widget class="QLabel" name="labelDonate">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>10</y>
+            <width>251</width>
+            <height>210</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="text">
+           <string>You can donate. For each euro donated you get 1000 Green-Coins.
+
+How do I donate?
+-----------------------
+Go to mrgreengaming.com and click&quot;Green-Coins&quot;.
+
+If you log into your account, you see a conveniently placed button that says &quot;Send donation&quot;.
+
+Just follow the simple instructions on there and you're done!
+</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+       <widget class="QTabWidget" name="tabWin">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>270</y>
+          <width>291</width>
+          <height>251</height>
+         </rect>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="tab_Win">
+         <attribute name="title">
+          <string>Win</string>
+         </attribute>
+         <widget class="QLabel" name="labelWin">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>10</y>
+            <width>261</width>
+            <height>210</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="text">
+           <string>The second way to get Green-Coins is racing. 
+
+Winning races: you earn GC based on the map length (10 - 40)
+(new maps do not count)
+
+New toptime: If you're good and manage to get a new top1, top2 or top3 you will earn extra GC!
+
+Even if you didnt win or finish you earn Green-Coins based on your results, so don't give up!
+
+</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+       <widget class="QLabel" name="labelHome_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>530</y>
+          <width>581</width>
+          <height>100</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="text">
+         <string>
+
+More info in the Network section or use this link:
+http://forums.mrgreengaming.com/topic/2183-the-grand-guide-to-green-coins/</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_login">
+     <attribute name="title">
+      <string>Register / Login</string>
+     </attribute>
+     <widget class="QLabel" name="label_step2">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>40</y>
+        <width>351</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>1. Register on http://forums.mrgreengaming.com/
+
+
+2. Visit mrgreengaming.com -&gt; click on the 'Green-Coins' button
+This step is needed to activate your Green-Coins counter
+
+
+3. Fill in your account info from forum.mrgreengaming.com:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelLoginInfo">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>280</y>
+        <width>361</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_pass_gc">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>250</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="frame">
+       <bool>true</bool>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="buttonLink">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>190</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Login</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_user_gc">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>220</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_user_gc">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>220</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Username or email:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_pass_gc">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>250</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Password:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_Web">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>190</y>
+        <width>151</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>mrgreengaming.com</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::PlainText</enum>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="shopBanner">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>521</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>Welcome to the Green-Coins shop!</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelGreencoins">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>10</y>
+      <width>191</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

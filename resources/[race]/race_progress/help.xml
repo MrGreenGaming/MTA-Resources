@@ -1,0 +1,11 @@
+<help title="Race Progress Bar">
+The Race Progress Bar shows the position of each player on the race track in a simplified way. It also shows the position of you and the other players, as well as the time differences (measured at the checkpoints).
+
+Commands/Keys
+------------------------
+/progress - Opens/closes the settings GUI
+F7 (short press) - Toggles the Race Progress Bar
+F7 (long press) - Opens/closes the settings GUI
+
+(The key may be changed by the serveradmin, please contact him if it doesn't work.)
+</help>

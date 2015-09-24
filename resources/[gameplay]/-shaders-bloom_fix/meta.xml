@@ -1,0 +1,12 @@
+<meta>
+	<info description="Shader - Bloom" version="0.0.6" type="script" />
+	<min_mta_version client="1.3.3" server="1.3.3" />
+	<script src="c_bloom.lua" type="client" />
+	<script src="c_rtpool.lua" type="client" />
+	<script src="c_switch.lua" type="client" />
+	<file src="fx/addBlend.fx" type="client" />
+	<file src="fx/blurH.fx" type="client" />
+	<file src="fx/blurV.fx" type="client" />
+	<file src="fx/brightPass.fx" type="client" />
+	<file src="fx/mta-helper.fx" type="client" />
+</meta>

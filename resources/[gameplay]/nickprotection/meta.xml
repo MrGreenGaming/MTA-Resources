@@ -1,0 +1,8 @@
+<meta>
+	<info name="protect nick" longname="Nick Protection" description="Prevents stealing of protected nicknames as well as nickchange spam." author="BinSlayer" type="script" version="1.0" />
+	<script src="nickProtect.lua" type="server" />
+	<script src="nickProtect_c.lua" type="client" />
+	<config src="help.xml" type="client" />
+	<download_priority_group>-1</download_priority_group>
+
+</meta>	

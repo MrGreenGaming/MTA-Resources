@@ -1,0 +1,11 @@
+<meta>
+	<info author="KaliBwoy" version="1" type="script" name="Map Tools" description="Map tools for map managers"/>
+
+	<script src="mm_c.lua" type="client"/>
+	<script src="mm.lua" type="server"/>
+	
+	<export function="newMap" http="true" />
+
+	
+
+</meta>

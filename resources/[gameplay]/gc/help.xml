@@ -1,0 +1,29 @@
+<help>
+Read all about the new Green-Coins system in the Shop! (press F6)
+
+
+All the commands you will need are replaced by the shop already, but here they are anyway.
+
+Login and logout:
+(using left4green.com account)
+    /gclogin  [email]  [password]
+        OR
+    /gclogin  [nick]    [password]
+
+    /gclogout
+
+Link and delink:
+(use this for auto-login, need to /login first)
+    /linkgclogin  [email]  [password]
+        OR
+    /linkgclogin  [nick]    [password]
+
+    /delink
+
+Get amount of Green-Coins:
+    /greencoins
+    /greencoins [player]
+
+Toggle GC counter:
+    /gc
+</help>

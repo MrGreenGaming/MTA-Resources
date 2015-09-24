@@ -1,0 +1,11 @@
+<meta>
+	<info author="KaliBwoy" version="1" name="Chatbox ads" type="misc" />
+	<script src="ads_s.lua" />
+	<script src="ads_c.lua" type="client" />
+	<config src="ads.xml" type="server" />
+
+	<settings>
+        <setting name="*intervalTime" value="5" friendlyname="Ad Time Interval (in minutes)"  />
+		<setting name="*prefix" value="[INFO]#FFFFFF" friendlyname="The prefix for outputChatBox"  />
+    </settings>
+</meta>

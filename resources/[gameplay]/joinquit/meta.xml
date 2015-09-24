@@ -1,0 +1,5 @@
+<meta>
+    <include resource="geoloc" />
+	<script src="joinquit_gi.lua" type="client" />
+    <script src="joinquit_server.lua" />
+</meta>

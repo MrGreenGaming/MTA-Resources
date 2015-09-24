@@ -1,0 +1,49 @@
+<meta>
+
+	<!-- Images -->
+	
+	<file src="img/BGClear.png"></file>
+	<file src="img/p_RESULT_play_hover.png"></file>
+	<file src="img/p_RESULT_play.png"></file>
+
+	<file src="img/p_timebar.png"></file>
+	<file src="img/p_pause_hover.png"></file>
+	<file src="img/p_pause.png"></file>
+	<file src="img/p_close_button.png"></file>
+	<file src="img/p_close_button_hover.png"></file>
+	<file src="img/p_settings_button.png"></file>
+	<file src="img/p_settings_button_hover.png"></file>
+	<file src="img/p_search_click.png"></file>
+	<file src="img/p_search.png"></file>
+	<file src="img/p_previous_hover.png"></file>
+	<file src="img/p_previous.png"></file>
+	<file src="img/p_play_hover.png"></file>
+	<file src="img/p_play.png"></file>
+	<file src="img/p_next_hover.png"></file>
+	<file src="img/p_next.png"></file>
+	<file src="img/p_lineSpacer.png"></file>
+	<file src="img/p_add_hover.png"></file>
+	<file src="img/p_add.png"></file>
+	<file src="img/ava.png"></file>
+	<file src="img/sclogo.png"></file>
+	<file src="img/shine.png"></file>
+	<file src="img/artwork-placeholder.png"></file>
+	<file src="img/Outline.png"></file>
+	<file src="img/BG.png"></file>
+
+	<!--Scripts -->
+	<script src="gui.lua" type="client" />
+	<script src="nowPlayingGUI.lua" type="client" />
+    <script src="client.lua" type="client" />
+    <script src="server.lua" type="server" />
+
+	<!--GUI Animations -->
+    <script src="client_anim.lua" type="client" />
+
+
+    <info name="SoundCloud Music Player" author="KaliBwoy" version="1.0.1" description="Music player that uses SoundCloud as music database."></info>
+    <settings>
+    </settings>
+</meta>
+
+

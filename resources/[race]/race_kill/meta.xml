@@ -1,0 +1,7 @@
+﻿<meta>
+	<info name="Kill detection" description="Kill detection for DM modes" author="SDK" type="script" addon="race" version="1.0"/>
+	<script src="killed_s.lua" type="server" />
+	<script src="killed_c.lua" type="client" />
+
+	<export function="getKiller" type="server"/>
+</meta>

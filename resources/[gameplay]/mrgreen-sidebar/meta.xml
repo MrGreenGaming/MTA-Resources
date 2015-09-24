@@ -1,0 +1,10 @@
+<meta>
+    <script src="sb_c.lua" type="client" protected="true" />
+    <script src="sb_s.lua" type="server" />
+    <info name="Sidebar" author="KaliBwoy" version="1.0.2" description="Custom sidebar"></info>
+    <settings>
+
+    </settings>
+</meta>
+
+

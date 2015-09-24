@@ -1,0 +1,92 @@
+<meta>
+    <info author="SDK" description="New HUD for race" type="script" version="1.0.0" addon="race" />
+	<script src="sp_hud.lua" type="client" protected="true" />
+	<script src="camera.lua" type="client" protected="true" />
+	<script src="radar.lua" type="client" protected="true" />
+	<config src="def.conf" type="client" />
+	
+	<file src="files/coolvetica_rg.ttf"/>
+	<file src="files/textureReplace.fx"/>
+	
+	<file src="images/radar.jpg"/>
+	<file src="images/world.png"/>
+	<file src="images/gtasa-blank-1.0.jpg"/>
+	<file src="images/blips/0.png"/>
+	<file src="images/blips/0-up.png"/>
+	<file src="images/blips/1.png"/>
+	<file src="images/blips/2.png"/>
+	<file src="images/blips/3.png"/>
+	<file src="images/blips/4.png"/>
+	<file src="images/blips/5.png"/>
+	<file src="images/blips/6.png"/>
+	<file src="images/blips/7.png"/>
+	<file src="images/blips/8.png"/>
+	<file src="images/blips/9.png"/>
+	<file src="images/blips/10.png"/>
+	<file src="images/blips/11.png"/>
+	<file src="images/blips/12.png"/>
+	<file src="images/blips/13.png"/>
+	<file src="images/blips/14.png"/>
+	<file src="images/blips/15.png"/>
+	<file src="images/blips/16.png"/>
+	<file src="images/blips/17.png"/>
+	<file src="images/blips/18.png"/>
+	<file src="images/blips/19.png"/>
+	<file src="images/blips/20.png"/>
+	<file src="images/blips/21.png"/>
+	<file src="images/blips/22.png"/>
+	<file src="images/blips/23.png"/>
+	<file src="images/blips/24.png"/>
+	<file src="images/blips/25.png"/>
+	<file src="images/blips/26.png"/>
+	<file src="images/blips/27.png"/>
+	<file src="images/blips/28.png"/>
+	<file src="images/blips/29.png"/>
+	<file src="images/blips/30.png"/>
+	<file src="images/blips/31.png"/>
+	<file src="images/blips/32.png"/>
+	<file src="images/blips/33.png"/>
+	<file src="images/blips/34.png"/>
+	<file src="images/blips/35.png"/>
+	<file src="images/blips/36.png"/>
+	<file src="images/blips/37.png"/>
+	<file src="images/blips/38.png"/>
+	<file src="images/blips/39.png"/>
+	<file src="images/blips/40.png"/>
+	<file src="images/blips/41.png"/>
+	<file src="images/blips/42.png"/>
+	<file src="images/blips/43.png"/>
+	<file src="images/blips/44.png"/>
+	<file src="images/blips/45.png"/>
+	<file src="images/blips/46.png"/>
+	<file src="images/blips/47.png"/>
+	<file src="images/blips/48.png"/>
+	<file src="images/blips/49.png"/>
+	<file src="images/blips/50.png"/>
+	<file src="images/blips/51.png"/>
+	<file src="images/blips/52.png"/>
+	<file src="images/blips/53.png"/>
+	<file src="images/blips/54.png"/>
+	<file src="images/blips/55.png"/>
+	<file src="images/blips/56.png"/>
+	<file src="images/blips/57.png"/>
+	<file src="images/blips/58.png"/>
+	<file src="images/blips/59.png"/>
+	<file src="images/blips/60.png"/>
+	<file src="images/blips/61.png"/>
+	<file src="images/blips/62.png"/>
+	<file src="images/blips/63.png"/>
+	<file src="images/blips/pickup1.png"/>
+	<file src="images/blips/pickup0.png"/>
+	<file src="images/blips/ped.png"/>
+	<file src="images/blips/pedvehicle.png"/>
+	<file src="images/blips/vehicle.png"/>
+	<file src="images/blips/pickup2.png"/>
+
+    <!-- Exports for settings resource  KaliBwoy -->
+    <export function="e_showSPhud" type="client"/>
+    <export function="e_showNewhud" type="client"/>
+    <export function="e_showOldhud" type="client"/>
+    <export function="e_showRadar" type="client"/>
+    <export function="e_hideRadar" type="client"/>
+</meta>

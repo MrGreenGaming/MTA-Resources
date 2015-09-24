@@ -1,0 +1,10 @@
+<meta>
+	<info description="Shader - DOF" version="0.0.6" type="script" />
+	<script src="c_dof.lua" type="client" />
+	<script src="c_rtpool.lua" type="client" />
+	<script src="c_switch.lua" type="client" />
+	<file src="fx/dBlurH.fx" type="client" />
+	<file src="fx/dBlurV.fx" type="client" />
+	<file src="fx/getDepth.fx" type="client" />
+	<file src="fx/mta-helper.fx" type="client" />
+</meta>

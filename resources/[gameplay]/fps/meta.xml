@@ -1,0 +1,10 @@
+<meta>
+    <info author="lil_Toady, modified by Crys" description="FPS Calculations" type="misc" version="1.2" />
+    <script src="fpscm.lua" type="client" />
+    <script src="fpscm_server.lua" />
+    <export function="enableFPS" type="client"/>
+
+	 <!-- Exports for settings resource  KaliBwoy -->
+    <export function="e_showFPS" type="client"/>
+    <export function="e_hideFPS" type="client"/>
+</meta>

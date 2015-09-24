@@ -1,0 +1,6 @@
+<meta>
+	<info name="Nitro Shader" author="NeXTreme" version="1.0.0" type="misc" />
+	
+	<script src="client.lua" type="client" />
+	<file src="nitro.fx" />
+</meta>

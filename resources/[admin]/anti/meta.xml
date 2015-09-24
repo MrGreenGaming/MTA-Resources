@@ -1,0 +1,33 @@
+﻿<meta>
+	<info name="Anti-High Ping" />
+	
+	<script src="colstate_c.lua" type="client" />
+	<script src="colstate_s.lua" type="server" />
+
+	<script src="mods.lua" type="server" />
+	<script src="mods_c.lua" type="client" />
+	
+	<script src="fps.lua" type="server" />
+	<script src="fps_client.lua" type="client" />
+	
+	<script src="camp_s.lua" type="server" />
+	<script src="camp_c.lua" type="client" />
+	
+	<script src="ping.lua" type="server" />
+	<script src="ping_client.lua" type="client" />
+	
+	<script src="idle_server.lua" type="server" />
+	<script src="idle_cl.lua" type="client" />
+	<export function="isPlayerAFK" type="server"/>
+	
+	<script src="anti_flood.lua" type="server" />
+	<script src="anti_flood_c.lua" type="client" />
+
+	<script src="timeout_c.lua" type="client" />
+	<script src="timeout.lua" type="server" />
+	
+	<settings>
+		<setting name='@differenceBetweenMessages_ms' value='[4000]' /> <!-- in this time (in miliseconds), player can send specific amount of messages -->
+		<setting name='@messagesNumber' value='[2]' /> <!-- the amount of messages player can send in the amount of ms set above -->
+	</settings>
+</meta>

@@ -1,0 +1,13 @@
+<meta>
+<info author="Wojak" description="hunting bot for race mod" type="script" version="1.1.0"/>
+	<include resource="missiontimer"/>
+	<script src="hunt_cl.lua" type="client"/>
+	<script src="hunt_s.lua" type="server"/>
+	<settings>
+		<setting name="#modspeed" value="20" /> <!-- tekst -->
+		<setting name="#aispeed" value="5.2" /> <!-- tekst -->
+		<setting name="#speedlimit" value="150" /> <!-- tekst -->
+		<setting name="#starthuntdely" value="25" /> <!-- tekst -->
+		<setting name="#huntpause" value="30" /> <!-- tekst -->
+	</settings>
+</meta>

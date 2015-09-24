@@ -1,0 +1,648 @@
+<map>
+	<modshop_vehicles id="modshop_vehicles">
+		<vehicle_group name="Street Racers">
+			<modshop_vehicle vehicle_name="Banshee" vehicle_id="429" neon_data="0.9,-0.5,1,2.0,-0.55,0.667,-2.2,-0.50,0.667" />
+			<modshop_vehicle vehicle_name="Bullet" vehicle_id="541" neon_data="0.85,-0.45,1,2.2,-0.50,0.667,-2.0,-0.45,0.667" />
+			<modshop_vehicle vehicle_name="Cheetah" vehicle_id="415" neon_data="0.85,-0.55,1,2.2,-0.65,0.667,-2.0,-0.60,0.667" />
+			<modshop_vehicle vehicle_name="Comet" vehicle_id="480" neon_data="0.85,-0.55,1,2.0,-0.55,0.667,-2.2,-0.50,0.667" />
+			<modshop_vehicle vehicle_name="Elegy" vehicle_id="562" neon_data="0.85,-0.50,1,2.2,-0.50,0.667,-2.0,-0.45,0.667" />
+			<modshop_vehicle vehicle_name="Flash" vehicle_id="565" neon_data="0.80,-0.50,1,2.0,-0.45,0.667,-1.8,-0.40,0.667" />
+			<modshop_vehicle vehicle_name="Hotknife" vehicle_id="434"  />
+			<modshop_vehicle vehicle_name="Hotring Racer" vehicle_id="494" neon_data="0.85,-0.70,1,2.4,-0.65,0.667,-2.7,-0.60,0.667" />
+			<modshop_vehicle vehicle_name="Hotring Racer 2" vehicle_id="502" neon_data="0.85,-0.70,1,2.4,-0.65,0.667,-2.4,-0.60,0.667" />
+			<modshop_vehicle vehicle_name="Hotring Racer 3" vehicle_id="503" neon_data="0.85,-0.70,1,2.4,-0.65,0.667,-2.7,-0.50,0.667" />
+			<modshop_vehicle vehicle_name="Infernus" vehicle_id="411" neon_data="0.9,-0.6,1,2.5,-0.60,0.667,-2.3,-0.55,0.667" />
+			<modshop_vehicle vehicle_name="Jester" vehicle_id="559" neon_data="0.85,-0.50,1,2.5,-0.50,0.667,-2.0,-0.45,0.667" />
+			<modshop_vehicle vehicle_name="Stratum" vehicle_id="561" neon_data="0.85,-0.60,1,2.4,-0.55,0.667,-2.4,-0.60,0.667" />
+			<modshop_vehicle vehicle_name="Sultan" vehicle_id="560" neon_data="0.80,-0.45,1,2.4,-0.45,0.667,-2.1,-0.45,0.667" />
+			<modshop_vehicle vehicle_name="Super GT" vehicle_id="506" neon_data="0.80,-0.55,1,2.15,-0.55,0.667,-2.1,-0.55,0.667" />
+			<modshop_vehicle vehicle_name="Turismo" vehicle_id="451" neon_data="0.80,-0.55,1,2.2,-0.55,0.667,-2.1,-0.55,0.667" />
+			<modshop_vehicle vehicle_name="Uranus" vehicle_id="558" neon_data="0.80,-0.45,1,2.2,-0.40,0.667,-2.1,-0.40,0.667" />
+			<modshop_vehicle vehicle_name="Windsor" vehicle_id="555" neon_data="0.80,-0.45,1,2.2,-0.40,0.667,-2.1,-0.40,0.667" />
+			<modshop_vehicle vehicle_name="ZR-350" vehicle_id="477" neon_data="0.9,-0.55,1,2.3,-0.55,0.667,-2.3,-0.50,0.667" />
+		</vehicle_group>
+		<vehicle_group name="Lowriders">
+			<modshop_vehicle vehicle_name="Blade" vehicle_id="536" neon_data="0.9,-0.60,1,2.25,-0.55,0.667,-2.6,-0.55,0.667" />
+			<modshop_vehicle vehicle_name="Broadway" vehicle_id="575" neon_data="0.9,-0.40,1,2.25,-0.40,0.667,-2.5,-0.40,0.667" />
+			<modshop_vehicle vehicle_name="Remington" vehicle_id="534" neon_data="0.9,-0.60,1,2.65,-0.55,0.667,-2.6,-0.55,0.667" />
+			<modshop_vehicle vehicle_name="Savanna" vehicle_id="567" neon_data="0.9,-0.65,1,2.65,-0.60,0.667,-2.6,-0.60,0.667" />
+			<modshop_vehicle vehicle_name="Slamvan" vehicle_id="535" neon_data="0.85,-0.60,1,2.3,-0.60,0.667,-2.4,-0.60,0.667" />
+			<modshop_vehicle vehicle_name="Tornado" vehicle_id="576" neon_data="0.9,-0.45,1,2.25,-0.45,0.667,-2.7,-0.45,0.667" />
+			<modshop_vehicle vehicle_name="Voodoo" vehicle_id="412" neon_data="0.9,-0.65,1,2.5,-0.60,0.667,-2.9,-0.60,0.667" />
+		</vehicle_group>
+		<vehicle_group name="Muscle Cars">
+			<modshop_vehicle vehicle_name="Buffalo" vehicle_id="402" neon_data="0.80,-0.65,1,2.35,-0.50,0.667,-2.4,-0.50,0.667" />
+			<modshop_vehicle vehicle_name="Clover" vehicle_id="542" neon_data="0.80,-0.60,1,2.35,-0.45,0.667,-2.4,-0.45,0.667" />
+			<modshop_vehicle vehicle_name="Phoenix" vehicle_id="603" neon_data="0.80,-0.65,1,2.35,-0.50,0.667,-2.4,-0.50,0.667" />
+			<modshop_vehicle vehicle_name="Sabre" vehicle_id="475" neon_data="0.80,-0.55,1,2.2,-0.50,0.667,-2.4,-0.50,0.667" />
+		</vehicle_group>
+		<vehicle_group name="Recreational">
+			<modshop_vehicle vehicle_name="Bandito" vehicle_id="568" />
+			<modshop_vehicle vehicle_name="Monster 3" vehicle_id="557" />
+			<modshop_vehicle vehicle_name="BF Injection" vehicle_id="424" />
+			<modshop_vehicle vehicle_name="Quadbike" vehicle_id="471" />
+			<modshop_vehicle vehicle_name="Bloodring Banger" vehicle_id="504" />
+			<modshop_vehicle vehicle_name="Sandking" vehicle_id="495" />
+			<modshop_vehicle vehicle_name="Caddy" vehicle_id="457" />
+			<modshop_vehicle vehicle_name="Vortex" vehicle_id="539" />
+			<modshop_vehicle vehicle_name="Camper" vehicle_id="483" />
+			<modshop_vehicle vehicle_name="Journey" vehicle_id="508" />
+			<modshop_vehicle vehicle_name="Kart" vehicle_id="571" />
+			<modshop_vehicle vehicle_name="Mesa" vehicle_id="500" />
+			<modshop_vehicle vehicle_name="Monster" vehicle_id="444" />
+			<modshop_vehicle vehicle_name="Monster 2" vehicle_id="556" />
+		</vehicle_group>
+		<vehicle_group name="Bikes">
+			<modshop_vehicle vehicle_name="BF-400" vehicle_id="581" />
+			<modshop_vehicle vehicle_name="Mountain Bike" vehicle_id="510" />
+			<modshop_vehicle vehicle_name="Bike" vehicle_id="509" />
+			<modshop_vehicle vehicle_name="NRG-500" vehicle_id="522" />
+			<modshop_vehicle vehicle_name="BMX" vehicle_id="481" />
+			<modshop_vehicle vehicle_name="PCJ-600" vehicle_id="461" />
+			<modshop_vehicle vehicle_name="Faggio" vehicle_id="462" />
+			<modshop_vehicle vehicle_name="Pizza Boy" vehicle_id="448" />
+			<modshop_vehicle vehicle_name="FCR-900" vehicle_id="521" />
+			<modshop_vehicle vehicle_name="Sanchez" vehicle_id="468" />
+			<modshop_vehicle vehicle_name="Freeway" vehicle_id="463" />
+			<modshop_vehicle vehicle_name="Wayfarer" vehicle_id="586" />
+		</vehicle_group>
+		<vehicle_group name="Civil Servant / Public Transportation">
+			<modshop_vehicle vehicle_name="Baggage" vehicle_id="485" />
+			<modshop_vehicle vehicle_name="Tram" vehicle_id="449" />
+			<modshop_vehicle vehicle_name="Brown Streak Engine" vehicle_id="538" />
+			<modshop_vehicle vehicle_name="Utility Van" vehicle_id="552" />
+			<modshop_vehicle vehicle_name="Bus" vehicle_id="431" />
+			<modshop_vehicle vehicle_name="Cabbie" vehicle_id="438" />
+			<modshop_vehicle vehicle_name="Coach" vehicle_id="437" />
+			<modshop_vehicle vehicle_name="Freight" vehicle_id="537" />
+			<modshop_vehicle vehicle_name="Sweeper" vehicle_id="574" />
+			<modshop_vehicle vehicle_name="Taxi" vehicle_id="420" />
+			<modshop_vehicle vehicle_name="Towtruck" vehicle_id="525" />
+			<modshop_vehicle vehicle_name="Trashmaster" vehicle_id="408" />
+		</vehicle_group>
+		<vehicle_group name="Government Vehicles">
+			<modshop_vehicle vehicle_name="Ambulance" vehicle_id="416" />
+			<modshop_vehicle vehicle_name="Police Car (Los Santos)" vehicle_id="596" />
+			<modshop_vehicle vehicle_name="Barracks" vehicle_id="433" />
+			<modshop_vehicle vehicle_name="Police Car (San Fierro)" vehicle_id="597" />
+			<modshop_vehicle vehicle_name="Enforcer" vehicle_id="427" />
+			<modshop_vehicle vehicle_name="Police Ranger" vehicle_id="599" />
+			<modshop_vehicle vehicle_name="FBI Rancher" vehicle_id="490" />
+			<modshop_vehicle vehicle_name="Rhino" vehicle_id="432" />
+			<modshop_vehicle vehicle_name="FBI Truck" vehicle_id="528" />
+			<modshop_vehicle vehicle_name="S.W.A.T." vehicle_id="601" />
+			<modshop_vehicle vehicle_name="Fire Truck" vehicle_id="407" />
+			<modshop_vehicle vehicle_name="Securicar" vehicle_id="428" />
+			<modshop_vehicle vehicle_name="Fire Truck (Ladder)" vehicle_id="544" />
+			<modshop_vehicle vehicle_name="HPV1000" vehicle_id="523" />
+			<modshop_vehicle vehicle_name="Patriot" vehicle_id="470" />
+			<modshop_vehicle vehicle_name="Police Car (Las Venturas)" vehicle_id="598" />
+		</vehicle_group>
+		<vehicle_group name="Heavy and Utility Trucks">
+			<modshop_vehicle vehicle_name="Benson" vehicle_id="499" />
+			<modshop_vehicle vehicle_name="Hotdog" vehicle_id="588" />
+			<modshop_vehicle vehicle_name="Black Boxville" vehicle_id="609" />
+			<modshop_vehicle vehicle_name="Linerunner" vehicle_id="403" />
+			<modshop_vehicle vehicle_name="Boxville" vehicle_id="498" />
+			<modshop_vehicle vehicle_name="Linerunner (Tanker Commando)" vehicle_id="514" />
+			<modshop_vehicle vehicle_name="Cement Truck" vehicle_id="524" />
+			<modshop_vehicle vehicle_name="Mr. Whoopee" vehicle_id="423" />
+			<modshop_vehicle vehicle_name="Combine Harvester" vehicle_id="532" />
+			<modshop_vehicle vehicle_name="Mule" vehicle_id="414" />
+			<modshop_vehicle vehicle_name="DFT-30" vehicle_id="578" />
+			<modshop_vehicle vehicle_name="Packer" vehicle_id="443" />
+			<modshop_vehicle vehicle_name="Dozer" vehicle_id="486" />
+			<modshop_vehicle vehicle_name="Roadtrain" vehicle_id="515" />
+			<modshop_vehicle vehicle_name="Dumper" vehicle_id="406" />
+			<modshop_vehicle vehicle_name="Tractor" vehicle_id="531" />
+			<modshop_vehicle vehicle_name="Dune" vehicle_id="573" />
+			<modshop_vehicle vehicle_name="Yankee" vehicle_id="456" />
+			<modshop_vehicle vehicle_name="Flatbed" vehicle_id="455" />
+		</vehicle_group>
+		<vehicle_group name="Light Trucks and Vans">
+			<modshop_vehicle vehicle_name="Berkley's RC Van" vehicle_id="459" />
+			<modshop_vehicle vehicle_name="Sadler" vehicle_id="543" />
+			<modshop_vehicle vehicle_name="Bobcat" vehicle_id="422" />
+			<modshop_vehicle vehicle_name="Tug" vehicle_id="583" />
+			<modshop_vehicle vehicle_name="Burrito" vehicle_id="482" />
+			<modshop_vehicle vehicle_name="Walton" vehicle_id="478" />
+			<modshop_vehicle vehicle_name="Damaged Sadler" vehicle_id="605" />
+			<modshop_vehicle vehicle_name="Yosemite" vehicle_id="554" />
+			<modshop_vehicle vehicle_name="Forklift" vehicle_id="530" />
+			<modshop_vehicle vehicle_name="Moonbeam" vehicle_id="418" />
+			<modshop_vehicle vehicle_name="Mower" vehicle_id="572" />
+			<modshop_vehicle vehicle_name="News Van" vehicle_id="582" />
+			<modshop_vehicle vehicle_name="Pony" vehicle_id="413" />
+			<modshop_vehicle vehicle_name="Rumpo" vehicle_id="440" />
+		</vehicle_group>
+		<vehicle_group name="2-Door and Compact cars">
+			<modshop_vehicle vehicle_name="Alpha"	vehicle_id="602" />
+			<modshop_vehicle vehicle_name="Hustler"	vehicle_id="545" />
+			<modshop_vehicle vehicle_name="Blista Compact"	vehicle_id="496" />
+			<modshop_vehicle vehicle_name="Majestic"	vehicle_id="517" />
+			<modshop_vehicle vehicle_name="Bravura"	vehicle_id="401" />
+			<modshop_vehicle vehicle_name="Manana"	vehicle_id="410" />
+			<modshop_vehicle vehicle_name="Buccaneer"	vehicle_id="518" />
+			<modshop_vehicle vehicle_name="Picador"	vehicle_id="600" />
+			<modshop_vehicle vehicle_name="Cadrona"	vehicle_id="527" />
+			<modshop_vehicle vehicle_name="Previon"	vehicle_id="436" />
+			<modshop_vehicle vehicle_name="Club"	vehicle_id="589" />
+			<modshop_vehicle vehicle_name="Stafford"	vehicle_id="580" />
+			<modshop_vehicle vehicle_name="Esperanto"	vehicle_id="419" />
+			<modshop_vehicle vehicle_name="Stallion"	vehicle_id="439" />
+			<modshop_vehicle vehicle_name="Feltzer"	vehicle_id="533" />
+			<modshop_vehicle vehicle_name="Tampa"	vehicle_id="549" />
+			<modshop_vehicle vehicle_name="Fortune"	vehicle_id="526" />
+			<modshop_vehicle vehicle_name="Virgo"	vehicle_id="491" />
+			<modshop_vehicle vehicle_name="Hermes"	vehicle_id="474" />	
+		</vehicle_group>
+		<vehicle_group name="4-Door and Luxury cars">
+			<modshop_vehicle vehicle_name="Admiral" vehicle_id="445" />
+			<modshop_vehicle vehicle_name="Oceanic" vehicle_id="467" />
+			<modshop_vehicle vehicle_name="Damaged Glendale" vehicle_id="604" />
+			<modshop_vehicle vehicle_name="Premier" vehicle_id="426" />
+			<modshop_vehicle vehicle_name="Elegant" vehicle_id="507" />
+			<modshop_vehicle vehicle_name="Primo" vehicle_id="547" />
+			<modshop_vehicle vehicle_name="Emperor" vehicle_id="585" />
+			<modshop_vehicle vehicle_name="Sentinel" vehicle_id="405" />
+			<modshop_vehicle vehicle_name="Euros" vehicle_id="587" />
+			<modshop_vehicle vehicle_name="Stretch" vehicle_id="409" />
+			<modshop_vehicle vehicle_name="Glendale" vehicle_id="466" />
+			<modshop_vehicle vehicle_name="Sunrise" vehicle_id="550" />
+			<modshop_vehicle vehicle_name="Greenwood" vehicle_id="492" />
+			<modshop_vehicle vehicle_name="Tahoma" vehicle_id="566" />
+			<modshop_vehicle vehicle_name="Intruder" vehicle_id="546" />
+			<modshop_vehicle vehicle_name="Vincent" vehicle_id="540" />
+			<modshop_vehicle vehicle_name="Merit" vehicle_id="551" />
+			<modshop_vehicle vehicle_name="Washington" vehicle_id="421" />
+			<modshop_vehicle vehicle_name="Nebula" vehicle_id="516" />
+			<modshop_vehicle vehicle_name="Willard" vehicle_id="529" />
+		</vehicle_group>
+		<vehicle_group name="SUVs and Wagons">
+			<modshop_vehicle vehicle_name="Huntley" vehicle_id="579" />
+			<modshop_vehicle vehicle_name="Landstalker" vehicle_id="400" />
+			<modshop_vehicle vehicle_name="Perennial" vehicle_id="404" />
+			<modshop_vehicle vehicle_name="Rancher" vehicle_id="489" />
+			<modshop_vehicle vehicle_name="Rancher (Lure)" vehicle_id="505" />
+			<modshop_vehicle vehicle_name="Regina" vehicle_id="479" />
+			<modshop_vehicle vehicle_name="Romero" vehicle_id="442" />
+			<modshop_vehicle vehicle_name="Solair" vehicle_id="458" />
+		</vehicle_group>
+		<vehicle_group name="RC Vehicles">
+			<modshop_vehicle vehicle_name="RC Bandit" vehicle_id="441" />
+			<modshop_vehicle vehicle_name="RC Baron" vehicle_id="464" />
+			<modshop_vehicle vehicle_name="RC Goblin" vehicle_id="501" />
+			<modshop_vehicle vehicle_name="RC Raider" vehicle_id="465" />
+			<modshop_vehicle vehicle_name="RC Tiger" vehicle_id="564" />
+			<modshop_vehicle vehicle_name="RC Cam (flower pot)" vehicle_id="594" />
+		</vehicle_group>
+		<vehicle_group name="Boats">
+			<modshop_vehicle vehicle_name="Coastguard" vehicle_id="472" />
+			<modshop_vehicle vehicle_name="Dinghy" vehicle_id="473" />
+			<modshop_vehicle vehicle_name="Jetmax" vehicle_id="493" />
+			<modshop_vehicle vehicle_name="Launch" vehicle_id="595" />
+			<modshop_vehicle vehicle_name="Marquis" vehicle_id="484" />
+			<modshop_vehicle vehicle_name="Predator" vehicle_id="430" />
+			<modshop_vehicle vehicle_name="Reefer" vehicle_id="453" />
+			<modshop_vehicle vehicle_name="Speeder" vehicle_id="452" />
+			<modshop_vehicle vehicle_name="Squalo" vehicle_id="446" />
+			<modshop_vehicle vehicle_name="Tropic" vehicle_id="454" />
+		</vehicle_group>
+		<vehicle_group name="Aircraft">
+			<modshop_vehicle vehicle_name="Andromada" vehicle_id="592" />
+			<modshop_vehicle vehicle_name="Nevada" vehicle_id="553" />
+			<modshop_vehicle vehicle_name="AT-400" vehicle_id="577" />
+			<modshop_vehicle vehicle_name="News Chopper" vehicle_id="488" />
+			<modshop_vehicle vehicle_name="Beagle" vehicle_id="511" />
+			<modshop_vehicle vehicle_name="Police Maverick" vehicle_id="497" />
+			<modshop_vehicle vehicle_name="Cargobob" vehicle_id="548" />
+			<modshop_vehicle vehicle_name="Raindance" vehicle_id="563" />
+			<modshop_vehicle vehicle_name="Cropduster" vehicle_id="512" />
+			<modshop_vehicle vehicle_name="Rustler" vehicle_id="476" />
+			<modshop_vehicle vehicle_name="Dodo" vehicle_id="593" />
+			<modshop_vehicle vehicle_name="Seasparrow" vehicle_id="447" />
+			<modshop_vehicle vehicle_name="Hunter" vehicle_id="425" />
+			<modshop_vehicle vehicle_name="Shamal" vehicle_id="519" />
+			<modshop_vehicle vehicle_name="Hydra" vehicle_id="520" />
+			<modshop_vehicle vehicle_name="Skimmer" vehicle_id="460" />
+			<modshop_vehicle vehicle_name="Leviathan" vehicle_id="417" />
+			<modshop_vehicle vehicle_name="Sparrow" vehicle_id="469" />
+			<modshop_vehicle vehicle_name="Maverick" vehicle_id="487" />
+			<modshop_vehicle vehicle_name="Stuntplane" vehicle_id="513" />
+		</vehicle_group>
+		<vehicle_group name="Trailers" ignore="true">
+			<modshop_vehicle vehicle_name="Baggage Trailer (covered)" vehicle_id="606" />
+			<modshop_vehicle vehicle_name="Baggage Trailer (Uncovered)" vehicle_id="607" />
+			<modshop_vehicle vehicle_name="Farm Trailer" vehicle_id="610" />
+			<modshop_vehicle vehicle_name="Freight Train Boxcar" vehicle_id="590" />
+			<modshop_vehicle vehicle_name="Freight Train Flatbed" vehicle_id="569" />
+			<modshop_vehicle vehicle_name="'Street Clean' Trailer" vehicle_id="611" />
+			<modshop_vehicle vehicle_name="Trailer (Tanker Commando)" vehicle_id="584" />
+			<modshop_vehicle vehicle_name="Trailer (Stairs)" vehicle_id="608" />
+			<modshop_vehicle vehicle_name="Trailer 1" vehicle_id="435" />
+			<modshop_vehicle vehicle_name="Trailer 2" vehicle_id="450" />
+			<modshop_vehicle vehicle_name="Trailer 3" vehicle_id="591" />
+		</vehicle_group>
+		<vehicle_group name="Trains" ignore="true">
+			<modshop_vehicle vehicle_name="Tram" vehicle_id="449" />
+			<modshop_vehicle vehicle_name="Freight" vehicle_id="537" />
+			<modshop_vehicle vehicle_name="Brown Streak" vehicle_id="538" />
+			<modshop_vehicle vehicle_name="Brown Streak Carriage" vehicle_id="570" />
+			<modshop_vehicle vehicle_name="Flat Freight" vehicle_id="569" />
+			<modshop_vehicle vehicle_name="Box Freight" vehicle_id="590" />
+		</vehicle_group>
+	</modshop_vehicles>
+    <modshop_upgrades id="modshop_upgrades">
+		<upgrade id="upgrade_1000" name="Pro" />
+		<upgrade id="upgrade_1001" name="Win" />
+		<upgrade id="upgrade_1002" name="Drag" />
+		<upgrade id="upgrade_1003" name="Alpha" />
+		<upgrade id="upgrade_1004" name="Champ Scoop" />
+		<upgrade id="upgrade_1005" name="Fury Scoop" />
+		<upgrade id="upgrade_1006" name="Roof Scoop" />
+		<upgrade id="upgrade_1007" name="Right Sideskirt" />
+		<upgrade id="upgrade_1011" name="Race Scoop" />
+		<upgrade id="upgrade_1012" name="Worx Scoop" />
+		<upgrade id="upgrade_1013" name="Round Fog" />
+		<upgrade id="upgrade_1014" name="Champ" />
+		<upgrade id="upgrade_1015" name="Race" />
+		<upgrade id="upgrade_1016" name="Worx" />
+		<upgrade id="upgrade_1017" name="Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1017" name="Left Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1018" name="Upswept" />
+		<upgrade id="upgrade_1019" name="Twin" />
+		<upgrade id="upgrade_1020" name="Large" />
+		<upgrade id="upgrade_1021" name="Medium" />
+		<upgrade id="upgrade_1022" name="Small" />
+		<upgrade id="upgrade_1023" name="Fury" />
+		<upgrade id="upgrade_1024" name="Square Fog" />
+		<upgrade id="upgrade_1025" name="Offroad" />
+		<upgrade id="upgrade_1026" name="Alien Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1026" name="Right Alien Sideskirt" />
+		<upgrade id="upgrade_1027" name="Left Alien Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1028" name="Alien" />
+		<upgrade id="upgrade_1029" name="X-Flow" />
+		<upgrade id="upgrade_1030" name="X-Flow Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1030" name="Left X-Flow Sideskirt" />
+		<upgrade id="upgrade_1031" name="Right X-Flow Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1032" name="Alien Roof Vent" />
+		<upgrade id="upgrade_1033" name="X-Flow Roof Vent" />
+		<upgrade id="upgrade_1034" name="Alien" />
+		<upgrade id="upgrade_1035" name="X-Flow Roof Vent" />
+		<upgrade id="upgrade_1036" name="Alien Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1036" name="Right Alien Sideskirt" />
+		<upgrade id="upgrade_1040" name="Left Alien Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1037" name="X-Flow" />
+		<upgrade id="upgrade_1038" name="Alien Roof Vent" />
+		<upgrade id="upgrade_1039" name="X-Flow Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1039" name="Left X-Flow Sideskirt" />
+		<upgrade id="upgrade_1041" name="Right X-Flow Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1042" name="Chrome Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1042" name="Right Chrome Sideskirt" />
+		<upgrade id="upgrade_1099" name="Left Chrome Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1043" name="Slamin" />
+		<upgrade id="upgrade_1044" name="Chrome" />
+		<upgrade id="upgrade_1045" name="X-Flow" />
+		<upgrade id="upgrade_1046" name="Alien" />
+		<upgrade id="upgrade_1047" name="Alien Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1047" name="Right Alien Sideskirt" />
+		<upgrade id="upgrade_1051" name="Left Alien Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1048" name="X-Flow Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1048" name="Right X-Flow Sideskirt" />
+		<upgrade id="upgrade_1052" name="Left X-Flow Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1049" name="Alien" />
+		<upgrade id="upgrade_1050" name="X-Flow" />
+		<upgrade id="upgrade_1053" name="X-Flow" />
+		<upgrade id="upgrade_1054" name="Alien" />
+		<upgrade id="upgrade_1055" name="Alien" />
+		<upgrade id="upgrade_1056" name="Alien Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1056" name="Right Alien Sideskirt" />
+		<upgrade id="upgrade_1062" name="Left Alien Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1057" name="X-Flow Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1057" name="Right X-Flow Sideskirt" />
+		<upgrade id="upgrade_1063" name="Left X-Flow Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1058" name="Alien" />
+		<upgrade id="upgrade_1059" name="X-Flow" />
+		<upgrade id="upgrade_1060" name="X-Flow" />
+		<upgrade id="upgrade_1061" name="X-Flow" />
+		<upgrade id="upgrade_1064" name="Alien" />
+		<upgrade id="upgrade_1065" name="Alien" />
+		<upgrade id="upgrade_1066" name="X-Flow" />
+		<upgrade id="upgrade_1067" name="Alien" />
+		<upgrade id="upgrade_1068" name="X-Flow" />
+		<upgrade id="upgrade_1069" name="Alien Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1069" name="Right Alien Sideskirt" />
+		<upgrade id="upgrade_1071" name="Left Alien Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1070" name="X-Flow Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1070" name="Right X-Flow Sideskirt" />
+		<upgrade id="upgrade_1072" name="Left X-Flow Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1073" name="Shadow" />
+		<upgrade id="upgrade_1074" name="Mega" />
+		<upgrade id="upgrade_1075" name="Rimshine" />
+		<upgrade id="upgrade_1076" name="Wires" />
+		<upgrade id="upgrade_1077" name="Classic" />
+		<upgrade id="upgrade_1078" name="Twist" />
+		<upgrade id="upgrade_1079" name="Cutter" />
+		<upgrade id="upgrade_1080" name="Switch" />
+		<upgrade id="upgrade_1081" name="Grove" />
+		<upgrade id="upgrade_1082" name="Import" />
+		<upgrade id="upgrade_1083" name="Dollar" />
+		<upgrade id="upgrade_1084" name="Trance" />
+		<upgrade id="upgrade_1085" name="Atomic" />
+		<upgrade id="upgrade_1086" name="Stereo" />
+		<upgrade id="upgrade_1088" name="Alien" />
+		<upgrade id="upgrade_1089" name="X-Flow" />
+		<upgrade id="upgrade_1090" name="Alien Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1090" name="Right Alien Sideskirt" />
+		<upgrade id="upgrade_1094" name="Left Alien Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1091" name="X-Flow" />
+		<upgrade id="upgrade_1092" name="Alien" />
+		<upgrade id="upgrade_1093" name="X-Flow Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1093" name="Right X-Flow Sideskirt" />
+		<upgrade id="upgrade_1095" name="Right X-Flow Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1096" name="Ahab" />
+		<upgrade id="upgrade_1097" name="Virtual" />
+		<upgrade id="upgrade_1098" name="Access" />
+		<upgrade id="upgrade_1100" name="Chrome Grill" />
+		<upgrade id="upgrade_1101" name="`Chrome Flames` Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1101" name="Left `Chrome Flames` Sideskirt" />
+		<upgrade id="upgrade_1122" name="Right `Chrome Flames` Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1102" name="`Chrome Strip` Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1102" name="Left `Chrome Strip` Sideskirt" />
+		<upgrade id="upgrade_1133" name="Right `Chrome Strip` Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1103" name="Covertible" />
+		<upgrade id="upgrade_1104" name="Chrome" />
+		<upgrade id="upgrade_1105" name="Slamin" />
+		<upgrade id="upgrade_1106" name="`Chrome Arches`" />
+		<!-- 
+		<upgrade id="upgrade_1106" name="Right `Chrome Arches`" />
+		<upgrade id="upgrade_1124" name="Left `Chrome Arches` Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1107" name="`Chrome Strip` Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1107" name="Left `Chrome Strip` Sideskirt" />
+		<upgrade id="upgrade_1108" name="Right `Chrome Strip` Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1109" name="Chrome" />
+		<upgrade id="upgrade_1110" name="Slamin" />
+		<upgrade id="upgrade_1111" name="Little Sign" />
+		<upgrade id="upgrade_1112" name="Little Sign" />
+		<upgrade id="upgrade_1113" name="Chrome" />
+		<upgrade id="upgrade_1114" name="Slamin" />
+		<upgrade id="upgrade_1115" name="Chrome" />
+		<upgrade id="upgrade_1116" name="Slamin" />
+		<upgrade id="upgrade_1117" name="Chrome" />
+		<upgrade id="upgrade_1118" name="`Chrome Trim` Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1118" name="Right `Chrome Trim` Sideskirt" />
+		<upgrade id="upgrade_1120" name="Left `Chrome Trim` Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1119" name="`Wheelcovers` Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1119" name="Right `Wheelcovers` Sideskirt" />		
+		<upgrade id="upgrade_1121" name="Left `Wheelcovers` Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1123" name="Bullbar Chrome Bars" />
+		<upgrade id="upgrade_1125" name="Bullbar Chrome Lights" />
+		<upgrade id="upgrade_1126" name="Chrome Exhaust" />
+		<upgrade id="upgrade_1127" name="Slamin Exhaust" />
+		<upgrade id="upgrade_1128" name="Vinyl Hardtop" />
+		<upgrade id="upgrade_1129" name="Chrome" />
+		<upgrade id="upgrade_1130" name="Hardtop" />
+		<upgrade id="upgrade_1131" name="Softtop" />
+		<upgrade id="upgrade_1132" name="Slamin" />
+		<upgrade id="upgrade_1134" name="`Chrome Strip` Sideskirt" />
+		<!-- 
+		<upgrade id="upgrade_1134" name="Right `Chrome Strip` Sideskirt" />
+		<upgrade id="upgrade_1137" name="Left `Chrome Strip` Sideskirt" />
+		 -->
+		<upgrade id="upgrade_1135" name="Slamin" />
+		<upgrade id="upgrade_1136" name="Chrome" />
+		<upgrade id="upgrade_1138" name="Alien" />
+		<upgrade id="upgrade_1139" name="X-Flow" />
+		<upgrade id="upgrade_1140" name="X-Flow" />
+		<upgrade id="upgrade_1141" name="Alien" />
+		<upgrade id="upgrade_1142" name="Oval Vents" />
+		<!-- 
+		<upgrade id="upgrade_1142" name="Left Oval Vents" />
+		<upgrade id="upgrade_1143" name="Right Oval Vents" />
+		 -->
+		<upgrade id="upgrade_1144" name="Square Vents" />
+		<!-- 
+		<upgrade id="upgrade_1144" name="Left Square Vents" />
+		<upgrade id="upgrade_1145" name="Right Square Vents" />
+		 -->
+		<upgrade id="upgrade_1146" name="X-Flow" />
+		<upgrade id="upgrade_1147" name="Alien" />
+		<upgrade id="upgrade_1148" name="X-Flow" />
+		<upgrade id="upgrade_1149" name="Alien" />
+		<upgrade id="upgrade_1150" name="Alien" />
+		<upgrade id="upgrade_1151" name="X-Flow" />
+		<upgrade id="upgrade_1152" name="X-Flow" />
+		<upgrade id="upgrade_1153" name="Alien" />
+		<upgrade id="upgrade_1154" name="Alien" />
+		<upgrade id="upgrade_1155" name="Alien" />
+		<upgrade id="upgrade_1156" name="X-Flow" />
+		<upgrade id="upgrade_1157" name="X-Flow" />
+		<upgrade id="upgrade_1158" name="X-Flow" />
+		<upgrade id="upgrade_1159" name="Alien" />
+		<upgrade id="upgrade_1160" name="Alien" />
+		<upgrade id="upgrade_1161" name="X-Flow" />
+		<upgrade id="upgrade_1162" name="Alien" />
+		<upgrade id="upgrade_1163" name="X-Flow" />
+		<upgrade id="upgrade_1164" name="Alien" />
+		<upgrade id="upgrade_1165" name="X-Flow" />
+		<upgrade id="upgrade_1166" name="Alien" />
+		<upgrade id="upgrade_1167" name="X-Flow" />
+		<upgrade id="upgrade_1168" name="Alien" />
+		<upgrade id="upgrade_1169" name="Alien" />
+		<upgrade id="upgrade_1170" name="X-Flow" />
+		<upgrade id="upgrade_1171" name="Alien" />
+		<upgrade id="upgrade_1172" name="X-Flow" />
+		<upgrade id="upgrade_1173" name="X-Flow" />
+		<upgrade id="upgrade_1174" name="Chrome" />
+		<upgrade id="upgrade_1175" name="Slamin" />
+		<upgrade id="upgrade_1176" name="Chrome" />
+		<upgrade id="upgrade_1177" name="Slamin" />
+		<upgrade id="upgrade_1178" name="Slamin" />
+		<upgrade id="upgrade_1179" name="Chrome" />
+		<upgrade id="upgrade_1180" name="Chrome" />
+		<upgrade id="upgrade_1181" name="Slamin" />
+		<upgrade id="upgrade_1182" name="Chrome" />
+		<upgrade id="upgrade_1183" name="Slamin" />
+		<upgrade id="upgrade_1184" name="Chrome" />
+		<upgrade id="upgrade_1185" name="Slamin" />
+		<upgrade id="upgrade_1186" name="Slamin" />
+		<upgrade id="upgrade_1187" name="Chrome" />
+		<upgrade id="upgrade_1188" name="Slamin" />
+		<upgrade id="upgrade_1189" name="Chrome" />
+		<upgrade id="upgrade_1190" name="Slamin" />
+		<upgrade id="upgrade_1191" name="Chrome" />
+		<upgrade id="upgrade_1192" name="Chrome" />
+		<upgrade id="upgrade_1193" name="Slamin" />
+	</modshop_upgrades>
+    <!--
+	<modshop_carcolors id="modsop_carcolors">
+		<carcolors hex="#000000DD" id="carcolor0"/>
+		<carcolors hex="#FFFFFFDD" id="carcolor1"/>
+		<carcolors hex="#2A77A1DD" id="carcolor2"/>
+		<carcolors hex="#840510DD" id="carcolor3"/>
+		<carcolors hex="#253739DD" id="carcolor4"/>
+		<carcolors hex="#87446FDD" id="carcolor5"/>
+		<carcolors hex="#D78D10DD" id="carcolor6"/>
+		<carcolors hex="#4C75B7DD" id="carcolor7"/>
+		<carcolors hex="#BEBEC6DD" id="carcolor8"/>
+		<carcolors hex="#5E7072DD" id="carcolor9"/>
+		<carcolors hex="#46597ADD" id="carcolor10"/>
+		<carcolors hex="#646A78DD" id="carcolor11"/>
+		<carcolors hex="#5D7E8DDD" id="carcolor12"/>
+		<carcolors hex="#58595BDD" id="carcolor13"/>
+		<carcolors hex="#DBD6DADD" id="carcolor14"/>
+		<carcolors hex="#9CA1A4DD" id="carcolor15"/>
+		<carcolors hex="#335F3EDD" id="carcolor16"/>
+		<carcolors hex="#730F1BDD" id="carcolor17"/>
+		<carcolors hex="#7B092ADD" id="carcolor18"/>
+		<carcolors hex="#A09D94DD" id="carcolor19"/>
+		<carcolors hex="#3B4E78DD" id="carcolor20"/>
+		<carcolors hex="#722E3DDD" id="carcolor21"/>
+		<carcolors hex="#691E3CDD" id="carcolor22"/>
+		<carcolors hex="#96918DDD" id="carcolor23"/>
+		<carcolors hex="#515459DD" id="carcolor24"/>
+		<carcolors hex="#3F3E44DD" id="carcolor25"/>
+		<carcolors hex="#A5A9A8DD" id="carcolor26"/>
+		<carcolors hex="#645C5ADD" id="carcolor27"/>
+		<carcolors hex="#3D4B68DD" id="carcolor28"/>
+		<carcolors hex="#969591DD" id="carcolor29"/>
+		<carcolors hex="#422021DD" id="carcolor30"/>
+		<carcolors hex="#5F262CDD" id="carcolor31"/>
+		<carcolors hex="#8494ABDD" id="carcolor32"/>
+		<carcolors hex="#767C7CDD" id="carcolor33"/>
+		<carcolors hex="#646464DD" id="carcolor34"/>
+		<carcolors hex="#5A5752DD" id="carcolor35"/>
+		<carcolors hex="#252527DD" id="carcolor36"/>
+		<carcolors hex="#2E3A36DD" id="carcolor37"/>
+		<carcolors hex="#93A396DD" id="carcolor38"/>
+		<carcolors hex="#6D7B88DD" id="carcolor39"/>
+		<carcolors hex="#231918DD" id="carcolor40"/>
+		<carcolors hex="#70655FDD" id="carcolor41"/>
+		<carcolors hex="#7C1C2ADD" id="carcolor42"/>
+		<carcolors hex="#610915DD" id="carcolor43"/>
+		<carcolors hex="#193826DD" id="carcolor44"/>
+		<carcolors hex="#5D1B1FDD" id="carcolor45"/>
+		<carcolors hex="#9D9872DD" id="carcolor46"/>
+		<carcolors hex="#7A7561DD" id="carcolor47"/>
+		<carcolors hex="#989586DD" id="carcolor48"/>
+		<carcolors hex="#ACB0B1DD" id="carcolor49"/>
+		<carcolors hex="#848887DD" id="carcolor50"/>
+		<carcolors hex="#305045DD" id="carcolor51"/>
+		<carcolors hex="#4D6168DD" id="carcolor52"/>
+		<carcolors hex="#162248DD" id="carcolor53"/>
+		<carcolors hex="#282F4BDD" id="carcolor54"/>
+		<carcolors hex="#7D6356DD" id="carcolor55"/>
+		<carcolors hex="#9DA4ACDD" id="carcolor56"/>
+		<carcolors hex="#9C8D70DD" id="carcolor57"/>
+		<carcolors hex="#6E1823DD" id="carcolor58"/>
+		<carcolors hex="#4E6881DD" id="carcolor59"/>
+		<carcolors hex="#9C9D98DD" id="carcolor60"/>
+		<carcolors hex="#927347DD" id="carcolor61"/>
+		<carcolors hex="#651C27DD" id="carcolor62"/>
+		<carcolors hex="#949EA0DD" id="carcolor63"/>
+		<carcolors hex="#A5A7A6DD" id="carcolor64"/>
+		<carcolors hex="#8F8C45DD" id="carcolor65"/>
+		<carcolors hex="#34191EDD" id="carcolor66"/>
+		<carcolors hex="#6A798CDD" id="carcolor67"/>
+		<carcolors hex="#AAAD8EDD" id="carcolor68"/>
+		<carcolors hex="#AB998FDD" id="carcolor69"/>
+		<carcolors hex="#851F2DDD" id="carcolor70"/>
+		<carcolors hex="#708298DD" id="carcolor71"/>
+		<carcolors hex="#575852DD" id="carcolor72"/>
+		<carcolors hex="#99A790DD" id="carcolor73"/>
+		<carcolors hex="#601A24DD" id="carcolor74"/>
+		<carcolors hex="#20202CDD" id="carcolor75"/>
+		<carcolors hex="#A4A095DD" id="carcolor76"/>
+		<carcolors hex="#AB9D83DD" id="carcolor77"/>
+		<carcolors hex="#78222BDD" id="carcolor78"/>
+		<carcolors hex="#0E306DDD" id="carcolor79"/>
+		<carcolors hex="#722B3FDD" id="carcolor80"/>
+		<carcolors hex="#7C71CEDD" id="carcolor81"/>
+		<carcolors hex="#741c28DD" id="carcolor82"/>
+		<carcolors hex="#1f2e33DD" id="carcolor83"/>
+		<carcolors hex="#4e322fDD" id="carcolor84"/>
+		<carcolors hex="#7c1c45DD" id="carcolor85"/>
+		<carcolors hex="#2e5b20DD" id="carcolor86"/>
+		<carcolors hex="#395a83DD" id="carcolor87"/>
+		<carcolors hex="#6c2838DD" id="carcolor88"/>
+		<carcolors hex="#a6a28fDD" id="carcolor89"/>
+		<carcolors hex="#afb1b0DD" id="carcolor90"/>
+		<carcolors hex="#364155DD" id="carcolor91"/>
+		<carcolors hex="#6d6d6fDD" id="carcolor92"/>
+		<carcolors hex="#0f6a89DD" id="carcolor93"/>
+		<carcolors hex="#204b6bDD" id="carcolor94"/>
+		<carcolors hex="#2a3e57DD" id="carcolor95"/>
+		<carcolors hex="#9ba09eDD" id="carcolor96"/>
+		<carcolors hex="#6d8497DD" id="carcolor97"/>
+		<carcolors hex="#4e5d60DD" id="carcolor98"/>
+		<carcolors hex="#ad9b80DD" id="carcolor99"/>
+		<carcolors hex="#406c8fDD" id="carcolor100"/>
+		<carcolors hex="#1f253bDD" id="carcolor101"/>
+		<carcolors hex="#ab9176DD" id="carcolor102"/>
+		<carcolors hex="#124572DD" id="carcolor103"/>
+		<carcolors hex="#96816cDD" id="carcolor104"/>
+		<carcolors hex="#64686bDD" id="carcolor105"/>
+		<carcolors hex="#115083DD" id="carcolor106"/>
+		<carcolors hex="#a19984DD" id="carcolor107"/>
+		<carcolors hex="#385694DD" id="carcolor108"/>
+		<carcolors hex="#525660DD" id="carcolor109"/>
+		<carcolors hex="#7f6856DD" id="carcolor110"/>
+		<carcolors hex="#8b929aDD" id="carcolor111"/>
+		<carcolors hex="#596f88DD" id="carcolor112"/>
+		<carcolors hex="#473531DD" id="carcolor113"/>
+		<carcolors hex="#456150DD" id="carcolor114"/>
+		<carcolors hex="#730a28DD" id="carcolor115"/>
+		<carcolors hex="#223558DD" id="carcolor116"/>
+		<carcolors hex="#640e1bDD" id="carcolor117"/>
+		<carcolors hex="#a3adc6DD" id="carcolor118"/>
+		<carcolors hex="#6a5854DD" id="carcolor119"/>
+		<carcolors hex="#9c8b81DD" id="carcolor120"/>
+		<carcolors hex="#620b1DDD" id="carcolor121"/>
+		<carcolors hex="#5b5d5fDD" id="carcolor122"/>
+		<carcolors hex="#634427DD" id="carcolor123"/>
+		<carcolors hex="#731926DD" id="carcolor124"/>
+		<carcolors hex="#1c376DDD" id="carcolor125"/>
+		<carcolors hex="#ec6baeDD" id="carcolor126"/>
+	</modshop_carcolors>
+    -->
+</map>
+

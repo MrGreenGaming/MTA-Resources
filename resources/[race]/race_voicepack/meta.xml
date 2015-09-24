@@ -1,0 +1,23 @@
+<meta>
+	<info name="Voice Pack" description="Voice Pack addon for Race" author="Flobu and dragon" type="script" addon="race" version="1.0"/>
+
+	<script src="voicepack_server.lua" type="server"/>
+	
+	<script src="voicepack_client.lua" type="client"/>
+	
+	<file src="audio/raceon.mp3"/>
+	<file src="audio/wasted.mp3"/>
+	<file src="audio/timesup.mp3"/>
+	<file src="audio/jobfail.mp3"/>
+	<file src="audio/jobcomplete.mp3"/>
+	<file src="audio/nicework.mp3"/>
+	<file src="audio/blue_flag_dropped.mp3"/>
+	<file src="audio/blue_flag_returned.mp3"/>
+	<file src="audio/blue_flag_taken.mp3"/>
+	<file src="audio/blue_team_scores.mp3"/>
+	<file src="audio/red_flag_dropped.mp3"/>
+	<file src="audio/red_flag_returned.mp3"/>
+	<file src="audio/red_flag_taken.mp3"/>
+	<file src="audio/red_team_scores.mp3"/>
+	<file src="audio/party_horn-Mike_Koenig-76599891.mp3"/>
+</meta>

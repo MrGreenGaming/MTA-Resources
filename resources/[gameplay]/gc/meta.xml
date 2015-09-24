@@ -1,0 +1,31 @@
+<meta>
+	<info author='Mr.Hankey' version='1.0' type='script' />
+	<script src='gc_rewards.lua' />
+	<script src='gc_autologin.lua' />
+	<script src='gc_s.lua' />
+	<script src='gc_c.lua' type='client' />
+	<script src='accounts.lua' />
+	<script src='database.lua' />
+	<file src='img/dot.png' />
+	
+	<config src="help.xml" type="client"/>
+	
+	<export function="isPlayerLoggedInGC" type="server"/>
+	<export function="getPlayerForumID" type="server"/>
+	<export function="getPlayerGreencoinsID" type="server"/>
+	<export function="getPlayerGreencoinsLogin" type="server"/>
+	<export function="getPlayerGreencoins" type="server"/>
+	<export function="addPlayerGreencoins" type="server"/>
+	<export function="toggleGCInfo" type="client"/>
+
+	 <!-- Exports for settings resource  KaliBwoy -->
+    <export function="e_showGC" type="client"/>
+    <export function="e_hideGC" type="client"/>
+	
+    <settings>
+    	<!-- Rewards can be changed without restarting the resource (adminpanel) -->
+		<setting name="*rewardPerHour" value="100" friendlyname="Amount of GC rewarded per hour" group="Time Reward" examples="100"/>
+
+    </settings>
+	
+</meta>

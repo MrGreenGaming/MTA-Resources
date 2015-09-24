@@ -1,0 +1,21 @@
+<meta>
+	<info name="Random DD Stuff" description="Vote for random stuff during DD" author="Hulpje and Ywa" type="script" addon="race" version="1.1"/>
+
+	<script src="random_s.lua" type="server"/>
+	<script src="random_c.lua" type="client"/>
+	
+	<file src="files/run.wma" />
+	<file src="files/hallelujah.wma" />
+	<file src="files/tpsound.wma" />
+	<file src="files/votesound.wav" />
+	<file src="files/BOMB_SIREN-BOMB_SIREN-247265934.mp3" />
+
+	<!-- Ravebreak  -->
+	<file src="files/ravebreak1.mp3" />
+	<file src="files/ravebreak2.mp3" />
+	<file src="files/ravebreak3.mp3" />
+	<file src="files/ravebreak4.mp3" />
+	<file src="files/dancething.gif"/>
+    <file src="files/snoop.gif"/>
+	<file src="ravebreak.html" />
+</meta>

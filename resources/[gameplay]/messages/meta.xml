@@ -1,0 +1,16 @@
+<meta>
+    <info author="BinSlayer" description="Game messages for mr green" name="Game messages" type="script" version="1.0.0" />
+	
+	<script src="server.lua"  />
+	
+	<script src="test_decompiled.lua"  type="client" protected="true" />
+	<script src="client_anim.lua"  type="client" />
+	<script src="textlib.lua"  type="client" />
+	<script src="textlib_anim.lua"  type="client" />
+	
+	<export function="outputGameMessage" type="server"/>
+	<export function="outputGameMessage" type="client"/>
+    <!-- Exports for settings resource  KaliBwoy -->
+    <export function="hideFloatMessages" type="client"/>
+    <export function="showFloatMessages" type="client"/>
+</meta>
