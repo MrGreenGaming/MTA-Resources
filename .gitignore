@@ -39,3 +39,4 @@
 *.x86_64
 *.hex
 
+/resources/\[web\]/irc/settings.xml
