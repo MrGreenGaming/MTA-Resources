@@ -37,7 +37,11 @@ if getElementType(thePlayer) == "player" then
 		setElementData(thePlayer, "player_have_power", true, true)
 		triggerClientEvent(thePlayer, "getRandomPower", resourceRoot)
 		local x, y, z = getElementPosition(source)
-		setTimer(spawnPickup, 1000, 1, nil, x, y, z)
+		if get("coremarkers_respawn") ~= false and type(get("coremarkers_respawn")) == "number" and get("coremarkers_respawn") >= 0  then
+			setTimer(spawnPickup, get("coremarkers_respawn"), 1, nil, x, y, z)
+		else
+			setTimer(spawnPickup, 10000, 1, nil, x, y, z)
+		end
 		removeEventHandler("onColShapeHit", source, getRandomPower)
 		destroyElement(source)
 	end
