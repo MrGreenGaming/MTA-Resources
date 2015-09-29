@@ -27,8 +27,9 @@ end
 )
 
 function getRandomPower()
+playSound("marker.mp3")
 local randomPower = unpack(powerTypes[math.random(#powerTypes)])
---local randomPower = "magnet"
+--local randomPower = "spikes"
 bindKeys(randomPower)
 	if randomPower == "rocket" then
 		setElementData(localPlayer, "laser.on", true)
@@ -148,7 +149,7 @@ function slowDownPlayer(player, killer)
 	end
 	
 	outputChatBox( "Player '"..getPlayerName(killer).."#006EFF' slowing you down", 0, 100, 255, true)
-	setGameSpeed(0.85)
+	setGameSpeed(0.7)
 	slowDownTimer = setTimer(setGameSpeed, 8000, 1, tonumber(1.0))
 	setElementData(localPlayer, "slowDown", true)
 	slowDownTimer2 = setTimer(setElementData, 8000, 1, localPlayer, "slowDown", false)

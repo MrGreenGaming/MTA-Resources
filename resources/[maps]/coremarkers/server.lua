@@ -1,3 +1,5 @@
+math.randomseed(getTickCount())
+
 addEventHandler("onResourceStart", resourceRoot, 
 function()
 showText_Create()
@@ -37,7 +39,11 @@ if getElementType(thePlayer) == "player" then
 		setElementData(thePlayer, "player_have_power", true, true)
 		triggerClientEvent(thePlayer, "getRandomPower", resourceRoot)
 		local x, y, z = getElementPosition(source)
-		setTimer(spawnPickup, 1000, 1, nil, x, y, z)
+		if get("coremarkers_respawn") ~= false and type(get("coremarkers_respawn")) == "number" and get("coremarkers_respawn") >= 0  then
+			setTimer(spawnPickup, get("coremarkers_respawn"), 1, nil, x, y, z)
+		else
+			setTimer(spawnPickup, 10000, 1, nil, x, y, z)
+		end
 		removeEventHandler("onColShapeHit", source, getRandomPower)
 		destroyElement(source)
 	end
@@ -54,10 +60,14 @@ function dropSpikes(theVehicle, x, y, z, rz, minY)
 	addEventHandler("onColShapeHit", spikesCol,
 	function(thePlayer)
 		if getElementType(thePlayer) == "player" then
-			local _, _, pz = getElementPosition(thePlayer)
-			local _, _, sz = getElementPosition(source)
-			if pz >= sz then
-				setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
+			local wheelState, _, _, _ = getVehicleWheelStates ( getPedOccupiedVehicle(thePlayer) )
+			if wheelState ~= 1 then
+				local _, _, pz = getElementPosition(thePlayer)
+				local _, _, sz = getElementPosition(source)
+				if pz >= sz then
+					setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
+					destroyElement(source)
+				end
 			end
 		end
 	end
