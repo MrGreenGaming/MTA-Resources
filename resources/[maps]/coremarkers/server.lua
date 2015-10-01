@@ -1,3 +1,5 @@
+math.randomseed(getTickCount())
+
 addEventHandler("onResourceStart", resourceRoot, 
 function()
 showText_Create()
@@ -58,10 +60,14 @@ function dropSpikes(theVehicle, x, y, z, rz, minY)
 	addEventHandler("onColShapeHit", spikesCol,
 	function(thePlayer)
 		if getElementType(thePlayer) == "player" then
-			local _, _, pz = getElementPosition(thePlayer)
-			local _, _, sz = getElementPosition(source)
-			if pz >= sz then
-				setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
+			local wheelState, _, _, _ = getVehicleWheelStates ( getPedOccupiedVehicle(thePlayer) )
+			if wheelState ~= 1 then
+				local _, _, pz = getElementPosition(thePlayer)
+				local _, _, sz = getElementPosition(source)
+				if pz >= sz then
+					setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
+					destroyElement(source)
+				end
 			end
 		end
 	end

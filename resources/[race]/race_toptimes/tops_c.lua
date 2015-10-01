@@ -56,6 +56,7 @@ addEventHandler('onClientMapStarting', getRootElement(),
 	end
 )
 
+addEvent('onClientPlayerFinish')
 addEventHandler('onClientPlayerFinish', getRootElement(),
 	function()
 		toggleTimes(true)
