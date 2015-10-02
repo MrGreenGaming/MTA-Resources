@@ -1,3 +1,5 @@
+math.randomseed(getTickCount())
+
 addEventHandler("onResourceStart", resourceRoot, 
 function()
 showText_Create()
@@ -58,10 +60,16 @@ function dropSpikes(theVehicle, x, y, z, rz, minY)
 	addEventHandler("onColShapeHit", spikesCol,
 	function(thePlayer)
 		if getElementType(thePlayer) == "player" then
-			local _, _, pz = getElementPosition(thePlayer)
-			local _, _, sz = getElementPosition(source)
-			if pz >= sz then
-				setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
+			if not getElementData(thePlayer, "rektBySpikes") then
+				local _, _, pz = getElementPosition(thePlayer)
+				local _, _, sz = getElementPosition(source)
+				if pz >= sz then
+					setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
+					setElementData(thePlayer, "rektBySpikes", true, true)
+					triggerClientEvent(thePlayer, "spikesTimerFunction", root, 10000)
+					spikesTimer = setTimer(function() setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 0, 0, 0, 0)end, 10000, 1)
+					destroyElement(source)
+				end
 			end
 		end
 	end
@@ -77,7 +85,35 @@ addEvent("dropHay", true)
 addEventHandler("dropHay", root, dropHay)
 
 function dropBarrel(theVehicle, x, y, z, rz)
-createObject(1225, x, y, z+0.4)
+local barrel = createObject(1225, x, y, z+0.4)
+local barrel2 = createObject(1225, x+0.5, y+0.5, z+0.4)
+local barrel3 = createObject(1225, x-0.5, y-0.5, z+0.4)
+local barrel4 = createObject(1225, x+0.5, y-0.5, z+0.4)
+local barrel5 = createObject(1225, x-0.5, y+0.5, z+0.4)
+setElementCollisionsEnabled(barrel, false)
+setElementCollisionsEnabled(barrel2, false)
+setElementCollisionsEnabled(barrel3, false)
+setElementCollisionsEnabled(barrel4, false)
+setElementCollisionsEnabled(barrel5, false)
+local barrelCol = createColSphere(x, y, z+0.6, 2.35)
+setElementParent(barrel, barrelCol)
+setElementParent(barrel2, barrelCol)
+setElementParent(barrel3, barrelCol)
+setElementParent(barrel4, barrelCol)
+setElementParent(barrel5, barrelCol)
+	
+addEventHandler("onColShapeHit", barrelCol,
+	function(thePlayer)
+		if getElementType(thePlayer) == "player" then
+			local barrel = getElementChildren(source)
+			local x, y, z = getElementPosition(barrel[1])
+			triggerClientEvent(root, "createExplosionEffect", root, x, y, z)
+			local health = getElementHealth(getPedOccupiedVehicle(thePlayer))
+			setElementHealth(getPedOccupiedVehicle(thePlayer), health-math.random(150, 350))
+			destroyElement(source)
+		end
+	end
+	)
 end
 addEvent("dropBarrel", true)
 addEventHandler("dropBarrel", root, dropBarrel)
@@ -85,16 +121,16 @@ addEventHandler("dropBarrel", root, dropBarrel)
 function dropOil(theVehicle, x, y, z, rz, minY)
 	local oil = createObject(2717, x, y, z, 90, 0, 0)
 	setObjectScale(oil, 2)
-	local oilCol = createColSphere(x, y, z, 2)
+	local oilCol = createColSphere(x, y, z+0.4, 2)
 	setElementParent(oil, oilCol)
 	
 	addEventHandler("onColShapeHit", oilCol,
 	function(thePlayer)
 		if getElementType(thePlayer) == "player" then
 			if math.random(2) == 1 then
-				setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, 0.07)	
+				setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, 0.055)	
 			else
-				setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, -0.07)	
+				setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, -0.055)	
 			end
 		end
 	end
@@ -110,3 +146,19 @@ function slowDownPlayer(player, killer)
 end
 addEvent("slowDownPlayer", true)
 addEventHandler("slowDownPlayer", root, slowDownPlayer)
+
+
+addEvent("onPlayerRaceWasted")
+addEventHandler("onPlayerRaceWasted", root, 
+function() 
+setElementData(source, "power_type", nil)
+setElementData(source, "player_have_power", false, true)
+setElementData(source, "dxShowTextToVictim", nil, true)
+setElementData(source, "dxShowTextToKiller", nil, true)
+setElementData(source, "slowDown", false)
+triggerClientEvent(source, "unbindKeys", resourceRoot)
+triggerClientEvent(source, "hideSpikesRepairHUD", resourceRoot)
+	if isTimer(spikesTimer) then
+		killTimer(spikesTimer)
+	end
+end)
