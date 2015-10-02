@@ -18,6 +18,7 @@ setElementData(localPlayer, "player_have_power", false, true)
 setElementData(localPlayer, "dxShowTextToVictim", nil, true)
 setElementData(localPlayer, "dxShowTextToKiller", nil, true)
 setElementData(localPlayer, "slowDown", false)
+setElementData(localPlayer, "rektBySpikes", false)
 engineImportTXD ( engineLoadTXD ( "oil.txd" ) , 2717 ) 
 engineSetModelLODDistance(1225, 300)
 engineSetModelLODDistance(3374, 300)
@@ -50,6 +51,8 @@ unbindKey("vehicle_fire", "down", onPlayerUsePower)
 setElementData(localPlayer, "power_type", nil)
 setElementData(localPlayer, "player_have_power", false, true)	
 end
+addEvent('unbindKeys', true)
+addEventHandler('unbindKeys', root, unbindKeys)
 
 function onPlayerUsePower(key, keyState, powerType)
 local theVehicle = getPedOccupiedVehicle(localPlayer)
@@ -76,10 +79,10 @@ unbindKeys()
 		triggerServerEvent("dropOil", resourceRoot, theVehicle, x, y, z, rz)
 	elseif powerType == "magnet" then
 		local rank = tonumber(getElementData(localPlayer, 'race rank'))
+		if rank >= 2 then
 		local rank = rank-1
-		if rank >=  0 then
 			for k, player in ipairs(getElementsByType("player")) do
-				if tonumber(getElementData(player, 'race rank')) == rank then
+				if tonumber(getElementData(player, 'race rank')) <= rank and getElementData(player,"state") == "alive" and rank >= 1 then
 					triggerServerEvent("slowDownPlayer", resourceRoot, player, localPlayer)
 					outputChatBox( "You slowing down: "..getPlayerName(player), 0, 100, 255, true)
 					local victimName = getPlayerName(player)
@@ -111,7 +114,7 @@ local sWidth, sHeight = guiGetScreenSize()
 addEventHandler( "onClientRender",  root,
 	function()
 		if getElementData(localPlayer, "power_type") ~= nil then
-			dxDrawImage(902.5*sWidth/1920, 120*sHeight/1080, 115*sHeight/1080, 115*sHeight/1080, "pics/"..getElementData(localPlayer, "power_type")..".png")
+			dxDrawImage(902.5*sWidth/1920, 120*sHeight/1080, 115*sHeight/1080, 115*sHeight/1080, "pics/"..getElementData(localPlayer, "power_type")..".png", 0, 0, 0, tocolor(255,255,255,255), true)
 		end
 	end
 )
@@ -120,6 +123,20 @@ addEventHandler( "onClientRender",  root,
 	function()
 		if getElementData(localPlayer, "power_type") == "rocket" then
 				DrawLaser()
+		end
+	end
+)
+
+addEventHandler( "onClientRender",  root,
+	function()
+		if getElementData(localPlayer, "rektBySpikes") then
+			local timeLeft = getTimerDetails(spikesTimer)
+			dxDrawImage(860*sWidth/1920, 890*sHeight/1080, 200*sHeight/1080, 200*sHeight/1080, "pics/wheel.png", 0, 0, 0, tocolor(255,255,255,255))
+			dxDrawRectangle(1020*sWidth/1920, 897*sHeight/1080, 20*sWidth/1920, 174*sHeight/1080, tocolor(0, 0, 0, 160))
+			dxDrawRectangle(1021*sWidth/1920, 898*sHeight/1080, 18*sWidth/1920, 172*sHeight/1080, tocolor(0, 0, 0, 180))
+			dxDrawRectangle(1022*sWidth/1920, 899*sHeight/1080, 16*sWidth/1920, 170*sHeight/1080, tocolor(0, 0, 0, 200))
+			dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, 168*sHeight/1080, tocolor(0, 255, 0, 200))
+			dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, timeLeft/spikesRepairTime*168*sHeight/1080, tocolor(30, 30, 30, 200))
 		end
 	end
 )
@@ -137,7 +154,7 @@ end
 addEventHandler( "onClientRender",  root,
 	function()
 		if getElementData(localPlayer, "slowDown") then
-				dxDrawImage(0, 0, sWidth, sHeight, "pics/effect.png", 0, 0, 0, tocolor(255, 255, 255, 50))
+				dxDrawImage(0, 0, sWidth, sHeight, "pics/effect.png", 0, 0, 0, tocolor(255,255,255,50), true)
 		end
 	end
 )
@@ -172,3 +189,25 @@ function dxShowTextToKiller()
 	end
 end
 addEventHandler("onClientPreRender", root, dxShowTextToKiller)
+
+function createExplosionEffect(x, y, z)
+createExplosion(x, y, z, 10, true, -1.0, false)
+end
+addEvent('createExplosionEffect', true)
+addEventHandler('createExplosionEffect', root, createExplosionEffect)
+
+function spikesTimerFunction(timems)
+spikesRepairTime = timems
+spikesTimer = setTimer(function() setElementData(localPlayer, "rektBySpikes", false, true) setVehicleWheelStates(getPedOccupiedVehicle(localPlayer), 0, 0, 0, 0) playSoundFrontEnd(46) end, timems, 1)
+end
+addEvent("spikesTimerFunction", true)
+addEventHandler("spikesTimerFunction", root, spikesTimerFunction)
+
+function hideSpikesRepairHUD()
+	if isTimer(spikesTimer) then
+		killTimer(spikesTimer)
+		setElementData(localPlayer, "rektBySpikes", false, true)
+	end
+end
+addEvent("hideSpikesRepairHUD", true)
+addEventHandler("hideSpikesRepairHUD", root, hideSpikesRepairHUD)

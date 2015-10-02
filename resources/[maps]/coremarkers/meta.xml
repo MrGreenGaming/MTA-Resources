@@ -10,6 +10,7 @@
     <file src="pics/speedboost.png"></file>
     <file src="pics/spikes.png"></file>
     <file src="pics/oil.png"></file>
+	<file src="pics/wheel.png"></file>
 	
     <script src="client.lua" type="client"></script>
     <script src="server.lua" type="server"></script>
