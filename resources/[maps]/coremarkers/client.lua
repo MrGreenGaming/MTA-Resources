@@ -81,8 +81,10 @@ unbindKeys()
 		local rank = tonumber(getElementData(localPlayer, 'race rank'))
 		if rank >= 2 then
 		local rank = rank-1
+			gotAlivePlayer = false
 			for k, player in ipairs(getElementsByType("player")) do
-				if tonumber(getElementData(player, 'race rank')) <= rank and getElementData(player,"state") == "alive" and rank >= 1 then
+				if tonumber(getElementData(player, 'race rank')) <= rank and getElementData(player,"state") == "alive" and rank >= 1 and not gotAlivePlayer then
+					gotAlivePlayer = true
 					triggerServerEvent("slowDownPlayer", resourceRoot, player, localPlayer)
 					outputChatBox( "You slowing down: "..getPlayerName(player), 0, 100, 255, true)
 					local victimName = getPlayerName(player)

@@ -15,7 +15,7 @@ local pos = {x=0.0,y=0.08}
 local nick = {x=0.1,y=0.4}
 local value = {x=0.4,y=0.7}
 local date = {x=0.7,y=0.95}
-local fadeTime = 500
+local fadeTime = 300
 local showTime = 15000
 
 local resx, resy = guiGetScreenSize()
@@ -122,7 +122,7 @@ addEventHandler("onClientRestore",root,updateTexture)
 
 addEventHandler('onClientRender', root, function()
 	if fading ~= 0 then
-		local t = getTickCount()
+		local t = getTickCount() + 1
 		if fading == 1 then
 			alpha = (t - tick)/(fadeTime)*255
 		else
