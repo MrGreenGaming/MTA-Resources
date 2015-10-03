@@ -1,0 +1,26 @@
+<meta>
+    <info gamemodes="race" type="map" name="CTF Desert War" version="1.0.0" racemode="ctf" mrgreen="2"></info>
+    <map src="CTF-Desert-War.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value='[ &quot;cj&quot; ]'></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#ghostmode" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#respawnTime" value="[ 4500 ]"></setting>
+        <setting name="#spawnScreen" value='[ &quot;on&quot; ]'></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#camera" value='[ [ [ &quot;0&quot;, &quot;0&quot;, &quot;0&quot; ], [ &quot;0&quot;, &quot;0&quot;, &quot;0&quot; ] ] ]'></setting>
+        <setting name="#duration" value="[ 900 ]"></setting>
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ false ]"></setting>
+        <setting name="#time" value="17:0"></setting>
+        <setting name="#respawntime" value="[ 5 ]"></setting>
+        <setting name="#weather" value="[ 2 ]"></setting>
+        <setting name="#roundTime" value="[ 600000 ]"></setting>
+        <setting name="#locked_time" value="[ true ]"></setting>
+        <setting name="#blips" value='[ &quot;team&quot; ]'></setting>
+        <setting name="#gravity" value="[ 0.008000 ]"></setting>
+    </settings>
+</meta>
