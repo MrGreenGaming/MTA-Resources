@@ -122,8 +122,7 @@ addEventHandler("onClientRestore",root,updateTexture)
 
 addEventHandler('onClientRender', root, function()
 	if fading ~= 0 then
-		local t = getTickCount()
-		local t = t+1 --trying to prevent (t-tick = 0) because sometimes t=tick and fading won't work if t=tick
+		local t = getTickCount() + 1
 		if fading == 1 then
 			alpha = (t - tick)/(fadeTime)*255
 		else
