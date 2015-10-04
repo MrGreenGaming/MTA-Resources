@@ -20,6 +20,7 @@ setElementData(localPlayer, "dxShowTextToKiller", nil, true)
 setElementData(localPlayer, "slowDown", false)
 setElementData(localPlayer, "rektBySpikes", false)
 engineImportTXD ( engineLoadTXD ( "oil.txd" ) , 2717 ) 
+engineImportTXD ( engineLoadTXD ( "crate.txd" ) , 3798 ) 
 engineSetModelLODDistance(1225, 300)
 engineSetModelLODDistance(3374, 300)
 engineSetModelLODDistance(2717, 300)
@@ -56,47 +57,45 @@ addEventHandler('unbindKeys', root, unbindKeys)
 
 function onPlayerUsePower(key, keyState, powerType)
 local theVehicle = getPedOccupiedVehicle(localPlayer)
+local dimension = getElementDimension(theVehicle)
 local x, y, z = getElementPosition(theVehicle)
 local _, _, rz = getElementRotation(theVehicle)
 local _, minY, minZ, _, _, _ = getElementBoundingBox(theVehicle)
 setElementData(localPlayer, "player_have_power", false, true)
 unbindKeys()
 
-	if powerType == "suicida" then
-		local vx, vy, vz = getElementVelocity(theVehicle)
-		setElementVelocity(theVehicle, -vx*5, -vy*5, 0.6)
-		setTimer(setVehicleTurnVelocity, 100, 1, theVehicle, 0, 0.3, 0)
-		setTimer(blowVehicle, 500, 1, theVehicle, true)
-	elseif powerType == "spikes" then
+	if powerType == "spikes" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
 		local z = getGroundPosition(x, y, z)		
-		triggerServerEvent("dropSpikes", resourceRoot, theVehicle, x, y, z, rz)
+		triggerServerEvent("dropSpikes", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "speedboost" then
 		setElementSpeed(theVehicle, "kmh", 280)
 	elseif powerType == "oil" then 
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
 		local z = getGroundPosition(x, y, z)	
-		triggerServerEvent("dropOil", resourceRoot, theVehicle, x, y, z, rz)
+		triggerServerEvent("dropOil", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "magnet" then
-		local rank = tonumber(getElementData(localPlayer, 'race rank'))
-		if rank >= 2 then
-		local rank = rank-1
+		local killerRank = tonumber(getElementData(localPlayer, 'race rank'))
+		if killerRank >= 2 then
+		local victimRank = killerRank-1
 			gotAlivePlayer = false
 			for k, player in ipairs(getElementsByType("player")) do
-				if tonumber(getElementData(player, 'race rank')) <= rank and getElementData(player,"state") == "alive" and rank >= 1 and not gotAlivePlayer then
-					gotAlivePlayer = true
-					triggerServerEvent("slowDownPlayer", resourceRoot, player, localPlayer)
-					outputChatBox( "You slowing down: "..getPlayerName(player), 0, 100, 255, true)
-					local victimName = getPlayerName(player)
-					setElementData(localPlayer, "dxShowTextToKiller", tostring("You slowing down: "..victimName), true)
-					setTimer(setElementData, 8000, 1, localPlayer, "dxShowTextToKiller", nil, true)
+				if type(getElementData(player, 'race rank')) == "number" then
+					if getElementData(player, 'race rank') <= victimRank and getElementData(player,"state") == "alive" and getElementData(player, 'race rank') >= 1 and not gotAlivePlayer then
+						gotAlivePlayer = true
+						triggerServerEvent("slowDownPlayer", resourceRoot, player, localPlayer)
+						outputChatBox( "You slowing down: "..getPlayerName(player), 0, 100, 255, true)
+						local victimName = getPlayerName(player)
+						setElementData(localPlayer, "dxShowTextToKiller", tostring("You slowing down: "..victimName), true)
+						setTimer(setElementData, 8000, 1, localPlayer, "dxShowTextToKiller", nil, true)
+					end
 				end
 			end
 		end
 	elseif powerType == "hay" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-2.4, 0)
 		local z = getGroundPosition(x, y, z)	
-		triggerServerEvent("dropHay", resourceRoot, theVehicle, x, y, z, rz)
+		triggerServerEvent("dropHay", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "rocket" then
 		local x, y, z, vx, vy, vz = getPositionAndVelocityForProjectile(theVehicle, x, y, z)
 		createProjectile(theVehicle, 21, x, y, z+0.45, 1, nil, 0, 0, 360 - rz, vx*15, vy*15, vz*15)
@@ -105,9 +104,9 @@ unbindKeys()
 	elseif powerType == "barrel" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.5, 0)
 		local z = getGroundPosition(x, y, z)	
-		triggerServerEvent("dropBarrel", resourceRoot, theVehicle, x, y, z, rz)
+		triggerServerEvent("dropBarrel", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "repair" then
-		fixVehicle(theVehicle)
+		triggerServerEvent("fixVehicle", resourceRoot, theVehicle)
 	end
 end
 
@@ -131,14 +130,17 @@ addEventHandler( "onClientRender",  root,
 
 addEventHandler( "onClientRender",  root,
 	function()
-		if getElementData(localPlayer, "rektBySpikes") then
-			local timeLeft = getTimerDetails(spikesTimer)
-			dxDrawImage(860*sWidth/1920, 890*sHeight/1080, 200*sHeight/1080, 200*sHeight/1080, "pics/wheel.png", 0, 0, 0, tocolor(255,255,255,255))
-			dxDrawRectangle(1020*sWidth/1920, 897*sHeight/1080, 20*sWidth/1920, 174*sHeight/1080, tocolor(0, 0, 0, 160))
-			dxDrawRectangle(1021*sWidth/1920, 898*sHeight/1080, 18*sWidth/1920, 172*sHeight/1080, tocolor(0, 0, 0, 180))
-			dxDrawRectangle(1022*sWidth/1920, 899*sHeight/1080, 16*sWidth/1920, 170*sHeight/1080, tocolor(0, 0, 0, 200))
-			dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, 168*sHeight/1080, tocolor(0, 255, 0, 200))
-			dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, timeLeft/spikesRepairTime*168*sHeight/1080, tocolor(30, 30, 30, 200))
+		if isElement(getPedOccupiedVehicle(localPlayer)) then
+			local s1, _, _, _ = getVehicleWheelStates(getPedOccupiedVehicle(localPlayer))
+			if getElementData(localPlayer, "rektBySpikes") and s1 ~= 0 then
+				local timeLeft = getTimerDetails(spikesTimer)
+				dxDrawImage(860*sWidth/1920, 890*sHeight/1080, 200*sHeight/1080, 200*sHeight/1080, "pics/wheel.png", 0, 0, 0, tocolor(255,255,255,255))
+				dxDrawRectangle(1020*sWidth/1920, 897*sHeight/1080, 20*sWidth/1920, 174*sHeight/1080, tocolor(0, 0, 0, 160))
+				dxDrawRectangle(1021*sWidth/1920, 898*sHeight/1080, 18*sWidth/1920, 172*sHeight/1080, tocolor(0, 0, 0, 180))
+				dxDrawRectangle(1022*sWidth/1920, 899*sHeight/1080, 16*sWidth/1920, 170*sHeight/1080, tocolor(0, 0, 0, 200))
+				dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, 168*sHeight/1080, tocolor(0, 255, 0, 200))
+				dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, timeLeft/spikesRepairTime*168*sHeight/1080, tocolor(30, 30, 30, 200))
+			end
 		end
 	end
 )
