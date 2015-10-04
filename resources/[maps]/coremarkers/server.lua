@@ -28,7 +28,7 @@ function spawnPickup(object, x, y, z)
 	setElementCollisionsEnabled(object, false)
 	moveObject(object, 5000, x, y, z+0.5, 0, 0, 360)
 	setTimer(function () if isElement(object) then moveObject(object, 5000, x, y, z+0.5, 0, 0, 360) end end, 5000, 0)
-	setTimer(function () if isElement(marker) then setMarkerColor(marker, math.random(255), math.random(255), math.random(255), 255) end end, 1000, 0)
+	setTimer(function () if isElement(marker) then setMarkerColor(marker, math.random(255), math.random(255), math.random(255), 255) end end, 500, 0)
 	
 	addEventHandler("onColShapeHit", col, getRandomPower)
 end
@@ -166,3 +166,17 @@ triggerClientEvent(source, "hideSpikesRepairHUD", resourceRoot)
 		killTimer(spikesTimer)
 	end
 end)
+
+addEventHandler ("onVehicleEnter", root, 
+function(thePlayer)
+setVehicleWheelStates(source, 0, 0, 0, 0)
+setElementData(thePlayer, "rektBySpikes", false, true)
+end
+)
+
+addEvent("fixVehicle", true)
+addEventHandler("fixVehicle", root, 
+function(theVehicle) 
+fixVehicle(theVehicle)
+end
+)

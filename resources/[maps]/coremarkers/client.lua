@@ -20,6 +20,7 @@ setElementData(localPlayer, "dxShowTextToKiller", nil, true)
 setElementData(localPlayer, "slowDown", false)
 setElementData(localPlayer, "rektBySpikes", false)
 engineImportTXD ( engineLoadTXD ( "oil.txd" ) , 2717 ) 
+engineImportTXD ( engineLoadTXD ( "crate.txd" ) , 3798 ) 
 engineSetModelLODDistance(1225, 300)
 engineSetModelLODDistance(3374, 300)
 engineSetModelLODDistance(2717, 300)
@@ -109,7 +110,7 @@ unbindKeys()
 		local z = getGroundPosition(x, y, z)	
 		triggerServerEvent("dropBarrel", resourceRoot, theVehicle, x, y, z, rz)
 	elseif powerType == "repair" then
-		fixVehicle(theVehicle)
+		triggerServerEvent("fixVehicle", resourceRoot, theVehicle)
 	end
 end
 
@@ -133,14 +134,17 @@ addEventHandler( "onClientRender",  root,
 
 addEventHandler( "onClientRender",  root,
 	function()
-		if getElementData(localPlayer, "rektBySpikes") then
-			local timeLeft = getTimerDetails(spikesTimer)
-			dxDrawImage(860*sWidth/1920, 890*sHeight/1080, 200*sHeight/1080, 200*sHeight/1080, "pics/wheel.png", 0, 0, 0, tocolor(255,255,255,255))
-			dxDrawRectangle(1020*sWidth/1920, 897*sHeight/1080, 20*sWidth/1920, 174*sHeight/1080, tocolor(0, 0, 0, 160))
-			dxDrawRectangle(1021*sWidth/1920, 898*sHeight/1080, 18*sWidth/1920, 172*sHeight/1080, tocolor(0, 0, 0, 180))
-			dxDrawRectangle(1022*sWidth/1920, 899*sHeight/1080, 16*sWidth/1920, 170*sHeight/1080, tocolor(0, 0, 0, 200))
-			dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, 168*sHeight/1080, tocolor(0, 255, 0, 200))
-			dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, timeLeft/spikesRepairTime*168*sHeight/1080, tocolor(30, 30, 30, 200))
+		if isElement(getPedOccupiedVehicle(localPlayer)) then
+			local s1, _, _, _ = getVehicleWheelStates(getPedOccupiedVehicle(localPlayer))
+			if getElementData(localPlayer, "rektBySpikes") and s1 ~= 0 then
+				local timeLeft = getTimerDetails(spikesTimer)
+				dxDrawImage(860*sWidth/1920, 890*sHeight/1080, 200*sHeight/1080, 200*sHeight/1080, "pics/wheel.png", 0, 0, 0, tocolor(255,255,255,255))
+				dxDrawRectangle(1020*sWidth/1920, 897*sHeight/1080, 20*sWidth/1920, 174*sHeight/1080, tocolor(0, 0, 0, 160))
+				dxDrawRectangle(1021*sWidth/1920, 898*sHeight/1080, 18*sWidth/1920, 172*sHeight/1080, tocolor(0, 0, 0, 180))
+				dxDrawRectangle(1022*sWidth/1920, 899*sHeight/1080, 16*sWidth/1920, 170*sHeight/1080, tocolor(0, 0, 0, 200))
+				dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, 168*sHeight/1080, tocolor(0, 255, 0, 200))
+				dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, timeLeft/spikesRepairTime*168*sHeight/1080, tocolor(30, 30, 30, 200))
+			end
 		end
 	end
 )
