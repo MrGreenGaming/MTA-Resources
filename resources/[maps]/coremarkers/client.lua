@@ -78,18 +78,20 @@ unbindKeys()
 		local z = getGroundPosition(x, y, z)	
 		triggerServerEvent("dropOil", resourceRoot, theVehicle, x, y, z, rz)
 	elseif powerType == "magnet" then
-		local rank = tonumber(getElementData(localPlayer, 'race rank'))
-		if rank >= 2 then
-		local rank = rank-1
+		local killerRank = tonumber(getElementData(localPlayer, 'race rank'))
+		if killerRank >= 2 then
+		local victimRank = killerRank-1
 			gotAlivePlayer = false
 			for k, player in ipairs(getElementsByType("player")) do
-				if tonumber(getElementData(player, 'race rank')) <= rank and getElementData(player,"state") == "alive" and rank >= 1 and not gotAlivePlayer then
-					gotAlivePlayer = true
-					triggerServerEvent("slowDownPlayer", resourceRoot, player, localPlayer)
-					outputChatBox( "You slowing down: "..getPlayerName(player), 0, 100, 255, true)
-					local victimName = getPlayerName(player)
-					setElementData(localPlayer, "dxShowTextToKiller", tostring("You slowing down: "..victimName), true)
-					setTimer(setElementData, 8000, 1, localPlayer, "dxShowTextToKiller", nil, true)
+				if type(getElementData(player, 'race rank')) == "number" then
+					if getElementData(player, 'race rank') <= victimRank and getElementData(player,"state") == "alive" and getElementData(player, 'race rank') >= 1 and not gotAlivePlayer then
+						gotAlivePlayer = true
+						triggerServerEvent("slowDownPlayer", resourceRoot, player, localPlayer)
+						outputChatBox( "You slowing down: "..getPlayerName(player), 0, 100, 255, true)
+						local victimName = getPlayerName(player)
+						setElementData(localPlayer, "dxShowTextToKiller", tostring("You slowing down: "..victimName), true)
+						setTimer(setElementData, 8000, 1, localPlayer, "dxShowTextToKiller", nil, true)
+					end
 				end
 			end
 		end
