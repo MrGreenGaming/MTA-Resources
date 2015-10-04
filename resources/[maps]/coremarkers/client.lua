@@ -57,27 +57,23 @@ addEventHandler('unbindKeys', root, unbindKeys)
 
 function onPlayerUsePower(key, keyState, powerType)
 local theVehicle = getPedOccupiedVehicle(localPlayer)
+local dimension = getElementDimension(theVehicle)
 local x, y, z = getElementPosition(theVehicle)
 local _, _, rz = getElementRotation(theVehicle)
 local _, minY, minZ, _, _, _ = getElementBoundingBox(theVehicle)
 setElementData(localPlayer, "player_have_power", false, true)
 unbindKeys()
 
-	if powerType == "suicida" then
-		local vx, vy, vz = getElementVelocity(theVehicle)
-		setElementVelocity(theVehicle, -vx*5, -vy*5, 0.6)
-		setTimer(setVehicleTurnVelocity, 100, 1, theVehicle, 0, 0.3, 0)
-		setTimer(blowVehicle, 500, 1, theVehicle, true)
-	elseif powerType == "spikes" then
+	if powerType == "spikes" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
 		local z = getGroundPosition(x, y, z)		
-		triggerServerEvent("dropSpikes", resourceRoot, theVehicle, x, y, z, rz)
+		triggerServerEvent("dropSpikes", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "speedboost" then
 		setElementSpeed(theVehicle, "kmh", 280)
 	elseif powerType == "oil" then 
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
 		local z = getGroundPosition(x, y, z)	
-		triggerServerEvent("dropOil", resourceRoot, theVehicle, x, y, z, rz)
+		triggerServerEvent("dropOil", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "magnet" then
 		local killerRank = tonumber(getElementData(localPlayer, 'race rank'))
 		if killerRank >= 2 then
@@ -99,7 +95,7 @@ unbindKeys()
 	elseif powerType == "hay" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-2.4, 0)
 		local z = getGroundPosition(x, y, z)	
-		triggerServerEvent("dropHay", resourceRoot, theVehicle, x, y, z, rz)
+		triggerServerEvent("dropHay", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "rocket" then
 		local x, y, z, vx, vy, vz = getPositionAndVelocityForProjectile(theVehicle, x, y, z)
 		createProjectile(theVehicle, 21, x, y, z+0.45, 1, nil, 0, 0, 360 - rz, vx*15, vy*15, vz*15)
@@ -108,7 +104,7 @@ unbindKeys()
 	elseif powerType == "barrel" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.5, 0)
 		local z = getGroundPosition(x, y, z)	
-		triggerServerEvent("dropBarrel", resourceRoot, theVehicle, x, y, z, rz)
+		triggerServerEvent("dropBarrel", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "repair" then
 		triggerServerEvent("fixVehicle", resourceRoot, theVehicle)
 	end

@@ -50,8 +50,9 @@ if getElementType(thePlayer) == "player" then
 end
 end
 
-function dropSpikes(theVehicle, x, y, z, rz, minY)
+function dropSpikes(theVehicle, x, y, z, rz, dimension)
 	local spikes = createObject(2892, 0, 0, -200, 0, 0, rz+90)
+	setElementDimension(spikes, dimension)
 	setObjectScale(spikes, 0.5)
 	setElementPosition(spikes, x, y, z+0.1)
 	local spikesCol = createColSphere(x, y, z, 2.6)
@@ -59,20 +60,25 @@ function dropSpikes(theVehicle, x, y, z, rz, minY)
 
 	addEventHandler("onColShapeHit", spikesCol,
 	function(thePlayer)
+		local spikes = getElementChildren(source)
+		local spikesDim = getElementDimension(spikes[1])
 		if getElementType(thePlayer) == "player" then
-			if not getElementData(thePlayer, "rektBySpikes") then
-				local _, _, pz = getElementPosition(thePlayer)
-				local _, _, sz = getElementPosition(source)
-				if pz >= sz then
-					setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
-					setElementData(thePlayer, "rektBySpikes", true, true)
-					triggerClientEvent(thePlayer, "spikesTimerFunction", root, 10000)
-					spikesTimer = setTimer(function() 
-						if isElement(getPedOccupiedVehicle(thePlayer)) then 
-							setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 0, 0, 0, 0) 
-						end 
-					end, 10000, 1)
-					destroyElement(source)
+			local playerDim = getElementDimension(thePlayer)
+			if spikesDim == playerDim then
+				if not getElementData(thePlayer, "rektBySpikes") then
+					local _, _, pz = getElementPosition(thePlayer)
+					local _, _, sz = getElementPosition(source)
+					if pz >= sz then
+						setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
+						setElementData(thePlayer, "rektBySpikes", true, true)
+						triggerClientEvent(thePlayer, "spikesTimerFunction", root, 10000)
+						spikesTimer = setTimer(function() 
+							if isElement(getPedOccupiedVehicle(thePlayer)) then 
+								setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 0, 0, 0, 0) 
+							end 
+						end, 10000, 1)
+						destroyElement(source)
+					end
 				end
 			end
 		end
@@ -82,18 +88,24 @@ end
 addEvent("dropSpikes", true)
 addEventHandler("dropSpikes", root, dropSpikes)
 
-function dropHay(theVehicle, x, y, z, rz)
-createObject(3374, x, y, z+1.5, 0, 0, rz+90)
+function dropHay(theVehicle, x, y, z, rz, dimension)
+local hay = createObject(3374, x, y, z+1.5, 0, 0, rz+90)
+setElementDimension(hay, dimension)
 end
 addEvent("dropHay", true)
 addEventHandler("dropHay", root, dropHay)
 
-function dropBarrel(theVehicle, x, y, z, rz)
+function dropBarrel(theVehicle, x, y, z, rz, dimension)
 local barrel = createObject(1225, x, y, z+0.4)
 local barrel2 = createObject(1225, x+0.5, y+0.5, z+0.4)
 local barrel3 = createObject(1225, x-0.5, y-0.5, z+0.4)
 local barrel4 = createObject(1225, x+0.5, y-0.5, z+0.4)
 local barrel5 = createObject(1225, x-0.5, y+0.5, z+0.4)
+setElementDimension(barrel, dimension)
+setElementDimension(barrel2, dimension)
+setElementDimension(barrel3, dimension)
+setElementDimension(barrel4, dimension)
+setElementDimension(barrel5, dimension)
 setElementCollisionsEnabled(barrel, false)
 setElementCollisionsEnabled(barrel2, false)
 setElementCollisionsEnabled(barrel3, false)
@@ -108,13 +120,18 @@ setElementParent(barrel5, barrelCol)
 	
 addEventHandler("onColShapeHit", barrelCol,
 	function(thePlayer)
+		local barrel = getElementChildren(source)
+		local barrelDim = getElementDimension(barrel[1])
 		if getElementType(thePlayer) == "player" then
-			local barrel = getElementChildren(source)
-			local x, y, z = getElementPosition(barrel[1])
-			triggerClientEvent(root, "createExplosionEffect", root, x, y, z)
-			local health = getElementHealth(getPedOccupiedVehicle(thePlayer))
-			setElementHealth(getPedOccupiedVehicle(thePlayer), health-math.random(150, 350))
-			destroyElement(source)
+			local playerDim = getElementDimension(thePlayer)
+			if barrelDim == playerDim then
+				local barrel = getElementChildren(source)
+				local x, y, z = getElementPosition(barrel[1])
+				triggerClientEvent(root, "createExplosionEffect", root, x, y, z)
+				local health = getElementHealth(getPedOccupiedVehicle(thePlayer))
+				setElementHealth(getPedOccupiedVehicle(thePlayer), health-math.random(150, 350))
+				destroyElement(source)
+			end
 		end
 	end
 	)
@@ -122,19 +139,25 @@ end
 addEvent("dropBarrel", true)
 addEventHandler("dropBarrel", root, dropBarrel)
 
-function dropOil(theVehicle, x, y, z, rz, minY)
+function dropOil(theVehicle, x, y, z, rz, dimension)
 	local oil = createObject(2717, x, y, z, 90, 0, 0)
+	setElementDimension(oil, dimension)
 	setObjectScale(oil, 2)
 	local oilCol = createColSphere(x, y, z+0.4, 2)
 	setElementParent(oil, oilCol)
 	
 	addEventHandler("onColShapeHit", oilCol,
 	function(thePlayer)
+		local oil = getElementChildren(source)
+		local oilDim = getElementDimension(oil[1])
 		if getElementType(thePlayer) == "player" then
-			if math.random(2) == 1 then
-				setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, 0.055)	
-			else
-				setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, -0.055)	
+			local playerDim = getElementDimension(thePlayer)
+			if oilDim == playerDim then
+				if math.random(2) == 1 then
+					setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, 0.055)	
+				else
+					setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, -0.055)	
+				end
 			end
 		end
 	end
