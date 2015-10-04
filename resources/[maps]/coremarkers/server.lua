@@ -67,7 +67,11 @@ function dropSpikes(theVehicle, x, y, z, rz, minY)
 					setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
 					setElementData(thePlayer, "rektBySpikes", true, true)
 					triggerClientEvent(thePlayer, "spikesTimerFunction", root, 10000)
-					spikesTimer = setTimer(function() setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 0, 0, 0, 0)end, 10000, 1)
+					spikesTimer = setTimer(function() 
+						if isElement(getPedOccupiedVehicle(thePlayer)) then 
+							setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 0, 0, 0, 0) 
+						end 
+					end, 10000, 1)
 					destroyElement(source)
 				end
 			end
