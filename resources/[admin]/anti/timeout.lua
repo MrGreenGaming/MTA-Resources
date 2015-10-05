@@ -26,29 +26,31 @@ end, 20000, 0)
 function checkSuspectPlayers() -- Check if FPS and Ping are constant before real kick, this should eliminate all false positives
 
 	for player, t in pairs(suspectPlayers) do
-		if #t < 4 then -- only record 4 times
+		if isElement(player) then --to prevent warnings
+			if #t < 4 then -- only record 4 times
 			
 
-			local p = getPlayerPing(player)
-			table.insert(suspectPlayers[player],{ping = p})
-		elseif #t >= 4 then -- if recorded 4 times then compare
-			local isTimedOut = true
+				local p = getPlayerPing(player)
+				table.insert(suspectPlayers[player],{ping = p})
+			elseif #t >= 4 then -- if recorded 4 times then compare
+				local isTimedOut = true
 
-			for i=1,3 do
-				if t[i][ping] ~= t[i+1][ping] then -- If ping/fps has changed in the meantime, it means the player is not timed out
-					isTimedOut = false
+				for i=1,3 do
+					if t[i][ping] ~= t[i+1][ping] then -- If ping/fps has changed in the meantime, it means the player is not timed out
+						isTimedOut = false
 					
-					break
+						break
+					end
 				end
-			end
 
-			if isTimedOut then
-				suspectPlayers[player] = nil
-				kickPlayer(player, 'Timed out (timeout detection)')
-				return
-			end
+				if isTimedOut then
+					suspectPlayers[player] = nil
+					kickPlayer(player, 'Timed out (timeout detection)')
+					return
+				end
 
-			suspectPlayers[player] = nil -- Player is not timed out
+				suspectPlayers[player] = nil -- Player is not timed out
+			end
 		end
 	end
 
