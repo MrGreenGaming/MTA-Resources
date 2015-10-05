@@ -2,6 +2,7 @@ math.randomseed(getTickCount())
 
 addEventHandler("onResourceStart", resourceRoot, 
 function()
+outputChatBox( '#ffffff"Core Markers" by #00dd22AleksCore #fffffflaunched.', killer, 255, 0, 0, true)
 showText_Create()
 showText( 54, 201, 46, "Pick-up power-ups\n @\n Press Fire button", 12000, all)
 setTimer(function() textItemSetColor(showText_Text, 54, 201, 46, 255) setTimer(function() textItemSetColor(showText_Text, 255, 255, 255, 255) end, 600, 1) end, 1000, 11)
@@ -166,14 +167,38 @@ end
 addEvent("dropOil", true)
 addEventHandler("dropOil", root, dropOil)
 
-function slowDownPlayer(player, killer)
-					setElementData(player, "dxShowTextToVictim", tostring("Player '"..getPlayerName(killer).."#006EFF' slowing you down"), true)
-					setTimer(setElementData, 8000, 1, player, "dxShowTextToVictim", nil, true)
-					triggerClientEvent(player, "slowDownPlayer", resourceRoot, player, killer)
+function doMagnet(killer)
+local killer_rank = exports.race:getPlayerRank(killer)
+	if killer_rank >= 2 then
+			local victim_rank = killer_rank-1
+			gotAlivePlayer = false
+			for k, player in ipairs(getElementsByType("player")) do
+				local rank = exports.race:getPlayerRank(player)
+				if type(rank) == "number" then
+					if rank <= victim_rank and rank >= 1 and isPedInVehicle(player) and not gotAlivePlayer and not getElementData(player, "dxShowTextToVictim") then
+						gotAlivePlayer = true
+						setElementData(player, "dxShowTextToVictim", tostring("Player '"..getPlayerName(killer).."#006EFF' slowing you down"), true)
+						setTimer(setElementData, 8000, 1, player, "dxShowTextToVictim", nil, true)
+						triggerClientEvent(player, "slowDownPlayer", resourceRoot, killer)
+						local px, py, pz = getElementPosition(getPedOccupiedVehicle(player))
+						local marker = createMarker( px, py, pz, 'corona', 2, 255, 0, 0)
+						attachElements(marker, getPedOccupiedVehicle(player))
+						setTimer ( destroyElement, 8000, 1, marker )
+						local marker1 = createMarker( px+.1, py, pz, 'corona', 2, 255, 0, 0)
+						attachElements(marker1, getPedOccupiedVehicle(player))
+						setTimer ( destroyElement, 8000, 1, marker1 )
+						outputChatBox( '#ffffff'..getPlayerName(killer)..'#ffffff slows down '..getPlayerName(player)..'#ffffff.', root, 0, 100, 255, true)
+						setElementData(killer, "dxShowTextToKiller", tostring("You slowing down: "..getPlayerName(player)), true)
+						setTimer(setElementData, 8000, 1, killer, "dxShowTextToKiller", nil, true)
+					end
+				end
+			end
+	elseif killer_rank == 1 then
+		outputChatBox( "#ff0000Magnet won't affect anyone if you're 1st.", killer, 255, 0, 0, true)
+	end
 end
-addEvent("slowDownPlayer", true)
-addEventHandler("slowDownPlayer", root, slowDownPlayer)
-
+addEvent("doMagnet", true)
+addEventHandler("doMagnet", root, doMagnet)
 
 addEvent("onPlayerRaceWasted")
 addEventHandler("onPlayerRaceWasted", root, 
@@ -201,5 +226,19 @@ addEvent("fixVehicle", true)
 addEventHandler("fixVehicle", root, 
 function(theVehicle) 
 fixVehicle(theVehicle)
+local px, py, pz = getElementPosition(theVehicle)
+local marker = createMarker( px, py, pz, 'corona', 2, 0, 255, 0)
+attachElements(marker, theVehicle)
+setTimer ( destroyElement, 1000, 1, marker )
+local marker1 = createMarker( px+.1, py, pz, 'corona', 2, 0, 255, 0)
+attachElements(marker1, theVehicle)
+setTimer ( destroyElement, 1000, 1, marker1 )
+end
+)
+
+addEvent("outputChatBoxForAll", true)
+addEventHandler("outputChatBoxForAll", root,
+function (thePlayer, text)
+outputChatBox(text, root, 255, 0, 0, true)
 end
 )

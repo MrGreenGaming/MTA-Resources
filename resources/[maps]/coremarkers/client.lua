@@ -31,7 +31,7 @@ end
 function getRandomPower()
 playSound("marker.mp3")
 local randomPower = unpack(powerTypes[math.random(#powerTypes)])
---local randomPower = "spikes"
+--local randomPower = "repair"
 bindKeys(randomPower)
 	if randomPower == "rocket" then
 		setElementData(localPlayer, "laser.on", true)
@@ -69,34 +69,19 @@ unbindKeys()
 		local z = getGroundPosition(x, y, z)		
 		triggerServerEvent("dropSpikes", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "speedboost" then
-		setElementSpeed(theVehicle, "kmh", 280)
+		setElementSpeed(theVehicle, "kmh", 260)
 	elseif powerType == "oil" then 
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
 		local z = getGroundPosition(x, y, z)	
 		triggerServerEvent("dropOil", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "magnet" then
-		local killerRank = tonumber(getElementData(localPlayer, 'race rank'))
-		if killerRank >= 2 then
-		local victimRank = killerRank-1
-			gotAlivePlayer = false
-			for k, player in ipairs(getElementsByType("player")) do
-				if type(getElementData(player, 'race rank')) == "number" then
-					if getElementData(player, 'race rank') <= victimRank and getElementData(player,"state") == "alive" and getElementData(player, 'race rank') >= 1 and not gotAlivePlayer then
-						gotAlivePlayer = true
-						triggerServerEvent("slowDownPlayer", resourceRoot, player, localPlayer)
-						outputChatBox( "You slowing down: "..getPlayerName(player), 0, 100, 255, true)
-						local victimName = getPlayerName(player)
-						setElementData(localPlayer, "dxShowTextToKiller", tostring("You slowing down: "..victimName), true)
-						setTimer(setElementData, 8000, 1, localPlayer, "dxShowTextToKiller", nil, true)
-					end
-				end
-			end
-		end
+		triggerServerEvent("doMagnet", resourceRoot, localPlayer)
 	elseif powerType == "hay" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-2.4, 0)
 		local z = getGroundPosition(x, y, z)	
 		triggerServerEvent("dropHay", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "rocket" then
+		triggerServerEvent("outputChatBoxForAll", resourceRoot, localPlayer, "#ffffff"..getPlayerName(localPlayer).." #fffffflaunches missiles into someone.")
 		local x, y, z, vx, vy, vz = getPositionAndVelocityForProjectile(theVehicle, x, y, z)
 		createProjectile(theVehicle, 21, x, y, z+0.45, 1, nil, 0, 0, 360 - rz, vx*15, vy*15, vz*15)
 		setTimer(createProjectile, 50, 1, theVehicle, 21, x, y, z+0.45, 1, nil, 0, 0, 360 - rz, vx*15, vy*15, vz*15)
@@ -163,17 +148,14 @@ addEventHandler( "onClientRender",  root,
 	end
 )
 
-function slowDownPlayer(player, killer)
+function slowDownPlayer()
 	if isTimer(slowDownTimer) then
-	killTimer(slowDownTimer)
-	killTimer(slowDownTimer2)
+		killTimer(slowDownTimer)
 	end
 	
-	outputChatBox( "Player '"..getPlayerName(killer).."#006EFF' slowing you down", 0, 100, 255, true)
 	setGameSpeed(0.7)
-	slowDownTimer = setTimer(setGameSpeed, 8000, 1, tonumber(1.0))
 	setElementData(localPlayer, "slowDown", true)
-	slowDownTimer2 = setTimer(setElementData, 8000, 1, localPlayer, "slowDown", false)
+	slowDownTimer = setTimer(function() setGameSpeed(tonumber(1.0)) setElementData(localPlayer, "slowDown", false) end, 8000, 1)
 end
 addEvent("slowDownPlayer", true)
 addEventHandler("slowDownPlayer", root, slowDownPlayer)
