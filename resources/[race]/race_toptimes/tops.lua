@@ -362,7 +362,9 @@ function gcLogin ( forumid, amount )
 	) AS maxs WHERE forumid = ? AND month != ?
 	]]
 	setTimer(function()
+		if isElement(player) then
 		dbQuery( mostMonthTops, {forumid, getPlayerSerial(player), getRealTime().month+1}, handlerConnect, q, forumid, getRealTime().month+1)
+		end
 	end, 10000, 1 )
 end
 addEventHandler("onGCLogin" , root, gcLogin )

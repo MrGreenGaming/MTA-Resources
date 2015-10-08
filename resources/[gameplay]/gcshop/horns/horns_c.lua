@@ -143,6 +143,9 @@ hornsTable = {
 	[142] = "Smoke Weed Everyday remix",
 	[143] = "Spacemen",
 	[144] = "They call it Merther!",
+	[145] = "Sad violin air horn",
+	[146] = "Fucking bi#@h!",
+	[147] = "Nice and strong Cena",
 }
 
 extensions = {
@@ -262,6 +265,9 @@ extensions = {
 	[142] = "mp3",
 	[143] = "mp3",
 	[144] = "mp3",
+	[145] = "mp3",
+	[146] = "mp3",
+	[147] = "mp3",
 
 
 

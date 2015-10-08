@@ -7,7 +7,7 @@ end
 function showText ( red, green, blue, text, time, thePlayer )
 textItemSetColor ( showText_Text, red, green, blue, 255 )
 textItemSetText ( showText_Text, text )
-outputChatBox(RGBToHex(red, green, blue)..text, thePlayer, red, green, blue, true)
+--outputChatBox(RGBToHex(red, green, blue)..text, thePlayer, red, green, blue, true)
 	
 	if ( showText_timer	) then
 		killTimer ( showText_timer )
