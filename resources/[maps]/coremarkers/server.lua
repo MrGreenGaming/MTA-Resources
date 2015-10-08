@@ -178,18 +178,18 @@ local killer_rank = exports.race:getPlayerRank(killer)
 					if rank <= victim_rank and rank >= 1 and isPedInVehicle(player) and not gotAlivePlayer and not getElementData(player, "dxShowTextToVictim") then
 						gotAlivePlayer = true
 						setElementData(player, "dxShowTextToVictim", tostring("Player '"..getPlayerName(killer).."#006EFF' slowing you down"), true)
-						setTimer(setElementData, 8000, 1, player, "dxShowTextToVictim", nil, true)
+						setTimer(setElementData, 3500, 1, player, "dxShowTextToVictim", nil, true)
 						triggerClientEvent(player, "slowDownPlayer", resourceRoot, killer)
 						local px, py, pz = getElementPosition(getPedOccupiedVehicle(player))
 						local marker = createMarker( px, py, pz, 'corona', 2, 255, 0, 0)
 						attachElements(marker, getPedOccupiedVehicle(player))
-						setTimer ( destroyElement, 8000, 1, marker )
+						setTimer ( destroyElement, 3500, 1, marker )
 						local marker1 = createMarker( px+.1, py, pz, 'corona', 2, 255, 0, 0)
 						attachElements(marker1, getPedOccupiedVehicle(player))
-						setTimer ( destroyElement, 8000, 1, marker1 )
+						setTimer ( destroyElement, 3500, 1, marker1 )
 						outputChatBox( '#00DDFF* #FFFFFF'..getPlayerName(killer)..'#00DDFF slows down #FFFFFF'..getPlayerName(player)..'#00DDFF.', root, 0, 100, 255, true)
 						setElementData(killer, "dxShowTextToKiller", tostring("You slowing down: "..getPlayerName(player)), true)
-						setTimer(setElementData, 8000, 1, killer, "dxShowTextToKiller", nil, true)
+						setTimer(setElementData, 3500, 1, killer, "dxShowTextToKiller", nil, true)
 					end
 				end
 			end

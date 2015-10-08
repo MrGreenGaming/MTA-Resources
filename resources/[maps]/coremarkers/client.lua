@@ -155,7 +155,7 @@ function slowDownPlayer()
 	
 	setGameSpeed(0.7)
 	setElementData(localPlayer, "slowDown", true)
-	slowDownTimer = setTimer(function() setGameSpeed(tonumber(1.0)) setElementData(localPlayer, "slowDown", false) end, 8000, 1)
+	slowDownTimer = setTimer(function() setGameSpeed(tonumber(1.0)) setElementData(localPlayer, "slowDown", false) end, 3500, 1)
 end
 addEvent("slowDownPlayer", true)
 addEventHandler("slowDownPlayer", root, slowDownPlayer)
