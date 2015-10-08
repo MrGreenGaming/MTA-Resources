@@ -81,7 +81,7 @@ unbindKeys()
 		local z = getGroundPosition(x, y, z)	
 		triggerServerEvent("dropHay", resourceRoot, theVehicle, x, y, z, rz, dimension)
 	elseif powerType == "rocket" then
-		triggerServerEvent("outputChatBoxForAll", resourceRoot, localPlayer, "#ffffff"..getPlayerName(localPlayer).." #fffffflaunches missiles into someone.")
+		triggerServerEvent("outputChatBoxForAll", resourceRoot, localPlayer, "#FF4000* #FFFFFF"..getPlayerName(localPlayer).." #FF4000launches missiles into someone.")
 		local x, y, z, vx, vy, vz = getPositionAndVelocityForProjectile(theVehicle, x, y, z)
 		createProjectile(theVehicle, 21, x, y, z+0.45, 1, nil, 0, 0, 360 - rz, vx*15, vy*15, vz*15)
 		setTimer(createProjectile, 50, 1, theVehicle, 21, x, y, z+0.45, 1, nil, 0, 0, 360 - rz, vx*15, vy*15, vz*15)
@@ -184,7 +184,7 @@ addEventHandler('createExplosionEffect', root, createExplosionEffect)
 
 function spikesTimerFunction(timems)
 spikesRepairTime = timems
-spikesTimer = setTimer(function() setElementData(localPlayer, "rektBySpikes", false, true) setVehicleWheelStates(getPedOccupiedVehicle(localPlayer), 0, 0, 0, 0) playSoundFrontEnd(46) end, timems, 1)
+spikesTimer = setTimer(function() setElementData(localPlayer, "rektBySpikes", false, true) playSoundFrontEnd(46) end, timems, 1)
 end
 addEvent("spikesTimerFunction", true)
 addEventHandler("spikesTimerFunction", root, spikesTimerFunction)

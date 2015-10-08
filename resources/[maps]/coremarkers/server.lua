@@ -187,7 +187,7 @@ local killer_rank = exports.race:getPlayerRank(killer)
 						local marker1 = createMarker( px+.1, py, pz, 'corona', 2, 255, 0, 0)
 						attachElements(marker1, getPedOccupiedVehicle(player))
 						setTimer ( destroyElement, 8000, 1, marker1 )
-						outputChatBox( '#ffffff'..getPlayerName(killer)..'#ffffff slows down '..getPlayerName(player)..'#ffffff.', root, 0, 100, 255, true)
+						outputChatBox( '#00DDFF* #FFFFFF'..getPlayerName(killer)..'#00DDFF slows down #FFFFFF'..getPlayerName(player)..'#00DDFF.', root, 0, 100, 255, true)
 						setElementData(killer, "dxShowTextToKiller", tostring("You slowing down: "..getPlayerName(player)), true)
 						setTimer(setElementData, 8000, 1, killer, "dxShowTextToKiller", nil, true)
 					end
