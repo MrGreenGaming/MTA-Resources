@@ -34,7 +34,7 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 			timeleftbg = guiCreateStaticImage(screenWidth/2-108/2, 15, 108, 24, 'img/timeleft.png', false, nil),
 			timeleft = guiCreateLabel(screenWidth/2-108/2, 19, 108, 30, '', false),
 			healthbar = FancyProgress.create(250, 1000, 'img/progress_health_bg.png', -65, 60, 123, 30, 'img/progress_health.png', 8, 8, 108, 15),
-			speedbar = FancyProgress.create(0, 1.5, 'img/progress_speed_bg.png', -65, 90, 123, 30, 'img/progress_speed.png', 8, 8, 108, 15),
+			speedbar = FancyProgress.create(0, 1.0, 'img/progress_speed_bg.png', -65, 90, 123, 30, 'img/progress_speed.png', 8, 8, 108, 15),
 		}
 		guiSetFont(g_GUI.timeleft, 'default-bold-small')
 		guiLabelSetHorizontalAlign(g_GUI.timeleft, 'center')
@@ -587,8 +587,10 @@ end
 function updateBars()
 	if g_Vehicle then
 		g_GUI.healthbar:setProgress(getElementHealth(g_Vehicle))
-		local vx, vy, vz = getElementVelocity(g_Vehicle)
-		g_GUI.speedbar:setProgress(math.sqrt(vx*vx + vy*vy + vz*vz))
+		--local vx, vy, vz = getElementVelocity(g_Vehicle)
+		--g_GUI.speedbar:setProgress(math.sqrt(vx*vx + vy*vy + vz*vz))
+		local nitro = getVehicleNitroLevel(g_Vehicle)
+		g_GUI.speedbar:setProgress(nitro)
 	end
 end
 
