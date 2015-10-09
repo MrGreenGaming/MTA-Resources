@@ -12,7 +12,7 @@ function mph()
 			dxDrawText( speed, x, y, x-68, 150, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false) 
 			dxDrawText( speed, x, y, x-72, 149, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false) 
 			dxDrawText( speed, x, y, x-68, 151, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
-			dxDrawText( speed, x, y, x-70, 150, tocolor ( 30, 144, 255, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
+			dxDrawText( speed, x, y, x-70, 150, tocolor ( 255, 255, 255, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
 		else
 		 xx,yy,zz = getElementVelocity(car)
 		 speednumber = getDistanceBetweenPoints3D(0,0,0,getElementVelocity(car))*100
@@ -23,7 +23,7 @@ function mph()
 		dxDrawText( speed, x, 150, x-68, 150, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false) 
 		dxDrawText( speed, x, 150, x-72, 149, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false) 
 		dxDrawText( speed, x, 150, x-68, 151, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
-		dxDrawText( speed, x, 150, x-70, 150, tocolor ( 30, 144, 255, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)	
+		dxDrawText( speed, x, 150, x-70, 150, tocolor ( 255, 255, 255, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)	
 		end
 	end	
 end
@@ -42,7 +42,7 @@ function kmh()
 			dxDrawText( speed, x, y, x-68, 150, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false) 
 			dxDrawText( speed, x, y, x-72, 149, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false) 
 			dxDrawText( speed, x, y, x-68, 151, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
-			dxDrawText( speed, x, y, x-70, 150, tocolor ( 30, 144, 255, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
+			dxDrawText( speed, x, y, x-70, 150, tocolor ( 255, 255, 255, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
 		else
 		 xx,yy,zz = getElementVelocity(car)
 		 speednumber = getDistanceBetweenPoints3D(0,0,0,getElementVelocity(car))*100*1.61
@@ -53,7 +53,7 @@ function kmh()
 		dxDrawText( speed, x, y, x-68, 150, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false) 
 		dxDrawText( speed, x, y, x-72, 149, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false) 
 		dxDrawText( speed, x, y, x-68, 151, tocolor ( 0, 0, 0, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
-		dxDrawText( speed, x, y, x-70, 150, tocolor ( 30, 144, 255, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
+		dxDrawText( speed, x, y, x-70, 150, tocolor ( 255, 255, 255, 255 ), 0.8, 'bankgothic', "right", "bottom", false, false, false)
 	end	
 	end
 end
