@@ -5,7 +5,7 @@ local powerTypes = {
 {"spikes"},
 {"speedboost"},
 {"oil"},
-{"magnet"},
+--{"magnet"},
 {"hay"},
 {"rocket"},
 {"barrel"}
