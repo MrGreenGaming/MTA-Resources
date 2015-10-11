@@ -50,3 +50,16 @@ else
 end
 return false
 end
+
+function getVehicleOriginalProperty( element, property )
+    if isElement ( element ) and getElementType ( element ) == "vehicle" and type ( property ) == "string" then
+        local handlingTable = getOriginalHandling ( getElementModel(element) ) 
+        local value = handlingTable[property]
+ 
+        if value then 
+            return value 
+        end
+    end
+ 
+    return false
+end
