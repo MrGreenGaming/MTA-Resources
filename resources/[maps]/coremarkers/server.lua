@@ -1,3 +1,5 @@
+local magnetSlowDownTime = 3500
+
 math.randomseed(getTickCount())
 
 addEventHandler("onResourceStart", resourceRoot, 
@@ -6,7 +8,7 @@ outputChatBox( '#ffffff"Core Markers" by #00dd22AleksCore #fffffflaunched.', kil
 showText_Create()
 showText( 54, 201, 46, "Pick-up power-ups\n @\n Press Fire button", 12000, all)
 setTimer(function() textItemSetColor(showText_Text, 54, 201, 46, 255) setTimer(function() textItemSetColor(showText_Text, 255, 255, 255, 255) end, 600, 1) end, 1000, 11)
-
+	
 	for index, object in ipairs(getElementsByType("object")) do
 		if getElementModel(object) == 3798 then
 			local x, y, z = getElementPosition(object)
@@ -51,21 +53,17 @@ if getElementType(thePlayer) == "player" then
 end
 end
 
-function dropSpikes(theVehicle, x, y, z, rz, dimension)
+function dropSpikes(creator, x, y, z, rz)
 	local spikes = createObject(2892, 0, 0, -200, 0, 0, rz+90)
-	setElementDimension(spikes, dimension)
 	setObjectScale(spikes, 0.5)
 	setElementPosition(spikes, x, y, z+0.1)
 	local spikesCol = createColSphere(x, y, z, 2.6)
 	setElementParent(spikes, spikesCol)
-
+	setElementData(spikesCol, "core spikes creator", creator)
+	
 	addEventHandler("onColShapeHit", spikesCol,
 	function(thePlayer)
-		local spikes = getElementChildren(source)
-		local spikesDim = getElementDimension(spikes[1])
-		if getElementType(thePlayer) == "player" then
-			local playerDim = getElementDimension(thePlayer)
-			if spikesDim == playerDim then
+		if getElementType(thePlayer) == "player" and getElementData(source, "core spikes creator") ~= thePlayer then
 				if not getElementData(thePlayer, "rektBySpikes") then
 					local _, _, pz = getElementPosition(thePlayer)
 					local _, _, sz = getElementPosition(source)
@@ -81,7 +79,6 @@ function dropSpikes(theVehicle, x, y, z, rz, dimension)
 						destroyElement(source)
 					end
 				end
-			end
 		end
 	end
 	)
@@ -89,77 +86,77 @@ end
 addEvent("dropSpikes", true)
 addEventHandler("dropSpikes", root, dropSpikes)
 
-function dropHay(theVehicle, x, y, z, rz, dimension)
-local hay = createObject(3374, x, y, z+1.5, 0, 0, rz+90)
-setElementDimension(hay, dimension)
+function dropHay(x, y, z, rz)
+createObject(3374, x, y, z+1.5, 0, 0, rz+90)
 end
 addEvent("dropHay", true)
 addEventHandler("dropHay", root, dropHay)
 
-function dropBarrel(theVehicle, x, y, z, rz, dimension)
-local barrel = createObject(1225, x, y, z+0.4)
-local barrel2 = createObject(1225, x+0.5, y+0.5, z+0.4)
-local barrel3 = createObject(1225, x-0.5, y-0.5, z+0.4)
-local barrel4 = createObject(1225, x+0.5, y-0.5, z+0.4)
-local barrel5 = createObject(1225, x-0.5, y+0.5, z+0.4)
-setElementDimension(barrel, dimension)
-setElementDimension(barrel2, dimension)
-setElementDimension(barrel3, dimension)
-setElementDimension(barrel4, dimension)
-setElementDimension(barrel5, dimension)
-setElementCollisionsEnabled(barrel, false)
-setElementCollisionsEnabled(barrel2, false)
-setElementCollisionsEnabled(barrel3, false)
-setElementCollisionsEnabled(barrel4, false)
-setElementCollisionsEnabled(barrel5, false)
-local barrelCol = createColSphere(x, y, z+0.6, 2.35)
-setElementParent(barrel, barrelCol)
-setElementParent(barrel2, barrelCol)
-setElementParent(barrel3, barrelCol)
-setElementParent(barrel4, barrelCol)
-setElementParent(barrel5, barrelCol)
-	
-addEventHandler("onColShapeHit", barrelCol,
+function dropRamp(x, y, z, rz)
+local ramp = createObject(13645, x, y, z+0.4, 4, 0, rz)
+local rampCol = createColSphere(x, y, z+0.4, 4)
+setElementParent(ramp, rampCol)
+
+	addEventHandler("onColShapeHit", rampCol,
 	function(thePlayer)
-		local barrel = getElementChildren(source)
-		local barrelDim = getElementDimension(barrel[1])
 		if getElementType(thePlayer) == "player" then
-			local playerDim = getElementDimension(thePlayer)
-			if barrelDim == playerDim then
-				local barrel = getElementChildren(source)
-				local x, y, z = getElementPosition(barrel[1])
-				triggerClientEvent(root, "createExplosionEffect", root, x, y, z)
-				local health = getElementHealth(getPedOccupiedVehicle(thePlayer))
-				setElementHealth(getPedOccupiedVehicle(thePlayer), health-math.random(150, 350))
-				destroyElement(source)
+			if not isTimer(destroyTimer) then
+				destroyTimer = setTimer(destroyElement, 15000, 1, source)
 			end
 		end
 	end
 	)
 end
-addEvent("dropBarrel", true)
-addEventHandler("dropBarrel", root, dropBarrel)
+addEvent("dropRamp", true)
+addEventHandler("dropRamp", root, dropRamp)
 
-function dropOil(theVehicle, x, y, z, rz, dimension)
+function dropBarrels(model, x, y, z, rz)
+local model = tonumber(model)
+local barrels = {}
+barrels[1] = createObject(model, x, y, z+0.4)
+barrels[2] = createObject(model, x+0.5, y+0.5, z+0.4)
+barrels[3] = createObject(model, x-0.5, y-0.5, z+0.4)
+barrels[4] = createObject(model, x+0.5, y-0.5, z+0.4)
+barrels[5] = createObject(model, x-0.5, y+0.5, z+0.4)
+
+		local barrelsCol = createColSphere(x, y, z+0.6, 2.35)
+		
+		for k, barrel in ipairs(barrels) do
+			setElementCollisionsEnabled(barrel, false)
+			setElementParent(barrel, barrelsCol)
+		end
+		
+		addEventHandler("onColShapeHit", barrelsCol,
+		function(thePlayer)
+			if getElementType(thePlayer) == "player" then
+				local barrel = getElementChildren(source)
+				local x, y, z = getElementPosition(barrel[1])
+				triggerClientEvent(root, "createExplosionEffect", root, x, y, z)
+				local health = getElementHealth(getPedOccupiedVehicle(thePlayer))
+				setElementHealth(getPedOccupiedVehicle(thePlayer), health-math.random(200, 400))
+				destroyElement(source)
+			end
+		end
+		)
+end
+addEvent("dropBarrels", true)
+addEventHandler("dropBarrels", root, dropBarrels)
+
+function dropOil(x, y, z, rz)
 	local oil = createObject(2717, x, y, z, 90, 0, 0)
-	setElementDimension(oil, dimension)
 	setObjectScale(oil, 2)
 	local oilCol = createColSphere(x, y, z+0.4, 2)
 	setElementParent(oil, oilCol)
 	
 	addEventHandler("onColShapeHit", oilCol,
 	function(thePlayer)
-		local oil = getElementChildren(source)
-		local oilDim = getElementDimension(oil[1])
 		if getElementType(thePlayer) == "player" then
-			local playerDim = getElementDimension(thePlayer)
-			if oilDim == playerDim then
 				if math.random(2) == 1 then
-					setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, 0.055)	
+					setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, 0.055)
 				else
 					setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, -0.055)	
 				end
-			end
+		destroyElement(source)
 		end
 	end
 	)
@@ -175,26 +172,20 @@ local killer_rank = exports.race:getPlayerRank(killer)
 			for k, player in ipairs(getElementsByType("player")) do
 				local rank = exports.race:getPlayerRank(player)
 				if type(rank) == "number" then
-					if rank <= victim_rank and rank >= 1 and isPedInVehicle(player) and not gotAlivePlayer and not getElementData(player, "dxShowTextToVictim") then
+					if rank <= victim_rank and rank >= 1 and isPedInVehicle(player) and not gotAlivePlayer and not getElementData(player, "slowed down right now") then
 						gotAlivePlayer = true
-						setElementData(player, "dxShowTextToVictim", tostring("Player '"..getPlayerName(killer).."#006EFF' slowing you down"), true)
-						setTimer(setElementData, 8000, 1, player, "dxShowTextToVictim", nil, true)
-						triggerClientEvent(player, "slowDownPlayer", resourceRoot, killer)
-						local px, py, pz = getElementPosition(getPedOccupiedVehicle(player))
-						local marker = createMarker( px, py, pz, 'corona', 2, 255, 0, 0)
-						attachElements(marker, getPedOccupiedVehicle(player))
-						setTimer ( destroyElement, 8000, 1, marker )
-						local marker1 = createMarker( px+.1, py, pz, 'corona', 2, 255, 0, 0)
-						attachElements(marker1, getPedOccupiedVehicle(player))
-						setTimer ( destroyElement, 8000, 1, marker1 )
-						outputChatBox( '#ffffff'..getPlayerName(killer)..'#ffffff slows down '..getPlayerName(player)..'#ffffff.', root, 0, 100, 255, true)
+						setElementData(player, "slowed down right now", true, true)
+						setTimer(setElementData, magnetSlowDownTime, 1, player, "slowed down right now", nil, true)
+						triggerClientEvent(player, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
+						attachMarker(getPedOccupiedVehicle(player), magnetSlowDownTime, 255, 0, 0)
+						sendClientMessage('#FFFFFF'..getPlayerName(killer)..'#00DDFF slows down #FFFFFF'..getPlayerName(player)..'.', root, 255, 255, 255, "bottom")
 						setElementData(killer, "dxShowTextToKiller", tostring("You slowing down: "..getPlayerName(player)), true)
-						setTimer(setElementData, 8000, 1, killer, "dxShowTextToKiller", nil, true)
+						setTimer(setElementData, magnetSlowDownTime, 1, killer, "dxShowTextToKiller", nil, true)
 					end
 				end
 			end
 	elseif killer_rank == 1 then
-		outputChatBox( "#ff0000Magnet won't affect anyone if you're 1st.", killer, 255, 0, 0, true)
+		sendClientMessage("Magnet won't affect anyone if you're 1st.", killer, 255, 0, 0, "bottom")
 	end
 end
 addEvent("doMagnet", true)
@@ -205,9 +196,10 @@ addEventHandler("onPlayerRaceWasted", root,
 function() 
 setElementData(source, "power_type", nil)
 setElementData(source, "player_have_power", false, true)
-setElementData(source, "dxShowTextToVictim", nil, true)
-setElementData(source, "dxShowTextToKiller", nil, true)
-setElementData(source, "slowDown", false)
+setElementData(source, "slowed down right now", nil, true)
+setElementData(source, "slowDown", false, true)
+setElementData(source, "rektBySpikes", false, true)
+setElementData(source, "boostx3", nil, true)
 triggerClientEvent(source, "unbindKeys", resourceRoot)
 triggerClientEvent(source, "hideSpikesRepairHUD", resourceRoot)
 	if isTimer(spikesTimer) then
@@ -226,19 +218,21 @@ addEvent("fixVehicle", true)
 addEventHandler("fixVehicle", root, 
 function(theVehicle) 
 fixVehicle(theVehicle)
-local px, py, pz = getElementPosition(theVehicle)
-local marker = createMarker( px, py, pz, 'corona', 2, 0, 255, 0)
-attachElements(marker, theVehicle)
-setTimer ( destroyElement, 1000, 1, marker )
-local marker1 = createMarker( px+.1, py, pz, 'corona', 2, 0, 255, 0)
-attachElements(marker1, theVehicle)
-setTimer ( destroyElement, 1000, 1, marker1 )
 end
 )
+
+function attachMarker(theVehicle, timer, r, g, b)
+local marker = createMarker( 0, 0, -200, 'corona', 2, r, g, b)
+attachElements(marker, theVehicle)
+setTimer ( destroyElement, timer, 1, marker )
+end
+addEvent("attachMarker", true)
+addEventHandler("attachMarker", root, attachMarker)
+
 
 addEvent("outputChatBoxForAll", true)
 addEventHandler("outputChatBoxForAll", root,
 function (thePlayer, text)
-outputChatBox(text, root, 255, 0, 0, true)
+sendClientMessage(text, root, 255, 255, 255, "bottom")
 end
 )

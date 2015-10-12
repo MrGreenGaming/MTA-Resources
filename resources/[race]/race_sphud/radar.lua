@@ -499,11 +499,13 @@ addEventHandler("onClientRestore",root,handleRestore)
 
 local rockets = {}
 function rocket (creator)
-	local projectile = source
-	local blip = createBlipAttachedTo ( projectile, 0, 1, 0, 0, 0, 255, -1000)
-	rockets[getVehicleController(creator)] = blip
-	setElementParent(blip, projectile)
-	setTimer(function() if blip and isElement(blip) then destroyElement(blip) end end, 4000, 1)
+	if getElementType(creator) == "vehicle" then
+		local projectile = source
+		local blip = createBlipAttachedTo ( projectile, 0, 1, 0, 0, 0, 255, -1000)
+		rockets[getVehicleController(creator)] = blip
+		setElementParent(blip, projectile)
+		setTimer(function() if blip and isElement(blip) then destroyElement(blip) end end, 4000, 1)
+	end
 end
 addEventHandler('onClientProjectileCreation', root, rocket)
 
