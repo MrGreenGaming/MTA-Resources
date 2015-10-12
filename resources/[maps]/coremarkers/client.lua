@@ -20,7 +20,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 function()
 setElementData(localPlayer, "power_type", nil)
 setElementData(localPlayer, "player_have_power", false, true)
-setElementData(source, "slowed down right now", nil, true)
+setElementData(localPlayer, "slowed down right now", nil, true)
 setElementData(localPlayer, "slowDown", false, true)
 setElementData(localPlayer, "rektBySpikes", false, true)
 setElementData(localPlayer, "boostx3", nil, true)
