@@ -37,7 +37,7 @@ end
 function getRandomPower()
 playSound("marker.mp3")
 local randomPower = unpack(powerTypes[math.random(#powerTypes)])
-local randomPower = "rocket"
+--local randomPower = "rocket"
 	
 	if math.random(150) == math.random(150) then
 		bindKeys("magnet")
