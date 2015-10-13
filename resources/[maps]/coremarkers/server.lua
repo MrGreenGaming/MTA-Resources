@@ -4,7 +4,7 @@ math.randomseed(getTickCount())
 
 addEventHandler("onResourceStart", resourceRoot, 
 function()
-outputChatBox( '#ffffff"Core Markers" by #00dd22AleksCore #fffffflaunched.', killer, 255, 0, 0, true)
+outputChatBox( '#ffffff"Core Markers" by #00dd22AleksCore #fffffflaunched.', root, 255, 0, 0, true)
 showText_Create()
 showText( 54, 201, 46, "Pick-up power-ups\n @\n Press Fire button", 12000, all)
 setTimer(function() textItemSetColor(showText_Text, 54, 201, 46, 255) setTimer(function() textItemSetColor(showText_Text, 255, 255, 255, 255) end, 600, 1) end, 1000, 11)
@@ -70,12 +70,7 @@ function dropSpikes(creator, x, y, z, rz)
 					if pz >= sz then
 						setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 1, 1, 1, 1)
 						setElementData(thePlayer, "rektBySpikes", true, true)
-						triggerClientEvent(thePlayer, "spikesTimerFunction", root, 10000)
-						spikesTimer = setTimer(function() 
-							if isElement(getPedOccupiedVehicle(thePlayer)) then 
-								setVehicleWheelStates(getPedOccupiedVehicle(thePlayer), 0, 0, 0, 0) 
-							end 
-						end, 10000, 1)
+						triggerClientEvent(thePlayer, "spikesTimerFunction", root)
 						destroyElement(source)
 					end
 				end
@@ -202,9 +197,6 @@ setElementData(source, "rektBySpikes", false, true)
 setElementData(source, "boostx3", nil, true)
 triggerClientEvent(source, "unbindKeys", resourceRoot)
 triggerClientEvent(source, "hideSpikesRepairHUD", resourceRoot)
-	if isTimer(spikesTimer) then
-		killTimer(spikesTimer)
-	end
 end)
 
 addEventHandler ("onVehicleEnter", root, 
@@ -216,8 +208,12 @@ end
 
 addEvent("fixVehicle", true)
 addEventHandler("fixVehicle", root, 
-function(theVehicle) 
-fixVehicle(theVehicle)
+function(thePlayer, theVehicle, fix) 
+	if fix then
+		fixVehicle(theVehicle)
+	end
+	setVehicleWheelStates(theVehicle, 0, 0, 0, 0)
+	setElementData(thePlayer, "rektBySpikes", false, true)
 end
 )
 
@@ -234,5 +230,13 @@ addEvent("outputChatBoxForAll", true)
 addEventHandler("outputChatBoxForAll", root,
 function (thePlayer, text)
 sendClientMessage(text, root, 255, 255, 255, "bottom")
+end
+)
+
+addEvent("onPlayerPickUpRacePickup", true)
+addEventHandler("onPlayerPickUpRacePickup", root, function(pickupID, pickupType)
+	if pickupType == "repair" then
+		setElementData(source, "rektBySpikes", false, true)
+	end
 end
 )

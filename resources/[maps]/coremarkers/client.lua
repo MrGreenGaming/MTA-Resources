@@ -37,7 +37,7 @@ end
 function getRandomPower()
 playSound("marker.mp3")
 local randomPower = unpack(powerTypes[math.random(#powerTypes)])
---local randomPower = "barrels"
+local randomPower = "rocket"
 	
 	if math.random(150) == math.random(150) then
 		bindKeys("magnet")
@@ -86,9 +86,9 @@ unbindKeys()
 		local z = getGroundPosition(x, y, z)		
 		triggerServerEvent("dropSpikes", resourceRoot, localPlayer, x, y, z, rz)
 	elseif powerType == "boost" then
-		local engineAcc = getVehicleOriginalProperty(theVehicle, "engineAcceleration")
+		local engineAcc = getVehicleOriginalProperty(theVehicle, "engineAcceleration")*2.5
 		if engineAcc >= 25 then
-			setElementSpeed(theVehicle, "kmh", 300)
+			setElementSpeed(theVehicle, "kmh", 290)
 		else
 			setElementSpeed(theVehicle, "kmh", 260)
 		end
@@ -100,7 +100,7 @@ unbindKeys()
 			setElementData(localPlayer, "boostx3", boost)
 			local engineAcc = getVehicleOriginalProperty(theVehicle, "engineAcceleration")*2.5
 			if engineAcc >= 25 then
-				setElementSpeed(theVehicle, "kmh", 300)
+				setElementSpeed(theVehicle, "kmh", 290)
 			else
 				setElementSpeed(theVehicle, "kmh", 260)
 			end
@@ -136,7 +136,7 @@ unbindKeys()
 		local z = getGroundPosition(x, y, z)
 		triggerServerEvent("dropBarrels", resourceRoot, 1225, x, y, z, rz)
 	elseif powerType == "repair" then
-		triggerServerEvent("fixVehicle", resourceRoot, theVehicle)
+		triggerServerEvent("fixVehicle", resourceRoot, localPlayer, theVehicle, true)
 	end
 end
 
@@ -178,7 +178,7 @@ addEventHandler( "onClientRender",  root,
 				dxDrawRectangle(1021*sWidth/1920, 898*sHeight/1080, 18*sWidth/1920, 172*sHeight/1080, tocolor(0, 0, 0, 180))
 				dxDrawRectangle(1022*sWidth/1920, 899*sHeight/1080, 16*sWidth/1920, 170*sHeight/1080, tocolor(0, 0, 0, 200))
 				dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, 168*sHeight/1080, tocolor(0, 255, 0, 200))
-				dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, timeLeft/spikesRepairTime*168*sHeight/1080, tocolor(30, 30, 30, 200))
+				dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, timeLeft/10000*168*sHeight/1080, tocolor(30, 30, 30, 200))
 			end
 		end
 		
@@ -235,9 +235,19 @@ end
 addEvent('createExplosionEffect', true)
 addEventHandler('createExplosionEffect', root, createExplosionEffect)
 
-function spikesTimerFunction(timems)
-spikesRepairTime = timems
-spikesTimer = setTimer(function() setElementData(localPlayer, "rektBySpikes", false, true) playSoundFrontEnd(46) end, timems, 1)
+function spikesTimerFunction()
+	if isTimer(spikesTimer) then
+		killTimer(spikesTimer)
+	end
+	spikesTimer = setTimer(function() 
+		setElementData(localPlayer, "rektBySpikes", false, true) 
+		local theVehicle = getPedOccupiedVehicle(localPlayer)
+		local s1, _, _, _ = getVehicleWheelStates(theVehicle)
+		if s1 ~= 0 then
+			playSoundFrontEnd(46)
+			triggerServerEvent("fixVehicle", resourceRoot, localPlayer, theVehicle, false)
+		end 
+	end, 10000, 1)
 end
 addEvent("spikesTimerFunction", true)
 addEventHandler("spikesTimerFunction", root, spikesTimerFunction)

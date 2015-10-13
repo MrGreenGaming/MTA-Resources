@@ -17,7 +17,7 @@ local DefaultTime = 8; 		-- The max time each message will show if time isn't de
 -- For scripters only					--
 ------------------------------------------
 local sx_, sy_ = guiGetScreenSize ( )
-local sx, sy = sx_/1280, sy_/1080 -- you got xXMADEXx's resolution :3 plz no hak mi
+local sx, sy = sx_/1920, sy_/1080 -- you got xXMADEXx's resolution :3 plz no hak mi
 local DefaultPos = true;
 local messages_top = { }
 local messages_btm = { }
@@ -81,7 +81,7 @@ function dxDrawNotificationBar ( )
 			end
 		end
 		dxDrawRectangle ( (sx_/2-530/2), i*25, 530, 25, tocolor ( 0, 0, 0, v.alpha ) )
-		dxDrawText ( tostring ( v.message ), 0, i*25, sx_, (i+1)*25, tocolor ( v.r, v.g, v.b, v.alpha*1.59375 ), sy*1, "default-bold", "center", "center", false, false, false, true)
+		dxDrawText ( tostring ( v.message ), 0, i*25, sx_, (i+1)*25, tocolor ( v.r, v.g, v.b, v.alpha*1.59375 ), sy*1.3, "clear", "center", "center", false, false, false, true)
 	end 
 	if ( #messages_top > maxMessages and messages_top[1].locked ) then
 		messages_top[1].locked = false
@@ -105,8 +105,10 @@ function dxDrawNotificationBar ( )
 				messages_btm[i].locked=false
 			end
 		end
-		dxDrawRectangle ( (sx_/2-530/2), sy_-(i*25), 530, 25, tocolor ( 0, 0, 0, v.alpha ) )
-		dxDrawText ( tostring ( v.message ), 0, sy_-(i*25), sx_, sy_-((i-1)*25), tocolor ( v.r, v.g, v.b, v.alpha*1.59375 ), sy*1, "default-bold", "center", "center", false, false, false, true)
+		
+		local textWidth = dxGetTextWidth(tostring ( v.message ), sy*1.5, "clear", true)+10*sx
+		dxDrawRectangle ( (sx_/2-textWidth/2), sy_-(i*27*sy), textWidth, 27*sy, tocolor ( 0, 0, 0, v.alpha ) )
+		dxDrawText ( tostring ( v.message ), 0, sy_-(i*27*sy), sx_, sy_-((i-1)*27*sy), tocolor ( v.r, v.g, v.b, v.alpha*1.59375 ), sy*1.5, "clear", "center", "center", false, false, false, true, true)
 	end 
 	if ( #messages_btm > maxMessages and messages_btm[1].locked ) then
 		messages_btm[1].locked = false
