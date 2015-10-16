@@ -21,9 +21,9 @@ settings = {
 	["content_color"] = {}
 }
 defaultSettings = {
-	["useanimation"] = true,
+	["useanimation"] = false,
 	["toggleable"] = false,
-	["showserverinfo"] = false,
+	["showserverinfo"] = true,
 	["showgamemodeinfo"] = false,
 	["showteams"] = true,
 	["usecolors"] = true,
@@ -70,9 +70,9 @@ defaultSettings = {
 		["a"] = 50
 	},
 	["serverinfo_color"] = {
-		["r"] = 150,
-		["g"] = 150,
-		["b"] = 150,
+		["r"] = 0,
+		["g"] = 255,
+		["b"] = 0,
 		["a"] = 255
 	},
 	["content_color"] = {
@@ -146,9 +146,9 @@ fontIndexes = {
 fontNames = { "default", "default-bold", "clear", "arial", "sans","pricedown", "bankgothic", "diploma", "beckett" }
 
 function readScoreboardSettings()
-	local settingsFile = xmlLoadFile( "settings.xml" )
+	local settingsFile = xmlLoadFile( "settings-mrgreen.xml" )
 	if not settingsFile then
-		settingsFile = xmlCreateFile( "settings.xml", "settings" )
+		settingsFile = xmlCreateFile( "settings-mrgreen.xml", "settings" )
 		if not settingsFile then return false end
 		
 		local useanimationTag = xmlCreateChild( settingsFile, "useanimation" )
@@ -863,9 +863,9 @@ function restoreDefaultSettings()
 end
 
 function saveSettings( settingsTable )
-	local settingsFile = xmlLoadFile( "settings.xml" )
+	local settingsFile = xmlLoadFile( "settings-mrgreen.xml" )
 	if not settingsFile then
-		settingsFile = xmlCreateFile( "settings.xml", "settings" )
+		settingsFile = xmlCreateFile( "settings-mrgreen.xml", "settings" )
 		if not settingsFile then return false end
 		local useanimationTag = xmlCreateChild( settingsFile, "useanimation" )
 		local toggleableTag = xmlCreateChild( settingsFile, "toggleable" )
