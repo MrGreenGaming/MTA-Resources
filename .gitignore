@@ -40,8 +40,9 @@
 *.hex
 
 /resources/\[web\]/irc/settings.xml
-resources/[web]/irc/irc.log
-resources/[gameplay]/helpmenu/svn.xml
-resources/[gameplay]/gcshop/shop.log
-resources/[gameplay]/helpmenu/motd.xml
-resources/[admin]/admin/conf/reports.xml
+/resources/\[web\]/irc/irc.log
+/resources/\[gameplay\]/gcshop/shop.log
+/resources/\[gameplay\]/gus/adminapplicants.xml
+/resources/\[gameplay\]/helpmenu/svn.xml
+/resources/\[gameplay\]/helpmenu/motd.xml
+/resources/\[admin\]/admin/conf/reports.xml
