@@ -146,9 +146,9 @@ fontIndexes = {
 fontNames = { "default", "default-bold", "clear", "arial", "sans","pricedown", "bankgothic", "diploma", "beckett" }
 
 function readScoreboardSettings()
-	local settingsFile = xmlLoadFile( "settings-mrgreen.xml" )
+	local settingsFile = xmlLoadFile( "@settings.xml" )
 	if not settingsFile then
-		settingsFile = xmlCreateFile( "settings-mrgreen.xml", "settings" )
+		settingsFile = xmlCreateFile( "@settings.xml", "settings" )
 		if not settingsFile then return false end
 		
 		local useanimationTag = xmlCreateChild( settingsFile, "useanimation" )
