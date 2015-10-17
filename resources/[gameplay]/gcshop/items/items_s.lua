@@ -107,6 +107,7 @@ local perks = {
 	[6] = { ID = 6, price =  2000, description = 'Longer burnup time', func = 'loadGCBurn'},
 	[7] = { ID = 7, price =  3000, description = 'Extra long burnup time', func = 'loadGCBurnExtra', requires = {6}, exp = 30},
 	[8] = { ID = 8, price =  3000, description = 'Health transfer', func = 'loadGCBurnTransfer', requires = {6}, exp = 30},
+	[9] = { ID = 9, price =  3000, description = 'Double sided objects', func = 'loadDoubleSided'},
 }
 
 function onGCShopLogin (forumID)

@@ -125,6 +125,20 @@ function build_itemsWidget(parent, offsetX, offsetY)
 	guiLabelSetHorizontalAlign(gui["labelInfo_8"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelInfo_8"], "top")
 	
+	gui["btnBuyPerk_9"] = guiCreateButton(541, 891, 101, 101, "Price:\n3000 GC", false, gui["scrollAreaItems"])
+	if on_btnBuyPerk_9_clicked then
+		addEventHandler("onClientGUIClick", gui["btnBuyPerk_9"], on_btnBuyPerk_9_clicked, false)
+	end
+	
+	gui["labelTitle_9"] = guiCreateLabel(21, 891, 200, 13, "9. Double sided objects", false, gui["scrollAreaItems"])
+	guiSetFont(gui["labelTitle_9"], "default-bold-small")
+	guiLabelSetHorizontalAlign(gui["labelTitle_9"], "left", false)
+	guiLabelSetVerticalAlign(gui["labelTitle_9"], "center")
+	
+	gui["labelInfo_9"] = guiCreateLabel(21, 911, 481, 71, "Makes all objects in a map doublesided (setElementDoubleSided)", false, gui["scrollAreaItems"])
+	guiLabelSetHorizontalAlign(gui["labelInfo_9"], "left", true)
+	guiLabelSetVerticalAlign(gui["labelInfo_9"], "top")
+	
 	gui["btnExtendScrollarea"] = guiCreateButton(281, 1021, 101, 101, "Price:\n1000 GC", false, gui["scrollAreaItems"])
 	guiSetEnabled(gui["btnExtendScrollarea"], false)
 	if on_btnExtendScrollarea_clicked then

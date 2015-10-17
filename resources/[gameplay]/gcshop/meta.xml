@@ -44,6 +44,8 @@
     <script src="items\voice\gcvoice_s.lua" type="server" />
     <script src="items\burn\burn_s.lua" type="server" />
     <script src="items\burn\burn_c.lua" type="client" />
+    <script src="items\doublesided\double_s.lua" type="server" />
+    <script src="items\doublesided\double_c.lua" type="client" />
    
     
     

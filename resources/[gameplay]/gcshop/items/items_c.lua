@@ -121,6 +121,13 @@ function on_btnBuyPerk_8_clicked(button, state, absoluteX, absoluteY)
 	button_buy_perk (8);
 end
 
+function on_btnBuyPerk_9_clicked(button, state, absoluteX, absoluteY)
+	if (button ~= "left") or (state ~= "up") then
+		return
+	end
+	button_buy_perk (9);
+end
+
 function button_buy_perk ( id )
 	if not player_perks[id] then
 		triggerServerEvent('gcbuyperk', localPlayer, localPlayer, 'gcbuyperk', id);
