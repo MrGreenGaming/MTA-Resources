@@ -44,3 +44,4 @@ resources/[web]/irc/irc.log
 resources/[gameplay]/helpmenu/svn.xml
 resources/[gameplay]/gcshop/shop.log
 resources/[gameplay]/helpmenu/motd.xml
+resources/[admin]/admin/conf/reports.xml
