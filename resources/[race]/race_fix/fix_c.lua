@@ -7,7 +7,7 @@ addEvent('vehicleChange', true)
 addEventHandler('vehicleChange', localPlayer, function(v, old)
 	if getVehicleType(getPedOccupiedVehicle(localPlayer)) == 'Boat' and not boat then
 		fps = getFPSLimit()
-		setFPSLimit(35)
+		setFPSLimit(getElementData(localPlayer, "fpslimitboats"))
 		boat = true
 	elseif getVehicleType(getPedOccupiedVehicle(localPlayer)) ~= 'Boat' and boat then
 		setFPSLimit(fps)

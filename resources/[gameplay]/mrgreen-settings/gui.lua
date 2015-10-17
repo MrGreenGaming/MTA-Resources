@@ -38,18 +38,26 @@ local screenW, screenH = guiGetScreenSize()
         guiEditSetMaxLength( GUIEditor.edit["drawdistance"], 5 )
         guiSetProperty(GUIEditor.edit["drawdistance"], "ValidationString", "^[0-9]*$")
 
-        GUIEditor.button["drawdistance"] = guiCreateButton(127, 256+85, 33, 25, "OK", false, GUIEditor.tab[1])
+        GUIEditor.button["drawdistance"] = guiCreateButton(36+85, 256+85, 33, 25, "OK", false, GUIEditor.tab[1])
         guiSetProperty(GUIEditor.button["drawdistance"], "NormalTextColour", "FFAAAAAA")
         GUIEditor.label["bloom"] = guiCreateLabel(72, 75, 209, 14, "Enable Bloom", false, GUIEditor.tab[1])
 
-        GUIEditor.label["fpslimit"] = guiCreateLabel(36+250, 290+30, 222, 15, "Set client FPS Limit (25 - 100)", false, GUIEditor.tab[1])
-        GUIEditor.edit["fpslimit"] = guiCreateEdit(36+250, 310+30, 81, 24, "", false, GUIEditor.tab[1])
+        GUIEditor.label["fpslimit"] = guiCreateLabel(292, 272, 222, 15, "Set client FPS Limit (25 - 100)", false, GUIEditor.tab[1])
+        GUIEditor.edit["fpslimit"] = guiCreateEdit(292, 272+19, 81, 24, "", false, GUIEditor.tab[1])
         guiEditSetMaxLength( GUIEditor.edit["fpslimit"], 3 )
         guiSetProperty(GUIEditor.edit["fpslimit"], "ValidationString", "^[0-9]*$")
 
-        GUIEditor.button["fpslimit"] = guiCreateButton(127+250, 310+30, 33, 25, "OK", false, GUIEditor.tab[1])
+        GUIEditor.button["fpslimit"] = guiCreateButton(292+85, 272+19, 33, 25, "OK", false, GUIEditor.tab[1])
         guiSetProperty(GUIEditor.button["fpslimit"], "NormalTextColour", "FFAAAAAA")
+		
+		GUIEditor.label["fpslimitboats"] = guiCreateLabel(292, 290+30, 222, 15, "Set client FPS Limit for boats (25 - 100)", false, GUIEditor.tab[1])
+		setTooltip(GUIEditor.label["fpslimitboats"], "Boats may slide or swim badly with FPS >50!")
+        GUIEditor.edit["fpslimitboats"] = guiCreateEdit(292, 310+30, 81, 24, "", false, GUIEditor.tab[1])
+        guiEditSetMaxLength( GUIEditor.edit["fpslimitboats"], 3 )
+        guiSetProperty(GUIEditor.edit["fpslimitboats"], "ValidationString", "^[0-9]*$")
 
+        GUIEditor.button["fpslimitboats"] = guiCreateButton(292+85, 310+30, 33, 25, "OK", false, GUIEditor.tab[1])
+        guiSetProperty(GUIEditor.button["fpslimitboats"], "NormalTextColour", "FFAAAAAA")
 
         GUIEditor.label["hdr"] = guiCreateLabel(72, 100, 209, 14, "Enable Contrast HDR", false, GUIEditor.tab[1])
         setTooltip(GUIEditor.label["hdr"],"This applies a 'High Dynamic Range' contrast effect.")
@@ -65,7 +73,7 @@ local screenW, screenH = guiGetScreenSize()
         guiLabelSetHorizontalAlign( GUIEditor.label[8], "center" )
         guiLabelSetVerticalAlign( GUIEditor.label[8], "center" )
 
-        GUIEditor.staticimage[1] = guiCreateStaticImage(281, 75, 1, 177, "img/dot_white.png", false, GUIEditor.tab[1])
+        GUIEditor.staticimage[1] = guiCreateStaticImage(281, 75, 1, 290, "img/dot_white.png", false, GUIEditor.tab[1])
         GUIEditor.checkbox["palette"] = guiCreateCheckBox(36, 199, 15, 15, "", false, false, GUIEditor.tab[1])
         GUIEditor.label["palette"] = guiCreateLabel(72, 199, 209, 14, "Enable ENB Palette", false, GUIEditor.tab[1])
         setTooltip(GUIEditor.label["palette"],"This enables an ENB effect.")
@@ -92,31 +100,31 @@ local screenW, screenH = guiGetScreenSize()
         GUIEditor.label["dof"] = guiCreateLabel(324, 75, 209, 14, "Enable Depth of Field", false, GUIEditor.tab[1])
         setTooltip(GUIEditor.label["dof"],"Makes MTA have depth. (blurs far away objects)")
 
-        GUIEditor.checkbox["radialblur"] = guiCreateCheckBox(292, 99, 15, 15, "", false, false, GUIEditor.tab[1])
-        GUIEditor.label["radialblur"] = guiCreateLabel(324, 99, 209, 14, "Enable Radial Blur", false, GUIEditor.tab[1])
+        GUIEditor.checkbox["radialblur"] = guiCreateCheckBox(292, 100, 15, 15, "", false, false, GUIEditor.tab[1])
+        GUIEditor.label["radialblur"] = guiCreateLabel(324, 100, 209, 14, "Enable Radial Blur", false, GUIEditor.tab[1])
         setTooltip(GUIEditor.label["radialblur"],"Makes the screen blurry when moving.")
 
-        GUIEditor.label["skybox"] = guiCreateLabel(324, 123, 209, 14, "Enable Sky Box", false, GUIEditor.tab[1])
-        GUIEditor.checkbox["skybox"] = guiCreateCheckBox(292, 123, 15, 15, "", false, false, GUIEditor.tab[1])
-        GUIEditor.combobox["skybox"] = guiCreateComboBox(292, 142, 136, 65, "", false, GUIEditor.tab[1])
+        GUIEditor.label["skybox"] = guiCreateLabel(324, 125, 209, 14, "Enable Sky Box", false, GUIEditor.tab[1])
+        GUIEditor.checkbox["skybox"] = guiCreateCheckBox(292, 125, 15, 15, "", false, false, GUIEditor.tab[1])
+        GUIEditor.combobox["skybox"] = guiCreateComboBox(292, 125+19, 136, 65, "", false, GUIEditor.tab[1])
         guiComboBoxAddItem(GUIEditor.combobox["skybox"], "Dynamic Sky")
         guiComboBoxAddItem(GUIEditor.combobox["skybox"], "SkyBox 2")
         guiComboBoxSetSelected(GUIEditor.combobox["skybox"], "Dynamic Sky")
 
-        GUIEditor.checkbox["carpaint"] = guiCreateCheckBox(292, 175, 15, 15, "", false, false, GUIEditor.tab[1])
+        GUIEditor.checkbox["carpaint"] = guiCreateCheckBox(292, 174, 15, 15, "", false, false, GUIEditor.tab[1])
         GUIEditor.label["carpaint"] = guiCreateLabel(324, 174, 209, 14, "Enable Car Paint Shader", false, GUIEditor.tab[1])
-        GUIEditor.combobox["carpaint"] = guiCreateComboBox(292, 197, 136, 65, "", false, GUIEditor.tab[1])
+        GUIEditor.combobox["carpaint"] = guiCreateComboBox(292, 174+19, 136, 65, "", false, GUIEditor.tab[1])
         guiComboBoxAddItem(GUIEditor.combobox["carpaint"], "Car Paint 1")
         guiComboBoxAddItem(GUIEditor.combobox["carpaint"], "Car Paint 2")
         guiComboBoxSetSelected(GUIEditor.combobox["carpaint"], "Car Paint 1")
 
 
 
-        GUIEditor.checkbox["nitro"] = guiCreateCheckBox(292, 175+54, 15, 15, "", false, false, GUIEditor.tab[1])
-        GUIEditor.label["nitro"] = guiCreateLabel(324, 174+54, 209, 14, "Enable Nitro Color", false, GUIEditor.tab[1])
-        GUIEditor.button["nitro"] = guiCreateButton(292, 174+79, 150, 25, "Set Nitro Color", false, GUIEditor.tab[1]) 
+        GUIEditor.checkbox["nitro"] = guiCreateCheckBox(292, 223, 15, 15, "", false, false, GUIEditor.tab[1])
+        GUIEditor.label["nitro"] = guiCreateLabel(324, 223, 209, 14, "Enable Nitro Color", false, GUIEditor.tab[1])
+        GUIEditor.button["nitro"] = guiCreateButton(292, 223+19, 150, 25, "Set Nitro Color", false, GUIEditor.tab[1]) 
 
-        NitroColorImage = guiCreateStaticImage(469, 228, 26, 17, "img/dot_white.png", false, GUIEditor.tab[1])
+        NitroColorImage = guiCreateStaticImage(469, 223, 26, 17, "img/dot_white.png", false, GUIEditor.tab[1])
         guiSetProperty(NitroColorImage, "ImageColours", "tl:FF0078FF tr:FF0078FF bl:FF0078FF br:FF0078FF")
 
 
