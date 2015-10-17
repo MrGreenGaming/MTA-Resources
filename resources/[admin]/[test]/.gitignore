@@ -1,0 +1,4 @@
+# Ignore everything in [test], it's for quickly testing out stuff
+*
+
+!.gitignore
