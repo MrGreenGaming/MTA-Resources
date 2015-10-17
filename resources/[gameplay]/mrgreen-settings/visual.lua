@@ -34,7 +34,8 @@ visual = { -- Standard Settings, 0 = off --
 	["btwheels"] = 0, -- 1 = "bt Wheels on"
 	["radar"] = 0, -- 1 = "Radar Shader on"
 	["drawdistance"] = 0, -- 100 - 10000 = "valid draw distance"
-	["fpslimit"] = 0, -- 25 - 100 = "valid fps limit"
+	["fpslimit"] = 60, -- 25 - 100 = "valid fps limit"
+	["fpslimitboats"] = 50, -- 25 - 100 = "valid fps limit"
 	["contrast"] = 0, -- 1 = "contrast HDR on"
 	["radial"] = 0, -- 1 = "Radial Blur on"
 	["nitro"] = 0, -- 1 = "Nitro on"
@@ -45,7 +46,7 @@ visual = { -- Standard Settings, 0 = off --
 	["nitrocolor"] = "0078FF",
 }
 
-
+	
 -- Reapply settings when one of these resources (re)starts
 local VSL_reApplyTimer = false
 -- Add resource name here when used
@@ -278,8 +279,16 @@ function visual_ButtonHandler()
 		setFPSLimit(nr)
 		visual["fpslimit"] = nr
 		v_setSaveTimer()
+	
+	elseif source == GUIEditor.button["fpslimitboats"] then
+		local nr = tonumber(guiGetText( GUIEditor.edit["fpslimitboats"] ))
 		
-
+		if not nr then outputChatBox("Please insert a number before clicking ok.") return end
+		if nr > 100 or nr < 25 then outputChatBox("FPS limit must be inbetween 25 and 100.") return end
+		
+		setElementData(localPlayer, "fpslimitboats", nr)
+		visual["fpslimitboats"] = nr
+		v_setSaveTimer()
 	end
 end
 addEventHandler("onClientGUIClick", resourceRoot, visual_ButtonHandler)
@@ -598,6 +607,18 @@ function setVisualGUI()
 				end
 			end
 
+		elseif f == "fpslimitboats" then
+			if u >= 25 and u <= 100 then
+				guiSetText( GUIEditor.edit["fpslimitboats"], u )
+				setElementData(localPlayer, "fpslimitboats", u)
+				visual["fpslimitboats"] = u
+			else
+				local fpslimit = getFPSLimit()
+				if fpslimit then
+					guiSetText(GUIEditor.edit["fpslimitboats"], fpslimit)
+				end
+			end
+			
 		elseif f == "contrast" then
 			if u == 1 then
 				guiCheckBoxSetSelected( GUIEditor.checkbox["contrast"], true )
