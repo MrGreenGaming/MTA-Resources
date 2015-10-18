@@ -35,7 +35,7 @@ visual = { -- Standard Settings, 0 = off --
 	["radar"] = 0, -- 1 = "Radar Shader on"
 	["drawdistance"] = 0, -- 100 - 10000 = "valid draw distance"
 	["fpslimit"] = 60, -- 25 - 100 = "valid fps limit"
-	["fpslimitboats"] = 50, -- 25 - 100 = "valid fps limit"
+	["fpslimitboats"] = 40, -- 25 - 100 = "valid fps limit"
 	["contrast"] = 0, -- 1 = "contrast HDR on"
 	["radial"] = 0, -- 1 = "Radial Blur on"
 	["nitro"] = 0, -- 1 = "Nitro on"
