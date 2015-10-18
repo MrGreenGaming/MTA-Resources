@@ -39,6 +39,7 @@
 *.x86_64
 *.hex
 
+# Specific resource ignores
 /resources/\[web\]/irc/settings.xml
 /resources/\[web\]/irc/irc.log
 /resources/\[gameplay\]/gcshop/shop.log
