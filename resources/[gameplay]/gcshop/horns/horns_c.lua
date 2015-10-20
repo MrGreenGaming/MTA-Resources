@@ -146,6 +146,7 @@ hornsTable = {
 	[145] = "Sad violin air horn",
 	[146] = "Fucking bi#@h!",
 	[147] = "Nice and strong Cena",
+	[148] = "Dikke BMW",
 }
 
 extensions = {
@@ -268,6 +269,7 @@ extensions = {
 	[145] = "mp3",
 	[146] = "mp3",
 	[147] = "mp3",
+	[148] = "mp3",
 
 
 
