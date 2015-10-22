@@ -144,7 +144,7 @@ function theTool()
 		for i,j in ipairs(getElementsByType('player')) do
 			if j ~= localPlayer and getPedOccupiedVehicle(j) and not getElementData(j,'gcmodshop.testing') then
 
-				if getElementDimension(j) ~= 0 then
+				if getElementDimension(j) ~= 0 or getElementDimension(getPedOccupiedVehicle(j)) ~= 0 then
 					setElementDimension(j, 0)
 					setElementDimension(getPedOccupiedVehicle(j), 0)
 				end
@@ -166,7 +166,7 @@ function theTool()
 							setElementDimension(j, 1)
 						end
 					else
-						if getElementDimension(j) ~= 0 then
+						if getElementDimension(j) ~= 0 or getElementDimension(getPedOccupiedVehicle(j)) ~= 0 then
 							setElementDimension(getPedOccupiedVehicle(j), 0)
 							setElementDimension(j, 0)
 						end
@@ -196,7 +196,7 @@ function theTool()
 						setElementDimension(getPedOccupiedVehicle(j), 1)
 						setElementDimension(j, 1)
 					else
-						if getElementDimension(j) ~= 0 then
+						if getElementDimension(j) ~= 0 or getElementDimension(getPedOccupiedVehicle(j)) ~= 0 then
 							setElementDimension(getPedOccupiedVehicle(j), 0)
 							setElementDimension(j, 0)
 						end
@@ -211,7 +211,7 @@ function theTool()
 				if getElementData(j,"player state") == "away" then
 					setElementDimension(j, 1)
 					setElementDimension(getPedOccupiedVehicle(j), 1)
-				elseif getElementDimension(j) ~= 0 then
+				elseif getElementDimension(j) ~= 0 or getElementDimension(getPedOccupiedVehicle(j)) ~= 0 then
 					setElementDimension(j, 0)
 					setElementDimension(getPedOccupiedVehicle(j), 0)
 				end
