@@ -69,6 +69,10 @@
     <script src="lockednicks\lockednicks_c.lua" type="client" />
     <script src="lockednicks\lockednicks.lua" type="server" />
     
+    <!-- Teams -->
+    <script src="teams\teams_c.lua" type="client" />
+    <script src="teams\teams_s.lua" type="server" />
+    
     <!-- Skins by BinSlayer    -->
     
     <script src="skin\skins_client.lua" type="client" />
