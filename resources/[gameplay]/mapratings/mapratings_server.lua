@@ -83,18 +83,7 @@ function(pMap)
 	local player = getPlayerName(source)
 	player = string.gsub (player, '#%x%x%x%x%x%x', '' )
 	map = string.gsub(map,"?","'") -- FIX FOR MAPS WITH ? IN NAME
-	local mapTable = (tableprefix[exports.race:getRaceMode()] or ("race maptimes " .. exports.race:getRaceMode())) .. ' ' .. map
-	local sql = executeSQLQuery("SELECT playerName, timeText FROM ? WHERE playerName=?", mapTable,player) 
-	local playerTime
-	if #sql > 0 and type(sql) == "table" then 
-		playerTime = sql[1].timeText 
-		if score[exports.race:getRaceMode()] then
-			playerTime = playerTime .. ' kills'
-		end
-	else
-		playerTime = "-not set-"
-	end
-	triggerClientEvent(source, "onMapGather", root, map,likes,dislikes,timesPlayed, author, description, lastTimePlayed, playerTime, nextmap)
+	triggerClientEvent(source, "onMapGather", root, map,likes,dislikes,timesPlayed, author, description, lastTimePlayed, '', nextmap)
 end
 )
 
