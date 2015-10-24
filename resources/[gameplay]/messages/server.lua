@@ -22,7 +22,7 @@ end
 
 function whichTimePassed()
 	if getResourceFromName('race') and getResourceState(getResourceFromName('race')) == 'running' then
-		return exports.race:getTimePassed()
+		return exports.race:getTimePassed() or 0
 	end	
 end
 
