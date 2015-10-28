@@ -412,7 +412,7 @@ function setDrawDistance(nr)
 		setFarClipDistance( nr )
 		visual["drawdistance"] = nr
 		if isTimer(drawdistanceTimer) then killTimer(drawdistanceTimer)	end
-		local drawdistanceTimer = setTimer(setDrawDistance,30000,0)
+		drawdistanceTimer = setTimer(setDrawDistance,30000,1)
 	end
 end
 
