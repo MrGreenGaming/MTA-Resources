@@ -48,6 +48,13 @@ function itemLogin ( perks_, player_perks_ )
 				if perk.exp then
 					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], 'Price:\n ' .. (tostring(perk.price)) .. ' GC\nExpires ' .. string.format('%02d/%02d', getRealTime(perk.expires).monthday, getRealTime(perk.expires).month + 1))
 					guiSetEnabled(items_gui["btnBuyPerk_" .. perk.ID], false)
+					if id == 10 then -- If colored rockets are bought, enable coloring button
+						guiSetEnabled(items_gui["setRocketColorButton"],true)
+						local theColor = getElementData(localPlayer,"gc_projectilecolor")
+						if theColor then
+							guiSetProperty(RocketColorImage, "ImageColours", setIMGcolor(theColor:gsub("#","")))
+						end
+					end
 				elseif perk.defaultAmount then
 					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], 'Extra Price:\n ' .. (tostring(perk.extraPrice)) .. '\n\nCurrent amount:\n' .. perk.options.amount )
 				else
@@ -128,6 +135,14 @@ function on_btnBuyPerk_9_clicked(button, state, absoluteX, absoluteY)
 	button_buy_perk (9);
 end
 
+function on_btnBuyPerk_10_clicked(button, state, absoluteX, absoluteY)
+	if (button ~= "left") or (state ~= "up") then
+		return
+	end
+	button_buy_perk (10);
+end
+
+
 function button_buy_perk ( id )
 	if not player_perks[id] then
 		triggerServerEvent('gcbuyperk', localPlayer, localPlayer, 'gcbuyperk', id);
@@ -141,3 +156,41 @@ function button_buy_perk ( id )
 		triggerServerEvent('gcbuyperkextra', localPlayer, localPlayer, 'gcbuyperkextra', id, 1);
 	end
 end
+
+
+-- Handle projectile color setting
+function button_set_rocketcolor()
+	openPicker(200,"#FF0000","Nitro Color") -- TODO set saved color
+end
+
+function setIMGcolor(hex)
+	local hex = hex:gsub("#","")
+	return "tl:FF"..hex.." tr:FF"..hex.." bl:FF"..hex.." br:FF"..hex
+end
+
+local colorCache = false
+function rocketColorChangeHandler(id, color, alpha)
+	if id == 200 then -- if it's the rocket colorpicker
+		
+		colorCache = color
+		local askServer = triggerServerEvent( "serverRocketColorChange", root, colorCache )
+
+		if not askServer then rocketColorChangeConfirm(false) end -- if fail then continue with next function
+		-- rocketColorChangeConfirm(true)
+
+		
+	end
+end
+addEventHandler("onColorPickerOK", resourceRoot, rocketColorChangeHandler)
+
+addEvent("clientRocketColorChangeConfirm",true)
+function rocketColorChangeConfirm(bool)
+	if bool then
+		outputChatBox( "Rocket color is now: "..colorCache.."COLOR", 255, 255, 255, true )
+		outputChatBox( "Colored rockets will only appear when you have bought the perk.", 255, 255, 255, true )
+		guiSetProperty(RocketColorImage, "ImageColours", setIMGcolor(colorCache:gsub("#","")))
+	else
+		colorCache = false
+	end
+end
+addEventHandler("clientRocketColorChangeConfirm",root,rocketColorChangeConfirm)

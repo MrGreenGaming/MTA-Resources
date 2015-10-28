@@ -46,7 +46,23 @@
     <script src="items\burn\burn_c.lua" type="client" />
     <script src="items\doublesided\double_s.lua" type="server" />
     <script src="items\doublesided\double_c.lua" type="client" />
-   
+
+    <script src="items\coloredprojectiles\coloredprojectiles_s.lua" type="server" />
+    <script src="items\coloredprojectiles\coloredprojectiles_c.lua" type="client" />
+    <script src="items\coloredprojectiles\picker_client.lua" type="client" />
+    <file src="items\coloredprojectiles\blank.png" />
+    <file src="items\coloredprojectiles\dot_white.png" />
+    <file src="items\coloredprojectiles\cursor.png" />
+    <file src="items\coloredprojectiles\h.png" />
+    <file src="items\coloredprojectiles\sv.png" />
+    <file src="items\coloredprojectiles\texture.png" />
+    <!-- Custom corona script by: Ren712 -->
+    <script src="items\coloredprojectiles\customcorona\customcorona_c_main.lua" type="client" />
+    <script src="items\coloredprojectiles\customcorona\customcorona_c_helper_functions.lua" type="client" />
+    <script src="items\coloredprojectiles\customcorona\customcorona_c_functions.lua" type="client" />
+    <file src="items\coloredprojectiles\customcorona\shaders\custom_corona0.fx" type="client" />
+    <file src="items\coloredprojectiles\customcorona\shaders\custom_corona1.fx" type="client" />
+    <file src="items\coloredprojectiles\customcorona\textures\coronastar.png" type="client" />
     
     
     <!-- Modshop -->
