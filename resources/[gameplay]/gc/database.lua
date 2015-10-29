@@ -16,6 +16,8 @@ local forumData = {
 }
 
 local devmode = get"devmode" == true
+useSQL = false
+
 --[[--
 Quickly enable devmode: /srun set("*gc.devmode", true)
 
@@ -57,7 +59,7 @@ function getPlayerLoginInfo(email, pw, callback)
 	end
 
 	if handlerForum and email and pw then
-		if checkSQL then
+		if useSQL then
 			local cmd = "SELECT member_id, members_pass_hash, members_pass_salt FROM "..forumData.fTable.." WHERE email=? OR name=?"
 			local query = dbQuery(handlerForum, cmd, email, email)
 			if query then
@@ -84,7 +86,8 @@ function getPlayerLoginInfo(email, pw, callback)
 			end
 		else
 			local url = 'http://api.mrgreengaming.com:8080/account/login'
-			local post = toJSON{ user = email, password = pw, appId = get"appId", appSecret = get"appSecret" }
+			local post = toJSON{ user = email, password = pw, appId = get"appId", appSecret = get"appSecretPass" }
+			-- outputDebugString(post)
 			fetchRemote(url, function(r,e)
 				if e ~= 0 then
 					outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. e, 1)
@@ -95,10 +98,11 @@ function getPlayerLoginInfo(email, pw, callback)
 				else
 					local result = fromJSON(r)
 					if result.error ~= 0 then
-						outputDebugString("getPlayerLoginInfo: api login error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
+						-- outputDebugString("getPlayerLoginInfo: api login error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
 						return callback(false)
 					else
 						local forumID = result.userId  
+						-- outputDebugString(tostring(forumID))
 						return callback(forumID)
 					end
 				end
