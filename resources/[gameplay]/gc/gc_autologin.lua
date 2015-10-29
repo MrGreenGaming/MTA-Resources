@@ -15,11 +15,10 @@ addEventHandler("onResourceStart", resourceRoot, startup)
 
 function clientStart()
 	local player = client
+	checkPlayerSerialGreencoins(player)
 	local serial = getPlayerSerial ( player )
 	if handlerConnect then
-		local query = dbQuery (autologinInfoReceived, {player}, handlerConnect, "SELECT forum_email, forum_password FROM `??` WHERE last_serial=?", loginTable, serial)
-	else
-		checkPlayerSerialGreencoins(player)
+		local query = dbQuery (autologinInfoReceived, {player}, handlerConnect, "SELECT forumid FROM `??` WHERE last_serial=?", loginTable, serial)
 	end
 end
 
@@ -28,34 +27,21 @@ addEventHandler('onClientGreenCoinsStart', root, clientStart)
 
 function autologinInfoReceived (query, player)
 	local results = dbPoll ( query, -1 )
-	if results and #results > 0 then
-		onLogin ( results[1].forum_email, results[1].forum_password, true, player )
-	else
-		checkPlayerSerialGreencoins(player)
+	if results and #results > 0 and tonumber(results[1].forumid) then
+		onAutoLogin ( tonumber(results[1].forumid), player )
 	end
 end
 
-function addAutologin ( player, email, pw )
+function updateAutologin ( player, forumid )
 	local serial = getPlayerSerial ( player )
 	local date = getRealDateTimeNowString()
 	local ip = getPlayerIP(player)
-	local query = dbQuery (handlerConnect, "SELECT forum_email, forum_password FROM `??` WHERE last_serial=?", loginTable, serial)
-	local results = dbPoll ( query, -1 )
-	if results and #results < 1 then
-		dbExec ( handlerConnect, "INSERT INTO `??` VALUES (?,?,?,?,?)", loginTable, email, pw, serial, date, ip )
-	end
+	dbExec ( handlerConnect, "INSERT INTO `??` (forumid, last_serial, last_login, last_ip) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE forumid=?, last_login=?, last_ip=?",
+	loginTable, forumid, serial, date, ip, forumid, date, ip )
 end
 
 
-function updateAutologin ( player )
-	local serial = getPlayerSerial ( player )
-	local date = getRealDateTimeNowString()
-	local ip = getPlayerIP(player)
-	dbExec ( handlerConnect, "UPDATE `??` SET last_login=?, last_ip=? WHERE last_serial=?", loginTable, date, ip, serial )
-end
-
-
-function deleteAutologin ( email )
-	dbExec ( handlerConnect, "DELETE FROM `??` WHERE forum_email=?", loginTable, email )
+function deleteAutologin ( forumid )
+	dbExec ( handlerConnect, "DELETE FROM `??` WHERE forumid=?", loginTable, forumid )
 end
 

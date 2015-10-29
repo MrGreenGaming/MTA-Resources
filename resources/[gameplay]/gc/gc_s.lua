@@ -5,42 +5,47 @@ accounts = {}
 ----------------------------
 
 
-function onLogin ( email, pw, autologin, playerElement )
-	-- email: forum email or nickname
-	-- pw: forum password, md5'ed or plaintext
-	-- autologin: is this an automated login or not
-	-- playerelement: the player who wants to log in, 'nil' when this function is called from client
-	local source = playerElement or source
-    if not accounts[source] then
-        accounts[source] = SAccount:create( source )
-        if pw and ( (playerElement and accounts[source]:login(email, pw)) or accounts[source]:login( email, md5(safeString(pw)) )) then
-			if not autologin then
-				addAutologin ( source, email, md5(safeString(pw)) )
-			else
-				updateAutologin ( source )
-			end
-            triggerClientEvent( source, "onLoginSuccess", source, accounts[source]:getGreencoins(), accounts[source]:getLoginEmail() )
-			triggerEvent( 'onGCLogin', source, accounts[source]:getForumID(), accounts[source]:getGreencoins(), accounts[source]:getLoginEmail())
-			local serialGreencoins = getSerialGreencoins (source)
-			-- Transfer gc's from serial storage to the forum storage and delete the serial greencoins
-			if (serialGreencoins) then
-				deleteSerialGreencoins(source)
-				addPlayerGreencoins ( source, serialGreencoins )
-				outputChatBox('[GC] Adding ' .. serialGreencoins .. ' GC from your rewards without an account', source, 0, 255, 0)
-			end
-			return true
-        else
-			if autologin then
-				deleteAutologin ( email )
-			end
-            triggerClientEvent( source, "onLoginFail", source, nil, not gcConnected() )
-            accounts[source]:destroy()
-            accounts[source] = nil
-        end
+-- email: forum email or nickname
+-- pw: forum password
+function onLogin ( email, pw, autologin )
+	local player = source
+    if not accounts[player] then
+        accounts[player] = SAccount:create( player )
+        accounts[player]:login(email, pw, player, onLoginSuccessfull)
     else
-        triggerClientEvent( source, "onLoginFail", source, true )
+        triggerClientEvent( player, "onLoginFail", player, true )
     end
 	return false
+end
+
+function onAutoLogin ( forumID, player )
+    if not accounts[player] then
+        accounts[player] = SAccount:create( player )
+        accounts[player]:loginViaForumID(forumID, player, onLoginSuccessfull)
+    else
+        triggerClientEvent( player, "onLoginFail", player, true )
+    end
+	return false
+end
+
+function onLoginSuccessfull(result, player)
+	if result then
+		updateAutologin ( player, accounts[player]:getForumID() )
+		triggerClientEvent( player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getLoginEmail() )
+		triggerEvent( 'onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getLoginEmail())
+		local serialGreencoins = getSerialGreencoins (player)
+		-- Transfer gc's from serial storage to the forum storage and delete the serial greencoins
+		if (serialGreencoins) then
+			deleteSerialGreencoins(player)
+			addPlayerGreencoins ( player, serialGreencoins )
+			outputChatBox('[GC] Adding ' .. serialGreencoins .. ' GC from your rewards without an account', player, 0, 255, 0)
+		end
+		return true
+	else
+		triggerClientEvent( player, "onLoginFail", player, nil, not gcConnected() )
+		accounts[player]:destroy()
+		accounts[player] = nil
+	end
 end
 
 addEvent('onGCLogin') -- broadcast event
@@ -69,7 +74,7 @@ function onLogout (playerElement)
         outputChatBox("[GC] Successfully logged out!", source, 0, 255, 0)
         triggerClientEvent(source, "onLogoutSuccess", root)
 		triggerEvent( 'onGCLogout', source, forumID )
-		deleteAutologin ( email )
+		deleteAutologin ( forumID )
     else
         outputChatBox("[GC] You're not logged in!", source, 255, 0, 0)
     end
@@ -310,7 +315,7 @@ setTimer(function()
 	for _,player in ipairs(getElementsByType('player')) do
 		local acc = accounts[player]
 		local playtime = getElementData(player, "playtime")
-		if acc and acc.gcRecord[4] > 0 and playtime then
+		if acc and acc.gcRecord[4] and acc.gcRecord[4] > 0 and playtime then
 			playtime = split(playtime, ':')
 			local gpm = acc.gcRecord[4] / (playtime[1] + playtime[2]/60)
 			setElementData(player, 'gpm', math.ceil(gpm))
