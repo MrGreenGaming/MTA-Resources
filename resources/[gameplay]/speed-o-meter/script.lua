@@ -117,6 +117,7 @@ function setKMH()
 		node = xmlCreateFile("settings.xml","mynode")
 	end
 
+	removeEventHandler("onClientRender",getRootElement(), kmh)
 	addEventHandler("onClientRender",getRootElement(), kmh)
 	removeEventHandler("onClientRender",getRootElement(), mph)
 	xmlNodeSetAttribute(node, "setting", "kmh")
@@ -129,6 +130,8 @@ function setMPH()
 	if not node then
 		node = xmlCreateFile("settings.xml","mynode")
 	end
+	
+	removeEventHandler("onClientRender",getRootElement(), mph)
 	addEventHandler("onClientRender",getRootElement(), mph)
 	removeEventHandler("onClientRender",getRootElement(), kmh)
 	xmlNodeSetAttribute(node, "setting", "mph")
