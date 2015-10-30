@@ -10,7 +10,7 @@
 -- 2010-02-09: Added toggleSettingsGuiKey, commented out unused settings
 
 defaultSettings = {
-	["enabled"] = true,
+	["enabled"] = false,
 	["drawDistance"] = true,
 	["drawDelay"] = true,
 	["mode"] = "km",
