@@ -142,6 +142,13 @@ function on_btnBuyPerk_10_clicked(button, state, absoluteX, absoluteY)
 	button_buy_perk (10);
 end
 
+function on_btnBuyPerk_11_clicked(button, state, absoluteX, absoluteY)
+	if (button ~= "left") or (state ~= "up") then
+		return
+	end
+	button_buy_perk (11);
+end
+
 
 function button_buy_perk ( id )
 	if not player_perks[id] then

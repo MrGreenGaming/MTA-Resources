@@ -1518,6 +1518,32 @@ function getRaceMode()
 	return g_CurrentRaceMode and g_MapInfo.modename or false
 end
 
+function export_setPlayerVehicle(player,vehicleID) -- Used in gc perk: reroll vehicle
+	if isElement(player) and getElementType(player) == "player" and type(vehicleID) == "number" then
+		local vehicle = g_CurrentRaceMode.getPlayerVehicle(player)
+		if not vehicle then return false end
+
+		local nitrous = getElementData(vehicle, 'nitro')
+		if type(nitrous) ~= "table" or type(nitrous[1]) ~= "boolean" or type(nitrous[2]) ~= "number" then
+			nitrous = false
+		end
+
+
+		local isset = setVehicleID(vehicle, vehicleID)
+		local notifyClient = clientCall(player, 'vehicleChanging', g_MapOptions.classicchangez, vehicleID)
+
+		if nitrous and nitrous[2] then
+			addVehicleUpgrade(vehicle, 1010)
+			clientCall(root, 'setVehicleNitroLevel', vehicle, nitrous[2])
+
+			if nitrous[1] then
+				clientCall(root, 'setVehicleNitroActivated', vehicle, true)
+			end
+		end
+
+		return not not isset
+	end
+end
 
 ------------------------
 -- Checks

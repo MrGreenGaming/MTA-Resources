@@ -109,6 +109,8 @@ local perks = {
 	[8] = { ID = 8, price =  3000, description = 'Health transfer', func = 'loadGCBurnTransfer', requires = {6}, exp = 30},
 	[9] = { ID = 9, price =  3000, description = 'Double sided objects', func = 'loadDoubleSided'},
 	[10] = { ID = 10, price =  2000, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
+	[11] = { ID = 11, price =  1000, description = 'NTS/DD Vehicle reroll for 30 days', func = 'loadVehicleReroll', exp = 30},
+
 }
 
 function onGCShopLogin (forumID)
@@ -555,7 +557,11 @@ function getPlayerRocketColor(player)
 	local query = dbQuery(handlerConnect, "SELECT color FROM gc_rocketcolor WHERE forumid=?", forumID)
 	local result = dbPoll(query,-1)
 
-	return result[1]["color"] or false
+	if result[1] and result[1]["color"] then
+		return result[1]["color"]
+	end
+
+	return false
 end
 
 function insertPlayerRocketColorToDB(player)
