@@ -12,7 +12,7 @@
 -------------------------
 
 local gamecenterResource = false
-settingsObject = Settings:new(defaultSettings,"settings.xml")
+settingsObject = Settings:new(defaultSettings,"@settings.xml")
 
 local function s(setting,settingType)
 	return settingsObject:get(setting,settingType)
