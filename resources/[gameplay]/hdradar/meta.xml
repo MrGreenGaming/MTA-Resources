@@ -216,5 +216,5 @@
 	<file src="client/img/radar/map/radar141.png" />
 	<file src="client/img/radar/map/radar142.png" />
 	<file src="client/img/radar/map/radar143.png" />
-
+	<download_priority_group>-11</download_priority_group>
 </meta>
