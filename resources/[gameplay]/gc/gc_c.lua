@@ -129,8 +129,10 @@ function loginSuccess( gcAmount, email )
         setGC(gcAmount)
     end
     fade = 1
-	gc_email = email
-    outputChatBox("[GC] You successfully logged in! (" .. gc_email ..")", 0, 255, 0)
+	if email then
+		gc_email = email
+		outputChatBox("[GC] You successfully logged in! (" .. gc_email ..")", 0, 255, 0)
+	end
 end
 
 addEvent("onLoginSuccess", true)
