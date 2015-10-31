@@ -64,7 +64,7 @@
     <file src="items\coloredprojectiles\customcorona\shaders\custom_corona1.fx" type="client" />
     <file src="items\coloredprojectiles\customcorona\textures\coronastar.png" type="client" />
     
-    
+    <script src="items\vehiclereroll\vehreroll_s.lua" type="server" />
     <!-- Modshop -->
     
     <script src="modshop\modshop_s.lua" type="server" />
@@ -255,7 +255,11 @@
 	<file src="horns\files\146.mp3" />
 	<file src="horns\files\147.mp3" />
 	<file src="horns\files\148.mp3" />
+<<<<<<< HEAD
+    <file src="horns\files\149.mp3" />
+=======
 	<file src="horns\files\149.mp3" />
+>>>>>>> origin/master
 	<file src="horns\icon.png" />
 	
 </meta>

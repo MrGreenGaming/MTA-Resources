@@ -168,7 +168,6 @@ function build_itemsWidget(parent, offsetX, offsetY)
 	if button_set_rocketcolor then
 		addEventHandler("onClientGUIClick", gui["setRocketColorButton"],button_set_rocketcolor,false)
 	end
-	-- color picker here
 
 	gui["btnBuyPerk_10"] = guiCreateButton(541, 1001, 101, 101, "Price:\n2000 GC", false, gui["scrollAreaItems"])
 	
@@ -176,6 +175,22 @@ function build_itemsWidget(parent, offsetX, offsetY)
 		addEventHandler("onClientGUIClick", gui["btnBuyPerk_10"], on_btnBuyPerk_10_clicked, false)
 	end
 	
+
+	-- Vehicle Reroll
+	gui["labelTitle_11"] = guiCreateLabel(21, 1111, 250, 13, "11. NTS/DD vehicle reroll for 30 days", false, gui["scrollAreaItems"])
+	guiSetFont(gui["labelTitle_11"], "default-bold-small")
+	guiLabelSetHorizontalAlign(gui["labelTitle_11"], "left", false)
+	guiLabelSetVerticalAlign(gui["labelTitle_11"], "center")
+	
+	gui["labelInfo_11"] = guiCreateLabel(21, 1131, 481, 71, "Having a bad vehicle in NTS/DD, with this perk you can change it once per map. \nPress 'c' or /rerollvehicle to activate.", false, gui["scrollAreaItems"])
+	guiLabelSetHorizontalAlign(gui["labelInfo_11"], "left", true)
+	guiLabelSetVerticalAlign(gui["labelInfo_11"], "top")
+
+	gui["btnBuyPerk_11"] = guiCreateButton(541, 1111, 101, 101, "Price:\n2000 GC", false, gui["scrollAreaItems"])
+	
+	if on_btnBuyPerk_11_clicked then
+		addEventHandler("onClientGUIClick", gui["btnBuyPerk_11"], on_btnBuyPerk_11_clicked, false)
+	end
 	
 	return gui, widgetWidth, widgetHeight
 end
