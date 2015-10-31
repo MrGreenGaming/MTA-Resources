@@ -147,7 +147,7 @@ hornsTable = {
 	[146] = "Fucking bi#@h!",
 	[147] = "Nice and strong Cena",
 	[148] = "Dikke BMW",
-	[148] = "Burp!",
+	[149] = "Burp!",
 }
 
 extensions = {
