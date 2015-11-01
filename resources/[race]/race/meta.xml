@@ -4,7 +4,6 @@
     
     <include resource="scoreboard" />
     <include resource="votemanager" />
-    <include resource="helpmanager" />
     <include resource="customblips" />
     
     
@@ -122,8 +121,7 @@
     <export function="e_getPickups" type="client" />
     <export function="getShooterMode" type="server" />
     <export function="export_setPlayerVehicle" type="server" />
-    
-    
+	
     <settings>
         <!-- *****************************************************
 			 All these settings are adjustable in the Admin Panel:
