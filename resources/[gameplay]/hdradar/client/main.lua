@@ -1,10 +1,10 @@
 local blipTextureNames = {
-  	"radar_centre.png",
-	"radar_light.png",
-	"radar_north.png",
-	"radar_runway.png",
-	"radardisc.png",
-	"radarRingPlane.png",
+  	"radar_centre",
+	"radar_light",
+	"radar_north",
+	"radar_runway",
+	"radardisc",
+	"radarRingPlane",
 }
 
 local radarTextureNames = {
