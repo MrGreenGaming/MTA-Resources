@@ -407,11 +407,17 @@ end
 addEventHandler("onColorPickerOK", resourceRoot, NitroColorHandler)
 
 function setDrawDistance(nr)
-	if not nr then return end
-	if nr >=100 and nr <= 100000 then
+	if not nr then nr = getDrawDistance() end
+	if nr >=100 and nr <= 10000 then
 		setFarClipDistance( nr )
 		visual["drawdistance"] = nr
+		if isTimer(drawdistanceTimer) then killTimer(drawdistanceTimer)	end
+		drawdistanceTimer = setTimer(setDrawDistance,30000,1)
 	end
+end
+
+function getDrawDistance()
+return visual["drawdistance"]
 end
 
 -- save and load --
@@ -455,7 +461,6 @@ function visual_LoadSettings()
 	xmlUnloadFile( v_loadXML )
 	v_noSaveTimer = setTimer(function() end,8000, 1) -- dont save if this is active
 	setVisualGUI()
-	setTimer(setDrawDistance,30000,0,visual["drawdistance"])
 end
 addEventHandler("onClientResourceStart", resourceRoot, visual_LoadSettings)
 
@@ -587,7 +592,6 @@ function setVisualGUI()
 			if u >= 100 and u <= 10000 then
 				guiSetText( GUIEditor.edit["drawdistance"], u )
 				setDrawDistance(u)
-				setTimer(setDrawDistance,10000,1,u)
 			else
 				local distance = getFarClipDistance()
 				if distance then

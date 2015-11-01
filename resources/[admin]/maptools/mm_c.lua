@@ -61,6 +61,7 @@ function buildGUI()
     guiLabelSetVerticalAlign(GUIEditor.label[1], "center")
     GUIEditor.edit[1] = guiCreateEdit(108, 13, 235, 23, "", false, GUIEditor.tab[1])
     GUIEditor.button[2] = guiCreateButton(356, 15, 80, 21, "Clear Search", false, GUIEditor.tab[1])
+    totalMapsLabel = guiCreateLabel(440, 13, 300, 23, "", false, GUIEditor.tab[1])
     addEventHandler("onClientGUIClick",GUIEditor.button[2],clearSearch)
     GUIEditor.button[3] = guiCreateButton(214, 371, 144, 32, "Delete Selected Map", false, GUIEditor.tab[1])
 	guiSetVisible(GUIEditor.button[3],false)
@@ -182,6 +183,10 @@ function rebuildGridLists()
         
         guiGridListClear(GUIEditor.gridlist[1])
 		guiGridListSetSortingEnabled(GUIEditor.gridlist[1], true)
+        if type(#MapList) == "number" then
+            guiSetText( totalMapsLabel, "Total maps: "..tostring(#MapList) )
+        end
+
         for _,map in ipairs(MapList) do
             local author = map.author or "N/A"
             local name = map.name

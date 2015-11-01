@@ -108,6 +108,9 @@ local perks = {
 	[7] = { ID = 7, price =  3000, description = 'Extra long burnup time', func = 'loadGCBurnExtra', requires = {6}, exp = 30},
 	[8] = { ID = 8, price =  3000, description = 'Health transfer', func = 'loadGCBurnTransfer', requires = {6}, exp = 30},
 	[9] = { ID = 9, price =  3000, description = 'Double sided objects', func = 'loadDoubleSided'},
+	[10] = { ID = 10, price =  2000, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
+	[11] = { ID = 11, price =  1000, description = 'NTS/DD Vehicle reroll for 30 days', func = 'loadVehicleReroll', exp = 30},
+
 }
 
 function onGCShopLogin (forumID)
@@ -519,7 +522,54 @@ function getShiftState ( player )
 	return lshift[player] or rshift[player]
 end
 
+--------------------------
+---   Rocket Colors   ---
+--------------------------
+function setPlayerRocketColor(player,color)
+	local fID = exports.gc:getPlayerForumID ( player )
+	if not color or #color ~= 7 then outputChatBox("Something went wrong, please try again!",player) return false end
+	if not fID then outputChatBox("You are not logged in to a gc account!",player) return false end
 
+	local exec = dbExec(handlerConnect, "UPDATE gc_rocketcolor SET color=? WHERE forumid=?", color:gsub("#",""), fID)
+
+	
+	if exec then setElementData(player,"gc_projectilecolor","#"..color) return true end
+
+	return false
+
+end
+
+addEvent("serverRocketColorChange",true)
+function rockerColorChange(hex)
+	local thePlayer = client
+	if not thePlayer or not isElement(thePlayer) or getElementType(thePlayer) ~= "player" then return end
+	local setColor = setPlayerRocketColor(thePlayer,hex)
+	
+	triggerClientEvent(thePlayer,"clientRocketColorChangeConfirm",resourceRoot,setColor or false)
+
+end
+addEventHandler("serverRocketColorChange",root,rockerColorChange)
+
+function getPlayerRocketColor(player)
+	local forumID = exports.gc:getPlayerForumID ( player )
+	if not forumID then return false end
+
+	local query = dbQuery(handlerConnect, "SELECT color FROM gc_rocketcolor WHERE forumid=?", forumID)
+	local result = dbPoll(query,-1)
+
+	if result[1] and result[1]["color"] then
+		return result[1]["color"]
+	end
+
+	return false
+end
+
+function insertPlayerRocketColorToDB(player)
+	local forumID = exports.gc:getPlayerForumID ( player )
+	if not forumID then return false end
+
+	return dbExec(handlerConnect, "INSERT INTO gc_rocketcolor (forumid,color) VALUES (?,?)", forumID,"00FF00" )
+end
 --------------------------
 ---   Tool functions   ---
 --------------------------

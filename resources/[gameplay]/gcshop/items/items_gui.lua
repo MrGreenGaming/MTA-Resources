@@ -139,10 +139,57 @@ function build_itemsWidget(parent, offsetX, offsetY)
 	guiLabelSetHorizontalAlign(gui["labelInfo_9"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelInfo_9"], "top")
 	
-	gui["btnExtendScrollarea"] = guiCreateButton(281, 1021, 101, 101, "Price:\n1000 GC", false, gui["scrollAreaItems"])
+	gui["btnExtendScrollarea"] = guiCreateButton(281, 1300, 101, 101, "Price:\n1000 GC", false, gui["scrollAreaItems"])
 	guiSetEnabled(gui["btnExtendScrollarea"], false)
 	if on_btnExtendScrollarea_clicked then
 		addEventHandler("onClientGUIClick", gui["btnExtendScrollarea"], on_btnExtendScrollarea_clicked, false)
+	end
+
+
+	gui["labelTitle_10"] = guiCreateLabel(21, 1001, 200, 13, "10. Colored Rockets for 30 days", false, gui["scrollAreaItems"])
+	guiSetFont(gui["labelTitle_10"], "default-bold-small")
+	guiLabelSetHorizontalAlign(gui["labelTitle_10"], "left", false)
+	guiLabelSetVerticalAlign(gui["labelTitle_10"], "center")
+	
+	gui["labelInfo_10"] = guiCreateLabel(21, 1021, 481, 71, "Make all your projectiles (rockets) appear in color.\nClick on the Set Color button to change it.", false, gui["scrollAreaItems"])
+	guiLabelSetHorizontalAlign(gui["labelInfo_10"], "left", true)
+	guiLabelSetVerticalAlign(gui["labelInfo_10"], "top")
+
+	gui["labelInfo_10_Coloring"] = guiCreateLabel(21, 1065, 481, 71, "Color:", false, gui["scrollAreaItems"])
+	guiLabelSetHorizontalAlign(gui["labelInfo_10_Coloring"], "left", true)
+	guiSetFont(gui["labelInfo_10_Coloring"], "default-bold-small")
+	guiLabelSetVerticalAlign(gui["labelInfo_10_Coloring"], "top")
+
+	RocketColorImage = guiCreateStaticImage(65, 1065, 18, 18, "items/coloredprojectiles/dot_white.png", false,gui["scrollAreaItems"])
+    guiSetProperty(RocketColorImage, "ImageColours", "tl:FF00FF00 tr:FF00FF00 bl:FF00FF00 br:FF00FF00") 
+
+    gui["setRocketColorButton"] = guiCreateButton(95, 1065, 101, 20, "Set Color", false, gui["scrollAreaItems"])   
+	guiSetEnabled(gui["setRocketColorButton"], false)
+	if button_set_rocketcolor then
+		addEventHandler("onClientGUIClick", gui["setRocketColorButton"],button_set_rocketcolor,false)
+	end
+
+	gui["btnBuyPerk_10"] = guiCreateButton(541, 1001, 101, 101, "Price:\n2000 GC", false, gui["scrollAreaItems"])
+	
+	if on_btnBuyPerk_10_clicked then
+		addEventHandler("onClientGUIClick", gui["btnBuyPerk_10"], on_btnBuyPerk_10_clicked, false)
+	end
+	
+
+	-- Vehicle Reroll
+	gui["labelTitle_11"] = guiCreateLabel(21, 1111, 250, 13, "11. NTS/DD vehicle reroll for 30 days", false, gui["scrollAreaItems"])
+	guiSetFont(gui["labelTitle_11"], "default-bold-small")
+	guiLabelSetHorizontalAlign(gui["labelTitle_11"], "left", false)
+	guiLabelSetVerticalAlign(gui["labelTitle_11"], "center")
+	
+	gui["labelInfo_11"] = guiCreateLabel(21, 1131, 481, 71, "Having a bad vehicle in NTS/DD, with this perk you can change it once per map. \nPress 'c' or /rerollvehicle to activate.", false, gui["scrollAreaItems"])
+	guiLabelSetHorizontalAlign(gui["labelInfo_11"], "left", true)
+	guiLabelSetVerticalAlign(gui["labelInfo_11"], "top")
+
+	gui["btnBuyPerk_11"] = guiCreateButton(541, 1111, 101, 101, "Price:\n2000 GC", false, gui["scrollAreaItems"])
+	
+	if on_btnBuyPerk_11_clicked then
+		addEventHandler("onClientGUIClick", gui["btnBuyPerk_11"], on_btnBuyPerk_11_clicked, false)
 	end
 	
 	return gui, widgetWidth, widgetHeight
