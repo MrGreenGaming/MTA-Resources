@@ -56,7 +56,7 @@ function draw()
     end
     
     -- bg
-    local width = math.max(dxGetTextWidth("Greencoins", 0.5, "bankgothic"), dxGetTextWidth(string.gsub( gc, "#%x%x%x%x%x%x", "" ), 0.5, "bankgothic"))
+    local width = math.max(dxGetTextWidth("GreenCoins", 0.5, "bankgothic"), dxGetTextWidth(string.gsub( gc, "#%x%x%x%x%x%x", "" ), 0.5, "bankgothic"))
     local height = dxGetFontHeight(0.5, "bankgothic")*2+15
     
     -- dxDrawImage(x-width-40, yPos, width+20, height, "img/dot.png", 0, 0, 0, tocolor(0, 0, 0, math.max(alpha-75, 0)))
@@ -69,7 +69,7 @@ function draw()
 	
     -- dxDrawImage(xPos, yPos, width+20, height, "img/dot.png", 0, 0, 0, tocolor(0, 0, 0, math.max(alpha-75, 0)))
 	dxDrawRectangle ( xPos - width-20, yPos - height, width+20, height, tocolor ( 0 ,0,0,math.max(alpha-105, 0)))
-    dxDrawText("Greencoins", xPos - width-20, yPos-height, xPos, yPos+height/2, tocolor(255, 255, 255, alpha), 0.5, "bankgothic", "center", "top", false, false, false)
+    dxDrawText("GreenCoins", xPos - width-20, yPos-height, xPos, yPos+height/2, tocolor(255, 255, 255, alpha), 0.5, "bankgothic", "center", "top", false, false, false)
     dxDrawText(tostring(gc), xPos - width-20, yPos-height/2, xPos, yPos, tocolor(255, 255, 255, alpha), 0.5, "bankgothic", "center", "top", false, false, false, true)
     
 end
