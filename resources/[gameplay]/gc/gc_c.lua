@@ -131,7 +131,7 @@ function loginSuccess(gcAmount, email)
 	fade = 1
 	if email then
 		gc_email = email
-		outputChatBox("[GC] You successfully logged in! (" .. gc_email ..")", 0, 255, 0)
+		outputChatBox("[GC] You successfully logged in as " .. gc_email ..".", 0, 255, 0)
 	end
 end
 
@@ -140,11 +140,11 @@ addEventHandler("onLoginSuccess", root, loginSuccess)
 
 function loginFail(alreadyLoggedIn, databaseDown)
 	if alreadyLoggedIn then
-		outputChatBox("[GC] You are already logged in! (" .. gc_email ..")", 255, 0, 0)
+		outputChatBox("[GC] You are already logged in as " .. gc_email ..".", 255, 0, 0)
 	elseif databaseDown then
-		outputChatBox("[GC] Greencoins database is down, could not login!", 255, 0, 0)
+		outputChatBox("[GC] GreenCoins database is not available at this moment. Please try again at a later moment.", 255, 0, 0)
 	else
-		outputChatBox("[GC] Wrong email or password entered!", 255, 0, 0)
+		outputChatBox("[GC] Wrong email or password entered.", 255, 0, 0)
 	end
 end
 
