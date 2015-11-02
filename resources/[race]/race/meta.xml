@@ -5,6 +5,7 @@
     <include resource="scoreboard" />
     <include resource="votemanager" />
     <include resource="customblips" />
+	<include resource="custom_coronas" />
     
     
     <script src="_common.lua" type="server" />
@@ -120,8 +121,8 @@
     <export function="getWatchedPlayer" type="client" />
     <export function="e_getPickups" type="client" />
     <export function="getShooterMode" type="server" />
-    <export function="export_setPlayerVehicle" type="server" />
-	
+	<export function="export_setPlayerVehicle" type="server" />
+    
     <settings>
         <!-- *****************************************************
 			 All these settings are adjustable in the Admin Panel:
