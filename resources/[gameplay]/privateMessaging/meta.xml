@@ -3,7 +3,5 @@
 	<script src="server.lua"/>
 	<script src="client.lua" type="client"/>
 	<file src="image/chat-icon.png" type="client"/>
-	<!--<file src="image/mtalogo.png" type="client"/>
-	<file src="image/shruk.png" type="client"/>-->
 	<config src="help.xml" type="client" />
 </meta>
