@@ -18,7 +18,7 @@
 
 	<file src="audio/mission_accomplished.mp3"/>
 	<file src="audio/123.mp3"/>
-	<file src="audio/go!.mp3"/>
+	<file src="audio/go.mp3"/>
 	
     <script src="modes/base.lua" type="server" />
     <script src="modes/destructionderby.lua" type="server" />
