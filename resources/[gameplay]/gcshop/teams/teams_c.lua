@@ -3,7 +3,6 @@ local teamGUI
 function onShopInit ( tabPanel )
 	local GUIEditor
 	teamTab = guiCreateTab("Teams", tabPanel)
-	guiSetSelectedTab(tabPanel,teamTab)
 	
 	-- GUIEditor start --
 
