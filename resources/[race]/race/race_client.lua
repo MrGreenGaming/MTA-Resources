@@ -1341,7 +1341,17 @@ function createCheckpoint(i)
 	end
 	local pos = checkpoint.position
 	local color = checkpoint.color or { 0, 0, 255 }
-	checkpoint.marker = createMarker(pos[1], pos[2], pos[3], checkpoint.type or 'checkpoint', checkpoint.size, color[1], color[2], color[3])
+	
+	if checkpoint.type == "corona" then
+		custommarker = exports.custom_coronas:createCorona(pos[1], pos[2], pos[3], checkpoint.size+0.1, color[1], color[2], color[3], color[4] or 255)
+		exports.custom_coronas:enableDepthBiasScale(true)
+		exports.custom_coronas:setCoronaDepthBias(custommarker, 1)
+		checkpoint.marker = createMarker(pos[1], pos[2], pos[3], "corona", 0, 0, 0, 0, 0)
+		setElementParent(custommarker, checkpoint.marker)
+	else
+		checkpoint.marker = createMarker(pos[1], pos[2], pos[3], checkpoint.type or 'checkpoint', checkpoint.size, color[1], color[2], color[3])
+	end
+	
 	if (not checkpoint.type or checkpoint.type == 'checkpoint') and i == #g_Checkpoints then
 		setMarkerIcon(checkpoint.marker, 'finish')
 	end
@@ -1385,6 +1395,10 @@ end
 function destroyCheckpoint(i)
 	local checkpoint = g_Checkpoints[i]
 	if checkpoint and checkpoint.marker then
+		if getElementChildren (checkpoint.marker) then
+			local marker = getElementChildren (checkpoint.marker)
+			exports.custom_coronas:destroyCorona(marker[1])
+		end
 		destroyElement(checkpoint.marker)
 		checkpoint.marker = nil
 		destroyElement(checkpoint.blip)
