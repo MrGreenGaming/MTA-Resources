@@ -28,7 +28,7 @@ A non-dramatic GNU license applies. See LICENSE file for details.
 ## Implementation
 * (SDK)
 * (KaliBwoy)
-* (AleksCore)
+* Alexey Yakubovskii (AleksCore)
 
 ## Additional implementation
 * Stijn Lindeman (Puma) - Pickup icons
