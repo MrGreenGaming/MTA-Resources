@@ -4,8 +4,8 @@
     
     <include resource="scoreboard" />
     <include resource="votemanager" />
-    <include resource="helpmanager" />
     <include resource="customblips" />
+	<include resource="custom_coronas" />
     
     
     <script src="_common.lua" type="server" />
@@ -16,6 +16,9 @@
     <script src="rankingboard.lua" type="server" />
     <script src="customcountdown/customcountdown_s.lua" type="server" />
 
+	<file src="audio/mission_accomplished.mp3"/>
+	<file src="audio/123.mp3"/>
+	<file src="audio/go.mp3"/>
 	
     <script src="modes/base.lua" type="server" />
     <script src="modes/destructionderby.lua" type="server" />
@@ -121,6 +124,7 @@
     <export function="getWatchedPlayer" type="client" />
     <export function="e_getPickups" type="client" />
     <export function="getShooterMode" type="server" />
+	<export function="export_setPlayerVehicle" type="server" />
     
     <settings>
         <!-- *****************************************************

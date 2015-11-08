@@ -51,37 +51,73 @@ end
 
 ---------------------------------------------------------------------------
 --
--- SAccount:login( username, password )
+-- SAccount:login( username, password, player, callback )
 --
 --
 --
 ---------------------------------------------------------------------------
 
-function SAccount:login(email, pw)
-    if not self.gcRecord[1] then
-        local forumID = getPlayerLoginInfo(email, pw)
-        if forumID then
-			for id, account in pairs (SAccount.instances) do
-				if account:getForumID() == forumID then return false end
+function SAccount:login(email, pw, player, callback)
+    if not self.gcRecord[1] and pw then
+        getPlayerLoginInfo(email, pw, function (forumID)
+			if not self.gcRecord[1] and forumID then
+				for id, account in pairs (SAccount.instances) do
+					if account:getForumID() == forumID then return callback(false, player) end
+				end
+				self.gcRecord[1] = forumID
+				local gcID, gcAmount = getPlayerGCInfo(forumID)
+				--outputDebugString(tostring(gcID))
+				if gcID and gcAmount then
+					self.gcRecord[2] = gcID
+					self.gcRecord[3] = gcAmount
+					self.gcRecord[4] = 0 -- earned gc this session
+					self.gcRecord[5] = email
+					triggerEvent('onGreencoinsLogin', self.player)
+					return callback(true, player)
+				else
+					outputChatBox ( "Attention!", self.player, 255, 0, 0 )
+					outputChatBox ( "It seems that you don't have your green-coins set up yet.", self.player, 255, 0, 0 )
+					outputChatBox ( "Visit mrgreengaming.com -> Green-Coins to do so!", self.player, 255, 0, 0 )
+				end
 			end
-            self.gcRecord[1] = forumID
-            local gcID, gcAmount = getPlayerGCInfo(forumID)
-            --outputDebugString(tostring(gcID))
-            if gcID and gcAmount then
-                self.gcRecord[2] = gcID
-                self.gcRecord[3] = gcAmount
-                self.gcRecord[4] = 0 -- earned gc this session
-                self.gcRecord[5] = email
-				triggerEvent('onGreencoinsLogin', self.player)
-                return true
-            else
-                outputChatBox ( "Attention!", self.player, 255, 0, 0 )
-                outputChatBox ( "It seems that you don't have your green-coins set up yet.", self.player, 255, 0, 0 )
-                outputChatBox ( "Visit mrgreengaming.com -> Green-Coins to do so!", self.player, 255, 0, 0 )
-            end
-        end
-    end
-    return false
+			return callback(false, player)
+		end)
+    else
+		return callback(false, player)
+	end
+end
+
+---------------------------------------------------------------------------
+--
+-- SAccount:loginViaForumID( forumid, player, callback )
+--
+--
+--
+---------------------------------------------------------------------------
+
+function SAccount:loginViaForumID(forumID, player, callback)
+	if not self.gcRecord[1] and forumID then
+		for id, account in pairs (SAccount.instances) do
+			if account:getForumID() == forumID then return callback(false, player) end
+		end
+		self.gcRecord[1] = forumID
+		local gcID, gcAmount = getPlayerGCInfo(forumID)
+		--outputDebugString(tostring(gcID))
+		if gcID and gcAmount then
+			self.gcRecord[2] = gcID
+			self.gcRecord[3] = gcAmount
+			self.gcRecord[4] = 0 -- earned gc this session
+			self.gcRecord[5] = email
+			triggerEvent('onGreencoinsLogin', self.player)
+			return callback(true, player)
+		else
+			outputChatBox ( "Attention!", self.player, 255, 0, 0 )
+			outputChatBox ( "It seems that you don't have your green-coins set up yet.", self.player, 255, 0, 0 )
+			outputChatBox ( "Visit mrgreengaming.com -> Green-Coins to do so!", self.player, 255, 0, 0 )
+		end
+    else
+		return callback(false, player)
+	end
 end
 
 ---------------------------------------------------------------------------

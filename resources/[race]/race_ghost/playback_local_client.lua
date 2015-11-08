@@ -106,6 +106,18 @@ function LocalGhostPlayback:destroy( finished )
 		killTimer( self.ghostFinishTimer )
 		self.ghostFinishTimer = nil
 	end
+	if isElement( self.ped ) then
+		destroyElement( self.ped )
+		-- outputDebug( "Destroyed ped." )
+	end
+	if isElement( self.vehicle ) then
+		destroyElement( self.vehicle )
+		-- outputDebug( "Destroyed vehicle." )
+	end
+	if isElement( self.blip ) then
+		destroyElement( self.blip )
+		-- outputDebug( "Destroyed blip." )
+	end
 	self = nil
 end
 

@@ -39,4 +39,14 @@
 *.x86_64
 *.hex
 
+# Specific resource ignores
 /resources/\[web\]/irc/settings.xml
+/resources/\[web\]/irc/irc.log
+/resources/\[gameplay\]/gcshop/shop.log
+/resources/\[gameplay\]/gus/adminapplicants.xml
+/resources/\[gameplay\]/helpmenu/svn.xml
+/resources/\[gameplay\]/helpmenu/motd.xml
+/resources/\[admin\]/admin/conf/reports.xml
+www/mta/mtasettings.php
+MrGreenMTA.sublime-workspace
+resources/[gameplay]/chatbox_ads/ads.xml
