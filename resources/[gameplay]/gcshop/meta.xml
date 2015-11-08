@@ -44,27 +44,9 @@
     <script src="items\voice\gcvoice_s.lua" type="server" />
     <script src="items\burn\burn_s.lua" type="server" />
     <script src="items\burn\burn_c.lua" type="client" />
-    <script src="items\doublesided\double_s.lua" type="server" />
-    <script src="items\doublesided\double_c.lua" type="client" />
-
-    <script src="items\coloredprojectiles\coloredprojectiles_s.lua" type="server" />
-    <script src="items\coloredprojectiles\coloredprojectiles_c.lua" type="client" />
-    <script src="items\coloredprojectiles\picker_client.lua" type="client" />
-    <file src="items\coloredprojectiles\blank.png" />
-    <file src="items\coloredprojectiles\dot_white.png" />
-    <file src="items\coloredprojectiles\cursor.png" />
-    <file src="items\coloredprojectiles\h.png" />
-    <file src="items\coloredprojectiles\sv.png" />
-    <file src="items\coloredprojectiles\texture.png" />
-    <!-- Custom corona script by: Ren712 -->
-    <script src="items\coloredprojectiles\customcorona\customcorona_c_main.lua" type="client" />
-    <script src="items\coloredprojectiles\customcorona\customcorona_c_helper_functions.lua" type="client" />
-    <script src="items\coloredprojectiles\customcorona\customcorona_c_functions.lua" type="client" />
-    <file src="items\coloredprojectiles\customcorona\shaders\custom_corona0.fx" type="client" />
-    <file src="items\coloredprojectiles\customcorona\shaders\custom_corona1.fx" type="client" />
-    <file src="items\coloredprojectiles\customcorona\textures\coronastar.png" type="client" />
+   
     
-    <script src="items\vehiclereroll\vehreroll_s.lua" type="server" />
+    
     <!-- Modshop -->
     
     <script src="modshop\modshop_s.lua" type="server" />
@@ -255,7 +237,7 @@
 	<file src="horns\files\146.mp3" />
 	<file src="horns\files\147.mp3" />
 	<file src="horns\files\148.mp3" />
-    <file src="horns\files\149.mp3" />
+	<file src="horns\files\149.mp3" />
 	<file src="horns\files\150.mp3" />
 	<file src="horns\files\151.mp3" />
 	<file src="horns\files\152.mp3" />
@@ -265,9 +247,5 @@
 	<file src="horns\files\156.mp3" />
 	<file src="horns\files\157.mp3" />
 	<file src="horns\files\158.mp3" />
-	<file src="horns\files\159.mp3" />
-	<file src="horns\files\160.mp3" />
-	<file src="horns\files\161.mp3" />
 	<file src="horns\icon.png" />
-	
 </meta>
