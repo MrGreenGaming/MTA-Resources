@@ -1,6 +1,7 @@
 local team_price = 2500
 local teams = {}	-- [teamid] = <teamelement>
 local playerteams = {}
+local playertimestamp = {}
 local invites = {}
 
 local team_sql = [[CREATE TABLE IF NOT EXISTS `team` (
@@ -40,7 +41,7 @@ addEventHandler('onShopInit', root, function()
 end)
 
 addEventHandler("onGCShopLogin", root, function()
-	checkPlayerTeam ( source )
+	checkPlayerTeam ( source, true )
 	triggerClientEvent(source, "teamLogin", resourceRoot)
 end)
 
@@ -61,35 +62,51 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
 	
 	local player = client
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
-	if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255*255*255)) end
-	if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
-	
 	if (not forumID) then
 		outputChatBox('You\'re not logged into a Green-Coins account!', player, 255, 0, 0 )
 		return
-	elseif type(teamname) ~= 'string' or #teamname < 3 then
-		outputChatBox('Not a valid teamname', player, 255, 0, 0 )
-		return
-	elseif type(teamtag) ~= 'string' or #teamtag < 3 then
-		outputChatBox('Not a valid teamtag', player, 255, 0, 0 )
-		return
-	elseif type(teamcolour) ~= 'string' or not getColorFromString(teamcolour) then
-		outputChatBox('Not a valid teamcolour', player, 255, 0, 0 )
-		return
-	end
-	
-	local result, error = gcshopBuyItem ( player, team_price, 'Team: ' .. table.concat({teamname, teamtag, teamcolour, teammsg}, ', ') )
-	if result == true then
-		local added = addTeamToDatabase( forumID, teamname, teamtag, teamcolour, teammsg )
-		addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team: ' .. table.concat({teamname, teamtag, teamcolour, teammsg}, ', ') )
-		outputChatBox ('Team \"' .. teamname  .. '\" (' .. tostring(teamtag) .. ') bought.', player, 0, 255, 0)
-		checkPlayerTeam ( player )
-		-- triggerClientEvent( player, 'modshopLogin', player, vehicle_price, getUpgInDatabase(forumID) or false )
-		return
-	end
-	if error then
-		outputChatBox( 'An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0 )
-		addToLog ( 'Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team: ' .. table.concat({teamname, teamtag, teamcolour, teammsg}, ', ') .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
+	elseif not playerteams[player] then
+		if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255*255*255)) end
+		if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
+		
+		if type(teamname) ~= 'string' or #teamname < 3 then
+			outputChatBox('Not a valid teamname', player, 255, 0, 0 )
+			return
+		elseif type(teamtag) ~= 'string' or #teamtag < 3 then
+			outputChatBox('Not a valid teamtag', player, 255, 0, 0 )
+			return
+		elseif type(teamcolour) ~= 'string' or not getColorFromString(teamcolour) then
+			outputChatBox('Not a valid teamcolour', player, 255, 0, 0 )
+			return
+		end
+		
+		local result, error = gcshopBuyItem ( player, team_price, 'Team: ' .. table.concat({teamname, teamtag, teamcolour, teammsg}, ', ') )
+		if result == true then
+			local added = addTeamToDatabase( forumID, teamname, teamtag, teamcolour, teammsg )
+			addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team: ' .. table.concat({teamname, teamtag, teamcolour, teammsg}, ', ') )
+			outputChatBox ('Team \"' .. teamname  .. '\" (' .. tostring(teamtag) .. ') bought.', player, 0, 255, 0)
+			checkPlayerTeam ( player )
+			-- triggerClientEvent( player, 'modshopLogin', player, vehicle_price, getUpgInDatabase(forumID) or false )
+			return
+		end
+		if error then
+			outputChatBox( 'An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0 )
+			addToLog ( 'Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team: ' .. table.concat({teamname, teamtag, teamcolour, teammsg}, ', ') .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
+		end
+	else
+		local result, error = gcshopBuyItem ( player, team_price, 'Team renew: ' .. tostring(playerteams[player]) )
+		if result == true then
+			local added = dbExec(handlerConnect, [[UPDATE `team` SET `timestamp`=? WHERE `teamid`=?]], getRealTime().timestamp, teamID)
+			addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team renew: ' .. tostring(playerteams[player]) )
+			outputChatBox ('Team renewed.', player, 0, 255, 0)
+			checkPlayerTeam ( player )
+			-- triggerClientEvent( player, 'modshopLogin', player, vehicle_price, getUpgInDatabase(forumID) or false )
+			return
+		end
+		if error then
+			outputChatBox( 'An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0 )
+			addToLog ( 'Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team renew: ' .. tostring(playerteams[player]) .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
+		end
 	end
 end)
 
@@ -105,27 +122,44 @@ function addPlayerToTeamDatabase ( forumID, teamID )
 	return dbExec(handlerConnect, teammember, forumID, teamID, getRealTime().timestamp, 1)
 end
 
+
 -- Looks up which team the player is in and puts him in it
-function checkPlayerTeam ( player )
+function checkPlayerTeam ( player, bLogin )
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
-	dbQuery ( checkPlayerTeam2, {player}, handlerConnect, [[SELECT * FROM `team_members` INNER JOIN `team` ON `team_members`.`teamid` = `team`.`teamid` WHERE `forumid` = ? AND `status` = 1]], forumID )
+	dbQuery ( checkPlayerTeam2, { player, bLogin }, handlerConnect, [[SELECT * FROM `team_members` INNER JOIN `team` ON `team_members`.`teamid` = `team`.`teamid` WHERE `forumid` = ?]], forumID )
 end
 
-function checkPlayerTeam2 ( qh, player )
+function checkPlayerTeam2 ( qh, player, bLogin )
 	local result = dbPoll( qh, -1 )
 
+	playertimestamp[player] = nil
 	-- check result and if player is still logged in
-	if not (isElement(player) and exports.gc:getPlayerForumID ( player ) and result and #result > 0) then
+	if not (isElement(player) and exports.gc:getPlayerForumID ( player ) and result) then
+		setPlayerTeam(player, nil)
+		playerteams[player] = nil
+		return
+	elseif #result < 1 or result[1].status ~= 1 then
 		local teamid = getPlayerTeam(player) and getElementData(getPlayerTeam(player), 'gcshop.teamid')
 		if teams[teamid] and countPlayersInTeam(teams[teamid]) < 2 then
 			destroyElement ( teams[teamid] )
 			teams[teamid] = nil
 		end
 		setPlayerTeam(player, nil)
+		playertimestamp[player] = result[1] and {result[1].timestamp, teamid} or nil
 		playerteams[player] = nil
 		return
 	end
 	local r = result[1]
+	
+	local age = (getRealTime().timestamp - r.timestamp) / (24 * 60 * 60)
+	outputConsole('[TEAMS] Team age in days: ' .. tostring(age))
+	
+	if age > 30 then
+		if bLogin then
+			outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
+		end
+		return
+	end
 	
 	local tr, tg, tb = getColorFromString(r.colour)
 	if not teams[r.teamid] then
@@ -138,10 +172,19 @@ function checkPlayerTeam2 ( qh, player )
 	end
 	playerteams[player] = r.teamid
 	if r.message then
-		outputChatBox(r.message, player, tr, tg, tb, true)
+		outputChatBox('#00FF00[TEAMS] ' .. r.message, player, tr, tg, tb, true)
 	end
 end
 
+addEvent('onGamemodeMapStop', true)
+addEventHandler('onGamemodeMapStop', root, function()
+	for player, teamid in pairs(playerteams) do
+		setPlayerTeam(player, teams[teamid])
+	end
+end)
+
+
+-- Sending invites, accepting, leaving team
 function invite(sender, c, playername)
 	local ownerid = tonumber(exports.gc:getPlayerForumID ( sender ))
 	if not ownerid then return end
@@ -172,6 +215,8 @@ function accept(player)
 		return outputChatBox('[TEAMS] You are not invited to any teams!', player, 0,255,0)
 	elseif not forumID then
 		return outputChatBox('[TEAMS] You are not logged in to GC', sender, 0,255,0)
+	elseif playertimestamp[player] and playertimestamp[player][2] ~= invites[player][1] and (getRealTime().timestamp - playertimestamp[player][1]) / (24 * 60 * 60) < 30 then
+		return outputChatBox('[TEAMS] You were in a team less than 30 days ago. Wait before joining another team', sender, 0,255,0)
 	end
 	
 	outputChatBox('[TEAMS] You accepted the invite', player, 0,255,0)
