@@ -46,7 +46,11 @@
 /resources/\[gameplay\]/gus/adminapplicants.xml
 /resources/\[gameplay\]/helpmenu/svn.xml
 /resources/\[gameplay\]/helpmenu/motd.xml
+/resources/\[gameplay\]/chatbox_ads/ads.xml
 /resources/\[admin\]/admin/conf/reports.xml
+
+# Web settings
 www/mta/mtasettings.php
+
+# Project files
 MrGreenMTA.sublime-workspace
-resources/[gameplay]/chatbox_ads/ads.xml
