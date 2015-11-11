@@ -86,7 +86,7 @@ function CTF:pickFreeSpawnpoint(ignore)
 	local g_OriginalSpawnpoints = g_Spawnpoints
 	local g_Spawnpoints = {}
 	local redPlayers, bluePlayers = countPlayersInTeam(self.red.Team), countPlayersInTeam(self.blue.Team)
-	if getPlayerTeam(ignore) then
+	if getPlayerTeam(ignore) == CTF.red.Team or getPlayerTeam(ignore) == CTF.blue.Team then
 		for i, spawn in ipairs(g_OriginalSpawnpoints) do
 			if (spawn.team == CTF.red.SpawnType and getPlayerTeam(ignore) == CTF.red.Team) or (spawn.team == CTF.blue.SpawnType and getPlayerTeam(ignore) == CTF.blue.Team) then
 				table.insert(g_Spawnpoints, spawn)
