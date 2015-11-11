@@ -98,7 +98,6 @@ addEventHandler("teamsData", root, function(teams, player, t)
 			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
 		end
 	end
-	if not t or player ~= localPlayer then return end
 	for r, z in ipairs(teams) do
 		if t and t.teamid == teamid and z.status == 1 then
 			i = guiGridListAddRow(g2)
@@ -106,6 +105,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 			guiGridListSetItemData(g2, i, 1, z.forumid, false, false)
 		end
 	end
+	if not t or player ~= localPlayer then return end
 	if t.status == 1 then
 		guiSetText(teamGUI.btnBuyTeam, "Renew team\n2500 GC / 30 days")
 		
