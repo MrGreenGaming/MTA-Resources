@@ -247,7 +247,7 @@ function accept(player)
 	
 	outputChatBox('[TEAMS] You accepted the invite and joined the team ' .. tostring(invites[player].team.name), player, 202,255,112)
 	if isElement(invites[player].sender) then
-		outputChatBox('[TEAMS] ' .. getPlayerName(player) .. ' accepted the invite', invites[player].team.sender, 202,255,112)
+		outputChatBox('[TEAMS] ' .. getPlayerName(player) .. ' accepted the invite', invites[player].sender, 202,255,112)
 	end
 	addPlayerToTeamDatabase ( forumID, invites[player].team.teamid )
 	checkPlayerTeam ( player )
@@ -334,6 +334,12 @@ addEvent('cmd', true)
 addEventHandler('cmd', resourceRoot, function(c, a) executeCommandHandler(c, client, a) end)
 
 -- Utility
+local getPlayerName_ = getPlayerName
+
+local function getPlayerName ( player )
+	return getPlayerName_(player) and string.gsub(getPlayerName_(player),"#%x%x%x%x%x%x","")
+end
+
 function getPlayerFromName_ ( name )
 	if type(name) ~= 'string' then return false end
 	

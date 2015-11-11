@@ -16,7 +16,7 @@ function onShopInit ( tabPanel )
 
 	GUIEditor.tab[1] = guiCreateTab("Your team", GUIEditor.tabpanel[1])
 
-	GUIEditor.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 30 days, but everyone in the team can refresh the team duration. You can only own one team or be in one team. If you create/join a team, you can't create/join any other team for 30 days.", false, GUIEditor.tab[1])
+	GUIEditor.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 30 days, but everyone in the team can renew the team duration. You can only own one team or be in one team. If you create/join a team, you can't create/join any other team for 30 days.", false, GUIEditor.tab[1])
 	guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
 	GUIEditor.btnBuyTeam = guiCreateButton(46, 263, 165, 50, "Create team\n2500 GC / 30 days", false, GUIEditor.tab[1])
 	guiSetProperty(GUIEditor.btnBuyTeam, "Disabled", "True")
@@ -97,13 +97,15 @@ addEventHandler("teamsData", root, function(teams, player, t)
 			i = guiGridListAddRow(g)
 			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
 		end
+	end
+	if not t or player ~= localPlayer then return end
+	for r, z in ipairs(teams) do
 		if t and t.teamid == teamid and z.status == 1 then
 			i = guiGridListAddRow(g2)
 			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
 			guiGridListSetItemData(g2, i, 1, z.forumid, false, false)
 		end
 	end
-	if not t or player ~= localPlayer then return end
 	if t.status == 1 then
 		guiSetText(teamGUI.btnBuyTeam, "Renew team\n2500 GC / 30 days")
 		
