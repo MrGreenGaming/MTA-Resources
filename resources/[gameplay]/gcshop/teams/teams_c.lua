@@ -40,11 +40,14 @@ function onShopInit ( tabPanel )
 	GUIEditor.gridMembers = guiCreateGridList(419, 107, 261, 202, false, GUIEditor.tab[1])
 	guiGridListAddColumn(GUIEditor.gridMembers, "Members", 0.9)
 	guiSetProperty(GUIEditor.gridMembers, "SortSettingEnabled", "False")
-	GUIEditor.btnInvite = guiCreateButton(419, 332, 114, 32, "Invite player", false, GUIEditor.tab[1])
-	guiSetProperty(GUIEditor.btnInvite, "Disabled", "True")
+	GUIEditor.btnInvite = guiCreateButton(272, 332, 114, 32, "/Invite player", false, GUIEditor.tab[1])
+	guiSetVisible(GUIEditor.btnInvite, false)
 	guiSetProperty(GUIEditor.btnInvite, "NormalTextColour", "FFAAAAAA")
+	GUIEditor.btnKick = guiCreateButton(419, 332, 114, 32, "Kick player", false, GUIEditor.tab[1])
+	guiSetVisible(GUIEditor.btnKick, false)
+	guiSetProperty(GUIEditor.btnKick, "NormalTextColour", "FFAAAAAA")
 	GUIEditor.btnLeave = guiCreateButton(566, 332, 114, 32, "Leave team", false, GUIEditor.tab[1])
-	guiSetProperty(GUIEditor.btnLeave, "Disabled", "True")
+	guiSetVisible(GUIEditor.btnLeave, false)
 	guiSetProperty(GUIEditor.btnLeave, "NormalTextColour", "FFAAAAAA")
 	GUIEditor.label[5] = guiCreateLabel(46, 225, 83, 28, "Welcome msg", false, GUIEditor.tab[1])
 	guiLabelSetVerticalAlign(GUIEditor.label[5], "center")
@@ -57,8 +60,12 @@ function onShopInit ( tabPanel )
 
 	-- GUIEditor end --
 	
+	guiSetVisible(GUIEditor.chkIgnore, false)
 	teamGUI = GUIEditor
 	addEventHandler('onClientGUIClick', GUIEditor.btnBuyTeam, buyTeam, false)
+	addEventHandler('onClientGUIClick', GUIEditor.btnKick, kickTeam, false)
+	addEventHandler('onClientGUIClick', GUIEditor.btnLeave, leaveTeam, false)
+	addEventHandler('onClientGUIClick', GUIEditor.btnInvite, inviteTeam, false)
 end
 addEvent('onShopInit', true)
 addEventHandler('onShopInit', root, onShopInit )
@@ -70,12 +77,111 @@ addEventHandler("teamLogin", root, function()
 	guiSetProperty(teamGUI.teamtag, "Disabled", "False")
 	guiSetProperty(teamGUI.teammsg, "Disabled", "False")
 	guiSetProperty(teamGUI.teamcolour, "Disabled", "False")
-	guiSetProperty(teamGUI.chkIgnore, "Disabled", "False")
-	guiSetProperty(teamGUI.btnInvite, "Disabled", "False")
-	guiSetProperty(teamGUI.btnLeave, "Disabled", "False")
+end)
+
+addEvent("teamsData", true)
+addEventHandler("teamsData", root, function(teams, player, t)
+	-- Update teamlists
+	local g = teamGUI.gridlist[1]
+	local g2 = teamGUI.gridMembers
+	guiGridListClear(g)
+	guiGridListClear(teamGUI.gridMembers)
+	local teamid, i
+	for r, z in ipairs(teams) do
+		if teamid ~= z.teamid then
+			teamid = z.teamid
+			i = guiGridListAddRow(g)
+			guiGridListSetItemText(g, i, 1, z.teamid .. '. ' .. z.tag .. ' ' .. z.name, true, false)
+		end
+		if z.status == 1 then
+			i = guiGridListAddRow(g)
+			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
+		end
+		if t and t.teamid == teamid and z.status == 1 then
+			i = guiGridListAddRow(g2)
+			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
+			guiGridListSetItemData(g2, i, 1, z.forumid, false, false)
+		end
+	end
+	if not t or player ~= localPlayer then return end
+	if t.status == 1 then
+		guiSetText(teamGUI.btnBuyTeam, "Renew team\n2500 GC / 30 days")
+		
+		guiSetEnabled(teamGUI.teamname, false)
+		guiSetEnabled(teamGUI.teamtag, false)
+		guiSetEnabled(teamGUI.teammsg, false)
+		guiSetEnabled(teamGUI.teamcolour, false)
+		guiSetText(teamGUI.teamname, t.name)
+		guiSetText(teamGUI.teamtag, t.tag)
+		guiSetText(teamGUI.teammsg, t.message or '')
+		guiSetText(teamGUI.teamcolour, t.colour)
+		
+		guiSetText(teamGUI.btnLeave, "Leave team")
+		guiSetVisible(teamGUI.btnLeave, true)
+		guiSetVisible(teamGUI.btnInvite, t.forumid == t.owner)
+		guiSetVisible(teamGUI.btnKick, t.forumid == t.owner)
+	else
+		guiSetText(teamGUI.btnBuyTeam, "Buy team\n2500 GC / 30 days")
+		
+		guiSetEnabled(teamGUI.teamname, true)
+		guiSetEnabled(teamGUI.teamtag, true)
+		guiSetEnabled(teamGUI.teammsg, true)
+		guiSetEnabled(teamGUI.teamcolour, true)
+		guiSetText(teamGUI.teamname, '')
+		guiSetText(teamGUI.teamtag, '')
+		guiSetText(teamGUI.teammsg, '')
+		guiSetText(teamGUI.teamcolour, '#FFFFFF')
+		
+		if t.status == 0 then
+			guiSetVisible(teamGUI.btnLeave, true)
+			guiSetText(teamGUI.btnLeave, "Rejoin team")
+		else
+			guiSetVisible(teamGUI.btnLeave, false)
+		end
+		guiSetVisible(teamGUI.btnInvite, false)
+		guiSetVisible(teamGUI.btnKick, false)
+	end
 end)
 
 -- Buying/extending team --
 function buyTeam (btn)
 	triggerServerEvent('buyTeam', resourceRoot, guiGetText(teamGUI.teamname), guiGetText(teamGUI.teamtag), guiGetText(teamGUI.teamcolour), guiGetText(teamGUI.teammsg))
 end
+
+function kickTeam(btn)
+	local r, c = guiGridListGetSelectedItem(teamGUI.gridMembers)
+	if r == -1 or c == -1 then return end
+	local forumid = tonumber(guiGridListGetItemData(teamGUI.gridMembers, r, c))
+	if not forumid then return end
+	triggerServerEvent('cmd', resourceRoot, 'teamkick', tostring(forumid))
+end
+
+function leaveTeam (btn)
+	triggerServerEvent('cmd', resourceRoot, guiGetText(teamGUI.btnLeave) == "Leave team" and 'leave' or 'rejoin')
+end
+
+function inviteTeam (btn)
+	--Create the grid list element
+	local playerWindow = guiCreateWindow ( 0.80, 0.10, 0.15, 0.60, "Team invite", true )
+	local playerList = guiCreateGridList ( 0.05, 0.05, 0.9, 0.55, true, playerWindow )
+	local inviteBtn = guiCreateButton(0.05, 0.60, .9, .15, "Invite", true, playerWindow)
+	local closeBtn = guiCreateButton(0.05, 0.80, .9, .15, "Close", true, playerWindow)
+	--Create a players column in the list
+	local column = guiGridListAddColumn( playerList, "Invite", 0.85 )
+	if ( column ) then --If the column has been created, fill it with players
+		for id, player in ipairs(getElementsByType("player")) do
+			local row = guiGridListAddRow ( playerList )
+			guiGridListSetItemText ( playerList, row, column, string.gsub(getPlayerName ( player ),"#%x%x%x%x%x%x",""), false, false )
+		end
+	end
+	addEventHandler('onClientGUIClick', inviteBtn, function() 
+		local r, c = guiGridListGetSelectedItem(playerList)
+		if r == -1 or c == -1 then return end
+		local name = guiGridListGetItemText(playerList, r, c)
+		triggerServerEvent('cmd', resourceRoot, 'invite', name)
+		destroyElement(playerWindow)
+	end, false)
+	addEventHandler('onClientGUIClick', closeBtn, function() destroyElement(playerWindow) end, false)
+
+end
+
