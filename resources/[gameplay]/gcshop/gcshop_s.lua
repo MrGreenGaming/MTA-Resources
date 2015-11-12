@@ -92,6 +92,7 @@ addCommandHandler ( "addToLog", function(p, c, text) outputChatBox(tostring(addT
 
 -- srun set("*gcshop.host", 'ares.limetric.com'); set("*gcshop.dbname", 'mrgreen_mtasrvs'); set("*gcshop.user", 'mrgreen_gcmta'); set("*gcshop.pass", 'pass');
 
+addEvent'shopStarted'
 function onStart()
 	if isTimer(adTimer) then killTimer(adTimer) end
 	adTimer = setTimer(function() 
@@ -110,12 +111,14 @@ function onStart()
 
 	
 	addToLog ( 'Shop started' )
-	
+	triggerEvent('shopStarted', resourceRoot)
 end
 addEventHandler('onResourceStart', resourceRoot, onStart )
 
+addEvent'shopStopped'
 function onStop()
 	addToLog ( 'Shop stopped' )
+	triggerEvent('shopStopped', resourceRoot)
 end
 addEventHandler('onResourceStop', resourceRoot, onStop )
 

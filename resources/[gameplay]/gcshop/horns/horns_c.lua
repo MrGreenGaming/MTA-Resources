@@ -149,6 +149,17 @@ hornsTable = {
 	[148] = "Dikke BMW",
 	[149] = "Burp!",
 	[150] = "Meep-meep!",
+	[151] = "Angels are crying",
+	[152] = "Bocka bass",
+	[153] = "I can't get no sleep",
+	[154] = "Ja pierdole kurwa",
+	[155] = "Komodo",
+	[156] = "Let go",
+	[157] = "Pop Hold it Down",
+	[158] = "Sacrifice",
+	[159] = "Single ladies",
+	[160] = "Feel Good Drag",
+	[161] = "They see me rollin"
 }
 
 extensions = {
@@ -274,6 +285,17 @@ extensions = {
 	[148] = "mp3",
 	[149] = "mp3",
 	[150] = "mp3",
+	[151] = "mp3",
+	[152] = "mp3",
+	[153] = "mp3",
+	[154] = "mp3",
+	[155] = "mp3",
+	[156] = "mp3",
+	[157] = "mp3",
+	[158] = "mp3",
+	[159] = "mp3",
+	[160] = "mp3",
+	[161] = "mp3",
 }
 function onShopInit ( tabPanel )
 	shopTabPanel = tabPanel
