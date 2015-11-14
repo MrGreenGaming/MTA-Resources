@@ -23,11 +23,11 @@ A non-dramatic GNU license applies. See LICENSE file for details.
 ## Project team
 * Jarno Veuger (Ywa) - Owner, merger, issue management
 * EsDeKa (SDK) - Merger, issue management
-* (KaliBwoy) - Merger, issue management
+* AfuSensi (KaliBwoy) - Merger, issue management
 
 ## Implementation
 * EsDeKa (SDK)
-* (KaliBwoy)
+* AfuSensi (KaliBwoy)
 * Alexey Yakubovskii (AleksCore)
 
 ## Additional implementation
