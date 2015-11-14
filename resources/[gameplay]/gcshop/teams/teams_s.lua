@@ -3,7 +3,7 @@ local teams = {}	-- [teamid] = <teamelement>
 local playerteams = {}
 local playertimestamp = {}
 local invites = {}
-local duration = 30 * 24 * 60 * 60
+local duration = 1
 
 local team_sql = [[CREATE TABLE IF NOT EXISTS `team` (
 	`teamid` smallint(5) unsigned NOT NULL AUTO_INCREMENT, 
@@ -220,7 +220,7 @@ function invite(sender, c, playername)
 	elseif not tonumber(exports.gc:getPlayerForumID ( player )) then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not logged in to GC', sender, 0,255,0)
 	-- Check if the sender is the owner and if the player can join the team
-	elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].forumid == ownerid) then
+	elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) then
 		return outputChatBox('[TEAMS] Only team owners can send invites!', sender, 255,0,0)
 	elseif playerteams[player] and playerteams[sender].status ~= 1 and playerteams[player].teamid == playerteams[sender].teamid then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is already in your team', sender, 0,255,0)
@@ -294,7 +294,7 @@ function makeowner(sender, c, playername)
 	elseif not tonumber(exports.gc:getPlayerForumID ( player )) then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not logged in to GC', sender, 0,255,0)
 	-- Check if the sender is the owner and if the player can join the team
-	elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].forumid == ownerid) then
+	elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) then
 		return outputChatBox('[TEAMS] Only team owners can do this!', sender, 255,0,0)
 	elseif playerteams[player] and (playerteams[player].status~=1 or playerteams[player].teamid ~= playerteams[sender].teamid) then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not in your team', sender, 0,255,0)

@@ -99,7 +99,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 		end
 	end
 	for r, z in ipairs(teams) do
-		if t and t.teamid == teamid and z.status == 1 then
+		if t and t.teamid == z.teamid and z.status == 1 then
 			i = guiGridListAddRow(g2)
 			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
 			guiGridListSetItemData(g2, i, 1, z.forumid, false, false)
