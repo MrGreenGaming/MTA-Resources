@@ -4,6 +4,7 @@ local playerteams = {}
 local playertimestamp = {}
 local invites = {}
 local duration = 1
+local team_duration = 30 * 24 * 60 * 60
 
 local team_sql = [[CREATE TABLE IF NOT EXISTS `team` (
 	`teamid` smallint(5) unsigned NOT NULL AUTO_INCREMENT, 
@@ -162,7 +163,7 @@ function checkPlayerTeam2 ( qh, player, bLogin )
 	-- Check team age
 	local age = (getRealTime().timestamp - r.renew_timestamp) 
 	outputConsole('[TEAMS] Team age in days: ' .. tostring(age/ (24 * 60 * 60)), player)
-	if age > duration then
+	if age > team_duration then
 		if bLogin then
 			outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
 		end
