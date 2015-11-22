@@ -441,7 +441,7 @@ function deletetop(p, c, pos)
 	sendClientTimes()
 	outputChatBox('Top #' .. tostring(pos) .. ' deleted', p)
 end
-addCommandHandler('deletetop', deletetop, true)
+-- addCommandHandler('deletetop', deletetop, true)
 
 function deletealltops(p, c)
 	local top = table.remove(times, pos)
@@ -452,7 +452,7 @@ function deletealltops(p, c)
 	sendClientTimes()
 	outputChatBox('Tops deleted', p)
 end
-addCommandHandler('deletealltops', deletealltops, true)
+-- addCommandHandler('deletealltops', deletealltops, true)
 
 function deletemonthtop(p, c)
 	if not monthtTopTime then
@@ -463,7 +463,7 @@ function deletemonthtop(p, c)
 	sendMonthTime()
 	outputChatBox('Month top deleted', p)
 end
-addCommandHandler('deletemonthtop', deletemonthtop, true)
+-- addCommandHandler('deletemonthtop', deletemonthtop, true)
 
 local modes={
 	race={race=true},
@@ -471,6 +471,7 @@ local modes={
 }
 
 function checkResources()
+	if true then return end	-- Fuck deletes
 	local m = modes[get'server']
 	local m2 = modes[get'server'=='race' and 'mix' or 'race']
 	if not m then

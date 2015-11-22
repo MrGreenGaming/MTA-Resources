@@ -224,7 +224,7 @@ function isPlayerEligibleToBuy(player, choice)
 end
 
 function playerHasBoughtMap(player, choice)
-    if (hasObjectPermissionTo(player, "function.banPlayer", false)) then  --if admin then dont take GC
+    if (hasObjectPermissionTo(player, "command.deletemap", false)) then  --if admin then dont take GC
 		return true
 	end
 	local mapprice = player == lastWinner and lastWinnerPrice or PRICE

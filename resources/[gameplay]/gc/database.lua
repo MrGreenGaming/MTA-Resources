@@ -51,7 +51,7 @@ end
 function getPlayerLoginInfo(email, pw, callback)
 	if devmode then
 		-- /gclogin <choose a forumID> <admin>
-		if pw == md5(safeString('admin')) then
+		if pw == 'admin' then
 			local forumID = math.floor(math.abs(tonumber(email))) or 1337
 			return callback(forumID)
 		end
