@@ -56,8 +56,6 @@ end)
 
 addEvent('buyTeam', true)
 addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour, teammsg)
-	if not hasObjectPermissionTo(client, "command.kick", false) then return end
-	
 	local player = client
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
 	local r = playerteams[player]
@@ -68,9 +66,29 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
 		return outputChatBox('[TEAMS] You were in a team less than 30 days ago. Wait before creating another team', player, 0,255,0)
 	-- Check if it's renewing a team
 	elseif r and r.status == 1 then
+		if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255*255*255)) end
+		if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
+		
+		if type(teamname) ~= 'string' or #teamname < 3 then
+			outputChatBox('Not a valid teamname', player, 255, 0, 0 )
+			return
+		elseif type(teamtag) ~= 'string' or #teamtag < 3 then
+			outputChatBox('Not a valid teamtag', player, 255, 0, 0 )
+			return
+		elseif type(teamcolour) ~= 'string' or not getColorFromString(teamcolour) then
+			outputChatBox('Not a valid teamcolour', player, 255, 0, 0 )
+			return
+		end
 		local result, error = gcshopBuyItem ( player, team_price, 'Team renew: ' .. tostring(r.teamid) )
 		if result == true then
-			local added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=? WHERE `teamid`=?]], getRealTime().timestamp, r.teamid)
+			local added
+			if r.owner ~= forumID then
+				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=? WHERE `teamid`=?]], getRealTime().timestamp, r.teamid)
+			else
+				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=?, `name`=?, `tag`=?, `colour`=?, `message`=? WHERE `teamid`=?]], getRealTime().timestamp, teamname, teamtag, teamcolour, teammsg, r.teamid)
+				setTeamName(teams[r.teamid], teamtag .. ' ' .. teamname)
+				setTeamColor(teams[r.teamid], getColorFromString(teamcolour))
+			end
 			addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team renew: ' .. tostring(r.teamid) )
 			outputChatBox ('Team renewed.', player, 0, 255, 0)
 			checkPlayerTeam ( player )
@@ -195,7 +213,9 @@ function leaveTeam (player)
 		destroyElement ( teams[teamid] )
 		teams[teamid] = nil
 	end
-	setPlayerTeam(player, nil)
+	if exports.race:getRaceMode() ~= "Capture the flag" then
+		setPlayerTeam(player, nil)
+	end
 	invites[player] = nil
 end
 
