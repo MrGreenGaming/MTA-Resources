@@ -97,7 +97,7 @@ end
 local function poll(a, va)
 	local _alivePlayers = getAlivePlayers()
 	local alivePlayers = {}
-	for i,player in ipairs(_alivePlayers) do -- Add players with kills to alivePlayers
+	for i,player in ipairs(_alivePlayers) do -- Add players without kills to alivePlayers
 		local kills = getElementData(player,"kills")
 		if tonumber(kills) and tonumber(kills) == 0 then
 			table.insert(alivePlayers,i)
