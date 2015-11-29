@@ -160,7 +160,9 @@ addEventHandler ( "onClientRender", g_Root,
 					local name = _getPlayerName(player)
 					if team then
 						r,g,b = getTeamColor(team)
-						name = getPlayerName(player)
+						if not getElementData(team, 'gcshop.teamid') then
+							name = getPlayerName(player)
+						end
 					end
 					if player and getElementData(player, 'markedblocker') then
 						name = name .. ' #FFFFFF[BLOCKER]'

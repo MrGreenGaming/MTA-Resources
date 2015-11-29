@@ -23,6 +23,9 @@ local fpsStrikes = {}
 -- Checking ping --
 -------------------
 
+addEvent("onGamemodeMapStart")
+addEventHandler("onGamemodeMapStart",root,function() fpsStrikes = {} end)
+
 addEventHandler ( "onResourceStart", resourceRoot,
 	function()
 		setTimer(checkFPS, checkInterval, 0)	

@@ -31,7 +31,6 @@ function onMapStarting(mapInfo, mapOptions, gameOptions)
 		return false;
 	end
 
-	--[[
 	if getPlayerCount() > 29 then
 		exports.scoreboard:addScoreboardColumn("dim", root, 15, "dim", 7)
 		if getPlayerCount() > 40 then
@@ -58,7 +57,6 @@ function onMapStarting(mapInfo, mapOptions, gameOptions)
 		end
 		mapUseGM = mapOptions['ghostmode']
 	end
-	--]]
 	triggerClientEvent('onServerMapStarting', root, dimensionsEnabled)
 	-- reset ranks for the next map
 	g_PlayersRank = {}

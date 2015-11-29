@@ -22,12 +22,12 @@ A non-dramatic GNU license applies. See LICENSE file for details.
 # Credits
 ## Project team
 * Jarno Veuger (Ywa) - Owner, merger, issue management
-* (SDK) - Merger, issue management
-* (KaliBwoy) - Merger, issue management
+* EsDeKa (SDK) - Merger, issue management
+* AfuSensi (KaliBwoy) - Merger, issue management
 
 ## Implementation
-* (SDK)
-* (KaliBwoy)
+* EsDeKa (SDK)
+* AfuSensi (KaliBwoy)
 * Alexey Yakubovskii (AleksCore)
 
 ## Additional implementation

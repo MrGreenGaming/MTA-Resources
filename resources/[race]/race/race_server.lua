@@ -707,7 +707,9 @@ addEventHandler('onPlayerReachCheckpointInternal', g_Root,
 		local checkpoint = g_CurrentRaceMode:getCheckpoint(checkpointNum)
 		if checkpoint.vehicle then
 			if getElementModel(vehicle) ~= tonumber(checkpoint.vehicle) then
-				clientCall(source, 'alignVehicleWithUp')
+				if checkpointNum < #g_Checkpoints then
+					clientCall(source, 'alignVehicleWithUp')
+				end
 				setVehicleID(vehicle, checkpoint.vehicle)
 				if nitroLevel then
 					addVehicleUpgrade(vehicle, 1010)
