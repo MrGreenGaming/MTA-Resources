@@ -39,6 +39,10 @@ function blocker(player, _, nick, duration)
 				outputChatBox("Something went wrong, please contact a developer. 'blocker() add'",player)
 			end
 		else
+			if not hasObjectPermissionTo ( player, "function.banPlayer", false ) and getElementData(blockPlayer,"markedblocker").canmodsoverride == "false" then
+				outputChatBox("Only admins can unmark /blocker's marked by admins",player)
+				return false
+			end
 			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
 			setElementData(blockPlayer , 'markedblocker', nil)
 
@@ -57,8 +61,8 @@ function unblocker(player, _, nick)
 	if not blockPlayer then
 		outputChatBox("No player found", player, 0, 255,0)
 	else
-		if not hasObjectPermissionTo ( player, "command.serialblocker", false ) and getElementData(blockPlayer,"markedblocker").canmodsoverride == "false" then
-			outputChatBox("Only admins can override /blocker's made by admins",player)
+		if not hasObjectPermissionTo ( player, "function.banPlayer", false ) and getElementData(blockPlayer,"markedblocker").canmodsoverride == "false" then
+			outputChatBox("Only admins can unmark /blocker's marked by admins",player)
 			return false
 		end
 			
