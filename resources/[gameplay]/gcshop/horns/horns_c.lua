@@ -159,8 +159,8 @@ hornsTable = {
 	[158] = "Sacrifice",
 	[159] = "Single ladies",
 	[160] = "Feel Good Drag",
-	[161] = "They see me rollin"
-	[162] = "OH. MY. GOD."
+	[161] = "They see me rollin",
+	[162] = "OH. MY. GOD.",
 }
 
 extensions = {
