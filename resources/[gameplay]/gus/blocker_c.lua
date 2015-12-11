@@ -115,4 +115,8 @@ function secondsToTimeDesc( seconds )
 		return string.reverse ( table.concat ( results, ", " ):reverse():gsub(" ,", " dna ", 1 ) )
 	end
 	return ""
+<<<<<<< HEAD
 end
+=======
+end
+>>>>>>> refs/remotes/JarnoVgr/master

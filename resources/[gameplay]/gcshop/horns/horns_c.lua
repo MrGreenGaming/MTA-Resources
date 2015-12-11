@@ -159,7 +159,8 @@ hornsTable = {
 	[158] = "Sacrifice",
 	[159] = "Single ladies",
 	[160] = "Feel Good Drag",
-	[161] = "They see me rollin"
+	[161] = "They see me rollin",
+	[162] = "OH. MY. GOD.",
 }
 
 extensions = {
@@ -296,6 +297,7 @@ extensions = {
 	[159] = "mp3",
 	[160] = "mp3",
 	[161] = "mp3",
+	[162] = "mp3",
 }
 function onShopInit ( tabPanel )
 	shopTabPanel = tabPanel
