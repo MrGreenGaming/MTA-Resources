@@ -71,7 +71,7 @@ function getTextColor(n,theType)
             if n > maxPing then
                 return tocolor(255,0,0)
             else
-                local danger = minFPS/100*dangerPercentage
+                local danger = maxPing/100*dangerPercentage
                 if n > danger then
                     tocolor(255,200,0)
                 end

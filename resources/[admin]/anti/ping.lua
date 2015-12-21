@@ -32,12 +32,12 @@ end
 -- Set limit to element data
 addEventHandler("onResourceStart",resourceRoot,
 	function()
-		setElementData("anti_pinglimit",root,getPingLimit())
-		setTimer(function() setElementData("anti_pinglimit",root,getPingLimit()) end,60000,0)
+		setElementData(root,"anti_pinglimit",getPingLimit())
+		setTimer(function() setElementData(root,"anti_pinglimit",getPingLimit()) end,60000,0)
 	end)
 addEventHandler("onResourceStop",resourceRoot,
 	function()
-		setElementData("anti_pinglimit",root,nil)
+		setElementData(root,"anti_pinglimit",nil)
 	end)
 
 
