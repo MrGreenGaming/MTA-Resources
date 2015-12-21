@@ -1,5 +1,5 @@
 <meta>
-	<info author="jbeta" description="Vote manager resource" type="script" version="1.1.0" />
+	<info author="jbeta/KaliBwoy(gui)" description="Vote manager resource" type="script" version="1.1.0" />
 	
 	<script src="votemanager_errorcodes.lua" type="server"/>
 	<script src="votemanager_server.lua" type="server"/>
@@ -13,6 +13,28 @@
 		<export function="voteBetweenMaps"/>
 		<export function="voteBetweenModes"/>
 	<script src="votemanager_client.lua" type="client"/>
+
+
+		<file src="fonts/Roboto-Black.ttf"/>
+		<file src="fonts/Roboto-BlackItalic.ttf"/>
+		<file src="fonts/Roboto-Bold.ttf"/>
+		<file src="fonts/Roboto-BoldItalic.ttf"/>
+		<file src="fonts/RobotoCondensed-Bold.ttf"/>
+		<file src="fonts/RobotoCondensed-BoldItalic.ttf"/>
+		<file src="fonts/RobotoCondensed-Italic.ttf"/>
+		<file src="fonts/RobotoCondensed-Light.ttf"/>
+		<file src="fonts/RobotoCondensed-LightItalic.ttf"/>
+		<file src="fonts/RobotoCondensed-Regular.ttf"/>
+		<file src="fonts/Roboto-Italic.ttf"/>
+		<file src="fonts/Roboto-Light.ttf"/>
+		<file src="fonts/Roboto-LightItalic.ttf"/>
+		<file src="fonts/Roboto-Medium.ttf"/>
+		<file src="fonts/Roboto-MediumItalic.ttf"/>
+		<file src="fonts/Roboto-Regular.ttf"/>
+		<file src="fonts/Roboto-Thin.ttf"/>
+		<file src="fonts/Roboto-ThinItalic.ttf"/>
+
+	
 	
 	<settings>
 		<setting name="*color" value="#DF6464" />
@@ -52,5 +74,7 @@
 		<setting name="*votekill_locktime" value="[120]"/>
 		<setting name="*votekill_percentage" value="[70]"/>
 		<setting name="*votekill_allowchange" value="[true]"/>
+
+
 	</settings>
 </meta>
