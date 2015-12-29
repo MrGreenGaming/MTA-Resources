@@ -491,7 +491,7 @@ function receiveCountdownTimer(whatToDo)
     elseif whatToDo == "go" then
         activeCircle = "go"
         -- playSoundFrontEnd(45)
-		playSound("audio/go!.mp3")
+		playSound("audio/go.mp3")
         setTimer(function() EaseGo = true end,500,1)
 
     end
