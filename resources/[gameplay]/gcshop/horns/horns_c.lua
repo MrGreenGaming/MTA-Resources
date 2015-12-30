@@ -163,142 +163,6 @@ hornsTable = {
 	[162] = "OH. MY. GOD.",
 }
 
-extensions = {
-	[16] = "ogg",
-	[13] = "mp3",
-	[17] = "mp3",
-	[18] = "mp3",
-	[19] = "mp3",
-	[26] = "mp3",
-	[29] = "mp3",
-	[30] = "mp3",
-	[13] = "mp3",
-	[31] = "mp3",
-	[33] = "mp3",
-	[36] = "mp3",
-	[37] = "mp3",
-	[39] = "mp3",
-	[13] = "mp3",
-	[42] = "mp3",
-	[40] = "mp3",
-	[43] = "mp3",
-	[44] = "mp3",
-	[45] = "mp3",
-	[46] = "mp3",
-	[47] = "mp3",
-	[48] = "mp3",
-	[51] = "mp3",
-	[53] = "mp3",
-	[55] = "mp3",
-	[56] = "mp3",
-	[57] = "mp3",
-	[58] = "mp3",
-	[59] = "mp3",
-	[60] = "mp3",
-	[61] = "mp3",
-	[62] = "mp3",
-	[63] = "mp3",
-	[64] = "mp3",
-	[65] = "mp3",
-	[66] = "mp3",
-	[67] = "mp3",
-	[68] = "mp3",
-	[69] = "mp3",
-	[70] = "mp3",
-	[71] = "mp3",
-	[72] = "mp3",
-	[73] = "mp3",
-	[74] = "mp3",
-	[75] = "mp3",
-	[75] = "mp3",
-	[76] = "mp3",
-	[77] = "mp3",
-	[78] = "mp3",
-	[79] = "mp3",
-	[80] = "mp3",
-	[81] = "mp3",
-	[82] = "mp3",
-	[83] = "mp3",
-	[84] = "mp3",
-	[85] = "mp3",
-	[86] = "mp3",
-	[87] = "mp3",
-	[88] = "mp3",
-	[89] = "mp3",
-	[90] = "mp3",
-	[91] = "mp3",
-	[92] = "mp3",
-	[93] = "mp3",
-	[94] = "mp3",
-	[95] = "mp3",
-	[96] = "mp3",
-	[97] = "mp3",
-	[98] = "mp3",
-	[99] = "mp3",
-	[100] = "mp3",
-	[101] = "mp3",
-	[102] = "mp3",
-	[103] = "mp3",
-	[104] = "mp3",
-	[105] = "mp3",
-	[106] = "mp3",
-	[107] = "mp3",
-	[108] = "mp3",
-	[109] = "mp3",
-	[110] = "mp3",
-	[111] = "mp3",
-	[112] = "mp3",
-	[113] = "mp3",
-	[114] = "mp3",
-	[115] = "mp3",
-	[116] = "mp3",
-	[117] = "mp3",
-	[118] = "mp3",
-	[119] = "mp3",
-	[120] = "mp3",
-	[121] = "mp3",
-	[122] = "mp3",
-	[123] = "mp3",
-	[124] = "mp3",
-	[125] = "mp3",
-	[126] = "mp3",
-	[127] = "mp3",
-	[128] = "mp3",
-	[129] = "mp3",
-	[130] = "mp3",
-	[131] = "mp3",
-	[132] = "mp3",
-	[133] = "mp3",
-	[134] = "mp3",
-	[135] = "mp3",
-	[136] = "mp3",
-	[137] = "mp3",
-	[138] = "mp3",
-	[139] = "mp3",
-	[140] = "mp3",
-	[141] = "mp3",
-	[142] = "mp3",
-	[143] = "mp3",
-	[144] = "mp3",
-	[145] = "mp3",
-	[146] = "mp3",
-	[147] = "mp3",
-	[148] = "mp3",
-	[149] = "mp3",
-	[150] = "mp3",
-	[151] = "mp3",
-	[152] = "mp3",
-	[153] = "mp3",
-	[154] = "mp3",
-	[155] = "mp3",
-	[156] = "mp3",
-	[157] = "mp3",
-	[158] = "mp3",
-	[159] = "mp3",
-	[160] = "mp3",
-	[161] = "mp3",
-	[162] = "mp3",
-}
 function onShopInit ( tabPanel )
 	shopTabPanel = tabPanel
 	--triggerServerEvent('getHornsData', localPlayer)
@@ -324,6 +188,8 @@ function onShopInit ( tabPanel )
 	local label7 = guiCreateLabel(0.35, 0.80, 0.60, 0.15,"Current price: 1500 GC (each)",true,hornsTab)
 	local play = guiCreateButton(0.35, 0.47, 0.07, 0.05, "Play", true, hornsTab)
 	addEventHandler ( "onClientGUIClick",play, playButton,false)
+	addEventHandler ( "onClientGUIDoubleClick",gridList, playButton,false)
+	addEventHandler ( "onClientGUIDoubleClick",ownList, setFunction,false)
 	local buy = guiCreateButton(0.35, 0.88, 0.07, 0.05, "Buy", true, hornsTab)
 	addEventHandler ( "onClientGUIClick",buy, buyButton,false)
 	ownList = guiCreateGridList(0.6, 0.45, 0.3, 0.5, true, hornsTab)
@@ -346,12 +212,8 @@ function playButton(button, state)
 			return
 		end
 		row = row + 1
-		local extension
-		extension = ".wav"
-		if extensions[row] then 
-			extension = "." .. extensions[row]
-		end	
-		soundTest = playSound("horns/files/"..tostring(row)..extension, false)
+
+		soundTest = playSound("horns/files/"..tostring(row)..".mp3", false)
 	end
 end
 
@@ -470,12 +332,7 @@ function createSoundForCar(car, horn)
 	icon[car] = guiCreateStaticImage(0, 0, guix, guiy, "horns/icon.png", false )
 	guiSetVisible(icon[car], false)
 	local x,y,z = getElementPosition(car)
-	local extension
-	extension = ".wav"
-	if extensions[tonumber(horn)] then
-		extension = "." .. extensions[tonumber(horn)]
-	end	
-	local sound = playSound3D("horns/files/"..horn..extension, x, y, z, false)
+	local sound = playSound3D("horns/files/"..horn..".mp3", x, y, z, false)
 	setSoundMaxDistance(sound, 50)
 	local length = getSoundLength(sound)
 	length = length * 1000
