@@ -189,10 +189,10 @@ function onShopInit ( tabPanel )
 	local play = guiCreateButton(0.35, 0.47, 0.07, 0.05, "Play", true, hornsTab)
 	addEventHandler ( "onClientGUIClick",play, playButton,false)
 	addEventHandler ( "onClientGUIDoubleClick",gridList, playButton,false)
-	addEventHandler ( "onClientGUIDoubleClick",ownList, setFunction,false)
 	local buy = guiCreateButton(0.35, 0.88, 0.07, 0.05, "Buy", true, hornsTab)
 	addEventHandler ( "onClientGUIClick",buy, buyButton,false)
 	ownList = guiCreateGridList(0.6, 0.45, 0.3, 0.5, true, hornsTab)
+	addEventHandler ( "onClientGUIDoubleClick",ownList, setFunction,false)
 	guiGridListSetSortingEnabled(ownList, false)
 	ownColumn = guiGridListAddColumn(ownList, "My horns", 0.9)
 	local setButton = guiCreateButton(0.91, 0.65, 0.07, 0.05, "Set", true, hornsTab)
@@ -206,7 +206,9 @@ addEventHandler('onShopInit', root, onShopInit )
 
 function playButton(button, state)
 	if button == "left" and state == "up" then	
-		stopSound(soundTest) 
+		if isElement(soundTest) then
+			stopSound(soundTest) 
+		end
 		local row, col = guiGridListGetSelectedItem(gridList)
 		if row == -1 or row == false then
 			return
