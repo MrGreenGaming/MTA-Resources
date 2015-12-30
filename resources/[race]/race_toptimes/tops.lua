@@ -3,7 +3,7 @@ local monthlyReward = 5				-- GC for having a monthly top
 local baseTop1Reward = 5			-- Base top1 reward, multiplied with amount of months on server
 local displayTopCount = 8
 
-local times = {}
+local times = {}					-- [top] = {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), new=true}
 local monthtimes = {}
 local monthtTopTime = nil
 local mapname
@@ -431,39 +431,56 @@ end
 -- Removing times --
 --------------------
 
-function deletetop(p, c, pos)
+function deletetop(p, c, pos, ...)
 	pos = tonumber(pos)
+	local reason = table.concat({...},' ')
 	if not (pos and times[pos]) then
 		return outputChatBox('Top not found ' .. tostring(pos), p)
+	elseif not reason or #reason < 2 then
+		return outputChatBox('Syntax: /deletetop <top> <reason>', p)
 	end
 	local top = table.remove(times, pos)
 	dbExec(handlerConnect, 'DELETE FROM toptimes WHERE forumid = ? and mapname = ?', top.forumid, top.mapname)
 	sendClientTimes()
-	outputChatBox('Top #' .. tostring(pos) .. ' deleted', p)
+	outputChatBox('Top #' .. pos .. ' ' .. timeMsToTimeText(top.value) .. ' ' .. top.mta_name .. ' was deleted by ' .. _getPlayerName(p))
+	deletelog(("Top #%d (%s %s) on map \"%s\" was deleted by %s (%s): %s"):format(pos, timeMsToTimeText(top.value), top.mta_name, top.mapname, _getPlayerName(p), getAccountName(getPlayerAccount(p)), reason))
 end
--- addCommandHandler('deletetop', deletetop, true)
+addCommandHandler('deletetop', deletetop, true)
 
-function deletealltops(p, c)
+function deletealltops(p, c, ...)
+	local reason = table.concat({...},' ')
+	if not reason or #reason < 2 then
+		return outputChatBox('Syntax: /deletealltops <reason>', p)
+	end
 	local top = table.remove(times, pos)
+	if not top then return end
 	for i,v in ipairs(times) do
 		times[i] = nil
 	end
 	dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ?', times.resname)
 	sendClientTimes()
-	outputChatBox('Tops deleted', p)
+	outputChatBox('All tops deleted for ' .. top.mapname .. ' by ' .. _getPlayerName(p))
+	deletelog(("All tops on map \"%s\" deleted by %s (%s): %s"):format(top.mapname, _getPlayerName(p), getAccountName(getPlayerAccount(p)), reason))
 end
--- addCommandHandler('deletealltops', deletealltops, true)
+addCommandHandler('deletealltops', deletealltops, true)
 
 function deletemonthtop(p, c)
 	if not monthtTopTime then
-		return outputChatBox('Top not found', p)
+		return outputChatBox('Month top not found', p)
 	end
 	dbExec(handlerConnect, 'DELETE FROM toptimes_month WHERE mapname = ? AND month = ?', monthtTopTime.resname, monthtTopTime.month)
 	monthtTopTime = nil
 	sendMonthTime()
 	outputChatBox('Month top deleted', p)
 end
--- addCommandHandler('deletemonthtop', deletemonthtop, true)
+addCommandHandler('deletemonthtop', deletemonthtop, true)
+
+function deletelog ( msg)
+	local f = fileExists'deleted_tops.log' and fileOpen'deleted_tops.log' or fileCreate'deleted_tops.log'
+	fileSetPos( f, fileGetSize( f ) )
+	fileWrite(f, FormatDate(nil, true) .. ' ' .. msg .. '\n')
+	fileClose(f)
+end
 
 local modes={
 	race={race=true},
@@ -577,9 +594,11 @@ addCommandHandler('tops',
 -- utility --
 -------------
 
-function FormatDate(timestamp)
+function FormatDate(timestamp, full)
 	local t =  getRealTime(timestamp)
-	-- return string.format("%02d/%02d/'%02d %02d:%02d:%02d", t.monthday, t.month+1, t.year - 100, t.hour, t.minute, t.second)
+	if full then
+		return string.format("%02d/%02d/'%02d %02d:%02d:%02d", t.monthday, t.month+1, t.year - 100, t.hour, t.minute, t.second)
+	end
 	return string.format("%02d-%02d", t.monthday, t.month+1)
 end
 
