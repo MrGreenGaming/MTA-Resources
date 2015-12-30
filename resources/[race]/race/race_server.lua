@@ -1520,6 +1520,10 @@ function getRaceMode()
 	return g_CurrentRaceMode and g_MapInfo.modename or false
 end
 
+function getCheckPoints()
+	return g_Checkpoints
+end
+
 function export_setPlayerVehicle(player,vehicleID) -- Used in gc perk: reroll vehicle
 	if isElement(player) and getElementType(player) == "player" and type(vehicleID) == "number" then
 		local vehicle = g_CurrentRaceMode.getPlayerVehicle(player)

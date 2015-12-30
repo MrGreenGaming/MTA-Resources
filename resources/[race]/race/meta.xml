@@ -119,6 +119,7 @@
     <export function="isPlayerFinished" type="server" />
     <export function="getPlayerVehicle" type="server" />
     <export function="getRaceMode" type="shared" />
+    <export function="getCheckPoints" type="shared" />
     <export function="getStartTick" type="client" />
     <export function="getWhichDataSourceToUse" type="client" />
     <export function="getWatchedPlayer" type="client" />

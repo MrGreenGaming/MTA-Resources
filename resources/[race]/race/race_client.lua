@@ -1606,6 +1606,9 @@ function getStartTick()
 	return g_StartTick or false
 end
 
+function getCheckPoints()
+	return g_Checkpoints
+end
 
 function e_getPickups()
 	return g_Pickups

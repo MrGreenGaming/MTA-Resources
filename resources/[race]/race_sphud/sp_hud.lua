@@ -180,7 +180,7 @@ function drawNewHUD()
 	local rank = getElementData(target,'race rank')
 	local players = #getElementsByType('player') or 1
 	local currentCheckpoint = (getElementData(target, 'race.checkpoint') or 1) - ((getElementData(target, 'race.finished') and 0) or 1)
-	local totalCheckpoints = (#getElementsByType('checkpoint') or 1)
+	local totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
 	local health = math.ceil((getElementHealth(g_Veh) - 250) / 7.50)
 	if g_hud ~= 1 then
 		if not ( isVehicle(g_Veh) and isElementOnScreen(g_Veh) ) then return end
@@ -204,7 +204,7 @@ function drawNewHUD()
 			local rank = getElementData(target,'race rank')
 			local players = #getElementsByType('player') or 1
 			local currentCheckpoint = (getElementData(target, 'race.checkpoint') or 1) - ((getElementData(target, 'race.finished') and 0) or 1)
-			local totalCheckpoints = (#getElementsByType('checkpoint') or 1)
+			local totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
 			local health = math.ceil((getElementHealth(g_Veh) - 250) / 7.50)
 			local speedMode = 1
 			
