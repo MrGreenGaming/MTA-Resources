@@ -206,7 +206,9 @@ addEventHandler('onShopInit', root, onShopInit )
 
 function playButton(button, state)
 	if button == "left" and state == "up" then	
-		stopSound(soundTest) 
+		if isElement(soundTest) then
+			stopSound(soundTest) 
+		end
 		local row, col = guiGridListGetSelectedItem(gridList)
 		if row == -1 or row == false then
 			return
