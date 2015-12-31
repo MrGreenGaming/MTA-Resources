@@ -319,8 +319,4 @@ function splitStringforChatBox(str)
    )
    table.insert(lines, line)
    return lines
-<<<<<<< HEAD
 end
-=======
-end
->>>>>>> refs/remotes/JarnoVgr/master

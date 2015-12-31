@@ -27,7 +27,7 @@ function showHud (hud)
 			exports.fps:enableFPS(false)
 		end
 		g_hud = hud
-		if getResourceFromName('race') then
+		if getResourceFromName('race') and getResourceState(getResourceFromName'race' ) == 'running' then
 			g_StartTick = exports.race:getStartTick()
 		end
 	else
@@ -110,7 +110,7 @@ addEventHandler('onClientResourceStart', resourceRoot, onStart)
 
 -- hide race hud (without changing the race mode, it needs to be send to serverside first)
 function hideRaceHUD(hide)
-	if not getResourceFromName('race') then return end
+	if not (getResourceFromName('race') and getResourceState(getResourceFromName'race' ) == 'running') then return end
 	if hide == true then
 		triggerEvent('onClientCall_race', getResourceRootElement( getResourceFromName('race')), 'hideGUIComponents', 'timepassed', 'healthbar', 'speedbar', 'ranknum', 'ranksuffix', 'checkpoint', 'timeleftbg', 'timeleft')
 	else 

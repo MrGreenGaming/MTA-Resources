@@ -12,7 +12,7 @@ setTimer( loadResourceSettings, 30000, 0 )
 addCommandHandler( "chatboxads", function(p) if hasObjectPermissionTo( p, "function.banPlayer" , false ) then triggerClientEvent( p, "editChatboxAds", resourceRoot,adMessages ) end end )
 
 function loadAds()
-	local theXML = xmlLoadFile("ads.xml")
+	local theXML = fileExists"ads.xml" and xmlLoadFile("ads.xml") or xmlCreateFile("ads.xml", "ads")
 	local childTable = xmlNodeGetChildren( theXML )
 	if #childTable == 0 then xmlUnloadFile( theXML ) outputDebugString("No ads in ads.xml") return end
 
