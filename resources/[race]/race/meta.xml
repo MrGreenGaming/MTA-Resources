@@ -89,8 +89,6 @@
     <!-- SHADERS -->
     <file src="shaders/paintjob.fx"/>
 
-
-    <file src="audio/mission_accomplished.mp3" />
     
     <file src="model/nitro.dff" />
     <file src="model/nitro.txd" />
@@ -119,6 +117,7 @@
     <export function="isPlayerFinished" type="server" />
     <export function="getPlayerVehicle" type="server" />
     <export function="getRaceMode" type="shared" />
+    <export function="getCheckPoints" type="shared" />
     <export function="getStartTick" type="client" />
     <export function="getWhichDataSourceToUse" type="client" />
     <export function="getWatchedPlayer" type="client" />

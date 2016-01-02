@@ -49,7 +49,7 @@ addEventHandler("onGCShopLogin", root, function()
 end)
 
 addEventHandler("onGCShopLogout", root, function()
-	if player then playerteams[player] = nil end
+	playerteams[source] = nil
 	leaveTeam (source)
 	triggerClientEvent(source, "teamLogout", resourceRoot)
 end)

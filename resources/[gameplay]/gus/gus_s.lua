@@ -131,7 +131,7 @@ local adminapplicants = {}
 addEventHandler('onResourceStart' , root, function()	-- root for updating w/e
 	adminapplicants = {}
 	local xml = xmlLoadFile("adminapplicants.xml")
-	if not xml then return outputDebugString("gus: adminapplicants.xml not found") end
+	if not xml then return end
 	for k, a in ipairs(xmlNodeGetChildren(xml)) do
 		adminapplicants[tonumber(xmlNodeGetAttribute(a, 'forumid'))] = xmlNodeGetAttribute(a, 'nick')
 	end
