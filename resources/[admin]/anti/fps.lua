@@ -11,11 +11,11 @@ local fpsStrikes = {}
 -- Set limit to element data
 addEventHandler("onResourceStart",resourceRoot,
 	function()
-		setElementData("anti_fpsMinimum",root,fpsMinimum)
+		setElementData(root,"anti_fpsMinimum",fpsMinimum)
 	end)
 addEventHandler("onResourceStop",resourceRoot,
 	function()
-		setElementData("anti_fpsMinimum",root,nil)
+		setElementData(root,"anti_fpsMinimum",nil)
 	end)
 
 -------------------

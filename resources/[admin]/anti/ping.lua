@@ -27,6 +27,7 @@ function getPingLimit()
 	local h = getRealTime().hour
 	return (hour1 <= h and h <= hour2) and pingLimit2 or pingLimit1
 end
+addCommandHandler( "ping", function(plyr) outputChatBox("Max Ping: ".. getPingLimit() ..". Your ping: ".. getPlayerPing(plyr)..".",plyr) end )
 
 
 -- Set limit to element data
