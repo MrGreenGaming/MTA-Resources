@@ -1,3 +1,5 @@
+local screenWidth, screenHeight = guiGetScreenSize()
+
 hornsTable = {
 	[1] = "Birdo-geluidje",
 	[2] = "Boo-gebulder",
@@ -299,42 +301,55 @@ extensions = {
 	[161] = "mp3",
 	[162] = "mp3",
 }
+
 function onShopInit ( tabPanel )
 	shopTabPanel = tabPanel
 	--triggerServerEvent('getHornsData', localPlayer)
+	
 	if isElement(hornsTab) then return end
+	
+	--// Tab Panels //--
 	hornsTab = guiCreateTab("Custom Horns", shopTabPanel)
-	gridList = guiCreateGridList(0.03, 0.45, 0.3, 0.5, true, hornsTab)
-	guiGridListSetSortingEnabled(gridList, false)
-	local column = guiGridListAddColumn(gridList, "Available horns", 0.9)
+	buyHornsTabPanel = guiCreateTabPanel(35, 30, 641, 381, false, hornsTab)
+	buyHornsTab = guiCreateTab("Buy horns", buyHornsTabPanel)
+	perkTab = guiCreateTab("Horn Perks", buyHornsTabPanel)
+	
+	
+	--// Gridlists //--
+	availableHornsList = guiCreateGridList(0.05, 0.11, 0.42, 0.66, true, buyHornsTab)
+	guiGridListSetSortingEnabled(availableHornsList, false)
+	local column = guiGridListAddColumn(availableHornsList, "Available horns", 0.9)
 	for id, horn in ipairs(hornsTable) do 
-		local row = guiGridListAddRow(gridList)
-		guiGridListSetItemText(gridList, row, column, tostring(id)..") "..horn, false, false)
+		local row = guiGridListAddRow(availableHornsList)
+		guiGridListSetItemText(availableHornsList, row, column, tostring(id)..") "..horn, false, false)
 	end
-	local label1 = guiCreateLabel(0.05, 0.04, 0.9, 0.15,"Welcome to Custom Horns. In this tab, you can listen to horns samples, buy horns and set your current one.",true,hornsTab)
-	guiSetFont(label1, "default-bold-small")
-	local label2 = guiCreateLabel(0.05, 0.09, 0.9, 0.15,"Please select an item below and click 'Play' or 'Buy'",true,hornsTab)
-	local label3 = guiCreateLabel(0.05, 0.14, 0.9, 0.15,"Clicking 'play' will show you what it sounds like",true,hornsTab)
-	local label4 = guiCreateLabel(0.05, 0.19, 0.9, 0.15,"Clicking 'buy' will add the horn to your list of bought horns for future usage",true,hornsTab)
-	local label5 = guiCreateLabel(0.05, 0.24, 0.9, 0.15,"In the right box, you can choose from your bought horns which one to actually use as a horn with 'H'",true,hornsTab)
-	label6 = guiCreateLabel(0.05, 0.29, 0.9, 0.15,"Current set horn can only be used 3 times per map (10 secs cool-off). Your current one is: none",true,hornsTab)
-	local label8 = guiCreateLabel(0.05, 0.34, 0.9, 0.15,"However, you can buy unlimited usage of the custom horn for 5000 GC. This item applies to all horns.",true,hornsTab)
-	local uses = guiCreateButton(0.05, 0.39, 0.15, 0.05, "Buy unlimited usage", true, hornsTab)
-	addEventHandler ( "onClientGUIClick",uses, unlimitedHorn,false)
-	local label7 = guiCreateLabel(0.35, 0.80, 0.60, 0.15,"Current price: 1500 GC (each)",true,hornsTab)
-	local play = guiCreateButton(0.35, 0.47, 0.07, 0.05, "Play", true, hornsTab)
-	addEventHandler ( "onClientGUIClick",play, playButton,false)
-	addEventHandler ( "onClientGUIDoubleClick",gridList, playButton,false)
-	local buy = guiCreateButton(0.35, 0.88, 0.07, 0.05, "Buy", true, hornsTab)
+	--
+	myHornsList = guiCreateGridList(0.53, 0.11, 0.42, 0.66, true, buyHornsTab)
+	guiGridListSetSortingEnabled(myHornsList, false)
+	myHornsNameColumn = guiGridListAddColumn(myHornsList, "My horns", 0.7)
+	myHornsKeyColumn = guiGridListAddColumn(myHornsList, "Key", 0.2)
+
+	
+	
+	--// Labels //--
+	guiCreateLabel(0.05, 0.04, 0.9, 0.15,'Select a horn out of the left box and press "Buy" to buy for regular usage or double-click to listen it.',true,buyHornsTab)
+	guiCreateLabel(0.14, 0.78, 0.9, 0.15,'Double-click to listen horn.',true,buyHornsTab)
+	guiCreateLabel(0.04, 0.08, 0.9, 0.15,"Horns can only be used 3 times per map (10 secs cool-off). However, you can buy\nunlimited usage of the custom horn for 5000 GC. This item applies to all horns.",true,perkTab)
+	guiCreateLabel(0.60, 0.78, 0.9, 0.15,'Double-click to bind horn to a key.',true,buyHornsTab)
+	
+	
+	--// Buttons //--
+	local buy = guiCreateButton(0.14, 0.83, 0.22, 0.12, "Buy selected horn\nPrice: 1500 GC (each)", true, buyHornsTab)
+	local unbindall = guiCreateButton(0.62, 0.83, 0.22, 0.12, "Unbind all horns", true, buyHornsTab)
+	unlimited = guiCreateButton(0.77, 0.05, 0.20, 0.15, "Buy unlimited usage\nPrice: 5000 GC", true, perkTab)	
+
+	
+	--// Event Handlers //--
 	addEventHandler ( "onClientGUIClick",buy, buyButton,false)
-	ownList = guiCreateGridList(0.6, 0.45, 0.3, 0.5, true, hornsTab)
-	addEventHandler ( "onClientGUIDoubleClick",ownList, setFunction,false)
-	guiGridListSetSortingEnabled(ownList, false)
-	ownColumn = guiGridListAddColumn(ownList, "My horns", 0.9)
-	local setButton = guiCreateButton(0.91, 0.65, 0.07, 0.05, "Set", true, hornsTab)
-	local disable = guiCreateButton(0.65, 0.39, 0.15, 0.05, "Disable my horn", true, hornsTab)
-	addEventHandler ( "onClientGUIClick",disable, disableButton,false)
-	addEventHandler ( "onClientGUIClick",setButton, setFunction,false)
+	addEventHandler ( "onClientGUIDoubleClick",myHornsList, preBindKeyForHorn,false)
+	addEventHandler ( "onClientGUIDoubleClick",availableHornsList, playButton,false)
+	addEventHandler ( "onClientGUIClick",unbindall, unbindAllHorns,false)
+	addEventHandler ( "onClientGUIClick",unlimited, unlimitedHorn,false)
 end
 addEvent('onShopInit', true)
 addEventHandler('onShopInit', root, onShopInit )
@@ -345,7 +360,7 @@ function playButton(button, state)
 		if isElement(soundTest) then
 			stopSound(soundTest) 
 		end
-		local row, col = guiGridListGetSelectedItem(gridList)
+		local row, col = guiGridListGetSelectedItem(availableHornsList)
 		if row == -1 or row == false then
 			return
 		end
@@ -361,8 +376,9 @@ end
 
 function buyButton(button, state)
 	if button == "left" and state == "up" then
-		local row, col = guiGridListGetSelectedItem(gridList)
+		local row, col = guiGridListGetSelectedItem(availableHornsList)
 		if row == -1 or row == false then
+			outputChatBox("Select a horn first", 255, 0, 0)
 			return
 		end
 		row = row + 1
@@ -370,19 +386,131 @@ function buyButton(button, state)
 	end
 end
 
-function setFunction(button, state)
-	if button == "left" and state == "up" then
-		local row, col = guiGridListGetSelectedItem(ownList)
-		if row == -1 or row == false then
-			return
+
+------------------
+-- Horn binding --
+------------------
+function getKeyForHorn(key, state) 
+	if state then 
+		if key == "escape" then
+			unbindKeyForHorn()
+			cancelEvent()
+		else	
+			bindKeyForHorn(key) 
+		end	
+		removeEventHandler("onClientKey", root, getKeyForHorn)
+		destroyElement(bindingWindow)
+	end 
+end
+
+function preBindKeyForHorn()
+	local row, col = guiGridListGetSelectedItem(source)
+	if row == -1 or row == false then
+		outputChatBox("Select a horn first", 255, 0, 0)
+		return
+	end
+	soundName = guiGridListGetItemData(source, row, col)
+	bindingWindow = guiCreateWindow(0.4*screenWidth/1920, 0.45*screenHeight/1080, 0.2*screenWidth/1920, 0.08*screenHeight/1080, "Binding a key to horn", true)
+	guiCreateLabel(0.25, 0.5, 1, 1, "Press a key to bind or escape to clear", true, bindingWindow)
+	guiWindowSetMovable(bindingWindow, false)
+	guiSetAlpha(bindingWindow, 1)
+	addEventHandler("onClientKey", root, getKeyForHorn)
+end
+
+function bindKeyForHorn(keyNew)
+	for i,j in ipairs(hornsTable) do 
+	
+		if j == soundName or type(soundName) == "number" then
+			hornBinded = false
+			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
+			
+			for x=0, 1000 do
+			local bindNode = xmlFindChild(bindsXML, "bind", x)
+			
+				if bindNode then
+					local keyOld = xmlNodeGetAttribute(bindNode, "key")
+					local hornID = xmlNodeGetAttribute(bindNode, "hornID")
+					
+					if hornID == tostring(i) then
+							xmlNodeSetAttribute(bindNode, "key", keyNew)
+							triggerServerEvent("bindHorn", localPlayer, keyNew, i, soundName, false)
+							triggerServerEvent("unbindHorn", localPlayer, keyOld)
+							xmlSaveFile(bindsXML)
+							hornBinded = true
+					end
+					
+				else
+					if not hornBinded then
+						bindNode = xmlCreateChild(bindsXML, "bind")
+						xmlNodeSetAttribute(bindNode, "key", keyNew)
+						if type(soundName) == "string" then
+							xmlNodeSetAttribute(bindNode, "hornID", i)
+							xmlNodeSetAttribute(bindNode, "hornName", soundName)
+							triggerServerEvent("bindHorn", localPlayer, keyNew, i, soundName, false)
+						end
+						xmlSaveFile(bindsXML)
+					end
+					
+					xmlUnloadFile(bindsXML) 
+					triggerServerEvent('getHornsData', localPlayer)
+					break  
+					
+				end
+			end 
+		break
+		elseif type(soundName) == "number" and soundName <= 6 then
+			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
+			
+			for i=1, 1000 do
+				
+			end
+		end	
+	end
+end
+
+function unbindKeyForHorn()
+	for i,j in ipairs(hornsTable) do 
+		if j == soundName or type(soundName) == "number" then
+			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
+			for x=0, 1000 do
+				local bindNode = xmlFindChild(bindsXML, "bind", x)
+				if bindNode then
+					local key = xmlNodeGetAttribute(bindNode, "key")
+					local hornID = xmlNodeGetAttribute(bindNode, "hornName")
+					if hornID == soundName then
+						xmlDestroyNode(bindNode)
+						triggerServerEvent("unbindHorn", localPlayer, key)
+						xmlSaveFile(bindsXML)
+						xmlUnloadFile(bindsXML) 
+						triggerServerEvent('getHornsData', localPlayer)
+						break  
+					end
+				end
+			end
 		end
-		local soundName = guiGridListGetItemData(ownList, row, col)
-		for i,j in ipairs(hornsTable) do 
-			if j == soundName then
-				triggerServerEvent('onPlayerSetHorn', localPlayer, i)
-				break
-			end	
-		end
+	end
+end
+
+function unbindAllHorns()
+triggerServerEvent("unbindAllHorns", resourceRoot)
+
+bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
+	for i=0, 1000 do
+		if bindsXML then
+			local bindNode = xmlFindChild(bindsXML, "bind", i)
+			if bindNode then
+				local key = xmlNodeGetAttribute(bindNode, "key")
+				if key ~= nil then
+					triggerServerEvent("unbindHorn", localPlayer, key)
+				end
+			else 
+				bindsXML = xmlCreateFile('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml', "binds")
+				xmlSaveFile(bindsXML)
+				xmlUnloadFile(bindsXML)
+				triggerServerEvent('getHornsData', localPlayer)
+			break  
+			end
+		end 
 	end
 end
 
@@ -392,11 +520,7 @@ function unlimitedHorn(button, state)
 	end
 end
 
-function disableButton(button, state)
-	if button == "left" and state == "up" then
-		triggerServerEvent('onDisableHorn', localPlayer)
-	end
-end
+
 
 addEvent('onClientSuccessBuyHorn', true)
 addEventHandler('onClientSuccessBuyHorn', root,
@@ -410,22 +534,14 @@ function(success)
 end
 )
 
-addEvent('onClientSuccessSetHorn', true)
-addEventHandler('onClientSuccessSetHorn', root,
-function(success)
-	if success then
-		outputChatBox("Horn successfully set as default horn")
-		triggerServerEvent('getHornsData', localPlayer)
-	else
-		outputChatBox("Either not logged in, or you already have this horn.")
-	end
-end
-)
-
-
 addEvent("hornsLogin", true)
 addEventHandler("hornsLogin", root,
-function()
+function(isUnlimited, forumid)
+	setElementData(localPlayer, "mrgreen_gc_forumID", forumid)
+	if isUnlimited then
+		guiSetText(unlimited, "Buy unlimited usage\nPrice: 5000 GC\nBought!")
+		guiSetEnabled(unlimited, false)
+	end
 	triggerServerEvent('getHornsData', localPlayer)
 end
 )
@@ -433,30 +549,53 @@ end
 addEvent("hornsLogout", true)
 addEventHandler("hornsLogout", root,
 function()
-	--close the tab
-	--[[if shopTabPanel and hornsTab then
-		guiDeleteTab ( hornsTab, shopTabPanel )
-		hornsTab = nil
-	end]]
+	triggerServerEvent("unbindAllHorns", resourceRoot)
+	
+	guiGridListClear(myHornsList)
+	guiSetText(unlimited, "Buy unlimited usage\nPrice: 5000 GC")
+	guiSetEnabled(unlimited, true)
 end
 )
 
 addEvent('sendHornsData', true)
 addEventHandler('sendHornsData', root,
-function(current, boughtHorns)
-	guiGridListClear(ownList)
-	if current == "none" then
-		guiSetText(label6, "Current set horn can only be used 3 times per map (10 secs cool-off). Your current one is: "..current)
-	else	
-		guiSetText(label6, "Current set horn can only be used 3 times per map (10 secs cool-off). Your current one is: "..hornsTable[tonumber(current)])
-	end	
+function(boughtHorns)
+	guiGridListClear(myHornsList)
 	for i,j in ipairs(boughtHorns) do
-		local row = guiGridListAddRow(ownList)
-		guiGridListSetItemText(ownList, row, ownColumn, tostring(j)..") "..hornsTable[tonumber(j)], false, false)
-		guiGridListSetItemData(ownList, row, ownColumn, hornsTable[tonumber(j)])
+		local row = guiGridListAddRow(myHornsList)
+		guiGridListSetItemText(myHornsList, row, myHornsNameColumn, tostring(j)..") "..hornsTable[tonumber(j)], false, false)
+		guiGridListSetItemData(myHornsList, row, myHornsNameColumn, hornsTable[tonumber(j)])
+		guiGridListSetItemText(myHornsList, row, myHornsKeyColumn, getKeyBoundToHorn( tostring(j) ), false, false)
 	end
 end
 )
+
+function getKeyBoundToHorn(horn)
+	bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
+	if not bindsXML then
+		bindsXML = xmlCreateFile('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml', "binds")
+		xmlSaveFile(bindsXML)
+	end
+	
+	for i=0, 1000 do
+		local bindNode = xmlFindChild(bindsXML, "bind", i)
+		if bindNode then
+			local key = xmlNodeGetAttribute(bindNode, "key")
+			local hornID = xmlNodeGetAttribute(bindNode, "hornID")
+			if key ~= nil and horn == hornID then
+				if string.len(hornID) >=5 then
+					triggerServerEvent("bindHorn", localPlayer, key, hornID, nil, true)
+				elseif string.len(hornID) >= 1 and string.len(hornID) <= 3 then
+					triggerServerEvent("bindHorn", localPlayer, key, hornID, nil, false)
+				end
+				xmlUnloadFile(bindsXML)
+				return key
+			end
+		else xmlUnloadFile(bindsXML) return "-"  
+		end
+	end 
+end
+
 
 soundTimer = {}
 killOtherTimer = {}
@@ -531,3 +670,12 @@ end
 
 soundsOn = true
 
+addEvent('onClientSuccessBuyUnlimitedUsage', true)
+addEventHandler('onClientSuccessBuyUnlimitedUsage', root,
+function(success)
+	if success then
+		guiSetText(unlimited, "Buy unlimited usage\nPrice: 5000 GC\nBought!")
+		guiSetEnabled(unlimited, false)
+	end
+end
+)
