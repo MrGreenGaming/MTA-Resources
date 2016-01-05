@@ -132,7 +132,6 @@ end
 addEvent("unbindHorn", true)
 addEventHandler("unbindHorn", root, function(key)
 	unbindKey(client, key, "down", useHorn)
-	outputChatBox("unbinded")
 end
 )
 
