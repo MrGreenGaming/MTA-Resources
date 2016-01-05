@@ -13,7 +13,7 @@ function build_mainGCShopWindow()
 	local windowWidth, windowHeight = 750, 540
 	local left = screenWidth/2 - windowWidth/2
 	local top = screenHeight/2 - windowHeight/2
-	gui["_root"] = guiCreateWindow(left, top, windowWidth, windowHeight, "MrGreenGaming Green-Coins Shop!", false)
+	gui["_root"] = guiCreateWindow(left, top, windowWidth, windowHeight, "Green-Coins Shop", false)
 	guiWindowSetSizable(gui["_root"], false)
 	
 	gui["shopTabs"] = guiCreateTabPanel(10, 70, 730, 460, false, gui["_root"])
@@ -85,12 +85,12 @@ function build_mainGCShopWindow()
 	guiLabelSetHorizontalAlign(gui["label_Web"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_Web"], "center")
 	
-	gui["shopBanner"] = guiCreateLabel(10, 25, 521, 41, "Welcome to the Green-Coins shop!", false, gui["_root"])
-	guiLabelSetHorizontalAlign(gui["shopBanner"], "center", false)
-	guiLabelSetVerticalAlign(gui["shopBanner"], "center")
+	gui["labelGreencoinsShadow1"] = guiCreateLabel(550.5, 24.5, 191, 41, "", false, gui["_root"])
+	guiLabelSetHorizontalAlign(gui["labelGreencoinsShadow1"], "right", false)
+	guiLabelSetVerticalAlign(gui["labelGreencoinsShadow1"], "center")
 	
 	gui["labelGreencoins"] = guiCreateLabel(550, 25, 191, 41, "", false, gui["_root"])
-	guiLabelSetHorizontalAlign(gui["labelGreencoins"], "center", false)
+	guiLabelSetHorizontalAlign(gui["labelGreencoins"], "right", false)
 	guiLabelSetVerticalAlign(gui["labelGreencoins"], "center")
 	
 	return gui, windowWidth, windowHeight

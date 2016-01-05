@@ -80,8 +80,12 @@ end
 
 local loggedInGC = false
 function gcLogin ( forumID_, amount )
-	guiSetText(shop_GUI["labelGreencoins"], 'Greencoins: ' .. tostring(tonumber(amount) or 0))
-	guiLabelSetColor(shop_GUI["labelGreencoins"], 0x00, 0xAA, 0x00 )
+	guiSetText(shop_GUI["labelGreencoinsShadow1"], tostring(tonumber(amount) or 0)..' GreenCoins')
+	guiLabelSetColor(shop_GUI["labelGreencoinsShadow1"], 0, 0, 0 )
+	
+	guiSetText(shop_GUI["labelGreencoins"], tostring(tonumber(amount) or 0)..' GreenCoins')
+	guiLabelSetColor(shop_GUI["labelGreencoins"], 0, 255, 0 )
+
 	
 	guiSetText(shop_GUI["labelLoginInfo"], "You successfully logged in!\n\nYour account is linked and will be auto logged in from now on!")
 	guiSetText(shop_GUI["buttonLink"], "Logout")
