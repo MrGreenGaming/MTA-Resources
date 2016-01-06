@@ -100,6 +100,7 @@ addEventHandler("cShopGCLogin" , root, gcLogin )
 function gcLoginFail(alreadyLoggedIn)
 	guiSetText(shop_GUI["buttonLink"], "Login")
     if alreadyLoggedIn then
+		guiSetText(shop_GUI["labelGreencoinsShadow1"], '')
 		guiSetText(shop_GUI["labelGreencoins"], '')
 		guiSetText(shop_GUI["labelLoginInfo"], "You are already logged in!")
     else
@@ -113,6 +114,7 @@ addEventHandler("onLoginFail", root, gcLoginFail)
 
 function gcLogout(initShop)
 	guiSetText(shop_GUI["buttonLink"], "Login")
+	guiSetText(shop_GUI["labelGreencoinsShadow1"], '')
 	guiSetText(shop_GUI["labelGreencoins"], '')
 	guiSetText(shop_GUI["labelLoginInfo"], "Not logged in!")
 	guiLabelSetColor(shop_GUI["labelLoginInfo"], 0x00, 0xFF, 0x00 )
@@ -125,10 +127,12 @@ addEventHandler("cShopGCLogout", root, gcLogout)
 function gcChange ( amount )
 	if not amount then
 		amount_GCS = 0;
+		guiSetText(shop_GUI["labelGreencoinsShadow1"], '')
 		guiSetText(shop_GUI["labelGreencoins"], '')
 	else
 		amount_GCS = tonumber(amount) or 0;
-		guiSetText(shop_GUI["labelGreencoins"], 'Greencoins: ' .. tostring(tonumber(amount) or 0))
+		guiSetText(shop_GUI["labelGreencoinsShadow1"], tostring(tonumber(amount) or 0)..' GreenCoins')
+		guiSetText(shop_GUI["labelGreencoins"], tostring(tonumber(amount) or 0)..' GreenCoins')
 	end
 end
 addEvent("onGCChange", true)
