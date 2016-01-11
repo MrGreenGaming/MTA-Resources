@@ -2,7 +2,7 @@ local tops = 8
 local posx, posy = 0.55, 0.015
 local sizex, sizey = 300, 46+15*(tops+3)
 local image = 'backg1a.png'
-local imageColor = tocolor(255,255,255,200)
+local imageColor = tocolor(255,255,255,245)
 local titleHeight = 38
 local topsAreaHeight = 227
 local personalTopHeight = 34
@@ -10,7 +10,7 @@ local monthlyTopHeight = 34
 local textColor = tocolor(255,255,255)
 local selfTextColor = tocolor(0,255,255)
 local scaleX, scaleY = 1, 1
-local font = 'default'
+local font = 'default-bold'
 local pos = {x=0.0,y=0.08}
 local nick = {x=0.1,y=0.4}
 local value = {x=0.4,y=0.7}
