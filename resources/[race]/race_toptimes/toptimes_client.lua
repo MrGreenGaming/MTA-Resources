@@ -133,7 +133,7 @@ end
 function CToptimes:postCreate()
 	self:openWindow()
 	self:setWindowPosition( 0.7, 0.02 )
-	self:setHotKey('F5')
+	-- self:setHotKey('F5')
 end
 
 
