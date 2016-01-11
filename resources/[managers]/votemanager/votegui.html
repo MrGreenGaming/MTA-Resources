@@ -1,0 +1,547 @@
+<html lang="en-gb" dir="ltr" >
+    <head>
+
+    <style>
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed, 
+        figure, figcaption, footer, header, hgroup, 
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure, 
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+
+            line-height: 1;
+            -webkit-font-smoothing: none;
+            overflow: hidden;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+
+        @font-face {
+            font-family: "Roboto Condensed";
+            font-style: normal;
+            font-weight: 300;
+            src: local('Roboto Condensed Light'), local('RobotoCondensed-Light'), url("http://mta/votemanager/fonts/RobotoCondensed-Light.ttf") format('truetype');
+        }
+        @font-face {
+            font-family: "Roboto Condensed";
+            font-style: italic;
+            font-weight: 300;
+            src: local('Roboto Condensed Light Italic'), local('RobotoCondensed-LightItalic'), url("http://mta/votemanager/fonts/RobotoCondensed-LightItalic.ttf") format('truetype');
+        }
+        /* Normal */
+
+        @font-face {
+            font-family: "Roboto Condensed";
+            font-style: normal;
+            font-weight: 400;
+            src: local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url("http://mta/votemanager/fonts/RobotoCondensed-Regular.ttf") format('truetype');
+        }
+        @font-face {
+            font-family: "Roboto Condensed";
+            font-style: italic;
+            font-weight: 400;
+            src: local('Roboto Condensed Italic'), local('RobotoCondensed-Italic'), url("http://mta/votemanager/fonts/RobotoCondensed-Italic.ttf") format('truetype');
+        }
+        /* Bold */
+
+        @font-face {
+            font-family: "Roboto Condensed";
+            font-style: normal;
+            font-weight: 700;
+            src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url("http://mta/votemanager/fonts/RobotoCondensed-Bold.ttf") format('truetype');
+        }
+        @font-face {
+            font-family: "Roboto Condensed";
+            font-style: italic;
+            font-weight: 700;
+            src: local('Roboto Condensed Bold Italic'), local('RobotoCondensed-BoldItalic'), url("http://mta/votemanager/fonts/RobotoCondensed-BoldItalic.ttf") format('truetype');
+        }
+        @font-face {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 300;
+            src: local('Roboto Light'), local('Roboto-Light'), url("http://mta/votemanager/fonts/Roboto-Light.ttf") format('truetype');
+        }
+        @font-face {
+            font-family: "Roboto";
+            font-style: italic;
+            font-weight: 300;
+            src: local('Roboto Light Italic'), local('Roboto-LightItalic'), url("http://mta/votemanager/fonts/Roboto-LightItalic.ttf") format('truetype');
+        }
+        
+
+        /* Normal */
+        
+        @font-face {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            src: local('Roboto Regular'), local('Roboto-Regular'), url("http://mta/votemanager/fonts/Roboto-Regular.ttf") format('truetype');
+        }
+        @font-face {
+            font-family: "Roboto";
+            font-style: italic;
+            font-weight: 400;
+            src: local('Roboto Italic'), local('Roboto-Italic'), url("http://mta/votemanager/fonts/Roboto-Italic.ttf") format('truetype');
+        }
+        /* Bold */
+        
+        @font-face {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 700;
+            src: local('Roboto Bold'), local('Roboto-Bold'), url("http://mta/votemanager/fonts/Roboto-Bold.ttf") format('truetype');
+        }
+        @font-face {
+            font-family: "Roboto";
+            font-style: italic;
+            font-weight: 700;
+            src: local('Roboto Bold Italic'), local('Roboto-BoldItalic'), url("http://mta/votemanager/fonts/Roboto-BoldItalic.ttf") format('truetype');
+        }
+        @font-face {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 200;
+            src: local('Roboto Thin'), local('Roboto-Thin'), url("http://mta/votemanager/fonts/Roboto-Thin.ttf") format('truetype');
+        }
+        @font-face {
+            font-family: "Roboto";
+            font-style: italic;
+            font-weight: 200;
+            src: local('Roboto Thin Italic'), local('Roboto-ThinItalic'), url("http://mta/votemanager/fonts/Roboto-ThinItalic.ttf") format('truetype');
+        }
+
+        .wrapper{
+            display: block;
+            position: relative;
+            bottom: 20vh;
+            width: 100%;
+            height: 100%;
+
+
+        }
+
+        .voteBox {
+
+            
+            -webkit-font-smoothing: antialiased;
+            position:absolute;
+            bottom:0;
+      
+
+
+
+            visibility:hidden;
+            text-shadow: 0.1vw 0.1vw 0.1vw rgba(0, 0, 0, 1);
+            color: white;
+            font-family: "Roboto Condensed", Helvetica, Arial, sans-serif;
+            font-weight: 200;
+
+
+            height: auto; /*25vh*/
+
+            min-width: 200px;
+            background: rgba(0,0,0,0.8);
+            -webkit-box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow:    0px 0px 9px 0px rgba(0, 0, 0, 0.3);
+            box-shadow:         0px 0px 9px 0px rgba(0, 0, 0, 0.3);
+            /*left:;*/
+
+
+        }
+        
+        .header {
+            /*border-style: solid;
+            border-top: solid rgba(0,255,0,0.7);
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+            border-width: 1vh;*/
+            background: rgba(0,0,0,0.4);
+            height: 15%;
+            /*min-height: 15px;*/
+            width: 100%;
+            font-family: "Roboto", Helvetica, Arial, sans-serif;
+            font-weight: normal;
+            font-size: 1.4vw;
+            line-height: 2.5vh;
+            text-align: center;
+            padding-top: 0.8vh;
+            padding-bottom: 0.8vh;
+        }
+
+        .description {
+            background: rgba(0,0,0,0.1);
+            height: 20%;
+            width: 100%;
+            font-family: "Roboto", Helvetica, Arial, sans-serif;
+            font-weight: normal;
+            font-size: 1vw;
+            line-height: 2.5vh;
+            padding-top: 0.7vh;
+            padding-bottom: 0.7vh;
+
+        }
+        .description a {
+            margin-left: 0.5vw;
+        }
+        
+        .time {
+            margin-top: 2.5%;
+            font-family: "Roboto", Helvetica, Arial, sans-serif;
+            font-weight: 200;
+            font-size: 1.1vw;
+            text-align: center;
+            height: 5%;
+            width: 100%;
+            text-shadow: 0.05vw 0.05vw 0.05vw rgba(0, 0, 0, 1);
+        }
+        .notifyCancel {
+            margin-top: 2.5%;
+            width: 100%;
+            height: 5%;
+            font-family: "Roboto", Helvetica, Arial, sans-serif;
+            font-weight: 200;
+            font-size: 0.8vw;
+            text-align: center;
+            padding-bottom: 0.2vh;
+        }
+
+        .options {
+            
+            
+            font-family: "Roboto", Helvetica, Arial, sans-serif;
+            font-weight: 200;
+            font-size: 1.1vw;
+            padding-top: 0.5vh;
+            padding-bottom: 0.5vh;
+
+            text-shadow: 0.05vw 0.05vw 0.05vw rgba(0, 0, 0, 1);
+            margin-right: 5vw;
+            width: 100%;
+           
+            
+        }
+
+        .options li {
+            margin: 0.5vh;
+            margin-top:1.5vh;
+            list-style-type: decimal;
+            list-style-position: inside;
+            /*margin-left: 0.5vw;*/
+            
+
+
+        }
+
+        .selected {
+
+            text-shadow: 0.1vw 0.1vw 0.1vw rgba(0, 0, 0, 0);
+            color: black;
+            font-weight: normal;
+
+            background:rgba(255,255,255,1);
+            -webkit-animation-duration: 5s;
+            animation-duration:5s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+            -webkit-animation-name: revealBackground;
+        }
+
+
+        
+        @media screen and (max-width: 800px) {
+
+            .voteBox{
+                /*width: 30vw;*/
+            }
+            .header {
+                font-size: 2.4vw;
+            }
+            .description {
+                font-size: 2.1vw;
+            }
+            .time {
+                font-size: 1.9vw;
+            }
+            .notifyCancel {
+                font-size: 1.8vw;
+            }
+            .options {
+                font-size: 2.1vw;
+                font-weight: 200;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+
+        }
+        
+        
+
+        .animated {
+            visibility:visible;
+            
+        
+            /*opacity: 100;*/
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+
+
+         }
+         
+         @-webkit-keyframes bounceInUp {
+            0% {
+               opacity: 0;
+               -webkit-transform: translateY(2000px);
+            }
+            60% {
+               opacity: 1;
+               -webkit-transform: translateY(-30px);
+            }
+            80% {
+               -webkit-transform: translateY(10px);
+            }
+            100% {
+               -webkit-transform: translateY(0);
+            }
+         }
+         
+         @keyframes bounceInUp {
+            0% {
+              
+               transform: translateY(2000px);
+            }
+            60% {
+               
+               transform: translateY(-30px);
+            }
+            80% {
+               transform: translateY(10px);
+            }
+            100% {
+               transform: translateY(0);
+            }
+         }
+
+         @-webkit-keyframes bounceInDown {
+            0% {
+              
+               -webkit-transform: translateY(0px);
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+ 
+            100% {
+                opacity: 0;
+               -webkit-transform: translateY(2000px);
+            }
+         }
+         
+         @keyframes bounceInDown {
+            0% {
+              
+               transform: translateY(0px);
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 0;
+               transform: translateY(2000px);
+            }
+         }
+         
+         .bounceInUp {
+            -webkit-animation-name: bounceInUp;
+            animation-name: bounceInUp;
+         }
+
+         .bounceInDown {
+            -webkit-animation-name: bounceInDown;
+            animation-name: bounceInDown;
+         }
+
+         .hidden {
+            display: none;
+         }
+
+    </style>
+
+
+    </head>
+    
+
+    <body>
+        <div class="wrapper">
+            <div class="voteBox" id="voteBox">
+                <div class="header"><a>Vote</a></div>
+                <div class="description"><a id="description"></a></div>
+                <ol class="options" id="options" >
+
+                </ol>
+                <div class="time" id="time"></div>
+                <div class="notifyCancel" id="notifyCancel"> <a>(backspace to cancel vote)<a></div>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+        
+
+        function updateTime(s) {
+            document.getElementById('time').innerHTML = s;
+        }
+
+        function receiveOptions(options,description) {
+            document.getElementById("voteBox").style.width = "auto";
+            document.getElementById("options").innerHTML = options;
+            document.getElementById("description").innerHTML = description;
+            centerBox()
+
+        }
+
+        function clearOptions() {
+            document.getElementById("description").innerHTML = "";
+            document.getElementById('options').innerHTML = "";
+        }
+
+        
+        function setSelected(option) {
+            if(option == "clear") {
+                var selected = document.getElementsByClassName("selected")[0];
+                if (selected) {
+                    selected.className = "";
+                }
+                
+            } else if(document.getElementById(option)){
+                var selected = document.getElementsByClassName("selected")[0];
+                if (selected) {
+                    selected.className = ""
+                }
+                
+
+                document.getElementById(option).className = "selected"
+            }     
+        }
+
+
+        function setPollVisible(bool) {
+            if (bool == "true") {
+                centerBox()
+                document.getElementById("voteBox").className = "voteBox animated bounceInUp";
+            } else if (bool == "false") {
+                document.getElementById("voteBox").className = "voteBox animated bounceInDown";
+            }
+
+
+        }
+
+        function setTimeLeft(seconds) {
+            document.getElementById("time").innerHTML = seconds;
+        }
+
+        function showAllowChange(bool) {
+            if(bool == "true") {
+                document.getElementById("notifyCancel").className = "notifyCancel";
+            } else if (bool == "false") {
+                document.getElementById("notifyCancel").className = "notifyCancel hidden";
+            }
+        }
+
+        function centerBox() {
+
+            var screenW = window.innerWidth;
+            var boxW = document.getElementById("voteBox").offsetWidth;
+            var minus =  screenW - boxW
+            var center = minus/2
+
+
+
+            document.getElementById("voteBox").style.left = center;
+            document.getElementById("voteBox").style.width = boxW;
+        }
+        window.onload = centerBox;
+
+
+    //     function scalePage() {
+    //     var w = window.innerWidth;
+    //     var h = window.innerHeight;
+    //     var normalResX = 1920 ;
+    //     var normalResY = 1080 ;
+    //     var relativeResX = w/normalResX
+    //     var relativeResY = h/normalResY
+    //     var b = relativeResX + ",";
+    //     var c = b+relativeResX + ")";
+    //     var aspectRatio = w/h
+    //     document.getElementById("rat").innerHTML = aspectRatio;
+
+    //     if (aspectRatio > 1.7) {
+
+    //     } else if (aspectRatio > 1.3 && aspectRatio < 1.4) {
+
+            
+            
+    //         document.getElementById("voteBox").style.width = '50%';
+    //     } else if (aspectRatio > 1.599 && aspectRatio < 1.7) {
+    //         document.getElementById("voteBox").style.width = '35%';
+    //     } else if (aspectRatio > 1.2 && aspectRatio < 1.3) {
+    //         document.getElementById("voteBox").style.width = '55%';
+    //     } else if (aspectRatio > 1.49 && aspectRatio < 1.6) {
+    //         document.getElementById("voteBox").style.width = '40%';
+    //     }
+
+
+        
+        
+    // }
+    // window.onload = scalePage;
+    // window.onresize = scalePage;
+
+
+
+        </script>
+
+
+
+    </body>
+
+</html>
