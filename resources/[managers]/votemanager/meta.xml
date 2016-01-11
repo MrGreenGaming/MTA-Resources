@@ -33,6 +33,8 @@
 		<file src="fonts/Roboto-Regular.ttf"/>
 		<file src="fonts/Roboto-Thin.ttf"/>
 		<file src="fonts/Roboto-ThinItalic.ttf"/>
+		
+		<file src="votegui.html"/>
 
 	
 	
