@@ -185,7 +185,7 @@ addCommandHandler('uploadmap',
 addCommandHandler('irc',
 	function(player)
 		outputChatBox("Join our IRC Channel! If you need admin support, join the channel and ask for an admin", player, 0, 255, 0)
-		outputChatBox("IRC Server: irc.gtanet.com IRC Channel: #mrgreen", player, 0, 255, 0)
+		outputChatBox("IRC Server: maple.nl.eu.gtanet.com IRC Channel: #mrgreen", player, 0, 255, 0)
 	end
 )
 

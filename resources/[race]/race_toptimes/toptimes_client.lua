@@ -256,6 +256,7 @@ end
 --
 ---------------------------------------------------------------------------
 function CToptimes:setWindowTitle( mapName )
+	mapName = string.sub(mapName, 1, 35)
 	if self.gui['title'] then
 		-- Set the title
 		guiSetText ( self.gui['title'], 'Top Times - ' .. mapName )

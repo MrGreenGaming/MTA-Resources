@@ -13,7 +13,7 @@ local scaleX, scaleY = 1, 1
 local font = 'default-bold'
 local pos = {x=0.0,y=0.08}
 local nick = {x=0.1,y=0.4}
-local value = {x=0.4,y=0.7}
+local value = {x=0.5,y=0.7}
 local date = {x=0.7,y=0.95}
 local fadeTime = 300
 local showTime = 15000
@@ -86,7 +86,7 @@ bindKey('F5', 'down', function() toggleTimes() end)
 function updateTexture()
 	dxSetRenderTarget(target, true)
 	dxDrawImage(0,0,sizex,sizey,texture,0,0,0,imageColor)
-	dxDrawText('Top Times - ' .. (times.mapname or ''), 0, 0, w*sw, titleHeight*sh, textColor, scaleX, scaleY, font, 'center', 'center', true)
+	dxDrawText('Top Times - ' .. string.sub((times.mapname or ''), 1, 35), 0, 0, w*sw, titleHeight*sh, textColor, scaleX, scaleY, font, 'center', 'center', true)
 	local i = 1
 	for k, r in ipairs(times) do
 		local textColor = r.player == localPlayer and selfTextColor or textColor
