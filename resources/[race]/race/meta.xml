@@ -58,7 +58,9 @@
     <script src="config_client.lua" type="client" />
     <script src="override_client.lua" type="client" />
     <script src="editor_support_client.lua" type="client" />
-    <config src="help.xml" type="client" />
+
+	<script src="onClientVehicleExplode.lua" type="client" />
+	<script src="onVehicleExplode.lua" type="server" />
     
     <file src="img/progress_health_bg.png" />
     <file src="img/progress_health.png" />
