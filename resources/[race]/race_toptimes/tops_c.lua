@@ -86,7 +86,7 @@ bindKey('F5', 'down', function() toggleTimes() end)
 function updateTexture()
 	dxSetRenderTarget(target, true)
 	dxDrawImage(0,0,sizex,sizey,texture,0,0,0,imageColor)
-	dxDrawText('Top Times - ' .. (times.mapname or ''), 0, 0, w*sw, titleHeight*sh, textColor, scaleX, scaleY, font, 'center', 'center', true)
+	dxDrawText('Top Times - ' .. string.sub((times.mapname or ''), 1, 35), 0, 0, w*sw, titleHeight*sh, textColor, scaleX, scaleY, font, 'center', 'center', true)
 	local i = 1
 	for k, r in ipairs(times) do
 		local textColor = r.player == localPlayer and selfTextColor or textColor
