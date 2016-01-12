@@ -173,6 +173,7 @@ hornsTable = {
 	[170] = "Kappa",
 	[171] = "Adele - Hello",
 	[172] = "Magiiiik",
+	[173] = "Keep the Change You Filthy Animal",
 }
 
 extensions = {
@@ -320,6 +321,7 @@ extensions = {
 	[170] = "mp3",
 	[171] = "mp3",
 	[172] = "mp3",
+	[173] = "mp3",
 }
 
 function onShopInit ( tabPanel )
