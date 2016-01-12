@@ -13,7 +13,7 @@ local scaleX, scaleY = 1, 1
 local font = 'default-bold'
 local pos = {x=0.0,y=0.08}
 local nick = {x=0.1,y=0.4}
-local value = {x=0.4,y=0.7}
+local value = {x=0.5,y=0.7}
 local date = {x=0.7,y=0.95}
 local fadeTime = 300
 local showTime = 15000
