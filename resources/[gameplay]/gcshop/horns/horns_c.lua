@@ -164,16 +164,12 @@ hornsTable = {
 	[161] = "They see me rollin",
 	[162] = "OH. MY. GOD.",
 	[163] = "F1 Horn",
-	[164] = "Evil Laugh",
-	[165] = "Antonioooo",		
- 	[166] = "Hero",		
- 	[167] = "GTALibertyCity",		
- 	[168] = "PersonalJesus",		
- 	[169] = "Unforgiven",
-	[170] = "Kappa",
-	[171] = "Adele - Hello",
-	[172] = "Magiiiik",
-	[173] = "Keep the Change You Filthy Animal",
+	[164] = "Evil Laugth",
+	[165] = "Antonioooo",
+	[166] = "Hero",
+	[167] = "GTALibertyCity",
+	[168] = "PersonalJesus",
+	[169] = "Unforgiven",
 }
 
 extensions = {
@@ -313,15 +309,11 @@ extensions = {
 	[162] = "mp3",
 	[163] = "mp3",
 	[164] = "mp3",
-	[165] = "mp3",		
- 	[166] = "mp3",		
- 	[167] = "mp3",		
- 	[168] = "mp3",		
- 	[169] = "mp3",
-	[170] = "mp3",
-	[171] = "mp3",
-	[172] = "mp3",
-	[173] = "mp3",
+	[165] = "mp3",
+	[166] = "mp3",
+	[167] = "mp3",
+	[168] = "mp3",
+	[169] = "mp3",
 }
 
 function onShopInit ( tabPanel )
@@ -442,7 +434,7 @@ end
 function bindKeyForHorn(keyNew)
 	for i,j in ipairs(hornsTable) do 
 	
-		if j == soundName then
+		if j == soundName or type(soundName) == "number" then
 			hornBinded = false
 			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
 			
@@ -479,14 +471,20 @@ function bindKeyForHorn(keyNew)
 					
 				end
 			end 
-		end
 		break
+		elseif type(soundName) == "number" and soundName <= 6 then
+			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
+			
+			for i=1, 1000 do
+				
+			end
+		end	
 	end
 end
 
 function unbindKeyForHorn()
 	for i,j in ipairs(hornsTable) do 
-		if j == soundName then
+		if j == soundName or type(soundName) == "number" then
 			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
 			for x=0, 1000 do
 				local bindNode = xmlFindChild(bindsXML, "bind", x)
