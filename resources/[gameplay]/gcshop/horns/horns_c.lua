@@ -442,7 +442,7 @@ end
 function bindKeyForHorn(keyNew)
 	for i,j in ipairs(hornsTable) do 
 	
-		if j == soundName then
+		if j == soundName or type(soundName) == "number" then
 			hornBinded = false
 			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
 			
@@ -479,14 +479,20 @@ function bindKeyForHorn(keyNew)
 					
 				end
 			end 
-		end
 		break
+		elseif type(soundName) == "number" and soundName <= 6 then
+			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
+			
+			for i=1, 1000 do
+				
+			end
+		end	
 	end
 end
 
 function unbindKeyForHorn()
 	for i,j in ipairs(hornsTable) do 
-		if j == soundName then
+		if j == soundName or type(soundName) == "number" then
 			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
 			for x=0, 1000 do
 				local bindNode = xmlFindChild(bindsXML, "bind", x)
