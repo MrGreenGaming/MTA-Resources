@@ -164,7 +164,15 @@ hornsTable = {
 	[161] = "They see me rollin",
 	[162] = "OH. MY. GOD.",
 	[163] = "F1 Horn",
-	[164] = "Evil Laugth",
+	[164] = "Evil Laugh",
+	[165] = "Antonioooo",		
+ 	[166] = "Hero",		
+ 	[167] = "GTALibertyCity",		
+ 	[168] = "PersonalJesus",		
+ 	[169] = "Unforgiven",
+	[170] = "Kappa",
+	[171] = "Adele - Hello",
+	[172] = "Magiiiik",
 }
 
 extensions = {
@@ -304,6 +312,14 @@ extensions = {
 	[162] = "mp3",
 	[163] = "mp3",
 	[164] = "mp3",
+	[165] = "mp3",		
+ 	[166] = "mp3",		
+ 	[167] = "mp3",		
+ 	[168] = "mp3",		
+ 	[169] = "mp3",
+	[170] = "mp3",
+	[171] = "mp3",
+	[172] = "mp3",
 }
 
 function onShopInit ( tabPanel )
