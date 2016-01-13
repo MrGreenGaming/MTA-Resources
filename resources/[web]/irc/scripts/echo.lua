@@ -95,7 +95,7 @@ addEventHandler("onPlayerChat",root,
 		elseif type == 1 then
 			outputIRC("06* "..getNameNoColor(source).." "..message)
 		elseif type == 2 then
-			outputIRC("07(TEAM)"..getNameNoColor(source)..": "..message)
+			--outputIRC("07(TEAM)"..getNameNoColor(source)..": "..message)
 	
 		end
         end
