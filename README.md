@@ -24,6 +24,7 @@ A non-dramatic 'The MIT License' applies. See LICENSE file for details.
 * Jarno Veuger (Ywa) - Owner, merger, issue management
 * EsDeKa (SDK) - Merger, issue management
 * AfuSensi (KaliBwoy) - Merger, issue management
+* Alexey Yakubovskii (AleksCore) - Merger, issue management
 
 ## Implementation
 * EsDeKa (SDK)

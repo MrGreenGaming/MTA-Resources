@@ -385,11 +385,13 @@ function savefile(mapname, src, text)
 	end
 	-- create a backup
 	local backup = fileCopy(':' .. mapname .. '/' .. src, ':' .. mapname .. '/' .. src .. '.' .. getRealTime().timestamp .. '.bak', true)
-	if not backup then return outputChatBox("Could not create backup", player) end
+	if not backup then return outputChatBox("Could not create backup. Changes aren't saved.", player) end
 	
-	-- write new text in src
-	local file = fileOpen(':' .. mapname .. '/' .. src)
-	if not file then return outputChatBox("Could not open :" .. mapname .. '/' ..src, player) end
+	local deletefile = fileDelete(':' .. mapname .. '/' .. src)
+	if not deletefile then return outputChatBox("Could not overwrite:" .. mapname .. '/' ..src, player) end
+	
+	local file = fileCreate(':' .. mapname .. '/' .. src)
+	if not file then return outputChatBox("Could not overwrite:" .. mapname .. '/' ..src, player) end
 	fileWrite(file, text)
 	fileClose(file)
 	outputChatBox("Saved file " .. ':' .. mapname .. '/' .. src .. " and made a backup", player)

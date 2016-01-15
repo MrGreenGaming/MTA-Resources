@@ -64,11 +64,11 @@ function show()
 			dxDrawText("Likes: "..mapLikes, x+26, y+64, x+width-28, y+80, tocolor(144, 238, 144,alpha), 1.3, "arial", "left", "center", true, false, false)
 		end
 		if info.mapDislikes then	
-			dxDrawText("Dislikes: "..mapDislikes, x+180, y+63, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+180, y+65, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+179, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+181, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+180, y+64, x+width-28, y+80, tocolor(255, 160, 122, alpha), 1.3, "arial", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+26, y+83, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+26, y+85, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+25, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+27, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+26, y+84, x+width-28, y+100, tocolor(255, 160, 122, alpha), 1.3, "arial", "left", "center", true, false, false)
 		end	
 		if info.mapAuthor then	
 			dxDrawText("Author: "..mapAuthor, x+20, y+40, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "arial", "center", "center", true, false, false)
@@ -78,8 +78,8 @@ function show()
 			dxDrawText("Author: "..mapAuthor, x+20, y+42, x+width-20, y+55, tocolor(255, 255, 255, alpha), 1.3, "arial", "center", "center", true, false, false)
 		end	
 		if info.mapTimesPlayed then	
-			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+62, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
-			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+66, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
+			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+63, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
+			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+65, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
 			dxDrawText("Times played: "..mapTimesPlayed, x+8+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
 			dxDrawText("Times played: "..mapTimesPlayed, x+12+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
 			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+64, x+width-23, y+80, tocolor(255, 255, 255, alpha), 1.3, "arial", "right", "center", true, false, false)
@@ -93,11 +93,11 @@ function show()
 			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-20, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "arial", "left", "center", true, false, false)
 		end	
 		-- if info.mapDescription then	
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+85, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+87, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+25, y+86, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+27, y+86, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+86, x+width-23, y+height, tocolor(255, 255, 255, alpha), 1.3, "arial", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+110, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+112, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+25, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+27, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+111, x+width-23, y+height, tocolor(255, 255, 255, alpha), 1.3, "arial", "left", "top", true, true, false)
 		-- end
 		-- if info.mapPlayerTime then	
 			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-21-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
