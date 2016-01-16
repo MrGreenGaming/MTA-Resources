@@ -85,7 +85,7 @@ function doubleCheck ( needKill )
 			setPlayerCollisionless(thePlayer)
 		end
 		outputChatBox('You were '..action..' for high ping (Max ' .. pingLimit .. ')', thePlayer, 255, 165, 0)
-		outputDebugString(getPlayerName(thePlayer) .. ' was '..action..' for high ping (Max ' .. pingLimit .. ')')
+		outputConsole(getPlayerName(thePlayer) .. ' was '..action..' for high ping (Max ' .. pingLimit .. ')')
 		punishedForMap[thePlayer] = true
 	else
 		-- textDisplayRemoveObserver(warn, thePlayer)

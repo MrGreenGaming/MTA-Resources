@@ -718,7 +718,7 @@ end
 addEvent("onPlayerUsingHorn", true)
 addEventHandler("onPlayerUsingHorn", root,
 function(horn, car)
-	if (getElementData(source, "state") == "alive") and (getElementData(localPlayer, "state") == "alive") and (soundsOn == true) and (getElementData(localPlayer, "dim") == getElementData(source, "dim")) then
+	if (getElementData(source, "state") == "alive") and (getElementData(localPlayer, "state") == "alive") and (soundsOn == true) and (getElementData(localPlayer, "dim") == getElementData(source, "dim")) and getPedOccupiedVehicle(localPlayer) then
 		local x,y,z = getElementPosition(getPedOccupiedVehicle(localPlayer))
 		local rx, ry, rz = getElementPosition(car)
 		if getDistanceBetweenPoints3D(x,y,z,rx,ry,rz) < 40 then

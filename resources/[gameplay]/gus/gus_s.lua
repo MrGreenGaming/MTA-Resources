@@ -4,11 +4,19 @@ addEventHandler("onResourceStart", root,
 		if (resourceRoot == source or getResourceName ( resource ) == 'scoreboard') then
 			exports.scoreboard:addScoreboardColumn("playtime", root, 35)
 		end
+		if getResourceInfo(resource, "type") ~= "map" then
+			outputDebugString("********* Started: " .. getResourceName(resource))
+		end
     end
 )
-addEventHandler("onResourceStop", getResourceRootElement(getThisResource()),
-	function()
-		exports.scoreboard:removeScoreboardColumn("playtime", root, 35)
+addEventHandler("onResourceStop", root,
+	function(resource)
+		if source == getResourceRootElement(getThisResource()) then
+			exports.scoreboard:removeScoreboardColumn("playtime", root, 35)
+		end
+		if getResourceInfo(resource, "type") ~= "map" then
+			outputDebugString("********* Stopped: " .. getResourceName(resource))
+		end
 	end
 )
 
