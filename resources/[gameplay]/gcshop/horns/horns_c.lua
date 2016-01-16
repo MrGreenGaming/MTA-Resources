@@ -192,6 +192,7 @@ hornsTable = {
 	[189] = "Love Sex American Express",
 	[190] = "Nigthtrain",
 	[191] = "Step it up",
+	[192] = "Tobi King",
 }
 
 extensions = {
@@ -358,6 +359,7 @@ extensions = {
 	[189] = "mp3",
 	[190] = "mp3",
 	[191] = "mp3",
+	[192] = "mp3",
 }
 
 function onShopInit ( tabPanel )
