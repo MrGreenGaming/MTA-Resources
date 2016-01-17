@@ -199,8 +199,37 @@ if (isset($_POST["upload"], $_FILES["zip_file"])) {
 					ftp_rdel($ftp_conn, $folder_path);
 				}
 				elseif (strlen($mta_error) > 1 ) {	// MTA server reported an error
-					$servermessage = "Error while loading map: " . $mta_error;
-					ftp_rdel($ftp_conn, $folder_path);
+					// $servermessage = "Error while loading map: " . $mta_error;
+					// ftp_rdel($ftp_conn, $folder_path);
+					
+					// Try again, quick try for a fix 17/01/2016
+					// Notify the server a new mta map was uploaded
+					$returns = false;
+					try { $returns = $mtaServer->getResource("maptools")->call("newMap", $filename, $_SESSION['forumid'], $_SESSION['user']); }
+					catch (Exception $e) {}
+					$mta_error = $returns[0];
+					$status = $returns[1];
+					
+					// Check the response from the mta server, if something is wrong then remove the folder again
+					if (!$returns) {	// Couldn't connect to mta
+						$servermessage = "Could not connect with the MTA server, check if it is online and try again";
+						ftp_rdel($ftp_conn, $folder_path);
+					}
+					elseif (strlen($mta_error) > 1 ) {	// MTA server reported an error
+						$servermessage = "Error while loading map: " . $mta_error;
+						ftp_rdel($ftp_conn, $folder_path);
+					}
+					else {
+						// MTA server reported adding is ok, add map to database
+						$stmt = $mysqli->prepare("INSERT INTO `uploaded_maps` (forumid, uploadername, resname, status, comment) VALUES (?,?,?,?,?)");
+						$stmt->bind_param("issss", $forumid, $uploadername, $filename, $status, $comment);
+						$forumid = (int)$_SESSION['forumid'];
+						$uploadername = $_SESSION['user'];
+						$comment = substr(trim($_POST['comment']), 0, 255);
+						$stmt->execute();
+						
+						$servermessage = "Map loaded successfully. Now wait untill a mapmanager tests it!";
+					}
 				}
 				else {
 					// MTA server reported adding is ok, add map to database
