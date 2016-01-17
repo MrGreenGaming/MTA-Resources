@@ -479,58 +479,47 @@ end
 
 function bindKeyForHorn(keyNew)
 	for i,j in ipairs(hornsTable) do 
-	
-		if j == soundName or type(soundName) == "number" then
+		if j == soundName then
 			hornBinded = false
 			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
 			
 			for x=0, 1000 do
-			local bindNode = xmlFindChild(bindsXML, "bind", x)
+				local bindNode = xmlFindChild(bindsXML, "bind", x)
 			
 				if bindNode then
 					local keyOld = xmlNodeGetAttribute(bindNode, "key")
 					local hornID = xmlNodeGetAttribute(bindNode, "hornID")
 					
 					if hornID == tostring(i) then
-							xmlNodeSetAttribute(bindNode, "key", keyNew)
-							triggerServerEvent("bindHorn", localPlayer, keyNew, i, soundName, false)
-							triggerServerEvent("unbindHorn", localPlayer, keyOld)
-							xmlSaveFile(bindsXML)
-							hornBinded = true
+						xmlNodeSetAttribute(bindNode, "key", keyNew)
+						triggerServerEvent("bindHorn", localPlayer, keyNew, i, soundName, false)
+						triggerServerEvent("unbindHorn", localPlayer, keyOld)
+						xmlSaveFile(bindsXML)
+						hornBinded = true
 					end
 					
-				else
+				else --elseif no bindNode then create it:
 					if not hornBinded then
-						bindNode = xmlCreateChild(bindsXML, "bind")
+						local bindNode = xmlCreateChild(bindsXML, "bind")
 						xmlNodeSetAttribute(bindNode, "key", keyNew)
-						if type(soundName) == "string" then
-							xmlNodeSetAttribute(bindNode, "hornID", i)
-							xmlNodeSetAttribute(bindNode, "hornName", soundName)
-							triggerServerEvent("bindHorn", localPlayer, keyNew, i, soundName, false)
-						end
+						xmlNodeSetAttribute(bindNode, "hornID", i)
+						xmlNodeSetAttribute(bindNode, "hornName", soundName)
+						triggerServerEvent("bindHorn", localPlayer, keyNew, i, soundName, false)
 						xmlSaveFile(bindsXML)
 					end
 					
 					xmlUnloadFile(bindsXML) 
 					triggerServerEvent('getHornsData', localPlayer)
 					break  
-					
 				end
 			end 
-		break
-		elseif type(soundName) == "number" and soundName <= 6 then
-			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
-			
-			for i=1, 1000 do
-				
-			end
 		end	
 	end
 end
 
 function unbindKeyForHorn()
 	for i,j in ipairs(hornsTable) do 
-		if j == soundName or type(soundName) == "number" then
+		if j == soundName then
 			bindsXML = xmlLoadFile ('horns/binds-' .. getElementData(localPlayer, "mrgreen_gc_forumID").. '.xml')
 			for x=0, 1000 do
 				local bindNode = xmlFindChild(bindsXML, "bind", x)

@@ -121,10 +121,7 @@ end
 addEvent("bindHorn", true)
 addEventHandler("bindHorn", root, function(key, hornID, hornName)
 	if not isKeyBound(client, key, "down", useHorn) then
-		local binded = bindKey(client, key, "down", useHorn, hornID)
-		if binded and hornName then
-			outputChatBox("'"..hornName.."' horn was successfully binded to the '"..key.."' key.", client, 0, 200, 0, true)
-		end
+		bindKey(client, key, "down", useHorn, hornID)
 	end
 end
 )
