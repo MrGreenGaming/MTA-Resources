@@ -1,5 +1,4 @@
 ﻿screenWidth, screenHeight = guiGetScreenSize()
-browser = createBrowser(screenWidth, screenHeight,true,true)
 local rootElement = getRootElement()
 
 local voteWindow
@@ -110,13 +109,6 @@ addEventHandler("doShowPoll", rootElement,
 		finishTime = getTickCount() + pollTime
 		addEventHandler("onClientRender", rootElement, updateTime)
 
-
-		 
-
-
-
-		
-
 	end
 )
 
@@ -127,7 +119,6 @@ function setOption(number)
 		selectedVote = number
 	end
 end
-
 
 
 
@@ -233,24 +224,6 @@ addCommandHandler("cancelvote",
 )
 
 
-
-
-addEventHandler("onClientBrowserCreated",resourceRoot,
-	function()
-		
-		loadBrowserURL(browser,"http://mta/votemanager/votegui.html")
-		addEventHandler("onClientRender", root, webBrowserRender)
-	end)
-
-function webBrowserRender()
-	--Render the browser on the full size of the screen.
-	if browser then
-
-		dxDrawImage(0, 0, screenWidth, screenHeight, browser, 0, 0, 0, tocolor(255,255,255,255), true)
-	end
-end
-
-
 function table.insertUnique(t,val)
 	for k,v in pairs(t) do
         if v == val then
@@ -265,12 +238,6 @@ end
 
 
 -- GUI --
-
-
-
-
-
-
 local screenW, screenH = guiGetScreenSize()
 
 optionTable =  {
