@@ -273,9 +273,9 @@ description_text = "Vote Description text:"
 
 local isPostGUI = true
 function draw()
-    local background =            dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight, tocolor(0, 0, 0, 228), isPostGUI,false)
+    local background =            dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight, tocolor(0, 0, 0, 200), isPostGUI,false)
     local title =                 dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, title_height, tocolor(11, 138, 25, 255), isPostGUI,false)
-	local titleGlass =            dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, 17.5, tocolor(255, 255, 255, 40), isPostGUI,false)
+	local titleGlass =            dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, 17.5, tocolor(11, 180, 25, 255), isPostGUI,false)
     local title_text_draw =            dxDrawText("Vote", backgroundX, backgroundY, backgroundX + backgroundWidth, backgroundY+title_height, tocolor(255, 255, 255, 255), 1, bigFont, "center", "center", false, false, isPostGUI, false, false)
     local description_text_draw =      dxDrawText(description_text, backgroundX+textXoffset, backgroundY+descriptionYoffset, backgroundX + backgroundWidth - 20, backgroundY+descriptionYoffset+descriptionHeight, tocolor(255, 255, 255, 255), 1, fontBold, "left", "top", false, true, isPostGUI, false, false)
     

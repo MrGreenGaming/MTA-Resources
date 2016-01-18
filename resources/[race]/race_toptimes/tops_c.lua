@@ -2,7 +2,7 @@ local tops = 8
 local posx, posy = 0.55, 0.015
 local sizex, sizey = 300, 46+15*(tops+3)
 local image = 'backg1a.png'
-local imageColor = tocolor(255,255,255,200)
+local imageColor = tocolor(255,255,255,255)
 local titleHeight = 38
 local topsAreaHeight = 227
 local personalTopHeight = 34
@@ -85,7 +85,12 @@ bindKey('F5', 'down', function() toggleTimes() end)
 
 function updateTexture()
 	dxSetRenderTarget(target, true)
-	dxDrawImage(0,0,sizex,sizey,texture,0,0,0,imageColor)
+	--dxDrawImage(0,0,sizex,sizey,texture,0,0,0,imageColor)
+	dxDrawRectangle(0, 0, 446, 334, tocolor(0, 0, 0, 200), isPostGUI,false) --background
+	dxDrawRectangle(0, 0, 446, 23, tocolor(11, 138, 25, 255), isPostGUI,false) --title
+	dxDrawRectangle(0, 0, 446, 12.5, tocolor(11, 180, 25, 255), isPostGUI,false) --title glass effect
+	dxDrawRectangle(0, 167, 446, 1, tocolor(255, 255, 255, 100), isPostGUI,false) --line1
+	dxDrawRectangle(0, 188, 446, 1, tocolor(255, 255, 255, 100), isPostGUI,false) --line2
 	dxDrawText('Top Times - ' .. string.sub((times.mapname or ''), 1, 35), 0, 0, w*sw, titleHeight*sh, textColor, scaleX, scaleY, font, 'center', 'center', true)
 	local i = 1
 	for k, r in ipairs(times) do
