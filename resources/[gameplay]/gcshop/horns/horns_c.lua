@@ -175,7 +175,7 @@ hornsTable = {
 	[172] = "Magiiiik",
 	[173] = "Keep the Change You Filthy Animal",
 	[174] = "Crazy santa",
-	[175] = "Dumb Flordia Moron",
+	[175] = "Dumb Florida Moron",
 	[176] = "AMG",
 	[177] = "Audi",
 	[178] = "Chase the sun",
@@ -185,14 +185,17 @@ hornsTable = {
 	[182] = "I Am Jacks Hungry Heart Vocal 2",
 	[183] = "I Am Jacks Hungry Heart Vocal",
 	[184] = "I Am Jacks Hungry Heart",
-	[185] = "I Belive In Dreams",
+	[185] = "I Believe In Dreams",
 	[186] = "I Can't Stop",
 	[187] = "Insomnia",
 	[188] = "Komodoo",
 	[189] = "Love Sex American Express",
-	[190] = "Nigthtrain",
+	[190] = "Nighttrain",
 	[191] = "Step it up",
 	[192] = "Tobi King",
+	[193] = "Tsunami",
+	[194] = "DubStep!!",
+	[195] = "Disturbed - fear",
 }
 
 extensions = {
@@ -360,6 +363,9 @@ extensions = {
 	[190] = "mp3",
 	[191] = "mp3",
 	[192] = "mp3",
+	[193] = "mp3",
+	[194] = "mp3",
+	[195] = "mp3",
 }
 
 function onShopInit ( tabPanel )
