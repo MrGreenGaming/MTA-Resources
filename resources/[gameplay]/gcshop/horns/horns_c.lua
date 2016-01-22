@@ -202,6 +202,8 @@ hornsTable = {
 	[199] = "Reality - Original",
 	[200] = "Bellini - Samba De Janeiro",
 	[201] = "Do You See Me Now?",
+	[201] = "WAR, WAR NEVER CHANGES!",
+	[202] = "Laugth",
 }
 
 extensions = {
@@ -378,6 +380,8 @@ extensions = {
 	[199] = "mp3",
 	[200] = "mp3",
 	[201] = "mp3",
+	[202] = "wav",
+	[203] = "mp3",
 }
 
 function onShopInit ( tabPanel )
