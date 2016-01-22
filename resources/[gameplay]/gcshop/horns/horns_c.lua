@@ -195,7 +195,13 @@ hornsTable = {
 	[192] = "Tobi King",
 	[193] = "Tsunami",
 	[194] = "DubStep!!",
-	[195] = "Disturbed - fear",
+	[195] = "Disturbed - Fear",
+	[196] = "Knife Party - Nya",
+	[197] = "Feel Dog Inc",
+	[198] = "Reality - Melody",
+	[199] = "Reality - Original",
+	[200] = "Bellini - Samba De Janeiro",
+	[201] = "Do You See Me Now?",
 }
 
 extensions = {
@@ -366,6 +372,12 @@ extensions = {
 	[193] = "mp3",
 	[194] = "mp3",
 	[195] = "mp3",
+	[196] = "mp3",
+	[197] = "mp3",
+	[198] = "mp3",
+	[199] = "mp3",
+	[200] = "mp3",
+	[201] = "mp3",
 }
 
 function onShopInit ( tabPanel )
