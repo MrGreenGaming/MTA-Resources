@@ -43,6 +43,7 @@
 /resources/\[web\]/irc/settings.xml
 /resources/\[web\]/irc/irc.log
 /resources/\[race\]/race_toptimes/deleted_tops.log
+/resources/\[gameplay\]/gcshop/items/paintjob/*.bmp
 /resources/\[gameplay\]/gcshop/shop.log
 /resources/\[gameplay\]/gus/adminapplicants.xml
 /resources/\[gameplay\]/helpmenu/svn.xml

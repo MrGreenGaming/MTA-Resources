@@ -50,7 +50,7 @@ local g_times = {}
 
 function initiate()
 	settingsObject:loadFromXml()
-	mapStarted()
+	-- mapStarted()
 	sendMessageToServer("loaded")
 end
 addEventHandler("onClientResourceStart",getResourceRootElement(getThisResource()),initiate)
@@ -62,13 +62,13 @@ function mapStarted()
 	readyToDraw = false
 	mapLoaded = false
 	setTimer(function()
-	if loadMap() then
-		-- If data was successfully loaded, prepare drawing
-		mapLoaded = true
-		calculateCheckpointDistance()
-		prepareDraw()
-	end
-	end, 500, 1)
+		if loadMap() then
+			-- If data was successfully loaded, prepare drawing
+			mapLoaded = true
+			calculateCheckpointDistance()
+			prepareDraw()
+		end
+	end, 2000, 1)
 	g_times = {}
 	g_delay = {}
 	-- TODO: load distances for map

@@ -81,6 +81,7 @@ local function removeHEXFromString(str)
 end
 
 local function getPlayerStrippedName(player)
+	if not isElement(player) then error('getPlayerStrippedName error', 2) end
 	return removeHEXFromString(getPlayerName(player))
 end
 
@@ -100,7 +101,7 @@ local function poll(a, va)
 	for i,player in ipairs(_alivePlayers) do -- Add players without kills to alivePlayers
 		local kills = getElementData(player,"kills")
 		if tonumber(kills) and tonumber(kills) == 0 then
-			table.insert(alivePlayers,i)
+			table.insert(alivePlayers,player)
 		end
 	end
 
@@ -186,7 +187,6 @@ function typeDoubleDamage()
 		setVehicleHandling(veh, "collisionDamageMultiplier", 2)
 	end
 
-	table.remove(voteOutcomes, 19)
 end
 addEventHandler("doubleDamage", root, typeDoubleDamage)
 
@@ -616,7 +616,6 @@ function removePickups()
 
 	triggerClientEvent( getRootElement(  ), "clientRemovePickups", getRootElement(  ) )
 
-	table.remove(voteOutcomes, 20)
 end
 addEventHandler("removePickupsEvent", root, removePickups)
 

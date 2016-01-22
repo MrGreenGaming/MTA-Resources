@@ -30,4 +30,3 @@
 	// API access
 	$appID = ;
 	$appSecret = ;
-?>

@@ -1,5 +1,4 @@
 ﻿screenWidth, screenHeight = guiGetScreenSize()
-browser = createBrowser(screenWidth, screenHeight,true,true)
 local rootElement = getRootElement()
 
 local voteWindow
@@ -110,13 +109,6 @@ addEventHandler("doShowPoll", rootElement,
 		finishTime = getTickCount() + pollTime
 		addEventHandler("onClientRender", rootElement, updateTime)
 
-
-		 
-
-
-
-		
-
 	end
 )
 
@@ -127,7 +119,6 @@ function setOption(number)
 		selectedVote = number
 	end
 end
-
 
 
 
@@ -233,24 +224,6 @@ addCommandHandler("cancelvote",
 )
 
 
-
-
-addEventHandler("onClientBrowserCreated",resourceRoot,
-	function()
-		
-		loadBrowserURL(browser,"http://mta/votemanager/votegui.html")
-		addEventHandler("onClientRender", root, webBrowserRender)
-	end)
-
-function webBrowserRender()
-	--Render the browser on the full size of the screen.
-	if browser then
-
-		dxDrawImage(0, 0, screenWidth, screenHeight, browser, 0, 0, 0, tocolor(255,255,255,255), true)
-	end
-end
-
-
 function table.insertUnique(t,val)
 	for k,v in pairs(t) do
         if v == val then
@@ -265,12 +238,6 @@ end
 
 
 -- GUI --
-
-
-
-
-
-
 local screenW, screenH = guiGetScreenSize()
 
 optionTable =  {
@@ -306,8 +273,9 @@ description_text = "Vote Description text:"
 
 local isPostGUI = true
 function draw()
-    local background =            dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight, tocolor(0, 0, 0, 228), isPostGUI,false)
-    local title =                 dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, title_height, tocolor(0, 0, 0, 185), isPostGUI,false)
+    local background =            dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight, tocolor(0, 0, 0, 200), isPostGUI,false)
+    local title =                 dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, title_height, tocolor(11, 138, 25, 255), isPostGUI,false)
+	local titleGlass =            dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, 17.5, tocolor(11, 180, 25, 255), isPostGUI,false)
     local title_text_draw =            dxDrawText("Vote", backgroundX, backgroundY, backgroundX + backgroundWidth, backgroundY+title_height, tocolor(255, 255, 255, 255), 1, bigFont, "center", "center", false, false, isPostGUI, false, false)
     local description_text_draw =      dxDrawText(description_text, backgroundX+textXoffset, backgroundY+descriptionYoffset, backgroundX + backgroundWidth - 20, backgroundY+descriptionYoffset+descriptionHeight, tocolor(255, 255, 255, 255), 1, fontBold, "left", "top", false, true, isPostGUI, false, false)
     

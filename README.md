@@ -17,13 +17,14 @@ TBA
 Anyone is welcome to contribute. Make sure your changes correspond with our goal. When in doubt, make an issue with your wished changes, before applying them in the code-base.
 
 # License
-A non-dramatic GNU license applies. See LICENSE file for details.
+A non-dramatic 'The MIT License' applies. See LICENSE file for details.
 
 # Credits
 ## Project team
 * Jarno Veuger (Ywa) - Owner, merger, issue management
 * EsDeKa (SDK) - Merger, issue management
 * AfuSensi (KaliBwoy) - Merger, issue management
+* Alexey Yakubovskii (AleksCore) - Merger, issue management
 
 ## Implementation
 * EsDeKa (SDK)
