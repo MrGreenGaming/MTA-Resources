@@ -201,6 +201,7 @@ hornsTable = {
 	[198] = "Reality - Melody",
 	[199] = "Reality - Original",
 	[200] = "Bellini - Samba De Janeiro",
+	[201] = "Do You See Me Now?",
 }
 
 extensions = {
@@ -376,6 +377,7 @@ extensions = {
 	[198] = "mp3",
 	[199] = "mp3",
 	[200] = "mp3",
+	[201] = "mp3",
 }
 
 function onShopInit ( tabPanel )
