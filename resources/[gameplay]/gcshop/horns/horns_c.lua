@@ -1,5 +1,5 @@
 local screenWidth, screenHeight = guiGetScreenSize()
-
+downloadHornList = {}
 hornsTable = {
 	[1] = "Birdo-geluidje",
 	[2] = "Boo-gebulder",
@@ -380,6 +380,8 @@ extensions = {
 	[201] = "mp3",
 }
 
+
+
 function onShopInit ( tabPanel )
 	shopTabPanel = tabPanel
 	--triggerServerEvent('getHornsData', localPlayer)
@@ -432,7 +434,7 @@ end
 addEvent('onShopInit', true)
 addEventHandler('onShopInit', root, onShopInit )
 
-
+local previewHornList = {}
 function playButton(button, state)
 	if button == "left" and state == "up" then	
 		if isElement(soundTest) then
@@ -448,7 +450,9 @@ function playButton(button, state)
 		if extensions[row] then 
 			extension = "." .. extensions[row]
 		end	
-		soundTest = playSound("horns/files/"..tostring(row)..extension, false)
+		-- soundTest = playSound("horns/files/"..tostring(row)..extension, false)
+		table.insert(previewHornList,"horns/files/"..tostring(row)..extension)
+		downloadFile( "horns/files/"..tostring(row)..extension )
 	end
 end
 
@@ -674,18 +678,21 @@ local globalalpha = 1
 icon = {}
 
 function createSoundForCar(car, horn)
+	if not isElement(car) then return end
+	if getElementType(car) == "player" then car = getPedOccupiedVehicle( car ) end -- If var car = player then turn car into an actual car element
 	if isElement(icon[car]) then destroyElement(icon[car]) end
 	if isTimer(soundTimer[car]) then killTimer(soundTimer[car]) end
 	if isTimer(killOtherTimer[car]) then killTimer(killOtherTimer[car]) end
 	icon[car] = guiCreateStaticImage(0, 0, guix, guiy, "horns/icon.png", false )
 	guiSetVisible(icon[car], false)
 	local x,y,z = getElementPosition(car)
-	local extension
-	extension = ".wav"
-	if extensions[tonumber(horn)] then
-		extension = "." .. extensions[tonumber(horn)]
-	end	
-	local sound = playSound3D("horns/files/"..horn..extension, x, y, z, false)
+	-- local extension
+	-- extension = ".wav"
+	-- if extensions[tonumber(horn)] then
+	-- 	extension = "." .. extensions[tonumber(horn)]
+	-- end	
+	-- local sound = playSound3D("horns/files/"..horn..extension, x, y, z, false)
+	local sound = playSound3D(horn, x, y, z, false) -- Horn argument is passed as path
 	setSoundMaxDistance(sound, 50)
 	local length = getSoundLength(sound)
 	length = length * 1000
@@ -723,17 +730,86 @@ function createSoundForCar(car, horn)
 end
 
 addEvent("onPlayerUsingHorn", true)
-addEventHandler("onPlayerUsingHorn", root,
-function(horn, car)
+function playerUsingHorn(horn,car)
 	if (getElementData(source, "state") == "alive") and (getElementData(localPlayer, "state") == "alive") and (soundsOn == true) and (getElementData(localPlayer, "dim") == getElementData(source, "dim")) and getPedOccupiedVehicle(localPlayer) then
 		local x,y,z = getElementPosition(getPedOccupiedVehicle(localPlayer))
 		local rx, ry, rz = getElementPosition(car)
-		if getDistanceBetweenPoints3D(x,y,z,rx,ry,rz) < 40 then
-			createSoundForCar(car, horn)
+		local playerTriggered = getVehicleOccupant( car )
+		if not playerTriggered or getElementType(playerTriggered) ~= "player" then return end
+		-- DO THIS IN OTHER FUNCTION -- if getDistanceBetweenPoints3D(x,y,z,rx,ry,rz) < 40 then
+		
+		-- Download file first, then do this
+
+		local extension
+		extension = ".wav"
+		if extensions[tonumber(horn)] then
+			extension = "." .. extensions[tonumber(horn)]
 		end	
+
+		local hornPath = "horns/files/"..horn..extension
+		table.insert(downloadHornList,{horn=hornPath,player=playerTriggered})
+		downloadFile( hornPath )
+			
 	end	
 end
-)
+addEventHandler("onPlayerUsingHorn", root,playerUsingHorn)
+
+	
+
+
+function getHornSource(path,preview)
+	local found = {}
+	local remove = {}
+
+	if preview then
+		for num,t in ipairs(previewHornList) do
+			if t == path then
+				found = true
+				table.insert(remove,num)
+			end
+		end
+		if #remove > 0 then
+			for _,i in ipairs(remove) do
+				table.remove(previewHornList,i)
+			end
+		end		
+	else
+
+		for num,t in ipairs(downloadHornList) do
+			if t.horn == path then
+				table.insert(found,t.player)
+				table.insert(remove,num)
+			end
+		end
+		if #remove > 0 then
+			for _,i in ipairs(remove) do
+				table.remove(downloadHornList,i)
+			end
+		end
+	end
+
+	return found
+end
+
+
+function onHornDownloadComplete(path,succes)
+	if not succes then outputDebugString("GCSHOP: "..path.." failed to download (horns_c)") return false end
+	
+	if #previewHornList > 0 then
+		local prevSource = getHornSource(path,true)
+		if prevSource then
+			playSound( path,false )
+		end
+	end
+
+	local hornSource = getHornSource(path)
+	if #hornSource > 0 then
+		for _,p in ipairs(hornSource) do
+			createSoundForCar(p, path)
+		end
+	end
+end
+addEventHandler("onClientFileDownloadComplete",resourceRoot,onHornDownloadComplete)
 
 soundsOn = true
 
