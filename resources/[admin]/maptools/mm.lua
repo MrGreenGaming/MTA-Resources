@@ -140,6 +140,10 @@ function onNewMapStart()
     setResourceInfo(map,"deletedBy",g_AccName)
     setResourceInfo(map,"deleteTimeStamp",tostring(getRealTime().timestamp))
 
+    -- Check if copied deleted resource exists, if so then delete first.
+    if getResourceFromName( resname.."_deleted" ) then
+    	deleteResource( resname.."_deleted" )
+    end
 
     copyResource(map,resname.."_deleted",deletedMapsPath)
 
