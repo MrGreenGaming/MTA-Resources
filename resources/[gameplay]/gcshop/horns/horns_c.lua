@@ -200,6 +200,7 @@ hornsTable = {
 	[197] = "Feel Dog Inc",
 	[198] = "Reality - Melody",
 	[199] = "Reality - Original",
+	[200] = "Bellini - Samba De Janeiro",
 }
 
 extensions = {
@@ -374,6 +375,7 @@ extensions = {
 	[197] = "mp3",
 	[198] = "mp3",
 	[199] = "mp3",
+	[200] = "mp3",
 }
 
 function onShopInit ( tabPanel )
