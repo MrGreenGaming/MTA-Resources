@@ -465,6 +465,11 @@ function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
         setResourceInfo(theRes,"deletedBy",adminAccName)
         setResourceInfo(theRes,"deleteTimeStamp",tostring(getRealTime().timestamp))
 
+		-- Check if copied deleted resource exists, if so then delete first.
+		if getResourceFromName( map.resname.."_deleted" ) then
+			deleteResource( map.resname.."_deleted" )
+		end
+
         copyResource(theRes,map.resname.."_deleted",deletedMapsPath)
         local delete = deleteResource(map.resname)
         if not delete and isElement(client) then
