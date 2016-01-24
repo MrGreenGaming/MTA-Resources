@@ -111,47 +111,47 @@
     
     <script src="horns\horns_c.lua" type="client" />
     <script src="horns\horns_s.lua" type="server" />
-    <file src="horns\files\1.wav" download="false"/>
-    <file src="horns\files\2.wav" download="false"/>
-    <file src="horns\files\3.wav" download="false"/>
-    <file src="horns\files\4.wav" download="false"/>
-    <file src="horns\files\5.wav" download="false"/>
-    <file src="horns\files\6.wav" download="false"/>
-    <file src="horns\files\7.wav" download="false"/>
-    <file src="horns\files\8.wav" download="false"/>
-    <file src="horns\files\9.wav" download="false"/>
-    <file src="horns\files\10.wav" download="false"/>
-    <file src="horns\files\11.wav" download="false"/>
-    <file src="horns\files\12.wav" download="false"/>
+    <file src="horns\files\1.mp3" download="false"/>
+    <file src="horns\files\2.mp3" download="false"/>
+    <file src="horns\files\3.mp3" download="false"/>
+    <file src="horns\files\4.mp3" download="false"/>
+    <file src="horns\files\5.mp3" download="false"/>
+    <file src="horns\files\6.mp3" download="false"/>
+    <file src="horns\files\7.mp3" download="false"/>
+    <file src="horns\files\8.mp3" download="false"/>
+    <file src="horns\files\9.mp3" download="false"/>
+    <file src="horns\files\10.mp3" download="false"/>
+    <file src="horns\files\11.mp3" download="false"/>
+    <file src="horns\files\12.mp3" download="false"/>
     <file src="horns\files\13.mp3" download="false"/>
-    <file src="horns\files\14.wav" download="false"/>
-    <file src="horns\files\15.wav" download="false"/>
-    <file src="horns\files\16.ogg" download="false"/>
+    <file src="horns\files\14.mp3" download="false"/>
+    <file src="horns\files\15.mp3" download="false"/>
+    <file src="horns\files\16.mp3" download="false"/>
     <file src="horns\files\17.mp3" download="false"/>
     <file src="horns\files\18.mp3" download="false"/>
     <file src="horns\files\19.mp3" download="false"/>
-    <file src="horns\files\20.wav" download="false"/>
-    <file src="horns\files\21.wav" download="false"/>
-    <file src="horns\files\22.wav" download="false"/>
-    <file src="horns\files\23.wav" download="false"/>
-    <file src="horns\files\24.wav" download="false"/>
-    <file src="horns\files\25.wav" download="false"/>
+    <file src="horns\files\20.mp3" download="false"/>
+    <file src="horns\files\21.mp3" download="false"/>
+    <file src="horns\files\22.mp3" download="false"/>
+    <file src="horns\files\23.mp3" download="false"/>
+    <file src="horns\files\24.mp3" download="false"/>
+    <file src="horns\files\25.mp3" download="false"/>
     <file src="horns\files\26.mp3" download="false"/>
-    <file src="horns\files\27.wav" download="false"/>
-    <file src="horns\files\28.wav" download="false"/>
+    <file src="horns\files\27.mp3" download="false"/>
+    <file src="horns\files\28.mp3" download="false"/>
     <file src="horns\files\29.mp3" download="false"/>
     <file src="horns\files\30.mp3" download="false"/>
     <file src="horns\files\31.mp3" download="false"/>
-    <file src="horns\files\32.wav" download="false"/>
+    <file src="horns\files\32.mp3" download="false"/>
     <file src="horns\files\33.mp3" download="false"/>
-    <file src="horns\files\34.wav" download="false"/>
-    <file src="horns\files\35.wav" download="false"/>
+    <file src="horns\files\34.mp3" download="false"/>
+    <file src="horns\files\35.mp3" download="false"/>
     <file src="horns\files\36.mp3" download="false"/>
     <file src="horns\files\37.mp3" download="false"/>
-    <file src="horns\files\38.wav" download="false"/>
+    <file src="horns\files\38.mp3" download="false"/>
     <file src="horns\files\39.mp3" download="false"/>
     <file src="horns\files\40.mp3" download="false"/>
-    <file src="horns\files\41.wav" download="false"/>
+    <file src="horns\files\41.mp3" download="false"/>
     <file src="horns\files\42.mp3" download="false"/>
     <file src="horns\files\43.mp3" download="false"/>
     <file src="horns\files\44.mp3" download="false"/>
@@ -159,12 +159,12 @@
     <file src="horns\files\46.mp3" download="false"/>
     <file src="horns\files\47.mp3" download="false"/>
     <file src="horns\files\48.mp3" download="false"/>
-    <file src="horns\files\49.wav" download="false"/>
-    <file src="horns\files\50.wav" download="false"/>
+    <file src="horns\files\49.mp3" download="false"/>
+    <file src="horns\files\50.mp3" download="false"/>
     <file src="horns\files\51.mp3" download="false"/>
-    <file src="horns\files\52.wav" download="false"/>
+    <file src="horns\files\52.mp3" download="false"/>
     <file src="horns\files\53.mp3" download="false"/>
-    <file src="horns\files\54.wav" download="false"/>
+    <file src="horns\files\54.mp3" download="false"/>
     <file src="horns\files\55.mp3" download="false"/>
     <file src="horns\files\56.mp3" download="false"/>
     <file src="horns\files\57.mp3" download="false"/>
