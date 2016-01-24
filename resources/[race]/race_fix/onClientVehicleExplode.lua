@@ -1,4 +1,6 @@
-﻿local FireLifetime = 30000
+﻿math.randomseed( getTickCount() )
+
+local FireLifetime = 30000
 
 function createPostExplosionEffect(vehicle)
 local x, y, z = getElementPosition(vehicle)
@@ -17,7 +19,12 @@ effects[7] = createEffect("fire", x+math.random(0.1, 2.0), y, z-math.random(0.4,
 effects[8] = createEffect("fire", x, y-math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
 effects[9] = createEffect("fire", x, y+math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
 
-setTimer(function() for k, effect in ipairs(effects) do  if isElement(effect) then destroyElement(effect) end end end, FireLifetime, 1)
+setTimer(function() 
+			for k, effect in ipairs(effects) do  
+				setTimer(function() if isElement(effect) then destroyElement(effect) end end, math.random(10000), 1)
+			end 
+		end, FireLifetime, 1)
+
 end
 
 addEvent("createPostExplosionEffect", true)

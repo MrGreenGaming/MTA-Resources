@@ -261,9 +261,6 @@ addEventHandler('onShopInit', root, onShopInit )
 local previewHornList = {}
 function playButton(button, state)
 	if button == "left" and state == "up" then	
-		if isElement(soundTest) then
-			stopSound(soundTest) 
-		end
 		local row, col = guiGridListGetSelectedItem(availableHornsList)
 		if row == -1 or row == false then
 			return
@@ -610,8 +607,11 @@ function onHornDownloadComplete(path,succes)
 	
 	if #previewHornList > 0 then
 		local prevSource = getHornSource(path,true)
+		if isElement(hornPreview) then
+			stopSound(hornPreview) 
+		end
 		if prevSource then
-			playSound( path,false )
+			hornPreview = playSound( path,false )
 		end
 	end
 
