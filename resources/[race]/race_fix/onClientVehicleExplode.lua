@@ -21,7 +21,7 @@ effects[9] = createEffect("fire", x, y+math.random(0.1, 2.0), z-math.random(0.4,
 
 setTimer(function() 
 			for k, effect in ipairs(effects) do  
-				setTimer(function() if isElement(effect) then destroyElement(effect) end end, math.random(10000), 1)
+				setTimer(function() if isElement(effect) then destroyElement(effect) end end, math.random(1,10)*1000, 1)
 			end 
 		end, FireLifetime, 1)
 
