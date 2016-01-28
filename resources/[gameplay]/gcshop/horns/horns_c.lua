@@ -211,7 +211,10 @@ hornsTable = {
 	[208] = "MadLaugh3",
 	[209] = "MadLaugh4",	
 	[210] = "Out Of My Way",
-	[211] = "Gazuj",		
+	[211] = "Gazuj",
+	[212] = "One click headshop",
+	[213] = "DubStep 2",
+	[214] = "Detonate",
 }
 
 
