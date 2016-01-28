@@ -212,8 +212,8 @@ hornsTable = {
 	[209] = "MadLaugh4",	
 	[210] = "Out Of My Way",	
 	[211] = "One click headshop",	
-	[210] = "DUBSTEP HORN 2!",	
-	[210] = "Detonate",		
+	[212] = "DUBSTEP HORN 2!",	
+	[213] = "Detonate",		
 }
 
 
