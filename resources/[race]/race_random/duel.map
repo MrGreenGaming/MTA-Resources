@@ -15,6 +15,4 @@
     <object id="object (vgncarshade1) (25)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-435.60001" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
     <object id="object (vgncarshade1) (26)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-395.29999" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
     <object id="object (vgncarshade1) (27)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-355.29999" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
-    <spawnpoint id="spawnpoint (NRG-500) (1)" vehicle="522" team="none" posX="-932.79999" posY="-328" posZ="2.2" rotX="0" rotY="0" rotZ="270"></spawnpoint>
-    <spawnpoint id="spawnpoint (NRG-500) (2)" vehicle="522" team="none" posX="-315" posY="-328" posZ="2.2" rotX="0" rotY="0" rotZ="90"></spawnpoint>
 </map>
