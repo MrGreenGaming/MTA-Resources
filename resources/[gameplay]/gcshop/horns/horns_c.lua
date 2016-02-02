@@ -205,6 +205,13 @@ hornsTable = {
 	[202] = "WAR, WAR NEVER CHANGES!",
 	[203] = "Laugh",
 	[204] = "Mr FuckFace",
+	[205] = "Leeroy",
+	[206] = "MadLaugh1",	
+	[207] = "MadLaugh2",	
+	[208] = "MadLaugh3",
+	[209] = "MadLaugh4",	
+	[210] = "Out Of My Way",
+	[211] = "Gazuj",		
 }
 
 

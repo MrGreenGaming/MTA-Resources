@@ -167,6 +167,9 @@ addEventHandler ( "onClientRender", g_Root,
 					if player and getElementData(player, 'markedblocker') then
 						name = name .. ' #FFFFFF[BLOCKER]'
 					end
+					if player and getElementData(player, 'markedlagger') then
+						name = name .. ' #FFFFFF[LAGGER]'
+					end
 					local offset = (scale) * NAMETAG_TEXT_BAR_SPACE/2
 					-- Edit #1 Colour nicknames
 					if not bOnlyHealthBar then
