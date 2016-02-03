@@ -230,6 +230,10 @@ hornsTable = {
 	[227] = "Use force luke",
 	[228] = "weird thunder",
 	[229] = "Wohoohue salsa",
+	[230] = "Chilling y'all",
+	[231] = "Im... Faaalling !",
+	[232] = "You R so F_cked !",
+	[233] = "Its time to dueell",
 }
 
 
