@@ -1,5 +1,5 @@
 local screenWidth, screenHeight = guiGetScreenSize()
-
+downloadHornList = {}
 hornsTable = {
 	[1] = "Birdo-geluidje",
 	[2] = "Boo-gebulder",
@@ -175,7 +175,7 @@ hornsTable = {
 	[172] = "Magiiiik",
 	[173] = "Keep the Change You Filthy Animal",
 	[174] = "Crazy santa",
-	[175] = "Dumb Flordia Moron",
+	[175] = "Dumb Florida Moron",
 	[176] = "AMG",
 	[177] = "Audi",
 	[178] = "Chase the sun",
@@ -185,182 +185,58 @@ hornsTable = {
 	[182] = "I Am Jacks Hungry Heart Vocal 2",
 	[183] = "I Am Jacks Hungry Heart Vocal",
 	[184] = "I Am Jacks Hungry Heart",
-	[185] = "I Belive In Dreams",
+	[185] = "I Believe In Dreams",
 	[186] = "I Can't Stop",
 	[187] = "Insomnia",
 	[188] = "Komodoo",
 	[189] = "Love Sex American Express",
-	[190] = "Nigthtrain",
+	[190] = "Nighttrain",
 	[191] = "Step it up",
 	[192] = "Tobi King",
+	[193] = "Tsunami",
+	[194] = "DubStep!!",
+	[195] = "Disturbed - Fear",
+	[196] = "Knife Party - Nya",
+	[197] = "Feel Dog Inc",
+	[198] = "Reality - Melody",
+	[199] = "Reality - Original",
+	[200] = "Bellini - Samba De Janeiro",
+	[201] = "Do You See Me Now?",
+	[202] = "WAR, WAR NEVER CHANGES!",
+	[203] = "Laugh",
+	[204] = "Mr FuckFace",
+	[205] = "Leeroy",
+	[206] = "MadLaugh1",	
+	[207] = "MadLaugh2",	
+	[208] = "MadLaugh3",
+	[209] = "MadLaugh4",	
+	[210] = "Out Of My Way",
+	[211] = "Gazuj",
+	[212] = "One click headshop",
+	[213] = "DubStep 2",
+	[214] = "Detonate",
+	[215] = "Want To Want Me",
+	[216] = "Bring It On!",
+	[217] = "Cant handle the truth",
+	[218] = "Eminem My Salsa",
+	[219] = "Für Elise",
+	[220] = "Gooooodmorning Vietnaaam",
+	[221] = "HELP ME !! ",
+	[222] = "I'm a Metalhead ",
+	[223] = "I'm Batman ",
+	[224] = "more hate..",
+	[225] = "Rational Gaze",
+	[226] = "The Watcher",
+	[227] = "Use force luke",
+	[228] = "weird thunder",
+	[229] = "Wohoohue salsa",
+	[230] = "Chilling y'all",
+	[231] = "Im... Faaalling !",
+	[232] = "You R so F_cked !",
+	[233] = "Its time to dueell",
 }
 
-extensions = {
-	[16] = "ogg",
-	[13] = "mp3",
-	[17] = "mp3",
-	[18] = "mp3",
-	[19] = "mp3",
-	[26] = "mp3",
-	[29] = "mp3",
-	[30] = "mp3",
-	[13] = "mp3",
-	[31] = "mp3",
-	[33] = "mp3",
-	[36] = "mp3",
-	[37] = "mp3",
-	[39] = "mp3",
-	[13] = "mp3",
-	[42] = "mp3",
-	[40] = "mp3",
-	[43] = "mp3",
-	[44] = "mp3",
-	[45] = "mp3",
-	[46] = "mp3",
-	[47] = "mp3",
-	[48] = "mp3",
-	[51] = "mp3",
-	[53] = "mp3",
-	[55] = "mp3",
-	[56] = "mp3",
-	[57] = "mp3",
-	[58] = "mp3",
-	[59] = "mp3",
-	[60] = "mp3",
-	[61] = "mp3",
-	[62] = "mp3",
-	[63] = "mp3",
-	[64] = "mp3",
-	[65] = "mp3",
-	[66] = "mp3",
-	[67] = "mp3",
-	[68] = "mp3",
-	[69] = "mp3",
-	[70] = "mp3",
-	[71] = "mp3",
-	[72] = "mp3",
-	[73] = "mp3",
-	[74] = "mp3",
-	[75] = "mp3",
-	[75] = "mp3",
-	[76] = "mp3",
-	[77] = "mp3",
-	[78] = "mp3",
-	[79] = "mp3",
-	[80] = "mp3",
-	[81] = "mp3",
-	[82] = "mp3",
-	[83] = "mp3",
-	[84] = "mp3",
-	[85] = "mp3",
-	[86] = "mp3",
-	[87] = "mp3",
-	[88] = "mp3",
-	[89] = "mp3",
-	[90] = "mp3",
-	[91] = "mp3",
-	[92] = "mp3",
-	[93] = "mp3",
-	[94] = "mp3",
-	[95] = "mp3",
-	[96] = "mp3",
-	[97] = "mp3",
-	[98] = "mp3",
-	[99] = "mp3",
-	[100] = "mp3",
-	[101] = "mp3",
-	[102] = "mp3",
-	[103] = "mp3",
-	[104] = "mp3",
-	[105] = "mp3",
-	[106] = "mp3",
-	[107] = "mp3",
-	[108] = "mp3",
-	[109] = "mp3",
-	[110] = "mp3",
-	[111] = "mp3",
-	[112] = "mp3",
-	[113] = "mp3",
-	[114] = "mp3",
-	[115] = "mp3",
-	[116] = "mp3",
-	[117] = "mp3",
-	[118] = "mp3",
-	[119] = "mp3",
-	[120] = "mp3",
-	[121] = "mp3",
-	[122] = "mp3",
-	[123] = "mp3",
-	[124] = "mp3",
-	[125] = "mp3",
-	[126] = "mp3",
-	[127] = "mp3",
-	[128] = "mp3",
-	[129] = "mp3",
-	[130] = "mp3",
-	[131] = "mp3",
-	[132] = "mp3",
-	[133] = "mp3",
-	[134] = "mp3",
-	[135] = "mp3",
-	[136] = "mp3",
-	[137] = "mp3",
-	[138] = "mp3",
-	[139] = "mp3",
-	[140] = "mp3",
-	[141] = "mp3",
-	[142] = "mp3",
-	[143] = "mp3",
-	[144] = "mp3",
-	[145] = "mp3",
-	[146] = "mp3",
-	[147] = "mp3",
-	[148] = "mp3",
-	[149] = "mp3",
-	[150] = "mp3",
-	[151] = "mp3",
-	[152] = "mp3",
-	[153] = "mp3",
-	[154] = "mp3",
-	[155] = "mp3",
-	[156] = "mp3",
-	[157] = "mp3",
-	[158] = "mp3",
-	[159] = "mp3",
-	[160] = "mp3",
-	[161] = "mp3",
-	[162] = "mp3",
-	[163] = "mp3",
-	[164] = "mp3",
-	[165] = "mp3",		
- 	[166] = "mp3",		
- 	[167] = "mp3",		
- 	[168] = "mp3",		
- 	[169] = "mp3",
-	[170] = "mp3",
-	[171] = "mp3",
-	[172] = "mp3",
-	[173] = "mp3",
-	[174] = "mp3",
-	[175] = "mp3",
-	[176] = "mp3",
-	[177] = "mp3",
-	[178] = "mp3",
-	[179] = "mp3",
-	[180] = "mp3",
-	[181] = "mp3",
-	[182] = "mp3",
-	[183] = "mp3",
-	[184] = "mp3",
-	[185] = "mp3",
-	[186] = "mp3",
-	[187] = "mp3",
-	[188] = "mp3",
-	[189] = "mp3",
-	[190] = "mp3",
-	[191] = "mp3",
-	[192] = "mp3",
-}
+
 
 function onShopInit ( tabPanel )
 	shopTabPanel = tabPanel
@@ -414,23 +290,19 @@ end
 addEvent('onShopInit', true)
 addEventHandler('onShopInit', root, onShopInit )
 
-
+local previewHornList = {}
 function playButton(button, state)
 	if button == "left" and state == "up" then	
-		if isElement(soundTest) then
-			stopSound(soundTest) 
-		end
 		local row, col = guiGridListGetSelectedItem(availableHornsList)
 		if row == -1 or row == false then
 			return
 		end
 		row = row + 1
 		local extension
-		extension = ".wav"
-		if extensions[row] then 
-			extension = "." .. extensions[row]
-		end	
-		soundTest = playSound("horns/files/"..tostring(row)..extension, false)
+		extension = ".mp3"
+
+		table.insert(previewHornList,"horns/files/"..tostring(row)..extension)
+		downloadFile( "horns/files/"..tostring(row)..extension )
 	end
 end
 
@@ -656,18 +528,16 @@ local globalalpha = 1
 icon = {}
 
 function createSoundForCar(car, horn)
+	if not isElement(car) then return end
+	if getElementType(car) == "player" then car = getPedOccupiedVehicle( car ) end -- If var car = player then turn car into an actual car element
 	if isElement(icon[car]) then destroyElement(icon[car]) end
 	if isTimer(soundTimer[car]) then killTimer(soundTimer[car]) end
 	if isTimer(killOtherTimer[car]) then killTimer(killOtherTimer[car]) end
 	icon[car] = guiCreateStaticImage(0, 0, guix, guiy, "horns/icon.png", false )
 	guiSetVisible(icon[car], false)
 	local x,y,z = getElementPosition(car)
-	local extension
-	extension = ".wav"
-	if extensions[tonumber(horn)] then
-		extension = "." .. extensions[tonumber(horn)]
-	end	
-	local sound = playSound3D("horns/files/"..horn..extension, x, y, z, false)
+
+	local sound = playSound3D(horn, x, y, z, false) -- Horn argument is passed as path
 	setSoundMaxDistance(sound, 50)
 	local length = getSoundLength(sound)
 	length = length * 1000
@@ -705,17 +575,86 @@ function createSoundForCar(car, horn)
 end
 
 addEvent("onPlayerUsingHorn", true)
-addEventHandler("onPlayerUsingHorn", root,
-function(horn, car)
+function playerUsingHorn(horn,car)
 	if (getElementData(source, "state") == "alive") and (getElementData(localPlayer, "state") == "alive") and (soundsOn == true) and (getElementData(localPlayer, "dim") == getElementData(source, "dim")) and getPedOccupiedVehicle(localPlayer) then
 		local x,y,z = getElementPosition(getPedOccupiedVehicle(localPlayer))
 		local rx, ry, rz = getElementPosition(car)
-		if getDistanceBetweenPoints3D(x,y,z,rx,ry,rz) < 40 then
-			createSoundForCar(car, horn)
-		end	
+		local playerTriggered = getVehicleOccupant( car )
+		if not playerTriggered or getElementType(playerTriggered) ~= "player" then return end
+		-- DO THIS IN OTHER FUNCTION -- if getDistanceBetweenPoints3D(x,y,z,rx,ry,rz) < 40 then
+		
+		-- Download file first, then do this
+
+		local extension = ".mp3"
+
+
+		local hornPath = "horns/files/"..horn..extension
+		table.insert(downloadHornList,{horn=hornPath,player=playerTriggered})
+		downloadFile( hornPath )
+			
 	end	
 end
-)
+addEventHandler("onPlayerUsingHorn", root,playerUsingHorn)
+
+	
+
+
+function getHornSource(path,preview)
+	local found = {}
+	local remove = {}
+
+	if preview then
+		for num,t in ipairs(previewHornList) do
+			if t == path then
+				found = true
+				table.insert(remove,num)
+			end
+		end
+		if #remove > 0 then
+			for _,i in ipairs(remove) do
+				table.remove(previewHornList,i)
+			end
+		end		
+	else
+
+		for num,t in ipairs(downloadHornList) do
+			if t.horn == path then
+				table.insert(found,t.player)
+				table.insert(remove,num)
+			end
+		end
+		if #remove > 0 then
+			for _,i in ipairs(remove) do
+				table.remove(downloadHornList,i)
+			end
+		end
+	end
+
+	return found
+end
+
+
+function onHornDownloadComplete(path,succes)
+	if not succes then outputDebugString("GCSHOP: "..path.." failed to download (horns_c)") return false end
+	
+	if #previewHornList > 0 then
+		local prevSource = getHornSource(path,true)
+		if isElement(hornPreview) then
+			stopSound(hornPreview) 
+		end
+		if prevSource then
+			hornPreview = playSound( path,false )
+		end
+	end
+
+	local hornSource = getHornSource(path)
+	if #hornSource > 0 then
+		for _,p in ipairs(hornSource) do
+			createSoundForCar(p, path)
+		end
+	end
+end
+addEventHandler("onClientFileDownloadComplete",resourceRoot,onHornDownloadComplete)
 
 soundsOn = true
 

@@ -131,7 +131,7 @@ function rerollPlayerVehicle(player)
 			playerRolledAmount[player] = 1
 		end
 		-- output for root
-		outputChatBox(getPlayerName(player).." #22FF00has rerolled his vehicle to "..getVehicleName(vehicle)..". (Reroll GC perk) ",root,255,255,255,true)
+		outputChatBox(getPlayerName(player).." #22FF00has rerolled his vehicle from " .. getVehicleNameFromModel(vehicleID) .. " to "..getVehicleName(vehicle)..". (Reroll GC perk) ",root,255,255,255,true)
 	end
 
 	return true

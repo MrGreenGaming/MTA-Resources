@@ -79,13 +79,13 @@ function()
 end
 )
 
-function useHorn(player, key, keyState, hornID)
+function useHorn(player, arg1, arg2, hornID)
 	if (canHornBeUsed[player]) and (coolOff[player] == true) and (isPedInVehicle(player)) and (not isVehicleBlown(getPedOccupiedVehicle(player))) and (getElementHealth(getPedOccupiedVehicle(player)) > 250) and (getElementData(player, "state") == "alive") then
 		local logged = exports.gc:isPlayerLoggedInGC(player)
 		if logged then
 			local forumid = exports.gc:getPlayerForumID(player)
 			forumid = tostring(forumid)
-			if tonumber(hornID) then
+			if tonumber(hornID or arg2) then
 				local query = dbQuery(handlerConnect, "SELECT horns, unlimited FROM gc_horns WHERE forumid = ?", forumid)
 				local sql = dbPoll(query,-1)
 				if #sql > 0 then
@@ -93,17 +93,17 @@ function useHorn(player, key, keyState, hornID)
 					
 					local useHorn = false
 					for i,j in ipairs(allHorns) do
-						if tonumber(j) == tonumber(hornID) then
+						if tonumber(j) == tonumber(hornID or arg2) then
 							useHorn = true
 							break
 						end
 					end
 
-					if not useHorn then outputChatBox("Please buy the horn (".. tostring(hornID) ..") first before using it",player,255,0,0) return end
+					if not useHorn then outputChatBox("Please buy the horn (".. tostring(hornID or arg2) ..") first before using it",player,255,0,0) return end
 
 					local car = getPedOccupiedVehicle(player)
 					coolOffTimer[player] = setTimer(function(player) coolOff[player] = true end, 10000, 1, player)
-					triggerClientEvent("onPlayerUsingHorn", player, hornID, car)
+					triggerClientEvent("onPlayerUsingHorn", player, hornID or arg2, car)
 					coolOff[player] = false
 					howManyTimes[player] = howManyTimes[player] + 1
 					if sql[1].unlimited == 1 then howManyTimes[player] = 0 end
@@ -117,6 +117,7 @@ function useHorn(player, key, keyState, hornID)
 		end	
 	end	
 end
+addCommandHandler("gchorn",useHorn)
 
 addEvent("bindHorn", true)
 addEventHandler("bindHorn", root, function(key, hornID, hornName)

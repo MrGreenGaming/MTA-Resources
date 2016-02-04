@@ -1,0 +1,20 @@
+<map edf:definitions="editor_main">
+    <object id="object (vgncarshade1) (9)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-475.5" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (13)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-323.70001" posY="-328" posZ="0.001" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (14)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-916.29999" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (15)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-876.40002" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (16)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-836" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (17)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-796" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (18)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-756.09998" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (19)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-715.90002" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (20)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-675.90002" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (21)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-635.70001" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (22)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-596" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (23)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-555.79999" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (24)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-515.70001" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (25)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-435.60001" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (26)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-395.29999" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (27)" breakable="true" interior="0" alpha="255" model="3458" doublesided="false" scale="1" dimension="9001" posX="-355.29999" posY="-328" posZ="0" rotX="0" rotY="0" rotZ="0"></object>
+    <spawnpoint id="spawnpoint (NRG-500) (1)" vehicle="522" team="none" posX="-932.79999" posY="-328" posZ="2.2" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="spawnpoint (NRG-500) (2)" vehicle="522" team="none" posX="-315" posY="-328" posZ="2.2" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+</map>

@@ -140,6 +140,10 @@ function onNewMapStart()
     setResourceInfo(map,"deletedBy",g_AccName)
     setResourceInfo(map,"deleteTimeStamp",tostring(getRealTime().timestamp))
 
+    -- Check if copied deleted resource exists, if so then delete first.
+    if getResourceFromName( resname.."_deleted" ) then
+    	deleteResource( resname.."_deleted" )
+    end
 
     copyResource(map,resname.."_deleted",deletedMapsPath)
 
@@ -460,6 +464,11 @@ function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
         setResourceInfo(theRes,"deleteReason",reason)
         setResourceInfo(theRes,"deletedBy",adminAccName)
         setResourceInfo(theRes,"deleteTimeStamp",tostring(getRealTime().timestamp))
+
+		-- Check if copied deleted resource exists, if so then delete first.
+		if getResourceFromName( map.resname.."_deleted" ) then
+			deleteResource( map.resname.."_deleted" )
+		end
 
         copyResource(theRes,map.resname.."_deleted",deletedMapsPath)
         local delete = deleteResource(map.resname)

@@ -55,9 +55,9 @@ function buildGUI()
 	guiCreateLabel(600, 270, 180, 20, "Retard - Admin", false, AboutTab)
 	guiCreateLabel(600, 290, 180, 20, "neox. - Admin", false, AboutTab)
 	guiCreateLabel(600, 310, 180, 20, "Hulpje - Admin", false, AboutTab)
-	guiCreateLabel(600, 330, 180, 20, "SkyNet - Admin", false, AboutTab)
-	guiCreateLabel(600, 350, 180, 20, "Goldberg - Admin", false, AboutTab)
-	guiCreateLabel(600, 370, 180, 20, "Besweeet - Admin", false, AboutTab)
+	guiCreateLabel(600, 330, 180, 20, "Goldberg - Admin", false, AboutTab)
+	guiCreateLabel(600, 350, 180, 20, "Besweeet - Admin", false, AboutTab)
+	-- guiCreateLabel(600, 370, 180, 20, "Besweeet - Admin", false, AboutTab)
 	
 	CommandsBindsTab = guiCreateTab("Commands & Binds", TabPanel)
 	

@@ -18,8 +18,8 @@ function CTF:isMapValid()
 		return false 
 	else
 		local error = false
-		for i, spawn in ipairs(getElementsByType'spawnpoint') do
-			local team = getElementData(spawn, 'team')
+		for i, spawn in ipairs(g_Spawnpoints) do
+			local team = spawn.team
 			if not (team == self.red.SpawnType or team == self.blue.SpawnType) then
 				error = true
 				outputRace('Error. CTF spawnpoint #' .. i .. ' "' .. getElementID(spawn) .. '" has no team assigned')
