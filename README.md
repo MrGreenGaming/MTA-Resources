@@ -37,3 +37,4 @@ A non-dramatic GNU license applies. See LICENSE file for details.
 * Dev topic: http://mrgreengaming.com/forums/topic/17140-development-topic-lua-github-ask-here-if-you-need-help-with-git-or-the-resources/
 * Discussion forums: http://mrgreengaming.com/forums/forum/31-multi-theft-auto/
 * Direct communication: mail@mrgreengaming.com
+test
