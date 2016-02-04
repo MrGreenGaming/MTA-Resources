@@ -240,7 +240,7 @@ end
 function FormatDate(timestamp)
 	local t =  getRealTime(timestamp)
 	-- return string.format("%02d/%02d/'%02d %02d:%02d:%02d", t.monthday, t.month+1, t.year - 100, t.hour, t.minute, t.second)
-	return string.format("%02d/%02d/%d", t.monthday, t.month+1, t.year)
+	return string.format("%02d/%02d/%d", t.monthday, t.month+1, t.year + 1900)
 end
 
 addEvent("mm_receiveMapLists",true)
