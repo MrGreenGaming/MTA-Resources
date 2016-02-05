@@ -28,6 +28,7 @@ function duel(p, c, a)
 		setElementDimension(map, 0)
 	end
 	triggerClientEvent('its_time_to_duel.mp3', resourceRoot)
+	outputChatBox("[DUEL] " .. getPlayerName(p) .. " #00FF00started a duel!", root, 0,255,0, true)
 end
 addCommandHandler('duel', duel, true)
 
