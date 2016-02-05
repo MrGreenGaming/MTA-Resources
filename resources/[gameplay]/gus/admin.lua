@@ -8,9 +8,9 @@ function adsay(player, c, ...) 			-- Admin chat
 	for k, v in ipairs (getElementsByType("player")) do
 		if hasObjectPermissionTo ( v, "general.adminpanel", false ) then
 			outputChatBox ( "ADMIN> "..string.gsub ( (getPlayerName(player)), '#%x%x%x%x%x%x', '' )..": "..message, v, 255, 0, 0,true )
+			triggerClientEvent(v, 'flash', resourceRoot)
 		end
 	end
-
 end
 addCommandHandler('adsay', adsay)
 
