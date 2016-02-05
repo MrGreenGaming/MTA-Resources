@@ -27,7 +27,7 @@ function showHud (hud)
 			exports.fps:enableFPS(false)
 		end
 		g_hud = hud
-		if getResourceFromName('race') then
+		if getResourceFromName('race') and getResourceState(getResourceFromName'race' ) == 'running' then
 			g_StartTick = exports.race:getStartTick()
 		end
 	else
@@ -110,7 +110,7 @@ addEventHandler('onClientResourceStart', resourceRoot, onStart)
 
 -- hide race hud (without changing the race mode, it needs to be send to serverside first)
 function hideRaceHUD(hide)
-	if not getResourceFromName('race') then return end
+	if not (getResourceFromName('race') and getResourceState(getResourceFromName'race' ) == 'running') then return end
 	if hide == true then
 		triggerEvent('onClientCall_race', getResourceRootElement( getResourceFromName('race')), 'hideGUIComponents', 'timepassed', 'healthbar', 'speedbar', 'ranknum', 'ranksuffix', 'checkpoint', 'timeleftbg', 'timeleft')
 	else 
@@ -180,7 +180,7 @@ function drawNewHUD()
 	local rank = getElementData(target,'race rank')
 	local players = #getElementsByType('player') or 1
 	local currentCheckpoint = (getElementData(target, 'race.checkpoint') or 1) - ((getElementData(target, 'race.finished') and 0) or 1)
-	local totalCheckpoints = (#getElementsByType('checkpoint') or 1)
+	local totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
 	local health = math.ceil((getElementHealth(g_Veh) - 250) / 7.50)
 	if g_hud ~= 1 then
 		if not ( isVehicle(g_Veh) and isElementOnScreen(g_Veh) ) then return end
@@ -204,7 +204,7 @@ function drawNewHUD()
 			local rank = getElementData(target,'race rank')
 			local players = #getElementsByType('player') or 1
 			local currentCheckpoint = (getElementData(target, 'race.checkpoint') or 1) - ((getElementData(target, 'race.finished') and 0) or 1)
-			local totalCheckpoints = (#getElementsByType('checkpoint') or 1)
+			local totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
 			local health = math.ceil((getElementHealth(g_Veh) - 250) / 7.50)
 			local speedMode = 1
 			

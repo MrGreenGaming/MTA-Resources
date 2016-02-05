@@ -4,11 +4,17 @@
 	<script src="random_s.lua" type="server"/>
 	<script src="random_c.lua" type="client"/>
 	
+	<script src="duel_s.lua" type="server"/>
+	<script src="duel_c.lua" type="client"/>
+    <map src="duel.map"></map>
+	
 	<file src="files/run.wma" />
 	<file src="files/hallelujah.wma" />
 	<file src="files/tpsound.wma" />
 	<file src="files/votesound.wav" />
 	<file src="files/BOMB_SIREN-BOMB_SIREN-247265934.mp3" />
+	
+	<file src="files/its_time_to_duel.mp3" />
 
 	<!-- Ravebreak  -->
 	<file src="files/ravebreak1.mp3" />

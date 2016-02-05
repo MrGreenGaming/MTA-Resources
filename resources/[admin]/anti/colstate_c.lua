@@ -3,7 +3,13 @@ addEventHandler("onClientResourceStart",resourceRoot,function() triggerServerEve
 
 
 addEvent("onClientReceiveCollisionlessTable",true)
-addEventHandler("onClientReceiveCollisionlessTable",root,function(t) theCollisionlessTable = t setCollision("refresh") end)
+addEventHandler("onClientReceiveCollisionlessTable",root,function(t)
+	theCollisionlessTable = t
+	for _, p in ipairs(getElementsByType'player') do
+		setElementData(p, 'markedlagger', t[p] or nil, false)
+	end
+	setCollision("refresh")
+end)
 
 
 
@@ -19,6 +25,7 @@ function setCollision()
 			local vehCollLess = getPedOccupiedVehicle(p)
 			if vehMe and vehCollLess then
 				setElementCollidableWith(vehMe, vehCollLess, false)
+				setElementAlpha(vehCollLess, 140)
 			end
 		end
 	end

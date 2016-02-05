@@ -201,6 +201,7 @@ _addEventHandler('onClientResourceStart', root, function(r)
 	if loadingMapResourceName == getResourceName(r) then
 		loadedClientMap = true
 		-- outputDebugString( 'loadedClientMap ' .. loadingMapResourceName)
+		triggerServerEvent('client_loaded_map', resourceRoot)
 	end
 end)
 
@@ -1606,6 +1607,9 @@ function getStartTick()
 	return g_StartTick or false
 end
 
+function getCheckPoints()
+	return g_Checkpoints
+end
 
 function e_getPickups()
 	return g_Pickups

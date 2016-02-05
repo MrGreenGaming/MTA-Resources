@@ -140,6 +140,10 @@ function onNewMapStart()
     setResourceInfo(map,"deletedBy",g_AccName)
     setResourceInfo(map,"deleteTimeStamp",tostring(getRealTime().timestamp))
 
+    -- Check if copied deleted resource exists, if so then delete first.
+    if getResourceFromName( resname.."_deleted" ) then
+    	deleteResource( resname.."_deleted" )
+    end
 
     copyResource(map,resname.."_deleted",deletedMapsPath)
 
@@ -385,11 +389,13 @@ function savefile(mapname, src, text)
 	end
 	-- create a backup
 	local backup = fileCopy(':' .. mapname .. '/' .. src, ':' .. mapname .. '/' .. src .. '.' .. getRealTime().timestamp .. '.bak', true)
-	if not backup then return outputChatBox("Could not create backup", player) end
+	if not backup then return outputChatBox("Could not create backup. Changes aren't saved.", player) end
 	
-	-- write new text in src
-	local file = fileOpen(':' .. mapname .. '/' .. src)
-	if not file then return outputChatBox("Could not open :" .. mapname .. '/' ..src, player) end
+	local deletefile = fileDelete(':' .. mapname .. '/' .. src)
+	if not deletefile then return outputChatBox("Could not overwrite:" .. mapname .. '/' ..src, player) end
+	
+	local file = fileCreate(':' .. mapname .. '/' .. src)
+	if not file then return outputChatBox("Could not overwrite:" .. mapname .. '/' ..src, player) end
 	fileWrite(file, text)
 	fileClose(file)
 	outputChatBox("Saved file " .. ':' .. mapname .. '/' .. src .. " and made a backup", player)
@@ -458,6 +464,11 @@ function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
         setResourceInfo(theRes,"deleteReason",reason)
         setResourceInfo(theRes,"deletedBy",adminAccName)
         setResourceInfo(theRes,"deleteTimeStamp",tostring(getRealTime().timestamp))
+
+		-- Check if copied deleted resource exists, if so then delete first.
+		if getResourceFromName( map.resname.."_deleted" ) then
+			deleteResource( map.resname.."_deleted" )
+		end
 
         copyResource(theRes,map.resname.."_deleted",deletedMapsPath)
         local delete = deleteResource(map.resname)

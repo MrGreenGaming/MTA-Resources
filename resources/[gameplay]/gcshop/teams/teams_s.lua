@@ -3,7 +3,8 @@ local teams = {}	-- [teamid] = <teamelement>
 local playerteams = {}
 local playertimestamp = {}
 local invites = {}
-local duration = 30 * 24 * 60 * 60
+local duration = 1
+local team_duration = 30 * 24 * 60 * 60
 
 local team_sql = [[CREATE TABLE IF NOT EXISTS `team` (
 	`teamid` smallint(5) unsigned NOT NULL AUTO_INCREMENT, 
@@ -48,15 +49,13 @@ addEventHandler("onGCShopLogin", root, function()
 end)
 
 addEventHandler("onGCShopLogout", root, function()
-	if player then playerteams[player] = nil end
+	playerteams[source] = nil
 	leaveTeam (source)
 	triggerClientEvent(source, "teamLogout", resourceRoot)
 end)
 
 addEvent('buyTeam', true)
 addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour, teammsg)
-	if not hasObjectPermissionTo(client, "command.kick", false) then return end
-	
 	local player = client
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
 	local r = playerteams[player]
@@ -67,9 +66,29 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
 		return outputChatBox('[TEAMS] You were in a team less than 30 days ago. Wait before creating another team', player, 0,255,0)
 	-- Check if it's renewing a team
 	elseif r and r.status == 1 then
+		if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255*255*255)) end
+		if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
+		
+		if type(teamname) ~= 'string' or #teamname < 3 then
+			outputChatBox('Not a valid teamname', player, 255, 0, 0 )
+			return
+		elseif type(teamtag) ~= 'string' or #teamtag < 3 then
+			outputChatBox('Not a valid teamtag', player, 255, 0, 0 )
+			return
+		elseif type(teamcolour) ~= 'string' or not getColorFromString(teamcolour) then
+			outputChatBox('Not a valid teamcolour', player, 255, 0, 0 )
+			return
+		end
 		local result, error = gcshopBuyItem ( player, team_price, 'Team renew: ' .. tostring(r.teamid) )
 		if result == true then
-			local added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=? WHERE `teamid`=?]], getRealTime().timestamp, r.teamid)
+			local added
+			if r.owner ~= forumID then
+				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=? WHERE `teamid`=?]], getRealTime().timestamp, r.teamid)
+			else
+				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=?, `name`=?, `tag`=?, `colour`=?, `message`=? WHERE `teamid`=?]], getRealTime().timestamp, teamname, teamtag, teamcolour, teammsg, r.teamid)
+				setTeamName(teams[r.teamid], teamtag .. ' ' .. teamname)
+				setTeamColor(teams[r.teamid], getColorFromString(teamcolour))
+			end
 			addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team renew: ' .. tostring(r.teamid) )
 			outputChatBox ('Team renewed.', player, 0, 255, 0)
 			checkPlayerTeam ( player )
@@ -162,7 +181,7 @@ function checkPlayerTeam2 ( qh, player, bLogin )
 	-- Check team age
 	local age = (getRealTime().timestamp - r.renew_timestamp) 
 	outputConsole('[TEAMS] Team age in days: ' .. tostring(age/ (24 * 60 * 60)), player)
-	if age > duration then
+	if age > team_duration then
 		if bLogin then
 			outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
 		end
@@ -194,7 +213,9 @@ function leaveTeam (player)
 		destroyElement ( teams[teamid] )
 		teams[teamid] = nil
 	end
-	setPlayerTeam(player, nil)
+	if exports.race:getRaceMode() ~= "Capture the flag" then
+		setPlayerTeam(player, nil)
+	end
 	invites[player] = nil
 end
 
@@ -220,7 +241,7 @@ function invite(sender, c, playername)
 	elseif not tonumber(exports.gc:getPlayerForumID ( player )) then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not logged in to GC', sender, 0,255,0)
 	-- Check if the sender is the owner and if the player can join the team
-	elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].forumid == ownerid) then
+	elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) then
 		return outputChatBox('[TEAMS] Only team owners can send invites!', sender, 255,0,0)
 	elseif playerteams[player] and playerteams[sender].status ~= 1 and playerteams[player].teamid == playerteams[sender].teamid then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is already in your team', sender, 0,255,0)
@@ -247,7 +268,7 @@ function accept(player)
 	
 	outputChatBox('[TEAMS] You accepted the invite and joined the team ' .. tostring(invites[player].team.name), player, 202,255,112)
 	if isElement(invites[player].sender) then
-		outputChatBox('[TEAMS] ' .. getPlayerName(player) .. ' accepted the invite', invites[player].team.sender, 202,255,112)
+		outputChatBox('[TEAMS] ' .. getPlayerName(player) .. ' accepted the invite', invites[player].sender, 202,255,112)
 	end
 	addPlayerToTeamDatabase ( forumID, invites[player].team.teamid )
 	checkPlayerTeam ( player )
@@ -294,7 +315,7 @@ function makeowner(sender, c, playername)
 	elseif not tonumber(exports.gc:getPlayerForumID ( player )) then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not logged in to GC', sender, 0,255,0)
 	-- Check if the sender is the owner and if the player can join the team
-	elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].forumid == ownerid) then
+	elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) then
 		return outputChatBox('[TEAMS] Only team owners can do this!', sender, 255,0,0)
 	elseif playerteams[player] and (playerteams[player].status~=1 or playerteams[player].teamid ~= playerteams[sender].teamid) then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not in your team', sender, 0,255,0)
@@ -334,6 +355,12 @@ addEvent('cmd', true)
 addEventHandler('cmd', resourceRoot, function(c, a) executeCommandHandler(c, client, a) end)
 
 -- Utility
+local getPlayerName_ = getPlayerName
+
+local function getPlayerName ( player )
+	return getPlayerName_(player) and string.gsub(getPlayerName_(player),"#%x%x%x%x%x%x","")
+end
+
 function getPlayerFromName_ ( name )
 	if type(name) ~= 'string' then return false end
 	

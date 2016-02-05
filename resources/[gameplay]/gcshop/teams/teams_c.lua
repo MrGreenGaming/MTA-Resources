@@ -16,7 +16,7 @@ function onShopInit ( tabPanel )
 
 	GUIEditor.tab[1] = guiCreateTab("Your team", GUIEditor.tabpanel[1])
 
-	GUIEditor.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 30 days, but everyone in the team can refresh the team duration. You can only own one team or be in one team. If you create/join a team, you can't create/join any other team for 30 days.", false, GUIEditor.tab[1])
+	GUIEditor.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 30 days, but everyone in the team can renew the team duration. You can only own one team or be in one team. If you create/join a team, you can't create/join any other team for 30 days.", false, GUIEditor.tab[1])
 	guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
 	GUIEditor.btnBuyTeam = guiCreateButton(46, 263, 165, 50, "Create team\n2500 GC / 30 days", false, GUIEditor.tab[1])
 	guiSetProperty(GUIEditor.btnBuyTeam, "Disabled", "True")
@@ -85,7 +85,6 @@ addEventHandler("teamsData", root, function(teams, player, t)
 	local g = teamGUI.gridlist[1]
 	local g2 = teamGUI.gridMembers
 	guiGridListClear(g)
-	guiGridListClear(teamGUI.gridMembers)
 	local teamid, i
 	for r, z in ipairs(teams) do
 		if teamid ~= z.teamid then
@@ -97,20 +96,23 @@ addEventHandler("teamsData", root, function(teams, player, t)
 			i = guiGridListAddRow(g)
 			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
 		end
-		if t and t.teamid == teamid and z.status == 1 then
+	end
+	if not t or player ~= localPlayer then return end
+	guiGridListClear(teamGUI.gridMembers)
+	for r, z in ipairs(teams) do
+		if t and t.teamid == z.teamid and z.status == 1 then
 			i = guiGridListAddRow(g2)
 			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
 			guiGridListSetItemData(g2, i, 1, z.forumid, false, false)
 		end
 	end
-	if not t or player ~= localPlayer then return end
 	if t.status == 1 then
 		guiSetText(teamGUI.btnBuyTeam, "Renew team\n2500 GC / 30 days")
 		
-		guiSetEnabled(teamGUI.teamname, false)
-		guiSetEnabled(teamGUI.teamtag, false)
-		guiSetEnabled(teamGUI.teammsg, false)
-		guiSetEnabled(teamGUI.teamcolour, false)
+		guiSetEnabled(teamGUI.teamname, t.forumid == t.owner)
+		guiSetEnabled(teamGUI.teamtag, t.forumid == t.owner)
+		guiSetEnabled(teamGUI.teammsg, t.forumid == t.owner)
+		guiSetEnabled(teamGUI.teamcolour, t.forumid == t.owner)
 		guiSetText(teamGUI.teamname, t.name)
 		guiSetText(teamGUI.teamtag, t.tag)
 		guiSetText(teamGUI.teammsg, t.message or '')

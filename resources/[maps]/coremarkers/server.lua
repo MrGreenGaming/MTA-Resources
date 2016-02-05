@@ -1,4 +1,4 @@
-local magnetSlowDownTime = 3500
+local magnetSlowDownTime = 7000
 
 math.randomseed(getTickCount())
 
@@ -160,14 +160,14 @@ addEvent("dropOil", true)
 addEventHandler("dropOil", root, dropOil)
 
 function doMagnet(killer)
-local killer_rank = exports.race:getPlayerRank(killer)
+local killer_rank = getElementData(killer, "race rank")
 	if killer_rank >= 2 then
 			local victim_rank = killer_rank-1
 			gotAlivePlayer = false
 			for k, player in ipairs(getElementsByType("player")) do
-				local rank = exports.race:getPlayerRank(player)
+				local rank = getElementData(player, "race rank")
 				if type(rank) == "number" then
-					if rank <= victim_rank and rank >= 1 and isPedInVehicle(player) and not gotAlivePlayer and not getElementData(player, "slowed down right now") then
+					if rank <= victim_rank and rank >= 1 and getElementData(player, "state") == "alive" and not gotAlivePlayer and not getElementData(player, "slowed down right now") then
 						gotAlivePlayer = true
 						setElementData(player, "slowed down right now", true, true)
 						setTimer(setElementData, magnetSlowDownTime, 1, player, "slowed down right now", nil, true)

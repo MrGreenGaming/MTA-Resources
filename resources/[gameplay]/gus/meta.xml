@@ -16,6 +16,8 @@
     <script src="antipickups_c.lua" type="client" />
     <script src="bounty_s.lua" />
     <script src="bounty_c.lua" type="client" />
+    <script src="blocker.lua" />
+    <script src="blocker_c.lua" type="client" />
 
     <export function="chatDisabled" type="server" />
     <file src="chat.png" />
