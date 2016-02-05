@@ -201,6 +201,7 @@ _addEventHandler('onClientResourceStart', root, function(r)
 	if loadingMapResourceName == getResourceName(r) then
 		loadedClientMap = true
 		-- outputDebugString( 'loadedClientMap ' .. loadingMapResourceName)
+		triggerServerEvent('client_loaded_map', resourceRoot)
 	end
 end)
 
