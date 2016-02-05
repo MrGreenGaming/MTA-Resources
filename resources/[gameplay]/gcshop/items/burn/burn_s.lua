@@ -105,7 +105,7 @@ function resetBurnUpTime(player, times, marker, marker1)
 		setTimer ( resetBurnUpTime, extratime, 1, player, times - 1, marker, marker1 )
 	end
 	
-	outputChatBox ( 'You burned a little longer! ' .. (times or ''), player, 0x00, 0xFF )
+	exports.messages:outputGameMessage('You burned a little longer! ' .. (times or ''), player)
 end
 
 

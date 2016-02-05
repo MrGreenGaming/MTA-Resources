@@ -257,4 +257,3 @@ class Resource
 		return $this->server->callFunction ( $this->name, $function, $val );
 	}
 }
-?>

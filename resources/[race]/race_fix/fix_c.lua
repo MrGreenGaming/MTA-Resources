@@ -190,7 +190,6 @@ function onClientMapStarting(mapInfo)
 	if boat == true then
 		boat = false
 		setFPSLimit(fps)
-		outputDebugString'boat'
 	end
 end
 addEventHandler('onClientMapStarting', root, onClientMapStarting)

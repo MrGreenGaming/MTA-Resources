@@ -186,6 +186,7 @@ function recieveChatMessage(ply, msg)
   oldText = oldText .. time .. getPlayerName(ply) .. ": " .. msg .. "\n"
   guiSetText(chat[ply].memo, oldText)
   guiMemoSetCaretIndex(chat[ply].memo, string.len(oldText))
+  setWindowFlashing(true,0)
 end
 
 event_resource_start = function(res)

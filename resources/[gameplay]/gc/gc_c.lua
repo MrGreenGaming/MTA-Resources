@@ -105,7 +105,7 @@ end
 addCommandHandler("gc", toggleGCInfo)
 
 function setGC(amount, notLoggedIn)
-	gc = (notLoggedIn and '' or '#00FF00') .. amount
+	gc = (notLoggedIn and '' or '#00FF00') .. comma_value(amount)
 	pulse = true
 	setElementData(getLocalPlayer(), "greencoins",tostring(gc), true)
 end
@@ -174,6 +174,18 @@ function clientStart()
 	triggerServerEvent('onClientGreenCoinsStart', getLocalPlayer())
 end
 addEventHandler("onClientResourceStart", resourceRoot, clientStart)
+
+-- http://lua-users.org/wiki/FormattingNumbers
+function comma_value(amount)
+  local formatted = amount
+  while true do  
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1 %2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
 
 -- Exported function for settings menu, KaliBwoy
 function e_showGC()
