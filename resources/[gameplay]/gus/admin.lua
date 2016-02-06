@@ -8,9 +8,9 @@ function adsay(player, c, ...) 			-- Admin chat
 	for k, v in ipairs (getElementsByType("player")) do
 		if hasObjectPermissionTo ( v, "general.adminpanel", false ) then
 			outputChatBox ( "ADMIN> "..string.gsub ( (getPlayerName(player)), '#%x%x%x%x%x%x', '' )..": "..message, v, 255, 0, 0,true )
+			triggerClientEvent(v, 'flash', resourceRoot)
 		end
 	end
-
 end
 addCommandHandler('adsay', adsay)
 
@@ -173,144 +173,6 @@ end
 addCommandHandler('k', blowUp, true, true)
 
 
--- /blocker
-local blockers = {}		-- table with serials that link to timers that reset the blocker status
-local blockerDuration = 1000 * 60 * 60 * 1
-function blocker(player, _, nick, duration)
-	local blockPlayer = findPlayerByName(nick)
-	if not blockPlayer then
-		outputChatBox("No player found", player, 0, 255,0)
-	else
-		local serial = getPlayerSerial(blockPlayer)
-		if not blockers[serial] then
-			duration = tonumber(duration)
-			if not duration or not hasObjectPermissionTo ( player, "command.serialblocker", false ) then
-				duration = 1
-			end
-			setElementData(blockPlayer , 'markedblocker', true)
-			blockers[serial] = setTimer(function()
-				blockers[serial] = nil
-			end, blockerDuration * duration, 1)
-			outputChatBox(remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
-			logBlockAction(player, blockPlayer)
-			if useIRC() then
-				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
-			end
-		else
-			if isTimer(blockers[serial]) then
-				killTimer(blockers[serial])
-			end
-			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
-			setElementData(blockPlayer , 'markedblocker', nil)
-			blockers[serial] = nil
-			if useIRC() then
-				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
-			end
-		end
-	end
-end
-addCommandHandler('blocker', blocker, true, true)
-
-function unblocker(player, _, nick)
-	local blockPlayer = findPlayerByName(nick)
-	if not blockPlayer then
-		outputChatBox("No player found", player, 0, 255,0)
-	else
-		local serial = getPlayerSerial(blockPlayer)
-		if blockers[serial] and isTimer(blockers[serial]) then
-			killTimer(blockers[serial])
-			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
-		end
-		setElementData(blockPlayer , 'markedblocker', nil)
-		blockers[serial] = nil
-		if useIRC() then
-			exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
-		end
-	end
-	
-end
-addCommandHandler('unblocker', unblocker, true, true)
-
-function serialblocker(player, _, serial, duration)
-	if not serial or #serial ~= 32 then
-		outputChatBox("Not a valid serial", player, 0, 255,0)
-	else
-		if blockers[serial] and isTimer(blockers[serial]) then
-			killTimer(blockers[serial])
-		end
-		blockers[serial] = setTimer(function()
-			blockers[serial] = nil
-		end, (tonumber(duration) or 24) * 1000 * 60 * 60 * 1, 1)
-		outputChatBox("Marked "..serial.. " as a blocker for " .. math.round(((tonumber(duration) or 24) * 1000 * 60 * 60 * 1) / (60*60*1000), 1, ceil) .. 'hr', player, 255, 0, 0)
-	end
-end
-addCommandHandler('serialblocker', serialblocker, true, true)
-
-function unserialblocker(player, _, serial)
-	if not serial or #serial ~= 32 then
-		outputChatBox("Not a valid serial", player, 0, 255,0)
-	else
-		if blockers[serial] and isTimer(blockers[serial]) then
-			killTimer(blockers[serial])
-		end
-		blockers[serial] = nil
-		outputChatBox("Unmarked "..serial.. " as a blocker", player, 255, 0, 0)
-	end
-end
-addCommandHandler('unserialblocker', unserialblocker, true, true)
-
-function dispBlockers(source)
-	local t = {}
-	for _, player in ipairs(getElementsByType'player') do
-		if getElementData(player, 'markedblocker') then
-			local serial = getPlayerSerial(player)
-			if blockers[serial] then
-				local duration = math.round(getTimerDetails(blockers[serial]) / (60*60*1000), 1, ceil)
-				t[#t+1] = remcol(getPlayerName(player)) .. ' (' .. duration .. 'hr)'
-			else
-				t[#t+1] = remcol(getPlayerName(player))
-			end
-		end
-	end
-	if #t < 1 then
-		outputChatBox('No blockers online at the moment!', source, 255, 0, 0)
-	else
-		outputChatBox('Blockers online: ' .. table.concat(t, ', '), source, 255, 0, 0)
-	end
-	
-	for serial, timer in pairs(blockers) do
-		if timer and isTimer(timer) then
-			local duration = math.round(getTimerDetails(blockers[serial]) / (60*60*1000), 1, ceil)
-			outputConsole('Blocker ' .. serial .. ' (' .. duration .. 'hr)', source)
-		else
-			outputConsole('Blocker ' .. serial, source)
-		end
-	end
-end
-addCommandHandler('blockers', dispBlockers, true, true)
-
-function checkBlocker()
-	if blockers[getPlayerSerial(source)] then
-		setElementData(source , 'markedblocker', true)
-	end
-end
-addEventHandler('onPlayerJoin', root, checkBlocker)
-
-function logBlockAction(playerResponsible, playerBlocked)
-    local file
-    if fileExists("killers.log") then
-        file = fileOpen("killers.log")
-    else
-        file = fileCreate("killers.log")
-    end
-    local dateTime = getRealTime().monthday.."."..tostring(getRealTime().month+1).."."..tostring(getRealTime().year+1900).." - "..getRealTime().hour..":"..getRealTime().minute
-    playerResponsible = getPlayerName(playerResponsible)
-    playerBlocked = getPlayerName(playerBlocked)
-    local fullString = dateTime.." "..playerResponsible.." marked as blocker "..playerBlocked
-    fileSetPos(file, fileGetSize(file))
-    fileWrite(file, "\n"..fullString)
-    fileClose(file)
-end
 
 
 

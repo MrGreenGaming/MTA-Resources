@@ -7,7 +7,7 @@
 motdText, svnlog = '', ''
 motdVersion = 0
 function start()
-	local motdNode = xmlLoadFile 'motd.xml'
+	local motdNode = fileExists'motd.xml' and xmlLoadFile 'motd.xml' or xmlCreateFile('motd.xml', 'motd')
 	motdVersion = tonumber(xmlNodeGetAttribute(motdNode, 'version'))
 	motdText = xmlNodeGetValue(motdNode) or ''
 	xmlUnloadFile(motdNode)
@@ -47,7 +47,7 @@ function receivedSVNlog(data, errno)
 		local l = rev.message .. '\r\n * ' .. rev.author .. ' (' .. rev.revision .. ') on ' .. rev.date
 		text = text .. l .. '\r\n\r\n'
 	end
-	local svnNode = xmlLoadFile'svn.xml'
+	local svnNode = fileExists'svn.xml' and xmlLoadFile'svn.xml' or xmlCreateFile('svn.xml', 'log')
 	xmlNodeSetValue(svnNode, text)
 	xmlSaveFile(svnNode)
 	xmlUnloadFile(svnNode)

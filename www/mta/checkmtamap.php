@@ -379,5 +379,3 @@ function checkDDSHMap($mapxml) {
 
 	return "Ok";
 }
-
-?>

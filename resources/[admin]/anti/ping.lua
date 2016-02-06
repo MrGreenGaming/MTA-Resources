@@ -5,23 +5,11 @@
 -- Also does check for stuck 0-ping players --
 ----------------------------------------------
 
-local pingLimit1 = 260
+local pingLimit1 = 250
 local pingLimit2 = 350
 local hour1 = 0
 local hour2 = 8
 local pingCheckTime = 5 * 1000
-
-------------------
--- Warning text --
-------------------
-
--- local warn = textCreateDisplay ()
--- local warnText1 = textCreateTextItem ( "Your ping is too high", 0.5, 0.30, "high", 230, 0, 0, 255, 4.0, "center", "center" )
--- local warnText2 = textCreateTextItem ( "You will be killed", 0.5, 0.37, "high", 217, 0, 0, 255, 2.5, "center", "center" )
--- local warnText3 = textCreateTextItem ( "Your ping is too high", 0.503, 0.303, "high", 0, 0, 0, 255, 4.0, "center", "center" )
--- local warnText4 = textCreateTextItem ( "You will be killed", 0.503, 0.373, "high", 0, 0, 0, 255, 2.5, "center", "center" )
--- textDisplayAddText ( warn, warnText1 )
--- textDisplayAddText ( warn, warnText2 )
 
 
 -------------------
@@ -34,10 +22,25 @@ addEventHandler ( "onResourceStart", resourceRoot,
 	end
 )
 
+
 function getPingLimit()
 	local h = getRealTime().hour
 	return (hour1 <= h and h <= hour2) and pingLimit2 or pingLimit1
 end
+addCommandHandler( "ping", function(plyr) outputChatBox("Max Ping: ".. getPingLimit() ..". Your ping: ".. getPlayerPing(plyr)..".",plyr) end )
+
+
+-- Set limit to element data
+addEventHandler("onResourceStart",resourceRoot,
+	function()
+		setElementData(root,"anti_pinglimit",getPingLimit())
+		setTimer(function() setElementData(root,"anti_pinglimit",getPingLimit()) end,60000,0)
+	end)
+addEventHandler("onResourceStop",resourceRoot,
+	function()
+		setElementData(root,"anti_pinglimit",nil)
+	end)
+
 
 function checkPing()
 	local pingLimit = getPingLimit()
@@ -82,7 +85,7 @@ function doubleCheck ( needKill )
 			setPlayerCollisionless(thePlayer)
 		end
 		outputChatBox('You were '..action..' for high ping (Max ' .. pingLimit .. ')', thePlayer, 255, 165, 0)
-		outputDebugString(getPlayerName(thePlayer) .. ' was '..action..' for high ping (Max ' .. pingLimit .. ')')
+		outputConsole(getPlayerName(thePlayer) .. ' was '..action..' for high ping (Max ' .. pingLimit .. ')')
 		punishedForMap[thePlayer] = true
 	else
 		-- textDisplayRemoveObserver(warn, thePlayer)
@@ -90,5 +93,6 @@ function doubleCheck ( needKill )
 end
 addEvent("clientCheck", true)
 addEventHandler("clientCheck", getRootElement(), doubleCheck )
+
 
 

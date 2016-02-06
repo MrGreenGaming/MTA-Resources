@@ -1,4 +1,5 @@
-﻿local rootElement = getRootElement()
+﻿screenWidth, screenHeight = guiGetScreenSize()
+local rootElement = getRootElement()
 
 local voteWindow
 local boundVoteKeys = {}
@@ -15,71 +16,18 @@ local finishTime
 
 local cacheVoteNumber
 local cacheTimer
+last = 1
 
-local layout = {}
-layout.window = {
-	width = 150,
-	relative = false,
-	alpha = 0.85,
-}
-layout.title = {
-	posX = 10,
-	posY = 25,
-	width = layout.window.width,
-	relative = false,
-	alpha = 1,
-	r = 100,
-	g = 100,
-	b = 250,
-	font = "default-bold-small",
-}
-layout.option = {
-	posX = 10,
-	width = layout.window.width,
-	relative = false,
-	alpha = 1,
-	r = 200,
-	g = 200,
-	b = 200,
-	font = "default-normal",
-	bottom_padding = 4, --px
-}
-layout.cancel = {
-	posX = 10,
-	width = layout.window.width,
-	height = 16,
-	relative = false,
-	alpha = 1,
-	r = 120,
-	g = 120,
-	b = 120,
-	font = "default-normal",
-}
-layout.time = {
-	posX = 0,
-	width = layout.window.width,
-	height = 16,
-	relative = false,
-	alpha = 1,
-	r = 255,
-	g = 255,
-	b = 255,
-	font = "default-bold-small",
-}
-layout.chosen = {
-	alpha = 1,
-	r = 255,
-	g = 130,
-	b = 130,
-	font = "default-bold-small",
-}
-layout.padding = {
-	bottom = 10,
-}
 
+local timeCache = false
 local function updateTime()
 	local seconds = math.ceil( (finishTime - getTickCount()) / 1000 )
-	guiSetText(timeLabel, seconds)
+	if timeCache ~= seconds and seconds > -1 then
+		if tostring(seconds) == "-0" then seconds = 0 end
+		timeCache = seconds
+
+		countdown_text = tostring(seconds)
+	end
 end
 
 addEvent("doShowPoll", true)
@@ -88,6 +36,7 @@ addEvent("doStopPoll", true)
 
 addEventHandler("doShowPoll", rootElement,
 	function (pollData, pollOptions, pollTime)
+
 		--clear the send vote cache
 		cacheVoteNumber = ""
 		--clear the bound keys table
@@ -96,23 +45,8 @@ addEventHandler("doShowPoll", rootElement,
 		nameFromVoteID = pollOptions
 		--then build a reverse table
 		voteIDFromName = {}
-		local width
-	    for id, name in ipairs(nameFromVoteID) do
-			voteIDFromName[name] = id
-            width = dxGetTextWidth("1. "..name) + 20
-            --check if the name width is higher than the current width
-            if layout.window.width < width then
-                --set the curent width to the width of the name
-                layout.window.width = width
-            end
-		end
-        
-		for word in string.gfind(pollData.title, "[^%s]+") do
-            width = dxGetTextWidth(word) + 20
-            if layout.window.width < width then
-                layout.window.width = width
-            end
-        end
+
+
 		
 		--determine if we have to append nomination number
 		local nominationString = ""
@@ -122,47 +56,16 @@ addEventHandler("doShowPoll", rootElement,
 		
 		isChangeAllowed = pollData.allowchange
 
-        layout.title.width  = layout.window.width - 20
-        layout.option.width = layout.window.width
-        layout.cancel.width = layout.window.width
-        layout.time.width   = layout.window.width
+        -- layout.title.width  = layout.window.width - 20
+        -- layout.option.width = layout.window.width
+        -- layout.cancel.width = layout.window.width
+        -- layout.time.width   = layout.window.width
 		
         local screenX, screenY = guiGetScreenSize()
         
-		--create the window
-		voteWindow = guiCreateWindowFromCache (
-						screenX,
-						screenY,
-						layout.window.width,
-						screenY, --!
-						"Vote"..nominationString,
-						layout.window.relative
-					)
-		guiSetAlpha(voteWindow, layout.window.alpha)
+
 		
-		--create the title label
-		
-		local titleLabel = guiCreateLabelFromCache(
-						layout.title.posX,
-						layout.title.posY,
-						layout.title.width,
-						0, --!
-						pollData.title,
-						layout.title.relative,
-						voteWindow
-					)
-		local titleHeight = guiLabelGetFontHeight(titleLabel) * math.ceil(guiLabelGetTextExtent(titleLabel) / layout.title.width)
-		guiSetSize(titleLabel, layout.title.width, titleHeight, false)
-		guiLabelSetHorizontalAlign ( titleLabel, "left", true )
-		
-		guiLabelSetColor(titleLabel, layout.title.r, layout.title.g, layout.title.b)
-		guiSetAlpha(titleLabel, layout.title.alpha)
-		guiSetFont(titleLabel, layout.title.font)
-		setElementParent(titleLabel, voteWindow)
-		
-		local labelY = layout.title.posY + titleHeight
-		
-		--for each option, bind its key and create its label
+		--for each option, bind 
 		for index, option in ipairs(pollOptions) do
 			--bind the number key and add it to the bound keys table
 			local optionKey = tostring(index)
@@ -170,30 +73,6 @@ addEventHandler("doShowPoll", rootElement,
 			bindKey("num_"..optionKey, "down", sendVote_bind)
 			
 			table.insert(boundVoteKeys, optionKey)
-            
-			--create the option label
-			optionLabels[index] = guiCreateLabelFromCache(
-						layout.option.posX,
-						labelY,
-						layout.option.width,
-						0,
-						optionKey..". "..option,
-						layout.option.relative,
-						voteWindow
-					)
-			-- -[[ FIXME - wordwrap
-			--local optionHeight = guiLabelGetFontHeight(optionLabels[index]) *
-			--	math.ceil(guiLabelGetTextExtent(optionLabels[index]) / layout.option.width)
-			local optionHeight = 16
-			guiSetSize(optionLabels[index], layout.option.width, titleHeight, false)
-			guiLabelSetHorizontalAlign ( optionLabels[index], "left", true )
-			--]]
-			
-			guiLabelSetColor(optionLabels[index], layout.option.r, layout.option.g, layout.option.b)
-			guiSetAlpha(optionLabels[index], layout.option.alpha)
-			setElementParent(optionLabels[index], voteWindow)
-			
-			labelY = labelY + optionHeight + layout.option.bottom_padding
 		end
 		
 		--bind 0 keys if there are more than 9 options
@@ -205,57 +84,43 @@ addEventHandler("doShowPoll", rootElement,
 		
 		if isChangeAllowed then
 			bindKey("backspace", "down", sendVote_bind)
-			
-			--create the cancel label
-			cancelLabel = guiCreateLabelFromCache(
-						layout.cancel.posX,
-						labelY,
-						layout.cancel.width,
-						layout.cancel.height,
-						"(Backspace to cancel)",
-						layout.cancel.relative,
-						voteWindow
-					)
-			guiLabelSetHorizontalAlign ( cancelLabel, "left", true )
-			guiLabelSetColor(cancelLabel, layout.cancel.r, layout.cancel.g, layout.cancel.b)
-			guiSetAlpha(cancelLabel, layout.cancel.alpha)
-			setElementParent(cancelLabel, voteWindow)
-				
-			labelY = labelY + layout.cancel.height
 		end
-		
-		--create the time label
-		timeLabel = guiCreateLabelFromCache(
-						layout.time.posX,
-						labelY,
-						layout.time.width,
-						layout.time.height,
-						"",
-						layout.time.relative,
-						voteWindow
-					)
-		guiLabelSetColor(timeLabel, layout.time.r, layout.time.g, layout.time.b)
-		guiLabelSetHorizontalAlign(timeLabel, "center")
-		guiSetAlpha(timeLabel, layout.time.alpha)
-		guiSetFont(timeLabel, layout.time.font)
-		setElementParent(timeLabel, voteWindow)
-		
-		labelY = labelY + layout.time.height
-		
-		--adjust the window to the number of options
-		local windowHeight = labelY + layout.padding.bottom
-		guiSetSize(voteWindow, layout.window.width, windowHeight, false)
-		guiSetPosition(voteWindow, screenX - layout.window.width, screenY - windowHeight, false)
-		
-        --set the default value after creating gui
-        layout.window.width = 150
-        
+
+        -- Set table up
+		optionTable = pollOptions
+		-- Set up Width
+
+		local highestW = 0
+		for i,opt in ipairs(optionTable) do
+			local _w = dxGetTextWidth( i..". "..opt, 1.00, fontBold ) + textXoffset + 20
+			
+			if _w > highestW then highestW = _w end
+		end
+
+		if highestW > backgroundMinWidth then backgroundWidth = highestW else backgroundWidth = backgroundMinWidth end
+
+
+
+		description_text = pollData.title
+
+
+		setPollVisible(true)
 		isVoteActive = true
-		
 		finishTime = getTickCount() + pollTime
 		addEventHandler("onClientRender", rootElement, updateTime)
+
 	end
 )
+
+function setOption(number)
+	if number == -1 then
+		selectedVote = false
+	else
+		selectedVote = number
+	end
+end
+
+
 
 addEventHandler("doStopPoll", rootElement,
 	function ()
@@ -268,9 +133,8 @@ addEventHandler("doStopPoll", rootElement,
 		end
 		
 		unbindKey("backspace", "down", sendVote_bind)
-		
+		setPollVisible(false)
 		removeEventHandler("onClientRender", rootElement, updateTime)
-		destroyElementToCache(voteWindow)
 	end
 )
 
@@ -320,16 +184,15 @@ function sendVote(voteID)
 	
 	--if the player hasnt voted already (or if vote change is allowed anyway), update the vote text
 	if not hasAlreadyVoted or isChangeAllowed then
-		if hasAlreadyVoted then
-			guiSetFont(optionLabels[hasAlreadyVoted], layout.option.font)
-			guiSetAlpha(optionLabels[hasAlreadyVoted], layout.option.alpha)
-			guiLabelSetColor(optionLabels[hasAlreadyVoted], layout.option.r, layout.option.g, layout.option.b)
-		end
+
 		if voteID ~= -1 then
-			guiSetFont(optionLabels[voteID], layout.chosen.font)
-			guiSetAlpha(optionLabels[voteID], layout.chosen.alpha)
-			guiLabelSetColor(optionLabels[voteID], layout.chosen.r, layout.chosen.g, layout.chosen.b)
+			setOption(voteID)
+
 		end
+	end
+
+	if voteID == -1 then
+		setOption(voteID)
 	end
 	
 	--clear the send vote cache
@@ -361,105 +224,6 @@ addCommandHandler("cancelvote",
 )
 
 
---
--- Label cache
---
--- This code is tuned for the current votemanager setup and gui.
--- If things change, and this code breaks, it might be easier just to remove it.
---
-
-addEventHandler('onClientResourceStart', getRootElement(), function() precreateGuiElements() end )
-
-local unusedWindows = {}
-local unusedLabels = {}
-local donePrecreate = false
-
-function precreateGuiElements()
-    if donePrecreate then
-        return
-    end
-    -- outputDebugString( 'votemanager precreateGuiElements' )
-    local window = guiCreateWindowFromCache(10,10,100,100,'a',false )
-    if not window then
-        return
-    end
-    if #unusedWindows ~= 0 or #unusedLabels ~= 0 then
-        outputConsole( 'WARNING: Unexpected values at start of precreateGuiElements: #unusedWindows:' .. tostring(#unusedWindows) .. ' #unusedLabels:' .. tostring(#unusedLabels) )
-    end
-    for i=1,12 do
-        guiCreateLabelFromCache(10, i, 20, 10, 'a', false, window )
-	end
-    donePrecreate = true
-    destroyElementToCache(window)
-    if #unusedWindows ~= 1 or #unusedLabels ~= 12 then
-        outputConsole( 'WARNING: Unexpected values at end of precreateGuiElements: #unusedWindows:' .. tostring(#unusedWindows) .. ' #unusedLabels:' .. tostring(#unusedLabels) )
-    end
-end
-
-
-function guiCreateWindowFromCache(x, y, width, height, text, relative)
-    if #unusedWindows < 1 then
-        if donePrecreate then
-            outputConsole( 'WARNING: Unexpected call to guiCreateWindowFromCache: #unusedWindows:' .. tostring(#unusedWindows) .. ' #unusedLabels:' .. tostring(#unusedLabels) )
-        end
-	    return guiCreateWindow(x, y, width, height, text, relative )
-    else
-        local window = unusedWindows[#unusedWindows]
-        table.remove( unusedWindows )
-        guiSetSize(window, width, height, relative)
-        guiSetText(window, text)
-        guiSetPosition(window, x, y, relative)
-        guiSetAlpha(window, 1)
-        guiSetVisible(window, true)
-        -- guiBringToFront(window)
-        return window
-    end
-end
-
-
-function guiCreateLabelFromCache(x, y, width, height, text, relative, parent)
-    if #unusedLabels < 1 then
-        if donePrecreate then
-            outputConsole( 'WARNING: Unexpected call to guiCreateLabelFromCache: #unusedWindows:' .. tostring(#unusedWindows) .. ' #unusedLabels:' .. tostring(#unusedLabels) )
-        end
-	    return guiCreateLabel(x, y, width, height, text, relative, parent )
-    else
-        local label = unusedLabels[#unusedLabels]
-        table.remove( unusedLabels )
-        --setElementParent(label,parent)
-	    guiSetSize(label, width, height, relative)
-	    guiSetFont(label,"default-normal")
-	    guiSetText(label, text)
-	    guiLabelSetColor(label, 255, 255, 0)
-	    guiSetPosition(label, x, y, relative)
-        guiSetAlpha(label, 1)
-        guiSetVisible(label, true)
-        return label
-    end
-end
-
-
-function destroyElementToCache(elem)
-    local etype = getElementType(elem)
-    if etype == 'gui-window' then
-        local itemList = getElementChildren(elem)
-        if itemList then
-            for i,item in pairs(itemList) do
-                destroyElementToCache(item)
-            end
-        end
-        table.insertUnique(unusedWindows,elem)
-        guiSetVisible(elem, false)
-        if #unusedWindows ~= 1 or #unusedLabels ~= 12 then
-            outputConsole( 'WARNING: Unexpected values in destroyElementToCache: #unusedWindows:' .. tostring(#unusedWindows) .. ' #unusedLabels:' .. tostring(#unusedLabels) )
-        end
-    elseif etype == 'gui-label' then
-        table.insertUnique(unusedLabels,elem)
-        guiSetVisible(elem, false)
-    end
-end
-
-
 function table.insertUnique(t,val)
 	for k,v in pairs(t) do
         if v == val then
@@ -468,3 +232,178 @@ function table.insertUnique(t,val)
 	end
     table.insert(t,val)
 end
+
+
+
+
+
+-- GUI --
+local screenW, screenH = guiGetScreenSize()
+
+optionTable =  {
+    "Option text",
+    "Option text",
+    "Option text",
+}
+option_amount = #optionTable -- This changes with poll
+selectedVote = false
+backgroundWidth = 535 -- should change with text width
+backgroundMinWidth = 250
+backgroundHeight = 400 -- should change with option amounts
+backgroundX = screenW/2-(backgroundWidth/2)
+backgroundY = screenH -- used to hide before animation
+title_height = 35
+descriptionYoffset = 40
+textXoffset = 22
+descriptionHeight = 40
+first_option_text_Yoffset = 65
+option_text_height = 25
+countdown_text_height = 35 
+unvote_text_height = 22
+backgroundHeight = (option_text_height*option_amount)+option_text_height+first_option_text_Yoffset+countdown_text_height+unvote_text_height+2
+trueBackgroundY = false -- True Y position where it should go after anim
+
+font = "default"
+fontBold = "default-bold"
+bigFont = "default-bold"
+
+countdown_text = "10"
+description_text = "Vote Description text:"
+
+
+local isPostGUI = true
+function draw()
+    local background =            dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight, tocolor(0, 0, 0, 200), isPostGUI,false)
+    local title =                 dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, title_height, tocolor(11, 138, 25, 255), isPostGUI,false)
+	local titleGlass =            dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, 17.5, tocolor(11, 180, 25, 255), isPostGUI,false)
+    local title_text_draw =            dxDrawText("Vote", backgroundX, backgroundY, backgroundX + backgroundWidth, backgroundY+title_height, tocolor(255, 255, 255, 255), 1, bigFont, "center", "center", false, false, isPostGUI, false, false)
+    local description_text_draw =      dxDrawText(description_text, backgroundX+textXoffset, backgroundY+descriptionYoffset, backgroundX + backgroundWidth - 20, backgroundY+descriptionYoffset+descriptionHeight, tocolor(255, 255, 255, 255), 1, fontBold, "left", "top", false, true, isPostGUI, false, false)
+    
+    -- Draw options
+    for i, option in ipairs(optionTable) do
+        if i == selectedVote then
+            dxDrawRectangle(backgroundX, backgroundY+first_option_text_Yoffset+(option_text_height*i), backgroundWidth, option_text_height, tocolor(255, 255, 255, 228), isPostGUI,false)
+            dxDrawText(i..". "..option, backgroundX+textXoffset, backgroundY + first_option_text_Yoffset + (option_text_height*i), backgroundX+backgroundWidth, backgroundY + first_option_text_Yoffset + (option_text_height*i) + option_text_height, tocolor(10, 10, 10, 255), 1.00, fontBold, "left", "center", false, false, isPostGUI, false, false)
+        else
+            dxDrawText(i..". "..option, backgroundX+textXoffset, backgroundY + first_option_text_Yoffset + (option_text_height*i), backgroundX+backgroundWidth, backgroundY + first_option_text_Yoffset + (option_text_height*i) + option_text_height, tocolor(255, 255, 255, 255), 1.00, font, "left", "center", false, false, isPostGUI, false, false)
+        end
+
+    end
+
+
+    local countdown =             dxDrawText(countdown_text, backgroundX, backgroundY+(option_text_height*option_amount)+option_text_height+first_option_text_Yoffset, backgroundX+backgroundWidth, backgroundY+(option_text_height*option_amount)+option_text_height+first_option_text_Yoffset+countdown_text_height, tocolor(255, 255, 255, 255), 1, bigFont, "center", "center", false, false, isPostGUI, false, false)
+    if isChangeAllowed then
+        local unvote_text =           dxDrawText("(backspace to cancel)", backgroundX, backgroundY+(option_text_height*option_amount)+option_text_height+first_option_text_Yoffset+countdown_text_height, backgroundX+backgroundWidth, backgroundY+(option_text_height*option_amount)+option_text_height+first_option_text_Yoffset+countdown_text_height+unvote_text_height, tocolor(255, 255, 255, 255), 1.00, "arial", "center", "center", false, false, isPostGUI, false, false)
+    end
+end
+-- addEventHandler("onClientRender",root,draw)
+
+
+
+
+anim = {}
+anim.popWindowUp = {}
+anim.popWindowDown = {}
+breakAnimation = false -- If poll comes up within animation then break it and start new one
+function setPollVisible(bool)
+    if bool then
+    	-- reset vars
+    	breakAnimation = true
+    	option_amount = #optionTable -- This changes with poll
+		selectedVote = false
+		backgroundX = screenW/2-(backgroundWidth/2)
+		backgroundY = screenH -- used to hide before animation
+		backgroundHeight = (option_text_height*option_amount)+option_text_height+first_option_text_Yoffset+countdown_text_height+unvote_text_height+2
+		trueBackgroundY = (screenH * 0.8) - backgroundHeight -- True Y position where it should go after anim
+
+
+
+    	-- animations
+        anim.popWindowUp.startTime = getTickCount()
+        anim.popWindowUp.startSize = {backgroundX,screenH}
+        anim.popWindowUp.endSize = {backgroundX,trueBackgroundY}
+        anim.popWindowUp.endTime = anim.popWindowUp.startTime + 600
+        addEventHandler("onClientRender",root,draw)
+        addEventHandler("onClientRender", getRootElement(), popWindowUp)
+    else
+        anim.popWindowDown.startTime = getTickCount()
+        anim.popWindowDown.startSize = {backgroundX,trueBackgroundY}
+        anim.popWindowDown.endSize = {backgroundX,screenH}
+        anim.popWindowDown.endTime = anim.popWindowDown.startTime + 400
+        addEventHandler("onClientRender", getRootElement(), popWindowDown)
+    end
+end
+
+
+
+
+function popWindowUp()
+    local now = getTickCount()
+    local elapsedTime = now - anim.popWindowUp.startTime
+    local duration = anim.popWindowUp.endTime - anim.popWindowUp.startTime
+    local progress = elapsedTime / duration
+ 
+    local width, height, _ = interpolateBetween ( 
+        anim.popWindowUp.startSize[1], anim.popWindowUp.startSize[2], 0, 
+        anim.popWindowUp.endSize[1], anim.popWindowUp.endSize[2], 0, 
+        progress, "InOutBack")
+ 
+    backgroundY = height
+ 
+    if now >= anim.popWindowUp.endTime then
+    	breakAnimation = false
+
+        removeEventHandler("onClientRender", getRootElement(), popWindowUp)
+
+    end
+end
+
+
+function popWindowDown()
+    local now = getTickCount()
+    local elapsedTime = now - anim.popWindowDown.startTime
+    local duration = anim.popWindowDown.endTime - anim.popWindowDown.startTime
+    local progress = elapsedTime / duration
+ 
+    local width, height, _ = interpolateBetween ( 
+        anim.popWindowDown.startSize[1], anim.popWindowDown.startSize[2], 0, 
+        anim.popWindowDown.endSize[1], anim.popWindowDown.endSize[2], 0, 
+        progress, "InOutBack")
+ 
+    backgroundY = height
+ 
+    if now >= anim.popWindowDown.endTime or breakAnimation then
+    	breakAnimation = false
+    	backgroundY = screenH
+        removeEventHandler("onClientRender",root,draw)
+        removeEventHandler("onClientRender", getRootElement(), popWindowDown)
+
+    end
+end
+
+
+
+
+ 
+
+-- showit = false
+-- setTimer(function() showPoll(not showit) showit = not showit end,5000,0)
+
+
+
+local fontsLoad = {
+
+    {"fonts/Roboto-Bold.ttf",13,true,"cleartype"},
+
+    {"fonts/Roboto-Regular.ttf",13,false,"cleartype"},
+
+}
+function createFonts()
+
+    local f = fontsLoad[1]
+    local b = fontsLoad[2]
+    bigFont = dxCreateFont(f[1],20,f[3],f[4]) or "default-bold"
+    fontBold = dxCreateFont(f[1],f[2],f[3],f[4]) or "default-bold"
+    font = dxCreateFont(b[1],b[2],b[3],b[4]) or "default"
+end
+addEventHandler("onClientResourceStart",resourceRoot,createFonts)

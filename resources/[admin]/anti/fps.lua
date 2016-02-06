@@ -3,25 +3,27 @@
 -- with strikes. Limit = kickPlayer		--
 -------------------------------------------
 
-local fpsMinimum = 30 
+local fpsMinimum = 30
 local checkInterval = 3 * 1000
 local maxStrikes = 5
 local fpsStrikes = {}
 
-------------------
--- Warning text --
-------------------
-
--- local warnFPS = textCreateDisplay ()
--- local warnFPSText1 = textCreateTextItem ( "Your FPS is too low", 0.5, 0.23, "high", 230, 0, 0, 255, 4.0, "center", "center" )
--- local warnFPSText2 = textCreateTextItem ( "You will be killed", 0.5, 0.37, "high", 217, 0, 0, 255, 2.5, "center", "center" )
--- textDisplayAddText ( warnFPS, warnFPSText1 )
--- textDisplayAddText ( warnFPS, warnFPSText2 )
-
+-- Set limit to element data
+addEventHandler("onResourceStart",resourceRoot,
+	function()
+		setElementData(root,"anti_fpsMinimum",fpsMinimum)
+	end)
+addEventHandler("onResourceStop",resourceRoot,
+	function()
+		setElementData(root,"anti_fpsMinimum",nil)
+	end)
 
 -------------------
 -- Checking ping --
 -------------------
+
+addEvent("onGamemodeMapStart")
+addEventHandler("onGamemodeMapStart",root,function() fpsStrikes = {} end)
 
 addEventHandler ( "onResourceStart", resourceRoot,
 	function()

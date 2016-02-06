@@ -4,11 +4,19 @@ addEventHandler("onResourceStart", root,
 		if (resourceRoot == source or getResourceName ( resource ) == 'scoreboard') then
 			exports.scoreboard:addScoreboardColumn("playtime", root, 35)
 		end
+		if getResourceInfo(resource, "type") ~= "map" then
+			outputDebugString("********* Started: " .. getResourceName(resource))
+		end
     end
 )
-addEventHandler("onResourceStop", getResourceRootElement(getThisResource()),
-	function()
-		exports.scoreboard:removeScoreboardColumn("playtime", root, 35)
+addEventHandler("onResourceStop", root,
+	function(resource)
+		if source == getResourceRootElement(getThisResource()) then
+			exports.scoreboard:removeScoreboardColumn("playtime", root, 35)
+		end
+		if getResourceInfo(resource, "type") ~= "map" then
+			outputDebugString("********* Stopped: " .. getResourceName(resource))
+		end
 	end
 )
 
@@ -131,7 +139,7 @@ local adminapplicants = {}
 addEventHandler('onResourceStart' , root, function()	-- root for updating w/e
 	adminapplicants = {}
 	local xml = xmlLoadFile("adminapplicants.xml")
-	if not xml then return outputDebugString("gus: adminapplicants.xml not found") end
+	if not xml then return end
 	for k, a in ipairs(xmlNodeGetChildren(xml)) do
 		adminapplicants[tonumber(xmlNodeGetAttribute(a, 'forumid'))] = xmlNodeGetAttribute(a, 'nick')
 	end
@@ -185,7 +193,7 @@ addCommandHandler('uploadmap',
 addCommandHandler('irc',
 	function(player)
 		outputChatBox("Join our IRC Channel! If you need admin support, join the channel and ask for an admin", player, 0, 255, 0)
-		outputChatBox("IRC Server: irc.gtanet.com IRC Channel: #mrgreen", player, 0, 255, 0)
+		outputChatBox("IRC Server: maple.nl.eu.gtanet.com IRC Channel: #mrgreen", player, 0, 255, 0)
 	end
 )
 

@@ -92,7 +92,6 @@ function GhostPlayback:loadGhost()
 				self.blip = createBlipAttachedTo( self.ped, 0, 1, 150, 150, 150, 50 )
 				setElementParent( self.blip, self.ped )
 				warpPedIntoVehicle( self.ped, self.vehicle )
-				
 				-- outputDebugString( "Found a valid ghost file for " .. mapName .. " " .. tostring(self.forumid))
 				self.hasGhost = true
 				self.mapName = mapName
@@ -106,7 +105,7 @@ end
 
 function GhostPlayback:sendGhostData( target )
 	if self.hasGhost then
-		triggerLatentClientEvent( target or g_Root, "onClientGhostDataReceive", g_Root, self.recording, self.bestTime, self.racer, self.ped, self.vehicle )
+		triggerClientEvent( target or g_Root, "onClientGhostDataReceive", g_Root, self.recording, self.bestTime, self.racer, self.ped, self.vehicle )
 	end
 end
 

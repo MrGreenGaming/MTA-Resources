@@ -175,7 +175,7 @@ addEventHandler("onClientBrowserCreated", root,
 	function()
 
 		if source ~= carGameLevelBrowser then return end
-		loadBrowserURL(carGameLevelBrowser, "modes/cargamefiles/cargame.html")
+		loadBrowserURL(carGameLevelBrowser, "http://mta/local/modes/cargamefiles/cargame.html")
 		
 		
 		addEventHandler("onClientRender",root,drawCargameLevel)

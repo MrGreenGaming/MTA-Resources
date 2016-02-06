@@ -18,8 +18,8 @@ function CTF:isMapValid()
 		return false 
 	else
 		local error = false
-		for i, spawn in ipairs(getElementsByType'spawnpoint') do
-			local team = getElementData(spawn, 'team')
+		for i, spawn in ipairs(g_Spawnpoints) do
+			local team = spawn.team
 			if not (team == self.red.SpawnType or team == self.blue.SpawnType) then
 				error = true
 				outputRace('Error. CTF spawnpoint #' .. i .. ' "' .. getElementID(spawn) .. '" has no team assigned')
@@ -476,7 +476,12 @@ function Flag:hitColshape(player)
 		self:startCarrierTimer(self:getCarrier())
 		playSoundFrontEnd(root, 13)
 		local r, g, b = self:getTeamColor()
-		showMessage(self:getTeamName() .. "\'s flag has been taken by " .. self:getCarrierName(), r, g, b)
+		for _,p in ipairs(getPlayersInTeam(getPlayerTeam(player))) do
+			showMessage("Your team grabbed the enemy's flag!", r, g, b, p)
+		end
+		for _,p in ipairs(getPlayersInTeam(self:getTeam().Team)) do
+			showMessage("The enemy has grabbed your flag!", r, g, b, p)
+		end
 		if not self.dropped then
 			triggerEvent('onCTFFlagTaken', self:getCarrier())
 		end
@@ -497,7 +502,12 @@ function Flag:hitBaseCol(player)
 		playerFlag:resetToBase()
 		playSoundFrontEnd(root, 28)
 		local r, g, b = self:getTeamColor()
-		showMessage(playerFlag:getTeamName() .. "\'s flag has been delivered to base by " .. getPlayerName(player) .. '!', r, g, b )
+		for _,p in ipairs(getPlayersInTeam(getPlayerTeam(player))) do
+			showMessage("The enemy has delivered your flag!", r, g, b, p)
+		end
+		for _,p in ipairs(getPlayersInTeam(self:getTeam().Team)) do
+			showMessage("Your team delivered the enemy flag!", r, g, b, p)
+		end
 		triggerEvent('onCTFFlagDelivered', player)
 		g_CurrentRaceMode:addPoint(self:getTeam(), player)
 	end
