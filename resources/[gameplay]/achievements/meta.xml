@@ -5,6 +5,4 @@
 	<script src="unlocking_mix.lua" type="server" />
 	<script src="unlocking_race.lua" type="server" />
 	<script src="unlocking_race_client.lua" type="client" protected="true"/>
-	
-	<script src="convert_race.lua" type="server" />
 </meta>
