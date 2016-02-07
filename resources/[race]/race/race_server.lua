@@ -399,7 +399,6 @@ function startRace()
 	AddonOverride.removeAll()
     triggerEvent('onMapStarting', g_Root, g_MapInfo, g_MapOptions, g_GameOptions )
 	g_Players = {}
-	client_loaded_map = {}
 	TimerManager.createTimerFor("map","spawn"):setTimer(joinHandlerByTimer, 200, 0)
 	if g_CurrentRaceMode:isRanked() then
 		TimerManager.createTimerFor("map","rank"):setTimer(updateRank, 1000, 0)
@@ -451,10 +450,6 @@ function joinHandlerByTimer()
     joinHandlerBoth()
 end
 
-local client_loaded_map = {}
-addEvent('client_loaded_map', true)
-addEventHandler('client_loaded_map', resourceRoot, function() client_loaded_map[client] = true end)
-
 function joinHandlerBoth(player)
 	if #g_Spawnpoints == 0 then
  		-- start vote if no map is loaded
@@ -475,14 +470,14 @@ function joinHandlerBoth(player)
     end
 	if TimerManager.hasTimerFor("spawn") then
 		for i,p in ipairs(getElementsByType('player')) do
-			if not table.find(g_Players, p) and getElementData(p, 'player state') ~= 'away' and client_loaded_map[p] then
+			if not table.find(g_Players, p) and getElementData(p, 'player state') ~= 'away' then
 				player = p
 				break
 			end
 		end
 		if not player then
 			for i,p in ipairs(getElementsByType('player')) do
-				if not table.find(g_Players, p) and client_loaded_map[p] then
+				if not table.find(g_Players, p)then
 					player = p
 					break
 				end
@@ -1198,7 +1193,7 @@ function setPlayerReady( player )
 end
 
 function isPlayerNotReady( player )
-    return g_NotReady[player] and getElementData(player, 'player state') ~= 'away' and not client_loaded_map[player]
+    return g_NotReady[player] and getElementData(player, 'player state') ~= 'away'
 end
 
 
