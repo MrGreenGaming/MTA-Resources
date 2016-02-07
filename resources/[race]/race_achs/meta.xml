@@ -1,6 +1,0 @@
-<meta>
-	<info name="Achievement System" author="BinSlayer" version="1.0" description="Adds challenges to accomplish." type="script" addon="race" />
-	<script src="achievements_server.lua" type="server" />
-	<script src="achievements_client.lua" type="client" protected="true"/>
-	<export function="addPlayerAchievement" type="server"/>
-</meta>
