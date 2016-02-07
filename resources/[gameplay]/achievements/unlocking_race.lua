@@ -70,6 +70,7 @@ end
 addEvent('onPlayerFinish', true)
 addEventHandler('onPlayerFinish', root,
 function(rank, time)
+if exports.race:getRaceMode() ~= "Sprint" then return end
 	if rank == 1 then
 		g_Players[source].mapsWon = g_Players[source].mapsWon + 1
 		if g_Players[source].mapsWon == 10 then
@@ -184,6 +185,8 @@ end
 addEvent('onPostFinish', true)
 addEventHandler('onPostFinish', root,
 function()
+if exports.race:getRaceMode() ~= "Sprint" then return end
+
 --this is for "Be the only noob to die in a map"
 --this is for "be the only person who hasn't died in a map"
 	for i,j in ipairs(getElementsByType('player')) do 
@@ -252,6 +255,8 @@ end
 
 addEventHandler('onMapStarting', root,
 function(mapInfo, mapOptions, gameOptions)
+if exports.race:getRaceMode() ~= "Sprint" then return end
+
 	for i,j in pairs(g_Players) do 
 		j.died = false
 	end	
@@ -301,6 +306,8 @@ end
 addEvent('onPostFinish', true)
 addEventHandler('onPostFinish', root,
 function()
+if exports.race:getRaceMode() ~= "Sprint" then return end
+
 	if isTimer(delayDeath) then killTimer(delayDeath) end
 	if #tableOfWinners == 1 then
 		addPlayerAchievementRace(tableOfWinners[1], 21)
@@ -348,6 +355,8 @@ end
 addEvent("onPlayerToptimeImprovement",true)
 addEventHandler("onPlayerToptimeImprovement",root,
     function (newPos,newTime,oldPos,oldTime)
+	if exports.race:getRaceMode() ~= "Sprint" then return end
+	
 		if newPos == 1 then
 			if pl == source then
 				addPlayerAchievementRace(source, 24)

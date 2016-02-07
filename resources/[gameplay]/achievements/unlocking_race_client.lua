@@ -41,6 +41,8 @@ sec = 0
 bCheckOtherTimer = false
 
 function checkSeconds()
+if exports.race:getRaceMode() ~= "Sprint" then return end
+
 	secs = secs + 1
 	if secs == 30 then
 		triggerServerEvent("onClientAchievement", resourceRoot, 10) --"Drive at over 197 km/h for 30 seconds (50 GC)"
@@ -51,6 +53,8 @@ function checkSeconds()
 end
 
 function checkOtherSeconds()
+if exports.race:getRaceMode() ~= "Sprint" then return end
+
 	sec = sec + 1
 	if sec == 10 then
 		triggerServerEvent("onClientAchievement", resourceRoot, 9) --"Drive at 300 km/h for 10 seconds (100 GC)"
@@ -142,6 +146,8 @@ countHours = 0
 timeCounter = setTimer(function()
 	countHours = countHours + 1
 	if countHours == 4 then  	--if countHours == 4 actually, because setTimer runs after that time. so it's  +1 more
+		if exports.race:getRaceMode() ~= "Sprint" then return end
+		
 		triggerServerEvent("onClientAchievement", resourceRoot, 29) --"Play for 4 hours with no disconnecting (100 GC)"
 	end	
 end, 3600000, 0)
