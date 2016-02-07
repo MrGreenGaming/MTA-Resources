@@ -1,6 +1,10 @@
 <meta>
-	<info name="Achievement System" author="SDK" version="1.0" description="Adds challenges to accomplish." type="script" />
+	<info name="Achievement System" author="SDK, BinSlayer, AleksCore" version="1.0" description="Adds challenges to accomplish." type="script" />
+	<script src="gui_client.lua" type="client" protected="true"/>
 	<script src="achievements_server.lua" type="server" />
-	<script src="unlocking.lua" type="server" />
-	<script src="achievements_client.lua" type="client" protected="true"/>
+	<script src="unlocking_mix.lua" type="server" />
+	<script src="unlocking_race.lua" type="server" />
+	<script src="unlocking_race_client.lua" type="client" protected="true"/>
+	
+	<script src="convert_race.lua" type="server" />
 </meta>
