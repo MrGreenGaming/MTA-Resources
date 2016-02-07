@@ -13,7 +13,7 @@ function build_mainGCShopWindow()
 	local windowWidth, windowHeight = 750, 540
 	local left = screenWidth/2 - windowWidth/2
 	local top = screenHeight/2 - windowHeight/2
-	gui["_root"] = guiCreateWindow(left, top, windowWidth, windowHeight, "Green-Coins Shop", false)
+	gui["_root"] = guiCreateWindow(left, top, windowWidth, windowHeight, "Green-Coins Shop (F6 to close)", false)
 	guiWindowSetSizable(gui["_root"], false)
 	
 	gui["shopTabs"] = guiCreateTabPanel(10, 70, 730, 460, false, gui["_root"])
