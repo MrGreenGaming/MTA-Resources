@@ -6,7 +6,7 @@
 	
 	<script src="duel_s.lua" type="server"/>
 	<script src="duel_c.lua" type="client"/>
-    <map src="duel.map"></map>
+    <config src="duel.map"></config>
 	
 	<file src="files/run.wma" />
 	<file src="files/hallelujah.wma" />
