@@ -1,4 +1,4 @@
-local screenWidth, screenHeight = guiGetScreenSize()
+﻿local screenWidth, screenHeight = guiGetScreenSize()
 downloadHornList = {}
 hornsTable = {
 	[1] = "Birdo-geluidje",
@@ -234,6 +234,8 @@ hornsTable = {
 	[231] = "Im... Faaalling !",
 	[232] = "You R so F_cked !",
 	[233] = "Its time to dueell",
+	[234] = "Metins horn",
+	[235] = "frontliner-halos",
 }
 
 
