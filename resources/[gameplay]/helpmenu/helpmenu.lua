@@ -46,13 +46,11 @@ function buildGUI()
 	guiCreateLabel(420, 290, 180, 20, "AleksCore - Developer", false, AboutTab)
 	guiCreateLabel(420, 310, 180, 20, "Bob_Taylor - Map manager", false, AboutTab)
 	guiCreateLabel(420, 330, 180, 20, "Cena - Map manager", false, AboutTab)
-	guiCreateLabel(420, 350, 180, 20, "(O)_(O) - Admin", false, AboutTab)
-	guiCreateLabel(420, 370, 180, 20, "warp. - Admin", false, AboutTab)
 	guiCreateLabel(420, 390, 180, 20, "Moshpit - Admin", false, AboutTab)
 
 	guiCreateLabel(600, 230, 180, 20, "F1madkiller - Admin", false, AboutTab)
 	guiCreateLabel(600, 250, 180, 20, "Jack123 - Admin", false, AboutTab)
-	guiCreateLabel(600, 270, 180, 20, "Retard - Admin", false, AboutTab)
+	guiCreateLabel(600, 270, 180, 20, "Flipper - Admin", false, AboutTab)
 	guiCreateLabel(600, 290, 180, 20, "neox. - Admin", false, AboutTab)
 	guiCreateLabel(600, 310, 180, 20, "Hulpje - Admin", false, AboutTab)
 	guiCreateLabel(600, 330, 180, 20, "Goldberg - Admin", false, AboutTab)
@@ -88,7 +86,7 @@ function buildGUI()
 
 	RulesFaqsTab = guiCreateTab("Rules & FAQs", TabPanel)
 
-    RulesMemo = guiCreateMemo(22, 20, 331, 370, "\n\n                         _____ Rules _____\n\n\n  1. Do not cheat, hack or exploit to get any advantage\n\n  2. Do not insult or provoke any players or admins\n\n\n  3. Do not block other players or camp in DD and SH\n\n\n  4. Do not flood or spam the main chat\n\n\n  5. Do not advertise other servers\n\n\n   6. Do not TeamKill in CTF\n\n\n   7. Do not deliberately lock other people's name\n\n\n    8. Do not use tags of clans you are not in\n\n\n    \n        Breaking any of these rules may result in ban.\n\n", false, RulesFaqsTab)
+    RulesMemo = guiCreateMemo(22, 20, 331, 370, "\n\n                         _____ Rules _____\n\n\n  1. Do not cheat, hack or exploit to get any advantage\n\n  2. Do not insult or provoke any players or admins\n\n\n  3. Do not block other players or camp in DD and SH\n\n\n  4. Do not flood or spam the main chat\n\n\n  5. Do not advertise other servers\n\n\n   6. Do not TeamKill in CTF\n\n\n  7. Do not deliberately lock other people's name\n\n\n   8. Do not use tags of clans you are not in\n\n\n    \n        Breaking any of these rules may result in ban.\n\n", false, RulesFaqsTab)
     FaqsMemo = guiCreateMemo(398, 20, 331, 370, "    \n          \n            _____ Frequently Asked Questions _____\n\n\n  Q: What are GreenCoins?\n  \n  A: GreenCoins are our community currency, you can           use them on all of our servers.\n\n  Q: How do win GreenCoins?\n\n  A: You win GreenCoins by simply playing on our servers       you can also donate to get GreenCoins in return.\n\n  Q: What can I buy on this server with GreenCoins?\n\n  A: You can buy Perks, Maps, Custom Horns, Skins             and you can modify your vehicle on our GC Shop - F6\n\n If you have any other questions refer them to our staff", false, RulesFaqsTab)
 
 	
