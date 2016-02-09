@@ -53,7 +53,7 @@ function buildGUI()
 	guiCreateLabel(600, 290, 180, 20, "Hulpje - Dota Admin", false, AboutTab)
 	guiCreateLabel(600, 310, 180, 20, "Goldberg - Event Admin", false, AboutTab)
 	guiCreateLabel(600, 330, 180, 20, "Besweeet - 4th Admin", false, AboutTab)
-	guiCreateLabel(600, 370, 180, 20, "neox. - Map Assistant", false, AboutTab)
+	guiCreateLabel(600, 350, 180, 20, "neox. - Map Assistant", false, AboutTab)
 	
 	CommandsBindsTab = guiCreateTab("Commands & Binds", TabPanel)
 	
