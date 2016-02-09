@@ -47,7 +47,6 @@ function buildGUI()
 	guiCreateLabel(420, 310, 180, 20, "Bob_Taylor - Map manager", false, AboutTab)
 	guiCreateLabel(420, 330, 180, 20, "Cena - Map manager", false, AboutTab)
 	guiCreateLabel(420, 390, 180, 20, "Moshpit - Map Assistant", false, AboutTab)
-	
 	guiCreateLabel(600, 230, 180, 20, "F1madkiller - Admin", false, AboutTab)
 	guiCreateLabel(600, 250, 180, 20, "Jack123 - Admin", false, AboutTab)
 	guiCreateLabel(600, 270, 180, 20, "Flipper - Admin", false, AboutTab)
