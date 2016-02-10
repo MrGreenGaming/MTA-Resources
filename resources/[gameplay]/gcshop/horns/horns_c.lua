@@ -236,6 +236,10 @@ hornsTable = {
 	[233] = "Its time to dueell",
 	[234] = "Metins horn",
 	[235] = "frontliner-halos",
+	[236] = "Chicken",
+	[237] = "Mom",
+	[238] = "Spanish Flea Quick",
+	[239] = "Spanish Flea",
 }
 
 
