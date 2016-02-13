@@ -1,60 +1,87 @@
-﻿---------------
--- Send Motd --
--- & log to  --
--- client    --
----------------
-
-motdText, svnlog = '', ''
+﻿-----------------
+-- Send Motd ----
+-- & changelog --
+-- to client ----
+-----------------
+motdText, changelog = '', "Changelog currently isn't available for a some reason. Try to reconnect or check this tab a bit later"
 motdVersion = 0
+	
 function start()
 	local motdNode = fileExists'motd.xml' and xmlLoadFile 'motd.xml' or xmlCreateFile('motd.xml', 'motd')
 	motdVersion = tonumber(xmlNodeGetAttribute(motdNode, 'version'))
 	motdText = xmlNodeGetValue(motdNode) or ''
 	xmlUnloadFile(motdNode)
 	
-	local svnNode = xmlLoadFile'svn.xml'
-	svnlog = xmlNodeGetValue(svnNode) or ''
-	xmlUnloadFile(svnNode)
+	startChangelogDownload()
+	setTimer(startChangelogDownload, 10*60*1000, 0)
 end
 addEventHandler('onResourceStart', resourceRoot, start)
 
-function onClientRequestMotdAndLog()
-	triggerClientEvent ( client, 'receiveMotdAndLog', resourceRoot, motdText, svnlog, motdVersion )
+
+addEvent('requestMOTD', true)
+addEventHandler('requestMOTD', resourceRoot, 
+function()
+	triggerClientEvent ( client, 'receiveMotd', resourceRoot, motdText, motdVersion )
 end
-addEvent('requestMOTD&log', true)
-addEventHandler('requestMOTD&log', resourceRoot, onClientRequestMotdAndLog)
+)
+
+addEvent('requestChangelog', true)
+addEventHandler('requestChangelog', resourceRoot, 
+function()
+	triggerClientEvent ( client, 'receiveChangelog', resourceRoot, changelog )
+end
+)
 
 
-
--------------
--- SVN log --
--------------
-
-local logUrl = "http://api.mrgreengaming.com:8080/svn/mrg-race/log"
-
-function fetchSVNLog()
-	fetchRemote ( logUrl, receivedSVNlog )
+------------------------
+-- Get changelog text --
+------------------------
+function startChangelogDownload()
+	local logUrl = "https://github.com/JarnoVgr/Mr.Green-MTA-Resources/commits/master.atom/"
+	fetchRemote ( logUrl, receiveChangelog)
 end
 
-function receivedSVNlog(data, errno)
-	if errno ~= 0 then return outputDebugString('receivedSVNlog error: ' .. tostring(errno)) end
-	local text = "Server changelog from http://dev.limetric.com/svn/mta.php\r\n"
-	text = text .. "Last 10 changes at " .. makeCurrentDatetime() .. '\r\n'
-	text = text .. "_________________________________________________________\r\n\r\n"
-	data = {fromJSON(data)}
-	-- var_dump('-v', data)
-	for k,rev in ipairs(data) do
-		local l = rev.message .. '\r\n * ' .. rev.author .. ' (' .. rev.revision .. ') on ' .. rev.date
-		text = text .. l .. '\r\n\r\n'
+function receiveChangelog(responseData, errno)
+	if errno == 0 then --If no errors
+		--Save changelog to xml file
+		outputDebugString("Received changelog data", 3)
+		local logFile = fileExists"changelog.xml" and fileOpen"changelog.xml" or fileCreate("changelog.xml")
+		fileWrite(logFile, responseData)
+		fileClose(logFile)
+		
+		--And convert from the XML file to a formatted string
+		local logNode = xmlLoadFile("changelog.xml")
+		
+		changelog = "Server changelog from https://github.com/JarnoVgr/Mr.Green-MTA-Resources/commits/master\r\n"
+		changelog = changelog .. "Last 20 changes at " .. makeCurrentDatetime() .. '\r\n'
+		changelog = changelog .. "_________________________________________________________\r\n\r\n"
+	
+		for i=0, 19 do
+			local entryNode = xmlFindChild(logNode, "entry", i)
+		
+			local titleNode = xmlFindChild( entryNode, "title", 0 )
+			local nameNode = xmlFindChild( xmlFindChild(entryNode, "author", 0) , "name", 0 )
+			local date_timeNode = xmlFindChild( entryNode, "updated", 0 )
+		
+			local title = xmlNodeGetValue(titleNode)
+			local name = xmlNodeGetValue(nameNode)
+			local date_time = xmlNodeGetValue(date_timeNode)
+		
+			local title = string.gsub(string.gsub(title, "\n", ""), "  ", "")
+			local date_time =  string.gsub(string.gsub(date_time, "T", " "), "+", " UTC +")
+
+			changelog = changelog .. "* " .. title .. "\nby " .. name .. " on " .. date_time .. "\r\n\r\n"
+		end
+		
+		xmlUnloadFile(logNode)
+	elseif errno == 1 then
+		outputDebugString("Can't receive changelog from GitHub. Please update server to version 1.5.2", 3)
+	else
+		outputDebugString("Can't receive changelog from GitHub. Error #"..errno, 1)
 	end
-	local svnNode = fileExists'svn.xml' and xmlLoadFile'svn.xml' or xmlCreateFile('svn.xml', 'log')
-	xmlNodeSetValue(svnNode, text)
-	xmlSaveFile(svnNode)
-	xmlUnloadFile(svnNode)
-	svnlog = text
 end
-fetchSVNLog()
-setTimer(fetchSVNLog, 10*60*1000, 0)
+
+
 
 
 

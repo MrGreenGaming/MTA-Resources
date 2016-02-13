@@ -70,7 +70,7 @@ function buildGUI()
 	
 	LogBindsTab = guiCreateTab("Changelog", TabPanel)
 	
-	LogBindsMemoText = guiCreateMemo(20, 20, 711, 371, "Reconnect to see the changelog", false, LogBindsTab)
+	LogBindsMemoText = guiCreateMemo(20, 20, 711, 371, "Changelog currently isn't available for a some reason. Try to reconnect or check this tab a bit later", false, LogBindsTab)
 	guiMemoSetReadOnly(LogBindsMemoText, true)
 
 	EventsTab = guiCreateTab("Events", TabPanel)
@@ -102,23 +102,31 @@ function buildGUI()
 		addEventHandler("onClientGUIClick", SettingsButton, on_pushButton_2_clicked, false)
 	end
 	guiSetVisible(MainWindow, false)
-	triggerServerEvent('requestMOTD&log', resourceRoot)
+	triggerServerEvent('requestMOTD', resourceRoot)
+	triggerServerEvent('requestChangelog', resourceRoot)
+	setTimer(triggerServerEvent, 10*60*1000, 0, 'requestChangelog', resourceRoot)
 	return gui, windowWidth, windowHeight
 end
 addEventHandler("onClientResourceStart", resourceRoot, buildGUI)
 
-function receiveMotdAndLog ( motdText, svnlog, motdVersion )
-	if fileExists'svn.xml' then fileDelete'svn.xml' end
-	if fileExists'motd.xml' then fileDelete'motd.xml' end
+
+addEvent('receiveMotd', true)
+addEventHandler('receiveMotd', resourceRoot, 
+function ( motdText, motdVersion )
 	guiSetText(MotdMemo, motdText)
-	guiSetText(LogBindsMemoText, svnlog)
 	
 	if isNewMotd(motdVersion) then
 		showhideGUI()
 	end
 end
-addEvent('receiveMotdAndLog', true)
-addEventHandler('receiveMotdAndLog', resourceRoot, receiveMotdAndLog)
+)
+
+addEvent('receiveChangelog', true)
+addEventHandler('receiveChangelog', resourceRoot, 
+function ( changelog )
+	guiSetText(LogBindsMemoText, changelog)
+end
+)
 
 local settingsFile = '@settings.xml'
 function isNewMotd(motdVersion)
