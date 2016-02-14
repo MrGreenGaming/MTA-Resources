@@ -105,7 +105,7 @@ function gcLoginFail(alreadyLoggedIn)
 		guiSetText(shop_GUI["labelLoginInfo"], "You are already logged in!")
     else
 		forumID = nil;
-		guiSetText(shop_GUI["labelLoginInfo"], "Wrong email or password entered!\n\n(Have you set up your Green-Coins account?\nIf not, visit left4green.com -> Green-Coins to do so!)")
+		guiSetText(shop_GUI["labelLoginInfo"], "Wrong email or password entered!\n\nHave you set up your Green-Coins account? (Step #2)\nIf not, visit mrgreengaming.com -> GreenCoins to do so!")
     end
 	guiLabelSetColor(shop_GUI["labelLoginInfo"], 0xFF, 0x00, 0x00 )
 end
