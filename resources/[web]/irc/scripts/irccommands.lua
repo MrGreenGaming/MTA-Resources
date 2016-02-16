@@ -257,7 +257,7 @@ function(server,channel, user,command,par)
 	for i,j in ipairs(players) do 
 		if hasObjectPermissionTo(j, "function.banPlayer", false) then
 			k = k + 1
-			admins[k] = getPlayerName(j)
+			admins[k] = getPlayerName(j):gsub('#%x%x%x%x%x%x', '')
 		end
 	end
 	if #admins > 0 then	
