@@ -145,9 +145,9 @@ function on_buttonLink_clicked(button, state, absoluteX, absoluteY)
 	local user = guiGetText ( shop_GUI["edit_user_gc"] )
 	local pass = guiGetText ( shop_GUI["edit_pass_gc"] )
 	if not loggedInGC then
-		executeCommandHandler('gclogin', user .. ' ' .. pass )
+		triggerServerEvent("onLogin", localPlayer, user, pass)
 	else
-		executeCommandHandler('gclogout')
+		triggerServerEvent("onLogout", localPlayer)
 	end
 end
 
