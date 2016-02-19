@@ -69,8 +69,10 @@ function receiveChangelog(responseData, errno)
 		
 			local title = string.gsub(string.gsub(title, "\n", ""), "  ", "")
 			local date_time =  string.gsub(string.gsub(date_time, "T", " "), "+", " UTC +")
-
-			changelog = changelog .. "* " .. title .. "\nby " .. name .. " on " .. date_time .. "\r\n\r\n"
+			
+			if string.find(title, "Merge pull request") == nil then
+				changelog = changelog .. "* " .. title .. "\nby " .. name .. " on " .. date_time .. "\r\n\r\n"
+			end
 		end
 		
 		xmlUnloadFile(logNode)
