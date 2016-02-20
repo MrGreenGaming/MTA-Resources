@@ -1527,3 +1527,11 @@ function checkNickOnChange(old, new)
 	end
 end
 addEventHandler("onPlayerChangeNick", root, checkNickOnChange)
+
+
+addEvent("getSerialNicks", true)
+addEventHandler("getSerialNicks", root, 
+function (serial)
+executeCommandHandler("serialnicks", client, serial)
+end
+)
