@@ -81,9 +81,10 @@ y=y+A  				         guiCreateHeader ( 0.25, y, 0.20, 0.04, "Game:", true, aTab1.
 y=y+B   aTab1.Health		= guiCreateLabel ( 0.25, y, 0.20, 0.04, "Health: 0%", true, aTab1.Tab )
 --		aTab1.Armour		= guiCreateLabel ( 0.45, y, 0.20, 0.04, "Armour: 0%", true, aTab1.Tab )
 		aTab1.Skin			= guiCreateLabel ( 0.45, y, 0.20, 0.04, "Skin: N/A", true, aTab1.Tab )
-y=y+B	aTab1.Team			= guiCreateLabel ( 0.45, y, 0.20, 0.04, "Team: None", true, aTab1.Tab )
+y=y+B	
 --y=y+B   aTab1.Weapon		= guiCreateLabel ( 0.25, y, 0.35, 0.04, "Weapon: N/A", true, aTab1.Tab )
 		aTab1.Ping			= guiCreateLabel ( 0.25, y, 0.20, 0.04, "Ping: 0", true, aTab1.Tab )
+y=y+B	aTab1.Team			= guiCreateLabel ( 0.25, y, 0.45, 0.04, "Team: None", true, aTab1.Tab )
 --		aTab1.Money			= guiCreateLabel ( 0.45, y, 0.20, 0.04, "Money: 0", true, aTab1.Tab )
 y=y+B   aTab1.Area			= guiCreateLabel ( 0.25, y, 0.44, 0.04, "Area: Unknown", true, aTab1.Tab )
 y=y+B   aTab1.PositionX		= guiCreateLabel ( 0.25, y, 0.30, 0.04, "X: 0", true, aTab1.Tab )
@@ -621,7 +622,7 @@ function aClientResourceStop ( resource )
 	end
 end
 
-function aClientPlayerJoin ( ip, username, accountname, serial, admin, country )
+function aClientPlayerJoin ( ip, username, accountname, serial, admin, country, forumid )
 	if ip == false and serial == false then
 		-- Update country only
 		if aPlayers[source] then
@@ -637,6 +638,7 @@ function aClientPlayerJoin ( ip, username, accountname, serial, admin, country )
 	aPlayers[source]["serial"] = serial
 	aPlayers[source]["admin"] = admin
 	aPlayers[source]["country"] = country
+	aPlayers[source]["forumid"] = forumid
 	aPlayers[source]["acdetected"] = "..."
 	aPlayers[source]["d3d9dll"] = "-"
 	aPlayers[source]["imgmodsnum"] = ""
@@ -955,7 +957,7 @@ function aClientClick ( button )
 						end
 						guiSetText ( aTab1.IP, "IP: "..aPlayers[player]["IP"] )
 						guiSetText ( aTab1.Serial, "Serial: "..aPlayers[player]["serial"] )
-						guiSetText ( aTab1.ForumID, "Forum ID: "..aPlayers[player]["forumid"] )
+						guiSetText ( aTab1.ForumID, "Forum ID: " ..aPlayers[player]["forumid"] )
 						--guiSetText ( aTab1.Username, "Community Username: "..aPlayers[player]["username"] )
 						guiSetText ( aTab1.Accountname, "Account Name: "..aPlayers[player]["accountname"] )
 						guiSetText ( aTab1.ACDetected, "AC Detected: "..aPlayers[player]["acdetected"] )

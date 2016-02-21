@@ -291,8 +291,10 @@ function aSetPlayerMuted ( player, state, length )
 	if ( setPlayerMuted ( player, state ) ) then
 		if not state then
 			aRemoveUnmuteTimer( player )
+			removeMuteFromDB( getPlayerSerial(player) )
 		elseif state and length and length > 0 then
 			aAddUnmuteTimer( player, length )
+			addMuteToDB( getPlayerSerial(player), getPlayerName(player), getExpireTimestamp(length), getAccountName(getPlayerAccount(source)), getPlayerIP(player) )
 		end
 		triggerEvent ( "onPlayerMute", player, state )
 		return true
@@ -300,6 +302,7 @@ function aSetPlayerMuted ( player, state, length )
 	return false
 end
 
+--[[
 addEventHandler ( "onPlayerJoin", _root, function ()
 	local player = source
 	if aHasUnmuteTimer( player ) then
@@ -308,6 +311,7 @@ addEventHandler ( "onPlayerJoin", _root, function ()
 		end
 	end
 end )
+]]--
 
 -- Allows for timed mutes across reconnects
 function aAddUnmuteTimer( player, length )
@@ -388,7 +392,7 @@ addEventHandler ( "onPlayerJoin", _root, function ()
 	aPlayerInitialize ( source )
 	for id, player in ipairs(getElementsByType("player")) do
 		if ( hasObjectPermissionTo ( player, "general.adminpanel" ) ) then
-			triggerClientEvent ( player, "aClientPlayerJoin", source, getPlayerIP ( source ), getPlayerUserName ( source ), getPlayerAccountName ( source ), getPlayerSerial ( source ), hasObjectPermissionTo ( source, "general.adminpanel" ), aPlayers[source]["country"] )
+			triggerClientEvent ( player, "aClientPlayerJoin", source, getPlayerIP ( source ), getPlayerUserName ( source ), getPlayerAccountName ( source ), getPlayerSerial ( source ), hasObjectPermissionTo ( source, "general.adminpanel" ), aPlayers[source]["country"], exports.gc:getPlayerForumID ( source ) )
 		end
 	end
 	setPedGravity ( source, getGravity() )
@@ -1535,3 +1539,85 @@ function (serial)
 executeCommandHandler("serialnicks", client, serial)
 end
 )
+
+local mute_sql = [[CREATE TABLE IF NOT EXISTS `mute` (
+	`serial` VARCHAR(32) NOT NULL,
+	`name` VARCHAR(22) NOT NULL,
+	`expireTimestamp` VARCHAR(10) NOT NULL,
+	`byAdmin` VARCHAR(22) NOT NULL,
+	`whenMuted` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`IP` VARCHAR(15) NOT NULL,
+	PRIMARY KEY (`serial`),
+	UNIQUE INDEX `serial` (`serial`)
+)
+]]
+
+
+addEventHandler("onResourceStart",resourceRoot,
+	function() 
+		dbHandler = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+		if dbHandler then
+		
+			dbExec ( dbHandler, mute_sql )
+			
+			for _,p in ipairs(getElementsByType("player")) do
+				checkPlayerMute(p)
+			end
+			
+		else
+			outputDebugString('admin: could not connect to the mysql db')
+		end
+	end
+)	
+
+function getExpireTimestamp(seconds)
+	local current = getRealTime().timestamp 
+	return tonumber(current + seconds)
+end
+
+function removeMuteFromDB(serial)
+	if not serial then return false end
+		local query = dbExec(dbHandler,"DELETE FROM `mute` WHERE `serial`=?",serial)
+	return query
+end
+
+function addMuteToDB(serial, pName, expTimestamp, admName, pIP)
+	if serial and #serial == 32 and pName and expTimestamp and admName then
+		local query = dbExec(dbHandler,"REPLACE INTO mute (serial, name, expireTimestamp, byAdmin, IP) VALUES (?,?,?,?,?)", serial, pName, expTimestamp, admName, pIP)
+
+		return query
+	end
+end
+
+
+function checkPlayerMute(thePlayer)
+	local player = false
+	if getElementType(source) == "player" then
+		player = source
+	else
+		player = thePlayer
+	end
+
+	local serial = getPlayerSerial(player)
+
+	if isElement(dbHandler) then
+		local query = dbQuery(dbHandler, "SELECT * FROM mute WHERE serial = ?", serial)
+		local sql = dbPoll(query,-1)
+
+		if sql and #sql > 0 then
+			local currentTime = getRealTime().timestamp
+			local expire = sql[1].expireTimestamp - currentTime
+			if expire > 1 then
+				local expireReadable = secondsToTimeDesc(expire)
+				local t = sql[1]
+				--setElementData(player, "muted", t)
+				aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds )
+				outputChatBox(getPlayerName(player).." have been muted by "..t.byAdmin.." and will be unmuted in "..expireReadable,root,255,0,0)
+			else
+				aSetPlayerMuted ( player, not isPlayerMuted ( player ), 0)
+				removeMuteFromDB(getPlayerSerial(player))
+			end
+		end
+	end
+end
+addEventHandler('onPlayerJoin', root, checkPlayerMute)
