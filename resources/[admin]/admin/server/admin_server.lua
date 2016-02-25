@@ -294,7 +294,7 @@ function aSetPlayerMuted ( player, state, length )
 			removeMuteFromDB( getPlayerSerial(player) )
 		elseif state and length and length > 0 then
 			aAddUnmuteTimer( player, length )
-			addMuteToDB( getPlayerSerial(player), getPlayerName(player), getExpireTimestamp(length), getAccountName(getPlayerAccount(source)), getPlayerIP(player) )
+			addMuteToDB( getPlayerSerial(player), getPlayerName(player), getExpireTimestamp(length), getAccountName(getPlayerAccount(player)), getPlayerIP(player) )
 		end
 		triggerEvent ( "onPlayerMute", player, state )
 		return true
@@ -1621,3 +1621,42 @@ function checkPlayerMute(thePlayer)
 	end
 end
 addEventHandler('onPlayerJoin', root, checkPlayerMute)
+
+function getPlayerFromSerial ( serial )
+    assert ( type ( serial ) == "string" and #serial == 32, "getPlayerFromSerial - invalid serial" )
+    for index, player in ipairs ( getElementsByType ( "player" ) ) do
+        if ( getPlayerSerial ( player ) == serial ) then
+            return player
+        end
+    end
+    return false
+end
+
+function serialmute(player, _, serial, days)
+	if not hasObjectPermissionTo ( player, "command.ban" ) then
+		return
+	end
+	
+	if not serial or #serial ~= 32 then
+		outputChatBox('Wrong serial. Syntax: /serialmute [serial] [days]', player, 255, 0,0)
+		return
+	end
+	
+	if tonumber(days) and tonumber(days) > 1 then
+		seconds = days*24*60*60
+	else
+		outputChatBox('Wrong argument "days". Syntax: /serialmute [serial] [days]', player, 255, 0,0)
+		return
+	end
+	
+
+	if getPlayerFromSerial(serial) then
+		addMuteToDB(serial, getPlayerName(getPlayerFromSerial(serial)), getExpireTimestamp(seconds), getPlayerName(player):gsub("#%x%x%x%x%x%x",""), getPlayerIP(player))
+		aSetPlayerMuted (getPlayerFromSerial(serial), true, seconds)
+		outputChatBox("Serial: "..serial.. " muted for " .. days .. " days", player, 255, 0, 0)
+	else
+		addMuteToDB(serial,"", getExpireTimestamp(seconds), getPlayerName(player):gsub("#%x%x%x%x%x%x",""), getPlayerIP(player))
+		outputChatBox("Serial: "..serial.. " muted for " .. days .. " days", player, 255, 0, 0)
+	end
+end
+addCommandHandler('serialmute', serialmute)
