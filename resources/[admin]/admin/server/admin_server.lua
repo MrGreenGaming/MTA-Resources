@@ -1653,10 +1653,12 @@ function serialmute(player, _, serial, days)
 	if getPlayerFromSerial(serial) then
 		addMuteToDB(serial, getPlayerName(getPlayerFromSerial(serial)), getExpireTimestamp(seconds), getPlayerName(player):gsub("#%x%x%x%x%x%x",""), getPlayerIP(player))
 		aSetPlayerMuted (getPlayerFromSerial(serial), true, seconds)
-		outputChatBox("Serial: "..serial.. " muted for " .. days .. " days", player, 255, 0, 0)
+		outputChatBox("Serial: " ..serial.. " muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
+		outputServerLog("Serial: " ..serial.. " muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
 	else
 		addMuteToDB(serial,"", getExpireTimestamp(seconds), getPlayerName(player):gsub("#%x%x%x%x%x%x",""), getPlayerIP(player))
-		outputChatBox("Serial: "..serial.. " muted for " .. days .. " days", player, 255, 0, 0)
+		outputChatBox("Serial: " ..serial.. " muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
+		outputServerLog("Serial: " ..serial.. " muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
 	end
 end
 addCommandHandler('serialmute', serialmute)
