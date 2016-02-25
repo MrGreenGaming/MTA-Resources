@@ -1653,12 +1653,28 @@ function serialmute(player, _, serial, days)
 	if getPlayerFromSerial(serial) then
 		addMuteToDB(serial, getPlayerName(getPlayerFromSerial(serial)), getExpireTimestamp(seconds), getPlayerName(player):gsub("#%x%x%x%x%x%x",""), getPlayerIP(player))
 		aSetPlayerMuted (getPlayerFromSerial(serial), true, seconds)
-		outputChatBox("Serial: " ..serial.. " muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
-		outputServerLog("Serial: " ..serial.. " muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
+		outputChatBox("Serial: " ..serial.. " was muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
+		outputServerLog("Serial: " ..serial.. " was muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
 	else
 		addMuteToDB(serial,"", getExpireTimestamp(seconds), getPlayerName(player):gsub("#%x%x%x%x%x%x",""), getPlayerIP(player))
-		outputChatBox("Serial: " ..serial.. " muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
-		outputServerLog("Serial: " ..serial.. " muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
+		outputChatBox("Serial: " ..serial.. " was muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
+		outputServerLog("Serial: " ..serial.. " was muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
 	end
 end
 addCommandHandler('serialmute', serialmute)
+
+function serialunmute(player, _, serial)
+	if not hasObjectPermissionTo ( player, "command.ban" ) then
+		return
+	end
+	
+	if not serial or #serial ~= 32 then
+		outputChatBox('Wrong serial. Syntax: /serialmute [serial] [days]', player, 255, 0,0)
+		return
+	end
+	
+	removeMuteFromDB(serial)
+	outputChatBox("Serial: " ..serial.. " was unmuted by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
+	outputServerLog("Serial: " ..serial.. " was unmuted by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
+end
+addCommandHandler('serialunmute', serialunmute)
