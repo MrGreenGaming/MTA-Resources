@@ -392,7 +392,7 @@ addEventHandler ( "onPlayerJoin", _root, function ()
 	aPlayerInitialize ( source )
 	for id, player in ipairs(getElementsByType("player")) do
 		if ( hasObjectPermissionTo ( player, "general.adminpanel" ) ) then
-			triggerClientEvent ( player, "aClientPlayerJoin", source, getPlayerIP ( source ), getPlayerUserName ( source ), getPlayerAccountName ( source ), getPlayerSerial ( source ), hasObjectPermissionTo ( source, "general.adminpanel" ), aPlayers[source]["country"], exports.gc:getPlayerForumID ( source ) )
+			triggerClientEvent ( player, "aClientPlayerJoin", source, getPlayerIP ( source ), getPlayerUserName ( source ), getPlayerAccountName ( source ), getPlayerSerial ( source ), hasObjectPermissionTo ( source, "general.adminpanel" ), aPlayers[source]["country"], exports.gc:getPlayerForumID ( source ), exports.gc:getPlayerGreencoinsLogin ( source ) )
 		end
 	end
 	setPedGravity ( source, getGravity() )
