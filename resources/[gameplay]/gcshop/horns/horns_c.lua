@@ -240,6 +240,11 @@ hornsTable = {
 	[237] = "Mom",
 	[238] = "Spanish Flea Quick",
 	[239] = "Spanish Flea",
+	[240] = "Xfile",
+	[241] = "Tutturuu",
+	[242] = "Benny Hill Theme",
+	[243] = "Groove Street!",
+	[244] = "Lenteja",
 }
 
 

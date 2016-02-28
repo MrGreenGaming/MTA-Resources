@@ -52,7 +52,7 @@ function build_mainGCShopWindow()
 	
 	gui["tab_login"] = guiCreateTab("Register / Login", gui["shopTabs"])
 	
-	gui["label_step2"] = guiCreateLabel(180, 40, 351, 131, "1. Register on http://forums.mrgreengaming.com/\n\n\n2. Visit mrgreengaming.com -> click on the 'Green-Coins' button\nThis step is needed to activate your Green-Coins counter\n\n\n3. Fill in your account info from forum.mrgreengaming.com:", false, gui["tab_login"])
+	gui["label_step2"] = guiCreateLabel(180, 40, 351, 131, '1. Register on our forum (http://mrgreengaming.com/)\n\n\n2. Go to forum -> click "GreenCoins" button and log in using forum account.\n(This step is needed to activate your Green-Coins counter)\n\n\n3. Log in here using your forum account:', false, gui["tab_login"])
 	guiLabelSetHorizontalAlign(gui["label_step2"], "left", true)
 	guiLabelSetVerticalAlign(gui["label_step2"], "top")
 	
@@ -80,7 +80,7 @@ function build_mainGCShopWindow()
 	guiLabelSetHorizontalAlign(gui["label_pass_gc"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_pass_gc"], "center")
 	
-	gui["label_Web"] = guiCreateLabel(170, 190, 151, 16, "mrgreengaming.com", false, gui["tab_login"])
+	gui["label_Web"] = guiCreateLabel(200, 190, 151, 16, "mrgreengaming.com", false, gui["tab_login"])
 	guiSetFont(gui["label_Web"], "default-bold-small")
 	guiLabelSetHorizontalAlign(gui["label_Web"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_Web"], "center")
