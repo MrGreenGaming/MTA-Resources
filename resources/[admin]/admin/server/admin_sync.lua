@@ -23,6 +23,8 @@ function aSynchCoroutineFunc( type, data )
 		tableOut["freeze"] = isPlayerFrozen ( data )
 		tableOut["money"] = getPlayerMoney ( data )
 		tableOut["username"] = getPlayerUserName ( data ) or "N/A"
+		tableOut["forumid"] = exports.gc:getPlayerForumID ( data ) or "N/A"
+		tableOut["forumname"] = exports.gc:getPlayerGreencoinsLogin ( data ) or "N/A"
 		tableOut["version"] = aPlayers[data]["version"]
 		tableOut["accountname"] = getPlayerAccountName ( data ) or "N/A"
 		tableOut["groups"] = "None"
@@ -51,6 +53,8 @@ function aSynchCoroutineFunc( type, data )
 				tableOut[player]["version"] = aPlayers[player]["version"]
 				tableOut[player]["accountname"] = getPlayerAccountName ( player ) or "N/A"
 				tableOut[player]["serial"] = getPlayerSerial ( player )
+				tableOut[player]["forumid"] = exports.gc:getPlayerForumID ( player ) or "N/A"
+				tableOut[player]["forumname"] = exports.gc:getPlayerGreencoinsLogin ( player ) or "N/A"
 				tableOut[player]["country"] = aPlayers[player]["country"]
 				tableOut[player]["admin"] = hasObjectPermissionTo ( player, "general.adminpanel" )
 				tableOut[player]["acdetected"] = getPlayerACDetectedList( player )

@@ -48,6 +48,8 @@ function gcConnected()
 	return (handlerForum and handlerGC and true) or false
 end
 
+local accountDetailsCache = {}
+
 function getPlayerLoginInfo(email, pw, callback)
 	if devmode then
 		-- /gclogin <choose a forumID> <admin>
@@ -59,57 +61,64 @@ function getPlayerLoginInfo(email, pw, callback)
 	end
 
 	if handlerForum and email and pw then
-		if useSQL then
-			local cmd = "SELECT member_id, members_pass_hash, members_pass_salt FROM "..forumData.fTable.." WHERE email=? OR name=?"
-			local query = dbQuery(handlerForum, cmd, email, email)
-			if query then
-				local result = dbPoll(query, -1)   --might lag. Needs testing
-				if not result then outputDebugString("Error: Query not ready or error") dbFree(query) return false end
-				if not result[1] then 
-					dbFree(query)
-					return callback(false)
-				end
-				local forumID = result[1].member_id  
-				local forumHash = result[1].members_pass_hash
-				local forumSalt = result[1].members_pass_salt
-				
-				if forumSalt and forumHash then
-					if md5( string.lower(md5( forumSalt ))..string.lower(pw) ) == string.upper(forumHash) then
-						return callback(forumID)
-					else       
-						return callback(false)
-					end
-				end
-			else
-				outputDebugString("getPlayerLoginInfo: SELECT query failed! ", 1)
+		local url = 'http://api.mrgreengaming.com:8080/account/login'	-- returns {"error":0,"userId":591,"user":"SDK","name":"SDK","emailAddress":"sdk@gmail.com","greenCoins":0}
+		local post = toJSON{ user = email, password = pw, appId = get"appId", appSecret = get"appSecretPass" }
+		-- outputDebugString(post)
+		fetchRemote(url, function(r,e)
+			if e ~= 0 then
+				outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. e, 1)
 				return callback(false)
-			end
-		else
-			local url = 'http://api.mrgreengaming.com:8080/account/login'
-			local post = toJSON{ user = email, password = pw, appId = get"appId", appSecret = get"appSecretPass" }
-			-- outputDebugString(post)
-			fetchRemote(url, function(r,e)
-				if e ~= 0 then
-					outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. e, 1)
-					return callback(false)
-				elseif not fromJSON(r) then
-					outputDebugString("getPlayerLoginInfo: api query error! " .. r, 1)
+			elseif not fromJSON(r) then
+				outputDebugString("getPlayerLoginInfo: api query error! " .. r, 1)
+				return callback(false)
+			else
+				local result = fromJSON(r)
+				if result.error ~= 0 then
+					outputDebugString("getPlayerLoginInfo: api login error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
 					return callback(false)
 				else
-					local result = fromJSON(r)
-					if result.error ~= 0 then
-						-- outputDebugString("getPlayerLoginInfo: api login error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
-						return callback(false)
-					else
-						local forumID = result.userId  
-						-- outputDebugString(tostring(forumID))
-						return callback(forumID)
-					end
+					-- outputDebugString(tostring(r))
+					accountDetailsCache[result.userId] = result  
+					return callback(result.userId, result.name, result.emailAddress)
 				end
-			end, post)
-		end
+			end
+		end, post)
 	else
 		outputDebugString("getPlayerLoginInfo: No db connection or missing details!", 1)
+		return callback(false)
+	end
+end
+
+function getForumAccountDetails(forumID, callback)
+	if devmode then
+		return callback(forumID)
+	end
+	
+	if handlerForum and forumID then
+		if accountDetailsCache[forumID] then return callback(accountDetailsCache[forumID].name, accountDetailsCache[forumID].emailAddress) end
+		local url = 'http://api.mrgreengaming.com:8080/account/details'	-- returns {"error":0,"userId":591,"name":"SDK","emailAddress":"sdk@gmail.com","greenCoins":0}
+		local post = toJSON{ userId = forumID, appId = get"appId", appSecret = get"appSecretPass" }
+		fetchRemote(url, function(r,e)
+			if e ~= 0 then
+				outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. e, 1)
+				return callback(false)
+			elseif not fromJSON(r) then
+				outputDebugString("getPlayerLoginInfo: api query error! " .. tostring(r), 1)
+				return callback(false)
+			else
+				local result = fromJSON(r)
+				if result.error ~= 0 then
+					outputDebugString("getForumAccountDetails: api error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
+					return callback(false)
+				else
+					-- outputDebugString(tostring(r))
+					accountDetailsCache[forumID] = result
+					return callback(result.name, result.emailAddress)
+				end
+			end
+		end, post)
+	else
+		outputDebugString("getForumAccountDetails: No db connection or missing details!", 1)
 		return callback(false)
 	end
 end

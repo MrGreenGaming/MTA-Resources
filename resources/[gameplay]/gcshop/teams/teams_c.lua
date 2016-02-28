@@ -94,7 +94,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 		end
 		if z.status == 1 then
 			i = guiGridListAddRow(g)
-			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
+			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (' (Owner) (' .. tostring(z.age) .. '/60 days left') or ''), false, false)
 		end
 	end
 	if not t or player ~= localPlayer then return end
@@ -102,7 +102,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 	for r, z in ipairs(teams) do
 		if t and t.teamid == z.teamid and z.status == 1 then
 			i = guiGridListAddRow(g2)
-			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and ' (Owner)' or ''), false, false)
+			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name,"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (' (Owner) (' .. tostring(z.age) .. '/60 days left') or ''), false, false)
 			guiGridListSetItemData(g2, i, 1, z.forumid, false, false)
 		end
 	end

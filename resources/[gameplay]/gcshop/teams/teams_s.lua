@@ -83,9 +83,9 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
 		if result == true then
 			local added
 			if r.owner ~= forumID then
-				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=? WHERE `teamid`=?]], getRealTime().timestamp, r.teamid)
+				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=? WHERE `teamid`=?]], math.min(r.renew_timestamp + team_duration, getRealTime().timestamp + 2 * team_duration), r.teamid)
 			else
-				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=?, `name`=?, `tag`=?, `colour`=?, `message`=? WHERE `teamid`=?]], getRealTime().timestamp, teamname, teamtag, teamcolour, teammsg, r.teamid)
+				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=?, `name`=?, `tag`=?, `colour`=?, `message`=? WHERE `teamid`=?]], math.min(r.renew_timestamp + team_duration, getRealTime().timestamp + 2 * team_duration), teamname, teamtag, teamcolour, teammsg, r.teamid)
 				setTeamName(teams[r.teamid], teamtag .. ' ' .. teamname)
 				setTeamColor(teams[r.teamid], getColorFromString(teamcolour))
 			end
@@ -132,7 +132,7 @@ end)
 
 function addTeamToDatabase( forumID, teamname, teamtag, teamcolour, teammsg )
 	local teamcreate = [[INSERT INTO `team`(`owner`, `create_timestamp`, `renew_timestamp`, `name`, `tag`, `colour`, `message`) VALUES (?,?,?,?,?,?,?)]]
-	dbExec(handlerConnect, teamcreate, forumID, getRealTime().timestamp, getRealTime().timestamp, teamname, teamtag, teamcolour, teammsg)
+	dbExec(handlerConnect, teamcreate, forumID, getRealTime().timestamp, getRealTime().timestamp + team_duration, teamname, teamtag, teamcolour, teammsg)
 	local teammember = [[REPLACE INTO `team_members`(`forumid`, `teamid`, `join_timestamp`, `status`) VALUES (?,LAST_INSERT_ID(),?,?)]]
 	return dbExec(handlerConnect, teammember, forumID, getRealTime().timestamp, 1)
 end
@@ -164,8 +164,18 @@ function checkPlayerTeam2 ( qh, player, bLogin )
 		if j.forumid == forumid then
 			r = j
 			playerteams[player] = j
-			break
 		end
+		if j.forumid == j.owner then
+			j.age = string.format("%.2f", (j.renew_timestamp - getRealTime().timestamp)/ (24 * 60 * 60))
+		end
+	end
+	
+	local age
+	if r then
+		-- Check team age
+		age = (r.renew_timestamp - getRealTime().timestamp)
+		r.age = string.format("%.2f", age/ (24 * 60 * 60))
+		outputConsole('[TEAMS] Team days left: ' .. r.age, player)
 	end
 	
 	triggerClientEvent('teamsData', resourceRoot, result, player, r)
@@ -179,9 +189,9 @@ function checkPlayerTeam2 ( qh, player, bLogin )
 	end
 	
 	-- Check team age
-	local age = (getRealTime().timestamp - r.renew_timestamp) 
-	outputConsole('[TEAMS] Team age in days: ' .. tostring(age/ (24 * 60 * 60)), player)
-	if age > team_duration then
+	local age = (r.renew_timestamp - getRealTime().timestamp)
+	outputConsole('[TEAMS] Team days left: ' .. r.age, player)
+	if age < 0 then
 		if bLogin then
 			outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
 		end
