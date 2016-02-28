@@ -1,29 +1,45 @@
-local achsTable = 'achievements'
+local achsTableMix = 'achievements'
+local achsTableRace = 'achievements_race'
 
-allAchievements = {}
+allAchievementsMix = {}
+allAchievementsRace = {}
 
+local achievements_race_sql = [[CREATE TABLE IF NOT EXISTS `achievements_race` (
+	`forumID` INT(11) NOT NULL,
+	`achievementID` INT(11) NOT NULL,
+	`unlockedDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`unlocked` TINYINT(1) NOT NULL DEFAULT '0',
+	`progress` INT(10) UNSIGNED NULL DEFAULT NULL,
+	PRIMARY KEY (`forumID`,`achievementID`)
+)
+]]
 
 function onStart()
 	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
 	if not handlerConnect then
-		return outputDebugString('race_achs: could not connect to the mysql db')
+		return outputDebugString('achievements: could not connect to the mysql db')
 	end
 	queryAchievementsAll()
+	
+	
+	-- Create tables if they don't exist yet on shop start
+	dbExec ( handlerConnect, achievements_race_sql )
 end
 addEventHandler('onResourceStart', resourceRoot, onStart)
 
 function gcLogin ( forumID, amount )
-	getAchievements ( { forumID } )
+	getAchievements( { forumID } )
 end
 addEventHandler("onGCLogin" , root, gcLogin )
 
 function gcLogout ( forumID )
-	allAchievements[forumID] = nil
+	allAchievementsMix[forumID] = nil
+	allAchievementsRace[forumID] = nil
 end
 addEventHandler("onGCLogout" , root, gcLogout )
 
 function onClientGUI ()
-	triggerClientEvent(client, 'showAchievementsGUI', resourceRoot, achievementList, getPlayerAchievements ( client ) )
+	triggerClientEvent( client, 'showAchievementsGUI', resourceRoot, achievementListMix, getPlayerAchievementsMix ( client ), achievementListRace, getPlayerAchievementsRace ( client ) )
 end
 addEvent('onAchievementsBoxLoad', true)
 addEventHandler('onAchievementsBoxLoad', resourceRoot, onClientGUI)
@@ -47,97 +63,149 @@ end
 function getAchievements ( forumids )
 	if not handlerConnect then return end
 	forumids = table.concat(forumids, ',')
-	local qh = dbQuery ( handlerConnect, "SELECT * FROM `??` WHERE forumID IN (??)", achsTable, forumids)
-	local results = dbPoll ( qh, -1 )
-	if results and #results > 0 then
-		for _, row in ipairs(results) do
-			local ach = getAchievement ( row.achievementID )
+	local qhMix = dbQuery ( handlerConnect, "SELECT * FROM `??` WHERE forumID IN (??)", achsTableMix, forumids)
+	local resultsMix = dbPoll ( qhMix, -1 )
+	if resultsMix and #resultsMix > 0 then
+		for _, row in ipairs(resultsMix) do
+			local ach = getAchievementMix ( row.achievementID )
 			-- outputDebugString(string.format('%d %s %d %d / %d %s' , row.forumID, ach.s, row.unlocked, row.progress or 0, ach.max or 0, row.unlockedDate ) )
-			if not allAchievements[row.forumID] then allAchievements[row.forumID] = {} end
-			allAchievements[row.forumID][row.achievementID] = row
+			if not allAchievementsMix[row.forumID] then allAchievementsMix[row.forumID] = {} end
+			allAchievementsMix[row.forumID][row.achievementID] = row
+		end
+	end
+	
+	local qhRace = dbQuery ( handlerConnect, "SELECT * FROM `??` WHERE forumID IN (??)", achsTableRace, forumids)
+	local resultsRace = dbPoll ( qhRace, -1 )
+	if resultsRace and #resultsRace > 0 then
+		for _, row in ipairs(resultsRace) do
+			local ach = getAchievementRace ( row.achievementID )
+			-- outputDebugString(string.format('%d %s %d %d / %d %s' , row.forumID, ach.s, row.unlocked, row.progress or 0, ach.max or 0, row.unlockedDate ) )
+			if not allAchievementsRace[row.forumID] then allAchievementsRace[row.forumID] = {} end
+			allAchievementsRace[row.forumID][row.achievementID] = row
 		end
 	end
 end
 
 
-
-
--- checkplayer, returns true if the player can unlock the achievement, false if not logged in or already unlocked
-function checkPlayer (player, achID)
+-- checkPlayerMix, returns true if the player can unlock the achievement, false if not logged in or already unlocked
+function checkPlayerMix (player, achID)
 	local resGC = getResourceFromName'gc'
 	if not handlerConnect or not resGC or getResourceState ( resGC ) ~= 'running' then return false end
 	
 	if not exports.gc:isPlayerLoggedInGC ( player ) then return false end
 	
-	local playerAchievements = getPlayerAchievements ( player )
+	local playerAchievementsMix = getPlayerAchievementsMix ( player )
 		
-	return not playerAchievements[achID] or playerAchievements[achID].unlocked ~= 1
+	return not playerAchievementsMix[achID] or playerAchievementsMix[achID].unlocked ~= 1
 end
 
-function getPlayerAchievements ( player )
-	return allAchievements[exports.gc:getPlayerForumID ( player )] or {}
+-- checkPlayerRace, returns true if the player can unlock the achievement, false if not logged in or already unlocked
+function checkPlayerRace (player, achID)
+	local resGC = getResourceFromName'gc'
+	if not handlerConnect or not resGC or getResourceState ( resGC ) ~= 'running' then return false end
+	
+	if not exports.gc:isPlayerLoggedInGC ( player ) then return false end
+	
+	local playerAchievementsRace = getPlayerAchievementsRace ( player )
+		
+	return not playerAchievementsRace[achID] or playerAchievementsRace[achID].unlocked ~= 1
 end
 
 
-function addPlayerAchievement ( player, achID )
-	if isMapTesting() or not checkPlayer (player, achID) then return end
+function getPlayerAchievementsMix ( player )
+	return allAchievementsMix[exports.gc:getPlayerForumID ( player )] or {}
+end
 
-	local ach = getAchievement ( achID )
+function getPlayerAchievementsRace ( player )
+	return allAchievementsRace[exports.gc:getPlayerForumID ( player )] or {}
+end
+
+
+function addPlayerAchievementMix ( player, achID )
+	if isMapTesting() or not checkPlayerMix (player, achID) then return end
+
+	local ach = getAchievementMix ( achID )
 	local forumID = exports.gc:getPlayerForumID ( player )
 	local query = "INSERT INTO `??` (forumID, achievementID, unlocked) VALUES (?,?,?)"
-	dbExec ( handlerConnect, query, achsTable, forumID, achID, 1 )
+	dbExec ( handlerConnect, query, achsTableMix, forumID, achID, 1 )
 	outputChatBox( getPlayerName(player):gsub("#%x%x%x%x%x%x", "") .. " has unlocked the achievement: " .. ach.s, root, 255, 0, 0)
 	exports.gc:addPlayerGreencoins(player, ach.reward)
-	getAchievements ( { forumID } )
+	getAchievements( { forumID } )
+end
+
+function addPlayerAchievementRace ( player, achID )
+	if isMapTesting() or not checkPlayerRace (player, achID) then return end
+	local count = getPlayerCount()
+	if count < 5 then return end
+
+	local ach = getAchievementRace ( achID )
+	local forumID = exports.gc:getPlayerForumID ( player )
+	local query = "INSERT INTO `??` (forumID, achievementID, unlocked) VALUES (?,?,?)"
+	dbExec ( handlerConnect, query, achsTableRace, forumID, achID, 1 )
+	outputChatBox( getPlayerName(player):gsub("#%x%x%x%x%x%x", "") .. " has unlocked the achievement: " .. ach.s, root, 255, 0, 0)
+	exports.gc:addPlayerGreencoins(player, ach.reward)
+	getAchievements( { forumID } )
 end
 
 
-function addAchievementProgress ( players, achID, progress )		-- expects checkplayer is done beforehand
+function addAchievementProgressMix ( players, achID, progress )		-- expects checkPlayerMix is done beforehand
 	if type(players) ~= 'table' then players = {players} end
 	if isMapTesting() or #players < 1 then return end
-	local progressForumids, unlockedForumids, forumids = {}, {}, {}
-	local ach = getAchievement ( achID )
+	local progressForumidsMix, unlockedForumidsMix, forumids = {}, {}, {}
+	local ach = getAchievementMix ( achID )
 	local maxProgress = ach.max
 	for _, player in ipairs(players) do
-		if checkPlayer (player, achID) then
+		if checkPlayerMix (player, achID) then
 			local forumID = exports.gc:getPlayerForumID(player)
 			table.insert ( forumids, forumID )
-			local playerAch = allAchievements[forumID] and allAchievements[forumID][achID] or false
+			local playerAch = allAchievementsMix[forumID] and allAchievementsMix[forumID][achID] or false
 			if (playerAch and playerAch.progress + progress >= maxProgress) or (progress >= maxProgress) then
-				table.insert ( unlockedForumids, string.format('(%d,%d,1,%d)', forumID, achID, maxProgress) )
+				table.insert ( unlockedForumidsMix, string.format('(%d,%d,1,%d)', forumID, achID, maxProgress) )
 				outputChatBox( getPlayerName(player):gsub("#%x%x%x%x%x%x", "") .. " has unlocked the achievement: " .. ach.s, root, 255, 0, 0)
 				exports.gc:addPlayerGreencoins(player, ach.reward)
 			else
-				table.insert ( progressForumids, string.format('(%d,%d,0,%d)', forumID, achID, progress) )
+				table.insert ( progressForumidsMix, string.format('(%d,%d,0,%d)', forumID, achID, progress) )
 			end
 		end
 	end
-	if (#progressForumids > 0) then
-		progressForumids = table.concat ( progressForumids, ',' )
-		-- outputDebugString ( 'PROGRESS ' .. progressForumids )
+	if (#progressForumidsMix > 0) then
+		progressForumidsMix = table.concat ( progressForumidsMix, ',' )
+		-- outputDebugString ( 'PROGRESS ' .. progressForumidsMix )
 		local progressQuery = "INSERT INTO `??` (forumID, achievementID, unlocked, progress) VALUES ?? ON DUPLICATE KEY UPDATE progress = progress + ?"
 		-- outputDebugString ( 'PROGRESS ' .. progressQuery )
-		dbExec ( handlerConnect, progressQuery, achsTable, progressForumids, progress )
+		dbExec ( handlerConnect, progressQuery, achsTableMix, progressForumidsMix, progress )
 	end
-	if (#unlockedForumids > 0) then
-		unlockedForumids = table.concat ( unlockedForumids, ',' )
-		-- outputDebugString ( 'PROGRESS ' .. unlockedForumids )
+	if (#unlockedForumidsMix > 0) then
+		unlockedForumidsMix = table.concat ( unlockedForumidsMix, ',' )
+		-- outputDebugString ( 'PROGRESS ' .. unlockedForumidsMix )
 		local unlockedQuery = "INSERT INTO `??` (forumID, achievementID, unlocked, progress) VALUES ?? ON DUPLICATE KEY UPDATE unlocked = 1, progress = ?"
 		-- outputDebugString ( 'UNLOCK ' .. unlockedQuery )
-		dbExec ( handlerConnect, unlockedQuery, achsTable, unlockedForumids, maxProgress )
+		dbExec ( handlerConnect, unlockedQuery, achsTableMix, unlockedForumidsMix, maxProgress )
 	end
 	if #forumids > 0 then
 		getAchievements ( forumids )
 	end
 end
 
-local achs = {}
-function getAchievement ( achID )
-	if achs[achID] then return achs[achID] end
-	for k,ach in ipairs(achievementList) do
-		if ach.id == achID then
-			achs[achID] = ach
-			return ach
+local achsMix = {}
+function getAchievementMix ( achID )
+	if achsMix[achID] then return achsMix[achID] end
+	for k,achMix in ipairs(achievementListMix) do
+		if achMix.id == achID then
+			achsMix[achID] = achMix
+			return achMix
+		end
+	end
+	return false
+end
+
+local achsRace = {}
+function getAchievementRace ( achID )
+	if achsRace[achID] then return achsRace[achID] end
+	for k,achRace in ipairs(achievementListRace) do
+		if achRace.id == achID then
+			achsRace[achID] = achRace
+			return achRace
 		end
 	end
 	return false

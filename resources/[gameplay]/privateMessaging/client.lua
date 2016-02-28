@@ -31,7 +31,7 @@ function buildPlayerList()
   local gx, gy = guiGetScreenSize()
   local width, height = 222, 343
   local x = -1
-  local y = (3 / 4) * (gy - height)
+  local y = 0.5 * (gy - height)
   newmsg.img = guiCreateStaticImage(681, 134, 42, 34, "image/chat-icon.png", false) -- Mail message icon
   newmsg.lbl = guiCreateLabel(553, 175, 350, 50, "", false)
   guiSetVisible(newmsg.img, false)
@@ -39,7 +39,7 @@ function buildPlayerList()
   guiLabelSetColor(newmsg.lbl, 0, 170, 255)
   guiLabelSetHorizontalAlign(newmsg.lbl, "left", true)
   
-  wndPlayers = guiCreateWindow(x, y, width, height, "Private Chat", false)
+  wndPlayers = guiCreateWindow(x, y, width, height, "Private Chat (F3 to close)", false)
 
   grdPlayers = guiCreateGridList(0.0491, 0.0449 + 0.025, 0.9608, 0.8968 + 0.025, true, wndPlayers)
 
@@ -186,6 +186,7 @@ function recieveChatMessage(ply, msg)
   oldText = oldText .. time .. getPlayerName(ply) .. ": " .. msg .. "\n"
   guiSetText(chat[ply].memo, oldText)
   guiMemoSetCaretIndex(chat[ply].memo, string.len(oldText))
+  setWindowFlashing(true,0)
 end
 
 event_resource_start = function(res)

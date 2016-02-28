@@ -37,27 +37,24 @@ function buildGUI()
 	guiSetFont(StaffTitle, "default-bold-small")
 	guiLabelSetHorizontalAlign(StaffTitle, "left", false)
 	guiLabelSetVerticalAlign(StaffTitle, "center")
+	guiLabelSetColor(StaffTitle, 0, 255, 0)
 
 	MrGreenLogo = guiCreateStaticImage(391, 49, 350, 137, ":helpmenu/img/logo.png", false, AboutTab)
 	
-	guiCreateLabel(420, 230, 180, 20, "Ywa - Founder", false, AboutTab)
-	guiCreateLabel(420, 250, 180, 20, "SDK - Manager", false, AboutTab)
-	guiCreateLabel(420, 270, 180, 20, "Kalibwoy - Developer", false, AboutTab)
-	guiCreateLabel(420, 290, 180, 20, "AleksCore - Developer", false, AboutTab)
-	guiCreateLabel(420, 310, 180, 20, "Bob_Taylor - Map manager", false, AboutTab)
-	guiCreateLabel(420, 330, 180, 20, "Cena - Map manager", false, AboutTab)
-	guiCreateLabel(420, 350, 180, 20, "(O)_(O) - Admin", false, AboutTab)
-	guiCreateLabel(420, 370, 180, 20, "warp. - Admin", false, AboutTab)
-	guiCreateLabel(420, 390, 180, 20, "Moshpit - Admin", false, AboutTab)
-
-	guiCreateLabel(600, 230, 180, 20, "F1madkiller - Admin", false, AboutTab)
-	guiCreateLabel(600, 250, 180, 20, "Jack123 - Admin", false, AboutTab)
-	guiCreateLabel(600, 270, 180, 20, "Retard - Admin", false, AboutTab)
-	guiCreateLabel(600, 290, 180, 20, "neox. - Admin", false, AboutTab)
-	guiCreateLabel(600, 310, 180, 20, "Hulpje - Admin", false, AboutTab)
-	guiCreateLabel(600, 330, 180, 20, "Goldberg - Admin", false, AboutTab)
-	guiCreateLabel(600, 350, 180, 20, "Besweeet - Admin", false, AboutTab)
-	-- guiCreateLabel(600, 370, 180, 20, "Besweeet - Admin", false, AboutTab)
+	guiCreateLabel(405, 230, 180, 20, "Ywa - Founder", false, AboutTab)
+	guiCreateLabel(405, 250, 180, 20, "SDK - Manager", false, AboutTab)
+	guiCreateLabel(405, 270, 180, 20, "KaliBwoy - Developer", false, AboutTab)
+	guiCreateLabel(405, 290, 180, 20, "AleksCore - Developer", false, AboutTab)
+	guiCreateLabel(405, 310, 180, 20, "Bob_Taylor - Map Manager", false, AboutTab)
+	guiCreateLabel(405, 330, 180, 20, "Cena - Map Manager", false, AboutTab)
+	guiCreateLabel(405, 350, 180, 20, "MoshPit - Map Assistant", false, AboutTab)
+	guiCreateLabel(585, 230, 180, 20, "Jack123 - Mother Russia", false, AboutTab)
+	guiCreateLabel(585, 250, 180, 20, "Flipper - Niu Admin", false, AboutTab)
+	guiCreateLabel(585, 270, 180, 20, "F1MADKILLER - Mad Admin", false, AboutTab)
+	guiCreateLabel(585, 290, 180, 20, "Hulpje - Dota Admin", false, AboutTab)
+	guiCreateLabel(585, 310, 180, 20, "Goldberg - Event Admin", false, AboutTab)
+	guiCreateLabel(585, 330, 180, 20, "Besweeet - 4th Admin", false, AboutTab)
+	guiCreateLabel(585, 350, 180, 20, "neox. - Map Assistant", false, AboutTab)
 	
 	CommandsBindsTab = guiCreateTab("Commands & Binds", TabPanel)
 	
@@ -73,7 +70,7 @@ function buildGUI()
 	
 	LogBindsTab = guiCreateTab("Changelog", TabPanel)
 	
-	LogBindsMemoText = guiCreateMemo(20, 20, 711, 371, "Reconnect to see the changelog", false, LogBindsTab)
+	LogBindsMemoText = guiCreateMemo(20, 20, 711, 371, "Changelog currently isn't available for a some reason. Try to reconnect or check this tab a bit later", false, LogBindsTab)
 	guiMemoSetReadOnly(LogBindsMemoText, true)
 
 	EventsTab = guiCreateTab("Events", TabPanel)
@@ -88,7 +85,7 @@ function buildGUI()
 
 	RulesFaqsTab = guiCreateTab("Rules & FAQs", TabPanel)
 
-    RulesMemo = guiCreateMemo(22, 20, 331, 370, "\n\n                         _____ Rules _____\n\n\n  1. Do not cheat, hack or exploit to get any advantage\n\n  2. Do not insult or provoke any players or admins\n\n\n  3. Do not block other players or camp in DD and SH\n\n\n  4. Do not flood or spam the main chat\n\n\n  5. Do not advertise other servers\n\n\n   6. Do not TeamKill in CTF\n\n\n   7. Do not deliberately lock other people's name\n\n\n    8. Do not use tags of clans you are not in\n\n\n    \n        Breaking any of these rules may result in ban.\n\n", false, RulesFaqsTab)
+    RulesMemo = guiCreateMemo(22, 20, 331, 370, "\n\n                         _____ Rules _____\n\n\n  1. Do not cheat, hack or exploit to get any advantage\n\n  2. Do not insult or provoke any players or admins\n\n\n  3. Do not block other players or camp in DD and SH\n\n\n  4. Do not flood or spam the main chat\n\n\n  5. Do not advertise other servers\n\n\n   6. Do not TeamKill in CTF\n\n\n  7. Do not deliberately lock other people's name\n\n\n   8. Do not use tags of clans you are not in\n\n\n    \n        Breaking any of these rules may result in ban.\n\n", false, RulesFaqsTab)
     FaqsMemo = guiCreateMemo(398, 20, 331, 370, "    \n          \n            _____ Frequently Asked Questions _____\n\n\n  Q: What are GreenCoins?\n  \n  A: GreenCoins are our community currency, you can           use them on all of our servers.\n\n  Q: How do win GreenCoins?\n\n  A: You win GreenCoins by simply playing on our servers       you can also donate to get GreenCoins in return.\n\n  Q: What can I buy on this server with GreenCoins?\n\n  A: You can buy Perks, Maps, Custom Horns, Skins             and you can modify your vehicle on our GC Shop - F6\n\n If you have any other questions refer them to our staff", false, RulesFaqsTab)
 
 	
@@ -105,23 +102,31 @@ function buildGUI()
 		addEventHandler("onClientGUIClick", SettingsButton, on_pushButton_2_clicked, false)
 	end
 	guiSetVisible(MainWindow, false)
-	triggerServerEvent('requestMOTD&log', resourceRoot)
+	triggerServerEvent('requestMOTD', resourceRoot)
+	triggerServerEvent('requestChangelog', resourceRoot)
+	setTimer(triggerServerEvent, 10*60*1000, 0, 'requestChangelog', resourceRoot)
 	return gui, windowWidth, windowHeight
 end
 addEventHandler("onClientResourceStart", resourceRoot, buildGUI)
 
-function receiveMotdAndLog ( motdText, svnlog, motdVersion )
-	if fileExists'svn.xml' then fileDelete'svn.xml' end
-	if fileExists'motd.xml' then fileDelete'motd.xml' end
+
+addEvent('receiveMotd', true)
+addEventHandler('receiveMotd', resourceRoot, 
+function ( motdText, motdVersion )
 	guiSetText(MotdMemo, motdText)
-	guiSetText(LogBindsMemoText, svnlog)
 	
 	if isNewMotd(motdVersion) then
 		showhideGUI()
 	end
 end
-addEvent('receiveMotdAndLog', true)
-addEventHandler('receiveMotdAndLog', resourceRoot, receiveMotdAndLog)
+)
+
+addEvent('receiveChangelog', true)
+addEventHandler('receiveChangelog', resourceRoot, 
+function ( changelog )
+	guiSetText(LogBindsMemoText, changelog)
+end
+)
 
 local settingsFile = '@settings.xml'
 function isNewMotd(motdVersion)

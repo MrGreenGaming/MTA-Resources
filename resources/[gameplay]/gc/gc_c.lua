@@ -13,6 +13,7 @@ local pulses = 0
 local pulseMaxRepetitions = 3
 local pulseDir = "out"
 
+local gc_name = ""
 local gc_email = ""
 
 function draw()
@@ -124,14 +125,15 @@ end
 addEvent("onGCSetVisible", true)
 addEventHandler("onGCSetVisible", root, setVisible)
 
-function loginSuccess(gcAmount, email)
+function loginSuccess(gcAmount, name, email)
 	if gcAmount then
 		setGC(gcAmount)
 	end
 	fade = 1
 	if email then
+		gc_name = name
 		gc_email = email
-		outputChatBox("[GC] You successfully logged in as " .. gc_email ..".", 0, 255, 0)
+		outputChatBox("[GC] You successfully logged in as " .. gc_name .. '/' .. gc_email ..".", 0, 255, 0)
 	end
 end
 
@@ -140,7 +142,7 @@ addEventHandler("onLoginSuccess", root, loginSuccess)
 
 function loginFail(alreadyLoggedIn, databaseDown)
 	if alreadyLoggedIn then
-		outputChatBox("[GC] You are already logged in as " .. gc_email ..".", 255, 0, 0)
+		outputChatBox("[GC] You are already logged in as " .. gc_name .. '/' .. gc_email ..".", 255, 0, 0)
 	elseif databaseDown then
 		outputChatBox("[GC] GreenCoins database is not available at this moment. Please try again at a later moment.", 255, 0, 0)
 	else
@@ -165,6 +167,7 @@ function logoutSuccess()
 	setVisible(false)
 	gc = 0
 	gc_email = ""
+	gc_name = ""
 	setElementData(getLocalPlayer(), "greencoins", nil, true)
 end
 addEvent("onLogoutSuccess", true)
