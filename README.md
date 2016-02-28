@@ -6,7 +6,7 @@ TBA
 
 # Setting up a local server
 - Checkout the resources into your local MTA server folder
-- You can use the Mr.Green-MTA-Resources/config/mtaserver.conf file to use as an example server config
+- You can use the files in config/ as examples for maps, server config, acl and sql tables
 - A lot of resources need access to MySQL and GC accounts to work:
   1. Older resources still need their SQL tables created before they can run, use the dumps Mr.Green-MTA-Resources/config/green_coins.sql and Mr.Green-MTA-Resources/config/mrgreen_mtasrvs.sql to create them
   2. Set up the connection to your MySQL server in the gcshop settings (with runcode for example): `/srun set("*gcshop.host", 'localhost'); set("*gcshop.dbname", 'mrgreen_mtasrvs'); set("*gcshop.user", 'root'); set("*gcshop.pass", '');`

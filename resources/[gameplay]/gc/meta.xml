@@ -14,6 +14,7 @@
 	<export function="getPlayerForumID" type="server"/>
 	<export function="getPlayerGreencoinsID" type="server"/>
 	<export function="getPlayerGreencoinsLogin" type="server"/>
+	<export function="getPlayerGreencoinsEmail" type="server"/>
 	<export function="getPlayerGreencoins" type="server"/>
 	<export function="addPlayerGreencoins" type="server"/>
 	<export function="toggleGCInfo" type="client"/>

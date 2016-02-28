@@ -405,7 +405,7 @@ function mapRestart ( mapInfo, mapOptions, gameOptions )
 	previousSpawn = {}
 	spawnIndex = {}
 	lshift, rshift = {}, {}
-	allSpawnpoints = getElementsByType('spawnpoint')
+	allSpawnpoints = getElementsByType('spawnpoint', getResourceRootElement(exports.mapmanager:getRunningGamemodeMap ()))
 	if #getElementsByType('checkpoint') > 0 then
 		table.sort(allSpawnpoints, function (spawnA, spawnB)
 			local a_x, a_y, a_z, a_id = getSpawnpointPosition ( spawnA )
@@ -570,6 +570,7 @@ function insertPlayerRocketColorToDB(player)
 
 	return dbExec(handlerConnect, "INSERT INTO gc_rocketcolor (forumid,color) VALUES (?,?)", forumID,"00FF00" )
 end
+
 --------------------------
 ---   Tool functions   ---
 --------------------------
