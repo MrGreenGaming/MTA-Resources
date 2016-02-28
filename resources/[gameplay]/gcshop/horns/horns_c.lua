@@ -245,6 +245,21 @@ hornsTable = {
 	[242] = "Benny Hill Theme",
 	[243] = "Groove Street!",
 	[244] = "Lenteja",
+	[245] = "Cannonball",
+	[246] = "Hotel-California",
+	[247] = "I need a doctor, call me a doctor",
+	[248] = "Jump",
+	[249] = "Let it go",
+	[250] = "Mehter 2",
+	[251] = "Mehter",
+	[252] = "Midnight",
+	[253] = "No Money In The Bank",
+	[254] = "Number Of The Beast",
+	[255] = "Otpusti",
+	[256] = "Powerslave",
+	[257] = "Que boludo - Coco Basile",
+	[258] = "Surface",
+	[259] = "The Trooper",
 }
 
 
