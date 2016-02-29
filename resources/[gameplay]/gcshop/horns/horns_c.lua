@@ -260,7 +260,6 @@ hornsTable = {
 	[257] = "Que boludo - Coco Basile",
 	[258] = "Surface",
 	[259] = "The Trooper",
-	[260] = "Renault F1 v8",
 }
 
 
