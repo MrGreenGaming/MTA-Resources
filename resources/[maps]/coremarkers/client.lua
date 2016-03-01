@@ -1,5 +1,7 @@
 math.randomseed(getTickCount())
 
+local pickupDelay = 5000
+
 local powerTypes = {
 {"repair"},
 {"spikes"},
@@ -11,10 +13,6 @@ local powerTypes = {
 {"rocket"}
 }
 
-local rarePowers = {
-{"magnet"},
-{"boostx3"}
-}
 
 addEventHandler("onClientResourceStart", resourceRoot, 
 function()
@@ -35,18 +33,24 @@ end
 )
 
 function getRandomPower()
-playSound("marker.mp3")
-local randomPower = unpack(powerTypes[math.random(#powerTypes)])
---local randomPower = "rocket"
+	playSound("marker.mp3")
+	local randomPower = unpack(powerTypes[math.random(#powerTypes)])
 	
-	if math.random(100) == math.random(100) then
-		bindKeys("magnet")
-	elseif math.random(100) == math.random(100) then
-		bindKeys("boostx3")
-		setElementData(localPlayer, "boostx3", 3)
-	else
-		bindKeys(randomPower)
-	end
+	--Visual effect of random selecting
+	setTimer(function() setElementData(localPlayer, "power_type", unpack(powerTypes[math.random(#powerTypes)])) end, 100, pickupDelay/100)
+	
+	--Delay after picking up pickup
+	delayTimer = setTimer(function()
+				if math.random(80) == math.random(80) then
+					bindKeys("magnet")
+				elseif math.random(100) == math.random(100) then
+					bindKeys("boostx3")
+					setElementData(localPlayer, "boostx3", 3)
+				else
+					bindKeys(randomPower)
+				end
+			end,
+	pickupDelay+500, 1)
 end
 addEvent("getRandomPower", true)
 addEventHandler("getRandomPower", root, getRandomPower)
@@ -165,7 +169,7 @@ addEventHandler( "onClientRender",  root,
 			dxDrawImage(902.5*sWidth/1920, 120*sHeight/1080, 115*sHeight/1080, 115*sHeight/1080, "pics/"..getElementData(localPlayer, "power_type")..".png", 0, 0, 0, tocolor(255,255,255,255), true)
 		end
 		
-		if getElementData(localPlayer, "power_type") == "rocket" then
+		if getElementData(localPlayer, "power_type") == "rocket" and not isTimer(delayTimer) then
 				DrawLaser()
 		end
 		
