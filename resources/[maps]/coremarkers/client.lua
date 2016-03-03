@@ -37,7 +37,7 @@ function getRandomPower()
 	local randomPower = unpack(powerTypes[math.random(#powerTypes)])
 	
 	--Visual effect of random selecting
-	setTimer(function() setElementData(localPlayer, "power_type", unpack(powerTypes[math.random(#powerTypes)])) end, 100, (pickupDelay-200)/100)
+	setTimer(function() setElementData(localPlayer, "power_type", unpack(powerTypes[math.random(#powerTypes)])) end, 100, (pickupDelay-500)/100)
 	
 	--Delay after picking up pickup
 	delayTimer = setTimer(function()
