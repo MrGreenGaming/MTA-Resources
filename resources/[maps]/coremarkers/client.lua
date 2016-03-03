@@ -1,6 +1,6 @@
 math.randomseed(getTickCount())
 
-local pickupDelay = 5000
+local pickupDelay = 4000
 
 local powerTypes = {
 {"repair"},
@@ -37,7 +37,7 @@ function getRandomPower()
 	local randomPower = unpack(powerTypes[math.random(#powerTypes)])
 	
 	--Visual effect of random selecting
-	setTimer(function() setElementData(localPlayer, "power_type", unpack(powerTypes[math.random(#powerTypes)])) end, 100, pickupDelay/100)
+	setTimer(function() setElementData(localPlayer, "power_type", unpack(powerTypes[math.random(#powerTypes)])) end, 100, (pickupDelay-200)/100)
 	
 	--Delay after picking up pickup
 	delayTimer = setTimer(function()
@@ -50,7 +50,7 @@ function getRandomPower()
 					bindKeys(randomPower)
 				end
 			end,
-	pickupDelay+500, 1)
+	pickupDelay, 1)
 end
 addEvent("getRandomPower", true)
 addEventHandler("getRandomPower", root, getRandomPower)
