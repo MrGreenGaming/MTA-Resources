@@ -31,8 +31,8 @@ end
 function onLoginSuccessfull(result, player)
 	if result then
 		updateAutologin ( player, accounts[player]:getForumID() )
-		triggerClientEvent( player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getLoginEmail() )
-		triggerEvent( 'onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getLoginEmail())
+		triggerClientEvent( player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getForumName(), accounts[player]:getLoginEmail() )
+		triggerEvent( 'onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getForumName())
 		local serialGreencoins = getSerialGreencoins (player)
 		-- Transfer gc's from serial storage to the forum storage and delete the serial greencoins
 		if (serialGreencoins) then
@@ -197,6 +197,13 @@ function getPlayerGreencoinsID ( player )
 end
 
 function getPlayerGreencoinsLogin ( player )
+	if accounts[player] then
+		return accounts[player]:getForumName() or false
+	end
+	return false
+end
+
+function getPlayerGreencoinsEmail ( player )
 	if accounts[player] then
 		return accounts[player]:getLoginEmail() or false
 	end

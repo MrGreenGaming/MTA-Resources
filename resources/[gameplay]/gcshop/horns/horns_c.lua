@@ -278,7 +278,7 @@ function onShopInit ( tabPanel )
 	
 	
 	--// Gridlists //--
-	availableHornsList = guiCreateGridList(0.05, 0.11, 0.42, 0.66, true, buyHornsTab)
+	availableHornsList = guiCreateGridList(0.05, 0.15, 0.42, 0.66, true, buyHornsTab)
 	guiGridListSetSortingEnabled(availableHornsList, false)
 	local column = guiGridListAddColumn(availableHornsList, "Available horns", 0.9)
 	for id, horn in ipairs(hornsTable) do 
@@ -286,7 +286,7 @@ function onShopInit ( tabPanel )
 		guiGridListSetItemText(availableHornsList, row, column, tostring(id)..") "..horn, false, false)
 	end
 	--
-	myHornsList = guiCreateGridList(0.53, 0.11, 0.42, 0.66, true, buyHornsTab)
+	myHornsList = guiCreateGridList(0.53, 0.15, 0.42, 0.66, true, buyHornsTab)
 	guiGridListSetSortingEnabled(myHornsList, false)
 	myHornsNameColumn = guiGridListAddColumn(myHornsList, "My horns", 0.7)
 	myHornsKeyColumn = guiGridListAddColumn(myHornsList, "Key", 0.2)
@@ -295,14 +295,16 @@ function onShopInit ( tabPanel )
 	
 	--// Labels //--
 	guiCreateLabel(0.05, 0.04, 0.9, 0.15,'Select a horn out of the left box and press "Buy" to buy for regular usage or double-click to listen it.',true,buyHornsTab)
-	guiCreateLabel(0.14, 0.78, 0.9, 0.15,'Double-click to listen horn.',true,buyHornsTab)
+	guiCreateLabel(0.06, 0.105, 0.9, 0.15,'Double-click to listen horn:',true,buyHornsTab)
 	guiCreateLabel(0.04, 0.08, 0.9, 0.15,"Horns can only be used 3 times per map (10 secs cool-off). However, you can buy\nunlimited usage of the custom horn for 5000 GC. This item applies to all horns.",true,perkTab)
-	guiCreateLabel(0.60, 0.78, 0.9, 0.15,'Double-click to bind horn to a key.',true,buyHornsTab)
+	guiCreateLabel(0.54, 0.105, 0.9, 0.15,'Double-click to bind horn to a key:',true,buyHornsTab)
+	guiCreateLabel(0.753, 0.94, 0.9, 0.15,'(for gamepads)',true,buyHornsTab)
 	
 	
 	--// Buttons //--
-	local buy = guiCreateButton(0.14, 0.83, 0.22, 0.12, "Buy selected horn\nPrice: 1500 GC (each)", true, buyHornsTab)
-	local unbindall = guiCreateButton(0.62, 0.83, 0.22, 0.12, "Unbind all horns", true, buyHornsTab)
+	local buy = guiCreateButton(0.05, 0.83, 0.22, 0.12, "Buy selected horn\nPrice: 1500 GC (each)", true, buyHornsTab)
+	local unbindall = guiCreateButton(0.53, 0.83, 0.14, 0.12, "Unbind\nall horns", true, buyHornsTab)
+	local bindForGamepads = guiCreateButton(0.69, 0.83, 0.26, 0.12, "Bind to a horn control name\n(Esc -> Settings -> Binds)", true, buyHornsTab)
 	unlimited = guiCreateButton(0.77, 0.05, 0.20, 0.15, "Buy unlimited usage\nPrice: 5000 GC", true, perkTab)	
 
 	
@@ -311,6 +313,7 @@ function onShopInit ( tabPanel )
 	addEventHandler ( "onClientGUIDoubleClick",myHornsList, preBindKeyForHorn,false)
 	addEventHandler ( "onClientGUIDoubleClick",availableHornsList, playButton,false)
 	addEventHandler ( "onClientGUIClick",unbindall, unbindAllHorns,false)
+	addEventHandler ( "onClientGUIClick",bindForGamepads, bindToHornControlName,false)
 	addEventHandler ( "onClientGUIClick",unlimited, unlimitedHorn,false)
 end
 addEvent('onShopInit', true)
@@ -344,10 +347,21 @@ function buyButton(button, state)
 	end
 end
 
-
 ------------------
 -- Horn binding --
 ------------------
+function bindToHornControlName(button, state)
+	if button == "left" and state == "up" then
+		local row, col = guiGridListGetSelectedItem(myHornsList)
+		if row == -1 or row == false then
+			outputChatBox("Select a horn first", 255, 0, 0)
+			return
+		end
+		soundName = guiGridListGetItemData(myHornsList, row, col)
+		bindKeyForHorn("horn")
+	end
+end
+
 function getKeyForHorn(key, state) 
 	if state then 
 		if key == "escape" then

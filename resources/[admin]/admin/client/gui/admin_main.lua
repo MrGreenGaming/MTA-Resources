@@ -70,6 +70,7 @@ y=y+B   aTab1.Accountname	= guiCreateLabel ( 0.25, y, 0.435, 0.035, "Account Nam
 y=y+B   aTab1.Groups		= guiCreateLabel ( 0.25, y, 0.435, 0.035, "Groups: N/A", true, aTab1.Tab )
 y=y+B   aTab1.Serial		= guiCreateLabel ( 0.25, y, 0.44, 0.035, "Serial: N/A", true, aTab1.Tab )
 y=y+B   aTab1.ForumID		= guiCreateLabel ( 0.25, y, 0.44, 0.035, "Forum ID: N/A", true, aTab1.Tab ) 
+y=y+B   aTab1.ForumName		= guiCreateLabel ( 0.25, y, 0.44, 0.035, "Forum Name: N/A", true, aTab1.Tab ) 
 y=y+B   aTab1.Version		= guiCreateLabel ( 0.25, y, 0.435, 0.035, "Version: N/A", true, aTab1.Tab )
 y=y+B   aTab1.ACDetected	= guiCreateLabel ( 0.25, y, 0.30, 0.035, "AC Detected: N/A", true, aTab1.Tab )
 y=y+B   aTab1.ACD3D			= guiCreateLabel ( 0.25, y, 0.30, 0.035, "D3D9.DLL: N/A", true, aTab1.Tab )
@@ -622,7 +623,7 @@ function aClientResourceStop ( resource )
 	end
 end
 
-function aClientPlayerJoin ( ip, username, accountname, serial, admin, country, forumid )
+function aClientPlayerJoin ( ip, username, accountname, serial, admin, country, forumid, forumname )
 	if ip == false and serial == false then
 		-- Update country only
 		if aPlayers[source] then
@@ -639,6 +640,7 @@ function aClientPlayerJoin ( ip, username, accountname, serial, admin, country, 
 	aPlayers[source]["admin"] = admin
 	aPlayers[source]["country"] = country
 	aPlayers[source]["forumid"] = forumid
+	aPlayers[source]["forumname"] = forumname
 	aPlayers[source]["acdetected"] = "..."
 	aPlayers[source]["d3d9dll"] = "-"
 	aPlayers[source]["imgmodsnum"] = ""
@@ -958,6 +960,7 @@ function aClientClick ( button )
 						guiSetText ( aTab1.IP, "IP: "..aPlayers[player]["IP"] )
 						guiSetText ( aTab1.Serial, "Serial: "..aPlayers[player]["serial"] )
 						guiSetText ( aTab1.ForumID, "Forum ID: " ..aPlayers[player]["forumid"] )
+						guiSetText ( aTab1.ForumName, "Forum Name: " ..aPlayers[player]["forumname"] )
 						--guiSetText ( aTab1.Username, "Community Username: "..aPlayers[player]["username"] )
 						guiSetText ( aTab1.Accountname, "Account Name: "..aPlayers[player]["accountname"] )
 						guiSetText ( aTab1.ACDetected, "AC Detected: "..aPlayers[player]["acdetected"] )
@@ -981,6 +984,7 @@ function aClientClick ( button )
 					guiSetText ( aTab1.IP, "IP: N/A" )
 					guiSetText ( aTab1.Serial, "Serial: N/A" )
 					guiSetText ( aTab1.ForumID, "Forum ID: N/A" )
+					guiSetText ( aTab1.ForumName, "Forum Name: N/A" )
 					--guiSetText ( aTab1.Username, "Community Username: N/A" )
 					guiSetText ( aTab1.Version, "Version: N/A" )
 					guiSetText ( aTab1.Accountname, "Account Name: N/A" )
