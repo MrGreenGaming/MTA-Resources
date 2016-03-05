@@ -66,11 +66,16 @@ function updatePlaytimes()
 			setElementData(p, 'hoursPlayed', 0)
 		elseif currentTick - jointick >= aMin * 60 then
 			hoursPlayed = hoursPlayed + 1
-			local hourstring, anotherString = " hours",  " another "
-			if hoursPlayed == 1 then hourstring = " hour" anotherString = " an " end
-			outputChatBox ( prefix .. "#00FF00 You have been rewarded " .. tostring(rewardPerHour) .. " Green-Coins for playing for"..anotherString.."hour! (" .. tostring(hoursPlayed) .. hourstring .. ")", p, 0, 255, 0, true)
-			-- outputDebugString("Player: "..getPlayerName(p).." triggered time reward ("..hoursPlayed.."H)")
-			addPlayerGreencoins(p, rewardPerHour)
+			if isPlayerLoggedInGC(p) then
+				local hourstring, anotherString = " hours",  " another "
+				if hoursPlayed == 1 then hourstring = " hour" anotherString = " an " end
+				local reward = math.floor (rewardPerHour / ( getElementData(p, 'player state') ~= 'away' and 1 or 2))
+				outputChatBox ( prefix .. "#00FF00 You have been rewarded " .. tostring(reward) .. " Green-Coins for playing for"..anotherString.."hour! (" .. tostring(hoursPlayed) .. hourstring .. ")", p, 0, 255, 0, true)
+				-- outputDebugString("Player: "..getPlayerName(p).." triggered time reward ("..hoursPlayed.."H)")
+				addPlayerGreencoins(p, reward)
+			else
+				outputChatBox ( prefix .. "#00FF00 You weren\'t logged in, login to get your " .. rewardPerHour .. " GC each hour you play!", p, 0, 255, 0, true)
+			end
 			jointick = currentTick
 			setElementData(p, 'jointick', currentTick)
 			setElementData(p, 'hoursPlayed', hoursPlayed)
