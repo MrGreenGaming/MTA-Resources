@@ -260,12 +260,6 @@ hornsTable = {
 	[257] = "Que boludo - Coco Basile",
 	[258] = "Surface",
 	[259] = "The Trooper",
-	[260] = "GLP Dubstep",
-	[261] = "Espectacular",
-	[262] = "I Am Optimus Prime",
-	[263] = "NyanCat",
-	[264] = "Said-Nya",
-	[265] = "Thriller",
 }
 
 
