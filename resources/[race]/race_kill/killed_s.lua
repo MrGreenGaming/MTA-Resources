@@ -56,6 +56,10 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 				
 			elseif exports.race:getRaceMode() == "Reach the flag" then
 				exports.scoreboard:removeScoreboardColumn('checkpoint')
+				
+				
+			elseif exports.race:getRaceMode() == "Never the same" then
+				exports.scoreboard:scoreboardAddColumn("checkpoint", root, 77, "Checkpoint", 4)
 			end
 
 		elseif state == "LoadingMap" then
