@@ -1,7 +1,7 @@
 MAX_PRIRORITY_SLOT = 500
 
 scoreboardColumns = {
-	{ ["name"] = "name", ["width"] = 200, ["friendlyName"] = "Name", ["priority"] = 1 },
+	{ ["name"] = "name", ["width"] = 200, ["friendlyName"] = "Name", ["priority"] = 2 },
 	{ ["name"] = "ping", ["width"] = 40, ["friendlyName"] = "Ping", ["priority"] = MAX_PRIRORITY_SLOT }
 }
 resourceColumns = {}
@@ -104,8 +104,8 @@ function scoreboardResetColumns( forElement )
 		end
 		local result = triggerClientEvent( getRootElement(), "doScoreboardResetColumns", getRootElement() )
 		if result then
-			scoreboardAddColumn( "name", 200, "Name" )
-			scoreboardAddColumn( "ping", 40, "Ping" )
+			scoreboardAddColumn( "name", 200, "Name", 2 )
+			scoreboardAddColumn( "ping", 40, "Ping", 500 )
 		end
 		return result
 	else
