@@ -378,8 +378,8 @@ addEvent('onManhuntRoundEnded')
 function Manhunt:destroy()
 	self:cleanup()
 	
-	exports.scoreboard:addScoreboardColumn('race rank')
-	exports.scoreboard:addScoreboardColumn('checkpoint')
+	exports.scoreboard:scoreboardAddColumn("race rank", root, 74, "Race Rank", 3)
+	exports.scoreboard:scoreboardAddColumn("checkpoint", root, 77, "Checkpoint", 4)
 
 	if self.rankingBoard then
 		self.rankingBoard:destroy()
