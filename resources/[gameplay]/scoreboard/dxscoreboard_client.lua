@@ -828,8 +828,8 @@ function scoreboardResetColumns( fromServer )
 		resourceColumns = {}
 	end
 	if not fromServer then
-		scoreboardAddColumn( "name", 200, "Name" )
-		scoreboardAddColumn( "ping", 40, "Ping" )
+		scoreboardAddColumn( "name", 200, "Name", 2 )
+		scoreboardAddColumn( "ping", 40, "Ping", 500 )
 	end
 	return true
 end

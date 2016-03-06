@@ -902,9 +902,10 @@ addEventHandler('onGamemodeStart', g_ResRoot,
 )
 
 function addRaceScoreboardColumns()
-	exports.scoreboard:addScoreboardColumn('race rank')
-	exports.scoreboard:addScoreboardColumn('checkpoint')
-	exports.scoreboard:scoreboardAddColumn('player state',root,50,"state")
+	exports.scoreboard:scoreboardAddColumn("race rank", root, 74, "Race Rank", 3)
+	exports.scoreboard:scoreboardAddColumn("checkpoint", root, 77, "Checkpoint", 4)
+	exports.scoreboard:scoreboardAddColumn("player state", root, 50, "State", 9)
+	setTimer ( function() exports.scoreboard:scoreboardSetSortBy("race rank") end, 2000, 1 )
 end
 
 addEventHandler('onResourceStop', g_ResRoot,

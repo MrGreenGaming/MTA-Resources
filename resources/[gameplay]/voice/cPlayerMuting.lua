@@ -134,7 +134,7 @@ addEventHandler ( "onClientResourceStart", resourceRoot,
 			
 			if getResourceFromName"scoreboard" then
 				-- For some reason, without this timer scoreboard moves the column to a different position if you've just joined
-				setTimer ( call, 50, 1, getResourceFromName"scoreboard", "scoreboardAddColumn", DATA_NAME, 30, "Voice", 1 )
+				setTimer ( call, 50, 1, getResourceFromName"scoreboard", "scoreboardAddColumn", DATA_NAME, 32, "Voice", 1 )
 				addEventHandler ( "onClientPlayerScoreboardClick", root, scoreboardClick )
 				addEventHandler ( "onClientPlayerJoin", root, handleJoinedPlayer )
 			end

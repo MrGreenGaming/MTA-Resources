@@ -75,7 +75,7 @@ end, true, 'high+4')	-- high priority to make sure we set country data before ot
 addEventHandler("onResourceStart", root,
     function(res)
         if res == resource or getResourceName(res) == "scoreboard" then
-            exports.scoreboard:addScoreboardColumn("country", root, 20, "country", 2)
+            exports.scoreboard:scoreboardAddColumn("country", root, 56, "Country", 20)
             for k, player in ipairs(getElementsByType"player") do
             	checkIP(player)
             end

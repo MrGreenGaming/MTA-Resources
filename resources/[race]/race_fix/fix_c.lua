@@ -213,9 +213,8 @@ addEventHandler ( "onClientMapStarting", getLocalPlayer(), smoke )
 function sortRank()
 	setTimer ( function() exports.scoreboard:scoreboardSetSortBy("race rank") end, 1000, 1 )
 end
-
+sortRank()
 addEventHandler("onClientResourceStart", getResourceRootElement(getResourceFromName("scoreboard")), sortRank)
-addEventHandler("onClientResourceStart", resourceRoot, sortRank)
 
 -------------------------------
 -- Fix heli blades collision --

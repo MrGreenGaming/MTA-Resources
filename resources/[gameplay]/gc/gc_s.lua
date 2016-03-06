@@ -113,7 +113,7 @@ addEventHandler("onResourceStop", resourceRoot, stopup)
 
 function addScoreboard(resource)
 	if (resourceRoot == source or getResourceName ( resource ) == 'scoreboard') then
-		exports.scoreboard:addScoreboardColumn("greencoins", root, 35, "green-coins", 7)
+		exports.scoreboard:scoreboardAddColumn("greencoins", root, 77, "GreenCoins", 30)
 	end
 end
 addEventHandler("onResourceStart", root, addScoreboard)

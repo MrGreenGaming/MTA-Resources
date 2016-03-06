@@ -2,7 +2,7 @@
 addEventHandler("onResourceStart", root,
     function(resource)
 		if (resourceRoot == source or getResourceName ( resource ) == 'scoreboard') then
-			exports.scoreboard:addScoreboardColumn("playtime", root, 35)
+			exports.scoreboard:scoreboardAddColumn("playtime", root, 60, "Playtime", 50)
 		end
 		if getResourceInfo(resource, "type") ~= "map" then
 			outputDebugString("********* Started: " .. getResourceName(resource))

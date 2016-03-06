@@ -1,7 +1,7 @@
 addEventHandler("onResourceStart", root,
     function(resource)
 		if (resourceRoot == source or getResourceName ( resource ) == 'scoreboard') then
-			exports.scoreboard:addScoreboardColumn("fps", root, 35)
+			exports.scoreboard:scoreboardAddColumn("fps", root, 32, "FPS", 40)
 		end
     end
 )
