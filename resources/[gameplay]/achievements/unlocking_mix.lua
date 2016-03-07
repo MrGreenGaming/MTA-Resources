@@ -1,4 +1,4 @@
-g_Players = {}
+local g_Players = {}
 
 achievementListMix = {
 	-- { achText, achID (unique!!!!), reward, max }

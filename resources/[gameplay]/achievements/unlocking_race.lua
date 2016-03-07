@@ -1,3 +1,4 @@
+local g_Players = {}
 tableOfWinners = {}
 tableOfPlayers = {}
 
