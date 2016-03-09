@@ -338,7 +338,7 @@ function update()
 			local distanceToCp = distanceFromPlayerToCheckpoint(player,headingForCp)
 			if distanceToCp ~= false then
 				-- Add with numeric index to make shuffling possible
-				table.insert(players,{getPlayerName(player),calculateDistance(headingForCp,distanceToCp),player})
+				table.insert(players,{getPlayerName(player):gsub('#%x%x%x%x%x%x', ''),calculateDistance(headingForCp,distanceToCp),player})
 				--players[v] = calculateDistance(headingForCp,distanceToCp)
 			end
 		end
@@ -362,7 +362,7 @@ function update()
 	-- (since it can't simply be access via the index anymore, because of the numeric indexes)
 	g_localPlayerDistance = nil
 	for _,table in pairs(players) do
-		if table[1] == getPlayerName(getLocalPlayer()) then
+		if table[1] == getPlayerName(getLocalPlayer()):gsub('#%x%x%x%x%x%x', '') then
 			g_localPlayerDistance = table[2]
 		end
 	end
@@ -533,7 +533,7 @@ function draw()
 	local backgroundColor = getColor("background")
 	local fontColor = getColor("font")
 	local color = getColor("font")
-	local localPlayerName = getPlayerName(getLocalPlayer())
+	local localPlayerName = getPlayerName(getLocalPlayer()):gsub('#%x%x%x%x%x%x', '')
 
 	-- Dertemine local Players distance
 	local localPlayerDistance = g_localPlayerDistance
