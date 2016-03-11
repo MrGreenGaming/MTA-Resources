@@ -4,7 +4,10 @@
 -- @author	driver2
 -- @copyright	2009-2010 driver2
 
-
+_getPlayerName = getPlayerName
+function getPlayerName ( player )
+    return string.gsub ( _getPlayerName ( player ), '#%x%x%x%x%x%x', '' )
+end
 
 -------------
 -- GUI Stuff

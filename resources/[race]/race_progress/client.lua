@@ -607,7 +607,6 @@ function draw()
 		-- if myRank and rank and (math.abs(myRank-rank) < 6 or rank == 1) and getPedOccupiedVehicle(value[3]) and not isVehicleDamageProof(getPedOccupiedVehicle(value[3])) then       
 		if myRank and rank and getPedOccupiedVehicle(value[3]) and not isVehicleDamageProof(getPedOccupiedVehicle(value[3])) then       
 		local playerName = value[1]
-		playerName = string.gsub ( playerName, '#%x%x%x%x%x%x', '' )
 		local playerDistance = value[2]
 		local playerElement = value[3]
 		local delay = nil
