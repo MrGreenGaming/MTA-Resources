@@ -166,7 +166,7 @@ addEventHandler('changeDimension', root, changeDimension)
 
 -- Checking dimensions, if they're almost empty change all the players inside
 function checkTeam ( team )
-	if tonumber(team) and team ~= 0 and #getPlayersInDim ( team ) <= 3 then
+	if tonumber(team) and team ~= 0 and #getPlayersInDim ( team ) <= 5 then
 		for _, player in ipairs(getPlayersInDim(team, true)) do
 			triggerClientEvent(player, "checkDimensionOkay", root)
 			g_Players[player].timesPerMap = g_Players[player].timesPerMap + 1
@@ -186,7 +186,7 @@ end
 
 -- Is the player spectating
 function spectating(player)
-	return (getElementData(player, "kKey") == "spectating") or (getElementData(player, "state") ~= "alive")
+	return (getElementData(player, "kKey") == "spectating") or (getElementData(player, "player state") ~= "alive")
 end
 
 -- Changing the dimension of a player through admin panel
