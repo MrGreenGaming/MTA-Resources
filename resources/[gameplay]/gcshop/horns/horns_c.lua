@@ -266,6 +266,8 @@ hornsTable = {
 	[263] = "NyanCat",
 	[264] = "Said-Nya",
 	[265] = "Thriller",
+	[266] = "CUZ IMA MUTHAPHUKIN NINJAA",
+	[267] = "JUMP MOTHERFUCKER JUMP",
 }
 
 
