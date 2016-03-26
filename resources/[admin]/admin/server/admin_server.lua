@@ -287,14 +287,16 @@ function getPlayerAccountName( player )
 end
 
 addEvent ( "onPlayerMute", false )
-function aSetPlayerMuted ( player, state, length )
+function aSetPlayerMuted ( player, state, length, dontAddToDB)
 	if ( setPlayerMuted ( player, state ) ) then
 		if not state then
 			aRemoveUnmuteTimer( player )
 			removeMuteFromDB( getPlayerSerial(player) )
 		elseif state and length and length > 0 then
 			aAddUnmuteTimer( player, length )
-			addMuteToDB( getPlayerSerial(player), getPlayerName(player), getExpireTimestamp(length), getAccountName(getPlayerAccount(player)), getPlayerIP(player) )
+			if not dontAddToDB then
+				addMuteToDB( getPlayerSerial(player), getPlayerName(player), getExpireTimestamp(length), getAccountName(getPlayerAccount(player)), getPlayerIP(player) )
+			end
 		end
 		triggerEvent ( "onPlayerMute", player, state )
 		return true
@@ -1610,12 +1612,10 @@ function checkPlayerMute(thePlayer)
 			if expire > 1 then
 				local expireReadable = secondsToTimeDesc(expire)
 				local t = sql[1]
-				--setElementData(player, "muted", t)
-				aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds )
+				aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds, true )
 				outputChatBox(getPlayerName(player).." have been muted by "..t.byAdmin.." and will be unmuted in "..expireReadable,root,255,0,0)
 			else
 				aSetPlayerMuted ( player, not isPlayerMuted ( player ), 0)
-				removeMuteFromDB(getPlayerSerial(player))
 			end
 		end
 	end
@@ -1669,7 +1669,7 @@ function serialunmute(player, _, serial)
 	end
 	
 	if not serial or #serial ~= 32 then
-		outputChatBox('Wrong serial. Syntax: /serialmute [serial] [days]', player, 255, 0,0)
+		outputChatBox('Wrong serial. Syntax: /serialunmute [serial] [days]', player, 255, 0,0)
 		return
 	end
 	
