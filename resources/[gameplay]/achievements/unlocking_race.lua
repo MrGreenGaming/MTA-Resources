@@ -149,7 +149,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	if (g_Players[source].deathCount >= 3) then
 		addPlayerAchievementRace(source, 19)
 	end	
-	if (g_Players[source].deathCount >= 1) then
+	if (g_Players[source].deathCount >= 1) and (rank == 1) then
 		addPlayerAchievementRace(source, 20)
 	end	
 	if (g_Players[source].hasBeenChatting) then
