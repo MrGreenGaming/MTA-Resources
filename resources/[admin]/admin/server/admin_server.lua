@@ -296,6 +296,7 @@ function aSetPlayerMuted ( player, state, length, dontAddToDB, byAdmin)
 			aAddUnmuteTimer( player, length )
 			if not dontAddToDB then
 				addMuteToDB( getPlayerSerial(player), getPlayerName(player), getExpireTimestamp(length), getAccountName(getPlayerAccount(byAdmin)), getPlayerIP(player) )
+				outputServerLog( getPlayerName(player).. " has been muted for " .. secondsToTimeDesc(length) .. " days by " ..getAccountName(getPlayerAccount(byAdmin)) )
 			end
 		end
 		triggerEvent ( "onPlayerMute", player, state )
@@ -1613,7 +1614,7 @@ function checkPlayerMute(thePlayer)
 				local expireReadable = secondsToTimeDesc(expire)
 				local t = sql[1]
 				aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds, true )
-				outputChatBox(getPlayerName(player).." have been muted by "..t.byAdmin.." and will be unmuted in "..expireReadable,root,255,0,0)
+				outputChatBox(getPlayerName(player).." was muted by "..t.byAdmin.." and will be unmuted in "..expireReadable,root,255,0,0)
 			else
 				aSetPlayerMuted ( player, not isPlayerMuted ( player ), 0)
 			end
@@ -1649,16 +1650,16 @@ function serialmute(player, _, serial, days)
 		return
 	end
 	
-
-	if getPlayerFromSerial(serial) then
-		addMuteToDB(serial, getPlayerName(getPlayerFromSerial(serial)), getExpireTimestamp(seconds), getAccountName( getPlayerAccount(player) ), getPlayerIP(getPlayerFromSerial(serial)))
-		aSetPlayerMuted (getPlayerFromSerial(serial), true, seconds, player)
-		outputChatBox("Serial: " ..serial.. " was muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
-		outputServerLog("Serial: " ..serial.. " was muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
+	local playerToMute = getPlayerFromSerial(serial)
+	if playerToMute then
+		addMuteToDB( serial, getPlayerName(playerToMute) , getExpireTimestamp(seconds) , getAccountName( getPlayerAccount(player) ), getPlayerIP(playerToMute) )
+		aSetPlayerMuted ( playerToMute, true, seconds, player)
+		outputChatBox(getPlayerName(playerToMute).. " has been muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
+		outputServerLog(getPlayerName(playerToMute).. " has been muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
 	else
 		addMuteToDB(serial,"", getExpireTimestamp(seconds), getAccountName( getPlayerAccount(player) ), getPlayerIP(player))
-		outputChatBox("Serial: " ..serial.. " was muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
-		outputServerLog("Serial: " ..serial.. " was muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
+		outputChatBox("Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
+		outputServerLog("Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
 	end
 end
 addCommandHandler('serialmute', serialmute)
@@ -1669,12 +1670,12 @@ function serialunmute(player, _, serial)
 	end
 	
 	if not serial or #serial ~= 32 then
-		outputChatBox('Wrong serial. Syntax: /serialunmute [serial] [days]', player, 255, 0,0)
+		outputChatBox('Wrong serial. Syntax: /serialunmute [serial]', player, 255, 0,0)
 		return
 	end
 	
 	removeMuteFromDB(serial)
-	outputChatBox("Serial: " ..serial.. " was unmuted by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
-	outputServerLog("Serial: " ..serial.. " was unmuted by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
+	outputChatBox("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
+	outputServerLog("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
 end
 addCommandHandler('serialunmute', serialunmute)
