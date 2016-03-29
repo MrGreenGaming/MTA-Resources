@@ -18,7 +18,6 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 					setElementData(pl, 'kills', 0)
 					g_PlayersKills[pl] = 0
 				end
-				exports.scoreboard:removeScoreboardColumn('checkpoint')
 				exports.scoreboard:scoreboardAddColumn ('kills', root, 40, "Kills", 4)
 
 			-- elseif exports.race:getRaceMode() == "CarGame" then
@@ -35,8 +34,12 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 					setElementData(pl, 'kills', 0)
 					g_PlayersKills[pl] = 0
 				end
-				--kills always 0, uncomment it when it will be fixed
-				--exports.scoreboard:scoreboardAddColumn('kills', root, 40, "Kills", 4)
+				
+				if exports.race:getShooterMode() == "cargame" then
+					--kills always 0 in CarGame
+				else
+					exports.scoreboard:scoreboardAddColumn('kills', root, 40, "Kills", 4)
+				end
 				triggerClientEvent('startShooterKillDetection', resourceRoot)
 			
 
@@ -46,7 +49,6 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 					setElementData(pl, 'defends', 0)
 					g_PlayersKills[pl] = 0
 				end
-				exports.scoreboard:removeScoreboardColumn('checkpoint')
 				-- exports.scoreboard:addScoreboardColumn('defends')
 				
 				
@@ -54,9 +56,7 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 				exports.scoreboard:scoreboardAddColumn("checkpoint", root, 77, "Checkpoint", 4)
 				
 				
-			elseif exports.race:getRaceMode() == "Reach the flag" then
-				exports.scoreboard:removeScoreboardColumn('checkpoint')
-				
+			elseif exports.race:getRaceMode() == "Reach the flag" then				
 				
 			elseif exports.race:getRaceMode() == "Never the same" then
 				exports.scoreboard:scoreboardAddColumn("checkpoint", root, 77, "Checkpoint", 4)
@@ -64,6 +64,7 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 
 		elseif state == "LoadingMap" then
 			exports.scoreboard:removeScoreboardColumn('kills')
+			exports.scoreboard:removeScoreboardColumn('checkpoint')
 			for _, pl in ipairs(getElementsByType('player')) do
 				setElementData(pl, 'kills', nil)
 			end
