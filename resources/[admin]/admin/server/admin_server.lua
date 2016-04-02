@@ -1663,7 +1663,7 @@ function serialmute(pAdmin, _, serial, days)
 		return
 	end
 	
-	if tonumber(days) and tonumber(days) > 1 then
+	if tonumber(days) and tonumber(days) >= 1 then
 		seconds = days*24*60*60
 	else
 		outputChatBox('Wrong argument "days". Syntax: /serialmute [serial] [days]', pAdmin, 255, 0,0)
@@ -1671,11 +1671,15 @@ function serialmute(pAdmin, _, serial, days)
 	end
 
 	local playerToMute = getPlayerFromSerial(serial)
-	if playerToMute then --if player online -> mute and add to DB
+	if playerToMute then --if player online -> mute (it'll be auto-added to db)
+		setPlayerMuted ( playerToMute, false ) --to prevent bug when you can't update mute days, nvm about this string
 		aSetPlayerMuted ( playerToMute, true, seconds, pAdmin)
 	else -- if player not online -> just add mute to DB
 		addMuteToDB( serial, false, seconds, getAccountName( getPlayerAccount(pAdmin) ) )
 	end
+	local textMuted = "Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getAccountName( getPlayerAccount(pAdmin) )
+	outputChatBox(textMuted, root, 255, 0, 0)
+	outputServerLog(textMuted)
 end
 addCommandHandler('serialmute', serialmute)
 
