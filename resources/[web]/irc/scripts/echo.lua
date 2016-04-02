@@ -189,7 +189,7 @@ addEvent("onPlayerMute")
 addEventHandler("onPlayerMute",root,
         function (state)
                if state then
-			outputIRC("12* "..getNameNoColor(source).." was muted!")
+			--outputIRC("12* "..getNameNoColor(source).." was muted!")
 		else
 			--outputIRC("12* "..getNameNoColor(source).." was unmuted!")
 		end

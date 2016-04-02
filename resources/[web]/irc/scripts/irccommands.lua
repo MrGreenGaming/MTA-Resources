@@ -397,7 +397,7 @@ addIRCCommandHandler("!mute",
                         end
                         setPlayerMuted(player,true)
                         if reason then
-                                outputChatBox("* "..getPlayerName(player).." was muted by "..ircGetUserNick(user).." ("..reason..")",root,0,0,255)
+                                outputChatBox("* "..getPlayerName(player).." was muted by "..ircGetUserNick(user).." ("..reason..")",root,255,0,0)
                                 ircSay(channel,"12* "..getPlayerName(player).." was muted by "..ircGetUserNick(user).." ("..reason..")")
                         else
                                 outputChatBox("* "..getPlayerName(player).." was muted by "..ircGetUserNick(user),root,0,0,255)

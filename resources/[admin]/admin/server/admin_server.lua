@@ -287,16 +287,15 @@ function getPlayerAccountName( player )
 end
 
 addEvent ( "onPlayerMute", false )
-function aSetPlayerMuted ( player, state, length, dontAddToDB, byAdmin)
+function aSetPlayerMuted ( player, state, length, pAdmin)
 	if ( setPlayerMuted ( player, state ) ) then
 		if not state then
 			aRemoveUnmuteTimer( player )
 			removeMuteFromDB( getPlayerSerial(player) )
 		elseif state and length and length > 0 then
 			aAddUnmuteTimer( player, length )
-			if not dontAddToDB then
-				addMuteToDB( getPlayerSerial(player), getPlayerName(player), getExpireTimestamp(length), getAccountName(getPlayerAccount(byAdmin)), getPlayerIP(player) )
-				outputServerLog( getPlayerName(player).. " has been muted for " .. secondsToTimeDesc(length) .. " days by " ..getAccountName(getPlayerAccount(byAdmin)) )
+			if pAdmin then
+				addMuteToDB( getPlayerSerial(player), getPlayerName(player), length, getAccountName( getPlayerAccount(pAdmin) ), getPlayerIP(player) )
 			end
 		end
 		triggerEvent ( "onPlayerMute", player, state )
@@ -546,7 +545,13 @@ function aAction ( type, action, admin, player, data, more )
 		local node = aLogMessages[type][action]
 		if ( node ) then
 			local r, g, b = node["r"], node["g"], node["b"]
-			if ( node["all"] ) then outputChatBox ( aStripString ( node["all"] ), _root, r, g, b ) end
+			if ( node["all"] ) then outputChatBox ( aStripString ( node["all"] ), _root, r, g, b ) 
+				if action == "mute" then 
+					exports.irc:outputIRC("4* "..string.gsub( aStripString ( node["all"] ), "#%x%x%x%x%x%x", "" ))
+				elseif action == "unmute" then
+					exports.irc:outputIRC("11* "..string.gsub( aStripString ( node["all"] ), "#%x%x%x%x%x%x", "" ))
+				end 
+			end
 			if ( node["admin"] ) and ( admin ~= player ) then outputChatBox ( aStripString ( node["admin"] ), admin, r, g, b ) end
 			if ( node["player"] ) then outputChatBox ( aStripString ( node["player"] ), player, r, g, b ) end
 			if ( node["log"] ) then outputServerLog ( aStripString ( node["log"] ) ) end
@@ -880,7 +885,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			local seconds = tonumber(additional) and tonumber(additional) > 0 and tonumber(additional)
 			mdata = reason~="" and ( "(" .. reason .. ")" ) or ""
 			more = seconds and ( "(" .. secondsToTimeDesc(seconds) .. ")" ) or ""
-			aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds, nil, source )
+			aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds, source )
 		elseif ( action == "freeze" )  then
 			if ( isPlayerFrozen ( player ) ) then action = "un"..action end
 			aSetPlayerFrozen ( player, not isPlayerFrozen ( player ) )
@@ -1584,10 +1589,21 @@ function removeMuteFromDB(serial)
 	return query
 end
 
-function addMuteToDB(serial, pName, expTimestamp, admName, pIP)
-	if serial and #serial == 32 and pName and expTimestamp and admName then
-		local query = dbExec(dbHandler,"REPLACE INTO mute (serial, name, expireTimestamp, byAdmin, IP) VALUES (?,?,?,?,?)", serial, pName, expTimestamp, admName, pIP)
+function ifNameReturnSerial() 
+	if pName then 
+		return " ("..serial..")"
+	end 
+end
 
+function addMuteToDB(serial, pName, length, adminAccountName, pIP)
+	if serial and #serial == 32 and length and adminAccountName then
+		local query = dbExec(dbHandler,"REPLACE INTO mute (serial, name, expireTimestamp, byAdmin, IP) VALUES (?,?,?,?,?)", serial, pName or "", getExpireTimestamp(length), adminAccountName, pIP or "")
+			if query then
+				outputServerLog( "* Mutes DB:".. (pName or serial).. "" ..(ifNameReturnSerial() or "").. " has been muted for " ..secondsToTimeDesc(length).. " by " ..adminAccountName )
+			else
+				outputChatBox("Failed to add mute to DB. Player: "..pName.. ", length: "..secondsToTimeDesc(length)..", by admin: "..adminAccountName, root, 255, 0, 0)
+				outputServerLog("Failed to add mute to DB. Player: "..pName.. ", length: "..secondsToTimeDesc(length)..", by admin: "..adminAccountName)
+			end
 		return query
 	end
 end
@@ -1609,14 +1625,18 @@ function checkPlayerMute(thePlayer)
 
 		if sql and #sql > 0 then
 			local currentTime = getRealTime().timestamp
-			local expire = sql[1].expireTimestamp - currentTime
-			if expire > 1 then
-				local expireReadable = secondsToTimeDesc(expire)
+			local seconds = sql[1].expireTimestamp - currentTime
+			if seconds > 1 then
+				local expireReadable = secondsToTimeDesc(seconds)
 				local t = sql[1]
-				aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds, true )
-				outputChatBox(getPlayerName(player).." was muted by "..t.byAdmin.." and will be unmuted in "..expireReadable,root,255,0,0)
+				aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds)
+				local textMuted = getPlayerName(player).." was muted by "..t.byAdmin.." and will be unmuted in "..expireReadable.."."
+				local textMuted = string.gsub( textMuted, "#%x%x%x%x%x%x", "" ) 
+				outputChatBox( textMuted , root, 0, 255, 100)
+				exports.irc:outputIRC( "10* "..textMuted )
+				outputServerLog( textMuted )
 			else
-				aSetPlayerMuted ( player, not isPlayerMuted ( player ), 0)
+				aSetPlayerMuted ( player, false)
 			end
 		end
 	end
@@ -1633,49 +1653,44 @@ function getPlayerFromSerial ( serial )
     return false
 end
 
-function serialmute(player, _, serial, days)
-	if not hasObjectPermissionTo ( player, "command.ban" ) then
+function serialmute(pAdmin, _, serial, days)
+	if not hasObjectPermissionTo ( pAdmin, "command.ban" ) then
 		return
 	end
 	
 	if not serial or #serial ~= 32 then
-		outputChatBox('Wrong serial. Syntax: /serialmute [serial] [days]', player, 255, 0,0)
+		outputChatBox('Wrong serial. Syntax: /serialmute [serial] [days]', pAdmin, 255, 0,0)
 		return
 	end
 	
 	if tonumber(days) and tonumber(days) > 1 then
 		seconds = days*24*60*60
 	else
-		outputChatBox('Wrong argument "days". Syntax: /serialmute [serial] [days]', player, 255, 0,0)
+		outputChatBox('Wrong argument "days". Syntax: /serialmute [serial] [days]', pAdmin, 255, 0,0)
 		return
 	end
-	
+
 	local playerToMute = getPlayerFromSerial(serial)
-	if playerToMute then
-		addMuteToDB( serial, getPlayerName(playerToMute) , getExpireTimestamp(seconds) , getAccountName( getPlayerAccount(player) ), getPlayerIP(playerToMute) )
-		aSetPlayerMuted ( playerToMute, true, seconds, player)
-		outputChatBox(getPlayerName(playerToMute).. " has been muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
-		outputServerLog(getPlayerName(playerToMute).. " has been muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
-	else
-		addMuteToDB(serial,"", getExpireTimestamp(seconds), getAccountName( getPlayerAccount(player) ), getPlayerIP(player))
-		outputChatBox("Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
-		outputServerLog("Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
+	if playerToMute then --if player online -> mute and add to DB
+		aSetPlayerMuted ( playerToMute, true, seconds, pAdmin)
+	else -- if player not online -> just add mute to DB
+		addMuteToDB( serial, false, seconds, getAccountName( getPlayerAccount(pAdmin) ) )
 	end
 end
 addCommandHandler('serialmute', serialmute)
 
-function serialunmute(player, _, serial)
-	if not hasObjectPermissionTo ( player, "command.ban" ) then
+function serialunmute(pAdmin, _, serial)
+	if not hasObjectPermissionTo ( pAdmin, "command.ban" ) then
 		return
 	end
 	
 	if not serial or #serial ~= 32 then
-		outputChatBox('Wrong serial. Syntax: /serialunmute [serial]', player, 255, 0,0)
+		outputChatBox('Wrong serial. Syntax: /serialunmute [serial]', pAdmin, 255, 0,0)
 		return
 	end
 	
 	removeMuteFromDB(serial)
-	outputChatBox("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""), root, 255, 0, 0)
-	outputServerLog("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(player):gsub("#%x%x%x%x%x%x",""))
+	outputChatBox("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x",""), root, 255, 100, 0)
+	outputServerLog("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x",""))
 end
 addCommandHandler('serialunmute', serialunmute)
