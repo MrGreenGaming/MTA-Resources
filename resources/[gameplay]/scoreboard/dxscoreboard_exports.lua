@@ -104,7 +104,7 @@ function scoreboardResetColumns( forElement )
 		end
 		local result = triggerClientEvent( getRootElement(), "doScoreboardResetColumns", getRootElement() )
 		if result then
-			scoreboardAddColumn( "name", 200, "Name", 2 )
+			scoreboardAddColumn( "name", 200, "Name", 3 )
 			scoreboardAddColumn( "ping", 40, "Ping", 500 )
 		end
 		return result

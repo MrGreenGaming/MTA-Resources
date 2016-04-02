@@ -572,7 +572,7 @@ function Shooter:start()
 		
 		-- exports.scoreboard:removeScoreboardColumn('race rank')
 		exports.scoreboard:removeScoreboardColumn('checkpoint')
-		exports.scoreboard:scoreboardAddColumn("level", root, 40, "Level", 4)
+		exports.scoreboard:scoreboardAddColumn("level", root, 40, "Level", 5)
 
 		local options = {
 			duration = 10 * 60 * 1000,
