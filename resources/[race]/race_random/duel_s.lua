@@ -5,19 +5,29 @@ local maps = {
 local function getAlivePlayers()
 	local players = {}
 	for _, player in ipairs(getElementsByType('player')) do
-		if getElementData(player, 'state') == 'alive' then
+		if getElementData(player, 'player state') == 'alive' then
 			table.insert(players, player)
 		end
 	end
 	return players
 end
 
-local mapname, maproot
+local mapname, maproot, initiator
 
 function startDuel(p, c, a)
+	if maproot then return end
 	local players = getAlivePlayers()
 	if exports.race:getRaceMode() ~= "Destruction derby" then return outputChatBox("Not a DD map", p) end
 	if #players ~= 2 then return outputChatBox(#players .. " != 2 players for duel", p) end
+	
+	if getElementData(p, 'player state') ~= 'alive' then return outputChatBox("Only the last two players can start duels", p, 255,0,0) end
+	if not initiator then
+		outputChatBox(getPlayerStrippedName(p) .. " has requested to duel! /duel to accept", root, 0, 255, 0)
+		initiator = p
+		return
+	elseif p == initiator then
+		return
+	end
 	
 	-- Load in random map
 	mapname = maps[math.random(#maps)]
@@ -40,15 +50,25 @@ function startDuel(p, c, a)
 		setTimer(setElementFrozen, 100, 1, veh, false)
 	end
 	triggerClientEvent('its_time_to_duel.mp3', resourceRoot)
-	outputChatBox("[DUEL] " .. getPlayerName(p) .. " #00FF00started a duel!", root, 0,255,0, true)
+	outputChatBox("[DUEL] " .. getPlayerName(p) .. " #00FF00accepted a duel!", root, 0,255,0, true)
 end
-addCommandHandler('duel', startDuel, true)
+addCommandHandler('duel', startDuel)
 
 function stopDuel() 
 	if maproot then
 		destroyElement(maproot)
 		maproot = nil
+		initiator = nil
 	end
 end
 addEvent('stopDuel')
 addEventHandler('onPostFinish', root, stopDuel)
+
+function removeHEXFromString(str)
+	return str:gsub("#%x%x%x%x%x%x", "")
+end
+
+function getPlayerStrippedName(player)
+	if not isElement(player) then error('getPlayerStrippedName error', 2) end
+	return removeHEXFromString(getPlayerName(player))
+end
