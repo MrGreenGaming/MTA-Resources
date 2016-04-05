@@ -12,7 +12,7 @@ local function getAlivePlayers()
 	return players
 end
 
-local mapname, maproot, initiator
+local maproot, initiator
 
 function startDuel(p, c, a)
 	if maproot then return end
@@ -30,8 +30,7 @@ function startDuel(p, c, a)
 	end
 	
 	-- Load in random map
-	mapname = maps[math.random(#maps)]
-	local node = getResourceConfig ( mapname )
+	local node = getResourceConfig ( maps[math.random(#maps)] )
 	if not node then return outputChatBox("Couldn't load xml", p) end
 	maproot = loadMapData ( node, resourceRoot )
 	xmlUnloadFile ( node )
@@ -44,7 +43,8 @@ function startDuel(p, c, a)
 		local veh = getPedOccupiedVehicle(p)
 		
 		local s = spawns[k]
-		setElementPosition(veh, getElementPosition(s))
+		local x, y, z = getElementPosition(s)
+		setElementPosition(veh, x, y, z+1)
 		setElementRotation(veh, 0, 0, getElementData(s, 'rotZ'))
 		setElementFrozen(veh, true)
 		setTimer(setElementFrozen, 100, 1, veh, false)
@@ -57,9 +57,9 @@ addCommandHandler('duel', startDuel)
 function stopDuel() 
 	if maproot then
 		destroyElement(maproot)
-		maproot = nil
-		initiator = nil
 	end
+	maproot = nil
+	initiator = nil
 end
 addEvent('stopDuel')
 addEventHandler('onPostFinish', root, stopDuel)
