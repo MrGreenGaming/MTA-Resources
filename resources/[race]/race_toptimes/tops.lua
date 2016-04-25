@@ -556,7 +556,8 @@ addCommandHandler('oldtops',
 
 addCommandHandler('tops',
 	function(p, cmd, ex)
-		ex= tonumber(ex) or 3
+		ex = tonumber(ex)
+		ex = ex and ex < 11 and ex or 3 
 		local forumid = exports.gc:getPlayerForumID(p)
 		if not forumid then
 			return outputChatBox("You are not logged in to Greencoins!", p)
