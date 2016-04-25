@@ -327,7 +327,10 @@ function Shooter:restorePlayer(id, player, bNoFade, bDontFix)
 
 			-- Set Spawn Protection
 			self.spawnProtection[player] = true
-			
+			if Shooter.spawnProtectionCountdown[player] then
+				Shooter.spawnProtectionCountdown[player]:destroy()
+				Shooter.spawnProtectionCountdown[player] = nil
+			end
 			setTimer(function() 
 				-- Countdown.create(5, self.removeSpawnProtection, 'Spawn Protection will be removed in:', 255, 255, 255, 0.20, 2.5, true,self, self.id, player):start(player)
 				setVehicleDamageProof(vehicle,true)
