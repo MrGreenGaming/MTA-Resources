@@ -66,8 +66,8 @@ function dxDrawVoiceLabel ( player, index, color )
 	px = px + spacing
 
 	-- shadows
-	dxDrawText ( getPlayerName ( player ), px + 1, py + 1, px, py, ICON_TEXT_SHADOW, scale )
+	dxDrawText ( getPlayerName ( player ):gsub('#%x%x%x%x%x%x', ''), px + 1, py + 1, px, py, ICON_TEXT_SHADOW, scale )
 	-- text
-	dxDrawText ( getPlayerName ( player ), px, py, px, py, color, scale )
+	dxDrawText ( getPlayerName ( player ):gsub('#%x%x%x%x%x%x', ''), px, py, px, py, color, scale )
 end
 
