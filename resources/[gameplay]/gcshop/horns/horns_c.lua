@@ -268,6 +268,8 @@ hornsTable = {
 	[265] = "Thriller",
 	[266] = "CUZ IMA MUTHAPHUKIN NINJAA",
 	[267] = "JUMP MOTHERFUCKER JUMP",
+	[268] = "Tuco - It's me Tuco",
+	[269] = "Tuco - SandyFuck",
 }
 
 

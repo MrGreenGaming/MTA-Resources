@@ -213,7 +213,7 @@ addCommandHandler("lol",
 		local nick = getPlayerName(player)
 		if not arg then
 			outputChatBox(nick.."#FFD700 is laughing out loud.", root, 255, 215, 0, true)
-			exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughin out loud." )
+			exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud." )
 			g_lolPlayers[player] = getTickCount()
 		else
 			local who = findPlayerByName(arg)
@@ -221,7 +221,7 @@ addCommandHandler("lol",
 			else
 				local whoName = getPlayerName(who)
 				outputChatBox(nick.."#FFD700 is laughing out loud at "..whoName, root, 255, 215, 0, true)
-				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughin out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
+				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
 				g_lolPlayers[player] = getTickCount()
 			end
 		end	
