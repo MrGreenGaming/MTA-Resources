@@ -29,7 +29,7 @@ function fetchip(p, cmd, IP)
 		--end
 	end
 end
-addCommandHandler( "geoloc_fetchip", fetchip, true)
+--addCommandHandler( "geoloc_fetchip", fetchip, true)
 
 function receiveIPdata(json, err, IP, nick)
 	-- check for fetchRemote errors
