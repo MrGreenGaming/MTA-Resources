@@ -46,7 +46,7 @@ function togglePM(trueornah, loadornah)
 	end
 	if loadornah ~= true then
 		if trueornah == true then
-			outputChatBox("Private messaging has been turned on for you!", client, 255, 0, 0)
+			outputChatBox("Private messaging has been turned on for you!", client, 0, 255, 0)
 		else
 			outputChatBox("Private messaging has been turned off for you!", client, 255, 0, 0)
 		end
