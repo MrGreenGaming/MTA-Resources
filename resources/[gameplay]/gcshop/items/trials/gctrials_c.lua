@@ -159,7 +159,7 @@ end
 function trick_Leggs( key, keyState )
 	if keyState == 'down' then
 		local bike = getPedOccupiedVehicle( localPlayer )
-		if isElement(bike) and not isVehicleOnGround( bike ) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
+		if isElement(bike) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
 			local legg
 			if key == '1' then legg = 'bmx_left' elseif key == '2' then legg = 'bmx_right' end
 			triggerServerEvent( 'doTrickAnimation', localPlayer, 'bmx', legg, false )
@@ -173,7 +173,7 @@ end
 function trick_Dive( key, keyState )
 	if keyState == 'down' then
 		local bike = getPedOccupiedVehicle( localPlayer )
-		if isElement(bike) and not isVehicleOnGround( bike ) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
+		if isElement(bike) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
 			triggerServerEvent( 'doTrickAnimation', localPlayer, 'parachute', 'fall_skydive', true )
 			isStunted = true
 		end
@@ -185,7 +185,7 @@ end
 function trick_Stay( key, keyState )
 	if keyState == 'down' then
 		local bike = getPedOccupiedVehicle( localPlayer )
-		if isElement(bike) and not isVehicleOnGround( bike ) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
+		if isElement(bike) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
 			triggerServerEvent( 'doTrickAnimation', localPlayer, 'shop', 'shp_jump_land', false )
 			isStunted = true
 		end
@@ -197,7 +197,7 @@ end
 function trick_Seat180( key, keyState )
 	if keyState == 'down' then
 		local bike = getPedOccupiedVehicle( localPlayer )
-		if isElement(bike) and not isVehicleOnGround( bike ) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
+		if isElement(bike) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
 			triggerServerEvent( 'doTrickAnimation', localPlayer, 'crib', 'crib_console_loop', false )
 			isStunted = true
 		end
