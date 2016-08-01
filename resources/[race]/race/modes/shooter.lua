@@ -537,14 +537,14 @@ Shooter.__Levels = { -- cache Levels with all possible vehicles in it, will get 
 
 local lastShooterMode = false
 function Shooter:start()
-	if not lastShooterMode then
-		local t = {"shooter","cargame"}
-		shooterMode = t[math.random(2)]--t[1]--t[math.random(2)]
-	elseif lastShooterMode == "shooter" then
-		shooterMode = "cargame"
-	elseif lastShooterMode == "cargame" then
+	-- if not lastShooterMode then
+		-- local t = {"shooter","cargame"}
+		-- shooterMode = t[math.random(2)]--t[1]--t[math.random(2)]
+	-- elseif lastShooterMode == "shooter" then
+		-- shooterMode = "cargame"
+	-- elseif lastShooterMode == "cargame" then
 		shooterMode = "shooter" 
-	end
+	-- end
 
 	lastShooterMode = shooterMode
 
