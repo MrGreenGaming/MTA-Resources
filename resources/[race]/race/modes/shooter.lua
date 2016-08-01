@@ -537,14 +537,15 @@ Shooter.__Levels = { -- cache Levels with all possible vehicles in it, will get 
 
 local lastShooterMode = false
 function Shooter:start()
-	-- if not lastShooterMode then
+	if not lastShooterMode then
 		-- local t = {"shooter","cargame"}
 		-- shooterMode = t[math.random(2)]--t[1]--t[math.random(2)]
-	-- elseif lastShooterMode == "shooter" then
-		-- shooterMode = "cargame"
-	-- elseif lastShooterMode == "cargame" then
+		shooterMode = "shooter"
+	elseif lastShooterMode == "shooter" then
+		shooterMode = "cargame"
+	elseif lastShooterMode == "cargame" then
 		shooterMode = "shooter" 
-	-- end
+	end
 
 	lastShooterMode = shooterMode
 
@@ -595,7 +596,7 @@ function Shooter:start()
 		end
 		
 	else
-		-- outputChatBox("Shooter launched in Shooter mode, next mode : CarGame",root,0,255,0)
+		outputChatBox("Shooter launched in Shooter mode, next mode : CarGame",root,0,255,0)
 		local options = {
 			duration = 5 * 60 * 1000,
 			respawn = 'none',
