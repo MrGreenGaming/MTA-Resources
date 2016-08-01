@@ -595,7 +595,7 @@ function Shooter:start()
 		end
 		
 	else
-		outputChatBox("Shooter launched in Shooter mode, next mode : CarGame",root,0,255,0)
+		-- outputChatBox("Shooter launched in Shooter mode, next mode : CarGame",root,0,255,0)
 		local options = {
 			duration = 5 * 60 * 1000,
 			respawn = 'none',
