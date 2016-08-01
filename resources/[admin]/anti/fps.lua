@@ -3,7 +3,7 @@
 -- with strikes. Limit = kickPlayer		--
 -------------------------------------------
 
-local fpsMinimum = 30
+local fpsMinimum = 25
 local checkInterval = 3 * 1000
 local maxStrikes = 5
 local fpsStrikes = {}
