@@ -71,6 +71,14 @@ function isNickProtected(nick)
 	end	
 end
 
+function deleteNick(p, c, nick)
+	if not nick then return end
+	cmd = "DELETE FROM gc_nickprotection WHERE pNick = ?"
+	dbExec(handlerConnect, cmd, nick)
+	outputChatBox("[NICK] Removed \"" .. nick .. "\" nickprotection", p)
+end
+addCommandHandler('deletenick', deleteNick, true)
+
 -- function protectNick(id, name)
 -- 	if isNickProtected(name) then
 -- 		return false
