@@ -1,89 +1,143 @@
 math.randomseed(getTickCount())
 
-local pickupDelay = 4000
+local delay = 3000
+
 
 local powerTypes = {
-{"repair"},
-{"spikes"},
-{"boost"},
-{"oil"},
-{"hay"},
-{"barrels"},
-{"ramp"},
-{"rocket"}
+					{"repair"},
+					{"spikes"},
+					{"boost"},
+					{"oil"},
+					{"hay"},
+					{"barrels"},
+					{"ramp"},
+					{"rocket"},
+					--rare power types
+					{"magnet"},
 }
+
 
 
 addEventHandler("onClientResourceStart", resourceRoot, 
 function()
-setElementData(localPlayer, "power_type", nil)
-setElementData(localPlayer, "player_have_power", false, true)
-setElementData(localPlayer, "slowed down right now", nil, true)
-setElementData(localPlayer, "slowDown", false, true)
-setElementData(localPlayer, "rektBySpikes", false, true)
-setElementData(localPlayer, "boostx3", nil, true)
-engineImportTXD ( engineLoadTXD ( "oil.txd" ) , 2717 ) 
-engineImportTXD ( engineLoadTXD ( "crate.txd" ) , 3798 ) 
-engineSetModelLODDistance(1225, 300)
-engineSetModelLODDistance(3374, 300)
-engineSetModelLODDistance(2717, 300)
-engineSetModelLODDistance(3798, 300)
-engineSetModelLODDistance(13645, 300)
+	sWidth, sHeight = guiGetScreenSize()
+	
+	setElementData(localPlayer, "coremarkers_powerType", false)
+	setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false, true)
+	setElementData(localPlayer, "coremarkers_isPlayerRektBySpikes", false, true)
+	
+	engineImportTXD ( engineLoadTXD ( "oil.txd" ) , 2717 ) 
+	engineImportTXD ( engineLoadTXD ( "crate.txd" ) , 3798 ) 
+	
+	engineSetModelLODDistance(1225, 300)
+	engineSetModelLODDistance(3374, 300)
+	engineSetModelLODDistance(2717, 300)
+	engineSetModelLODDistance(3798, 300)
+	engineSetModelLODDistance(13645, 300)
 end
 )
 
+
 function getRandomPower()
 	playSound("marker.mp3")
-	local randomPower = unpack(powerTypes[math.random(#powerTypes)])
 	
-	--Visual effect of random selecting
-	setTimer(function() setElementData(localPlayer, "power_type", unpack(powerTypes[math.random(#powerTypes)])) end, 100, (pickupDelay-500)/100)
+	if math.random(50) == math.random(50) then 
+		randomPower = unpack(powerTypes[math.random(9,9)]) --select rare power types
+	else
+		randomPower = unpack(powerTypes[math.random(1,8)])
+	end
 	
-	--Delay after picking up pickup
-	delayTimer = setTimer(function()
-				if math.random(80) == math.random(80) then
-					bindKeys("magnet")
-				elseif math.random(100) == math.random(100) then
-					bindKeys("boostx3")
-					setElementData(localPlayer, "boostx3", 3)
-				else
-					bindKeys(randomPower)
-				end
-			end,
-	pickupDelay, 1)
+	if isElement(bgPicture) then destroyElement(bgPicture) end
+	if isElement(_typePicture) then destroyElement(_typePicture) end
+	bgPicture = guiCreateStaticImage(902.5*sWidth/1920, 120*sHeight/1080, 115*sHeight/1080, 115*sHeight/1080, "pics/background.png", false)
+	_typePicture = guiCreateStaticImage(902.5*sWidth/1920, 120*sHeight/1080, 115*sHeight/1080, 115*sHeight/1080, "pics/repair.png", false)
+	guiSetAlpha(_typePicture, 0.45)
+	
+	delayStop = delay-50
+	stopRoulette = setTimer(function() if isElement(_typePicture) then destroyElement(_typePicture) end end, delayStop, 1)
+	changePic(2)
+	givePowerTimer = setTimer(givePower, delay, 1, randomPower)
 end
 addEvent("getRandomPower", true)
 addEventHandler("getRandomPower", root, getRandomPower)
 
-function bindKeys(powerType)
-bindKey("fire", "down", onPlayerUsePower, powerType)
-bindKey("vehicle_fire", "down", onPlayerUsePower, powerType)
-	if powerType == "boostx3" then
-		setElementData(localPlayer, "power_type", "boost")
-	else
-		setElementData(localPlayer, "power_type", powerType)
-	end
+function changePic(s)
+	if not isElement(_typePicture) then return end
+	
+	if not isTimer(stopRoulette) then return end
+	
+		timeleft = getTimerDetails(stopRoulette) 
+		
+		if s == 1 then
+			guiStaticImageLoadImage(_typePicture, "pics/repair.png")
+			setTimer(changePic, 50*(delayStop/timeleft), 1, 2)
+		elseif s == 2 then
+			guiStaticImageLoadImage(_typePicture, "pics/spikes.png")
+			setTimer(changePic, 50*(delayStop/timeleft), 1, 3)
+		elseif s == 3 then
+			guiStaticImageLoadImage(_typePicture, "pics/boost.png")
+			setTimer(changePic, 50*(delayStop/timeleft), 1, 4)
+		elseif s == 4 then
+			guiStaticImageLoadImage(_typePicture, "pics/oil.png")
+			setTimer(changePic, 50*(delayStop/timeleft), 1, 5)
+		elseif s == 5 then
+			guiStaticImageLoadImage(_typePicture, "pics/hay.png")
+			setTimer(changePic, 50*(delayStop/timeleft), 1, 6)
+		elseif s == 6 then
+			guiStaticImageLoadImage(_typePicture, "pics/barrels.png")
+			setTimer(changePic, 50*(delayStop/timeleft), 1, 7)
+		elseif s == 7 then
+			guiStaticImageLoadImage(_typePicture, "pics/ramp.png")
+			setTimer(changePic, 50*(delayStop/timeleft), 1, 8)
+		elseif s == 8 then
+			guiStaticImageLoadImage(_typePicture, "pics/rocket.png")
+			setTimer(changePic, 50*(delayStop/timeleft), 1, 9)
+		elseif s == 9 then
+			guiStaticImageLoadImage(_typePicture, "pics/magnet.png")
+			setTimer(changePic, 50*(delayStop/timeleft), 1, 1)
+		end
+end
+
+function givePower(powerType)
+	typePicture = guiCreateStaticImage(902.5*sWidth/1920, 120*sHeight/1080, 115*sHeight/1080, 115*sHeight/1080, "pics/"..powerType..".png", false)
+	
+	bindKey("fire", "down", onPlayerUsePower, powerType)
+	bindKey("vehicle_fire", "down", onPlayerUsePower, powerType)
+	
+	setElementData(localPlayer, "coremarkers_powerType", powerType)
+	
 	if powerType == "rocket" then 
 		setElementData(localPlayer, "laser.on", true)
 	end	
 end
 
-function unbindKeys()
-unbindKey("fire", "down", onPlayerUsePower)
-unbindKey("vehicle_fire", "down", onPlayerUsePower)
-setElementData(localPlayer, "power_type", nil)
-setElementData(localPlayer, "player_have_power", false, true)	
+
+
+function removePower()
+	if onPlayerUsePower ~= nil then
+		unbindKey("fire", "down", onPlayerUsePower)
+		unbindKey("vehicle_fire", "down", onPlayerUsePower)
+	end
+	
+	setElementData(localPlayer, "coremarkers_powerType", false)
+	if isElement(bgPicture) then destroyElement(bgPicture) end
+	if isElement(typePicture) then destroyElement(typePicture) end
+	if isElement(_typePicture) then destroyElement(_typePicture) end
+	if isTimer(givePowerTimer) then killTimer(givePowerTimer) end
 end
-addEvent('unbindKeys', true)
-addEventHandler('unbindKeys', root, unbindKeys)
+addEvent('removePower', true)
+addEventHandler('removePower', root, removePower)
+
+
 
 function onPlayerUsePower(key, keyState, powerType)
-local theVehicle = getPedOccupiedVehicle(localPlayer)
-local x, y, z = getElementPosition(theVehicle)
-local _, _, rz = getElementRotation(theVehicle)
-local _, minY, minZ, _, _, _ = getElementBoundingBox(theVehicle)
-setElementData(localPlayer, "player_have_power", false, true)
-unbindKeys()
+	if getElementData(localPlayer, "coremarkers_powerType") == false then return end
+	
+	local theVehicle = getPedOccupiedVehicle(localPlayer)
+	local x, y, z = getElementPosition(theVehicle)
+	local _, _, rz = getElementRotation(theVehicle)
+	local _, minY, minZ, _, _, _ = getElementBoundingBox(theVehicle)
+	
 
 	if powerType == "spikes" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
@@ -95,25 +149,6 @@ unbindKeys()
 			setElementSpeed(theVehicle, "kmh", 290)
 		else
 			setElementSpeed(theVehicle, "kmh", 260)
-		end
-	elseif powerType == "boostx3" then
-		local boost = getElementData(localPlayer, "boostx3")
-		if boost <= 3 then
-			setElementData(localPlayer, "player_have_power", true, true)
-			local boost = boost-1
-			setElementData(localPlayer, "boostx3", boost)
-			local engineAcc = getVehicleOriginalProperty(theVehicle, "engineAcceleration")*2.5
-			if engineAcc >= 25 then
-				setElementSpeed(theVehicle, "kmh", 290)
-			else
-				setElementSpeed(theVehicle, "kmh", 260)
-			end
-			if boost == 0 then
-				setElementData(localPlayer, "boostx3", nil)
-				setElementData(localPlayer, "player_have_power", false, true)
-			else
-				bindKeys("boostx3")
-			end
 		end
 	elseif powerType == "oil" then 
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
@@ -142,40 +177,23 @@ unbindKeys()
 	elseif powerType == "repair" then
 		triggerServerEvent("fixVehicle", resourceRoot, localPlayer, theVehicle, true)
 	end
+	
+	removePower()
 end
 
-addEventHandler("onClientResourceStart", root, function()
-	sWidth, sHeight = guiGetScreenSize()
 
-	if sWidth == 1280 and sHeight == 1024 then
-		xRight = 1056
-		xRightShadow = xRight+2
-	elseif sWidth == 1024 and sHeight == 768 then
-		xRight = 1050
-		xRightShadow = xRight+2
-	elseif sWidth == 1280 and sHeight == 720 then
-		xRight = 1013
-		xRightShadow = xRight+2
-	else
-		xRight = 1010
-		xRightShadow = xRight+2
-	end
-end
-)
+
+
 
 addEventHandler( "onClientRender",  root,
-	function()
-		if getElementData(localPlayer, "power_type") ~= nil then
-			dxDrawImage(902.5*sWidth/1920, 120*sHeight/1080, 115*sHeight/1080, 115*sHeight/1080, "pics/"..getElementData(localPlayer, "power_type")..".png", 0, 0, 0, tocolor(255,255,255,255), true)
-		end
-		
-		if getElementData(localPlayer, "power_type") == "rocket" and not isTimer(delayTimer) then
+	function()		
+		if getElementData(localPlayer, "coremarkers_powerType") == "rocket" and not isTimer(delayTimer) then
 				DrawLaser()
 		end
 		
 		if isElement(getPedOccupiedVehicle(localPlayer)) then
 			local s1, _, _, _ = getVehicleWheelStates(getPedOccupiedVehicle(localPlayer))
-			if getElementData(localPlayer, "rektBySpikes") and s1 ~= 0 then
+			if getElementData(localPlayer, "coremarkers_isPlayerRektBySpikes") and s1 ~= 0 then
 				local timeLeft = getTimerDetails(spikesTimer)
 				dxDrawImage(860*sWidth/1920, 890*sHeight/1080, 200*sHeight/1080, 200*sHeight/1080, "pics/wheel.png", 0, 0, 0, tocolor(255,255,255,255))
 				dxDrawRectangle(1020*sWidth/1920, 897*sHeight/1080, 20*sWidth/1920, 174*sHeight/1080, tocolor(0, 0, 0, 160))
@@ -186,65 +204,71 @@ addEventHandler( "onClientRender",  root,
 			end
 		end
 		
-		if getElementData(localPlayer, "slowDown") then
+		if getElementData(localPlayer, "coremarkers_isPlayerSlowedDown") then
 				dxDrawImage(0, 0, sWidth, sHeight, "pics/effect.png", 0, 0, 0, tocolor(255,255,255,50), true)
-		end
-
-		if getElementData(localPlayer, "boostx3") then
-			dxDrawText("x"..getElementData(localPlayer, "boostx3"), 0*sWidth/1920, 126*sHeight/1080, xRightShadow*sWidth/1920, 0, tocolor ( 0, 0, 0, 255 ), 1.5*sHeight/1080, "clear", "right", "top", false, false, true, true )
-			dxDrawText("x"..getElementData(localPlayer, "boostx3"), 0*sWidth/1920, 124*sHeight/1080, xRight*sWidth/1920, 0, tocolor ( 255, 255, 255, 255 ), 1.5*sHeight/1080, "clear", "right", "top", false, false, true, true )
 		end
 	end
 )
 
 function DrawLaser()
-if isElement(getPedOccupiedVehicle(localPlayer)) then
-local x, y, z = getElementPosition(getPedOccupiedVehicle(localPlayer))
-local minX, minY, minZ, maxX, maxY, maxZ = getElementBoundingBox(getPedOccupiedVehicle(localPlayer))
-local x2, y2, z2 = getPositionFromElementOffset(getPedOccupiedVehicle(localPlayer), 0, maxY+100, 0.45)
-dxDrawLine3D(x,y,z+0.45,x2,y2,z2, tocolor(255,0,0,255), 1)
-end
+	if isElement(getPedOccupiedVehicle(localPlayer)) then
+		local x, y, z = getElementPosition(getPedOccupiedVehicle(localPlayer))
+		local minX, minY, minZ, maxX, maxY, maxZ = getElementBoundingBox(getPedOccupiedVehicle(localPlayer))
+		local x2, y2, z2 = getPositionFromElementOffset(getPedOccupiedVehicle(localPlayer), 0, maxY+100, 0.45)
+		
+		dxDrawLine3D(x,y,z+0.45,x2,y2,z2, tocolor(255,0,0,255), 1)
+	end
 end
 
-function slowDownPlayer(magnetSlowDownTime)
+
+addEvent("slowDownPlayer", true)
+addEventHandler("slowDownPlayer", root, 
+function (magnetSlowDownTime)
+
 	if isTimer(slowDownTimer) then
 		killTimer(slowDownTimer)
 	end
 	
 	setGameSpeed(0.7)
-	setElementData(localPlayer, "slowDown", true)
-	slowDownTimer = setTimer(function() setGameSpeed(tonumber(1.0)) setElementData(localPlayer, "slowDown", false) end, magnetSlowDownTime, 1)
+	setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", true)
+	slowDownTimer = setTimer(function() setGameSpeed(tonumber(1.0)) setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", true, true) end, magnetSlowDownTime, 1)
+	
 end
-addEvent("slowDownPlayer", true)
-addEventHandler("slowDownPlayer", root, slowDownPlayer)
+)
 
-function createExplosionEffect(x, y, z)
-createExplosion(x, y, z, 0, true, -1.0, false)
 
-local effects = {}
-effects[1] = createEffect("fire", x, y, z-math.random(0.4, 1.2), 0, 0, 0, 100)
-
-effects[2] = createEffect("fire", x+math.random(0.1, 2.0), y+math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
-effects[3] = createEffect("fire", x+math.random(0.1, 2.0), y-math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
-effects[4] = createEffect("fire", x-math.random(0.1, 2.0), y+math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
-effects[5] = createEffect("fire", x-math.random(0.1, 2.0), y-math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
-
-effects[6] = createEffect("fire", x-math.random(0.1, 2.0), y, z-math.random(0.4, 1.2), 0, 0, 0, 100)
-effects[7] = createEffect("fire", x+math.random(0.1, 2.0), y, z-math.random(0.4, 1.2), 0, 0, 0, 100)
-effects[8] = createEffect("fire", x, y-math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
-effects[9] = createEffect("fire", x, y+math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
-
-setTimer(function() for k, effect in ipairs(effects) do  destroyElement(effect) end end, 30000, 1)
-end
 addEvent('createExplosionEffect', true)
-addEventHandler('createExplosionEffect', root, createExplosionEffect)
+addEventHandler('createExplosionEffect', root, 
+function (x, y, z)
+	createExplosion(x, y, z, 0, true, -1.0, false)
 
-function spikesTimerFunction()
+	local effects = {}
+	effects[1] = createEffect("fire", x, y, z-math.random(0.4, 1.2), 0, 0, 0, 100)
+
+	effects[2] = createEffect("fire", x+math.random(0.1, 2.0), y+math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
+	effects[3] = createEffect("fire", x+math.random(0.1, 2.0), y-math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
+	effects[4] = createEffect("fire", x-math.random(0.1, 2.0), y+math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
+	effects[5] = createEffect("fire", x-math.random(0.1, 2.0), y-math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
+
+	effects[6] = createEffect("fire", x-math.random(0.1, 2.0), y, z-math.random(0.4, 1.2), 0, 0, 0, 100)
+	effects[7] = createEffect("fire", x+math.random(0.1, 2.0), y, z-math.random(0.4, 1.2), 0, 0, 0, 100)
+	effects[8] = createEffect("fire", x, y-math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
+	effects[9] = createEffect("fire", x, y+math.random(0.1, 2.0), z-math.random(0.4, 1.2), 0, 0, 0, 100)
+
+	setTimer(function() for k, effect in ipairs(effects) do  destroyElement(effect) end end, 30000, 1)
+end
+)
+
+
+addEvent("spikesTimerFunction", true)
+addEventHandler("spikesTimerFunction", root, 
+function ()
 	if isTimer(spikesTimer) then
 		killTimer(spikesTimer)
 	end
+	
 	spikesTimer = setTimer(function() 
-		setElementData(localPlayer, "rektBySpikes", false, true) 
+		setElementData(localPlayer, "coremarkers_isPlayerRektBySpikes", false, true) 
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		local s1, _, _, _ = getVehicleWheelStates(theVehicle)
 		if s1 ~= 0 then
@@ -252,15 +276,17 @@ function spikesTimerFunction()
 			triggerServerEvent("fixVehicle", resourceRoot, localPlayer, theVehicle, false)
 		end 
 	end, 10000, 1)
-end
-addEvent("spikesTimerFunction", true)
-addEventHandler("spikesTimerFunction", root, spikesTimerFunction)
 
-function hideSpikesRepairHUD()
+end
+)
+
+
+addEvent("hideSpikesRepairHUD", true)
+addEventHandler("hideSpikesRepairHUD", root, 
+function ()
 	if isTimer(spikesTimer) then
 		killTimer(spikesTimer)
-		setElementData(localPlayer, "rektBySpikes", false, true)
+		setElementData(localPlayer, "coremarkers_isPlayerRektBySpikes", false, true)
 	end
 end
-addEvent("hideSpikesRepairHUD", true)
-addEventHandler("hideSpikesRepairHUD", root, hideSpikesRepairHUD)
+)

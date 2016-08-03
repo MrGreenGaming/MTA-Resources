@@ -3,16 +3,19 @@
     <file src="oil.txd"></file>
 	<file src="crate.txd"></file>
     <file src="pics/effect.png"></file>
+	<file src="pics/wheel.png"></file>
+	<file src="pics/background.png"></file>
+	
     <file src="pics/barrels.png"></file>
     <file src="pics/hay.png"></file>
-    <file src="pics/magnet.png"></file>
     <file src="pics/repair.png"></file>
     <file src="pics/rocket.png"></file>
     <file src="pics/boost.png"></file>
     <file src="pics/spikes.png"></file>
     <file src="pics/oil.png"></file>
-	<file src="pics/wheel.png"></file>
 	<file src="pics/ramp.png"></file>
+	
+	<file src="pics/magnet.png"></file>
 	
 	<script src="chatbar_c.lua" type="client"></script>
     <script src="chatbar_s.lua" type="server"></script>
