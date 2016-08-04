@@ -600,6 +600,7 @@ function FormatDate(timestamp, full)
 	if full then
 		return string.format("%02d/%02d/'%02d %02d:%02d:%02d", t.monthday, t.month+1, t.year - 100, t.hour, t.minute, t.second)
 	end
+	return string.format("%02d.%02d.%02d", t.monthday, t.month+1, t.year + 1900)
 end
 
 function timeMsToTimeText( timeMs )
