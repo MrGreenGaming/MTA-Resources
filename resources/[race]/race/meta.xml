@@ -123,6 +123,8 @@
     <export function="e_getPickups" type="client" />
     <export function="getShooterMode" type="server" />
 	<export function="export_setPlayerVehicle" type="server" />
+	
+	<export function="disableNTSModeForDD" type="server"/>
     
     <settings>
         <!-- *****************************************************

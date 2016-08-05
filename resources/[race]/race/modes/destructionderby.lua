@@ -79,6 +79,7 @@ function DestructionDerby:onPlayerJoin(player, spawnpoint)
 end
 
 function DestructionDerby:start()
+	ntsMode = true
 	self:resetChangeTimer()
 
 
@@ -149,6 +150,7 @@ local function betterRandom(limit,player)
 end
 
 function DestructionDerby:randomizeVehicles()
+	if not ntsMode then return end
 	outputGameMessageSmart("Changed vehicles")
 
 	for k, player in ipairs(getActivePlayers()) do
@@ -238,3 +240,7 @@ DestructionDerby.modeOptions = {
 	ghostmode = false,
 	ghostmode_map_can_override = false,
 }
+
+function disableNTSModeForDD() 
+	ntsMode = false 
+end

@@ -36,6 +36,8 @@ function startDuel(p, c, a)
 	xmlUnloadFile ( node )
 	if not maproot then return outputChatBox("Couldn't load map", p) end
 	
+	exports.race:disableNTSModeForDD()
+		
 	-- Find spawns
 	local spawns = getElementsByType('spawnpoint', maproot)
 	
