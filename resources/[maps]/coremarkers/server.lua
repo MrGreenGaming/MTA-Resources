@@ -183,7 +183,6 @@ function (killer)
 				if rank <= victim_rank and rank >= 1 and getElementData(victim, "state") == "alive" and not gotAlivePlayer and not getElementData(victim, "coremarkers_isPlayerSlowedDown") then
 					gotAlivePlayer = true
 					setElementData(victim, "coremarkers_isPlayerSlowedDown", true, true)
-					setTimer(setElementData, magnetSlowDownTime, 1, victim, "coremarkers_isPlayerSlowedDown", false, true)
 					triggerClientEvent(victim, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
 					attachMarker(getPedOccupiedVehicle(victim), magnetSlowDownTime, 255, 0, 0)
 					sendClientMessage('#FFFFFF'..getPlayerName(killer)..'#00DDFF slows down #FFFFFF'..getPlayerName(victim)..'.', root, 255, 255, 255, "bottom")

@@ -231,7 +231,7 @@ function (magnetSlowDownTime)
 	
 	setGameSpeed(0.7)
 	setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", true)
-	slowDownTimer = setTimer(function() setGameSpeed(tonumber(1.0)) setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", true, true) end, magnetSlowDownTime, 1)
+	slowDownTimer = setTimer(function() setGameSpeed(tonumber(1.0)) setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false, true) end, magnetSlowDownTime, 1)
 	
 end
 )
