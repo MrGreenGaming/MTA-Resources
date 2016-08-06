@@ -2,6 +2,18 @@ local maps = {
 	"duel.map",
 }
 
+--Categories was taken from map editor
+local tDuelCars = {
+					--"2-Door"	
+401, 410, 436, 474, 491, 496, 517, 526, 527, 533, 545, 549, 439, 475, 542,
+					--"4-Door"
+405, 409, 420, 421, 426, 438, 445, 466, 467, 492, 507, 516, 529, 540, 546, 547, 550, 551, 566, 580, 585, 
+					--"Lowriders"
+412, 419, 518, 534, 535, 536, 567, 575, 576, 
+					--"Sports Cars"
+402, 411, 415, 429, 451, 477, 480, 506, 541, 555, 558, 559, 560, 562, 565, 587, 602, 603					
+}
+
 local function getAlivePlayers()
 	local players = {}
 	for _, player in ipairs(getElementsByType('player')) do
@@ -12,9 +24,9 @@ local function getAlivePlayers()
 	return players
 end
 
-local maproot, initiator
+local maproot, initiator, duelType
 
-function startDuel(p, c, a)
+function startDuel(p, c, t)
 	if maproot then return end
 	local players = getAlivePlayers()
 	if exports.race:getRaceMode() ~= "Destruction derby" then return outputChatBox("Not a DD map", p) end
@@ -22,8 +34,13 @@ function startDuel(p, c, a)
 	
 	if getElementData(p, 'player state') ~= 'alive' then return outputChatBox("Only the last two players can start duels", p, 255,0,0) end
 	if not initiator then
-		outputChatBox(getPlayerStrippedName(p) .. " has requested to duel! /duel to accept", root, 0, 255, 0)
+		if t == 2 then 
+			outputChatBox(getPlayerStrippedName(p) .. " has requested to duel on #ffffffequal #00ff00cars! /duel to accept", root, 0, 255, 0, true) 
+		else 
+			outputChatBox(getPlayerStrippedName(p) .. " has requested to duel on #ffffffrandom #00ff00cars! /duel to accept", root, 0, 255, 0, true) 
+		end
 		initiator = p
+		duelType = t
 		return
 	elseif p == initiator then
 		return
@@ -42,8 +59,18 @@ function startDuel(p, c, a)
 	-- Find spawns
 	local spawns = getElementsByType('spawnpoint', maproot)
 	
+	local vehicle = tDuelCars[math.random(#tDuelCars)]
+	local function returnVehicleModel() 
+			if duelType == 2 then 
+				return vehicle 
+			else 
+				return tDuelCars[math.random(#tDuelCars)] 
+			end
+		end
+
 	for k, p in ipairs(players) do
 		local veh = getPedOccupiedVehicle(p)
+		setElementModel(veh, returnVehicleModel())
 		
 		local s = spawns[k]
 		local x, y, z = getElementPosition(s)
@@ -63,6 +90,7 @@ function stopDuel()
 	end
 	maproot = nil
 	initiator = nil
+	duelType = nil
 end
 addEvent('stopDuel')
 addEventHandler('onPostFinish', root, stopDuel)
