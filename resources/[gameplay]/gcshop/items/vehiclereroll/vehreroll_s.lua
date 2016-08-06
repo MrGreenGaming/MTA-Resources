@@ -197,3 +197,6 @@ end
 
 
 
+function disableReRoll()
+	isRerollAllowed = false
+end

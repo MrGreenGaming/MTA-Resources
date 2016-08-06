@@ -37,6 +37,7 @@ function startDuel(p, c, a)
 	if not maproot then return outputChatBox("Couldn't load map", p) end
 	
 	exports.race:disableNTSModeForDD()
+	exports.gcshop:disableReRoll()
 		
 	-- Find spawns
 	local spawns = getElementsByType('spawnpoint', maproot)

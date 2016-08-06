@@ -382,4 +382,5 @@
 	<file src="horns\files\269.mp3" download="false"/>
 	<file src="horns\icon.png" />
 	
+	<export function="disableReRoll" type="server"/>
 </meta>
