@@ -187,16 +187,16 @@ function getMD5 ( filename )
 end
 
 ----------------------------------------
----          Imgur PJ upload         ---
+---         Hosting PJ upload         ---
 ----------------------------------------
-function receiveImgurURL(url,id)
+function receiveHostingURL(url,id)
 	local player = source
-	fetchRemote(url,receiveImgurFetch,"",false,player,id)
+	fetchRemote(url,receiveHostingFetch,"",false,player,id)
 end
-addEvent("serverReceiveImgurURL",true)
-addEventHandler("serverReceiveImgurURL",root,receiveImgurURL)
+addEvent("serverReceiveHostingURL",true)
+addEventHandler("serverReceiveHostingURL",root,receiveHostingURL)
 
-function receiveImgurFetch(responseData,errno,player,id)
+function receiveHostingFetch(responseData,errno,player,id)
 	if not player or not responseData then return end
 	if errno == 0 then
 		triggerEvent("receiveImage",player,responseData,id)
