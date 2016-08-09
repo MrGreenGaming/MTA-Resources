@@ -10,6 +10,15 @@ local mapname
 local info
 local months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
 
+
+local country_sql_table = [[CREATE TABLE IF NOT EXISTS `country` (
+	`forumid` INT(11) NOT NULL,
+	`country` CHAR(2) NOT NULL,
+	PRIMARY KEY (`forumid`),
+	UNIQUE INDEX `forumid` (`forumid`)
+)
+]]
+
 score = {}
 score['Destruction derby'] = true
 score['Shooter'] = true
@@ -37,6 +46,8 @@ addEventHandler('onResourceStart', resourceRoot,
 			queryMapTimes(raceInfo.mapInfo, true)
 		end
 		checkResources()
+
+		dbExec ( handlerConnect, country_sql_table )
 	end
 )
 
@@ -746,4 +757,44 @@ function var_dump(...)
 		string = string..v
 	end
 	return string, output
+end
+
+
+--Get the country of a player for flags
+addEventHandler("onGCLogin" , root, 
+function(forumID)
+	if not isElement(source) then return end
+	
+	getPlayerCountry(source, forumID)
+end
+)
+
+
+function getPlayerCountry(player,forumID)
+	if not handlerConnect then return end
+	
+	local country = exports.geoloc:getPlayerCountry(player)
+	local playerName = getPlayerName(player)
+	
+	local query = dbQuery ( handlerConnect, "SELECT * FROM country WHERE forumid = ?", forumID)
+	local results = dbPoll ( query, -1 )
+	if results and #results > 0 then		
+		local country_sql = results[1].country
+		if country_sql == country then 
+			return
+		else
+			addPlayerCountryToDB(player, playerName, forumID, country)
+		end
+	else
+		addPlayerCountryToDB(player, playerName, forumID, country)
+	end
+end
+
+function addPlayerCountryToDB(player, playerName, forumID, country)
+	local query = dbExec(handlerConnect,"REPLACE INTO `country` (forumid, country) VALUES (?,?)", forumID, country)
+	if query then
+		outputDebugString("Added country code for player: "..playerName..". Country code: "..country)
+	else
+		outputDebugString("Failed to add country code for player: "..playerName.. ". Country code: "..country, 1)
+	end
 end
