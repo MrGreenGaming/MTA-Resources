@@ -784,14 +784,14 @@ function getPlayerCountry(player,forumID)
 		if country_sql == country then 
 			return
 		else
-			addPlayerCountryToDB(player, playerName, forumID, country)
+			addPlayerCountryToDB(playerName, forumID, country)
 		end
 	else
-		addPlayerCountryToDB(player, playerName, forumID, country)
+		addPlayerCountryToDB(playerName, forumID, country)
 	end
 end
 
-function addPlayerCountryToDB(player, playerName, forumID, country)
+function addPlayerCountryToDB(playerName, forumID, country)
 	local query = dbExec(handlerConnect,"REPLACE INTO `country` (forum_id, country) VALUES (?,?)", forumID, country)
 	if query then
 		outputDebugString("Added country code for player: "..playerName..". Country code: "..country)
@@ -799,3 +799,24 @@ function addPlayerCountryToDB(player, playerName, forumID, country)
 		outputDebugString("Failed to add country code for player: "..playerName.. ". Country code: "..country, 1)
 	end
 end
+
+
+function addcountry(p, c, pos, code)
+	pos = tonumber(pos)
+	if not (pos and times[pos]) then
+		return outputChatBox('Top not found ' .. tostring(pos), p)
+	elseif not code then
+		return outputChatBox('Syntax: /addcountry <position> <country code>', p)
+	end
+	
+	local query = dbExec(handlerConnect, "REPLACE INTO `country` (forum_id, country) VALUES (?,?)", times[pos].forumid, code)
+
+	if query then
+		outputDebugString("Added country code for player: "..times[pos].mta_name..". Country code: "..code)
+		outputChatBox("Added country code for player: "..times[pos].mta_name..". Country code: "..code, p)
+	else
+		outputDebugString("Failed to add country code for player: "..times[pos].mta_name.. ". Country code: "..code, 1)
+		outputChatBox("Failed to add country code for player: "..times[pos].mta_name.. ". Country code: "..code, p)
+	end
+end
+addCommandHandler('addcountry', addcountry, true)
