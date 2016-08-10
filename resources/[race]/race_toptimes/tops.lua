@@ -46,7 +46,7 @@ addEventHandler('onResourceStart', resourceRoot,
 			queryMapTimes(raceInfo.mapInfo, true)
 		end
 		checkResources()
-
+		
 		dbExec ( handlerConnect, country_sql_table )
 	end
 )
@@ -57,15 +57,16 @@ function queryMapTimes (mapInfo, bStart)
 	monthtTopTime = nil
 	mapname = mapInfo.resname
 	info = mapInfo
-	local q = "SELECT forumid, mapname, pos, value, date, g.mta_name FROM toptimes, mrgreen_gc.green_coins g WHERE forumid = g.forum_id and mapname = ? ORDER BY pos"
+	local q = "SELECT forumid, mapname, pos, value, date, g.mta_name, h.country FROM toptimes, mrgreen_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY pos"
 	dbQuery(maptimes, {mapInfo, bStart}, handlerConnect, q, mapname)
 	if not score[exports.race:getRaceMode()] then
-		local q = "SELECT forumid, mapname, value, date, month, g.mta_name FROM toptimes_month, mrgreen_gc.green_coins g WHERE forumid = g.forum_id and mapname = ? ORDER BY date DESC"
+		local q = "SELECT forumid, mapname, value, date, month, g.mta_name, h.country FROM toptimes_month, mrgreen_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY date DESC"
 		dbQuery(monthlytime, {mapInfo, bStart}, handlerConnect, q, mapname, getRealTime().month+1)
 	else
 		sendMonthTime()	-- send empty month time
 	end
 end
+
 
 function maptimes(qh, mapInfo, bStart)
 	local result = dbPoll(qh, 0)
@@ -776,7 +777,7 @@ function getPlayerCountry(player,forumID)
 	local country = exports.geoloc:getPlayerCountry(player)
 	local playerName = getPlayerName(player)
 	
-	local query = dbQuery ( handlerConnect, "SELECT * FROM country WHERE forumid = ?", forumID)
+	local query = dbQuery ( handlerConnect, "SELECT * FROM country WHERE forum_id = ?", forumID)
 	local results = dbPoll ( query, -1 )
 	if results and #results > 0 then		
 		local country_sql = results[1].country
@@ -791,7 +792,7 @@ function getPlayerCountry(player,forumID)
 end
 
 function addPlayerCountryToDB(player, playerName, forumID, country)
-	local query = dbExec(handlerConnect,"REPLACE INTO `country` (forumid, country) VALUES (?,?)", forumID, country)
+	local query = dbExec(handlerConnect,"REPLACE INTO `country` (forum_id, country) VALUES (?,?)", forumID, country)
 	if query then
 		outputDebugString("Added country code for player: "..playerName..". Country code: "..country)
 	else
