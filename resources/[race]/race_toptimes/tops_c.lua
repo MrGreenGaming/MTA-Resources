@@ -1,6 +1,6 @@
 local tops = 8
 local posx, posy = 0.55, 0.015
-local sizex, sizey = 330, 46+15*(tops+3)
+local sizex, sizey = 350, 46+15*(tops+3)
 local image = 'backg1a.png'
 local imageColor = tocolor(255,255,255,255)
 local titleHeight = 38
