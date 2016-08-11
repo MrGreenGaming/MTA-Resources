@@ -221,6 +221,7 @@ function updatePlayerTop(player, rank, value)
 		monthtTopTime.formatDate = FormatDate(monthtTopTime.date)
 		monthtTopTime.player = player
 		monthtTopTime.mta_name = getPlayerName(player)
+		monthtTopTime.country = exports.geoloc:getPlayerCountry(player)
 		monthtTopTime.rewarded = oldRewarded
 		
 		if oldTime then
@@ -242,7 +243,7 @@ function updatePlayerTop(player, rank, value)
 		newTime = value
 		if not toptime then
 			q = "INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname`) VALUES (?,?,?,?)"
-			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), new=true})
+			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), country = exports.geoloc:getPlayerCountry(player), new=true})
 			-- outputDebugString('new top for ' .. getPlayerName(player))
 		elseif (not times.kills and value < toptime.value) or (times.kills and value > toptime.value) then
 			oldPos, oldTime = toptime.pos, toptime.value
@@ -252,6 +253,7 @@ function updatePlayerTop(player, rank, value)
 			toptime.formatDate = FormatDate(toptime.date)
 			toptime.player = player
 			toptime.mta_name=getPlayerName(player)
+			toptime.country = exports.geoloc:getPlayerCountry(player)
 			toptime.new=true
 			-- outputDebugString('updated top for ' .. getPlayerName(player))
 		end
@@ -776,6 +778,8 @@ function getPlayerCountry(player,forumID)
 	
 	local country = exports.geoloc:getPlayerCountry(player)
 	local playerName = getPlayerName(player)
+	
+	if country == "A1" then return end --if country is "Anonymous Proxy" - ignore and add country manually using /addcountry
 	
 	local query = dbQuery ( handlerConnect, "SELECT * FROM country WHERE forum_id = ?", forumID)
 	local results = dbPoll ( query, -1 )
