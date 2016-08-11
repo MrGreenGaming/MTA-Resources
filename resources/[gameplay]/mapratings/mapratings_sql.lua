@@ -80,7 +80,7 @@ function _getPlayerName ( player )
 	return removeColorCoding ( getPlayerName ( player ) )
 end
 
--- [[
+--[[
 addCommandHandler('convertratingsfromsqlitetomysql', function()
 	local theCon2 = dbConnect("sqlite","mapratings.db")
 	local query = dbQuery(theCon2,"SELECT * FROM mapRate")
