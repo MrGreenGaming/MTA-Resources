@@ -15,16 +15,6 @@ addEventHandler('vehicleChange', localPlayer, function(v, old)
 	end
 end)
 
-addEventHandler("onClientElementDataChange", root, 
-function(dataName,oldValue)
-	if dataName == "state" then
-		if getElementData(source, dataName) == "spectating" or getElementData(source, dataName) == "dead" or getElementData(source, dataName) == "finished" then
-			setFPSLimit(fps)
-		end
-	end
-end
-)
-
 -------------------
 ---   NFS NOS   ---
 -------------------
