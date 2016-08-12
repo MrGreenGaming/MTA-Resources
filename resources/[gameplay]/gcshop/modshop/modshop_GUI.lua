@@ -95,7 +95,7 @@ function build_modshopWidget(parent, offsetX, offsetY)
 	guiLabelSetHorizontalAlign(gui["lblPaintjobText"], "left", true)
 	guiLabelSetVerticalAlign(gui["lblPaintjobText"], "top")
 	
-	gui["lblPaintjobNote"] = guiCreateLabel(350, 265, 271, 91, "Use TinyPic.com or Imgur.com direct link \nOr\nCopy custom paintjob images into this map:\nC:\\Program Files\\MTA San Andreas\\mods\\deathmatch\\resources\\gcshop\\", false, gui["tabVehicleColors"])
+	gui["lblPaintjobNote"] = guiCreateLabel(350, 265, 271, 91, "You can use TinyPic.com, Imgur.com, Postimg.org direct link \nOr\nCopy custom paintjob images into this map:\nC:\\Program Files\\MTA San Andreas\\mods\\deathmatch\\resources\\gcshop\\", false, gui["tabVehicleColors"])
 	guiLabelSetHorizontalAlign(gui["lblPaintjobNote"], "left", true)
 	guiLabelSetVerticalAlign(gui["lblPaintjobNote"], "top")
 	

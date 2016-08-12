@@ -433,7 +433,7 @@ local allowedExtensions = {".png",".bmp",".jpg"}
 function gcshopRequestPaintjob(imageMD5, forumID, filename, id)
 	if not player_perks[4] then return outputChatBox('Buy the perk!', 255, 0, 0); end
 	--outputDebugString('c: Requesting paintjob ' ..tostring( filename) .. ' ' .. tostring(forumID) .. ' ' .. getPlayerName(localPlayer))
-	if string.find(filename,".tinypic.com/") or string.find(filename,"i.imgur.com/") then -- If filename is hosting URL
+	if string.find(filename,".tinypic.com/") or string.find(filename,"i.imgur.com/") or string.find(filename,".postimg.org/") then -- If filename is hosting URL
 		local forbiddenFile = 0
 		for _,ext in ipairs(allowedExtensions) do
 			if string.find(filename,ext) then
