@@ -2,7 +2,7 @@
 -- MrGreen banner --
 
 function banner()
-	dxDrawImage(3, y-48-5, 320, 40, 'text.png')
+	dxDrawImage(3, y-48-5, 320, 40, 'text.png', 0, 0, 0, tocolor(255, 255, 255), true)
 end
 addEventHandler("onClientRender", root, banner )
 
