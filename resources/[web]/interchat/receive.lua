@@ -151,3 +151,13 @@ function testConnection()
 	return 'connection ok'
 end
 
+
+--------------------
+-- Online players --
+--------------------
+
+function sendOnlinePlayers ()
+	local players = #getElementsByType('player')
+	local max_players = getMaxPlayers()
+	return tostring(players), max_players
+end

@@ -3,10 +3,23 @@
 	
 	<!-- sending stuff -->
 	<script src="send.lua" type="server" />
-	<script src="redirect_c.lua" type="client" />
 	
 	<!-- receiving stuff -->
 	<script src="receive.lua" type="server" />
+	
+	
+	<!-- GUI -->
+	<script src="gui.lua" type="client" />
+	
+	<file src="images/background.png" />
+	<file src="images/race.png" />
+	<file src="images/mix.png" />
+	<file src="images/selected.png" />
+	
+	<file src="fonts/arial.ttf" />
+	
+	
+	<!-- Exported functions -->
 	<export function="playerRedirect" http="true" />
 	<export function="playerChatBoxRemote" http="true" />
 	<export function="sendPlayerNames" http="true" />
@@ -16,6 +29,7 @@
 	<export function="aAddSerialUnmuteTimer" http="true" />
 	<export function="addSyncBan" http="true" />
 	<export function="testConnection" http="true" />
+	<export function="sendOnlinePlayers" http="true" />
 	
 	 <settings>
 			<setting name="*this_server" 		value="Race" 					friendlyname="Short name for this server"	/>

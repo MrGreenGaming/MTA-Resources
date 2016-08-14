@@ -13,6 +13,15 @@ other_http_port = get('other_http_port')	-- http to communicate with
 resourceName = getResourceName(getThisResource())
 other_ipandport = other_ip .. ':' .. other_http_port
 
+local max_players = getMaxPlayers()
+
+function getServersInfo()
+	triggerClientEvent(client, "receiveServersInfo", client, this_server, other_server)
+end
+addEvent("getServersInfo", true)
+addEventHandler("getServersInfo", root, getServersInfo)
+
+
 -- Test connection with other server
 outputDebugString("Interchat " .. other_ipandport .. " " ..other_port .. " " .. tostring(
 	callRemote(other_ipandport, resourceName, "testConnection", function(response)
@@ -234,3 +243,25 @@ addEventHandler("onBan",root,
 		callRemote ( other_ipandport, resourceName, "addSyncBan", (function() end), ip, serial, reason, seconds )
 	end
 )
+
+--------------------
+-- Online players --
+--------------------
+
+function getServerPlayersOnline ()
+	players = #getElementsByType('player')
+	setElementData(resourceRoot, this_server.." Players", players.."/"..max_players, true)
+	
+	callRemote ( other_ipandport, resourceName, "sendOnlinePlayers", receivePlayersOnline) --getOtherServerPlayersOnline
+end
+setTimer(getServerPlayersOnline, 1000, 0)
+
+function receivePlayersOnline ( players2, max_players2 )
+	if players2 == "ERROR" or players2 == nil then players2 = "0" end
+	if max_players2 == nil then max_players2 = "0" end
+	
+	setElementData(resourceRoot, other_server.." Players", players2.."/"..max_players2, true)
+	
+	local players_total = tostring(tonumber(players) + tonumber(players2))
+	setElementData(resourceRoot, "Total players online", players_total, true)
+end
