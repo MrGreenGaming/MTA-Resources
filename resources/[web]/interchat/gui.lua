@@ -5,7 +5,7 @@ local other_server = nil
 local players_race = 0
 local players_mix = 0
 
-local img_Background = guiCreateStaticImage(0, 0, 1920, 1080, "images/background.png", false)
+local img_Background = guiCreateStaticImage(0, 0, 1920*screenX/1920, 1080*screenY/1080, "images/background.png", false)
 guiSetVisible(img_Background, false)
 
 
