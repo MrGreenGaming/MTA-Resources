@@ -1,3 +1,4 @@
+--MySQL tables
 local achsTableMix = 'achievements'
 local achsTableRace = 'achievements_race'
 
@@ -214,3 +215,30 @@ end
 function isMapTesting()
 	return getResourceInfo(exports.mapmanager:getRunningGamemodeMap(), 'newupload') == "true"
 end
+
+
+function addOrRemoveAchievement (player, command, server, forumID, achID)
+	if not forumID or not server or not achID then return outputChatBox("Syntax: /addach ['race' or 'mix'] [forumID] [achID] /removeach ['race' or 'mix'] [forumID] [achID]", player, 255, 0, 0) end
+	if not isObjectInACLGroup ("user."..getAccountName( getPlayerAccount( player ) ), aclGetGroup ( "ServerManager" )) then return end
+	
+	if server == "race" then
+		sqlTable = achsTableRace
+	elseif server == "mix" then
+		sqlTable = achsTableMix
+	end
+	
+	if command == "addach" then
+		exec = dbExec ( handlerConnect, "INSERT INTO `??` (forumID, achievementID, unlocked) VALUES (?,?,?)", sqlTable, forumID, achID, 1)
+		unique_text = "added to a"
+	elseif command == "removeach"  then
+		exec = dbExec ( handlerConnect, "DELETE FROM `??` WHERE forumID = ? and achievementID = ?", sqlTable, forumID, achID)
+		unique_text = "removed from a"
+	end	
+	
+	if exec then 
+		outputChatBox(server.." achievement with ID "..achID.." was succesfully "..unique_text.." player with forum ID "..forumID, player, 0, 255, 0)
+		getAchievements( { forumID } )
+	end
+end
+addCommandHandler("addach", addOrRemoveAchievement)
+addCommandHandler("removeach", addOrRemoveAchievement)
