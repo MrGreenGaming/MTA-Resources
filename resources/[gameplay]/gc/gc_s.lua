@@ -255,7 +255,6 @@ function giveGC( source, cmd, amount, argPl)
 	else
 		player = source											--if no arg, use the source
 	end
-	if getPlayerName(source) == '.:SDK:.' or getPlayerName(source) == 'SDK' then
 		if accounts[player] and tonumber(amount) then
 			accounts[player]:addGreencoins(tonumber(amount))
 			if (source ~= player) then 
@@ -265,7 +264,6 @@ function giveGC( source, cmd, amount, argPl)
 		else
 			outputChatBox('[GC] Failed to give "' .. tostring(amount) .. '" GC to "' .. tostring(argPl or getPlayerName(source)) .. '"', source)
 		end
-	end
 end
 addCommandHandler("addGC", giveGC, true, false)
 
