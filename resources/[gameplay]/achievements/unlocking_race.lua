@@ -282,6 +282,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			end
 		end
 	end	
+	tableOfWinners = {}
 	for i,j in pairs(g_Players) do 
 		j.hasBeenChatting = false
 		j.deathCount = 0
@@ -312,7 +313,8 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	if isTimer(delayDeath) then killTimer(delayDeath) end
 	if #tableOfWinners == 1 then
 		addPlayerAchievementRace(tableOfWinners[1], 21)
-	end	
+	end
+	tableOfWinners = {}	
 	for i,j in ipairs(getElementsByType('player')) do
 		if g_Players[j].dead then
 			g_Players[j].countMapsWithNoDeaths = 0
