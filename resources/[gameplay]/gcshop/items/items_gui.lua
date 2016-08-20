@@ -18,11 +18,12 @@ function build_itemsWidget(parent, offsetX, offsetY)
 	guiLabelSetHorizontalAlign(gui["labelTitle_1"], "left", false)
 	guiLabelSetVerticalAlign(gui["labelTitle_1"], "center")
 	
-	gui["labelInfo_1"] = guiCreateLabel(21, 31, 481, 71, "This perk allows you to do stunts on your bike while airborn. You can do tricks by pressing 1-5 and do 360° turns in the air.", false, gui["scrollAreaItems"])
+	gui["labelInfo_1"] = guiCreateLabel(21, 31, 481, 71, "This perk was removed due to bugs which can't be easily fixed. All GreenCoins will be refunded soon", false, gui["scrollAreaItems"])
 	guiLabelSetHorizontalAlign(gui["labelInfo_1"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelInfo_1"], "top")
 	
 	gui["btnBuyPerk_1"] = guiCreateButton(541, 11, 101, 101, "Price:\n1000 GC", false, gui["scrollAreaItems"])
+	guiSetEnabled(gui["btnBuyPerk_1"], false)
 	if on_btnBuyPerk_1_clicked then
 		addEventHandler("onClientGUIClick", gui["btnBuyPerk_1"], on_btnBuyPerk_1_clicked, false)
 	end

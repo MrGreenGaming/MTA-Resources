@@ -5,12 +5,12 @@
 local ID = 1
 
 function loadGCTrials ( player, bool, settings )
-	triggerClientEvent(player, 'loadGCTrials', player, bool, settings)
-	if bool then
-		addCommandHandler('trials', setTrials)
-	else
-		removeCommandHandler('trials', setTrials)
-	end
+	--triggerClientEvent(player, 'loadGCTrials', player, bool, settings)
+	--if bool then
+	--	addCommandHandler('trials', setTrials)
+	--else
+	--	removeCommandHandler('trials', setTrials)
+	--end
 end
 
 
