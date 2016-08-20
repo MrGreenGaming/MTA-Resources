@@ -13,7 +13,7 @@ end
 addEvent( 'loadDoubleSided', true )
 addEventHandler( 'loadDoubleSided', localPlayer, loadDoubleSided)
 
-function settingGCTrials ( settings )
+function settingDoubleSided ( settings )
 	if not settings.disabled then
 		doublesided = true
 		setEverythingDoubleSided()
@@ -21,8 +21,8 @@ function settingGCTrials ( settings )
 		doublesided = false
 	end
 end
-addEvent('settingGCTrials', true)
-addEventHandler('settingGCTrials', localPlayer, settingGCTrials)
+addEvent('settingDoubleSided', true)
+addEventHandler('settingDoubleSided', localPlayer, settingDoubleSided)
 
 function setEverythingDoubleSided()
 	if not doublesided then return end
