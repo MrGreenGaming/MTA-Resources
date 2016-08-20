@@ -5,12 +5,12 @@
 local ID = 1
 
 function loadGCTrials ( player, bool, settings )
-	--triggerClientEvent(player, 'loadGCTrials', player, bool, settings)
-	--if bool then
-	--	addCommandHandler('trials', setTrials)
-	--else
-	--	removeCommandHandler('trials', setTrials)
-	--end
+	triggerClientEvent(player, 'loadGCTrials', player, bool, settings)
+	if bool then
+		addCommandHandler('trials', setTrials)
+	else
+		removeCommandHandler('trials', setTrials)
+	end
 end
 
 
@@ -27,12 +27,13 @@ function setTrials ( player, cmd, on )
 	triggerClientEvent(player, 'settingGCTrials', player, getPerkSettings(player, ID))
 end
 
-function doTrickAnimation ( block, name, loop )
+function doTrickAnimation ( block, name, loop, timeMs )
 	block = block or nil;
 	name = name or nil;
 	loop = loop or false;
+	timeMs = timeMs or -1
 
-	setPedAnimation( source, block, name, -1, loop, false, false );
+	setPedAnimation( source, block, name, timeMs, loop, false, false );
 end
 addEvent( 'doTrickAnimation', true );
 addEventHandler( 'doTrickAnimation', root, doTrickAnimation)

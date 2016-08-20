@@ -25,6 +25,7 @@ end
 addEvent( 'loadGCTrials', true )
 addEventHandler( 'loadGCTrials', localPlayer, loadGCTrials)
 
+
 function settingGCTrials ( settings )
 	if not settings.dont_flip then
 		loadFlip()
@@ -42,10 +43,10 @@ function loadFlip()
 	
 	-- Flip it faster
 	for k, v in pairs(getBoundKeys'steer_back') do
-		--bindKey( k, 'both', preRotation )
+		bindKey( k, 'both', preRotation )
 	end
 	for k, v in pairs(getBoundKeys'steer_forward') do
-		--bindKey( k, 'both', preRotation )
+		bindKey( k, 'both', preRotation )
 	end
 end
 
@@ -53,10 +54,10 @@ function unloadFlip()
 	removeEventHandler( 'onClientPreRender', root, onClientPreRender)
 	
 	for k, v in pairs(getBoundKeys'steer_back') do
-		--unbindKey( k, 'both', preRotation )
+		unbindKey( k, 'both', preRotation )
 	end
 	for k, v in pairs(getBoundKeys'steer_forward') do
-		--unbindKey( k, 'both', preRotation )
+		unbindKey( k, 'both', preRotation )
 	end
 	
 	minus, plus = false, false
@@ -64,6 +65,7 @@ function unloadFlip()
 	removeEventHandler( 'onClientPreRender', root, plusRotation )
 
 end
+
 
 function loadTricks()
 	bindKey( '1', 'both', trick_Leggs )
@@ -90,9 +92,15 @@ end
 
 function onClientPreRender()
 	local bike = getPedOccupiedVehicle( localPlayer )
-	if isElement(bike) and not isVehicleOnGround( bike ) and bikes[getVehicleNameFromModel( getElementModel(bike) )] and 0.1 < getDistanceBetweenPoints3D(0,0,0,getElementVelocity(bike)) then
-		local rx, ry, rz  = getElementRotation( bike )
-		setElementRotation( bike, rx, 0, rz )
+	
+	if isElement(bike) then
+		local x, y, z = getElementPosition(bike)
+		local gz = getGroundPosition(x, y, z)
+		local height = math.ceil(z-gz)
+		if not isVehicleOnGround( bike ) and bikes[getVehicleNameFromModel( getElementModel(bike) )] and 0.1 < getDistanceBetweenPoints3D(0,0,0,getElementVelocity(bike)) and height > 11 and not isBikeCloseToGround(bike) then
+			local rx, ry, rz  = getElementRotation( bike )
+			setElementRotation( bike, rx, 0, rz )
+		end
 	end
 end
 
@@ -124,7 +132,7 @@ function minusRotation()
 	local bike = getPedOccupiedVehicle( localPlayer )
 	if isElement(bike) and not isVehicleOnGround( bike ) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
 		local rx, ry, rz = getElementRotation( bike )
-		setElementRotation( bike, rx + 2.5, ry, rz )
+		setElementRotation( bike, rx + 0.5, ry, rz )
 	end
 end
 
@@ -132,7 +140,7 @@ function plusRotation()
 	local bike = getPedOccupiedVehicle( localPlayer )
 	if isElement(bike) and not isVehicleOnGround( bike ) and bikes[getVehicleNameFromModel( getElementModel(bike) )] then
 		local rx, ry, rz = getElementRotation( bike )
-		setElementRotation( bike, rx - 2.5, ry, rz )
+		setElementRotation( bike, rx - 0.5, ry, rz )
 	end
 end
 
@@ -211,9 +219,9 @@ function trick_End()
 	if isElement(bike) then
 		local bn = getVehicleNameFromModel( getElementModel( bike ) )
 		if bn == 'NRG-500' or bn == 'PCJ-600' or bn == 'FCR-900' or bn == 'BF-400' then
-			triggerServerEvent( 'doTrickAnimation', localPlayer, 'bikes', 'bikes_ride', false )
+			triggerServerEvent( 'doTrickAnimation', localPlayer, 'bikes', 'bikes_ride', false, 0 )
 		elseif bn == 'Sanchez' then
-			triggerServerEvent( 'doTrickAnimation', localPlayer, 'biked', 'biked_ride', false )
+			triggerServerEvent( 'doTrickAnimation', localPlayer, 'biked', 'biked_ride', false, 0 )
 		end
 	end
 	isStunted = false
@@ -226,3 +234,68 @@ function onClientRender()
 	end
 end
 addEventHandler( 'onClientRender', root, onClientRender)
+
+--This function need for isBikeCloseToGround() function
+function getPositionFromElementOffset(element,offX,offY,offZ)
+    local m = getElementMatrix ( element )
+    local x = offX * m[1][1] + offY * m[2][1] + offZ * m[3][1] + m[4][1]
+    local y = offX * m[1][2] + offY * m[2][2] + offZ * m[3][2] + m[4][2]
+    local z = offX * m[1][3] + offY * m[2][3] + offZ * m[3][3] + m[4][3]
+    return x, y, z
+end
+
+---------------------------------------------------------------------------------------------------------------------------------------
+-- Function isBikeCloseToGround() needed because isVehicleOnGround() don't work correctly with bikes riding sideways, doing wheelie, etc. --
+---------------------------------------------------------------------------------------------------------------------------------------
+
+--It will check if bike is on the ground or really close to ground to stop tricks
+function isBikeCloseToGround(bike)
+	local x, y, z = getElementPosition(bike)
+	
+	--It will draw the short line under the bike and hitZ will be nil if line don't hit the ground
+	local x2, y2, z2 = getPositionFromElementOffset(bike, 0, 0, -3)
+	local _, _, _, hitZ = processLineOfSight(x, y, z, x2, y2, z2, true, false, false, true)
+	--dxDrawLine3D(x, y, z, x2, y2, z2, tocolor(255, 0, 0))
+
+	--It will draw the short line behind the bike
+	local x3, y3, z3 = getPositionFromElementOffset(bike, 0, -2, 0)
+	local _, _, _, hitZ2 = processLineOfSight(x, y, z, x3, y3, z3, true, false, false, true)
+	--dxDrawLine3D(x, y, z, x3, y3, z3, tocolor(255, 0, 0))
+	
+	--front of the bike
+	local x4, y4, z4 = getPositionFromElementOffset(bike, 0, 2, 0)
+	local _, _, _, hitZ3 = processLineOfSight(x, y, z, x4, y4, z4, true, false, false, true)
+	--dxDrawLine3D(x, y, z, x4, y4, z4, tocolor(255, 0, 0))
+	
+	--right side of the bike
+	local x5, y5, z5 = getPositionFromElementOffset(bike, 2, 0, 0)
+	local _, _, _, hitZ4 = processLineOfSight(x, y, z, x5, y5, z5, true, false, false, true)
+	--dxDrawLine3D(x, y, z, x5, y5, z5, tocolor(255, 0, 0))
+	
+	--left side of the bike
+	local x6, y6, z6 = getPositionFromElementOffset(bike, -2, 0, 0)
+	local _, _, _, hitZ5 = processLineOfSight(x, y, z, x6, y6, z6, true, false, false, true)
+	--dxDrawLine3D(x, y, z, x6, y6, z6, tocolor(255, 0, 0))
+	
+	--above the bike
+	local x6, y6, z6 = getPositionFromElementOffset(bike, 0, 0, 2)
+	local _, _, _, hitZ5 = processLineOfSight(x, y, z, x6, y6, z6, true, false, false, true)
+	--dxDrawLine3D(x, y, z, x6, y6, z6, tocolor(255, 0, 0))
+	
+	if hitZ ~= nil or hitZ2 ~= nil or hitZ3 ~= nil or hitZ4 ~= nil or hitZ5 ~= nil then
+		return true
+	else
+		return false
+	end
+end
+
+--for testing
+--[[
+addEventHandler("onClientPreRender", root,
+function()
+	local bike = getPedOccupiedVehicle(localPlayer)
+	if isElement(bike) then
+		outputChatBox(tostring(isBikeCloseToGround(bike)))
+	end
+end
+)]]--
