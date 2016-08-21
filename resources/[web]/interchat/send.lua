@@ -13,7 +13,11 @@ other_http_port = get('other_http_port')	-- http to communicate with
 resourceName = getResourceName(getThisResource())
 other_ipandport = other_ip .. ':' .. other_http_port
 
-local max_players = getMaxPlayers()
+mapInfo_other = {}
+mapInfo_other.name = ""
+mapInfo_other.author = ""
+
+max_players = getMaxPlayers()
 
 function getServersInfo()
 	triggerClientEvent(client, "receiveServersInfo", client, this_server, other_server)
@@ -201,11 +205,57 @@ end
 --------------
 
 function mapStarted (mapinfo)
-	callRemote ( other_ipandport, resourceName, "outputMapRemote", (function() end), mapinfo.name, exports.race:getRaceMode() )
+	mapInfo = mapinfo
+	callRemote ( other_ipandport, resourceName, "sendMapInfo", (function() end), mapInfo.name, mapInfo.author, exports.race:getRaceMode(), true, false ) --Send mapInfo and update F2 GUI for clients of the other server
+	triggerClientEvent("updateF2GUI", resourceRoot, this_server.." Map", "Map: "..mapInfo.name.."\nAuthor: "..mapInfo.author) --Update F2 GUI for clients of this server
 end
 addEvent("onMapStarting")
 addEventHandler("onMapStarting", root, mapStarted)
 
+function getServersMapInfo ( sendTo )
+	if not mapInfo then
+		local s = getElementData( getResourceRootElement( getResourceFromName("race") ) , "info") 
+		if s then
+			mapInfo = s.mapInfo
+		else
+			mapInfo = {}
+			mapInfo.name = ""
+			mapInfo.author = ""
+		end
+	end
+	
+	if sendTo == "sendToAll" then
+		sendToElement = root
+		callRemote ( other_ipandport, resourceName, "sendMapInfo", receiveMapInfo, mapInfo.name, mapInfo.author, nil, false, true ) --Get mapInfo from the other server and update F2 GUI for clients of this server
+	elseif sendTo == "client" then
+		sendToElement = client
+		triggerClientEvent(sendToElement, "updateF2GUI", sendToElement, other_server.." Map", "Map: "..mapInfo_other.name.."\nAuthor: "..mapInfo_other.author) --Update F2 GUI for clients of this server
+	end
+	
+	triggerClientEvent(sendToElement, "updateF2GUI", resourceRoot, this_server.." Map", "Map: "..mapInfo.name.."\nAuthor: "..mapInfo.author) --Update F2 GUI for clients of this server
+end
+addEvent("getServersMapInfo", true)
+addEventHandler("getServersMapInfo", root, getServersMapInfo)
+
+
+function receiveMapInfo ( mapinfo )
+	if mapinfo == "ERROR" or mapinfo == nil then 
+		mapInfo_other = {}
+		mapInfo_other.name = ""
+		mapInfo_other.author = ""
+	else
+		mapInfo_other = mapinfo
+	end
+	
+	triggerClientEvent(root, "updateF2GUI", resourceRoot, other_server.." Map", "Map: "..mapInfo_other.name.."\nAuthor: "..mapInfo_other.author)
+end
+
+
+addEventHandler("onResourceStart", resourceRoot, 
+function() 
+	setTimer(getServersMapInfo, 500, 1, "sendToAll")
+end
+)
 
 ---------------
 -- GC logins --
@@ -244,17 +294,18 @@ addEventHandler("onBan",root,
 	end
 )
 
---------------------
--- Online players --
---------------------
+-----------------------
+-- Online players F2 --
+-----------------------
 
-function getServerPlayersOnline ()
+function getServerPlayersOnline ( )
 	players = #getElementsByType('player')
 	setElementData(resourceRoot, this_server.." Players", players.."/"..max_players, true)
 	
 	callRemote ( other_ipandport, resourceName, "sendOnlinePlayers", receivePlayersOnline) --getOtherServerPlayersOnline
 end
 setTimer(getServerPlayersOnline, 1000, 0)
+
 
 function receivePlayersOnline ( players2, max_players2 )
 	if players2 == "ERROR" or players2 == nil then players2 = "0" end

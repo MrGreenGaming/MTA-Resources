@@ -10,11 +10,13 @@
 	
 	<!-- GUI -->
 	<script src="gui.lua" type="client" />
+	<script src="tooltips.lua" type="client" />
 	
 	<file src="images/background.png" />
 	<file src="images/race.png" />
 	<file src="images/mix.png" />
-	<file src="images/selected.png" />
+	<file src="images/info.png" />
+	<file src="images/sprite.png" />
 	
 	<file src="fonts/arial.ttf" />
 	
@@ -24,12 +26,12 @@
 	<export function="playerChatBoxRemote" http="true" />
 	<export function="sendPlayerNames" http="true" />
 	<export function="sendAdminNames" http="true" />
-	<export function="outputMapRemote" http="true" />
 	<export function="greencoinsLogin" http="true" />
 	<export function="aAddSerialUnmuteTimer" http="true" />
 	<export function="addSyncBan" http="true" />
 	<export function="testConnection" http="true" />
 	<export function="sendOnlinePlayers" http="true" />
+	<export function="sendMapInfo" http="true" />
 	
 	 <settings>
 			<setting name="*this_server" 		value="Race" 					friendlyname="Short name for this server"	/>
