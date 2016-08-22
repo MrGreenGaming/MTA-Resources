@@ -20,7 +20,7 @@ addEventHandler("onGUIPrivateMessage", root,
 		elseif delay[client] and getTickCount() - delay[client] < min_delay and not isPlayerAdmin then
 			return outputChatBox('Do not spam. Private message wasn\'t delivered. ', client, 255, 0, 0)
         elseif g_PlayersRefuse[toplayer] and not isPlayerAdmin then
-            return outputChatBox("Message not delivered! "..getPlayerName(toplayer).." does not wish to be disturbed right now!", source, 255, 0, 0)
+            return outputChatBox("Message not delivered! "..getPlayerName(toplayer):gsub( '#%x%x%x%x%x%x', '' ).." does not wish to be disturbed right now!", source, 255, 0, 0)
 		end
 		
 		triggerClientEvent(toplayer, "onPrivateChatSent", client, client, text)
