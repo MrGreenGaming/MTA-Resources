@@ -6,7 +6,7 @@ addEventHandler("onResourceStart", resourceRoot,
 function()
 	outputChatBox( '#ffffff"Core Markers" by #00dd22AleksCore #fffffflaunched.', root, 255, 0, 0, true)
 	showText_Create()
-	showText( 54, 201, 46, "Pick-up power-ups\n @\n Press Fire button", 12000, all)
+	showText( 54, 201, 46, "Pick-up power-ups\n @\n Press LMB or LCTRL button", 12000, all)
 	setTimer(function() textItemSetColor(showText_Text, 54, 201, 46, 255) setTimer(function() textItemSetColor(showText_Text, 255, 255, 255, 255) end, 600, 1) end, 1000, 11)
 	
 	for index, object in ipairs(getElementsByType("object")) do

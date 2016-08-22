@@ -101,8 +101,8 @@ end
 function givePower(powerType)
 	typePicture = guiCreateStaticImage(902.5*sWidth/1920, 120*sHeight/1080, 115*sHeight/1080, 115*sHeight/1080, "pics/"..powerType..".png", false)
 	
-	bindKey("fire", "down", onPlayerUsePower, powerType)
-	bindKey("vehicle_fire", "down", onPlayerUsePower, powerType)
+	bindKey("mouse1", "down", onPlayerUsePower, powerType)
+	bindKey("lctrl", "down", onPlayerUsePower, powerType)
 	
 	setElementData(localPlayer, "coremarkers_powerType", powerType)
 	
@@ -114,11 +114,6 @@ end
 
 
 function removePower()
-	if onPlayerUsePower ~= nil then
-		unbindKey("fire", "down", onPlayerUsePower)
-		unbindKey("vehicle_fire", "down", onPlayerUsePower)
-	end
-	
 	setElementData(localPlayer, "coremarkers_powerType", false)
 	if isElement(bgPicture) then destroyElement(bgPicture) end
 	if isElement(typePicture) then destroyElement(typePicture) end
@@ -178,6 +173,8 @@ function onPlayerUsePower(key, keyState, powerType)
 		triggerServerEvent("fixVehicle", resourceRoot, localPlayer, theVehicle, true)
 	end
 	
+	unbindKey("mouse1", "down", onPlayerUsePower)
+	unbindKey("lctrl", "down", onPlayerUsePower)
 	removePower()
 end
 
