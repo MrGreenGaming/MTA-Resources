@@ -733,7 +733,7 @@ function doDrawScoreboard( rtPass, onlyAnim, sX, sY )
 									content.height = content.height or itemHeight
 									content.width = content.width or itemHeight
 									local itemWidth = itemHeight/content.height * content.width
-									outputConsole("Height: "..itemHeight.." Width: "..itemWidth)
+
 									content.color = content.color or tocolor(255,255,255,255)
 									content.rot = content.rot or 0
 									content.rotOffX = content.rotOffX or 0
