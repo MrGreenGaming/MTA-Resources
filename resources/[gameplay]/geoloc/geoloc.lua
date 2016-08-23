@@ -10,6 +10,7 @@ function checkIP(player)
 	        removeElementData ( player, "country" )
 	        removeElementData ( player, "fullCountryName" )
 			setElementData(player, 'country', cache[IP].cc)
+			setElementData(player, 'flag-country', {type = "flag-country", flag = ":admin/client/images/flags_new/"..string.lower(cache[IP].cc)..".png", country = cache[IP].cc} )
 			setElementData(player, 'fullCountryName', cache[IP].country)
 		elseif split(IP,'.')[1] == "192" or split(IP,'.')[1] == "172" or split(IP,'.')[1] == "10" or split(IP,'.')[1] == "127" then
 			-- fetch our own IP for local adresses
@@ -52,6 +53,7 @@ function receiveIPdata(json, err, IP, nick)
 	local player = getPlayerFromName( nick )
 	if player then
 		setElementData(player, 'country', table.geoplugin_countryCode)
+		setElementData(player, 'flag-country', {type = "flag-country", flag = ":admin/client/images/flags_new/"..string.lower(table.geoplugin_countryCode)..".png", country = table.geoplugin_countryCode} )
 		setElementData(player, 'fullCountryName', table.geoplugin_countryName)
 	end	
 end
@@ -75,7 +77,7 @@ end, true, 'high+4')	-- high priority to make sure we set country data before ot
 addEventHandler("onResourceStart", root,
     function(res)
         if res == resource or getResourceName(res) == "scoreboard" then
-            exports.scoreboard:scoreboardAddColumn("country", root, 56, "Country", 20)
+            exports.scoreboard:scoreboardAddColumn("flag-country", root, 56, "Country", 20)
             for k, player in ipairs(getElementsByType"player") do
             	checkIP(player)
             end
@@ -89,7 +91,7 @@ addEventHandler("onResourceStop", getResourceRootElement(getThisResource()),
             removeElementData ( player, "country" )
             removeElementData ( player, "fullCountryName" )
         end
-        exports.scoreboard:removeScoreboardColumn("country")
+        exports.scoreboard:removeScoreboardColumn("flag-country")
     end
 )
 
