@@ -277,7 +277,7 @@ function startNextMapVote()
 				outputWarning( 'Forced next map failed' )
 				startRandomMap()
 			else
-				outputChatBox("[Maps-Center] Starting queued map for " .. map[4], root, 0, 255, 0)
+				outputChatBox("[Maps-Center] Starting queued map for " .. map[4]:gsub( '#%x%x%x%x%x%x', '' ), root, 0, 255, 0)
 			end
 			skipMapQueue = getResourceFromName(map[2])
 			return
@@ -419,7 +419,7 @@ addEventHandler('nextMapVoteResult', getRootElement(),
 				if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
 					problemChangingMap()
 				else
-					outputChatBox("[Maps-Center] Starting queued map for " .. mapBuyer, root, 0, 255, 0)
+					outputChatBox("[Maps-Center] Starting queued map for " .. mapBuyer:gsub( '#%x%x%x%x%x%x', '' ), root, 0, 255, 0)
 				end
 				skipMapQueue = map
 			end
