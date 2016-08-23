@@ -728,6 +728,19 @@ function doDrawScoreboard( rtPass, onlyAnim, sX, sY )
 									content.rotOffY = content.rotOffY or 0
 									
 									dxDrawImage ( topX+theX, y, itemWidth, itemHeight, content.src, content.rot, content.rotOffX, content.rotOffY, content.color, drawOverGUI )
+								elseif content.type == "flag-country" and content.flag and content.country then
+									local itemHeight = dxGetFontHeight( fontscale(contentFont, scoreboardScale), contentFont )
+									content.height = content.height or itemHeight
+									content.width = content.width or itemHeight
+									local itemWidth = itemHeight/content.height * content.width
+									outputConsole("Height: "..itemHeight.." Width: "..itemWidth)
+									content.color = content.color or tocolor(255,255,255,255)
+									content.rot = content.rot or 0
+									content.rotOffX = content.rotOffX or 0
+									content.rotOffY = content.rotOffY or 0
+									
+									dxDrawImage ( topX+theX, y+itemHeight*0.1, itemHeight*1.066666666666667, itemWidth*0.7333333333333333, content.flag, content.rot, content.rotOffX, content.rotOffY, content.color, drawOverGUI )
+									dxDrawText( content.country, topX+theX+itemWidth*1.2, 		y, 		topX+x+s(column.width), 	y+dxGetFontHeight( fontscale(contentFont, scoreboardScale), contentFont ), 			tocolor( r or 255, g or 255, b or 255, a or 255 ), fontscale(contentFont, s(1)), contentFont, "left", "top", true, false, drawOverGUI, true )
 								end
 							else
 								dxDrawText( string.gsub( content, "#%x%x%x%x%x%x", "" ), topX+theX+s(1), 	y+s(1), topX+x+s(1+column.width), 	y+s(11)+dxGetFontHeight( fontscale(contentFont, scoreboardScale), contentFont ), 	tocolor( 0, 0, 0, a or 255 ), fontscale(contentFont, s(1)), contentFont, "left", "top", true, false, drawOverGUI )
