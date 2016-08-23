@@ -1232,7 +1232,7 @@ end
 
 function loadFlagImage( guiStaticImage, countryCode )
 	if countryCode then
-		local flagFilename = "client\\images\\flags\\"..tostring ( countryCode )..".png"
+		local flagFilename = "client\\images\\flags_new\\"..tostring ( countryCode )..".png"
 		if getVersion().sortable and getVersion().sortable > "1.1.0" then
 			-- 1.1
 			if fileExists( flagFilename ) then
