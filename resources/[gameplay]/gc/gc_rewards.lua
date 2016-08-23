@@ -456,7 +456,7 @@ addEventHandler("onPlayerFinish", root, RTFfinish)
 ---   NTS   ---
 ---------------
 
-rewardNTS = {16, 12, 8}
+rewardNTS = {16, 12, 8, 5, 3}
 function NTSfinish( rank, time )
 	if isMapTesting() or modename ~= "Never the same" or not rewardNTS[rank] then return end
 	local player = source
