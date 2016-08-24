@@ -71,11 +71,11 @@ end)
 
 function showRadar(cmd, show)
 	if tonumber(show) == 1 then
-		showPlayerHudComponent('radar', false)
+		setPlayerHudComponentVisible('radar', false)
 		g_radar = true
 	else
 		g_radar = false
-		showPlayerHudComponent('radar', true)
+		setPlayerHudComponentVisible('radar', true)
 	end
 	if cmd then
 		outputChatBox( (g_radar and 'Showing' or 'Hiding') .. ' radar')
@@ -130,7 +130,7 @@ addEventHandler('onClientMapStarting', root, function(mapinfo, mapoptions)
 		setTimer(hideRaceHUD, 50, 1, true)
 	end
 	if g_radar then
-		showPlayerHudComponent('radar', false)
+		setPlayerHudComponentVisible('radar', false)
 	end
 end)
 
@@ -812,7 +812,7 @@ end
 
 function e_showRadar()
 
-		showPlayerHudComponent('radar', false)
+		setPlayerHudComponentVisible('radar', false)
 		g_radar = true
 	
 
@@ -828,7 +828,7 @@ end
 
 function e_hideRadar()
 		g_radar = false
-		showPlayerHudComponent('radar', true)
+		setPlayerHudComponentVisible('radar', true)
 		local g_conf = xmlLoadFile ( 'hud.conf' )
 		local radarnode = xmlFindChild ( g_conf, 'radar', 0)
 		xmlNodeSetAttribute ( radarnode, 'enabled', 0 )

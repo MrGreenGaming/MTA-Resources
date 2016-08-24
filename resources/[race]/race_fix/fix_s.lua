@@ -22,7 +22,7 @@ addEventHandler("onRaceStateChanging", root,
 			end	
 		end
 		for _, j in ipairs(getElementsByType('player')) do 
-			showPlayerHudComponent(j, 'radio', true)
+			setPlayerHudComponentVisible(j, 'radio', true)
 		end	
 	end	
 )
