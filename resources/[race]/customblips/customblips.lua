@@ -3,7 +3,7 @@
 --		During this period, It is not possible to rotate the camera, but getCameraMatrix returns the lookAt point as if it had rotated.  
 --		This means the customblip rotates like crazy but the radar doesnt
 --
---* 2)		showPlayerHUDComponent has the ability to hide the radar, but custom blips is not aware of this.
+--* 2)		setPlayerHudComponentVisible has the ability to hide the radar, but custom blips is not aware of this.
 --		All scripts would also need to hook into customblips to notify it whenever hiding the radar
 --
 -- Bug #2 is most easily fixed if we get a isRadarVisible/isPlayerHUDComponentVisible function or something to that effect

@@ -119,16 +119,16 @@ function Manhunt.handleDriveBy(player, key, state, self)
 	end
 	if state == 'down' and not isPedDoingGangDriveby(player) then
 		Manhunt.drivebyDelay[player] = getTickCount()
-		showPlayerHudComponent(player, 'ammo', true)
+		setPlayerHudComponentVisible(player, 'ammo', true)
 		setPedDoingGangDriveby(player, true)	
 	elseif state == 'up' then
 		if Manhunt.drivebyDelay[player] and getTickCount() - Manhunt.drivebyDelay[player] > 250 then
 			setPedDoingGangDriveby(player, false)
-			showPlayerHudComponent(player, 'ammo', false)
+			setPlayerHudComponentVisible(player, 'ammo', false)
 		end
 	elseif state == 'down' and isPedDoingGangDriveby(player) then
 		setPedDoingGangDriveby(player, false)
-		showPlayerHudComponent(player, 'ammo', false)
+		setPlayerHudComponentVisible(player, 'ammo', false)
 	end	
 end
 
