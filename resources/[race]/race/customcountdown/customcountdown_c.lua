@@ -7,7 +7,7 @@ local circleSize = 128
 local halfCircleSize = circleSize/2
 -- GUI DUMMY
 local function createDummy()
-	circleDummy = guiCreateStaticImage(screenWidth/2-halfCircleSize, screenHeight/8, circleSize, circleSize, "img/circle.png", false)
+	circleDummy = guiCreateStaticImage(0.5*screenWidth-halfCircleSize, 0.125*screenHeight, circleSize, circleSize, "img/circle.png", false)
 	guiSetVisible( circleDummy, false )
 end
 addEventHandler("onClientResourceStart",resourceRoot,createDummy)
@@ -532,18 +532,7 @@ function dummyToDX(dummy,kind)
     local dummyWidth,dummyHeight = guiGetSize( dummy, false )
     if kind == "image" then
         return dummyPosX,dummyPosY,dummyWidth,dummyHeight
-
-    elseif kind == "text" then -- Buggy "center" argument for dxDrawText, so compensating here
-    	extraHeight = 0
-    	if screenHeight == 768 then
-    		extraHeight = 18
-    	elseif screenHeight == 720 then
-    		extraHeight = 20
-    	elseif screenHeight == 600 then
-    		extraHeight = 23
-    	elseif screenHeight == 480 then
-    		extraHeight = 27
-    	end
-        return dummyPosX,dummyPosY-extraHeight,dummyPosX+dummyWidth,dummyHeight+dummyHeight-extraHeight
+    elseif kind == "text" then 
+        return dummyPosX,dummyPosY,dummyPosX+dummyWidth,dummyPosY+dummyHeight
     end
 end
