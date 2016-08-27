@@ -16,19 +16,19 @@ function build_modshopWidget(parent, offsetX, offsetY)
 	gui["tabBuyVehicle"] = guiCreateTab("Buy vehicles", gui["modshopTabs"])
 	
 	gui["carsTable"] = guiCreateGridList(20, 24, 321, 311, false, gui["tabBuyVehicle"])
-	-- guiGridListSetSortingEnabled(gui["carsTable"], false)
+	guiGridListSetSortingEnabled(gui["carsTable"], false)
 	gui["carsTable_col0"] = guiGridListAddColumn(gui["carsTable"], "Vehicle", 0.311526)
 	gui["carsTable_col1"] = guiGridListAddColumn(gui["carsTable"], "ID", 0.311526)
 	
 	local carsTable_row = nil
 	
-	gui["buyVehicleButton"] = guiCreateButton(380, 60, 75, 23, "Buy vehicle", false, gui["tabBuyVehicle"])
+	gui["buyVehicleButton"] = guiCreateButton(380, 90, 75, 23, "Buy vehicle", false, gui["tabBuyVehicle"])
 	guiSetEnabled(gui["buyVehicleButton"], false)
 	if on_buyVehicleButton_clicked then
 		addEventHandler("onClientGUIClick", gui["buyVehicleButton"], on_buyVehicleButton_clicked, false)
 	end
 	
-	gui["labelPrice"] = guiCreateLabel(380, 30, 141, 16, "Current price : 550 GC", false, gui["tabBuyVehicle"])
+	gui["labelPrice"] = guiCreateLabel(380, 10, 241, 76, "Current price for one vehicle: 550 GC\n\nAll upgrades are free for bought vehicles", false, gui["tabBuyVehicle"])
 	guiLabelSetHorizontalAlign(gui["labelPrice"], "left", false)
 	guiLabelSetVerticalAlign(gui["labelPrice"], "center")
 	
@@ -53,53 +53,81 @@ function build_modshopWidget(parent, offsetX, offsetY)
 	-- gui["checkBox_5"] = guiCreateCheckBox(430, 300, 111, 17, "Paintjobs: 3", false, false, gui["tabBuyVehicle"])
 	-- guiSetEnabled(gui["checkBox_5"], false)
 	
-	gui["upgradeVehicleButton"] = guiCreateButton(380, 100, 131, 23, "Upgrade this vehicle", false, gui["tabBuyVehicle"])
+	gui["upgradeVehicleButton"] = guiCreateButton(380, 130, 131, 23, "Upgrade this vehicle", false, gui["tabBuyVehicle"])
 	guiSetEnabled(gui["upgradeVehicleButton"], false)
 	if on_upgradeVehicleButton_clicked then
 		addEventHandler("onClientGUIClick", gui["upgradeVehicleButton"], on_upgradeVehicleButton_clicked, false)
 	end
 	
-	gui["viewVehicleButton"] = guiCreateButton(380, 140, 131, 23, "View current vehicle", false, gui["tabBuyVehicle"])
+	gui["viewVehicleButton"] = guiCreateButton(380, 170, 131, 23, "View current vehicle", false, gui["tabBuyVehicle"])
 	guiSetEnabled(gui["viewVehicleButton"], false)
 	if on_viewVehicleButton_clicked then
 		addEventHandler("onClientGUIClick", gui["viewVehicleButton"], on_viewVehicleButton_clicked, false)
 	end
 	
-	gui["tabVehicleColors"] = guiCreateTab("Colors + Paintjobs", gui["modshopTabs"])
 	
-	gui["lblCol1"] = guiCreateLabel(35, 100, 51, 21, "Paint 1:", false, gui["tabVehicleColors"])
+	gui["tabVehicleColors"] = guiCreateTab("Colors + Paintjobs", gui["modshopTabs"])
+	guiSetEnabled(gui["tabVehicleColors"], false)
+	
+	gui["lblCol1"] = guiCreateLabel(30, 79, 51, 21, "Paint 1:", false, gui["tabVehicleColors"])
 	guiLabelSetHorizontalAlign(gui["lblCol1"], "left", false)
 	guiLabelSetVerticalAlign(gui["lblCol1"], "center")
 	
-	gui["editCol1"] = guiCreateEdit(90, 100, 91, 20, "", false, gui["tabVehicleColors"])
+	gui["lblCol2"] = guiCreateLabel(30, 119, 51, 21, "Paint 2:", false, gui["tabVehicleColors"])
+	guiLabelSetHorizontalAlign(gui["lblCol2"], "left", false)
+	guiLabelSetVerticalAlign(gui["lblCol2"], "center")	
+	
+	gui["lblLight"] = guiCreateLabel(30, 159, 51, 21, "Lights:", false, gui["tabVehicleColors"])
+	guiLabelSetHorizontalAlign(gui["lblLight"], "left", false)
+	guiLabelSetVerticalAlign(gui["lblLight"], "center")
+	
+	gui["squareCol1"] = guiCreateStaticImage(181, 79, 24, 24, "utilites/img/blank_white.png", false, gui["tabVehicleColors"])
+	gui["squareCol2"] = guiCreateStaticImage(181, 119, 24, 24, "utilites/img/blank_white.png", false, gui["tabVehicleColors"])
+	gui["squareLight"] = guiCreateStaticImage(181, 159, 24, 24, "utilites/img/blank_white.png", false, gui["tabVehicleColors"])
+	
+	local col = rgbaToHex(0, 0, 0, 0)
+	guiSetProperty(gui["squareCol1"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
+	guiSetProperty(gui["squareCol2"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
+	guiSetProperty(gui["squareLight"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
+	
+	gui["editCol1"] = guiCreateEdit(80, 80, 91, 20, "", false, gui["tabVehicleColors"])
 	guiEditSetMaxLength(gui["editCol1"], 11)
 	
-	gui["editCol2"] = guiCreateEdit(90, 140, 91, 20, "", false, gui["tabVehicleColors"])
+	gui["editCol2"] = guiCreateEdit(80, 120, 91, 20, "", false, gui["tabVehicleColors"])
 	guiEditSetMaxLength(gui["editCol2"], 11)
 	
-	gui["lblCol2"] = guiCreateLabel(35, 140, 51, 21, "Paint 2:", false, gui["tabVehicleColors"])
-	guiLabelSetHorizontalAlign(gui["lblCol2"], "left", false)
-	guiLabelSetVerticalAlign(gui["lblCol2"], "center")
+	gui["editLight"] = guiCreateEdit(80, 160, 91, 20, "", false, gui["tabVehicleColors"])
+	guiEditSetMaxLength(gui["editLight"], 11)
 	
-	gui["lblVehColText"] = guiCreateLabel(30, 30, 271, 61, "You can change vehicles' two different paint colors and their headlight color.", false, gui["tabVehicleColors"])
+	
+	gui["lblVehColText"] = guiCreateLabel(30, 25, 271, 61, "You can change vehicle's two different paint colors and their headlight color.", false, gui["tabVehicleColors"])
 	guiLabelSetHorizontalAlign(gui["lblVehColText"], "left", true)
-	guiLabelSetVerticalAlign(gui["lblVehColText"], "center")
+	guiLabelSetVerticalAlign(gui["lblVehColText"], "top")
 	
-	gui["btnApplyColor"] = guiCreateButton(70, 230, 111, 23, "Save colors", false, gui["tabVehicleColors"])
+	gui["btnApplyColor"] = guiCreateButton(30, 210, 90, 23, "Save colors", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnApplyColor"], false)
 	if on_btnApplyColor_clicked then
 		addEventHandler("onClientGUIClick", gui["btnApplyColor"], on_btnApplyColor_clicked, false)
 	end
 	
-	gui["lblPaintjobText"] = guiCreateLabel(350, 20, 271, 61, "A few cars have paintjobs, usually 3 variants.\nCustom paintjobs also work on most vehicles without paintjobs, but are randomly aligned, be warned!", false, gui["tabVehicleColors"])
+	gui["lblPaintjobText"] = guiCreateLabel(340, 25, 271, 61, "Below you can upload custom paint job.\nCustom paintjobs work on most vehicles without paintjobs, but are randomly aligned, be warned!", false, gui["tabVehicleColors"])
 	guiLabelSetHorizontalAlign(gui["lblPaintjobText"], "left", true)
 	guiLabelSetVerticalAlign(gui["lblPaintjobText"], "top")
 	
-	gui["lblPaintjobNote"] = guiCreateLabel(350, 265, 271, 91, "You can use TinyPic.com, Imgur.com, Postimg.org direct link \nOr\nCopy custom paintjob images into this map:\nC:\\Program Files\\MTA San Andreas\\mods\\deathmatch\\resources\\gcshop\\", false, gui["tabVehicleColors"])
-	guiLabelSetHorizontalAlign(gui["lblPaintjobNote"], "left", true)
-	guiLabelSetVerticalAlign(gui["lblPaintjobNote"], "top")
+	gui["lblPaintjobText2"] = guiCreateLabel(340, 210, 271, 61, "File path or direct link (URL):", false, gui["tabVehicleColors"])
 	
-	gui["tabelPaintjob"] = guiCreateGridList(360, 100, 131, 111, false, gui["tabVehicleColors"])
+	--gui["lblPaintjobText3Shadow"] = guiCreateLabel(340, 280, 271, 61, "Don't forget to Apply and Save Paintjob", false, gui["tabVehicleColors"])
+	gui["lblPaintjobText3"] = guiCreateLabel(340, 280, 271, 61, "Don't forget to Apply and Save Paintjob", false, gui["tabVehicleColors"])
+	--guiLabelSetColor(gui["lblPaintjobText3Shadow"], 0, 0, 0)
+	--guiLabelSetColor(gui["lblPaintjobText3"], 255, 0, 0)
+	--guiSetVisible(gui["lblPaintjobText3Shadow"], false)
+	--guiSetVisible(gui["lblPaintjobText3"], false)
+	
+	--gui["lblPaintjobNote"] = guiCreateLabel(340, 265, 271, 91, "You can use TinyPic.com, Imgur.com, Postimg.org direct link \nOr\nCopy custom paintjob images into this folder:\n\\MTA San Andreas\\mods\\deathmatch\\resources\\gcshop\\", false, gui["tabVehicleColors"])
+	--guiLabelSetHorizontalAlign(gui["lblPaintjobNote"], "left", true)
+	--guiLabelSetVerticalAlign(gui["lblPaintjobNote"], "top")
+	
+	gui["tabelPaintjob"] = guiCreateGridList(340, 80, 131, 120, false, gui["tabVehicleColors"])
 	guiGridListSetSortingEnabled(gui["tabelPaintjob"], false)
 	gui["tabelPaintjob_col0"] = guiGridListAddColumn(gui["tabelPaintjob"], "Paintjob", 0.709924)
 	
@@ -117,59 +145,72 @@ function build_modshopWidget(parent, offsetX, offsetY)
 	tabelPaintjob_row = guiGridListAddRow(gui["tabelPaintjob"])
 	guiGridListSetItemText(gui["tabelPaintjob"], tabelPaintjob_row, gui["tabelPaintjob_col0"], "Paintjob 3", false, false )
 	
-	gui["btnApplyPaintjob"] = guiCreateButton(360, 230, 121, 23, "Save Paintjob", false, gui["tabVehicleColors"])
+	gui["btnApplyPaintjob"] = guiCreateButton(340, 300, 264, 23, "Apply and Save Paintjob", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnApplyPaintjob"], false)
 	if on_btnApplyPaintjob_clicked then
 		addEventHandler("onClientGUIClick", gui["btnApplyPaintjob"], on_btnApplyPaintjob_clicked, false)
 	end
 	
-	gui["lblLight"] = guiCreateLabel(35, 180, 51, 21, "Light :", false, gui["tabVehicleColors"])
-	guiLabelSetHorizontalAlign(gui["lblLight"], "left", false)
-	guiLabelSetVerticalAlign(gui["lblLight"], "center")
+	gui["btnApplyPaintjob2"] = guiCreateButton(340, 325, 264, 23, "Apply and Save Paintjob For All Vehicles", false, gui["tabVehicleColors"])
+	guiSetEnabled(gui["btnApplyPaintjob2"], true)
+	if on_btnApplyPaintjob_clicked then
+		addEventHandler("onClientGUIClick", gui["btnApplyPaintjob2"], on_btnApplyPaintjob2_clicked, false)
+	end
 	
-	gui["editLight"] = guiCreateEdit(90, 180, 91, 20, "", false, gui["tabVehicleColors"])
-	guiEditSetMaxLength(gui["editLight"], 11)
-	
-	gui["btnCol1"] = guiCreateButton(200, 100, 71, 23, "Change", false, gui["tabVehicleColors"])
+	gui["btnCol1"] = guiCreateButton(214, 80, 57, 23, "Change", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnCol1"], false)
 	if on_btnCol1_clicked then
 		addEventHandler("onClientGUIClick", gui["btnCol1"], on_btnCol1_clicked, false)
 	end
 	
-	gui["btnCol2"] = guiCreateButton(200, 140, 71, 23, "Change", false, gui["tabVehicleColors"])
+	gui["btnCol2"] = guiCreateButton(214, 120, 57, 23, "Change", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnCol2"], false)
 	if on_btnCol2_clicked then
 		addEventHandler("onClientGUIClick", gui["btnCol2"], on_btnCol2_clicked, false)
 	end
 	
-	gui["btnLight"] = guiCreateButton(200, 180, 71, 23, "Change", false, gui["tabVehicleColors"])
+	gui["btnLight"] = guiCreateButton(214, 160, 57, 23, "Change", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnLight"], false)
 	if on_btnLight_clicked then
 		addEventHandler("onClientGUIClick", gui["btnLight"], on_btnLight_clicked, false)
 	end
 	
-	gui["btnApplyColor_2"] = guiCreateButton(70, 270, 141, 23, "Save colors for all", false, gui["tabVehicleColors"])
+	gui["btnApplyColor_2"] = guiCreateButton(141, 210, 130, 23, "Save colors for all", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnApplyColor_2"], false)
 	if on_btnApplyColor_2_clicked then
 		addEventHandler("onClientGUIClick", gui["btnApplyColor_2"], on_btnApplyColor_2_clicked, false)
 	end
 	
-	gui["btnUploadPaintjob"] = guiCreateButton(510, 230, 121, 23, "Upload Paintjob", false, gui["tabVehicleColors"])
+	gui["btnUploadPaintjob"] = guiCreateButton(493, 254, 111, 23, "Upload Paintjob", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnUploadPaintjob"], false)
 	if on_btnUploadPaintjob_clicked then
 		addEventHandler("onClientGUIClick", gui["btnUploadPaintjob"], on_btnUploadPaintjob_clicked, false)
 	end
 	
-	gui["editFilename"] = guiCreateEdit(520, 200, 91, 20, "file.bmp", false, gui["tabVehicleColors"])
+	gui["editFilename"] = guiCreateEdit(340, 230, 264, 20, "file.bmp or http://i.imgur.com/bLaBlA.jpg", false, gui["tabVehicleColors"])
 	guiEditSetMaxLength(gui["editFilename"], 32767)
+	setTooltip(gui["editFilename"], "You can use TinyPic.com, Imgur.com, Postimg.org direct link or copy custom paintjob images into this folder: \\MTA San Andreas\\mods\\deathmatch\\resources\\gcshop\\")
 	
 	gui["tabUpgrades"] = guiCreateTab("Rims + Upgrades", gui["modshopTabs"])
+	guiSetEnabled(gui["tabUpgrades"], false)
 	
 	gui["addUpgradeButton"] = guiCreateButton(400, 120, 111, 23, "Add upgrade", false, gui["tabUpgrades"])
 	guiSetEnabled(gui["addUpgradeButton"], false)
 	if on_addUpgradeButton_clicked then
 		addEventHandler("onClientGUIClick", gui["addUpgradeButton"], on_addUpgradeButton_clicked, false)
 	end
+	
+	--gui["addUpgradeToAllButton"] = guiCreateButton(400, 180, 141, 23, "Add to all vehicles", false, gui["tabUpgrades"])
+	--guiSetEnabled(gui["addUpgradeToAllButton"], false)
+	--if on_addUpgradeButton_clicked then
+	--	addEventHandler("onClientGUIClick", gui["addUpgradeToAllButton"], on_addUpgradeButton_clicked, false)
+	--end
+	
+	--gui["removeUpgradeFromAllButton"] = guiCreateButton(400, 210, 141, 23, "Remove from all vehicles", false, gui["tabUpgrades"])
+	--guiSetEnabled(gui["removeUpgradeFromAllButton"], false)
+	--if on_addUpgradeButton_clicked then
+	--	addEventHandler("onClientGUIClick", gui["removeUpgradeFromAllButton"], on_addUpgradeButton_clicked, false)
+	--end
 	
 	gui["upgradeTable"] = guiCreateGridList(20, 24, 321, 311, false, gui["tabUpgrades"])
 	guiGridListSetSortingEnabled(gui["upgradeTable"], false)
@@ -185,6 +226,7 @@ function build_modshopWidget(parent, offsetX, offsetY)
 	end
 	
 	gui["tabNeonlights"] = guiCreateTab("Neon lights", gui["modshopTabs"])
+	guiSetEnabled(gui["tabNeonlights"], false)
 	
 	gui["btnNeonGreen"] = guiCreateButton(90, 170, 75, 23, "Green", false, gui["tabNeonlights"])
 	guiSetEnabled(gui["btnNeonGreen"], false)

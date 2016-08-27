@@ -203,15 +203,28 @@ function addShopPaintJob ( player, forumID, vehicleID, paintjob)
 	else
 		paintjob = math.range(paintjob, 0, 3 + (getPerkSettings(player, 4) and getPerkSettings(player, 4).amount or 0))
 		local realPJ = (paintjob ~= 0 and paintjob - 1) or 3
-		if paintjob > 3  then
-			addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob )
-			outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": new custom paintjob #' .. paintjob, player, 0, 255, 0 )
-		elseif paintjob ~= 0 then
-			addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob - 1 )
-			outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": new paintjob #' .. paintjob, player, 0, 255, 0 )
+		if vehicleID ~= '*' then
+			if paintjob > 3  then
+				addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob )
+				outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": new custom paintjob #' .. paintjob, player, 0, 255, 0 )
+			elseif paintjob ~= 0 then
+				addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob - 1 )
+				outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": new paintjob #' .. paintjob, player, 0, 255, 0 )
+			else
+				remUpgFromSlotDatabase (forumID, vehicleID, 'slot17' )
+				outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": paintjob removed' , player, 0, 255, 0 )
+			end
 		else
-			remUpgFromSlotDatabase (forumID, vehicleID, 'slot17' )
-			outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": paintjob removed' , player, 0, 255, 0 )
+			if paintjob > 3  then
+				addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob )
+				outputChatBox ('All your vehicles have a new custom paintjob #' .. paintjob, player, 0, 255, 0 )
+			elseif paintjob ~= 0 then
+				addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob - 1 )
+				outputChatBox ('All your vehicles have a new paintjob #' .. paintjob, player, 0, 255, 0 )
+			else
+				remUpgFromSlotDatabase (forumID, vehicleID, 'slot17' )
+				outputChatBox ('Paintjob removed from all your vehicles' , player, 0, 255, 0 )
+			end
 		end
 		local veh = getPedOccupiedVehicle(player)
 		if veh and vehicleID == getElementModel(veh) then 
@@ -1006,8 +1019,14 @@ end
 
 function remUpgFromSlotDatabase (forumID, vehID, slot )
 	forumID = tonumber(forumID)
-	vehID = tonumber(vehID)
-	if not isVehInDatabase (forumID, vehID) then
+	if vehID ~= '*' then vehID = tonumber(vehID) end
+		
+	if vehID == '*' and type(slot) == 'string' then
+		local result = dbExec(handlerConnect, "UPDATE ?? SET ?? = ? WHERE forumID=?", tableName, slot, '', tostring(forumID))
+
+		getModsFromDB(forumID)
+		return not not result
+	elseif not isVehInDatabase (forumID, vehID) then
 		outputDebugString('remUpgToDatabase no data forum/veh id')
 		return false
 	elseif type(slot) == 'string' then

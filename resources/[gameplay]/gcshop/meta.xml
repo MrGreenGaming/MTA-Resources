@@ -5,6 +5,11 @@
     <script src="gcshop_s.lua" />
     <script src="gcshop_c.lua" type="client" protected="true" />
     <script src="gcshop_gui.lua" type="client" protected="true" />
+	
+	<script src="utilites\tooltips\tooltips.lua" type="client" protected="false" />
+	<file src="utilites\tooltips\sprite.png" />
+	
+	<file src="utilites\img\blank_white.png" />
     <include resource="gc" />
 
     

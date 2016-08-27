@@ -14,7 +14,7 @@ function onShopInit ( tabPanel )
 	modshopTab = guiCreateTab ( 'Modshop', shopTabPanel )
 	if modshopTab then
 			modshop_gui = build_modshopWidget( modshopTab, 35, 10 )
-			guiSetText(modshop_gui['labelPrice'], 'Current price :  GC')
+			guiSetText(modshop_gui['labelPrice'], 'You should register and log in to buy\nvehicles and upgrade them')
 			addEventHandler( 'onClientGUIClick', modshop_gui["carsTable"], vehicleSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["upgradeTable"], upgradeSelected, false)
 	end
@@ -44,7 +44,7 @@ function modshopLogin ( price, modshop_table )
 		modshopTab = guiCreateTab ( 'Modshop', shopTabPanel )
 		if modshopTab then
 			modshop_gui = build_modshopWidget( modshopTab, 35, 10 )
-			guiSetText(modshop_gui['labelPrice'], 'Current price : ' .. (tostring(vehicle_price) or 550) .. ' GC')
+			guiSetText(modshop_gui['labelPrice'], 'Current price for one vehicle: ' .. (tostring(vehicle_price) or 550) .. ' GC\n\nAll upgrades are free for bought vehicles')
 			addEventHandler( 'onClientGUIClick', modshop_gui["carsTable"], vehicleSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["upgradeTable"], upgradeSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["tabelPaintjob"], paintjobSelected, false)
@@ -192,13 +192,22 @@ function on_upgradeVehicleButton_clicked(button, state, absoluteX, absoluteY)
 		guiSetEnabled(modshop_gui["btnCol2"], true)
 		guiSetEnabled(modshop_gui["btnLight"], true)
 		guiSetEnabled(modshop_gui["btnApplyPaintjob"], true)
+		guiSetEnabled(modshop_gui["btnApplyPaintjob2"], true)
 		guiSetEnabled(modshop_gui["addUpgradeButton"], true)
 		guiSetEnabled(modshop_gui["viewVehicleButton"], true)
+		guiSetEnabled(modshop_gui["tabVehicleColors"], true)
+		guiSetEnabled(modshop_gui["tabUpgrades"], true)
+		guiSetEnabled(modshop_gui["tabNeonlights"], true)
 	end
 	current_vehicle = selectedID
 	guiSetText( modshop_gui["labelCurrentVehicle"] , "Currently modding: " .. selectedName .. " (" .. current_vehicle .. ")")
 	loadUpgradeList(current_vehicle)
     loadNeon(current_vehicle)
+	
+	local col = rgbaToHex(0, 0, 0, 0)
+	guiSetProperty(modshop_gui["squareCol1"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
+	guiSetProperty(modshop_gui["squareCol2"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
+	guiSetProperty(modshop_gui["squareLight"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
 	return fillInCurrentUpgrades(current_vehicle)
 end
 
@@ -233,6 +242,13 @@ function fillInCurrentUpgrades ( vehID )
 	tempColors["veh_color1"] = #t1 == 3 and {r = t1[1], g = t1[2], b = t1[3]} or {}
 	tempColors["veh_color2"] = #t2 == 3 and {r = t2[1], g = t2[2], b = t2[3]} or {}
 	tempColors["light_color"] = tonumber(upgrades.slot22) and {r = tonumber(upgrades.slot22), g = tonumber(upgrades.slot23), b = tonumber(upgrades.slot24)} or {}
+	
+	local col1 = rgbaToHex(tonumber(t1[1]), tonumber(t1[2]), tonumber(t1[3]), 255)
+	guiSetProperty(modshop_gui["squareCol1"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col1), tostring(col1), tostring(col1), tostring(col1)))
+	local col2 = rgbaToHex(tonumber(t2[1]), tonumber(t2[2]), tonumber(t2[3]), 255)
+	guiSetProperty(modshop_gui["squareCol2"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col2), tostring(col2), tostring(col2), tostring(col2)))
+	local col3 = rgbaToHex(tonumber(upgrades.slot22), tonumber(upgrades.slot23), tonumber(upgrades.slot24), 255)
+	guiSetProperty(modshop_gui["squareLight"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col3), tostring(col3), tostring(col3), tostring(col3)))
 end
 
 
@@ -246,6 +262,13 @@ local gui = {
 	["veh_color2"] = "editCol2",
 	["light_color"] = "editLight"
 }
+
+local gui_square = {
+	["veh_color1"] = "squareCol1",
+	["veh_color2"] = "squareCol2",
+	["light_color"] = "squareLight"
+}
+
 tempColors = {
 	["veh_color1"] = {
 		["r"] = nil,
@@ -305,6 +328,9 @@ function updateColor()
 	local r2, g2, b2 = tempColors.veh_color2.r, tempColors.veh_color2.g, tempColors.veh_color2.b
 	local rl, gl, bl = tempColors.light_color.r, tempColors.light_color.g, tempColors.light_color.b
 	guiSetText(modshop_gui[gui[editing]], tempColors[editing].r ..','.. tempColors[editing].g ..','.. tempColors[editing].b)
+	
+	local col = rgbaToHex(tempColors[editing].r, tempColors[editing].g, tempColors[editing].b, 255)
+	guiSetProperty(modshop_gui[gui_square[editing]], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
 	local editingVehicle = getPedOccupiedVehicle(localPlayer)
 	if editingVehicle and current_vehicle == getElementModel(editingVehicle) then
 		local r1_, g1_, b1_, r2_, g2_, b2_ = getVehicleColor(editingVehicle, true)
@@ -352,6 +378,15 @@ function on_btnApplyPaintjob_clicked(button, state, absoluteX, absoluteY)
 	triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', tostring(current_vehicle), 'paintjob', tostring(row or 0))
 end
 
+function on_btnApplyPaintjob2_clicked(button, state, absoluteX, absoluteY)
+	if (button ~= "left") or (state ~= "up") then
+		return
+	end
+	local row, col = guiGridListGetSelectedItem(modshop_gui["tabelPaintjob"])
+	if row == -1 then row = 0 end
+	triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', '*', 'paintjob', tostring(row or 0))
+end
+
 function paintjobSelected(button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") or not shop_GUI or source ~= modshop_gui["tabelPaintjob"] then
 		return
@@ -371,7 +406,7 @@ function previewPJ()
 		local filename = 'items/paintjob/' .. forumID .. '-' .. row - 3 .. '.bmp';
 		if fileExists(filename) then
 			if not modshop_gui["imgPreviewPaintjob"] then
-				modshop_gui["imgPreviewPaintjob"] = guiCreateStaticImage( 520, 100, 91, 91, filename, false, modshop_gui["tabVehicleColors"] )
+				modshop_gui["imgPreviewPaintjob"] = guiCreateStaticImage( 484, 80, 120, 120, filename, false, modshop_gui["tabVehicleColors"] )
 			else
 				guiStaticImageLoadImage(modshop_gui["imgPreviewPaintjob"], filename);
 			end
@@ -790,4 +825,13 @@ function var_dump(...)
 		string = string..v
 	end
 	return string, output
+end
+
+
+
+function rgbaToHex(r, g, b, a)
+	if not r then
+		r, g, b, a = 255, 255, 255, 0
+	end
+	return string.format("%02X%02X%02X%02X", a, r, g, b)
 end
