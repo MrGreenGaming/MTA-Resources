@@ -108,6 +108,11 @@ addEventHandler("teamsData", root, function(teams, player, t)
 	end
 	if t.status == 1 then
 		guiSetText(teamGUI.btnBuyTeam, "Renew team\n2500 GC / 30 days")
+		if tonumber(t.age) == 60 then
+			guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "True")
+		else
+			guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "False")
+		end
 		
 		guiSetEnabled(teamGUI.teamname, t.forumid == t.owner)
 		guiSetEnabled(teamGUI.teamtag, t.forumid == t.owner)
