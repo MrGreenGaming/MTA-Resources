@@ -75,6 +75,12 @@ function()
 	setTimer(triggerServerEvent, 500, 1, "getServersInfo", localPlayer)
 	setTimer(triggerServerEvent, 500, 1, "getServersMapInfo", localPlayer, "client")
 	
+	setTimer(function()		
+				guiSetText(label_RaceOnline, getElementData(resourceRoot, "Race Players"))		
+				guiSetText(label_MixOnline, getElementData(resourceRoot, "Mix Players"))		
+				guiSetText(label_TotalOnline, "Total players online: "..getElementData(resourceRoot, "Total players online"))		
+				end,		
+	1100, 1)	
 	
 	local var_buttonZoom = 8
 	local var_buttonZoom_a = 8/screenX
