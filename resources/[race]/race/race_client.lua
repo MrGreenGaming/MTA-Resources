@@ -1045,7 +1045,7 @@ end
 function Spectate.dropCamera( player, time, ignoreLockplayer )
 	if Spectate.active and player == Spectate.target and (Spectate.lockPlayer ~= player or not ignoreLockplayer or g_MapOptions.respawn == 'none') then
 		if not Spectate.hasDroppedCamera() then
-			setCameraMatrix( getCameraMatrix() )
+			--setCameraMatrix( getCameraMatrix() )
 			Spectate.target = nil
 			Spectate.droppedCameraTimer:setTimer(Spectate.cancelDropCamera, time, 1, player )
 		end
