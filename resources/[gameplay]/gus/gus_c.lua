@@ -165,7 +165,7 @@ addEventHandler('onClientMapStarting', root, function ()
 	if limit then setFPSLimit(limit) end
 end)
 
-addCommandHandler('votekut', function() playSound(":gcshop/horns/files/38.wav", false) end)
+addCommandHandler('votekut', function() playSound(":gcshop/horns/files/38.mp3", false) end)
 
 addEventHandler("onClientResourceStart",resourceRoot,
 	function()
