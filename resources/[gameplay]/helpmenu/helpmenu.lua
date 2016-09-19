@@ -47,15 +47,14 @@ function buildGUI()
 	guiCreateLabel(405, 290, 180, 20, "Bob_Taylor - Map Manager", false, AboutTab)
 	guiCreateLabel(405, 310, 180, 20, "F1MADKILLER - Map Manager", false, AboutTab)
 	guiCreateLabel(405, 330, 180, 20, "MoshPit - Map Assistant", false, AboutTab)
-	-- guiCreateLabel(405, 350, 180, 20, "MoshPit - Map Assistant", false, AboutTab)
+	guiCreateLabel(405, 350, 180, 20, "neox. - Map Assistant", false, AboutTab)
+	
 	guiCreateLabel(585, 230, 180, 20, "Jack123 - Mother Russia", false, AboutTab)
 	guiCreateLabel(585, 250, 180, 20, "Stig - Niu Admin", false, AboutTab)
-	
 	guiCreateLabel(585, 270, 180, 20, "Hulpje - Dota Admin", false, AboutTab)
 	guiCreateLabel(585, 290, 180, 20, "Goldberg - Event Admin", false, AboutTab)
 	guiCreateLabel(585, 310, 180, 20, "Besweeet - 4th Admin", false, AboutTab)
 	guiCreateLabel(585, 330, 180, 20, "FantomicanYoshi - Just Yoshi", false, AboutTab)
-	-- guiCreateLabel(585, 350, 180, 20, "neox. - Map Assistant", false, AboutTab)
 	
 	CommandsBindsTab = guiCreateTab("Commands & Binds", TabPanel)
 	
