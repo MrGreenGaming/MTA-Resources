@@ -11,7 +11,9 @@ function checkNoGamemodeMaps()
 	local incompatibleMaps = getMapsCompatibleWithNoGamemode()
 	
 	if incompatibleMaps and #incompatibleMaps > 0 then
-		outputDebugString('need to convert ' .. #incompatibleMaps .. ' map(s)')
+		if debugMode then
+			outputDebugString('need to convert ' .. #incompatibleMaps .. ' map(s)')
+		end
 		for i, map in ipairs(incompatibleMaps) do
 			if map.gm then
 				setResourceInfo(map.resource , 'gamemodes', 'race')
@@ -27,8 +29,10 @@ function checkNoGamemodeMaps()
 	if not(incompatibleMaps and #incompatibleMaps > 0) then
 		return
 	end
-
-	outputDebugString('need to convert ' .. #incompatibleMaps .. ' map(s) to new format 2')
+	
+	if debugMode then
+		outputDebugString('need to convert ' .. #incompatibleMaps .. ' map(s) to new format 2')
+	end
 	for i, map in ipairs(incompatibleMaps) do
 		updateMapToNewFormat(map.resource)
 	end

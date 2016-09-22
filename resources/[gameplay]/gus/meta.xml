@@ -18,6 +18,7 @@
     <script src="bounty_c.lua" type="client" />
     <script src="blocker.lua" />
     <script src="blocker_c.lua" type="client" />
+	<script src="settings.lua" />
 
     <export function="chatDisabled" type="server" />
     <file src="chat.png" />
@@ -29,4 +30,14 @@
     <!-- Exports for settings resource  KaliBwoy -->
     <export function="showChaticon" type="client"/>
     <export function="hideChaticon" type="client"/>
+	
+	<settings>
+		<setting
+			name="*gus_debugMessages"
+			friendlyname="Output debug messages"
+			group="Debug"
+			accept="[true|false]"
+			value="false"
+			/>
+	</settings>
 </meta>
