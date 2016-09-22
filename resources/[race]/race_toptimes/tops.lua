@@ -604,6 +604,38 @@ addCommandHandler('tops',
 	end
 )
 
+function getPlayerToptimes(player, range)
+	local forumID = exports.gc:getPlayerForumID(player)
+	if not forumID then	return false end
+	if not range then return false end
+	
+	dbQuery(function(qh)
+		local result = dbPoll(qh, 0)
+		if not result then
+			return false
+		elseif #result == 0 then
+			return 0
+		else
+			tops = {}
+			for pos = 1, range do
+				local r = nil
+				for _, row in ipairs(result) do
+					if pos == row.pos then
+						r = row
+						break
+					end
+				end
+				if not r then
+					tops[pos] = 0
+				else
+					tops[pos] = r.count
+				end
+			end
+			return tops
+		end
+	end, handlerConnect, "SELECT pos, count(*) count, GROUP_CONCAT(mapname SEPARATOR ', ') mapnames FROM `toptimes` WHERE forumid=? GROUP BY pos ORDER BY pos", forumID)
+end
+
 
 -------------
 -- utility --
