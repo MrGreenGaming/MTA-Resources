@@ -535,20 +535,16 @@ Shooter.__Levels = { -- cache Levels with all possible vehicles in it, will get 
 	[10] = {432,432}, -- Max Level (when player reaches this level, game ends)
 }
 
-local lastShooterMode = false
 function Shooter:start()
-	if not lastShooterMode then
-		-- local t = {"shooter","cargame"}
-		-- shooterMode = t[math.random(2)]--t[1]--t[math.random(2)]
+	local currentMap = exports.mapmanager:getRunningGamemodeMap()
+	local round = (times[currentMap] or 0) + 1
+	if round == 1 then
 		shooterMode = "shooter"
-	elseif lastShooterMode == "shooter" then
+	elseif round == 2 or round > 3 then
 		shooterMode = "cargame"
-	elseif lastShooterMode == "cargame" then
+	elseif round == 3 then
 		shooterMode = "shooter" 
 	end
-
-	lastShooterMode = shooterMode
-
 
 	if shooterMode == "cargame" then
 		outputChatBox("Shooter launched in CarGame mode, next mode : Shooter",root,0,255,0)
