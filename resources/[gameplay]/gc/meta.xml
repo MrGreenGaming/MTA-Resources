@@ -4,6 +4,8 @@
 	<script src='gc_autologin.lua' />
 	<script src='gc_s.lua' />
 	<script src='gc_c.lua' type='client' />
+	<script src='gc_effects_s.lua' />
+	<script src='gc_effects_c.lua' type='client' />
 	<script src='accounts.lua' />
 	<script src='database.lua' />
 	<file src='img/dot.png' />
@@ -18,6 +20,7 @@
 	<export function="getPlayerGreencoins" type="server"/>
 	<export function="addPlayerGreencoins" type="server"/>
 	<export function="toggleGCInfo" type="client"/>
+	<export function="GCTextPopUp" type="shared"/>
 
 	 <!-- Exports for settings resource  KaliBwoy -->
     <export function="e_showGC" type="client"/>
