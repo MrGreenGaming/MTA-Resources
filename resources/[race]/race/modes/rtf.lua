@@ -158,4 +158,5 @@ RTF.modeOptions = {
 	autopimp_map_can_override = false,
 	ghostmode = true,
 	ghostmode_map_can_override = false,
+	duration = (g_MapOptions and (g_MapOptions.duration < 600)) or 10*60*1000,
 }
