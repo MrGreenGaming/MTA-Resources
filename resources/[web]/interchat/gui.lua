@@ -26,7 +26,7 @@ function()
 	setTooltip(img_ButtonMixInfo, "Car madness with various gamemodes as Capture The Flag, Shooter, Reach The Flag, Never The Same and Never The Same DD.")
 
 	--Labels
-	label_RaceMix_font = guiCreateFont("fonts/arial.ttf", math.floor(17*screenX/1920))
+	label_RaceMix_font = exports.fonts:createCEGUIFont("Arial", math.floor(17*screenX/1920))
 
 	label_Race = guiCreateLabel(0.025, 0.045, 0.155, 0.2, "RACE", true, img_ButtonRace)
 	guiLabelSetHorizontalAlign(label_Race, "left")
@@ -44,20 +44,20 @@ function()
 	guiLabelSetHorizontalAlign(label_MixOnline, "right")
 	guiSetFont(label_MixOnline, label_RaceMix_font)
 
-	label_ChooseServer_font = guiCreateFont("fonts/arial.ttf", math.floor(30*screenX/1920))
+	label_ChooseServer_font = exports.fonts:createCEGUIFont("Arial", math.floor(30*screenX/1920))
 	label_ChooseServer_posY = 0.80
 	label_ChooseServer = guiCreateLabel(0, label_ChooseServer_posY*screenY, screenX, label_ChooseServer_posY*screenY, "Select the server where you want to play", false, img_Background)
 	guiLabelSetHorizontalAlign(label_ChooseServer, "center")
 	guiSetFont(label_ChooseServer, label_ChooseServer_font)
 
 
-	label_TotalOnline_font = guiCreateFont("fonts/arial.ttf", math.floor(20*screenX/1920))
+	label_TotalOnline_font = exports.fonts:createCEGUIFont("Arial", math.floor(20*screenX/1920))
 	label_TotalOnline_posY = 0.96
 	label_TotalOnline = guiCreateLabel(0, label_TotalOnline_posY*screenY, screenX, label_TotalOnline_posY*screenY, "Total players online: ", false, img_Background)
 	guiLabelSetHorizontalAlign(label_TotalOnline, "center")
 	guiSetFont(label_TotalOnline, label_TotalOnline_font)
 
-	label_YouAreHere_font = guiCreateFont("fonts/arial.ttf", math.floor(15*screenX/1920))
+	label_YouAreHere_font = exports.fonts:createCEGUIFont("Arial", math.floor(15*screenX/1920))
 	label_YouAreHere = guiCreateLabel(0, 0, 0.2083333333333333*screenX, 25*screenX/1920, "You are here", false, img_Background)
 	guiLabelSetHorizontalAlign(label_YouAreHere, "center")
 	guiSetFont(label_YouAreHere, label_YouAreHere_font)

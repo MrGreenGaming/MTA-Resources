@@ -20,8 +20,6 @@
 	<file src="images/info.png" />
 	<file src="images/sprite.png" />
 	
-	<file src="fonts/arial.ttf" />
-	
 	
 	<!-- Exported functions -->
 	<export function="playerRedirect" http="true" />
