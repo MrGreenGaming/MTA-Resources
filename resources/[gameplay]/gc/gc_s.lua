@@ -189,6 +189,13 @@ function getPlayerForumID ( player )
 	return false
 end
 
+function getPlayerForumProfileData ( player )
+	if accounts[player] then
+		return accounts[player]:getProfileData() or false
+	end
+	return false
+end
+
 function getPlayerGreencoinsID ( player )
 	if accounts[player] then
 		return tonumber(accounts[player]:getGreencoinsID()) or false

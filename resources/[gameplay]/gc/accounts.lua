@@ -59,7 +59,7 @@ end
 
 function SAccount:login(email, pw, player, callback)
     if not self.gcRecord[1] and pw then
-        getPlayerLoginInfo(email, pw, function (forumID, name, emailAddress)
+        getPlayerLoginInfo(email, pw, function (forumID, name, emailAddress, profile)
 			if not self.gcRecord[1] and forumID then
 				for id, account in pairs (SAccount.instances) do
 					if account:getForumID() == forumID then return callback(false, player) end
@@ -73,6 +73,7 @@ function SAccount:login(email, pw, player, callback)
 					self.gcRecord[4] = 0 -- earned gc this session
 					self.gcRecord[5] = name
 					self.gcRecord[6] = emailAddress
+					self.gcRecord[7] = profile
 					triggerEvent('onGreencoinsLogin', self.player)
 					return callback(true, player)
 				else
@@ -98,7 +99,7 @@ end
 
 function SAccount:loginViaForumID(forumID, player, callback)
 	if not self.gcRecord[1] and forumID then
-		getForumAccountDetails ( forumID, function(name, emailAddress)
+		getForumAccountDetails ( forumID, function(name, emailAddress, profile)
 			for id, account in pairs (SAccount.instances) do
 				if account:getForumID() == forumID then return callback(false, player) end
 			end
@@ -111,6 +112,7 @@ function SAccount:loginViaForumID(forumID, player, callback)
 				self.gcRecord[4] = 0 -- earned gc this session
 				self.gcRecord[5] = name
 				self.gcRecord[6] = emailAddress
+				self.gcRecord[7] = profile
 				triggerEvent('onGreencoinsLogin', self.player)
 				return callback(true, player)
 			else
@@ -194,6 +196,18 @@ end
 
 function SAccount:getLoginEmail()
     return self.gcRecord[6]
+end
+
+---------------------------------------------------------------------------
+--
+-- SAccount:getLoginProfileData()
+--
+--
+--
+---------------------------------------------------------------------------
+
+function SAccount:getProfileData()
+    return self.gcRecord[7]
 end
 
 ---------------------------------------------------------------------------

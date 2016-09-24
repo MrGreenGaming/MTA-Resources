@@ -61,7 +61,7 @@ function getPlayerLoginInfo(email, pw, callback)
 	end
 
 	if handlerForum and email and pw then
-		local url = 'http://api.mrgreengaming.com:8080/account/login'	-- returns {"error":0,"userId":591,"user":"SDK","name":"SDK","emailAddress":"sdk@gmail.com","greenCoins":0}
+		local url = 'http://api.mrgreengaming.com:8080/account/login'	-- returns {"error":0,"userId":591,"user":"SDK","name":"SDK","emailAddress":"sdk@gmail.com","greenCoins":0,"profile.photo":"http://forum_avatar.jpg","profile.photoThumb":"http://forum_avatar.jpg","profile.member_title":"custom forum title"}
 		local post = toJSON{ user = email, password = pw, appId = get"appId", appSecret = get"appSecretPass" }
 		-- outputDebugString(post)
 		fetchRemote(url, function(r,e)
@@ -79,7 +79,7 @@ function getPlayerLoginInfo(email, pw, callback)
 				else
 					-- outputDebugString(tostring(r))
 					accountDetailsCache[result.userId] = result  
-					return callback(result.userId, result.name, result.emailAddress)
+					return callback(result.userId, result.name, result.emailAddress, result.profile)
 				end
 			end
 		end, post)
@@ -96,7 +96,7 @@ function getForumAccountDetails(forumID, callback)
 	
 	if handlerForum and forumID then
 		if accountDetailsCache[forumID] then return callback(accountDetailsCache[forumID].name, accountDetailsCache[forumID].emailAddress) end
-		local url = 'http://api.mrgreengaming.com:8080/account/details'	-- returns {"error":0,"userId":591,"name":"SDK","emailAddress":"sdk@gmail.com","greenCoins":0}
+		local url = 'http://api.mrgreengaming.com:8080/account/details'	-- returns {"error":0,"userId":591,"name":"SDK","emailAddress":"sdk@gmail.com","greenCoins":0,"profile.photo":"http://forum_avatar.jpg","profile.photoThumb":"http://forum_avatar.jpg","profile.member_title":"custom forum title"}
 		local post = toJSON{ userId = forumID, appId = get"appId", appSecret = get"appSecretPass" }
 		fetchRemote(url, function(r,e)
 			if e ~= 0 then
@@ -113,7 +113,7 @@ function getForumAccountDetails(forumID, callback)
 				else
 					-- outputDebugString(tostring(r))
 					accountDetailsCache[forumID] = result
-					return callback(result.name, result.emailAddress)
+					return callback(result.name, result.emailAddress, result.profile)
 				end
 			end
 		end, post)
