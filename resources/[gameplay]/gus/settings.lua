@@ -1,1 +1,1 @@
-debugMode = get("*gus_debugMessages")
+debugMode = get("*gus_debugMessages") == "true"
