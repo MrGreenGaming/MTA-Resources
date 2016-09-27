@@ -586,7 +586,7 @@ addCommandHandler('tops',
 				outputChatBox('Your toptimes: ' , p)
 				for pos = 1,ex do
 					local r = nil
-					for k,row in ipairs(result) do
+					for _,row in ipairs(result) do
 						if pos == row.pos then
 							r = row
 							break
@@ -600,7 +600,7 @@ addCommandHandler('tops',
 					end
 				end
 			end
-		end, handlerConnect, "SELECT pos, count(*) count, GROUP_CONCAT(mapname SEPARATOR ', ') mapnames FROM `toptimes` WHERE forumid=? GROUP BY pos ORDER BY pos", forumid)
+		end, handlerConnect, "SELECT pos, count(*) count, GROUP_CONCAT(mapname SEPARATOR ', ') mapnames FROM `toptimes` WHERE forumid=? and pos <= ? GROUP BY pos ORDER BY pos", forumid, ex)
 	end
 )
 
@@ -763,15 +763,16 @@ function var_dump(...)
 end
 
 
---Get the country of a player for flags
+
+----------------------------------------------------------------------------
+--------------- Get the country of a player for flags ----------------------
+----------------------------------------------------------------------------
+
 addEventHandler("onGCLogin" , root, 
 function(forumID)
-	if not isElement(source) then return end
-	
 	getPlayerCountry(source, forumID)
 end
 )
-
 
 function getPlayerCountry(player,forumID)
 	if not handlerConnect then return end
@@ -824,3 +825,122 @@ function addcountry(p, c, pos, code)
 	end
 end
 addCommandHandler('addcountry', addcountry, true)
+
+
+
+---------------------------------------------------------------------------------------
+------------------------ Cache toptimes for every racemode ----------------------------
+---------------------------------------------------------------------------------------
+local positionsToCache = 3
+local toptimesCache = {}
+
+local racemodes = {
+					[1] = "race",
+					[2] = "nts",
+					[3] = "dd",
+					[4] = "sh",
+					[5] = "rtf",
+					--[6] = "ctf",
+}
+
+
+function cacheToptimes(forumID)
+	cachePlayerToptimes( { forumID } )
+end
+addEventHandler("onGCLogin" , root, cacheToptimes)
+
+function cleanToptimesCache (forumID)
+	toptimesCache[forumID] = nil
+end
+addEventHandler("onGCLogout" , root, cleanToptimesCache )
+
+addEventHandler("onResourceStart", resourceRoot, 
+	function()
+		queryTopsAll()
+	end
+)
+
+function queryTopsAll()
+	local resGC = getResourceFromName'gc'
+	if not resGC or getResourceState ( resGC ) ~= 'running' then return false end
+	
+	local forumids = {}
+	for _, player in ipairs(getElementsByType'player') do 
+		local forumID = exports.gc:getPlayerForumID (player)
+		if forumID then
+			table.insert(forumids, forumID)
+		end
+	end
+	
+	if #forumids > 0 then 
+		cachePlayerToptimes(forumids)
+	end
+end
+
+function cachePlayerToptimes(tableForumIDs)
+	if not handlerConnect then return end
+	
+	forumids = table.concat(tableForumIDs, ',')
+	
+	dbQuery(function(qh)
+		local result = dbPoll(qh, -1)
+		if not result then 
+			outputDebugString("cachePlayerToptimes() - Error: Query not ready or error") 
+			return false 
+		else
+			for _, id in pairs(tableForumIDs) do
+				toptimesCache[id] = {}
+			end
+			
+			for _, row in ipairs(result) do
+				if not toptimesCache[row.forumid] then toptimesCache[row.forumid] = {} end
+				
+				local mapnames = split(row.mapnames, ", ")
+				for _, mapname in pairs(mapnames) do
+					mapname = string.sub(mapname, 1, 4):lower()
+					for i=1, #racemodes do
+						local racemode = racemodes[i]
+						if string.find(mapname, racemode) ~= nil then
+							if not toptimesCache[row.forumid][racemode] then toptimesCache[row.forumid][racemode] = {} end
+							toptimesCache[row.forumid][racemode][row.pos] = (toptimesCache[row.forumid][racemode][row.pos] or 0) + 1
+						end
+					end
+				end
+			end
+		end
+	end, handlerConnect, "SELECT forumid, pos, GROUP_CONCAT(mapname SEPARATOR ', ') mapnames FROM `toptimes` WHERE forumid IN(??) and pos <= ? GROUP BY pos, forumid ORDER BY forumid", forumids, positionsToCache)
+end
+
+addEvent("onPlayerToptimeImprovement")
+addEventHandler("onPlayerToptimeImprovement", root, 
+	function(newPos, newTime, oldPos, oldTime)
+		local forumID = exports.gc:getPlayerForumID(source)
+		if not forumID then return end
+		
+		if newPos <= positionsToCache then
+			g_newTops = true
+		end
+	end
+)
+
+addEvent('onRaceStateChanging', true)
+addEventHandler('onRaceStateChanging', getRootElement(),
+	function(state)
+		if state == "GridCountdown" and g_newTops then --right after updatePosColumn()
+			queryTopsAll()
+		elseif state == "Running" then
+			g_newTops = false
+		end
+	end
+)
+
+-------------------------
+--- Exported function ---
+-------------------------
+function getPlayerToptimesByForumID(forumID, racemode)
+	if type(forumID) ~= "number" then return false end
+	if not racemode then return false end
+	if not toptimesCache[forumID] then return false end
+	
+	return toptimesCache[forumID][racemode]
+end
