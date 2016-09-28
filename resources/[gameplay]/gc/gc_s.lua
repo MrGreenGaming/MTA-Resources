@@ -41,7 +41,7 @@ function onLoginSuccessfull(result, player)
 			outputChatBox('[GC] Adding ' .. serialGreencoins .. ' GC from your rewards without an account', player, 0, 255, 0)
 		end
 		-- Download player forum avatar
-		if accounts[player]:getProfileData() and accounts[player]:getProfileData()["photoThumb"] and string.find(accounts[player]:getProfileData()["photoThumb"], "photo-") then
+		if accounts[player]:getProfileData() and accounts[player]:getProfileData()["photoThumb"] and accounts[player]:getProfileData()["photoThumb"] ~= "https://mrgreengaming.com/forums/uploads/" and accounts[player]:getProfileData()["photoThumb"] ~= "https://mrgreengaming.com/forums/uploads/null" then
 			outputDebugString("forumAvatar1 " .. accounts[player]:getForumName() .. " " .. accounts[player]:getForumID() .. " " .. tostring(accounts[player]:getProfileData()["photoThumb"]))
 			fetchRemote(accounts[player]:getProfileData()["photoThumb"], function(data, err) 
 			outputDebugString("forumAvatar2 " .. accounts[player]:getForumName() .. " " .. tostring(err))
@@ -67,7 +67,7 @@ addEventHandler("onLogin", root, onLogin)
 
 function clientStarted()
 	for player, account in pairs(accounts) do
-		if accounts[player]["photo"] then
+		if accounts[player]["photoThumb"] then
 			triggerClientEvent(client, "forumAvatar", resourceRoot, data, accounts[player]:getForumID() )
 		end
 	end
