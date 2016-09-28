@@ -367,7 +367,7 @@ end
 
 function CTF:destroy()
 	self:cleanup()
-	exports.scoreboard:scoreboardAddColumn("race rank", root, 74, "Race Rank", 4)
+	exports.scoreboard:scoreboardAddColumn("race rank", root, 40, "Rank", 4)
 	exports.scoreboard:scoreboardAddColumn("checkpoint", root, 77, "Checkpoint", 5)
 	if self.rankingBoard then
 		self.rankingBoard:destroy()
