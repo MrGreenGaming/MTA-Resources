@@ -1074,12 +1074,16 @@ function scoreboardSortFunction( a, b )
 	local sortByA
 	if a[sortBy.what] and type( a[sortBy.what] ) == "table" and sortBy.what == "name" then
 		sortByA = a[sortBy.what][1]
+	elseif a[sortBy.what] and type( a[sortBy.what] ) == "table" and sortBy.what == "flag-country" then
+		sortByA = a[sortBy.what]["country"]
 	else
 		sortByA = a[sortBy.what]
 	end
 	local sortByB
 	if b[sortBy.what] and type( b[sortBy.what] ) == "table" and sortBy.what == "name" then
 		sortByB = b[sortBy.what][1]
+	elseif b[sortBy.what] and type( b[sortBy.what] ) == "table" and sortBy.what == "flag-country" then
+		sortByB = b[sortBy.what]["country"]
 	else
 		sortByB = b[sortBy.what]
 	end
