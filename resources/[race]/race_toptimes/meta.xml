@@ -78,5 +78,6 @@
 	<export function="getTimeForPlayer" type="server" />
 	<export function="getPositionForTime" type="server" />
 	<export function="getIndexForPlayer" type="server" />
-	<export function="getPlayerToptimesByForumID" type="server" />
+	<export function="getPlayerToptimes" type="server" />
+	<export function="getPlayerToptimesByRacemode" type="server" />
 </meta>

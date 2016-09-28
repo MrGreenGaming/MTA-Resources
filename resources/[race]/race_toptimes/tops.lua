@@ -937,7 +937,14 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 -------------------------
 --- Exported function ---
 -------------------------
-function getPlayerToptimesByForumID(forumID, racemode)
+function getPlayerToptimes(forumID)
+	if type(forumID) ~= "number" then return false end
+	if not toptimesCache[forumID] then return false end
+	
+	return toptimesCache[forumID]
+end
+
+function getPlayerToptimesByRacemode(forumID, racemode)
 	if type(forumID) ~= "number" then return false end
 	if not racemode then return false end
 	if not toptimesCache[forumID] then return false end
