@@ -294,6 +294,19 @@ addEventHandler("onBan",root,
 	end
 )
 
+----------------------
+-- Unbans --
+----------------------
+
+addEventHandler("onUnban",root,
+	function (ban, admin)
+		local ip = getBanIP(ban)
+		local serial = getBanSerial(ban)
+		
+		callRemote ( other_ipandport, resourceName, "removeSyncBan", (function() end), admin, ip, serial )
+	end
+)
+
 -----------------------
 -- Online players F2 --
 -----------------------

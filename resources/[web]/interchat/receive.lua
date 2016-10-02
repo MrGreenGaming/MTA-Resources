@@ -161,6 +161,26 @@ function addSyncBan ( ip, serial, reason, seconds )
 end
 
 
+----------------------
+-- Unbans --
+----------------------
+
+function removeSyncBan ( admin, ip, serial )
+	if ip then
+		for _, ban in ipairs( getBans() ) do
+			if getBanIP(ban) == ip then
+				removeBan ( ban, admin )
+			end
+		end
+	elseif serial then
+		for _, ban in ipairs( getBans() ) do
+			if getBanSerial(ban) == string.upper(serial) then
+				removeBan ( ban, admin )
+			end
+		end
+	end
+end
+
 -------------
 -- Testing --
 -------------

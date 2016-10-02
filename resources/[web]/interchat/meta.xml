@@ -29,6 +29,7 @@
 	<export function="greencoinsLogin" http="true" />
 	<export function="aAddSerialUnmuteTimer" http="true" />
 	<export function="addSyncBan" http="true" />
+	<export function="removeSyncBan" http="true" />
 	<export function="testConnection" http="true" />
 	<export function="sendOnlinePlayers" http="true" />
 	<export function="sendMapInfo" http="true" />
