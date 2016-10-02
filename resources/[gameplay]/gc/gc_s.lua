@@ -40,6 +40,19 @@ function onLoginSuccessfull(result, player)
 			addPlayerGreencoins ( player, serialGreencoins )
 			outputChatBox('[GC] Adding ' .. serialGreencoins .. ' GC from your rewards without an account', player, 0, 255, 0)
 		end
+		-- Download player forum avatar
+		if accounts[player]:getProfileData() and accounts[player]:getProfileData()["photoThumb"] and accounts[player]:getProfileData()["photoThumb"] ~= "https://mrgreengaming.com/forums/uploads/" and accounts[player]:getProfileData()["photoThumb"] ~= "https://mrgreengaming.com/forums/uploads/null" then
+			outputDebugString("forumAvatar1 " .. accounts[player]:getForumName() .. " " .. accounts[player]:getForumID() .. " " .. tostring(accounts[player]:getProfileData()["photoThumb"]))
+			fetchRemote(accounts[player]:getProfileData()["photoThumb"], function(data, err) 
+			outputDebugString("forumAvatar2 " .. accounts[player]:getForumName() .. " " .. tostring(err))
+				if err == 0 then
+			outputDebugString("forumAvatar3 " .. accounts[player]:getForumName())
+					accounts[player]["photoThumb"] = data
+					triggerClientEvent("forumAvatar", resourceRoot, data, accounts[player]:getForumID() )
+					setElementData(player,"forumAvatar",{type = "image",src = ":gc/img/photo-thumb-" .. accounts[player]:getForumID() .. ".png",width = 20,height = 20})
+				end
+			end)
+		end
 		return true
 	else
 		triggerClientEvent( player, "onLoginFail", player, nil, not gcConnected() )
@@ -52,6 +65,15 @@ addEvent('onGCLogin') -- broadcast event
 addEvent("onLogin", true)
 addEventHandler("onLogin", root, onLogin)
 
+function clientStarted()
+	for player, account in pairs(accounts) do
+		if accounts[player]["photoThumb"] then
+			triggerClientEvent(client, "forumAvatar", resourceRoot, data, accounts[player]:getForumID() )
+		end
+	end
+end
+addEvent ( 'onClientGreenCoinsStart', true )
+addEventHandler('onClientGreenCoinsStart', root, clientStarted)
 
 function onOtherServerGCLogin ( forumID )
 	for player, account in pairs ( accounts ) do
@@ -69,6 +91,7 @@ function onLogout (playerElement)
     if accounts[source] then
 		local email = accounts[source]:getLoginEmail()
 		local forumID = accounts[source]:getForumID()
+		setElementData(player,"forumAvatar", nil)
         accounts[source]:destroy()
         accounts[source] = nil
         outputChatBox("[GC] Successfully logged out!", source, 0, 255, 0)
@@ -106,6 +129,7 @@ function stopup ()
 		setElementData(k, "greencoins", nil, true)
     end
 	exports.scoreboard:removeScoreboardColumn("greencoins", root)
+	exports.scoreboard:removeScoreboardColumn("forumAvatar", root)
 end
 
 addEventHandler("onResourceStop", resourceRoot, stopup)
@@ -114,6 +138,7 @@ addEventHandler("onResourceStop", resourceRoot, stopup)
 function addScoreboard(resource)
 	if (resourceRoot == source or getResourceName ( resource ) == 'scoreboard') then
 		exports.scoreboard:scoreboardAddColumn("greencoins", root, 77, "GreenCoins", 30)
+		exports.scoreboard:scoreboardAddColumn("forumAvatar", root, 20, "", 1.5)
 	end
 end
 addEventHandler("onResourceStart", root, addScoreboard)
