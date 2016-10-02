@@ -153,6 +153,26 @@ end
 addEvent("onLoginFail", true)
 addEventHandler("onLoginFail", root, loginFail)
 
+function forumAvatar(player, data, forumid)
+	if fileExists("img/photo-thumb-" .. forumid .. ".png") then
+		fileDelete("img/photo-thumb-" .. forumid .. ".png")
+	end
+	-- outputDebugString("forumAvatarc " .. forumid)
+	local myTexture = dxCreateTexture( data )
+	if myTexture then
+		-- outputDebugString("forumAvatarc2 " .. forumid)
+		local file = fileCreate("img/photo-thumb-" .. forumid .. ".png")
+		fileWrite(file, data)
+		fileClose(file)
+		setElementData(player,"forumAvatar",{type = "image",src = ":gc/img/photo-thumb-" .. forumid .. ".png",width = 20,height = 20}, false)
+		exports.scoreboard:scoreboardForceUpdate()
+		destroyElement(myTexture)
+	end
+end
+addEvent("forumAvatar", true)
+addEventHandler("forumAvatar", root, forumAvatar)
+
+
 function gcLogin(cmdName, email, password)
 	triggerServerEvent("onLogin", localPlayer, email, password)
 end

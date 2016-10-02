@@ -40,6 +40,7 @@ function onLoginSuccessfull(result, player)
 			addPlayerGreencoins ( player, serialGreencoins )
 			outputChatBox('[GC] Adding ' .. serialGreencoins .. ' GC from your rewards without an account', player, 0, 255, 0)
 		end
+		downloadAvatar(player)
 		return true
 	else
 		triggerClientEvent( player, "onLoginFail", player, nil, not gcConnected() )
@@ -52,6 +53,42 @@ addEvent('onGCLogin') -- broadcast event
 addEvent("onLogin", true)
 addEventHandler("onLogin", root, onLogin)
 
+
+-------------
+-- avatars --
+-------------
+
+function downloadAvatar(player)
+	-- Download player forum avatar
+	if accounts[player]:getProfileData() and accounts[player]:getProfileData()["photoThumb"] then
+		-- outputDebugString("forumAvatar1 " .. accounts[player]:getForumName() .. " " .. accounts[player]:getForumID() .. " " .. toJSON(accounts[player].gcRecord[7]))
+		fetchRemote(accounts[player]:getProfileData()["photoThumb"], function(data, err) 
+			-- outputDebugString("forumAvatar2 " .. accounts[player]:getForumName() .. " " .. tostring(err))
+			if err == 0 then
+				-- outputDebugString("forumAvatar3 " .. accounts[player]:getForumName())
+				accounts[player]["photoThumb"] = data
+				triggerClientEvent("forumAvatar", resourceRoot, player, accounts[player]["photoThumb"], accounts[player]:getForumID() )
+			end
+		end)
+	else
+		-- outputDebugString("forumAvatar1 no profile data " .. getPlayerName(player))
+	end
+end
+
+function clientStarted()
+	for player, account in pairs(accounts) do
+		if account["photoThumb"] then
+			triggerClientEvent(client, "forumAvatar", resourceRoot, player, account["photoThumb"], accounts[player]:getForumID() )
+		end
+	end
+end
+addEvent ( 'onClientGreenCoinsStart', true )
+addEventHandler('onClientGreenCoinsStart', root, clientStarted)
+
+
+-----------------
+-- Logging out --
+-----------------
 
 function onOtherServerGCLogin ( forumID )
 	for player, account in pairs ( accounts ) do
@@ -106,6 +143,7 @@ function stopup ()
 		setElementData(k, "greencoins", nil, true)
     end
 	exports.scoreboard:removeScoreboardColumn("greencoins", root)
+	exports.scoreboard:removeScoreboardColumn("forumAvatar", root)
 end
 
 addEventHandler("onResourceStop", resourceRoot, stopup)
@@ -114,6 +152,7 @@ addEventHandler("onResourceStop", resourceRoot, stopup)
 function addScoreboard(resource)
 	if (resourceRoot == source or getResourceName ( resource ) == 'scoreboard') then
 		exports.scoreboard:scoreboardAddColumn("greencoins", root, 77, "GreenCoins", 30)
+		exports.scoreboard:scoreboardAddColumn("forumAvatar", root, 20, "", 1.5)
 	end
 end
 addEventHandler("onResourceStart", root, addScoreboard)
