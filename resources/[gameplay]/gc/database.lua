@@ -95,7 +95,7 @@ function getForumAccountDetails(forumID, callback)
 	end
 	
 	if handlerForum and forumID then
-		if accountDetailsCache[forumID] then return callback(accountDetailsCache[forumID].name, accountDetailsCache[forumID].emailAddress) end
+		if accountDetailsCache[forumID] then return callback(accountDetailsCache[forumID].name, accountDetailsCache[forumID].emailAddress, accountDetailsCache[forumID].profile) end
 		local url = 'http://api.mrgreengaming.com:8080/account/details'	-- returns {"error":0,"userId":591,"name":"SDK","emailAddress":"sdk@gmail.com","greenCoins":0,"profile.photo":"http://forum_avatar.jpg","profile.photoThumb":"http://forum_avatar.jpg","profile.member_title":"custom forum title"}
 		local post = toJSON{ userId = forumID, appId = get"appId", appSecret = get"appSecretPass" }
 		fetchRemote(url, function(r,e)
