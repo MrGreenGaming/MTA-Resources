@@ -84,10 +84,10 @@ function updatePlaytimes()
 		setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
 	end
 end
-setTimer(updatePlaytimes,aMin*1000*minuteTickAmount + 1500,0) -- minuteTickAmount loop
+setTimer(updatePlaytimes, aMin*1000*minuteTickAmount + 1500, 0) -- minuteTickAmount loop
 setTimer(updatePlaytimes, 50, 1)
 
-addEventHandler("onPlayerJoin",root,function()
+addEventHandler("onPlayerJoin", root, function()
 	local serial = getPlayerSerial(source)
 	if playerTimes[serial] then
 		setElementData(source, 'jointick', playerTimes[serial].tick)
@@ -104,15 +104,23 @@ addEventHandler("onPlayerJoin",root,function()
 	end
 end)
 
-addEventHandler("onPlayerQuit",root,function()
-	if not getElementData( source , 'gotomix') then
-		playerTimes[getPlayerSerial(source)] = {tick = getElementData(source, 'jointick'), hoursPlayed = getElementData(source, 'hoursPlayed'), time = getRealTime().timestamp}
+addEventHandler("onPlayerQuit", root, function()
+	if not getElementData(source , 'gotomix') then
+		playerTimes[getPlayerSerial(source)] = {
+			tick = getElementData(source, 'jointick'),
+			hoursPlayed = getElementData(source, 'hoursPlayed'),
+			time = getRealTime().timestamp
+		}
 	end
 end)
 
 addEvent("onPlayerReplaceTime")
-addEventHandler("onPlayerReplaceTime",root,function(serial, tick, hoursPlayed)
-	playerTimes[serial] = {tick = tick or getRealTime().timestamp, hoursPlayed = hoursPlayed, time = getRealTime().timestamp}
+addEventHandler("onPlayerReplaceTime", root, function(serial, tick, hoursPlayed)
+	playerTimes[serial] = {
+		tick = tick or getRealTime().timestamp,
+		hoursPlayed = hoursPlayed,
+		time = getRealTime().timestamp
+	}
 end)
 
 
@@ -120,7 +128,6 @@ end)
 ---   Race (Sprint)   ---
 -------------------------
 local rewarded_Players = {}
-
 local maxRewardedToptimes = 3
 local maxRewardedFinishes = 5
 local minimumRewardTimeR = 2 * 60 * 1000
@@ -153,31 +160,17 @@ end
 addEventHandler("onPlayerToptimeImprovement", root, ontoptime)
 --]]
 
-function finish( rank )
-	if isMapTesting() or modename ~= "Sprint" then return end
+function finish(rank)
+	if isMapTesting() or modename ~= "Sprint" then
+		return
+	end
 	local player = source
-	if compareToTopPos and rank <= maxRewardedFinishes then
-		-- outputDebugString(rank .. '. ' .. getPlayerName(player) )
-		if not rewarded_Players[player] then rewarded_Players[player] = {} end
-		rewarded_Players[player].finishReward = calcFinishReward ( player, rank )
-		rewarded_Players[player].rank = rank 
-		
-		if rewarded_Players[player].finishReward > 1 then
-			-- outputDebugString ( prefix .. getPlayerName(source) .. "#00FF00 earned " .. rewarded_Players[player].finishReward .. " Green-Coins for rank " .. rank .. " (" .. ")",2)
-			addPlayerGreencoins ( player, rewarded_Players[player].finishReward)
-			if getResourceFromName"messages" and getResourceState(getResourceFromName"messages") == "running" then
-				exports.messages:outputGameMessage(getPlayerName(player) .. "#00FF00 earned " .. rewarded_Players[player].finishReward .. " Green-Coins for rank " .. rank .. " (" .. getPlayerGreencoins ( player ) .. ")", root, nil, 0, 255, 0)
-				outputChatBox ( prefix .. "You earned " .. rewarded_Players[player].finishReward .. " Green-Coins for rank " .. rank .. " (" .. getPlayerGreencoins ( player ) .. ")", player, 0, 255, 0, true)				
-			else
-				outputChatBox ( prefix .. getPlayerName(player) .. "#00FF00 earned " .. rewarded_Players[player].finishReward .. " Green-Coins for rank " .. rank .. " (" .. getPlayerGreencoins ( player ) .. ")", root, 0, 255, 0, true)				
-			end
-			-- local top = rewarded_Players[player].top
-			-- if top then
-				-- ontoptime(top[1], top[2], top[3], top[4], player)
-			-- end
-		end
-	elseif getResourceFromName"messages" and getResourceState(getResourceFromName"messages") == "running" then
-		local suffix
+	
+	--Ordinal indicator
+	local suffix
+	if (rank == 11) or (rank == 12) or (rank == 13) then
+		suffix = "th"
+	else
 		local lastNumber = rank % 10
 		if lastNumber == 1 then
 			suffix = "st"
@@ -185,15 +178,33 @@ function finish( rank )
 			suffix = "nd"
 		elseif lastNumber == 3 then
 			suffix = "rd"
-		else suffix = "th"
+		else
+			suffix = "th"
 		end
-		if (rank == 11) or (rank == 12) or (rank == 13) then suffix = "th" end	
-		exports.messages:outputGameMessage(getPlayerName(player).." has finished "..tostring(rank)..suffix, getRootElement(), nil)
 	end
+	
+	if compareToTopPos and rank <= maxRewardedFinishes then
+		if not rewarded_Players[player] then
+			rewarded_Players[player] = {}
+		end
+		rewarded_Players[player].finishReward = calcFinishReward(player, rank)
+		rewarded_Players[player].rank = rank 
+		
+		if rewarded_Players[player].finishReward > 1 then
+			addPlayerGreencoins(player, rewarded_Players[player].finishReward)
+			
+			exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0)
+			outputChatBox(prefix .."You earned ".. rewarded_Players[player].finishReward .." GC for finishing ".. tostring(rank) .. suffix ..". You now have ".. getPlayerGreencoins(player) .." GC.", player, 0, 255, 0, true)				
+			
+			return
+		end
+	end
+	
+	exports.messages:outputGameMessage(getPlayerName(player) .." finished ".. tostring(rank) .. suffix, getRootElement(), nil)
 end
 addEventHandler("onPlayerFinish", root, finish)
 
-function calcFinishReward ( player, rank )
+function calcFinishReward(player, rank)
 	--if not tonumber(topTime) then return 0 end
 	topTime = tonumber(topTime) or defaultRewardTime
 	local topTime = math.max(math.min(topTime, maximumRewardTimeR), minimumRewardTimeR)
@@ -203,17 +214,14 @@ function calcFinishReward ( player, rank )
 	return math.floor(math.round(math.max(reward,0)))
 end
 
-
 ---------------
 ---   Mix   ---
 ---------------
 
 local minPlayers = 5
-
 function areRewardsActivated()
 	return getPlayerCount() >= minPlayers
 end
-
 
 ---------------
 ---   CTF   ---
@@ -245,7 +253,7 @@ function CTFFlagCarrierKill(victim)
 	if isMapTesting() or modename ~= "Capture the flag" then return end
 	local player = source
 	if not areRewardsActivated() then
-		outputChatBox(prefix..getPlayerName(player)..'#00FF00 killed the flag carrier, but '..minPlayers..' or more players are required to get GC',root,0,255,0,true)
+		outputChatBox(prefix..getPlayerName(player)..'#00FF00 killed the flag carrier, but '..minPlayers..' or more players are required to get GC.',root,0,255,0,true)
 		return
 	else
 		local victimTeam = getPlayerTeam(victim)
