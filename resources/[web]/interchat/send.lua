@@ -98,6 +98,7 @@ function checkPlayerChat(name, message)
 		outputChatBox(out, root, 0xFF, 0xD7, 0x00)
 		outputServerLog(out)
 		exports.irc:outputIRC("08[" .. this_server:upper() .. "] " .. tostring(name) .. "> " .. tostring(message) .. "")
+		triggerEvent('onInterchatMessage', resourceRoot, this_server:upper(), tostring(name), tostring(message))
 	else
 		outputDebugString("Serverchat: no/wrong response from other server! (" .. other_ipandport .. ")", 1)
 	end

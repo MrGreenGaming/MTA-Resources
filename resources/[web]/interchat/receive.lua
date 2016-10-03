@@ -50,6 +50,7 @@ function playerChatBoxRemote ( name, message)
 	outputChatBox(out, root, 0xFF, 0xD7, 0x00)
 	outputServerLog(out)
 	exports.irc:outputIRC("08[" .. other_server:upper() .. "] " .. tostring(name) .. "> " .. tostring(message) .. "")
+	triggerEvent('onInterchatMessage', resourceRoot, other_server:upper(), tostring(name), tostring(message))
 	return name, message  
 end
 

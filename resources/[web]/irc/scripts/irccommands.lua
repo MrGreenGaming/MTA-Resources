@@ -92,6 +92,7 @@ function say (server,channel,user,command,...)
 	end
 	outputChatBox("* "..ircGetUserNick(user).."[IRC]: "..message,root,255,168,0)
 	outputIRC("07* "..ircGetUserNick(user).."[IRC]: "..message)
+	triggerEvent('onInterchatMessage', resourceRoot, "IRC", ircGetUserNick(user), message)
 	if command ~= 'say' then
 		outputIRC("You can speak ingame without using !say or !s now, messages are directly shown ingame")
 	end
