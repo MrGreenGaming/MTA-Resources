@@ -168,7 +168,7 @@ function finish(rank)
 	
 	--Ordinal indicator
 	local suffix
-	if (rank == 11) or (rank == 12) or (rank == 13) then
+	if rank == 11 or rank == 12 or rank == 13 then
 		suffix = "th"
 	else
 		local lastNumber = rank % 10
