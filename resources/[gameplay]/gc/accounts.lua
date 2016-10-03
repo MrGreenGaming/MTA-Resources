@@ -59,7 +59,7 @@ end
 
 function SAccount:login(email, pw, player, callback)
     if not self.gcRecord[1] and pw then
-        getPlayerLoginInfo(email, pw, function (forumID, name, emailAddress, profile)
+        getPlayerLoginInfo(email, pw, function (forumID, name, emailAddress, profile, joinTimestamp)
 			if not self.gcRecord[1] and forumID then
 				for id, account in pairs (SAccount.instances) do
 					if account:getForumID() == forumID then return callback(false, player) end
@@ -74,6 +74,7 @@ function SAccount:login(email, pw, player, callback)
 					self.gcRecord[5] = name
 					self.gcRecord[6] = emailAddress
 					self.gcRecord[7] = profile
+					self.gcRecord[8] = joinTimestamp
 					triggerEvent('onGreencoinsLogin', self.player)
 					return callback(true, player)
 				else
@@ -99,7 +100,7 @@ end
 
 function SAccount:loginViaForumID(forumID, player, callback)
 	if not self.gcRecord[1] and forumID then
-		getForumAccountDetails ( forumID, function(name, emailAddress, profile)
+		getForumAccountDetails ( forumID, function(name, emailAddress, profile, joinTimestamp)
 			for id, account in pairs (SAccount.instances) do
 				if account:getForumID() == forumID then return callback(false, player) end
 			end
@@ -113,6 +114,7 @@ function SAccount:loginViaForumID(forumID, player, callback)
 				self.gcRecord[5] = name
 				self.gcRecord[6] = emailAddress
 				self.gcRecord[7] = profile
+				self.gcRecord[8] = joinTimestamp
 				triggerEvent('onGreencoinsLogin', self.player)
 				return callback(true, player)
 			else
@@ -200,7 +202,7 @@ end
 
 ---------------------------------------------------------------------------
 --
--- SAccount:getLoginProfileData()
+-- SAccount:getProfileData()
 --
 --
 --
@@ -208,6 +210,18 @@ end
 
 function SAccount:getProfileData()
     return self.gcRecord[7]
+end
+
+---------------------------------------------------------------------------
+--
+-- SAccount:getJoinTimestamp()
+--
+--
+--
+---------------------------------------------------------------------------
+
+function SAccount:getJoinTimestamp()
+    return self.gcRecord[8]
 end
 
 ---------------------------------------------------------------------------

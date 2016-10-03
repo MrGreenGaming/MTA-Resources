@@ -57,19 +57,31 @@ addEventHandler("onLogin", root, onLogin)
 -------------
 -- avatars --
 -------------
+local supportedExtensions = {".png", ".bmp", ".jpg", ".jpeg" }
 
 function downloadAvatar(player)
 	-- Download player forum avatar
-	if accounts[player]:getProfileData() and accounts[player]:getProfileData()["photoThumb"] then
-		-- outputDebugString("forumAvatar1 " .. accounts[player]:getForumName() .. " " .. accounts[player]:getForumID() .. " " .. toJSON(accounts[player].gcRecord[7]))
-		fetchRemote(accounts[player]:getProfileData()["photoThumb"], function(data, err) 
-			-- outputDebugString("forumAvatar2 " .. accounts[player]:getForumName() .. " " .. tostring(err))
-			if err == 0 then
-				-- outputDebugString("forumAvatar3 " .. accounts[player]:getForumName())
-				accounts[player]["photoThumb"] = data
-				triggerClientEvent("forumAvatar", resourceRoot, player, accounts[player]["photoThumb"], accounts[player]:getForumID() )
+	if accounts[player]:getProfileData() and accounts[player]:getProfileData()["photo"] then
+		--outputDebugString("forumAvatar1 " .. accounts[player]:getForumName() .. " " .. accounts[player]:getForumID() .. " " .. toJSON(accounts[player].gcRecord[7]))
+		
+		isImageCompatible = false
+		for _, extension in pairs(supportedExtensions) do
+			if string.find(accounts[player]:getProfileData()["photo"], extension) then	
+				isImageCompatible = true
 			end
-		end)
+		end
+		
+		if isImageCompatible then
+			fetchRemote(accounts[player]:getProfileData()["photo"], function(data, err) 
+				-- outputDebugString("forumAvatar2 " .. accounts[player]:getForumName() .. " " .. tostring(err))
+				if err == 0 then
+					-- outputDebugString("forumAvatar3 " .. accounts[player]:getForumName())
+					accounts[player]["photo"] = data
+					triggerClientEvent("checkAvatar", resourceRoot, player, accounts[player]["photo"], accounts[player]:getForumID() )
+				
+				end
+			end)
+		end
 	else
 		-- outputDebugString("forumAvatar1 no profile data " .. getPlayerName(player))
 	end
@@ -77,8 +89,8 @@ end
 
 function clientStarted()
 	for player, account in pairs(accounts) do
-		if account["photoThumb"] then
-			triggerClientEvent(client, "forumAvatar", resourceRoot, player, account["photoThumb"], accounts[player]:getForumID() )
+		if account["photo"] then
+			triggerClientEvent(client, "checkAvatar", resourceRoot, player, account["photo"], accounts[player]:getForumID() )
 		end
 	end
 end
@@ -141,6 +153,7 @@ function stopup ()
         v:destroy(true)
         v = nil
 		setElementData(k, "greencoins", nil, true)
+		setElementData(k, "forumAvatar", nil, true)
     end
 	exports.scoreboard:removeScoreboardColumn("greencoins", root)
 	exports.scoreboard:removeScoreboardColumn("forumAvatar", root)
@@ -152,7 +165,7 @@ addEventHandler("onResourceStop", resourceRoot, stopup)
 function addScoreboard(resource)
 	if (resourceRoot == source or getResourceName ( resource ) == 'scoreboard') then
 		exports.scoreboard:scoreboardAddColumn("greencoins", root, 77, "GreenCoins", 30)
-		exports.scoreboard:scoreboardAddColumn("forumAvatar", root, 20, "", 1.5)
+		exports.scoreboard:scoreboardAddColumn("forumAvatar", root, 12, "", 1.5)
 	end
 end
 addEventHandler("onResourceStart", root, addScoreboard)
@@ -224,6 +237,13 @@ end
 function getPlayerForumID ( player )
 	if accounts[player] then
 		return tonumber(accounts[player]:getForumID()) or false
+	end
+	return false
+end
+
+function getPlayerForumJoinTimestamp ( player )
+	if accounts[player] then
+		return accounts[player]:getJoinTimestamp() or false
 	end
 	return false
 end
