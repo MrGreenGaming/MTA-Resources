@@ -10,6 +10,14 @@ local mapname
 local info
 local months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
 
+local racemodes = {
+					["Sprint"] = "race",
+					["Never the same"] = "nts",
+					["Destruction derby"] = "dd",
+					["Shooter"] = "sh",
+					["Reach the flag"] = "rtf",
+					--["Capture the flag"] = "ctf",
+}
 
 local country_sql_table = [[CREATE TABLE IF NOT EXISTS `country` (
 	`forumid` INT(11) NOT NULL,
@@ -56,6 +64,7 @@ function queryMapTimes (mapInfo, bStart)
 	monthtimes = {}
 	monthtTopTime = nil
 	mapname = mapInfo.resname
+	racemode = racemodes[ exports.race:getRaceMode() ] or "(NULL)"
 	info = mapInfo
 	local q = "SELECT forumid, mapname, pos, value, date, g.mta_name, h.country FROM toptimes, mrgreen_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY pos"
 	dbQuery(maptimes, {mapInfo, bStart}, handlerConnect, q, mapname)
@@ -242,7 +251,7 @@ function updatePlayerTop(player, rank, value)
 		local newPos, newTime, oldPos, oldTime
 		newTime = value
 		if not toptime then
-			q = "INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname`) VALUES (?,?,?,?)"
+			q = "INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname`, `racemode` ) VALUES (?,?,?,?,?)"
 			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), country = exports.geoloc:getPlayerCountry(player), new=true})
 			-- outputDebugString('new top for ' .. getPlayerName(player))
 		elseif (not times.kills and value < toptime.value) or (times.kills and value > toptime.value) then
@@ -257,7 +266,7 @@ function updatePlayerTop(player, rank, value)
 			toptime.new=true
 			-- outputDebugString('updated top for ' .. getPlayerName(player))
 		end
-		dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname)
+		dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, racemode)
 		if not times.kills then
 			table.sort(times, function(a,b) return a.value < b.value or (a.value == b.value and a.date < b.date) end)
 		else
@@ -834,16 +843,6 @@ addCommandHandler('addcountry', addcountry, true)
 local positionsToCache = 3
 local toptimesCache = {}
 
-local racemodes = {
-					[1] = "race",
-					[2] = "nts",
-					[3] = "dd",
-					[4] = "sh",
-					[5] = "rtf",
-					--[6] = "ctf",
-}
-
-
 function cacheToptimes(forumID)
 	cachePlayerToptimes( { forumID } )
 end
@@ -895,20 +894,14 @@ function cachePlayerToptimes(tableForumIDs)
 			for _, row in ipairs(result) do
 				if not toptimesCache[row.forumid] then toptimesCache[row.forumid] = {} end
 				
-				local mapnames = split(row.mapnames, ", ")
-				for _, mapname in pairs(mapnames) do
-					mapname = string.sub(mapname, 1, 4):lower()
-					for i=1, #racemodes do
-						local racemode = racemodes[i]
-						if string.find(mapname, racemode) ~= nil then
-							if not toptimesCache[row.forumid][racemode] then toptimesCache[row.forumid][racemode] = {} end
-							toptimesCache[row.forumid][racemode][row.pos] = (toptimesCache[row.forumid][racemode][row.pos] or 0) + 1
-						end
-					end
+				local racemodes = split(row.racemodes, ", ")
+				for _, racemode in pairs(racemodes) do
+					if not toptimesCache[row.forumid][racemode] then toptimesCache[row.forumid][racemode] = {} end
+					toptimesCache[row.forumid][racemode][row.pos] = (toptimesCache[row.forumid][racemode][row.pos] or 0) + 1
 				end
 			end
 		end
-	end, handlerConnect, "SELECT forumid, pos, GROUP_CONCAT(mapname SEPARATOR ', ') mapnames FROM `toptimes` WHERE forumid IN(??) and pos <= ? GROUP BY pos, forumid ORDER BY forumid", forumids, positionsToCache)
+	end, handlerConnect, "SELECT `forumid`, `pos`, GROUP_CONCAT(`racemode` SEPARATOR ', ') `racemodes` FROM `toptimes` WHERE `forumid` IN(??) and `pos` <= ? GROUP BY `pos`, `forumid`", forumids, positionsToCache)
 end
 
 addEvent("onPlayerToptimeImprovement")
