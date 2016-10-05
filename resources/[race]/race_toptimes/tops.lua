@@ -45,7 +45,7 @@ addEventHandler('onMapStarting', root,
 
 addEventHandler('onResourceStart', resourceRoot,
 	function()
-		handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+		handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"), "multi_statements=1")
 		local raceInfo = getRaceInfo()
 		if not handlerConnect then
 			outputDebugString('Serial/IP Database error: could not connect to the mysql db')
@@ -64,6 +64,7 @@ function queryMapTimes (mapInfo, bStart)
 	monthtimes = {}
 	monthtTopTime = nil
 	mapname = mapInfo.resname
+	mapnameFull = mapInfo.name
 	racemode = racemodes[ exports.race:getRaceMode() ] or "(NULL)"
 	info = mapInfo
 	local q = "SELECT forumid, mapname, pos, value, date, g.mta_name, h.country FROM toptimes, mrgreen_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY pos"
@@ -251,12 +252,19 @@ function updatePlayerTop(player, rank, value)
 		local newPos, newTime, oldPos, oldTime
 		newTime = value
 		if not toptime then
-			q = "INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname`, `racemode` ) VALUES (?,?,?,?,?)"
+			q = [[	
+					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname` ) VALUES (?,?,?,?);
+					INSERT INTO `maps`( `resname`,`mapname`, `racemode` ) VALUES (?,?,?) ON DUPLICATE KEY UPDATE resname=resname;
+				]]
 			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), country = exports.geoloc:getPlayerCountry(player), new=true})
 			-- outputDebugString('new top for ' .. getPlayerName(player))
+			dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, mapname, mapnameFull, racemode)
 		elseif (not times.kills and value < toptime.value) or (times.kills and value > toptime.value) then
 			oldPos, oldTime = toptime.pos, toptime.value
-			q = "UPDATE `toptimes` SET `value`=?, `date`=? WHERE `forumid`=? AND `mapname`=?"
+			q = [[
+					UPDATE `toptimes` SET `value`=?, `date`=? WHERE `forumid`=? AND `mapname`=?;
+					UPDATE `maps` SET `mapname`=?, `racemode`=? WHERE `resname`=?;
+				]]
 			toptime.value = value
 			toptime.date = getRealTime().timestamp
 			toptime.formatDate = FormatDate(toptime.date)
@@ -265,8 +273,9 @@ function updatePlayerTop(player, rank, value)
 			toptime.country = exports.geoloc:getPlayerCountry(player)
 			toptime.new=true
 			-- outputDebugString('updated top for ' .. getPlayerName(player))
+			dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, mapnameFull, racemode, mapname)
 		end
-		dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, racemode)
+		
 		if not times.kills then
 			table.sort(times, function(a,b) return a.value < b.value or (a.value == b.value and a.date < b.date) end)
 		else
@@ -901,7 +910,7 @@ function cachePlayerToptimes(tableForumIDs)
 				end
 			end
 		end
-	end, handlerConnect, "SELECT `forumid`, `pos`, GROUP_CONCAT(`racemode` SEPARATOR ', ') `racemodes` FROM `toptimes` WHERE `forumid` IN(??) and `pos` <= ? GROUP BY `pos`, `forumid`", forumids, positionsToCache)
+	end, handlerConnect, "SELECT a.forumid, a.pos, GROUP_CONCAT(b.racemode SEPARATOR ', ') racemodes FROM toptimes a, maps b WHERE a.forumid IN(??) and a.pos <= ? and a.mapname = b.resname GROUP BY a.pos, a.forumid", forumids, positionsToCache)
 end
 
 addEvent("onPlayerToptimeImprovement")
