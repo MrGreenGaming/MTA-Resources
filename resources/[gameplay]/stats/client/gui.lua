@@ -230,6 +230,9 @@ function receivePlayerStats( tbl, player )
 			elseif k == "id10" then
 				local this_session = tbl["temp_id10"]
 				v = this_session+v
+			elseif k == "id16" then
+				local this_session = tbl["temp_id10"]
+				v = this_session+v
 			end
 			guiSetText(GUIEditor.label["value"..k], v)
 		end
