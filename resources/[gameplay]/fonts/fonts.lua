@@ -2,6 +2,7 @@ fontLocations = {
     ["Century Gothic Bold"] = "fonts/Century Gothic Bold.ttf",
     ["OpenSans"] = "fonts/OpenSans.ttf",
 	["Arial"] = "fonts/arial.ttf",
+	["Tahoma Bold"] = "fonts/tahomabd.ttf",
   --["Font Name Example"] = "FontLocation/example.tff", -- EXAMPLE (dont forget to add it to meta.xml too)
 }
 
