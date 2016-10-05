@@ -43,7 +43,9 @@ addEventHandler("onRaceStateChanging", root,
 		currentRaceStateName = newStateName
 		if oldStateName == "GridCountdown" and newStateName == "Running" then
 			for _, player in ipairs(getElementsByType"player") do
-				incrementPlayerStatsData(player, id, 1)
+				if not getElementData(player, "player state") == "away" then
+					incrementPlayerStatsData(player, id, 1)
+				end
 			end
 		end
 	end
@@ -57,21 +59,27 @@ addEventHandler("onNotifyPlayerReady", root,
 		if not id then return end
 		
 		if currentRaceStateName == "Running" then
-			incrementPlayerStatsData(source, id, 1)
+			if not getElementData(source, "player state") == "away" then
+				incrementPlayerStatsData(source, id, 1)
+			end
 		end
 	end
 )
 
 addEventHandler("onPlayerWasted", root,
 	function(ammo, attacker, weapon, bodypart)
-		incrementPlayerStatsData(source, "temp_id6", 1)
+		if not getElementData(source, "player state") == "away" then
+			incrementPlayerStatsData(source, "temp_id6", 1)
+		end
 	end
 )
 
 addEvent('onPlayerFinishDD')
 addEventHandler('onPlayerFinishDD', root, 
 	function()
-		incrementPlayerStatsData(source, "temp_id12", 1)
+		if not getElementData(source, "player state") == "away" then
+			incrementPlayerStatsData(source, "temp_id12", 1)
+		end
 	end
 )
 
@@ -98,7 +106,9 @@ addEventHandler('onCTFFlagDelivered', root,
 addEvent('onPlayerFinishShooter')
 addEventHandler('onPlayerFinishShooter', root, 
 	function()
-		incrementPlayerStatsData(source, "temp_id16", 1)
+		if not getElementData(source, "player state") == "away" then
+			incrementPlayerStatsData(source, "temp_id16", 1)
+		end
 	end
 )
 
