@@ -1221,10 +1221,14 @@ function scoreboardClickHandler( button, state, cX, cY )
 				local element = scoreboardContent[index]["__SCOREBOARDELEMENT__"]
 				local font = iif( element and isElement( element ) and getElementType( element ) == "team", teamHeaderFont, contentFont )
 				if cX >= topX+s(5) and cX <= topX+width-s(5) and cY >= y and cY <= y+dxGetFontHeight( fontscale(font, scoreboardScale), font ) then
-					local selected = (not selectedRows[element]) == true
+					if clickedColumn ~= "forumAvatar" and clickedColumn ~= "voice:chatting" then
+						local selected = (not selectedRows[element]) == true
+					end
 					local triggered = triggerEvent( "onClientPlayerScoreboardClick", element, selected, cX, cY, clickedColumn )
 					if triggered then
-						selectedRows[element] = not selectedRows[element]
+						if clickedColumn ~= "forumAvatar" and clickedColumn ~= "voice:chatting" then
+							selectedRows[element] = not selectedRows[element]
+						end
 					end
 				end
 				y = y + dxGetFontHeight( fontscale(font, scoreboardScale), font )
