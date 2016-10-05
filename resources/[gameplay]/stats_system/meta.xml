@@ -1,5 +1,0 @@
-<meta>
-	<info author='BinSlayer' version='1.0' type='script' />
-	<script src='default_stats.lua' />
-	<script src='update_stats.lua' />
-</meta>
