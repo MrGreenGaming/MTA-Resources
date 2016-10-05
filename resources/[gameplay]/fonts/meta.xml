@@ -8,5 +8,6 @@
     <!-- FONTS -->
     <file src="fonts/Century Gothic Bold.ttf" type="client" /> 
     <file src="fonts/OpenSans.ttf" type="client" /> 
-	<file src="fonts/arial.ttf" type="client" /> 
+	<file src="fonts/arial.ttf" type="client" />
+	<file src="fonts/tahomabd.ttf" type="client" /> 	
 </meta>
