@@ -244,53 +244,45 @@ function getPositionFromElementOffset(element,offX,offY,offZ)
     return x, y, z
 end
 
----------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------
 -- Function isBikeCloseToGround() needed because isVehicleOnGround() don't work correctly with bikes riding sideways, doing wheelie, etc. --
----------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------
 
---It will check if bike is on the ground or really close to ground to stop tricks
 function isBikeCloseToGround(bike)
 	local x, y, z = getElementPosition(bike)
 	
-	--It will draw the short line under the bike and hitZ will be nil if line don't hit the ground
-	local x2, y2, z2 = getPositionFromElementOffset(bike, 0, 0, -3)
-	local _, _, _, hitZ = processLineOfSight(x, y, z, x2, y2, z2, true, false, false, true)
-	--dxDrawLine3D(x, y, z, x2, y2, z2, tocolor(255, 0, 0))
-
-	--It will draw the short line behind the bike
-	local x3, y3, z3 = getPositionFromElementOffset(bike, 0, -2, 0)
-	local _, _, _, hitZ2 = processLineOfSight(x, y, z, x3, y3, z3, true, false, false, true)
-	--dxDrawLine3D(x, y, z, x3, y3, z3, tocolor(255, 0, 0))
+	local x2, y2, z2 = getPositionFromElementOffset(bike, 0, 0, -3) --a point under the bike
+	local x3, y3, z3 = getPositionFromElementOffset(bike, 0, -2, 0) --behind
+	local x4, y4, z4 = getPositionFromElementOffset(bike, 0, 2, 0) --front
+	local x5, y5, z5 = getPositionFromElementOffset(bike, 2, 0, 0) --right
+	local x6, y6, z6 = getPositionFromElementOffset(bike, -2, 0, 0) --left
+	local x7, y7, z7 = getPositionFromElementOffset(bike, 0, 0, 2) --above 
+	local clear1 = isLineOfSightClear(x, y, z, x2, y2, z2, true, false, false, true)
+	local clear2 = isLineOfSightClear(x, y, z, x3, y3, z3, true, false, false, true)
+	local clear3 = isLineOfSightClear(x, y, z, x4, y4, z4, true, false, false, true)
+	local clear4 = isLineOfSightClear(x, y, z, x5, y5, z5, true, false, false, true)
+	local clear5 = isLineOfSightClear(x, y, z, x6, y6, z6, true, false, false, true)
+	local clear6 = isLineOfSightClear(x, y, z, x7, y7, z7, true, false, false, true)
 	
-	--front of the bike
-	local x4, y4, z4 = getPositionFromElementOffset(bike, 0, 2, 0)
-	local _, _, _, hitZ3 = processLineOfSight(x, y, z, x4, y4, z4, true, false, false, true)
-	--dxDrawLine3D(x, y, z, x4, y4, z4, tocolor(255, 0, 0))
-	
-	--right side of the bike
-	local x5, y5, z5 = getPositionFromElementOffset(bike, 2, 0, 0)
-	local _, _, _, hitZ4 = processLineOfSight(x, y, z, x5, y5, z5, true, false, false, true)
-	--dxDrawLine3D(x, y, z, x5, y5, z5, tocolor(255, 0, 0))
-	
-	--left side of the bike
-	local x6, y6, z6 = getPositionFromElementOffset(bike, -2, 0, 0)
-	local _, _, _, hitZ5 = processLineOfSight(x, y, z, x6, y6, z6, true, false, false, true)
-	--dxDrawLine3D(x, y, z, x6, y6, z6, tocolor(255, 0, 0))
-	
-	--above the bike
-	local x6, y6, z6 = getPositionFromElementOffset(bike, 0, 0, 2)
-	local _, _, _, hitZ5 = processLineOfSight(x, y, z, x6, y6, z6, true, false, false, true)
-	--dxDrawLine3D(x, y, z, x6, y6, z6, tocolor(255, 0, 0))
-	
-	if hitZ ~= nil or hitZ2 ~= nil or hitZ3 ~= nil or hitZ4 ~= nil or hitZ5 ~= nil then
-		return true
-	else
-		return false
+	if testing then
+		dxDrawLine3D(x, y, z, x2, y2, z2, tocolor(255, 0, 0))
+		dxDrawLine3D(x, y, z, x3, y3, z3, tocolor(255, 0, 0))
+		dxDrawLine3D(x, y, z, x4, y4, z4, tocolor(255, 0, 0))
+		dxDrawLine3D(x, y, z, x5, y5, z5, tocolor(255, 0, 0))
+		dxDrawLine3D(x, y, z, x6, y6, z6, tocolor(255, 0, 0))
+		dxDrawLine3D(x, y, z, x7, y7, z7, tocolor(255, 0, 0))
 	end
+	
+	if clear1 and clear2 and clear3 and clear4 and clear5 and clear6 then
+		return false
+	else
+		return true
+	end	
 end
 
 --for testing
 --[[
+testing = true
 addEventHandler("onClientPreRender", root,
 function()
 	local bike = getPedOccupiedVehicle(localPlayer)
@@ -298,4 +290,4 @@ function()
 		outputChatBox(tostring(isBikeCloseToGround(bike)))
 	end
 end
-)]]--
+)]]
