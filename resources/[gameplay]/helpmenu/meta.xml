@@ -1,9 +1,14 @@
 <meta>		
-	<info name="MrGreenGaming Welcome/Help/Settings Menu" author="warp., SDK, KaliBwoy" version="0.0.1" />
+	<info name="MrGreenGaming Welcome/Help/Settings Menu" author="warp., SDK, KaliBwoy, AleksCore" version="0.0.5" />
+	
 	<script src="helpmenu_s.lua" type="server" />	
 	<script src="helpmenu.lua" type="client" />	
+	<script src="admins.lua" type="shared" />	
 	
 	<file src="img/logo.png" />
 	<file src="commands.txt"/>
+	
 	<include resource="mrgreen-settings" />
+	
+	<min_mta_version client="1.5.2" server="1.5.2" />
 </meta>

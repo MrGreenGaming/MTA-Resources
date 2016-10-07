@@ -1,6 +1,6 @@
        -------------------------------> Keys <-------------------------------
 
-GC Bike Trails
+GC Bike Trails  (Required perk)
 1, 2, 3, 4, 5 - Each of these do different animations when the bike is in the air.
 
 F1      - Show your achievements
