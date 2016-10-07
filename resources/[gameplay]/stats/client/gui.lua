@@ -263,7 +263,7 @@ function receivePlayerStats( tbl, player )
 	end
 end
 addEvent("sendPlayerStats", true)
-addEventHandler("sendPlayerStats", root, receivePlayerStats)
+addEventHandler("sendPlayerStats", resourceRoot, receivePlayerStats)
 
 
 function scoreboardClick ( row, x, y, columnName )

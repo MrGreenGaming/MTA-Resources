@@ -144,7 +144,7 @@ function showGUI(playerInitiator, _, _, player)
 	triggerClientEvent(playerInitiator, "sendPlayerStats", resourceRoot, playerStatsCache[forumID], player)
 end
 addEvent("showGUI", true)
-addEventHandler("showGUI", root, showGUI)
+addEventHandler("showGUI", resourceRoot, showGUI)
 
 addEventHandler("onResourceStart", resourceRoot, 
 	function()
