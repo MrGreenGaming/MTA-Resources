@@ -138,14 +138,15 @@ end
 
 addEvent('receiveChangelog', true)
 addEventHandler('receiveChangelog', resourceRoot, 
-function ( changelog, changelogLastUpdate )
+function ( changelog, changelogLastUpdate, output )
 	if not changelog then return end
-	
 	guiSetText(LogBindsMemoText, changelog)
 	
 	if isNewChangelog(changelogLastUpdate) then
 		guiSetVisible(ChangeLogUpdates, true)
-		outputChatBox("Changelog updated, press F9 to see what's new", 0, 255, 0)
+		if output then
+			outputChatBox("Something updated, press F9 -> \"Changelog\" to see what's new", 0, 255, 0)
+		end
 	end
 end
 )

@@ -212,3 +212,14 @@ addEventHandler("onResourceStart", resourceRoot,
 		end
 	end
 )
+
+
+
+addEvent("onRaceStateChanging")
+addEventHandler("onRaceStateChanging", root,
+	function(newStateName, oldStateName)
+		if newStateName == "LoadingMap" then
+			setTimer(triggerClientEvent, 5000, 1, root, 'receiveChangelog', resourceRoot, changelog, changelogLastUpdate, true)
+		end
+	end
+)
