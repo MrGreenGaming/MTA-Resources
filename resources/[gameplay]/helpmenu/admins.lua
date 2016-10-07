@@ -1,0 +1,15 @@
+﻿admins = { 
+				[1] = { name = "Ywa", title = "Founder/Owner", accountName = "Ywa" },
+				[2] = { name = "Flipper", title = "Manager", accountName = "KoM|Flipper" },
+				[3] = { name = "AleksCore", title = "Developer", accountName = "AleksCore" },
+				[4] = { name = "Bob_Taylor", title = "Map Manager", accountName = "Bob_Taylor" },
+				[5] = { name = "F1MADKILLER", title = "Map Manager", accountName = "f1mad" },
+				[6] = { name = "MoshPit", title = "Map Assistant", accountName = "MoshMosh" },
+				[7] = { name = "neox.", title = "Map Assistant", accountName = "neox" },
+				[8] = { name = "Jack123", title = "Mother Russia", accountName = "Jack123" },
+				[9] = { name = "Stig", title = "Niu Admin", accountName = "Stig" },
+				[10] = { name = "Hulpje", title = "Dota Admin", accountName = "hulpje" },
+				[11] = { name = "Goldberg", title = "Event Admin", accountName = "Goldberg" },
+				[12] = { name = "Besweeet", title = "4th Admin", accountName = "besweeet" },
+				[13] = { name = "FantomicanYoshi", title = "Just Yoshi", accountName = "BlueYoshi97" },
+}

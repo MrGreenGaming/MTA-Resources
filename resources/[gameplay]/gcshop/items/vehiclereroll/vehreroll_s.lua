@@ -157,8 +157,14 @@ function vehreroll_getRandomVehicleID(ID)
 
 	if vehreroll_vehs[gm] and vehreroll_vehs[gm][vehType] then
 		local theTable = vehreroll_vehs[gm][vehType]
-
-		return theTable[math.random(1,#theTable)]
+		
+		local returnID
+		for i=1, 10 do
+			returnID = theTable[math.random(1,#theTable)]
+			if returnID ~= ID then break end
+		end
+		
+		return returnID
 	end
 
 	return false
