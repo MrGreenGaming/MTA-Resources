@@ -57,31 +57,22 @@ addEventHandler("onLogin", root, onLogin)
 -------------
 -- avatars --
 -------------
-local supportedExtensions = {".png", ".bmp", ".jpg", ".jpeg" }
-
 function downloadAvatar(player)
 	-- Download player forum avatar
 	if accounts[player]:getProfileData() and accounts[player]:getProfileData()["photo"] then
 		--outputDebugString("forumAvatar1 " .. accounts[player]:getForumName() .. " " .. accounts[player]:getForumID() .. " " .. toJSON(accounts[player].gcRecord[7]))
 		
-		isImageCompatible = false
-		for _, extension in pairs(supportedExtensions) do
-			if string.find(accounts[player]:getProfileData()["photo"], extension) then	
-				isImageCompatible = true
-			end
-		end
-		
-		if isImageCompatible then
-			fetchRemote(accounts[player]:getProfileData()["photo"], function(data, err) 
-				-- outputDebugString("forumAvatar2 " .. accounts[player]:getForumName() .. " " .. tostring(err))
-				if err == 0 then
-					-- outputDebugString("forumAvatar3 " .. accounts[player]:getForumName())
+		fetchRemote(accounts[player]:getProfileData()["photo"], function(data, err) 
+			-- outputDebugString("forumAvatar2 " .. accounts[player]:getForumName() .. " " .. tostring(err))
+			if err == 0 then
+				-- outputDebugString("forumAvatar3 " .. accounts[player]:getForumName())
+				if not string.find(data, "GIF", 1, 3) then --if not GIF - then continue
 					accounts[player]["photo"] = data
 					triggerClientEvent("checkAvatar", resourceRoot, player, accounts[player]["photo"], accounts[player]:getForumID() )
-				
 				end
-			end)
-		end
+				
+			end
+		end)
 	else
 		-- outputDebugString("forumAvatar1 no profile data " .. getPlayerName(player))
 	end
