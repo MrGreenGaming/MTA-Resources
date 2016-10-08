@@ -85,6 +85,8 @@ function clientStarted()
 	for player, account in pairs(accounts) do
 		if account["photo"] then
 			triggerClientEvent(client, "checkAvatar", resourceRoot, player, account["photo"], accounts[player]:getForumID() )
+		else
+			triggerClientEvent("updateAvatar", resourceRoot, _, player )
 		end
 	end
 end
