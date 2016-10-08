@@ -66,7 +66,9 @@ function downloadAvatar(player)
 			-- outputDebugString("forumAvatar2 " .. accounts[player]:getForumName() .. " " .. tostring(err))
 			if err == 0 then
 				-- outputDebugString("forumAvatar3 " .. accounts[player]:getForumName())
-				if not string.find(data, "GIF", 1, 3) then --if not GIF - then continue
+				if string.find(data, "GIF", 1, 3) then
+					triggerClientEvent("updateAvatar", resourceRoot, _, player )
+				else
 					accounts[player]["photo"] = data
 					triggerClientEvent("checkAvatar", resourceRoot, player, accounts[player]["photo"], accounts[player]:getForumID() )
 				end
@@ -75,6 +77,7 @@ function downloadAvatar(player)
 		end)
 	else
 		-- outputDebugString("forumAvatar1 no profile data " .. getPlayerName(player))
+		triggerClientEvent("updateAvatar", resourceRoot, _, player )
 	end
 end
 

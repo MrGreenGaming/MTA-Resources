@@ -187,9 +187,15 @@ function saveAndUpdateAvatar(filepath, newData, forumid, player)
 end
 
 function updateAvatar(forumid, player)
-	setElementData(player, "forumAvatar", { type = "image", src = ":gc/img/photo-thumb-" .. forumid .. ".png", width = 20, height = 20 }, false)
+	if not forumid then
+		setElementData(player, "forumAvatar", { type = "image", src = ":stats/images/avatar.png", width = 20, height = 20 }, false)
+	else
+		setElementData(player, "forumAvatar", { type = "image", src = ":gc/img/photo-thumb-" .. forumid .. ".png", width = 20, height = 20 }, false)
+	end
 	exports.scoreboard:scoreboardForceUpdate()
 end
+addEvent("updateAvatar", true)
+addEventHandler("updateAvatar", resourceRoot, updateAvatar)
 
 
 
