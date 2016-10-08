@@ -131,7 +131,7 @@ function showGUI(playerInitiator, _, _, player)
 	if not player then player = playerInitiator end
 
 	local forumID = exports.gc:getPlayerForumID(player)
-	if not forumID then return false end
+	if not forumID then outputChatBox("Only registered players have stats.", playerInitiator, 255, 0, 0) return false end
 	if not playerStatsCache[forumID] then return false end
 	
 	updateToptimes(forumID)
