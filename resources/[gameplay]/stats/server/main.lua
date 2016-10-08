@@ -143,8 +143,8 @@ function showGUI(playerInitiator, _, _, player)
 	
 	triggerClientEvent(playerInitiator, "sendPlayerStats", resourceRoot, playerStatsCache[forumID], player)
 end
-addEvent("showGUI", true)
-addEventHandler("showGUI", resourceRoot, showGUI)
+addEvent("sb_showStats", true)
+addEventHandler("sb_showStats", root, showGUI)
 
 addEventHandler("onResourceStart", resourceRoot, 
 	function()

@@ -268,7 +268,7 @@ addEventHandler("sendPlayerStats", resourceRoot, receivePlayerStats)
 
 function scoreboardClick ( row, x, y, columnName )
 	if getElementType(source) == "player" and columnName == "forumAvatar" then
-		triggerServerEvent("showGUI", resourceRoot, _, _, _, source)
+		triggerServerEvent("sb_showStats", resourceRoot, _, _, _, source)
 		executeCommandHandler("Toggle scoreboard", "0")
 	end
 end
