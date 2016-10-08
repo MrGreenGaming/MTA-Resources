@@ -183,6 +183,7 @@ addEventHandler("onPlayerLogin", root,
 		for i=1, #admins do
 			if getAccountName(account) == admins[i].accountName then
 				onlineAdmins[i] = true
+				return
 			end
 		end
 	end
@@ -193,6 +194,21 @@ addEventHandler("onPlayerLogout", root,
 		for i=1, #admins do
 			if getAccountName(account) == admins[i].accountName then
 				onlineAdmins[i] = false
+				return
+			end
+		end
+	end
+)
+
+addEventHandler ("onPlayerQuit", root, 
+	function()
+		local account = getPlayerAccount(source)
+		if not account then return end
+		
+		for i=1, #admins do
+			if getAccountName(account) == admins[i].accountName then
+				onlineAdmins[i] = false
+				return
 			end
 		end
 	end
