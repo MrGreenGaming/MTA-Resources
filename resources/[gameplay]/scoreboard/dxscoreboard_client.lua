@@ -547,9 +547,9 @@ function doDrawScoreboard( rtPass, onlyAnim, sX, sY )
 			if (serverInfo.gamemode or serverInfo.map) and showGamemodeInfo then y = y+dxGetFontHeight( fontscale(serverInfoFont, scoreboardScale), serverInfoFont ) end
 			y = y+s(3)
 			
-			local textLength = dxGetTextWidth( "Hold RMB to enable scrolling/sorting", fontscale(rmbFont, s(0.75)), rmbFont )
+			local textLength = dxGetTextWidth( "Hold RMB to enable scrolling/sorting. Click on a avatar to check stats", fontscale(rmbFont, s(0.75)), rmbFont )
 			local textHeight = dxGetFontHeight( fontscale(rmbFont, s(0.75)), rmbFont )
-			dxDrawText( "Hold RMB to enable scrolling/sorting", sX/2-(textLength/2), topY+scoreboardDimensions.height-textHeight-s(2), sX/2+(textLength/2), topY+scoreboardDimensions.height-s(2), cWhite, fontscale(serverInfoFont, s(0.75)), rmbFont, "left", "top", false, false, drawOverGUI )
+			dxDrawText( "Hold RMB to enable scrolling/sorting. Click on a avatar to check stats", sX/2-(textLength/2), topY+scoreboardDimensions.height-textHeight-s(2), sX/2+(textLength/2), topY+scoreboardDimensions.height-s(2), cWhite, fontscale(serverInfoFont, s(0.75)), rmbFont, "left", "top", false, false, drawOverGUI )
 
 			local bottomX, bottomY = topX+scoreboardDimensions.width, topY+scoreboardDimensions.height
 			textLength = dxGetTextWidth( "settings...", fontscale(sbFont, s(sbFontScale)), sbFont )
