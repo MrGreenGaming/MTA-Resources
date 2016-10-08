@@ -131,7 +131,7 @@ function showGUI(playerInitiator, _, _, player)
 	if not player then player = playerInitiator end
 
 	local forumID = exports.gc:getPlayerForumID(player)
-	if not forumID then return false end
+	if not forumID then outputChatBox("Only registered players have stats.", playerInitiator, 255, 0, 0) return false end
 	if not playerStatsCache[forumID] then return false end
 	
 	updateToptimes(forumID)
@@ -143,8 +143,8 @@ function showGUI(playerInitiator, _, _, player)
 	
 	triggerClientEvent(playerInitiator, "sendPlayerStats", resourceRoot, playerStatsCache[forumID], player)
 end
-addEvent("showGUI", true)
-addEventHandler("showGUI", resourceRoot, showGUI)
+addEvent("sb_showStats", true)
+addEventHandler("sb_showStats", root, showGUI)
 
 addEventHandler("onResourceStart", resourceRoot, 
 	function()

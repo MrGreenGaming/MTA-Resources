@@ -62,7 +62,7 @@ MenuItems = { -- Name, Icon
 	{name = "My Account", event = "sb_showMyAccount"},
 	{name = "GC Shop", event = "sb_showGCShop"},
 	{name = "Achievements", event = "sb_showAchievements"},
-	{name = "My Stats", event = "sb_showMyStats"},
+	{name = "My Stats", event = "sb_showStats"},
 	{name = "Settings", event = "sb_showSettings"},
 	{name = "PM", event = "sb_showPM"},
 	{name = "Music Player", event = "sb_showMusicPlayer"},
@@ -301,10 +301,10 @@ function clickHandler(button,state,x,y)
 			-- outputChatBox(tostring(item.x).." "..tostring(item.w).." "..tostring(item.y).." "..tostring(item.h))
 			if cursorx>item.x and cursorx < item.x+item.w and cursory>item.y and cursory<item.y+item.h then
 				-- Do stuff here
-				if item.event ~= "sb_showMyStats" then
+				if item.event ~= "sb_showStats" then
 					triggerEvent(item.event,root)
 					showSidebar()
-				elseif item.event == "sb_showMyStats" then
+				elseif item.event == "sb_showStats" then
 					triggerServerEvent(item.event,root)
 					showSidebar()
 				end
