@@ -59,6 +59,11 @@ function resetPlayer ( player )
 end
 addEventHandler('onPlayerJoin', root, resetPlayer)
 
+function playerQuit()
+	g_Players[source] = nil
+end
+addEventHandler('onPlayerQuit', root, playerQuit)
+
 function mapStarting(mapInfo, mapOptions, gameOptions)
 	modename = mapInfo.modename
 	resname = mapInfo.resname

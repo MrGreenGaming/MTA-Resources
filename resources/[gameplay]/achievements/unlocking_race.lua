@@ -164,6 +164,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	if (getElementHealth(getPedOccupiedVehicle(source)) < 250) then
 		addPlayerAchievementRace(source, 26)
 	end	
+	local c
 	if (rank == 1) then
 		c = 0
 		tickTimer = setTimer(function()
@@ -197,7 +198,8 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			g_Players[j].win = false
 		end	
 	end	
-	count = 0
+	local count = 0
+	local onlyPlayer
 	for i,j in pairs(g_Players) do 
 		for k, m in pairs(j) do 
 			if (k == "died") and (m == true) then
