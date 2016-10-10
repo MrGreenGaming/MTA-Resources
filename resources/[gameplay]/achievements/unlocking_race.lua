@@ -164,9 +164,8 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	if (getElementHealth(getPedOccupiedVehicle(source)) < 250) then
 		addPlayerAchievementRace(source, 26)
 	end	
-	local c
+	local c = 0
 	if (rank == 1) then
-		c = 0
 		tickTimer = setTimer(function()
 				c = c + 1
 		end, 1000, 44)         --this needs to be adjusted in case Green server changes max Hurry time.
