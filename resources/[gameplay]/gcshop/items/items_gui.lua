@@ -125,7 +125,7 @@ function build_itemsWidget(parent, offsetX, offsetY)
 	guiLabelSetHorizontalAlign(gui["labelInfo_8"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelInfo_8"], "top")
 	
-	gui["btnBuyPerk_9"] = guiCreateButton(541, 891, 101, 101, "Price:\n3000 GC", false, gui["scrollAreaItems"])
+	gui["btnBuyPerk_9"] = guiCreateButton(541, 891, 101, 101, "Price:\nDisabled", false, gui["scrollAreaItems"])
 	if on_btnBuyPerk_9_clicked then
 		addEventHandler("onClientGUIClick", gui["btnBuyPerk_9"], on_btnBuyPerk_9_clicked, false)
 	end

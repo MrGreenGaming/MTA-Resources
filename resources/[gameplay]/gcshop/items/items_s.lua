@@ -106,7 +106,7 @@ local perks = {
 	[5] = { ID = 5, price =  2500, description = 'Voice', func = 'loadGCVoice'},
 	[6] = { ID = 6, price =  2000, description = 'Longer burnup time', func = 'loadGCBurn'},
 	[7] = { ID = 7, price =  3000, description = 'Extra long burnup time', func = 'loadGCBurnExtra', requires = {6}, exp = 30},
-	[8] = { ID = 8, price =  3000, description = 'Health transfer', func = 'loadGCBurnTransfer', requires = {6}, exp = 30},
+	[8] = { ID = 8, price =  3000, description = 'Health transfer', func = 'loadGCBurnTransfer', requires = {6}, exp = 30, disabled = true},
 	[9] = { ID = 9, price =  3000, description = 'Double sided objects', func = 'loadDoubleSided'},
 	[10] = { ID = 10, price =  2000, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
 	[11] = { ID = 11, price =  1000, description = 'NTS/DD Vehicle reroll for 30 days', func = 'loadVehicleReroll', exp = 30},
@@ -145,6 +145,9 @@ function buyPerk ( player, cmd, ID )
 		return
 	elseif not ID or type(i) ~= 'table' then
 		outputChatBox('Not a valid perk (use the correct name or ID)', player, 255, 0, 0 )
+		return
+	elseif i.disabled then
+		outputChatBox('Perk purchase has been disabled', player, 255, 0, 0 )
 		return
 	elseif checkPerk ( forumID, ID ) then
 		outputChatBox('You already bought this perk: '..i.description, player, 255, 165, 0 )
@@ -195,6 +198,9 @@ function buyPerkExtra ( player, cmd, ID, total )
 		return
 	elseif not ID or type(i) ~= 'table' or not tonumber(i.defaultAmount) then
 		outputChatBox('Not a valid perk (use the correct name or ID)', player, 255, 0, 0 )
+		return
+	elseif i.disabled then
+		outputChatBox('Perk purchase has been disabled', player, 255, 0, 0 )
 		return
 	elseif not total then
 		outputChatBox('Not a valid amount (use a number)', player, 255, 0, 0 )
