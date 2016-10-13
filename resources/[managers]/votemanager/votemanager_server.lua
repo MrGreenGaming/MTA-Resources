@@ -69,18 +69,24 @@ function startPoll(pollData)
 		for k,player in ipairs(pollData.visibleTo) do
 			if isElement(player) and getElementType(player) == "player" then
 				allowedPlayers[player] = true
-				playerAmount = playerAmount + 1
+				if getElementData(player, 'player state') ~= 'away' then
+					playerAmount = playerAmount + 1
+				end
 			end
 		end
 	elseif isElement(pollData.visibleTo) and getElementType(pollData.visibleTo) == "team"  then
 		for k,player in ipairs(getPlayersInTeam(pollData.visibleTo)) do
 			allowedPlayers[player] = true
-			playerAmount = playerAmount + 1
+			if getElementData(player, 'player state') ~= 'away' then
+				playerAmount = playerAmount + 1
+			end
 		end
 	elseif isElement(pollData.visibleTo) or pollData.visibleTo == nil then
 		for k,player in ipairs(getElementsByType("player",pollData.visibleTo or rootElement)) do
 			allowedPlayers[player] = true
-			playerAmount = playerAmount + 1
+			if getElementData(player, 'player state') ~= 'away' then
+				playerAmount = playerAmount + 1
+			end
 		end
 	else
 		return false, errorCode.invalidVisibleTo
@@ -168,6 +174,7 @@ function sendPoll(element)
 end
 
 function recheckVotes()
+	triggerClientEvent('showVotesAmount', resourceRoot, activePoll.playersWhoVoted, math.ceil(activePoll.maxVoters * activePoll.percentage / 100), activePoll.maxVoters)
 	--quit without checking if there aren't enough votes yet
 	if (activePoll.playersWhoVoted / activePoll.maxVoters)*100 < activePoll.percentage then
 		return
