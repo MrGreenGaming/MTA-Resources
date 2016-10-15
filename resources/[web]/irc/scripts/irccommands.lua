@@ -104,8 +104,10 @@ addEventHandler("onDiscordUserCommand", root, function(author, message)
 		discordNick = author.name or "Noname"
 		discordRoles = author.roles or {}
 		-- setTimer(function() usingDiscordCommand = false end, 50, 1)
-		if (tonumber(ircGetCommandLevel(cmd) or 6)) <= (tonumber(ircGetUserLevel()) or 0) then
+		if (tonumber(ircGetCommandLevel('!' .. cmd) or 6)) <= (tonumber(ircGetUserLevel()) or 0) then
 			commands['!' .. cmd](server, channel, user, cmd, unpack(message.params))
+		else
+			exports.discord:send("chat.message.action", { author = ">", text = "You do not have access to that command!" })
 		end
 		usingDiscordCommand = false
 	else
