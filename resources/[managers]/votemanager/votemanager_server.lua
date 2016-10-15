@@ -385,6 +385,7 @@ addEventHandler("onClientSendVote", rootElement,
 			end
 			activePoll[previousVote].votes = activePoll[previousVote].votes - 1
 			activePoll[voteID].votes = activePoll[voteID].votes + 1
+			activePoll.playersWhoVoted = activePoll.playersWhoVoted - 1
 		else
 			if get("log_votes") then
 				outputServerLog(getPlayerName(client).." voted "..voteID.." ("..activePoll[voteID][1]..")")
