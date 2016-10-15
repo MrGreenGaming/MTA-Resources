@@ -4,6 +4,114 @@
 -- Date: 02-05-2010                                   --
 --------------------------------------------------------
 
+----------------------------------------------
+-- Hook for showing IRC commands to discord --
+----------------------------------------------
+
+commands = {}
+usingDiscordCommand = false
+discordNick = ""
+discordRoles = {}
+
+function addIRCCommandHandler_ (cmd, fn)
+	commands[cmd] = fn
+	return addIRCCommandHandler(cmd, fn)
+end
+local addIRCCommandHandler = addIRCCommandHandler_
+
+-- replaced functions to output to discord if usingDiscordCommand is set
+local function ircSay (...)
+	if (usingDiscordCommand) then
+		exports.discord:send("chat.message.action", { author = ">", text = removemIRCChars(({...})[2]) })
+	else
+		return func_ircSay(unpack{...})
+	end
+end
+
+local function ircNotice (...)
+	if (usingDiscordCommand) then
+		exports.discord:send("chat.message.action", { author = ">", text = removemIRCChars(({...})[2]) })
+	else
+		return func_ircNotice(unpack{...})
+	end
+end
+
+local function outputIRC (...)
+	if (usingDiscordCommand) then
+		exports.discord:send("chat.message.action", { author = ">", text = removemIRCChars(({...})[1]) })
+	else
+		return func_outputIRC(unpack{...})
+	end
+end
+
+local function ircIsEchoChannel (...)
+	if (usingDiscordCommand) then
+		return true
+	else
+		return func_ircIsEchoChannel(unpack{...})
+	end
+end
+
+local function ircIsCommandEchoChannelOnly (...)
+	if (usingDiscordCommand) then
+		return true
+	else
+		return func_ircIsCommandEchoChannelOnly(unpack{...})
+	end
+end
+
+local function ircGetUserNick (...)
+	if (usingDiscordCommand) then
+		return discordNick
+	else
+		return func_ircGetUserNick(unpack{...})
+	end
+end
+
+local function ircGetUserLevel (...)
+	if (usingDiscordCommand) then
+		for _, role in pairs(discordRoles) do
+			if role == "Admins" then
+				return 6
+			end
+		end
+		return 0
+	else
+		return func_ircGetUserLevel(unpack{...})
+	end
+end
+
+function removemIRCChars(text)
+	return text:gsub("%d%d?", "")
+end
+
+addEvent("onDiscordUserCommand")
+addEventHandler("onDiscordUserCommand", root, function(author, message)
+	usingDiscordCommand = false
+	local cmd = message.command
+	if not (cmd and type(cmd) == "string" and #cmd > 0) then
+		return
+	end
+	
+	
+	
+	-- local outputIRC_ = outputIRC
+	-- local outputIRC = function(text)
+		-- exports.discord:send("chat.message.action", { author = ">", text = text })
+	-- end
+	if commands['!' .. cmd] then
+		usingDiscordCommand = true
+		discordNick = author.name or "Noname"
+		discordRoles = author.roles or {}
+		-- setTimer(function() usingDiscordCommand = false end, 50, 1)
+		if (tonumber(ircGetCommandLevel(cmd) or 6)) <= (tonumber(ircGetUserLevel()) or 0) then
+			commands['!' .. cmd](server, channel, user, cmd, unpack(message.params))
+		end
+		usingDiscordCommand = false
+	else
+		exports.discord:send("chat.message.action", { author = ">", text = "That command does not exist!" })
+	end
+end)
 ------------------------------------
 -- Echo
 ------------------------------------
