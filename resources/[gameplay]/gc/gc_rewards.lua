@@ -194,7 +194,7 @@ function finish(rank)
 			addPlayerGreencoins(player, rewarded_Players[player].finishReward)
 			
 			exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0)
-			outputChatBox(prefix .."You earned ".. rewarded_Players[player].finishReward .." GC for finishing ".. tostring(rank) .. suffix ..". You now have ".. getPlayerGreencoins(player) .." GC.", player, 0, 255, 0, true)				
+			outputChatBox(prefix .."You earned ".. rewarded_Players[player].finishReward .." GC for finishing ".. tostring(rank) .. suffix ..". You now have ".. comma_value(getPlayerGreencoins(player)) .." GC.", player, 0, 255, 0, true)				
 			
 			return
 		end
@@ -572,4 +572,16 @@ end
 
 function isMapTesting()
 	return getResourceInfo(exports.mapmanager:getRunningGamemodeMap(), 'newupload') == "true"
+end
+
+--http://lua-users.org/wiki/FormattingNumbers
+function comma_value(amount)
+  local formatted = amount
+  while true do  
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1 %2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
 end
