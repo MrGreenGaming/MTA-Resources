@@ -80,10 +80,10 @@ end
 
 local loggedInGC = false
 function gcLogin ( forumID_, amount )
-	guiSetText(shop_GUI["labelGreencoinsShadow1"], tostring(tonumber(amount) or 0)..' GreenCoins')
+	guiSetText(shop_GUI["labelGreencoinsShadow1"], tostring(comma_value(tonumber(amount)) or 0)..' GreenCoins')
 	guiLabelSetColor(shop_GUI["labelGreencoinsShadow1"], 0, 0, 0 )
 	
-	guiSetText(shop_GUI["labelGreencoins"], tostring(tonumber(amount) or 0)..' GreenCoins')
+	guiSetText(shop_GUI["labelGreencoins"], tostring(comma_value(tonumber(amount)) or 0)..' GreenCoins')
 	guiLabelSetColor(shop_GUI["labelGreencoins"], 0, 255, 0 )
 
 	
@@ -131,8 +131,8 @@ function gcChange ( amount )
 		guiSetText(shop_GUI["labelGreencoins"], '')
 	else
 		amount_GCS = tonumber(amount) or 0;
-		guiSetText(shop_GUI["labelGreencoinsShadow1"], tostring(tonumber(amount) or 0)..' GreenCoins')
-		guiSetText(shop_GUI["labelGreencoins"], tostring(tonumber(amount) or 0)..' GreenCoins')
+		guiSetText(shop_GUI["labelGreencoinsShadow1"], tostring(comma_value(tonumber(amount)) or 0)..' GreenCoins')
+		guiSetText(shop_GUI["labelGreencoins"], tostring(comma_value(tonumber(amount)) or 0)..' GreenCoins')
 	end
 end
 addEvent("onGCChange", true)
@@ -195,3 +195,14 @@ addEventHandler("sb_showMyAccount",root,function()
 	
 end)
 
+--http://lua-users.org/wiki/FormattingNumbers
+ function comma_value(amount)
+   local formatted = amount
+   while true do  
+     formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1 %2')
+     if (k==0) then
+       break
+     end
+   end
+   return formatted
+ end
