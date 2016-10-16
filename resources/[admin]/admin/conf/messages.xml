@@ -20,7 +20,7 @@
       <log>ADMIN: $admin has kicked $player $data</log>
     </group>
     <group action="mute" r="255" g="0" b="0">
-      <all>$player has been muted$by_admin_4all. $data2</all>
+      <all>$player has been muted$by_admin_4all. $data2 $data</all>
       <log>ADMIN: $admin has muted $player $data $data2</log>
     </group>
 	<group action="setnick" r="255" g="0" b="0">

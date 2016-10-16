@@ -61,7 +61,15 @@ function aCommand ( admin, command, ... )
 		if ( ( aclGetAccount ( admin ) ) and ( hasObjectPermissionTo ( aclGetAccount ( admin ), "command."..call.action ) ) ) then
 			local arg, errormsg = aCommandToArgs ( { ... }, call.args )
 			if not errormsg then
-				if ( call.type == "player" ) then triggerEvent ( "aPlayer", admin, arg[1], call.action, arg[2], arg[3], arg[4] )
+				if ( call.type == "player" ) then 
+					if isObjectInACLGroup( aclGetAccount ( admin ), aclGetGroup ("Killers") ) and not isObjectInACLGroup( aclGetAccount ( admin ), aclGetGroup ("Admin") ) then
+						if tonumber(arg[3]) and tonumber(arg[3]) > 3600 or not arg[3] then
+							arg[3] = 3600
+						end
+						triggerEvent ( "aPlayer", admin, arg[1], call.action, arg[2], arg[3], arg[4] )
+					else
+						triggerEvent ( "aPlayer", admin, arg[1], call.action, arg[2], arg[3], arg[4] )
+					end
 				elseif ( call.type == "vehicle" ) then triggerEvent ( "aVehicle", admin, arg[1], call.action, arg[2], arg[3], arg[4] )
 				else triggerEvent ( "a"..string.upper ( string.sub ( call.type, 1, 1 ) )..string.sub ( call.type, 2 ), admin, call.action, arg[1], arg[2], arg[3], arg[4] )
 				end
