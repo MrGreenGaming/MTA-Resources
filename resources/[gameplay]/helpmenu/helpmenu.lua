@@ -151,7 +151,7 @@ function ( changelog, changelogLastUpdate, output )
 end
 )
 
-local changelogFile = '@changelog.xml'
+local changelogFile = 'changelog.xml'
 function isNewChangelog(changelogLastUpdate)
 	local setting = fileExists(changelogFile) and xmlLoadFile(changelogFile) or xmlCreateFile(changelogFile, 'settings')
 	local new = false
