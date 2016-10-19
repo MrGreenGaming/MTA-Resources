@@ -3,7 +3,7 @@ local playersCountry = {}
 --------------------------------------------------
 -- Screen resolution for which GUI was designed --
 --------------------------------------------------
-local myScreenW, myScreenH = 1920, 1080
+local maxResW, maxResH = 3840, 2160
 
 -------------------------------------
 -- Screen resolution of the client --
@@ -13,37 +13,43 @@ local oldScreenW, oldScreenH = guiGetScreenSize()
 -----------------------------------------------------------
 -- Calculations to make GUI look good on all resolutions --
 -----------------------------------------------------------
-local ratio = math.min(myScreenH/oldScreenH, myScreenW/oldScreenW) 
-local screenH = math.ceil(myScreenH*ratio) 
-local screenW = math.ceil(myScreenW*ratio) 
-local windowH = (515/myScreenH)*screenH
-local headerH = (27/myScreenH)*screenH
+local ratio = math.min(maxResH/oldScreenH, maxResW/oldScreenW) 
+local screenH = math.ceil(maxResH*ratio) 
+local screenW = math.ceil(maxResW*ratio) 
+local windowH = (515/maxResH)*screenH
+local headerH = (27/maxResH)*screenH
 if windowH+headerH > oldScreenH then
 	local ratio_multipl = windowH/oldScreenH
-	local ratio = (ratio/ratio_multipl)*0.7
+	if oldScreenH >= 1080 then
+		ratio = (ratio/ratio_multipl)*0.475
+	elseif oldScreenH > 720 and oldScreenH < 1050 then
+		ratio = (ratio/ratio_multipl)*0.55
+	else
+		ratio = (ratio/ratio_multipl)*0.7
+	end
 	----------------------------------------------------------------------------
 	-- New fake screen resolution which we'll use below to draw GUI correctly --
 	----------------------------------------------------------------------------
-	screenW = math.ceil(myScreenW*ratio)
-	screenH = math.ceil(myScreenH*ratio) 
+	screenW = math.ceil(maxResW*ratio)
+	screenH = math.ceil(maxResH*ratio) 
 end
 
 
-local windowW = (460/myScreenW)*screenW
-local windowH = (515/myScreenH)*screenH
+local windowW = (460/maxResW)*screenW
+local windowH = (515/maxResH)*screenH
 local windowPosX = 0.5*(oldScreenW-windowW)
 local windowPosY = 0.5*(oldScreenH-windowH)
-local headerH = (27/myScreenH)*screenH
+local headerH = (27/maxResH)*screenH
 local stripeW = windowW*0.65
-local stripeH = (15/myScreenH)*screenH
+local stripeH = (15/maxResH)*screenH
 local stripePosX = windowPosX+(windowW-stripeW)
-local textIndent = (10/myScreenW)*screenW
+local textIndent = (10/maxResW)*screenW
 local textColumn1W = windowW*0.25
 local textPosX = stripePosX+textIndent
 local textColumn2W = textPosX+textColumn1W
 
-local avatarW = (100/myScreenW)*screenW
-local avatarH = (100/myScreenH)*screenH
+local avatarW = (100/maxResW)*screenW
+local avatarH = (100/maxResH)*screenH
 local avatarPosX = windowPosX+0.5*(windowW-stripeW-avatarW)
 local avatarPosY = windowPosY+headerH*2.1
 local textNameW = stripePosX-windowPosX
@@ -51,22 +57,22 @@ local textNamePosY = windowPosY+headerH*1.1
 local textGCPosY = windowPosY+avatarH+headerH*2.1
 local textGCH = headerH
 
-local closeButtonW = (19/myScreenW)*screenW
-local closeButtonH = (19/myScreenH)*screenH
-local closeButtonIndent = (4/myScreenW)*screenW
+local closeButtonW = (19/maxResW)*screenW
+local closeButtonH = (19/maxResH)*screenH
+local closeButtonIndent = (4/maxResW)*screenW
 local closeButtonX = windowPosX+windowW-closeButtonIndent-closeButtonW
 local closeButtonY = windowPosY+closeButtonIndent
 --[[
-local gridlistIndent = (4/myScreenW)*screenW
+local gridlistIndent = (4/maxResW)*screenW
 local gridlistPosX = windowPosX+gridlistIndent
 local gridlistPosY = textGCPosY+textGCH+gridlistIndent
 local gridlistW = textNameW-2*gridlistIndent
 local gridlistH = (windowPosY+windowH)-gridlistPosY-gridlistIndent
 ]]
 
-local font0_opensans = exports.fonts:createCEGUIFont("OpenSans", math.floor(0.0148148148148148*screenH) )
-local font1_opensans = exports.fonts:createCEGUIFont("OpenSans", math.floor(0.011*screenH) )
-local font0_arial = exports.fonts:createCEGUIFont("Tahoma Bold", math.floor(0.008*screenH) )
+local font0_opensans = exports.fonts:createCEGUIFont("OpenSans", math.floor(16/maxResH*screenH) )
+local font1_opensans = exports.fonts:createCEGUIFont("OpenSans", math.floor(11.88/maxResH*screenH) )
+local font0_arial = exports.fonts:createCEGUIFont("Tahoma Bold", math.floor(8.64/maxResH*screenH) )
 
 GUIEditor = {
     label = {},
@@ -137,7 +143,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
         guiLabelSetHorizontalAlign(GUIEditor.label["name"], "center", false)
 		guiSetProperty(GUIEditor.label["name"], "AlwaysOnTop", "True")   
 		
-		flag = guiCreateStaticImage(stripePosX, avatarPosY-7, (16/myScreenW)*screenW, (11/myScreenH)*screenH, "images/dot.png", false, GUIEditor.label["parent"])
+		flag = guiCreateStaticImage(stripePosX, avatarPosY-7, (16/maxResW)*screenW, (11/maxResH)*screenH, "images/dot.png", false, GUIEditor.label["parent"])
 		guiSetProperty(flag, "AlwaysOnTop", "True")
 		guiSetProperty(flag, "ImageColours", "tl:00FFFFFF tr:00FFFFFF bl:00FFFFFF br:00FFFFFF")
 		
@@ -247,7 +253,7 @@ function receivePlayerStats( tbl, player )
 		local posX, posY = guiGetPosition(GUIEditor.label["valuecountry"], false)
 		local w, h = guiGetSize(GUIEditor.label["valuecountry"], false)
 		local textSize = guiLabelGetTextExtent(GUIEditor.label["valuecountry"])
-		guiSetPosition(flag, posX-((18/myScreenW)*screenW)+(w-textSize), posY+( (stripeH-((11/myScreenH)*screenH))*0.5 ), false)
+		guiSetPosition(flag, posX-((18/maxResW)*screenW)+(w-textSize), posY+( (stripeH-((11/maxResH)*screenH))*0.5 ), false)
 		guiStaticImageLoadImage(flag, country.flag)
 		guiSetProperty(flag, "ImageColours", "tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF")
 	else
