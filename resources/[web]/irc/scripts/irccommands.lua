@@ -731,7 +731,7 @@ addIRCCommandHandler("!uptime",
 function players(server,channel,user,command,name)
 		if not name then
 		if getPlayerCount() == 0 then
-			ircSay(channel,"There are no players ingame.")
+			ircSay(channel,"There are no players ingame")
 		elseif getPlayerCount() > 1 then
 			local players = getElementsByType("player")
 			for i,player in ipairs (players) do
