@@ -731,8 +731,8 @@ addIRCCommandHandler("!uptime",
 function players(server,channel,user,command,name)
 		if not name then
 		if getPlayerCount() == 0 then
-			ircSay(channel,"There are no players ingame")
-		else
+			ircSay(channel,"There are no players ingame.")
+		elseif getPlayerCount() > 1 then
 			local players = getElementsByType("player")
 			for i,player in ipairs (players) do
 				players[i] = getNameNoColor(player)
@@ -749,6 +749,23 @@ function players(server,channel,user,command,name)
 				end
 			end
 			ircSay(channel,"6There are "..getPlayerCount().." players ingame: "..table.concat(players,", "))
+		elseif getPlayerCount() == 1 then
+			local players = getElementsByType("player")
+			for i,player in ipairs (players) do
+				players[i] = getNameNoColor(player)
+                local accName = getAccountName ( getPlayerAccount ( player ) )
+                if accName and isObjectInACLGroup ("user."..accName, aclGetGroup ( "Admin" ) ) then
+                    players[i] = "12"..players[i].."6"
+                elseif accName and isObjectInACLGroup ("user."..accName, aclGetGroup ( "Killers" ) ) then
+                    players[i] = "4"..players[i].."6"
+                elseif getElementData ( player, "adminapplicant" ) then
+                    players[i] = "13"..players[i].."6"
+                end
+				if getElementData(player, "player state") == "away" then
+					players[i] = ""..players[i].."(💤)"
+				end
+			end
+			ircSay(channel,"6There is "..getPlayerCount().." player ingame: "..table.concat(players,", "))
 		end
 		else 
 			local theTable = { } 
