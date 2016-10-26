@@ -322,7 +322,7 @@ end
 addEvent('onPlayerFinish')
 addEventHandler('onPlayerFinish', root,
 	function(rank, time)
-	local forumid = exports.gc:getPlayerForumID(player)
+	local forumid = exports.gc:getPlayerForumID(source)
 		if forumid then
 			updatePlayerTop(source, rank, time)
 		else
