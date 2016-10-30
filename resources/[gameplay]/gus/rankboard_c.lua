@@ -29,7 +29,7 @@ function msToTimeStr(ms)
 	end
 	local centiseconds = tostring(math.floor(math.fmod(ms, 1000)/1))
 	if #centiseconds == 1 then
-		centiseconds = '0' .. centiseconds
+		centiseconds = '00' .. centiseconds
 	end
 	local s = math.floor(ms / 1000)
 	local seconds = tostring(math.fmod(s, 60))
