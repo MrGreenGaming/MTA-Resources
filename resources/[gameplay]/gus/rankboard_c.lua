@@ -27,7 +27,7 @@ function msToTimeStr(ms)
 	if not ms then
 		return ''
 	end
-	local centiseconds = tostring(math.floor(math.fmod(ms, 1000)/10))
+	local centiseconds = tostring(math.floor(math.fmod(ms, 1000)/1))
 	if #centiseconds == 1 then
 		centiseconds = '0' .. centiseconds
 	end
