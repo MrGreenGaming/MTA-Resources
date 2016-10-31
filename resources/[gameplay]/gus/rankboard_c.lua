@@ -31,7 +31,7 @@ function msToTimeStr(ms)
 	if #centiseconds == 1 then
 		centiseconds = '00' .. centiseconds
 	elseif #centiseconds == 10 then
-		centiseconds = '0' .. centiseconds .. '0'
+		centiseconds = '0' .. centiseconds
 	end
 	local s = math.floor(ms / 1000)
 	local seconds = tostring(math.fmod(s, 60))
