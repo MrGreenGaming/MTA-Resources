@@ -107,11 +107,13 @@ function NTS:getRandomVehicle(checkpoint)
 				NTS.custom[checkpoint.id] = {}
 				local modelCount = 1
 				for model in string.gmatch(models, "([^;]+)") do
-					if getVehicleNameFromModel(model) == "" then
-						outputDebugString("Model " .. model .. " not valid for checkpoint " .. checkpoint.id, 0, 255, 0, 213)
-					else
-						NTS.custom[checkpoint.id][modelCount] = model
-						modelCount = modelCount + 1
+					if tonumber(model) then
+						if getVehicleNameFromModel(model) == "" then
+							outputDebugString("Model " .. model .. " not valid for checkpoint " .. checkpoint.id, 0, 255, 0, 213)
+						else
+							NTS.custom[checkpoint.id][modelCount] = model
+							modelCount = modelCount + 1
+						end
 					end
 				end
 				list = NTS.custom[checkpoint.id]
