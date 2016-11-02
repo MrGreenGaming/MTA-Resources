@@ -1,0 +1,41 @@
+<def name="MrGreenGaming" extends="race" >
+	<setting 	name="racemode" 
+				friendlyname="MrGreen Race mode" 
+				type="selection:Race/DD,RTF,CTF,NTS,Shooter" 
+				description="Select one of the special race modes to test your maps before uploading" 
+				required="false"
+	/>
+	<setting 	name="ghostmode_checkpoint" 
+				friendlyname="Ghostmode checkpoint" 
+				type="natural" 
+				description="If the MrGreenGaming racemode has dynamic ghostmode enabled, ghostmode will turn off after reaching this checkpoint (default is 5)" 
+				required="false"
+	/>
+
+ 	<!-- <element name="checkpoint" friendlyname="NTS Checkpoint">
+		<data name="nts" type="selection:vehicle,water,air" required="true" />
+	</element> -->
+
+	<element name="rtf" friendlyname="RTF Flag" instructions="The flag to be captured." >
+		<data name="position" type="coord3d" default="0,0,0" />
+		<object model="2993" position="0,0,0" />
+		<marker position="0,0,0" size="1.5" type="corona" color="#00ff00ff" />
+	</element>
+	<element name="ctfred" friendlyname="Red CTF Flag" instructions="The Red flag to be captured." icon="red.png" >
+		<data name="position" type="coord3d" default="0,0,0" />
+		<object model="2914" position="0,0,0" />
+		<marker position="0,0,0" size="1.5" type="cylinder" color="#ff0000ff" />
+	</element>
+	<element name="ctfblue" friendlyname="Blue CTF Flag" instructions="The Blue flag to be captured." icon="blue.png" >
+		<data name="position" type="coord3d" default="0,0,0" />
+		<object model="2048" position="0,0,0" />
+		<marker position="0,0,0" size="1.5" type="cylinder" color="#0000ffff" />
+	</element>
+	<element name="randommarker" friendlyname="Random Marker" instructions="A pickup marker for the RandomMarkers script" >
+		<data name="position" type="coord3d" default="0,0,0" />
+		<marker position="0,0,0" size="4" type="cylinder" color="#0000ffff" />
+	</element>
+	<script src="edf_s.lua" type="server" />
+	<script src="edf_c.lua" type="client" />
+	
+ </def>

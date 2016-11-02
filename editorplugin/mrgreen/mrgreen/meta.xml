@@ -1,0 +1,12 @@
+<meta>
+	<info author="SDK" description="Map editor plugin for MrGreenGaming race modes" type="script" version="0.1" edf:definition="mrgreen.edf" />
+	
+	<script src="edf_s.lua" type="server" />
+	<script src="edf_c.lua" type="client" />
+	
+	<file src="blue.png" />
+	<file src="blue.txd" />
+	<file src="red.png" />
+	<file src="red.txd" />
+	<file src="flag.dff" />
+</meta>
