@@ -29,6 +29,7 @@ A non-dramatic 'The MIT License' applies. See `LICENSE` file for details.
 ## Additional implementation
 * Stijn Lindeman (Puma) - Pickup icons
 * Megas97
+* Hans Swart (Bierbuikje)
 
 # Links
 * Development help: http://mrgreengaming.com/forums/topic/17140-development-topic-lua-github-ask-here-if-you-need-help-with-git-or-the-resources/
