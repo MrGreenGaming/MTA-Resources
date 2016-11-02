@@ -351,8 +351,8 @@ function checkNTSMap($mapxml) {
 		$attr = $node->attributes();
 		if ($n == "spawnpoint")	$spawns++;
 		elseif ($n == "checkpoint") {
-			if (!isset($attr["nts"]) or !($attr["nts"] == "vehicle" or $attr["nts"] == "boat" or $attr["nts"] == "air"))
-				return ("Checkpoint #$checkpoints+1 has no correct nts type (vehicle/air/boat) set");
+			if (!isset($attr["nts"]) or !($attr["nts"] == "vehicle" or $attr["nts"] == "boat" or $attr["nts"] == "air" or $attr["nts"] == "custom"))
+				return ("Checkpoint #$checkpoints+1 has no correct nts type (vehicle/air/boat/custom) set");
 			$checkpoints++;
 		}
 	}

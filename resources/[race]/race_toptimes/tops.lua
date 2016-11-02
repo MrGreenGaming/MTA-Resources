@@ -322,7 +322,12 @@ end
 addEvent('onPlayerFinish')
 addEventHandler('onPlayerFinish', root,
 	function(rank, time)
-		updatePlayerTop(source, rank, time)
+	local forumid = exports.gc:getPlayerForumID(source)
+		if forumid then
+			updatePlayerTop(source, rank, time)
+		else
+			return outputChatBox("You need to login to your Green-Coins account in order to do toptimes!", source)
+		end
 	end
 , true, 'low')
 

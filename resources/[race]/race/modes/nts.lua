@@ -18,7 +18,7 @@ function NTS:isMapValid()
 end
 
 function NTS:isValidCheckpoint(checkpoint)
-	return checkpoint.nts == 'vehicle' or checkpoint.nts == 'boat' or checkpoint.nts == 'air'
+	return checkpoint.nts == 'vehicle' or checkpoint.nts == 'boat' or checkpoint.nts == 'air' or checkpoint.nts == 'custom'
 end
 
 function NTS:onPlayerWasted(player)
@@ -39,6 +39,7 @@ function NTS:onPlayerWasted(player)
 end
 
 function NTS:start()
+	NTS.custom = {nil}
 	math.randomseed(getTickCount()) 
 end
 
@@ -97,6 +98,29 @@ function NTS:getRandomVehicle(checkpoint)
 		list = NTS._planes
 	elseif checkpoint.nts == 'vehicle' then
 		list = NTS._cars
+	elseif checkpoint.nts == 'custom' then
+		local models = tostring(checkpoint.models)
+		if models then
+			if NTS.custom[checkpoint.id] then
+				list = NTS.custom[checkpoint.id]
+			else
+				NTS.custom[checkpoint.id] = {}
+				local modelCount = 1
+				for model in string.gmatch(models, "([^;]+)") do
+					if tonumber(model) then
+						if getVehicleNameFromModel(model) == "" then
+							outputDebugString("Model " .. model .. " not valid for checkpoint " .. checkpoint.id, 0, 255, 0, 213)
+						else
+							NTS.custom[checkpoint.id][modelCount] = model
+							modelCount = modelCount + 1
+						end
+					end
+				end
+				list = NTS.custom[checkpoint.id]
+			end
+		else
+			return false
+		end
 	else
 		return false
 	end	
