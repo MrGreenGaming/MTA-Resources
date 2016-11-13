@@ -148,6 +148,12 @@ function()
 						ms = "0"..ms
 					end	
 					firstTimeMS = time
+					local r, g, b
+					local localTeam = getPlayerTeam(localPlayer)
+					if localTeam then
+					r, g, b = getTeamColor (localTeam)
+					name = RGBToHex(r,g,b)..""..name
+					end
 					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 					shadowDrawnTexts[name] = dxDrawText(tostring(rank)..") "..tostring(shadowName).."  "..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 1, startY+add+1, x, startY+add+15+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 					drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).."  "..timeColor..""..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 0, startY+add, x, startY+add+15, theColor, rScale, theFont, "left","center",true,false,false,true,true)
@@ -163,7 +169,13 @@ function()
 						ms = "0"..ms
 					end
 					startX = 0
-		
+					
+					local r, g, b
+					local localTeam = getPlayerTeam(localPlayer)
+					if localTeam then
+					r, g, b = getTeamColor (localTeam)
+					name = RGBToHex(r,g,b)..""..name
+					end
 					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )	
 					shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName).." +"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), startX+1, startY+add+1, x, startY+add+15+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 					drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).."" ..timeColor.." +"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), startX, startY+add, x, startY+add+15, theColor, rScale, theFont, "left","center",true,false,false,true,true)
