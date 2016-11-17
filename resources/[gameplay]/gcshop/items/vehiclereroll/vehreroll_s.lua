@@ -109,13 +109,20 @@ function rerollPlayerVehicle(player)
 
 	if vehroll_firstcheckpoint and not vehroll_firstCheckpointPlayer[player] then return end
 
-
+	local gm = exports.race:getRaceMode()
+	local checkpoints
+	if gm == "Never the same" then
+		checkpoints = exports.race:getCheckPoints()
+	else
+		checkpoints = false
+	end
+	
 	local vehicle = getPedOccupiedVehicle( player )
 
 	local vehicleID = getElementModel(vehicle)
 	if vehreroll_disallowedVehicles[vehicleID] then outputChatBox("Reroll not allowed with this vehicle.",player,255,0,0) return end
 
-	local randomVehID = vehreroll_getRandomVehicleID(vehicleID)
+	local randomVehID = vehreroll_getRandomVehicleID(vehicleID, player, checkpoints)
 	if not randomVehID then return end
 
 	
@@ -147,24 +154,79 @@ function vehreroll_setBinds(player,bool)
 	end
 end
 
-function vehreroll_getRandomVehicleID(ID)
+function vehreroll_getRandomVehicleID(ID, player, checkpoints)
 	local gm = exports.race:getRaceMode()
 	
-	local vehType = vehreroll_getVehicleType(ID)
-	if not vehType then return false end
-	
-	
-
-	if vehreroll_vehs[gm] and vehreroll_vehs[gm][vehType] then
-		local theTable = vehreroll_vehs[gm][vehType]
-		
-		local returnID
-		for i=1, 10 do
-			returnID = theTable[math.random(1,#theTable)]
-			if returnID ~= ID then break end
+	if gm == "Never the same" then
+		local playerCP = getElementData(player, "race.checkpoint") - 1
+		local cpType
+		if playerCP == 0 then
+			cpType = "none"
+		else
+			cpType = checkpoints[playerCP].nts
 		end
 		
-		return returnID
+		if cpType == "custom" then
+			local models = tostring(checkpoints[playerCP].models)
+			if not models then return false end
+			local custom = {}
+			local modelCount = 1
+			for model in string.gmatch(models, "([^;]+)") do
+				if tonumber(model) then
+					if getVehicleNameFromModel(model) == "" then
+						--outputDebugString("Model " .. model .. " not valid for checkpoint " .. checkpoint.id, 0, 255, 0, 213)
+					else
+						custom[modelCount] = model
+						modelCount = modelCount + 1
+					end
+				end
+			end
+			local returnID
+			for i=1, 10 do
+				returnID = custom[math.random(1,#custom)]
+				if returnID ~= ID then break end
+			end
+			return returnID
+		else
+			local vehType
+			if cpType == "none" then
+				vehType = vehreroll_getVehicleType(ID)
+			elseif cpType == "vehicle" then
+				vehType = "car"
+			elseif cpType == "air" then
+				vehType = "plane"
+			end
+			if not vehType then return false end
+		
+			if vehreroll_vehs[gm] and vehreroll_vehs[gm][vehType] then
+				local theTable = vehreroll_vehs[gm][vehType]
+				
+				local returnID
+				for i=1, 10 do
+					returnID = theTable[math.random(1,#theTable)]
+					if returnID ~= ID then break end
+				end
+				
+				return returnID
+			end
+		end
+	else
+		local vehType = vehreroll_getVehicleType(ID)
+		if not vehType then return false end
+		
+		
+	
+		if vehreroll_vehs[gm] and vehreroll_vehs[gm][vehType] then
+			local theTable = vehreroll_vehs[gm][vehType]
+			
+			local returnID
+			for i=1, 10 do
+				returnID = theTable[math.random(1,#theTable)]
+				if returnID ~= ID then break end
+			end
+			
+			return returnID
+		end
 	end
 
 	return false
