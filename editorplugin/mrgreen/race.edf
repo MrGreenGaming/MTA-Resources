@@ -20,7 +20,8 @@
 		<data name="size" type="number" description="marker size" default="2.25" />
 		<data name="nextid" type="element:checkpoint" description="The next checkpoint after this one" required="false" default="" />
 		<data name="vehicle" type="vehicleID" required="false"/>
-		<data name="nts" type="selection:none,vehicle,boat,air" default="none" required="false" />
+		<data name="nts" type="selection:none,vehicle,boat,air,custom" default="none" required="false" />
+		<data name="models" type="string" default="none" required="false" />
 		<marker color="!color!" type="!type!" size="!size!"/>
 	</element>
 	<element name="racepickup" friendlyname="Race pickup" icon="edf/pickup.png">
