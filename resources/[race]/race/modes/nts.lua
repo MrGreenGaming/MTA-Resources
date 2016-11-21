@@ -102,6 +102,7 @@ function NTS:getRandomVehicle(checkpoint)
 		local models = tostring(checkpoint.models)
 		if models then
 			if NTS.custom[checkpoint.id] then
+				if #NTS.custom[checkpoint.id] == 0 then return false end
 				list = NTS.custom[checkpoint.id]
 			else
 				NTS.custom[checkpoint.id] = {}
@@ -116,6 +117,7 @@ function NTS:getRandomVehicle(checkpoint)
 						end
 					end
 				end
+				if #NTS.custom[checkpoint.id] == 0 then return false end
 				list = NTS.custom[checkpoint.id]
 			end
 		else
