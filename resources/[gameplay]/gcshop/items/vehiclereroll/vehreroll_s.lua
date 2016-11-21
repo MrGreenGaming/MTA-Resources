@@ -176,7 +176,7 @@ function vehreroll_getRandomVehicleID(ID, player, checkpoints)
 					if getVehicleNameFromModel(model) == "" then
 						--outputDebugString("Model " .. model .. " not valid for checkpoint " .. checkpoint.id, 0, 255, 0, 213)
 					else
-						custom[modelCount] = model
+						custom[modelCount] = tonumber(model)
 						modelCount = modelCount + 1
 					end
 				end
