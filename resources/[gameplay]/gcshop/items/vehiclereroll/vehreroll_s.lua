@@ -181,6 +181,7 @@ function vehreroll_getRandomVehicleID(ID, player, checkpoints)
 					end
 				end
 			end
+			if #custom == 0 then return false end
 			local returnID
 			for i=1, 10 do
 				returnID = custom[math.random(1,#custom)]
