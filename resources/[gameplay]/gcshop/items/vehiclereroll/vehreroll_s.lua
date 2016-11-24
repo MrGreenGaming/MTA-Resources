@@ -8,9 +8,9 @@ local maxRollsPerMap = 1
 local vehroll_firstcheckpoint = false -- don't allow before first checkpoint reached
 local vehroll_firstCheckpointPlayer = {}
 
-local vehreroll_vehs = { -- [gamemode] = {car = {}, boat = {}, plane = {} }
+local vehreroll_vehs = { -- [gamemode] = {vehicle = {}, boat = {}, air = {} }
 	["Never the same"] = {
-		["car"] = {	602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585,
+		["vehicle"] = {	602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585,
 					405, 587, 409, 466, 550, 492, 566, 546, 540, 551, 421, 516, 529, 581, 510, 509, 522, 481, 461, 462, 448, 521, 468, 463, 586, 485, 552, 431, 
 					438, 437, 574, 420, 525, 408, 416, 596, 433, 597, 427, 599, 490, 528, 601, 407, 428, 544, 523, 470, 598, 499, 588, 609, 403, 498, 514, 524,
 					423, 532, 414, 578, 443, 486, 406, 531, 573, 456, 455, 459, 543, 422, 583, 482, 478, 605, 554, 530, 418, 572, 582, 413, 440, 536, 575, 534, 
@@ -18,7 +18,7 @@ local vehreroll_vehs = { -- [gamemode] = {car = {}, boat = {}, plane = {} }
 					444, 556, 429, 541, 559, 415, 561, 480, 560, 562, 506, 565, 451, 434, 558, 494, 555, 502, 477, 503, 579, 400, 404, 489, 505, 479, 442, 458
 				},
 
-		["plane"] = {592, 577, 511, 548, 512, 593, 425, 520, 417, 487, 553, 488, 497, 563, 476, 447, 519, 460, 469, 513},
+		["air"] = {592, 577, 511, 548, 512, 593, 425, 520, 417, 487, 553, 488, 497, 563, 476, 447, 519, 460, 469, 513},
 		["boat"] = {472,473,493,595,484,430,453,452,446,454},
 	},
 	["Destruction derby"] = {
@@ -192,10 +192,8 @@ function vehreroll_getRandomVehicleID(ID, player, checkpoints)
 			local vehType
 			if cpType == "none" then
 				vehType = vehreroll_getVehicleType(ID)
-			elseif cpType == "vehicle" then
-				vehType = "car"
-			elseif cpType == "air" then
-				vehType = "plane"
+			else
+				vehType = cpType
 			end
 			if not vehType then return false end
 		
@@ -243,7 +241,7 @@ function vehreroll_getVehicleType(vehicleID)
 	
 
 	local boat = {430, 446, 452, 453, 454, 472, 473, 484, 493, 595}
-	local plane = {460, 476, 511, 512, 513, 519, 520, 553, 577, 592, 593, 417, 425, 447, 469, 487, 488, 497, 548, 563}
+	local air = {460, 476, 511, 512, 513, 519, 520, 553, 577, 592, 593, 417, 425, 447, 469, 487, 488, 497, 548, 563}
 
 	
 	
@@ -255,13 +253,13 @@ function vehreroll_getVehicleType(vehicleID)
 		end
 	end
 
-	for _,id in ipairs(plane) do
+	for _,id in ipairs(air) do
 		if tonumber(id) == tonumber(vehicleID) then
-			return "plane"
+			return "air"
 		end
 	end
 
-	return "car"
+	return "vehicle"
 end
 
 
