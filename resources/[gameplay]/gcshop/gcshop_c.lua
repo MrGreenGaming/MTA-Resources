@@ -3,7 +3,7 @@
 --   gcshop_c.lua    --
 -----------------------
 shop_GUI = nil
-amount_GCS = 0;
+amount_GCS = 0
 forumID = nil
 ------------------------------------
 -- Building and toggling the shop --
@@ -46,7 +46,6 @@ function showShop()
 	guiSetInputEnabled(false)
 	guiSetInputMode('no_binds_when_editing');
 	triggerEvent('onShopToggle', resourceRoot, true)
-
 end
 
 function hideShop()
@@ -151,32 +150,26 @@ function on_buttonLink_clicked(button, state, absoluteX, absoluteY)
 	end
 end
 
-function startMsg ()
-	setTimer(	
-		function()
+function startMsg()
+	setTimer(function()
 			if not loggedInGC then
-				outputChatBox ("Press F6 to get Green-Coins and buy items in the shop! ", 0, 255, 0)
+				outputChatBox("Press F6 to buy items in the GreenCoins shop.", 0, 255, 0)
 			end
 		end
-		, 10000, 1)
+	, 10000, 1)
 end
-
 addEventHandler("onClientResourceStart", getResourceRootElement(), startMsg)
 
 addEvent("sb_showGCShop")
-addEventHandler("sb_showGCShop",root,function()
-
+addEventHandler("sb_showGCShop", root, function()
 	if not shop_GUI or not guiGetVisible(shop_GUI._root) then
 		showShop()
-		guiSetSelectedTab(shop_GUI["shopTabs"],shop_GUI["tab_home"])
-
+		guiSetSelectedTab(shop_GUI["shopTabs"], shop_GUI["tab_home"])
 	elseif guiGetVisible(shop_GUI._root) and guiGetSelectedTab(shop_GUI["shopTabs"]) ~= shop_GUI["tab_home"] then
-		guiSetSelectedTab(shop_GUI["shopTabs"],shop_GUI["tab_home"])
-
+		guiSetSelectedTab(shop_GUI["shopTabs"], shop_GUI["tab_home"])
 	else
 		hideShop()
 	end
-	
 end)
 
 addEvent("sb_showMyAccount")
@@ -190,19 +183,17 @@ addEventHandler("sb_showMyAccount",root,function()
 		guiSetSelectedTab(shop_GUI["shopTabs"],shop_GUI["tab_login"])
 	else
 		hideShop()
-	end
-
-	
+	end	
 end)
 
 --http://lua-users.org/wiki/FormattingNumbers
- function comma_value(amount)
-   local formatted = amount
-   while true do  
-     formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1 %2')
-     if (k==0) then
-       break
-     end
-   end
-   return formatted
- end
+function comma_value(amount)
+	local formatted = amount
+	while true do  
+		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1 %2')
+		if k == 0 then
+			break
+		end
+	end
+	return formatted
+end
