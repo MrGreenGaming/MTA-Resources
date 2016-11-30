@@ -271,6 +271,8 @@ hornsTable = {
 	[268] = "Tuco - It's me Tuco",
 	[269] = "Tuco - SandyFuck",
 	[270] = "Say what again",
+	[271] = "CJ - my fuckin car",
+	[272] = "CJ - ah shit",
 }
 
 
