@@ -2,13 +2,18 @@
 All resources used on the MrGreenGaming.com Multi Theft Auto: San Andreas (MTASA) servers (Race &amp; Race Mix).
 # Setting up a local server
 - Checkout the resources into your local MTA server folder.
-- Example maps, server config, ACL and SQL tables can be found in the `config` folder.
-- A lot of resources need access to MySQL and GC accounts to work:
-  1. Older resources still need their SQL tables created before they can run, use the dumps `config/green_coins.sql` and `config/mrgreen_mtasrvs.sql` to create them.
-  2. Set up the connection to your MySQL server in the gcshop settings (with runcode for example): `/srun set("*gcshop.host", 'localhost'); set("*gcshop.dbname", 'mrgreen_mtasrvs'); set("*gcshop.user", 'root'); set("*gcshop.pass", '');`
-  3. Set up gc devmode, this skips the need to check passwords with /gclogin: `/srun set("*gc.devmode", true)`
-    * Now you can login with `/gclogin <forumid> admin`, the forumid is the id for an account you can choose.
+- Example maps, server config file, ACL example and SQL tables can be found in the `config` folder.
+- A lot of resources need access to a MySQL server and/or to GC accounts to work:
 
+  1. Setup gc devmode, with this you can gclogin with a testing account: `/srun set("*gc.devmode", true)`
+    * Now you can login with `/gclogin <forumid> admin`, pick a forumid or a random name. You will start with 99999 GC.
+  2. Setup a MySQL server (you'll need its host adress, username and a password optionally)
+    * The web development packet WAMP (or XAMPP) has a mysql server and phpmyadmin builtin, you can download it and install from here http://www.wampserver.com/
+    * phpmyadmin is a very handy tool to help with configuring and importing data, learn how to use it
+  3. Older script resources need their tables created before they can do anything, import `config/mrgreen_mtasrvs.sql` with PHPMYADMIN .
+  4. Now back into MTA. Set up the connection to your MySQL server in the gcshop settings (with runcode for example): `/srun set("*gcshop.host", 'localhost'); set("*gcshop.dbname", 'mrgreen_mtasrvs'); set("*gcshop.user", 'root'); set("*gcshop.pass", '');`
+  5. Restart the MTA server to make sure everything works correctly
+	
 # Contributing
 Everyone is encouraged to contribute. Make sure your changes correspond with the gameplay and looks already in place. When in doubt, make an issue with your wished changes, before applying them in the code-base.
 
