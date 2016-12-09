@@ -1,0 +1,10 @@
+<meta>
+	<file src="mapstop100_logo.png" />
+	<info name="maps top 100" longname="Mr. Green maps top 100" description="Event for playing 100 maps" author="Bierbuikje" type="script" version="1.0" />
+	<script src="mapstop100.lua" type="server" />
+	<script src="mapstop100_c.lua" type="client" />
+	<script src="votestop100.lua" type="server" />
+	<script src="votestop100_c.lua" type="client" />
+	<download_priority_group>-1</download_priority_group>
+
+</meta>	
