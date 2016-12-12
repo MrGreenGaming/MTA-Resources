@@ -376,7 +376,6 @@ addEventHandler( "DropSpikeStripEvent", root, DropSpikeStrip )
 
 function onPlayerHitSpikeStrip(hitElement)
 	typeofelement = getElementType(hitElement)
-	outputChatBox("Hit Spike 1 " .. typeofelement)
 	
 	if typeofelement == "player" then
 		local hit = false
@@ -387,12 +386,10 @@ function onPlayerHitSpikeStrip(hitElement)
 			if source == removeCols[_][4] then hit = true end
 			if source == removeCols[_][5] then hit = true end
 			if source == removeCols[_][6] then hit = true end
-			outputChatBox("Loop")
 		end
 		if hit then
 
 			local playerveh = getPedOccupiedVehicle(hitElement)
-			outputChatBox("Hit Spike 2")
 				-- get wheel states
 				local wheelstates = {}
 				local o,t,tr,f = getVehicleWheelStates(playerveh)
