@@ -273,6 +273,22 @@ hornsTable = {
 	[270] = "Say what again",
 	[271] = "CJ - my fuckin car",
 	[272] = "CJ - ah shit",
+	[273] = "CJ - asshole",
+	[274] = "CJ - sorry",
+	[275] = "CJ - fool",
+	[276] = "Big Smoke - move out",
+	[277] = "Ryder - busta",
+	[278] = "Ryder - move it",
+	[279] = "Sweet - speed up",
+	[280] = "Sweet - ass on fire",
+	[281] = "OG Loc - woah",
+	[282] = "OG Loc - look out",
+	[283] = "Catalina - idiota",
+	[284] = "Catalina - car on fire",
+	[285] = "Catalina - mistake",
+	[286] = "Old man - ass burns",
+	[287] = "Old man - whoopin",
+	[288] = "The Truth - brain in gear",
 }
 
 

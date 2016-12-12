@@ -387,7 +387,23 @@
 	<file src="horns\files\269.mp3" download="false"/>
 	<file src="horns\files\270.mp3" download="false"/>
 	<file src="horns\files\271.mp3" download="false"/>
-	<file src="horns\files\272.mp3" download="false"/>	
+	<file src="horns\files\272.mp3" download="false"/>
+	<file src="horns\files\273.mp3" download="false"/>
+	<file src="horns\files\274.mp3" download="false"/>
+	<file src="horns\files\275.mp3" download="false"/>
+	<file src="horns\files\276.mp3" download="false"/>
+	<file src="horns\files\277.mp3" download="false"/>
+	<file src="horns\files\278.mp3" download="false"/>
+	<file src="horns\files\279.mp3" download="false"/>
+	<file src="horns\files\280.mp3" download="false"/>
+	<file src="horns\files\281.mp3" download="false"/>
+	<file src="horns\files\282.mp3" download="false"/>
+	<file src="horns\files\283.mp3" download="false"/>
+	<file src="horns\files\284.mp3" download="false"/>
+	<file src="horns\files\285.mp3" download="false"/>
+	<file src="horns\files\286.mp3" download="false"/>
+	<file src="horns\files\287.mp3" download="false"/>
+	<file src="horns\files\288.mp3" download="false"/>
 	<file src="horns\icon.png" />
 	
 	<export function="disableReRoll" type="server"/>
