@@ -3,6 +3,7 @@ aboveheadTime = 2000 -- (1sec = 1000) Put the time that objects are above player
 givelightstrength = 25 --(0 - 255) strength of the marker that is created when player object above head --
 playsoundonmarkerhit = 43
 SpikeStripLifeTime = 12500 -- Time a spikestrip should stay on the ground once dropped (in ms)
+removeCols = {}
 
 
 
@@ -257,8 +258,15 @@ function DropSpikeStrip(spikedropx,spikedropy,spikedropz,spikerotx,spikeroty,spi
       local playerhealth = getElementHealth(playerveh)
       local vehrotx,vehroty,vehrotz = getElementRotation(playerveh)
       local colshapesize = 1
+	  local droppedspikestrip
+      local spikecolshape1dummy
+      local spikecolshape2dummy
+      local spikecolshape3dummy
+      local spikecolshape4dummy
+      local spikecolshape5dummy
+      local spikecolshape6dummy
       if spikedropz - groundz > 1 then -- If the ground is more then 1 away from the object--
-            local droppedspikestrip = createObject ( 2892, spikedropx, spikedropy, spikedropz + 0.1 ) --Creates DROPPED spikestrip--
+            droppedspikestrip = createObject ( 2892, spikedropx, spikedropy, spikedropz + 0.1 ) --Creates DROPPED spikestrip--
             setObjectScale(droppedspikestrip,0.5)
             setElementRotation(droppedspikestrip,0,0,vehrotz - 90)
             setTimer(destroyElement, SpikeStripLifeTime, 1, droppedspikestrip)
@@ -267,81 +275,14 @@ function DropSpikeStrip(spikedropx,spikedropy,spikedropz,spikerotx,spikeroty,spi
             local spikelocx,spikelocy,spikelocz = getElementPosition(droppedspikestrip)
 
             --MAKE COL SHAPES --
-            local spikecolshape1dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
-            local spikecolshape2dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
-            local spikecolshape3dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
-            local spikecolshape4dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
-            local spikecolshape5dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
-            local spikecolshape6dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
-
-
-            -- END MAKE COL SHAPES --
-            --Attach Colshapes to SpikeStrip --
-            attachElements(spikecolshape1dummy,droppedspikestrip, 0, 0.5)
-            attachElements(spikecolshape2dummy,droppedspikestrip, 0, 1)
-            attachElements(spikecolshape3dummy,droppedspikestrip, 0, 1.5)
-            attachElements(spikecolshape4dummy,droppedspikestrip, 0, -0.5)
-            attachElements(spikecolshape5dummy,droppedspikestrip, 0, -1)
-            attachElements(spikecolshape6dummy,droppedspikestrip, 0, -1.5)
-
-
-            --END Attach Colshapes to SpikeStrip END --
-
-            -- GET COLSHAPE POSITIONS, MAKES NEW COLSHAPES AND DELETE ATTACHED ONES --
-            local removeCols = {}
-            	--Colshape 1--
-            	local spikecol1x,spikecol1y,spikecol1z = getElementPosition(spikecolshape1dummy)
-            	local spikecolshape1 = createColSphere(spikecol1x, spikecol1y, spikecol1z + 0.5, colshapesize)
-            	destroyElement(spikecolshape1dummy)
-                  table.insert(removeCols,spikecolshape1)
-
-
-            	--Colshape 2--
-            	local spikecol2x,spikecol2y,spikecol2z = getElementPosition(spikecolshape2dummy)
-            	local spikecolshape2 = createColSphere(spikecol2x, spikecol2y, spikecol2z + 0.5, colshapesize)
-            	destroyElement(spikecolshape2dummy)
-                  table.insert(removeCols,spikecolshape2)
-
-            	--Colshape 3--
-            	local spikecol3x,spikecol3y,spikecol3z = getElementPosition(spikecolshape3dummy)
-            	local spikecolshape3 = createColSphere(spikecol3x, spikecol3y, spikecol3z + 0.5, colshapesize)
-            	destroyElement(spikecolshape3dummy)
-                  table.insert(removeCols,spikecolshape3)
-
-            	--Colshape 4--
-            	local spikecol4x,spikecol4y,spikecol4z = getElementPosition(spikecolshape4dummy)
-            	local spikecolshape4 = createColSphere(spikecol4x, spikecol4y, spikecol4z + 0.5, colshapesize)
-            	destroyElement(spikecolshape4dummy)
-                  table.insert(removeCols,spikecolshape4)
-
-            	--Colshape 5--
-            	local spikecol5x,spikecol5y,spikecol5z = getElementPosition(spikecolshape5dummy)
-            	local spikecolshape5 = createColSphere(spikecol5x, spikecol5y, spikecol5z + 0.5, colshapesize)
-            	destroyElement(spikecolshape5dummy)
-                  table.insert(removeCols,spikecolshape5)
-
-            	--Colshape 6--
-            	local spikecol6x,spikecol6y,spikecol6z = getElementPosition(spikecolshape6dummy)
-            	local spikecolshape6 = createColSphere(spikecol6x, spikecol6y, spikecol6z + 0.5, colshapesize)
-            	destroyElement(spikecolshape6dummy)
-                  table.insert(removeCols,spikecolshape6)
-
-
-
-            -- END GET COLSHAPE POSITIONS, MAKES NEW COLSHAPES AND DELETE ATTACHED ONES END --
-
-
-            --Remove Collision shapes after spike lifetime --
-            setTimer(function() for _,obj in ipairs(removeCols) do if isElement(obj) then destroyElement(obj) end end end, SpikeStripLifeTime, 1)
-
-
-            --END Remove Collision shapes after spike lifetime END--
-
-      
+            spikecolshape1dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
+            spikecolshape2dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
+            spikecolshape3dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
+            spikecolshape4dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
+            spikecolshape5dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
+            spikecolshape6dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.3)
       else 
-        	local droppedspikestrip = createObject ( 2892, spikedropx, spikedropy, groundz + 0.1  ) --Creates DROPPED spikestrip--
-
-
+        	droppedspikestrip = createObject ( 2892, spikedropx, spikedropy, groundz + 0.1  ) --Creates DROPPED spikestrip--
 
             setElementRotation(droppedspikestrip,0,0,vehrotz - 90)
             setTimer(destroyElement, SpikeStripLifeTime, 1, droppedspikestrip)
@@ -352,76 +293,81 @@ function DropSpikeStrip(spikedropx,spikedropy,spikedropz,spikerotx,spikeroty,spi
             local spikelocx,spikelocy,spikelocz = getElementPosition(droppedspikestrip)
 
             --MAKE COL SHAPES --
-            local spikecolshape1dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
-            local spikecolshape2dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
-            local spikecolshape3dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
-            local spikecolshape4dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
-            local spikecolshape5dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
-            local spikecolshape6dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
-
-
-            -- END MAKE COL SHAPES --
-            --Attach Colshapes to SpikeStrip --
-            attachElements(spikecolshape1dummy,droppedspikestrip, 0, 0.5)
-            attachElements(spikecolshape2dummy,droppedspikestrip, 0, 1)
-            attachElements(spikecolshape3dummy,droppedspikestrip, 0, 1.5)
-            attachElements(spikecolshape4dummy,droppedspikestrip, 0, -0.5)
-            attachElements(spikecolshape5dummy,droppedspikestrip, 0, -1)
-            attachElements(spikecolshape6dummy,droppedspikestrip, 0, -1.5)
-
-
-            --END Attach Colshapes to SpikeStrip END --
-
-            -- GET COLSHAPE POSITIONS, MAKES NEW COLSHAPES AND DELETE ATTACHED ONES --
-            local removeCols = {}
-      	--Colshape 1--
-      	local spikecol1x,spikecol1y,spikecol1z = getElementPosition(spikecolshape1dummy)
-      	local spikecolshape1 = createColSphere(spikecol1x, spikecol1y, spikecol1z + 0.5, colshapesize)
-      	destroyElement(spikecolshape1dummy)
-            table.insert(removeCols,spikecolshape1)
-
-      	--Colshape 2--
-      	local spikecol2x,spikecol2y,spikecol2z = getElementPosition(spikecolshape2dummy)
-      	local spikecolshape2 = createColSphere(spikecol2x, spikecol2y, spikecol2z + 0.5, colshapesize)
-      	destroyElement(spikecolshape2dummy)
-            table.insert(removeCols,spikecolshape2)
-
-      	--Colshape 3--
-      	local spikecol3x,spikecol3y,spikecol3z = getElementPosition(spikecolshape3dummy)
-      	local spikecolshape3 = createColSphere(spikecol3x, spikecol3y, spikecol3z + 0.5, colshapesize)
-      	destroyElement(spikecolshape3dummy)
-            table.insert(removeCols,spikecolshape3)
-
-      	--Colshape 4--
-      	local spikecol4x,spikecol4y,spikecol4z = getElementPosition(spikecolshape4dummy)
-      	local spikecolshape4 = createColSphere(spikecol4x, spikecol4y, spikecol4z + 0.5, colshapesize)
-      	destroyElement(spikecolshape4dummy)
-            table.insert(removeCols,spikecolshape4)
-
-      	--Colshape 5--
-      	local spikecol5x,spikecol5y,spikecol5z = getElementPosition(spikecolshape5dummy)
-      	local spikecolshape5 = createColSphere(spikecol5x, spikecol5y, spikecol5z + 0.5, colshapesize)
-      	destroyElement(spikecolshape5dummy)
-            table.insert(removeCols,spikecolshape5)
-
-      	--Colshape 6--
-      	local spikecol6x,spikecol6y,spikecol6z = getElementPosition(spikecolshape6dummy)
-      	local spikecolshape6 = createColSphere(spikecol6x, spikecol6y, spikecol6z + 0.5, colshapesize)
-      	destroyElement(spikecolshape6dummy)
-            table.insert(removeCols,spikecolshape6)
-
-
-
-            -- END GET COLSHAPE POSITIONS, MAKES NEW COLSHAPES AND DELETE ATTACHED ONES END --
-
-
-            --Remove Collision shapes after spike lifetime --
-            setTimer(function() for _,obj in ipairs(removeCols) do if isElement(obj) then destroyElement(obj) end obj = nil end end, SpikeStripLifeTime, 1)
-
-            --END Remove Collision shapes after spike lifetime END--
-
-
-      end 
+            spikecolshape1dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
+            spikecolshape2dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
+            spikecolshape3dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
+            spikecolshape4dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
+            spikecolshape5dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
+            spikecolshape6dummy = createColSphere(spikelocx, spikelocy, spikelocz, 0.5)
+      end
+	-- END MAKE COL SHAPES --
+	--Attach Colshapes to SpikeStrip --
+	attachElements(spikecolshape1dummy,droppedspikestrip, 0, 0.5)
+	attachElements(spikecolshape2dummy,droppedspikestrip, 0, 1)
+	attachElements(spikecolshape3dummy,droppedspikestrip, 0, 1.5)
+	attachElements(spikecolshape4dummy,droppedspikestrip, 0, -0.5)
+	attachElements(spikecolshape5dummy,droppedspikestrip, 0, -1)
+	attachElements(spikecolshape6dummy,droppedspikestrip, 0, -1.5)
+	
+	--END Attach Colshapes to SpikeStrip END --
+	
+	-- GET COLSHAPE POSITIONS, MAKES NEW COLSHAPES AND DELETE ATTACHED ONES --
+	local spikecolshape = {}
+		--Colshape 1--
+		local spikecol1x,spikecol1y,spikecol1z = getElementPosition(spikecolshape1dummy)
+		spikecolshape[1] = createColSphere(spikecol1x, spikecol1y, spikecol1z + 0.5, colshapesize)
+		destroyElement(spikecolshape1dummy)
+		
+		
+		--Colshape 2--
+		local spikecol2x,spikecol2y,spikecol2z = getElementPosition(spikecolshape2dummy)
+		spikecolshape[2] = createColSphere(spikecol2x, spikecol2y, spikecol2z + 0.5, colshapesize)
+		destroyElement(spikecolshape2dummy)
+		
+		--Colshape 3--
+		local spikecol3x,spikecol3y,spikecol3z = getElementPosition(spikecolshape3dummy)
+		spikecolshape[3] = createColSphere(spikecol3x, spikecol3y, spikecol3z + 0.5, colshapesize)
+		destroyElement(spikecolshape3dummy)
+		
+		--Colshape 4--
+		local spikecol4x,spikecol4y,spikecol4z = getElementPosition(spikecolshape4dummy)
+		spikecolshape[4] = createColSphere(spikecol4x, spikecol4y, spikecol4z + 0.5, colshapesize)
+		destroyElement(spikecolshape4dummy)
+		
+		--Colshape 5--
+		local spikecol5x,spikecol5y,spikecol5z = getElementPosition(spikecolshape5dummy)
+		spikecolshape[5] = createColSphere(spikecol5x, spikecol5y, spikecol5z + 0.5, colshapesize)
+		destroyElement(spikecolshape5dummy)
+		
+		--Colshape 6--
+		local spikecol6x,spikecol6y,spikecol6z = getElementPosition(spikecolshape6dummy)
+		spikecolshape[6] = createColSphere(spikecol6x, spikecol6y, spikecol6z + 0.5, colshapesize)
+		destroyElement(spikecolshape6dummy)
+	
+	local nr = 1
+	local nrBool = true
+	while nrBool do
+		if removeCols[nr] then
+			nr = nr + 1
+		else
+			nrBool = false
+		end
+	end
+	removeCols[nr] = spikecolshape
+	-- END GET COLSHAPE POSITIONS, MAKES NEW COLSHAPES AND DELETE ATTACHED ONES END --
+	
+	--Remove Collision shapes after spike lifetime --
+	setTimer(function()
+		destroyElement(removeCols[nr][1])
+		destroyElement(removeCols[nr][2])
+		destroyElement(removeCols[nr][3])
+		destroyElement(removeCols[nr][4])
+		destroyElement(removeCols[nr][5])
+		destroyElement(removeCols[nr][6])
+		removeCols[nr] = nil
+	end, SpikeStripLifeTime, 1)
+	
+	--END Remove Collision shapes after spike lifetime END--
 end
 addEvent( "DropSpikeStripEvent", true )
 addEventHandler( "DropSpikeStripEvent", root, DropSpikeStrip )
@@ -430,34 +376,32 @@ addEventHandler( "DropSpikeStripEvent", root, DropSpikeStrip )
 
 function onPlayerHitSpikeStrip(hitElement)
 	typeofelement = getElementType(hitElement)
+	
 	if typeofelement == "player" then
-		if (
-			source == spikecolshape1 or 
-			source == spikecolshape2 or 
-			source == spikecolshape3 or 
-			source == spikecolshape4 or 
-			source == spikecolshape5 or 
-			source == spikecolshape6 or 
-			source == spikecolshape7 or 
-			source == spikecolshape8 or 
-			source == spikecolshape9 or 
-			source == spikecolshape10 or 
-			source == spikecolshape11) then
+		local hit = false
+		for _ in pairs(removeCols) do
+			if source == removeCols[_][1] then hit = true end
+			if source == removeCols[_][2] then hit = true end
+			if source == removeCols[_][3] then hit = true end
+			if source == removeCols[_][4] then hit = true end
+			if source == removeCols[_][5] then hit = true end
+			if source == removeCols[_][6] then hit = true end
+		end
+		if hit then
 
-		local playerveh = getPedOccupiedVehicle(hitElement)
-
-            -- get wheel states
-            local wheelstates = {}
-            local o,t,tr,f = getVehicleWheelStates(playerveh)
-            table.insert(wheelstates,o) table.insert(wheelstates,t) table.insert(wheelstates,tr) table.insert(wheelstates,f)
-            for _,v in ipairs(wheelstates) do
-                  if v > 1 then
-                        v = 1
-                  end
-            end
-
-            -- set wheel states
-		setVehicleWheelStates(playerveh, math.random (wheelstates[1],1), math.random (wheelstates[2],1), math.random (wheelstates[3],1), math.random (wheelstates[4],1))
+			local playerveh = getPedOccupiedVehicle(hitElement)
+				-- get wheel states
+				local wheelstates = {}
+				local o,t,tr,f = getVehicleWheelStates(playerveh)
+				table.insert(wheelstates,o) table.insert(wheelstates,t) table.insert(wheelstates,tr) table.insert(wheelstates,f)
+				for _,v in ipairs(wheelstates) do
+					if v > 1 then
+							v = 1
+					end
+				end
+	
+				-- set wheel states
+			setVehicleWheelStates(playerveh, math.random (wheelstates[1],1), math.random (wheelstates[2],1), math.random (wheelstates[3],1), math.random (wheelstates[4],1))
 
 		end
 	end
