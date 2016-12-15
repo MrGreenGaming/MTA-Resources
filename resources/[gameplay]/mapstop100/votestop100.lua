@@ -55,7 +55,12 @@ function votes100_fetch100(p)
 	end
 	triggerClientEvent(p,"votes100_receiveMap100",resourceRoot,map100,castList)
 end
-addCommandHandler("vote", votes100_fetch100)
+
+function votes100_command(p)
+	votes100_fetch100(p)
+	triggerClientEvent(p,"votes100_openCloseGUI",resourceRoot)
+end
+addCommandHandler("vote", votes100_command)
 
 function votes100_voteMap(p, resname)
 	local logged = exports.gc:isPlayerLoggedInGC(p)
@@ -138,7 +143,7 @@ addEvent("votes100_removeMap", true)
 addEventHandler("votes100_removeMap", resourceRoot, votes100_removeMap)
 
 function votes100_sidebar(p)
-	votes100_fetch100(p)
+	votes100_command(p)
 end
 addEvent("votes100_sidebarServer", true)
 addEventHandler("votes100_sidebarServer", resourceRoot, votes100_sidebar)
