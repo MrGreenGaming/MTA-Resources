@@ -75,6 +75,7 @@ function votes100_buildGUI()
 end
 addEventHandler("onClientResourceStart",resourceRoot,votes100_buildGUI)
 
+addEvent("votes100_openCloseGUI",true)
 function votes100_openCloseGUI()
 	if guiGetVisible(VotesEditor.window[1]) then
 		guiSetVisible(VotesEditor.window[1],false)
@@ -86,7 +87,7 @@ function votes100_openCloseGUI()
 		guiSetInputMode("no_binds_when_editing")
 	end
 end
-addCommandHandler("vote",votes100_openCloseGUI)
+addEventHandler("votes100_openCloseGUI",root,votes100_openCloseGUI)
 
 addEvent("votes100_receiveMap100",true)
 function votes100_receiveMapList(votesList, castList)
@@ -226,7 +227,6 @@ function votes100_populateSearchResults(resultsTable,gridlist)
 end
 
 function votes100_sidebar()
-	votes100_openCloseGUI()
 	triggerServerEvent("votes100_sidebarServer", resourceRoot, localPlayer)
 end
 addEvent("sb_mapsTop100", true)

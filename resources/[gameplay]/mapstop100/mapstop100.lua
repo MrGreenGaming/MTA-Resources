@@ -58,7 +58,12 @@ function maps100_fetchMaps(player)
 
 	triggerClientEvent(player,"maps100_receiveMapLists",resourceRoot,mapList,map100)
 end
-addCommandHandler("maps100", maps100_fetchMaps)
+
+function maps100_command(p)
+	maps100_fetchMaps(p)
+	triggerClientEvent(p,"maps100_openCloseGUI",resourceRoot)
+end
+addCommandHandler("maps100", maps100_command)
 
 function maps100_addMap(p, name, author, gamemode, resname)
 	local qh = dbQuery(handlerConnect, "SELECT * FROM `mapstop100` WHERE `mapresourcename`=?", tostring(resname))

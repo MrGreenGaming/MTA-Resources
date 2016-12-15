@@ -61,6 +61,7 @@ function maps100_buildGUI()
 end
 addEventHandler("onClientResourceStart",resourceRoot,maps100_buildGUI)
 
+addEvent("maps100_openCloseGUI",true)
 function maps100_openCloseGUI()
 	if guiGetVisible(GUIEditor.window[1]) then
 		guiSetVisible(GUIEditor.window[1],false)
@@ -72,7 +73,7 @@ function maps100_openCloseGUI()
 		guiSetInputMode("no_binds_when_editing")
 	end
 end
-addCommandHandler("maps100",maps100_openCloseGUI)
+addEventHandler("maps100_openCloseGUI",root,maps100_openCloseGUI)
 
 addEvent("maps100_receiveMapLists",true)
 function receiveMapList(mapList,map100)
