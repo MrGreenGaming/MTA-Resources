@@ -67,6 +67,7 @@ MenuItems = { -- Name, Icon
 	{name = "PM", event = "sb_showPM"},
 	{name = "Music Player", event = "sb_showMusicPlayer"},
 	{name = "Help", event = "sb_showHelp"},
+	{name = "Maps top 100", event = "sb_mapsTop100"}
 	
 }
 
