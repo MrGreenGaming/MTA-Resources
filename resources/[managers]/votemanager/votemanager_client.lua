@@ -70,6 +70,7 @@ addEventHandler("doShowPoll", rootElement, function(pollData, pollOptions, pollT
 		--Bind 10th option to 0-key
 		if index == 10 then
 			index = 0
+			break
 		end
 
 		--bind the number key and add it to the bound keys table
@@ -125,7 +126,7 @@ addEventHandler("doStopPoll", rootElement, function()
 	removeEventHandler("onClientRender", rootElement, updateTime)
 end)
 
-local function sendVote_bind(key)
+function sendVote_bind(key)
 	if key ~= "backspace" then
 		key = key:gsub('num_', '')
 		if #nameFromVoteID < 10 then
@@ -156,7 +157,7 @@ local function sendVote_bind(key)
 	end
 end
 
-local function sendVote(voteID)
+function sendVote(voteID)
 	if not isVoteActive then
 		return
 	end
@@ -387,4 +388,4 @@ local function createFonts()
 	fontBold = dxCreateFont(f[1], f[2], f[3], f[4]) or "default-bold"
 	font = dxCreateFont(b[1], b[2], b[3], b[4]) or "default"
 end
-addEventHandler("onClientResourceStart",resourceRoot, createFonts)
+addEventHandler("onClientResourceStart", resourceRoot, createFonts)
