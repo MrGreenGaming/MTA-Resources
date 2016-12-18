@@ -26,7 +26,7 @@ addEventHandler("showDelay", g_Root,
 			else
 				cps = "(-"..cps.."CPs) "
 			end
-			delayDisplayBehind:text("-"..msToTimeStr(delayTime).." "..cps..string.gsub(getPlayerName(source), "#%x%x%x%x%x%x", ""))
+			delayDisplayBehind:text("-"..msToTimeStr(delayTime).." "..cps..getPlayerName(source))
 			delayDisplayBehind:visible(true)
 			behindTick = getTickCount()
 			setTimer(hideDelayDisplay, TIME_TO_DISPLAY, 1, false)
@@ -50,7 +50,7 @@ addEventHandler("showDelay", g_Root,
 			else
 				cps = "(+"..cps.."CPs) "
 			end
-			delayDisplayFront:text("+"..msToTimeStr(delayTime).." "..cps..string.gsub(getPlayerName(source), "#%x%x%x%x%x%x", ""))
+			delayDisplayFront:text("+"..msToTimeStr(delayTime).." "..cps..getPlayerName(source))
 			delayDisplayFront:color(255, 0, 0)
 			delayDisplayFront:visible(true)
 			frontTick = getTickCount()
