@@ -174,13 +174,23 @@ function sendPoll(element)
 end
 
 function recheckVotes()
-	triggerClientEvent('showVotesAmount', resourceRoot, activePoll.playersWhoVoted, math.ceil(activePoll.maxVoters * activePoll.percentage / 100), activePoll.maxVoters)
+	--Get the number of votes needed
+	local votesNeeded = activePoll.maxVoters * activePoll.percentage / 100
+
 	--quit without checking if there aren't enough votes yet
 	if (activePoll.playersWhoVoted / activePoll.maxVoters)*100 < activePoll.percentage then
 		return
 	end
-	--get the number of votes needed
-	local votesNeeded = activePoll.maxVoters * activePoll.percentage / 100
+
+	--Summarize votes per option
+	local optionVotes = {}
+	for index, option in ipairs(activePoll) do
+		table.insert(optionVotes, option.votes)
+	end
+
+	--Inform clients
+	triggerClientEvent('showVotesAmount', resourceRoot, activePoll.playersWhoVoted, math.ceil(votesNeeded), activePoll.maxVoters, optionVotes)
+	
 	--if any option exceeds that number, it wins
 	for index,option in ipairs(activePoll) do
 		if option.votes >= votesNeeded then
@@ -191,7 +201,7 @@ function recheckVotes()
 		end
 	end
 
-    -- If no change allowed and everyone has voted, end poll quicker
+    --If no change allowed and everyone has voted, end poll quicker
     if activePoll and not activePoll.allowchange then
         if activePoll.playersWhoVoted == activePoll.maxVoters then
             if pollTimer then
