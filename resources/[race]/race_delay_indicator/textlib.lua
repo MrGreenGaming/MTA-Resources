@@ -20,6 +20,7 @@ defaults = {
 	bClip 						= false,
 	bWordWrap	 				= true,
 	bVisible 					= false,
+	bColorCode					= false,
 	tBoundingBox				= false, --If a bounding box is not set, it will not be used.
 	bRelativeBoundingBox		= true,
 }
@@ -150,6 +151,12 @@ function dxText:wordWrap(bool)
 	return true
 end
 
+function dxText:colorCode(bool)
+	if type(bool) ~= "boolean" then return self.bColorCode end
+	self.bColorCode = bool
+	return true
+end
+
 function dxText:type(type,...)
 	if not validTypes[type] then return self.strType, unpack(self.tAttributes) end
 	self.strType = type
@@ -247,7 +254,7 @@ addEventHandler ( "onClientRender", getRootElement(),
 						for offsetX=-outlinesize,outlinesize,outlinesize do
 							for offsetY=-outlinesize,outlinesize,outlinesize do
 								if not (offsetX == 0 and offsetY == 0) then
-									dxDrawText(self.strText, l + offsetX, t + offsetY, r + offsetX, b + offsetY, tocolor(att2, att3, att4, att5), self.fScale, self.strFont, self.bHorizontalAlign, self.bVerticalAlign, self.bClip, self.bWordWrap, self.bPostGUI )
+									dxDrawText(self.strText, l + offsetX, t + offsetY, r + offsetX, b + offsetY, tocolor(att2, att3, att4, att5), self.fScale, self.strFont, self.bHorizontalAlign, self.bVerticalAlign, self.bClip, self.bWordWrap, self.bPostGUI, self.bColorCode )
 								end
 							end
 						end
@@ -258,9 +265,9 @@ addEventHandler ( "onClientRender", getRootElement(),
 					att3 = att3 or 0
 					att4 = att4 or 0
 					att5 = att5 or self.tColor[4]
-					dxDrawText(self.strText, l + shadowDist, t + shadowDist, r + shadowDist, b + shadowDist, tocolor(att2, att3, att4, att5), self.fScale, self.strFont, self.bHorizontalAlign, self.bVerticalAlign, self.bClip, self.bWordWrap, self.bPostGUI )
+					dxDrawText(self.strText, l + shadowDist, t + shadowDist, r + shadowDist, b + shadowDist, tocolor(att2, att3, att4, att5), self.fScale, self.strFont, self.bHorizontalAlign, self.bVerticalAlign, self.bClip, self.bWordWrap, self.bPostGUI, self.bColorCode )
 				end
-				dxDrawText ( self.strText, l, t, r, b, tocolor(unpack(self.tColor)), self.fScale, self.strFont, self.bHorizontalAlign, self.bVerticalAlign, self.bClip, self.bWordWrap, self.bPostGUI )
+				dxDrawText ( self.strText, l, t, r, b, tocolor(unpack(self.tColor)), self.fScale, self.strFont, self.bHorizontalAlign, self.bVerticalAlign, self.bClip, self.bWordWrap, self.bPostGUI, self.bColorCode )
 				break
 			end
 		end
