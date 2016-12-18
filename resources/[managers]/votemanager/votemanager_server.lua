@@ -177,11 +177,6 @@ function recheckVotes()
 	--Get the number of votes needed
 	local votesNeeded = activePoll.maxVoters * activePoll.percentage / 100
 
-	--quit without checking if there aren't enough votes yet
-	if (activePoll.playersWhoVoted / activePoll.maxVoters)*100 < activePoll.percentage then
-		return
-	end
-
 	--Summarize votes per option
 	local optionVotes = {}
 	for index, option in ipairs(activePoll) do
@@ -190,8 +185,13 @@ function recheckVotes()
 
 	--Inform clients
 	triggerClientEvent('showVotesAmount', resourceRoot, activePoll.playersWhoVoted, math.ceil(votesNeeded), activePoll.maxVoters, optionVotes)
+
+	--Abort when there aren't enough votes yet
+	if (activePoll.playersWhoVoted / activePoll.maxVoters)*100 < activePoll.percentage then
+		return
+	end
 	
-	--if any option exceeds that number, it wins
+	--Decide winning option
 	for index,option in ipairs(activePoll) do
 		if option.votes >= votesNeeded then
 			local percent = option.votes * 100 / math.max(1,activePoll.maxVoters)
@@ -201,7 +201,7 @@ function recheckVotes()
 		end
 	end
 
-    --If no change allowed and everyone has voted, end poll quicker
+    --End poll quicker when vote changes aren't allowed
     if activePoll and not activePoll.allowchange then
         if activePoll.playersWhoVoted == activePoll.maxVoters then
             if pollTimer then
