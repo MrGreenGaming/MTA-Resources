@@ -20,7 +20,7 @@ defaults = {
 	bClip 						= false,
 	bWordWrap	 				= true,
 	bVisible 					= false,
-	bColorCode					= false,
+	bColorCode					= true,
 	tBoundingBox				= false, --If a bounding box is not set, it will not be used.
 	bRelativeBoundingBox		= true,
 }
