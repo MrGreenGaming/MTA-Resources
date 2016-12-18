@@ -3,15 +3,18 @@ local g_ResRoot = getResourceRootElement(getThisResource())
 local g_Me = getLocalPlayer()
 
 local DISTANCE_FRONT_BEHIND = 0.03
-local SCALE = 1.5
 local TIME_TO_DISPLAY = 2000
 
 local frontTick
 local behindTick
-local delayDisplayFront = dxText:create("", 0.5, 0.37, true, "default", SCALE)
-local delayDisplayBehind = dxText:create("", 0.5, 0.43, true, "default", SCALE)
+local delayDisplayFront = dxText:create("", 0.5, 0.37, true, "default-bold")
+local delayDisplayBehind = dxText:create("", 0.5, 0.43, true, "default-bold")
 delayDisplayFront:color(255, 0, 0)
 delayDisplayBehind:color(0, 255, 0)
+delayDisplayFront:type("shadow",1)
+delayDisplayBehind:type("shadow",1)
+delayDisplayFront:colorCode(true)
+delayDisplayBehind:colorCode(true)
 
 addEvent("showDelay", true)
 addEventHandler("showDelay", g_Root,
