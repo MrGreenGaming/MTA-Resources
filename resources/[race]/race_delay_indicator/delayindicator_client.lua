@@ -1,4 +1,3 @@
-local g_screenX,g_screenY = guiGetScreenSize()
 local g_Root = getRootElement()
 local g_ResRoot = getResourceRootElement(getThisResource())
 local g_Me = getLocalPlayer()
@@ -8,14 +7,14 @@ local TIME_TO_DISPLAY = 2000
 
 local frontTick
 local behindTick
-local delayDisplayFrontShadow = dxText:create("", ((0.5*g_screenX + 1)/g_screenX), ((0.37*g_screenY + 1)/g_screenY), true, "default-bold")
-local delayDisplayBehindShadow = dxText:create("", ((0.5*g_screenX + 1)/g_screenX), ((0.43*g_screenY + 1)/g_screenY), true, "default-bold")
-delayDisplayFrontShadow:color(0, 0, 0)
-delayDisplayBehindShadow:color(0, 0, 0)
-local delayDisplayFront = dxText:create("", 0.5*g_screenX, 0.37*g_screenY, true, "default-bold")
-local delayDisplayBehind = dxText:create("", 0.5*g_screenX, 0.43*g_screenY, true, "default-bold")
-delayDisplayFront:color(255, 0, 0)
-delayDisplayBehind:color(0, 255, 0)
+local delayDisplayFront = dxText:create("", 0.5, 0.37, true, "default-bold")
+local delayDisplayBehind = dxText:create("", 0.5, 0.43, true, "default-bold")
+delayDisplayFront:color(248,28,11)
+delayDisplayBehind:color(80,233,11)
+delayDisplayFront:type("shadow",1)
+delayDisplayBehind:type("shadow",1)
+delayDisplayFront:colorCode(true)
+delayDisplayBehind:colorCode(true)
 
 addEvent("showDelay", true)
 addEventHandler("showDelay", g_Root,
@@ -27,27 +26,20 @@ addEventHandler("showDelay", g_Root,
 			else
 				cps = "(-"..cps.."CPs) "
 			end
-			delayDisplayBehindShadow:text("-"..msToTimeStr(delayTime).." "..cps..string.gsub(getPlayerName(source), "#%x%x%x%x%x%x", ""))
-			delayDisplayBehindShadow:visible(true)
-			delayDisplayBehind:text("-"..msToTimeStr(delayTime).." #FFFFFF"..cps..getPlayerName(source))
+			delayDisplayBehind:text("-"..msToTimeStr(delayTime).." "..cps.."#FFFFFF"..getPlayerName(source))
 			delayDisplayBehind:visible(true)
 			behindTick = getTickCount()
 			setTimer(hideDelayDisplay, TIME_TO_DISPLAY, 1, false)
 		elseif type(optional) == "table" then
 			if delayTime < 0 then
 				-- outputChatBox("-"..msToTimeStr(-delayTime).." current record")
-				delayDisplayFrontShadow:text("+"..msToTimeStr(-delayTime).." record #"..optional[1])
-				delayDisplayFrontShadow:color(0, 0, 0)
 				delayDisplayFront:text("+"..msToTimeStr(-delayTime).." record #"..optional[1])
 				delayDisplayFront:color(255, 255, 0)
 			elseif delayTime > 0 then
 				-- outputChatBox("+"..msToTimeStr(delayTime).." current record")
-				delayDisplayFrontShadow:text("-"..msToTimeStr(delayTime).." record #"..optional[1])
-				delayDisplayFrontShadow:color(0, 0, 0)
 				delayDisplayFront:text("-"..msToTimeStr(delayTime).." record #"..optional[1])
 				delayDisplayFront:color(0, 255, 255)
 			end
-			delayDisplayFrontShadow:visible(true)
 			delayDisplayFront:visible(true)
 			frontTick = getTickCount()
 			setTimer(hideDelayDisplay, TIME_TO_DISPLAY, 1, true)
@@ -58,11 +50,8 @@ addEventHandler("showDelay", g_Root,
 			else
 				cps = "(+"..cps.."CPs) "
 			end
-			delayDisplayFrontShadow:text("+"..msToTimeStr(delayTime).." "..cps..string.gsub(getPlayerName(source), "#%x%x%x%x%x%x", ""))
-			delayDisplayFrontShadow:color(0, 0, 0)
-			delayDisplayFrontShadow:visible(true)
-			delayDisplayFront:text("+"..msToTimeStr(delayTime).." #FFFFFF"..cps..getPlayerName(source))
-			delayDisplayFront:color(255, 0, 0)
+			delayDisplayFront:text("+"..msToTimeStr(delayTime).." "..cps.."#FFFFFF"..getPlayerName(source))
+			delayDisplayFront:color(248,28,11)
 			delayDisplayFront:visible(true)
 			frontTick = getTickCount()
 			setTimer(hideDelayDisplay, TIME_TO_DISPLAY, 1, true)
@@ -72,14 +61,11 @@ addEventHandler("showDelay", g_Root,
 
 function hideDelayDisplay(front)
 	if front == "both" then
-		delayDisplayFrontShadow:visible(false)
-		delayDisplayBehindShadow:visible(false)
 		delayDisplayFront:visible(false)
 		delayDisplayBehind:visible(false)
 	elseif front then
 		local pastTime = getTickCount() - frontTick
 		if pastTime >= TIME_TO_DISPLAY then
-			delayDisplayFrontShadow:visible(false)
 			delayDisplayFront:visible(false)
 		else
 			if pastTime < 50 then pastTime = 50 end
@@ -89,7 +75,6 @@ function hideDelayDisplay(front)
 	else
 		local pastTime = getTickCount() - behindTick
 		if pastTime >= TIME_TO_DISPLAY then
-			delayDisplayBehindShadow:visible(false)
 			delayDisplayBehind:visible(false)
 		else
 			if pastTime < 50 then pastTime = 50 end
@@ -104,8 +89,6 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 		local settingsFile = xmlLoadFile("settings.xml")
 		if settingsFile then
 			local pos = xmlNodeGetAttributes(settingsFile)
-			delayDisplayFrontShadow:position(((pos.x*g_screenX + 1)/g_screenX), (((pos.y - DISTANCE_FRONT_BEHIND)*g_screenY + 1)/g_screenY))
-			delayDisplayBehindShadow:position(((pos.x*g_screenX + 1)/g_screenX), (((pos.y + DISTANCE_FRONT_BEHIND)*g_screenY + 1)/g_screenY))
 			delayDisplayFront:position(pos.x, pos.y - DISTANCE_FRONT_BEHIND)
 			delayDisplayBehind:position(pos.x, pos.y + DISTANCE_FRONT_BEHIND)
 		else
@@ -122,16 +105,8 @@ addCommandHandler("setdelaypos",
 	function(cmd,x,y)
 		if x and y then
 			if tonumber(x) and tonumber(y) then
-				delayDisplayFrontShadow:position(((x*g_screenX + 1)/g_screenX), (((y - DISTANCE_FRONT_BEHIND)*g_screenY + 1)/g_screenY), true)
-				delayDisplayBehindShadow:position(((x*g_screenY + 1)/g_screenX), (((y + DISTANCE_FRONT_BEHIND)*g_screenY + 1)/g_screenY), true)
-				delayDisplayFrontShadow:text("FRONT")
-				delayDisplayBehindShadow:text("BEHIND")
-				delayDisplayFrontShadow:color(0, 0, 0)
-				delayDisplayBehindShadow:color(0, 0, 0)
-				delayDisplayFrontShadow:visible(true)
-				delayDisplayBehindShadow:visible(true)
-				delayDisplayFront:position(x, y - DISTANCE_FRONT_BEHIND, true)
-				delayDisplayBehind:position(x, y + DISTANCE_FRONT_BEHIND, true)
+				delayDisplayFront:position(x, y - DISTANCE_FRONT_BEHIND)
+				delayDisplayBehind:position(x, y + DISTANCE_FRONT_BEHIND)
 				delayDisplayFront:text("FRONT")
 				delayDisplayBehind:text("BEHIND")
 				delayDisplayFront:color(255, 0, 0)
