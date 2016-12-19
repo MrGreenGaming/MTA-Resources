@@ -9,7 +9,7 @@
 				[8] = { name = "neox.", title = "Map Assistant", accountName = "neox" },
 				[9] = { name = "Goldberg", title = "Map Assistant", accountName = "Goldberg" },
 				[10] = { name = "Jack123", title = "Mother Russia", accountName = "Jack123" },
-				[11] = { name = "Stig", title = "Niu Admin", accountName = "Stig" },
+				[11] = { name = "Stig", title = "Old Admin", accountName = "Stig" },
 				[12] = { name = "Hulpje", title = "Dota Admin", accountName = "hulpje" },
 				[13] = { name = "Besweeet", title = "4th Admin", accountName = "besweeet" },
-}
+                                [14] = { name = "Bierbuikje", title = "NIU Admin", accountName = "bierbuikje" },
