@@ -1,8 +1,7 @@
 ﻿admins = {
 	{ name = "Ywa", title = "Founder/Owner", accountName = "Ywa" },
 	{ name = "Flipper", title = "Manager", accountName = "KoM|Flipper" },
-	{ name = "FantomicanYoshi", title = "Manager", accountName = "BlueYoshi97" },
-	{ name = "AleksCore", title = "Developer", accountName = "AleksCore" },
+	{ name = "FantomicanYoshi", title = "Manager", accountName = "BlueYoshi97" },        
 	{ name = "Bob_Taylor", title = "Map Manager", accountName = "Bob_Taylor" },
 	{ name = "Cena", title = "Map Manager", accountName = "Cena" },
 	{ name = "MoshPit", title = "Map Manager", accountName = "MoshMosh" },
