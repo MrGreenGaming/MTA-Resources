@@ -1,5 +1,7 @@
-MapList = {}
-Map100 = {}
+MapList = {} -- All maps on the server
+Map100 = {} -- All nominated maps
+MapsList = {} -- All maps on the server, detailed
+VoterList = {} -- All voters, detailed
 
 GUIEditor = {
     tab = {},
@@ -9,11 +11,39 @@ GUIEditor = {
     window = {},
     label = {},
     gridlist = {},
+	combobox = {},
+	image = {}
+}
+
+MainPanel = {
+    tab = {},
+    tabpanel = {},
+    edit = {},
+    button = {},
+    window = {},
+    label = {},
+    gridlist = {},
+	combobox = {},
+	image = {}
+}
+
+TablesInsight = {
+    tab = {},
+    tabpanel = {},
+    edit = {},
+    button = {},
+    window = {},
+    label = {},
+    gridlist = {},
+	combobox = {},
 	image = {}
 }
 
 function maps100_buildGUI()
 	local screenW, screenH = guiGetScreenSize()
+	
+	---- Nominating Panel ----
+	
 	GUIEditor.window[1] = guiCreateWindow((screenW - 768) / 2, (screenH - 640) / 2, 768, 684, "Maps top 100 - Nominations", false)
 	guiWindowSetSizable(GUIEditor.window[1], false)
 	
@@ -56,21 +86,150 @@ function maps100_buildGUI()
 	GUIEditor.button[4] = guiCreateButton(224, 568, 96, 24, "Clear search", false, GUIEditor.window[1])
 	addEventHandler("onClientGUIClick",GUIEditor.button[4],maps100_clearSearch,false)
 	
-	
 	guiSetVisible(GUIEditor.window[1],false)
+	
+	---- Main Panel ----
+	
+	MainPanel.window[1] = guiCreateWindow((screenW - 512) / 2, (screenH - 472) / 2, 512, 472, "Maps top 100", false)
+	guiWindowSetSizable(MainPanel.window[1], false)
+	
+	MainPanel.image[1] = guiCreateStaticImage(64, 16, 384, 96, "mapstop100_logo.png", false, MainPanel.window[1])
+	
+	MainPanel.button[1] = guiCreateButton(8, 120, 496, 80, "Nominating panel", false, MainPanel.window[1])
+	addEventHandler("onClientGUIClick",MainPanel.button[1],maps100_openCloseGUI,false)
+	
+	MainPanel.button[2] = guiCreateButton(8, 208, 496, 80, "Voting panel", false, MainPanel.window[1])
+	addEventHandler("onClientGUIClick",MainPanel.button[2],maps100_openCloseGUI,false)
+	
+	MainPanel.button[3] = guiCreateButton(8, 296, 496, 80, "Tables", false, MainPanel.window[1])
+	addEventHandler("onClientGUIClick",MainPanel.button[3],maps100_openCloseGUI,false)
+	
+	MainPanel.button[4] = guiCreateButton(8, 384, 496, 80, "Close", false, MainPanel.window[1])
+	addEventHandler("onClientGUIClick",MainPanel.button[4],maps100_openCloseGUI,false)
+	
+	guiSetVisible(MainPanel.window[1],false)
+	
+	---- Tables Insight ----
+	
+	TablesInsight.window[1] = guiCreateWindow((screenW - 768) / 2, (screenH - 640) / 2, 768, 640, "Maps top 100 - Tables", false)
+	guiWindowSetSizable(TablesInsight.window[1], false)
+	
+	TablesInsight.button[1] = guiCreateButton(320, 608, 128, 24, "Close", false, TablesInsight.window[1])
+	addEventHandler("onClientGUIClick",TablesInsight.button[1],maps100_openCloseGUI,false)
+	
+	TablesInsight.tabpanel[1] = guiCreateTabPanel(8, 24, 752, 576, false, TablesInsight.window[1])
+	
+	TablesInsight.tab[1] = guiCreateTab("Votes", TablesInsight.tabpanel[1])
+	
+	TablesInsight.combobox[1] = guiCreateComboBox(8, 8, 296, 128, "forumid", false, TablesInsight.tab[1])
+	
+	TablesInsight.combobox[2] = guiCreateComboBox(312, 8, 296, 128, "options", false, TablesInsight.tab[1])
+	guiComboBoxAddItem(TablesInsight.combobox[2], "choice1")
+	guiComboBoxAddItem(TablesInsight.combobox[2], "choice2")
+	guiComboBoxAddItem(TablesInsight.combobox[2], "choice3")
+	guiComboBoxAddItem(TablesInsight.combobox[2], "choice4")
+	guiComboBoxAddItem(TablesInsight.combobox[2], "choice5")
+	guiComboBoxAddItem(TablesInsight.combobox[2], "all")
+	
+	TablesInsight.button[2] = guiCreateButton(616, 8, 128, 24, "Remove", false, TablesInsight.tab[1])
+	addEventHandler("onClientGUIClick",TablesInsight.button[2],maps100_removeVote,false)
+	
+	TablesInsight.gridlist[1] = guiCreateGridList(8, 32, 736, 512, false, TablesInsight.tab[1])
+	guiGridListAddColumn(TablesInsight.gridlist[1], "id", 0.05)
+	guiGridListAddColumn(TablesInsight.gridlist[1], "forumid", 0.1)
+	guiGridListAddColumn(TablesInsight.gridlist[1], "choice1", 0.2)
+	guiGridListAddColumn(TablesInsight.gridlist[1], "choice2", 0.2)
+	guiGridListAddColumn(TablesInsight.gridlist[1], "choice3", 0.2)
+	guiGridListAddColumn(TablesInsight.gridlist[1], "choice4", 0.2)
+	guiGridListAddColumn(TablesInsight.gridlist[1], "choice5", 0.2)
+	
+	TablesInsight.tab[2] = guiCreateTab("Nominees", TablesInsight.tabpanel[1])
+	
+	TablesInsight.button[3] = guiCreateButton(8, 8, 128, 24, "Count votes", false, TablesInsight.tab[2])
+	addEventHandler("onClientGUIClick",TablesInsight.button[3],maps100_countVotes,false)
+	
+	TablesInsight.button[4] = guiCreateButton(8, 40, 128, 24, "Start Event", false, TablesInsight.tab[2])
+	addEventHandler("onClientGUIClick",TablesInsight.button[4],maps100_startEvent,false)
+	
+	TablesInsight.button[5] = guiCreateButton(8, 72, 128, 24, "Stop Event", false, TablesInsight.tab[2])
+	addEventHandler("onClientGUIClick",TablesInsight.button[5],maps100_stopEvent,false)
+	
+	TablesInsight.label[1] = guiCreateLabel(144, 8, 600, 24, "Counts the casted votes for each map and ranks them in descending order.", false, TablesInsight.tab[2])
+	guiLabelSetHorizontalAlign(TablesInsight.label[1], "left", false)
+	guiLabelSetVerticalAlign(TablesInsight.label[1], "center")
+	
+	TablesInsight.label[2] = guiCreateLabel(144, 36, 600, 32, "Start the event at the selected rank. E.g. if you select rank 32 it will play 32, 31, 30, 29.. etc. It adds all\nmaps to the queued maps list.", false, TablesInsight.tab[2])
+	guiLabelSetHorizontalAlign(TablesInsight.label[2], "left", false)
+	guiLabelSetVerticalAlign(TablesInsight.label[2], "center")
+	
+	TablesInsight.label[3] = guiCreateLabel(144, 72, 600, 24, "Stops the event, removes all remaining added maps from the queued maps list.", false, TablesInsight.tab[2])
+	guiLabelSetHorizontalAlign(TablesInsight.label[3], "left", false)
+	guiLabelSetVerticalAlign(TablesInsight.label[3], "center")
+	
+	TablesInsight.gridlist[2] = guiCreateGridList(8, 104, 736, 432, false, TablesInsight.tab[2])
+	guiGridListAddColumn(TablesInsight.gridlist[2], "id", 0.05)
+	guiGridListAddColumn(TablesInsight.gridlist[2], "mapresourcename", 0.2)
+	guiGridListAddColumn(TablesInsight.gridlist[2], "rank", 0.05)
+	guiGridListAddColumn(TablesInsight.gridlist[2], "votes", 0.1)
+	guiGridListAddColumn(TablesInsight.gridlist[2], "mapname", 0.2)
+	guiGridListAddColumn(TablesInsight.gridlist[2], "author", 0.2)
+	guiGridListAddColumn(TablesInsight.gridlist[2], "gamemode", 0.15)
+	
+	guiSetVisible(TablesInsight.window[1],false)
 end
 addEventHandler("onClientResourceStart",resourceRoot,maps100_buildGUI)
 
 addEvent("maps100_openCloseGUI",true)
-function maps100_openCloseGUI()
-	if guiGetVisible(GUIEditor.window[1]) then
-		guiSetVisible(GUIEditor.window[1],false)
-		showCursor(false)
-		guiSetInputMode("allow_binds")
+function maps100_openCloseGUI(button, state)
+	if button and state then
+		if state == "up" and button == "left" then
+			if source == MainPanel.button[1] then
+				guiSetVisible(MainPanel.window[1],false)
+				guiSetVisible(GUIEditor.window[1],true)
+			end
+			if source == MainPanel.button[2] then
+				guiSetVisible(MainPanel.window[1],false)
+				guiSetVisible(VotesEditor.window[1],true)
+			end
+			if source == MainPanel.button[3] then
+				guiSetVisible(MainPanel.window[1],false)
+				triggerServerEvent("maps100_fetchInsight", resourceRoot, localPlayer)
+				guiSetVisible(TablesInsight.window[1],true)
+			end
+			if source == MainPanel.button[4] then
+				guiSetVisible(MainPanel.window[1],false)
+				showCursor(false)
+				guiSetInputMode("allow_binds")
+			end
+			if source == GUIEditor.button[1] then
+				guiSetVisible(GUIEditor.window[1],false)
+				showCursor(false)
+				guiSetInputMode("allow_binds")
+			end
+			if source == TablesInsight.button[1] then
+				guiSetVisible(TablesInsight.window[1],false)
+				showCursor(false)
+				guiSetInputMode("allow_binds")
+			end
+		end
 	else
-		guiSetVisible(GUIEditor.window[1],true)
-		showCursor(true)
-		guiSetInputMode("no_binds_when_editing")
+		if guiGetVisible(MainPanel.window[1]) or guiGetVisible(GUIEditor.window[1]) or guiGetVisible(TablesInsight.window[1]) then
+			if guiGetVisible(MainPanel.window[1]) then
+				guiSetVisible(MainPanel.window[1],false)
+			end
+			if guiGetVisible(GUIEditor.window[1]) then
+				guiSetVisible(GUIEditor.window[1],false)
+			end
+			if guiGetVisible(TablesInsight.window[1]) then
+				guiSetVisible(TablesInsight.window[1],false)
+			end
+			showCursor(false)
+			guiSetInputMode("allow_binds")
+		else
+			guiSetVisible(MainPanel.window[1],true)
+			showCursor(true)
+			guiSetInputMode("no_binds_when_editing")
+		end
 	end
 end
 addEventHandler("maps100_openCloseGUI",root,maps100_openCloseGUI)
@@ -212,6 +371,103 @@ function maps100_removeMap(button, state)
 			else
 				return false
 			end
+		end
+	end
+end
+
+addEvent("maps100_receiveInsight",true)
+function receiveInsight(voterList, mapsList)
+    VoterList = voterList
+	MapsList = mapsList
+    maps100_rebuildInsight()
+end
+addEventHandler("maps100_receiveInsight",root,receiveInsight)
+
+function maps100_rebuildInsight()
+	guiGridListClear(TablesInsight.gridlist[1])
+	guiGridListSetSortingEnabled(TablesInsight.gridlist[1], false)
+	guiComboBoxClear(TablesInsight.combobox[1])
+	
+	for _,voter in ipairs(VoterList) do
+		local id = voter.id
+		local forumid = voter.forumid
+		local choice1 = voter.choice1
+		local choice2 = voter.choice2
+		local choice3 = voter.choice3
+		local choice4 = voter.choice4
+		local choice5 = voter.choice5
+		
+		local row = guiGridListAddRow(TablesInsight.gridlist[1])
+		
+		guiGridListSetItemText(TablesInsight.gridlist[1],row,1,tostring(id),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[1],row,2,tostring(forumid),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[1],row,3,tostring(choice1),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[1],row,4,tostring(choice2),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[1],row,5,tostring(choice3),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[1],row,6,tostring(choice4),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[1],row,7,tostring(choice5),false,false)
+		
+		guiComboBoxAddItem(TablesInsight.combobox[1], forumid)
+	end
+	
+	guiGridListClear(TablesInsight.gridlist[2])
+	guiGridListSetSortingEnabled(TablesInsight.gridlist[2], false)
+	
+	for _,map in ipairs(MapsList) do
+		local id = map.id
+		local mapresourcename = map.mapresourcename
+		local rank = map.rank
+		local votes = map.votes
+		local mapname = map.mapname
+		local author = map.author
+		local gamemode = map.gamemode
+        
+		local row = guiGridListAddRow(TablesInsight.gridlist[2])
+		
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,1,tostring(id),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,2,tostring(mapresourcename),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,3,tostring(rank),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,4,tostring(votes),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,5,tostring(mapname),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,6,tostring(author),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,7,tostring(gamemode),false,false)
+	end
+end
+
+function maps100_removeVote(button, state)
+	if state == "up" and button == "left" then
+		if source == TablesInsight.button[2] then
+			local forumid = guiComboBoxGetItemText(TablesInsight.combobox[1], guiComboBoxGetSelected(TablesInsight.combobox[1]))
+			local option = guiComboBoxGetItemText(TablesInsight.combobox[2], guiComboBoxGetSelected(TablesInsight.combobox[2]))
+			if forumid and option then
+				triggerServerEvent("maps100_removeVote", resourceRoot, localPlayer, forumid, option)
+			else
+				return false
+			end
+		end
+	end
+end
+
+function maps100_countVotes(button, state)
+	if state == "up" and button == "left" then
+		if source == TablesInsight.button[3] then
+			triggerServerEvent("maps100_countVotes", resourceRoot, localPlayer)
+		end
+	end
+end
+
+function maps100_startEvent(button, state)
+	if state == "up" and button == "left" then
+		if source == TablesInsight.button[4] then
+			outputChatBox("Button has yet to be scripted")
+		end
+	end
+end
+
+function maps100_stopEvent(button, state)
+	if state == "up" and button == "left" then
+		if source == TablesInsight.button[5] then
+			outputChatBox("Button has yet to be scripted")
 		end
 	end
 end
