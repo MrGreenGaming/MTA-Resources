@@ -289,6 +289,9 @@ hornsTable = {
 	[286] = "Old man - ass burns",
 	[287] = "Old man - whoopin",
 	[288] = "The Truth - brain in gear",
+	[289] = "Big Smoke - burger order",
+	[290] = "Excuse me, princess",
+	[291] = "TF2 - knee slap",
 }
 
 
