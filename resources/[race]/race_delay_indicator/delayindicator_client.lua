@@ -1,14 +1,17 @@
+local g_screenX,g_screenY = guiGetScreenSize()
 local g_Root = getRootElement()
 local g_ResRoot = getResourceRootElement(getThisResource())
 local g_Me = getLocalPlayer()
 
 local DISTANCE_FRONT_BEHIND = 0.03
 local TIME_TO_DISPLAY = 2000
+local SCALE = 1
+if g_screenY > 768 then SCALE = 1.5 end
 
 local frontTick
 local behindTick
-local delayDisplayFront = dxText:create("", 0.5, 0.37, true, "default-bold")
-local delayDisplayBehind = dxText:create("", 0.5, 0.43, true, "default-bold")
+local delayDisplayFront = dxText:create("", 0.5, 0.37, true, "default-bold", SCALE)
+local delayDisplayBehind = dxText:create("", 0.5, 0.43, true, "default-bold", SCALE)
 delayDisplayFront:color(248,28,11)
 delayDisplayBehind:color(80,233,11)
 delayDisplayFront:type("shadow",1)
