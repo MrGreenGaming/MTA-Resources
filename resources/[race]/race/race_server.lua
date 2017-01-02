@@ -1017,8 +1017,8 @@ function toggleServerGhostmode(player)
 	end
 end
 -- Edit #5 removed commands
---addCommandHandler('gm', toggleServerGhostmode)
---addCommandHandler('ghostmode', toggleServerGhostmode)
+addCommandHandler('gm', toggleServerGhostmode)
+addCommandHandler('ghostmode', toggleServerGhostmode)
 
 function updateGhostmode()
 	for i,player in ipairs(g_Players) do
