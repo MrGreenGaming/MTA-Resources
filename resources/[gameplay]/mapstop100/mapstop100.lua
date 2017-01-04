@@ -4,7 +4,7 @@ addEventHandler('onResourceStart', getResourceRootElement(),
 function()
 	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
 	if handlerConnect then
-		dbExec( handlerConnect, "CREATE TABLE IF NOT EXISTS `mapstop100` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mapresourcename` VARCHAR(70) BINARY NOT NULL, `mapname` VARCHAR(70) BINARY NOT NULL, `author` VARCHAR(70) BINARY NOT NULL, `gamemode` VARCHAR(70) BINARY NOT NULL, `rank` INTEGER, `votes` INTEGER, PRIMARY KEY (`id`) )" )
+		dbExec( handlerConnect, "CREATE TABLE IF NOT EXISTS `mapstop100` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mapresourcename` VARCHAR(70) BINARY NOT NULL, `mapname` VARCHAR(70) BINARY NOT NULL, `author` VARCHAR(70) BINARY NOT NULL, `gamemode` VARCHAR(70) BINARY NOT NULL, `rank` INTEGER, `votes` INTEGER, `balance` INTEGER, PRIMARY KEY (`id`) )" )
 		dbExec( handlerConnect, "CREATE TABLE IF NOT EXISTS `votestop100` ( `id` int(11) NOT NULL AUTO_INCREMENT, `forumid` int(10) unsigned NOT NULL, `choice1` VARCHAR(70) BINARY NOT NULL, `choice2` VARCHAR(70) BINARY NOT NULL, `choice3` VARCHAR(70) BINARY NOT NULL, `choice4` VARCHAR(70) BINARY NOT NULL, `choice5` VARCHAR(70) BINARY NOT NULL, PRIMARY KEY (`id`) )" )
 		else
 		outputDebugString('Maps top 100 error: could not connect to the mysql db')
@@ -113,7 +113,7 @@ function maps100_fetchInsight(p)
     table.sort(voterList,function(a,b) return tostring(a.id) < tostring(b.id) end)
 	
 	local mapsList = {}
-	local qh = dbQuery(handlerConnect, "SELECT * FROM `mapstop100`")
+	local qh = dbQuery(handlerConnect, "SELECT * FROM `mapstop100` ORDER BY `rank` DESC")
 	local map100_sql = dbPoll(qh,-1)
 	if not map100_sql then return false end
 	
@@ -122,13 +122,14 @@ function maps100_fetchInsight(p)
         local mapresourcename = tostring(row.mapresourcename)
         local rank = tostring(row.rank)
         local votes = tostring(row.votes)
+		local balance = tostring(row.balance)
         local mapname = tostring(row.mapname)
         local author = tostring(row.author)
         local gamemode = tostring(row.gamemode)
-        local t = {id = id, mapresourcename = mapresourcename, rank = rank, votes = votes, mapname = mapname, author = author, gamemode = gamemode}
+        local t = {id = id, mapresourcename = mapresourcename, rank = rank, votes = votes, balance = balance, mapname = mapname, author = author, gamemode = gamemode}
         table.insert(mapsList,t)
     end
-    table.sort(mapsList,function(a,b) return tostring(a.rank) < tostring(b.rank) end)
+    --table.sort(mapsList,function(a,b) return tostring(a.rank) < tostring(b.rank) end)
 	triggerClientEvent(p,"maps100_receiveInsight",resourceRoot,voterList,mapsList)
 end
 addEvent("maps100_fetchInsight", true)
@@ -185,11 +186,26 @@ addEventHandler("maps100_removeVote", resourceRoot, maps100_removeVote)
 function maps100_countVotes(p)
 	local qh = dbQuery(handlerConnect, "SELECT * FROM `mapstop100`")
 	local maps_sql = dbPoll(qh,-1)
-	if not maps_sql then return false end
+	
+	if not maps_sql then
+		outputDebugString("Could not fetch maps_sql")
+		return false
+	end
+	
+	local mapRatings = exports.mapratings:getTableOfRatedMaps()
+	
+	if not mapRatings then
+		outputDebugString("Could not fetch mapRatings")
+		return false
+	end
 	
 	local qh = dbQuery(handlerConnect, "SELECT * FROM `votestop100`")
 	local votes_sql = dbPoll(qh,-1)
-	if not votes_sql then return false end
+	
+	if not votes_sql then
+		outputDebugString("Could not fetch votes_sql")
+		return false
+	end
 	
 	for _,row in ipairs(maps_sql) do
 		local resname = tostring(maps_sql[_].mapresourcename)
@@ -202,14 +218,24 @@ function maps100_countVotes(p)
 			if tostring(votes_sql[i].choice5) == resname then votes = votes + 1 end
 		end
 		
-		local qh = dbQuery(handlerConnect, "UPDATE `mapstop100` SET `votes`=? WHERE `mapresourcename`=?", votes, resname)
+		local rating = mapRatings[resname]
+		local balance = 0
+		if rating then
+			likes = rating.likes
+			dislikes = rating.dislikes
+			if tonumber(likes) and tonumber(dislikes) then
+				balance = tonumber(likes) - tonumber(dislikes)
+			end
+		end
+		
+		local qh = dbQuery(handlerConnect, "UPDATE `mapstop100` SET `votes`=?, `balance`=? WHERE `mapresourcename`=?", votes, balance, resname)
 		if dbFree( qh ) then
 		else
 			outputChatBox("Could not set ".. votes .. " votes for " .. resname, p)
 		end
 	end
 	
-	local qh = dbQuery(handlerConnect, "SELECT * FROM `mapstop100` ORDER BY `votes` DESC")
+	local qh = dbQuery(handlerConnect, "SELECT * FROM `mapstop100` ORDER BY `votes` DESC, `balance` DESC")
 	local maps_sql = dbPoll(qh,-1)
 	if not maps_sql then return false end
 	
@@ -227,3 +253,19 @@ function maps100_countVotes(p)
 end
 addEvent("maps100_countVotes", true)
 addEventHandler("maps100_countVotes", resourceRoot, maps100_countVotes)
+
+function mapstop100_insertTrigger(p, rank)
+	local qh = dbQuery(handlerConnect, "SELECT * FROM `mapstop100` WHERE `rank`<=? ORDER BY `rank` DESC", rank)
+	local map100_sql = dbPoll(qh,-1)
+	if not map100_sql then return false end
+	
+	exports.gcshop:mapstop100_insert(p, map100_sql)
+end
+addEvent("mapstop100_insertTrigger", true)
+addEventHandler("mapstop100_insertTrigger", resourceRoot, mapstop100_insertTrigger)
+
+function mapstop100_removeTrigger(p)
+	exports.gcshop:mapstop100_remove(p)
+end
+addEvent("mapstop100_removeTrigger", true)
+addEventHandler("mapstop100_removeTrigger", resourceRoot, mapstop100_removeTrigger)
