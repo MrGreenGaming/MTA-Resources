@@ -385,3 +385,99 @@ function secondsToTimeDesc( seconds )
     end
     return ""
 end
+
+function mapstop100_insert(p, maps100)
+	for _,map in ipairs(myQueue) do
+		local str = string.find(tostring(map[4]), "Mr. Green maps top 100")
+		if str then
+			outputChatBox("ERROR: Mr. Green maps top 100 already running.",p)
+			return
+		end
+	end
+	
+	local serverMaps = {}
+	local gamemode = getResourceFromName("race")
+    local maps = call(getResourceFromName("mapmanager"), "getMapsCompatibleWithGamemode" , gamemode)
+    for _,map in ipairs (maps) do
+        table.insert(serverMaps, {name = getResourceInfo(map, "name") or getResourceName(map), resname = getResourceName(map), author = getResourceInfo ( map, "author" )})
+    end
+	
+	for _,row in ipairs(maps100) do
+		for i,v in ipairs(serverMaps) do
+			if tostring(row.mapresourcename) == v.resname then
+				local maps100_name = "Mr. Green maps top 100 - number " .. row.rank .. "!"
+				local choice = {v.name, v.resname, getResourceName(gamemode), maps100_name}
+				choice.forumID = 19
+				table.insert(myQueue, choice)
+			end
+		end
+	end
+	
+	triggerClientEvent(p,"mapstop100_refresh",resourceRoot)
+	
+	local tableOut = {}
+	local gamemode = getResourceFromName("race")
+        local maps = call(getResourceFromName("mapmanager"), "getMapsCompatibleWithGamemode" , gamemode)
+        for _,map in ipairs (maps) do
+			local name = getResourceInfo(map, "racemode") or "race"
+			if (not tableOut[name]) then
+				tableOut[name] = {}
+				tableOut[name].name = name
+				tableOut[name].resname = getResourceName(gamemode)
+				tableOut[name].maps = {}
+			end
+
+            table.insert(tableOut[name]["maps"] ,{name = getResourceInfo(map, "name") or getResourceName(map), resname = getResourceName(map), author = getResourceInfo ( map, "author" )})
+        end
+		
+		for name, mode in pairs(tableOut) do
+			table.sort(mode.maps, sortCompareFunction)
+		end
+		
+
+    table.sort((tableOut), sortCompareFunction)
+
+	triggerClientEvent(p ,"sendMapsToBuy", p, tableOut, myQueue)
+end
+addEvent("mapstop100_insert", true)
+addEventHandler("mapstop100_insert", resourceRoot, mapstop100_insert)
+
+function mapstop100_remove(p)
+	for _,map in ipairs(myQueue) do
+		local str = string.find(tostring(map[4]), "Mr. Green maps top 100")
+		if str then
+			--table.remove(myQueue, _)
+			myQueue[_] = nil
+		end
+	end
+	
+	triggerClientEvent(p,"mapstop100_refresh",resourceRoot)
+	
+	local tableOut = {}
+	local gamemode = getResourceFromName("race")
+        local maps = call(getResourceFromName("mapmanager"), "getMapsCompatibleWithGamemode" , gamemode)
+        for _,map in ipairs (maps) do
+			local name = getResourceInfo(map, "racemode") or "race"
+			if (not tableOut[name]) then
+				tableOut[name] = {}
+				tableOut[name].name = name
+				tableOut[name].resname = getResourceName(gamemode)
+				tableOut[name].maps = {}
+			end
+
+            table.insert(tableOut[name]["maps"] ,{name = getResourceInfo(map, "name") or getResourceName(map), resname = getResourceName(map), author = getResourceInfo ( map, "author" )})
+        end
+		
+		for name, mode in pairs(tableOut) do
+			table.sort(mode.maps, sortCompareFunction)
+		end
+		
+
+    table.sort((tableOut), sortCompareFunction)
+
+	triggerClientEvent(p ,"sendMapsToBuy", p, tableOut, myQueue)
+	
+	outputChatBox("All maps removed from map queue.",p)
+end
+addEvent("mapstop100_remove", true)
+addEventHandler("mapstop100_remove", resourceRoot, mapstop100_remove)

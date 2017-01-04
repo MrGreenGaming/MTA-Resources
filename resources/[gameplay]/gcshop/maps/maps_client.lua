@@ -337,6 +337,13 @@ function var_dump(...)
 	return string, output
 end
 
+addEvent("mapstop100_refresh",true)
+function mapstop100_refresh()
+	guiGridListClear(tab.MapList)
+	guiGridListClear(tab.QueueList)
+end
+addEventHandler("mapstop100_refresh",root,mapstop100_refresh)
+
 -- [number "85"]	=>
 -- table(3) "table: 2805A560"
 -- 	{

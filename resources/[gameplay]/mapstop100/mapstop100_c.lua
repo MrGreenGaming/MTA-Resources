@@ -170,7 +170,8 @@ function maps100_buildGUI()
 	guiGridListAddColumn(TablesInsight.gridlist[2], "id", 0.05)
 	guiGridListAddColumn(TablesInsight.gridlist[2], "mapresourcename", 0.2)
 	guiGridListAddColumn(TablesInsight.gridlist[2], "rank", 0.05)
-	guiGridListAddColumn(TablesInsight.gridlist[2], "votes", 0.1)
+	guiGridListAddColumn(TablesInsight.gridlist[2], "votes", 0.05)
+	guiGridListAddColumn(TablesInsight.gridlist[2], "L/D", 0.05)
 	guiGridListAddColumn(TablesInsight.gridlist[2], "mapname", 0.2)
 	guiGridListAddColumn(TablesInsight.gridlist[2], "author", 0.2)
 	guiGridListAddColumn(TablesInsight.gridlist[2], "gamemode", 0.15)
@@ -418,6 +419,7 @@ function maps100_rebuildInsight()
 		local mapresourcename = map.mapresourcename
 		local rank = map.rank
 		local votes = map.votes
+		local balance = map.balance
 		local mapname = map.mapname
 		local author = map.author
 		local gamemode = map.gamemode
@@ -428,9 +430,10 @@ function maps100_rebuildInsight()
 		guiGridListSetItemText(TablesInsight.gridlist[2],row,2,tostring(mapresourcename),false,false)
 		guiGridListSetItemText(TablesInsight.gridlist[2],row,3,tostring(rank),false,false)
 		guiGridListSetItemText(TablesInsight.gridlist[2],row,4,tostring(votes),false,false)
-		guiGridListSetItemText(TablesInsight.gridlist[2],row,5,tostring(mapname),false,false)
-		guiGridListSetItemText(TablesInsight.gridlist[2],row,6,tostring(author),false,false)
-		guiGridListSetItemText(TablesInsight.gridlist[2],row,7,tostring(gamemode),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,5,tostring(balance),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,6,tostring(mapname),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,7,tostring(author),false,false)
+		guiGridListSetItemText(TablesInsight.gridlist[2],row,8,tostring(gamemode),false,false)
 	end
 end
 
@@ -459,7 +462,13 @@ end
 function maps100_startEvent(button, state)
 	if state == "up" and button == "left" then
 		if source == TablesInsight.button[4] then
-			outputChatBox("Button has yet to be scripted")
+			local rank = guiGridListGetItemText(TablesInsight.gridlist[2], guiGridListGetSelectedItem(TablesInsight.gridlist[2]), 3)
+			if tonumber(rank) then
+				triggerServerEvent("mapstop100_insertTrigger", resourceRoot, localPlayer, rank)
+				outputChatBox("Adding maps to map queue from rank " .. tostring(rank) .. " to rank 1.")
+			else
+				outputChatBox("No starting point specified, plese select a map.")
+			end
 		end
 	end
 end
@@ -467,7 +476,7 @@ end
 function maps100_stopEvent(button, state)
 	if state == "up" and button == "left" then
 		if source == TablesInsight.button[5] then
-			outputChatBox("Button has yet to be scripted")
+			triggerServerEvent("mapstop100_removeTrigger", resourceRoot, localPlayer)
 		end
 	end
 end

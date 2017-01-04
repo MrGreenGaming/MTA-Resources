@@ -100,7 +100,9 @@
     <script src="skin\skins_server.lua" type="server" />
     <file src="skin\skins.xml" type="client" />
     
-    
+    <!-- Maps top 100 -->
+	<export function='mapstop100_insert' type='server' />
+	<export function='mapstop100_remove' type='server' />
 	
     <!-- Maps by BinSlayer    -->
 	
@@ -109,8 +111,6 @@
 	<file   src='maps\search.png' />	
 	<export function='getCurrentMapQueued' type='server' />
 	<export function='isAnyMapQueued' type='server' />
-    
-	
 	
     <!-- Custom horns by BinSlayer     -->
     
