@@ -163,10 +163,26 @@ function addShopUpgrade ( player, forumID, vehicleID, upgradeID)
 	upgradeID = upgradeSlotID(tonumber(upgradeID)) and tonumber(upgradeID)
 	if (not upgradeID) then
 		outputChatBox ( 'Not a valid upgrade ID (use numbers)', player, 255, 0, 0 )
-	elseif not isUpgradeCompatible ( vehicleID, upgradeID ) then
-		outputChatBox ( 'Upgrade ' .. tostring(upgradeID) .. ' isn\'t compatible with a(n) ' .. tostring(getVehicleNameFromModel(vehicleID)), player, 255, 0, 0 )
 	elseif upgradeID == 1008 or upgradeID == 1009 or upgradeID == 1010 or upgradeID == 1087 then
 		outputChatBox ( 'Nitro or hydraulics are not allowed', player, 255, 0, 0 )
+	elseif vehicleID == '*' then
+		local vehTable = getModsFromDB(forumID,true)
+		for i = 1, #vehTable do
+			if vehTable[i].vehicle then
+				if not isUpgradeCompatible ( vehTable[i].vehicle, upgradeID ) then
+				elseif isUpgInDatabase ( forumID, vehTable[i].vehicle, upgradeID ) then
+				else
+					local added = addUpgToDatabase (forumID, vehTable[i].vehicle, upgradeID )
+					local veh = getPedOccupiedVehicle(player)
+					if veh and vehTable[i].vehicle == getElementModel(veh) then 
+						addVehicleUpgrade(veh, upgradeID)
+					end
+				end
+			end	
+		end
+		outputChatBox ('Upgrade added to all your compatible vehicles' , player, 0, 255, 0 )
+	elseif not isUpgradeCompatible ( vehicleID, upgradeID ) then
+		outputChatBox ( 'Upgrade ' .. tostring(upgradeID) .. ' isn\'t compatible with a(n) ' .. tostring(getVehicleNameFromModel(vehicleID)), player, 255, 0, 0 )
 	elseif isUpgInDatabase ( forumID, vehicleID, upgradeID ) then
 		outputChatBox ( 'This upgrade is already added: '.. tostring(getVehicleNameFromModel(vehicleID)) .. ' + ' .. tostring(upgradeID), player, 255, 165, 0 )
 	else
@@ -782,12 +798,15 @@ end
 -- addCommandHandler('getVehModel', function(p, c, f, v) outputChatBox(tostring(getVehModel(tonumber(f) or f)),p) end, true, true )
 
 function isUpgradeCompatible ( vehicle, upgrade )
+	if isElement(tempveh) then destroyElement(tempveh) end
+	if timer then killTimer(timer) end
+	local timer = nil
 	local tempveh = nil
 	if not (isElement(vehicle) and getElementType(vehicle) == 'vehicle') then
 		if type(vehicle) == 'number' and getVehicleNameFromModel(vehicle) ~= '' then
 			tempveh = createVehicle(vehicle, 0,0,-50)
 			vehicle = tempveh
-			setTimer(function() if isElement(tempveh) then destroyElement(tempveh) end end, 500, 1)
+			timer = setTimer(function() if isElement(tempveh) then destroyElement(tempveh) end end, 500, 1)
 		else
 			return false
 		end
