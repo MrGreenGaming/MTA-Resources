@@ -231,6 +231,12 @@ function build_modshopWidget(parent, offsetX, offsetY)
 		addEventHandler("onClientGUIClick", gui["addUpgradeForAllButton"], on_addUpgradeForAllButton_clicked, false)
 	end
 	
+	gui["delUpgradeForAllButton"] = guiCreateButton(400, 210, 111, 33, "Remove upgrade for all", false, gui["tabUpgrades"])
+	guiSetEnabled(gui["delUpgradeForAllButton"], false)
+	if on_delUpgradeForAllButton_clicked then
+		addEventHandler("onClientGUIClick", gui["delUpgradeForAllButton"], on_delUpgradeForAllButton_clicked, false)
+	end
+	
 	gui["tabNeonlights"] = guiCreateTab("Neon lights", gui["modshopTabs"])
 	guiSetEnabled(gui["tabNeonlights"], false)
 	

@@ -562,14 +562,17 @@ function upgradeSelected(button, state, absoluteX, absoluteY)
 			guiSetEnabled(modshop_gui["addUpgradeButton"], false)
 			guiSetEnabled(modshop_gui["delUpgradeButton"], true)
 			guiSetEnabled(modshop_gui["addUpgradeForAllButton"], true)
+			guiSetEnabled(modshop_gui["delUpgradeForAllButton"], true)
 		elseif selected_upgrade then
 			guiSetEnabled(modshop_gui["addUpgradeButton"], true)
 			guiSetEnabled(modshop_gui["delUpgradeButton"], false)
 			guiSetEnabled(modshop_gui["addUpgradeForAllButton"], true)
+			guiSetEnabled(modshop_gui["delUpgradeForAllButton"], false)
 		else
 			guiSetEnabled(modshop_gui["addUpgradeButton"], false)
 			guiSetEnabled(modshop_gui["delUpgradeButton"], false)
 			guiSetEnabled(modshop_gui["addUpgradeForAllButton"], false)
+			guiSetEnabled(modshop_gui["delUpgradeForAllButton"], false)
 			selected_row = nil
 			selected_upgrade = nil
 		end
@@ -600,6 +603,15 @@ function on_addUpgradeForAllButton_clicked(button, state, absoluteX, absoluteY)
 	end
 	if getVehicleUpgradeSlotName(selected_upgrade) and getVehicleNameFromModel ( tonumber(current_vehicle) ) then
 		triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', '*', 'upgrade', selected_upgrade)
+	end
+end
+
+function on_delUpgradeForAllButton_clicked(button, state, absoluteX, absoluteY)
+	if (button ~= "left") or (state ~= "up") then
+		return
+	end
+	if getVehicleUpgradeSlotName(selected_upgrade) and getVehicleNameFromModel ( tonumber(current_vehicle) ) then
+		triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', '*', 'remupgrade', selected_upgrade)
 	end
 end
 
