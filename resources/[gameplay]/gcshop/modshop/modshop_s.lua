@@ -199,6 +199,20 @@ function remShopUpgrade ( player, forumID, vehicleID, upgradeID)
 	upgradeID = upgradeSlotID(tonumber(upgradeID)) and tonumber(upgradeID)
 	if (not upgradeID) then
 		outputChatBox ( 'Not a valid upgrade ID (use numbers)', player, 255, 0, 0 )
+	elseif vehicleID == '*' then
+		local vehTable = getModsFromDB(forumID,true)
+		for i = 1, #vehTable do
+			if vehTable[i].vehicle then
+				if isUpgInDatabase ( forumID, vehTable[i].vehicle, upgradeID ) then
+					local removed = remUpgFromDatabase (forumID, vehTable[i].vehicle, upgradeID )
+					local veh = getPedOccupiedVehicle(player)
+					if veh and vehicleID == getElementModel(veh) then 
+						removeVehicleUpgrade(veh, upgradeID)
+					end
+				end
+			end	
+		end
+		outputChatBox ('Removed upgrade of all your vehicles' , player, 0, 255, 0 )
 	elseif not isUpgInDatabase ( forumID, vehicleID, upgradeID ) then
 		outputChatBox ( 'This upgrade is not added: '.. tostring(getVehicleNameFromModel(vehicleID)) .. ' + ' .. tostring(upgradeID), player, 255, 165, 0 )
 	else
