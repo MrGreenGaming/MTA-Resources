@@ -1,5 +1,9 @@
 function mph()
+	local target = getCameraTarget()
 	car = getPedOccupiedVehicle(getLocalPlayer())
+	if target and getElementType(target) == "vehicle" then
+		car = target
+	end
 	if car then
 		if (getVehicleType(car) == "Plane") or (getVehicleType(car) == "Boat") or (getVehicleType(car) == "Helicopter") then
 			xx,yy,zz = getElementVelocity(car)
@@ -29,7 +33,11 @@ function mph()
 end
 
 function kmh()
+	local target = getCameraTarget()
 	car = getPedOccupiedVehicle(getLocalPlayer())
+	if target and getElementType(target) == "vehicle" then
+		car = target
+	end
 	if car then
 		if (getVehicleType(car) == "Plane") or (getVehicleType(car) == "Boat") or (getVehicleType(car) == "Helicopter") then
 			xx,yy,zz = getElementVelocity(car)
