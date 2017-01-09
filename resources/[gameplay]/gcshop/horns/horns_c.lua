@@ -619,7 +619,11 @@ function createSoundForCar(car, horn)
 		setElementPosition(sound, rx, ry, rz)
 		
 		
-		local playerx, playery, playerz = getElementPosition( getPedOccupiedVehicle(localPlayer) )
+		local target = getCameraTarget()
+		local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
+		if target then
+			playerx, playery, playerz = getElementPosition(target)
+		end
 		cp_x, cp_y, cp_z = getElementPosition( car)
 		local dist = getDistanceBetweenPoints3D ( cp_x, cp_y, cp_z, playerx, playery, playerz )
 		if dist and dist < 40 and ( isLineOfSightClear(cp_x, cp_y, cp_z+1.2, playerx, playery, playerz, true, false, false, false )) then
