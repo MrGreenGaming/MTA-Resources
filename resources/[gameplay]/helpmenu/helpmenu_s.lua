@@ -66,7 +66,7 @@ end
 function receiveChangelog(responseData, errno)
 	if errno == 0 then
 		--Load previous log file and save new changelog
-		outputDebugString("Received changelog data", 3)
+		--outputDebugString("Received changelog data", 3)
 		local logFile = fileExists("changelog.xml") and fileDelete("changelog.xml") and fileCreate("changelog.xml") or fileCreate("changelog.xml") 
 		fileWrite(logFile, responseData)
 		fileClose(logFile)
