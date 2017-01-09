@@ -63,15 +63,15 @@ function votes100_buildGUI()
 	
 	guiSetVisible(VotesEditor.window[1],false)
 	
-	if isTimer(maps100Timer) then killTimer(maps100Timer) end
-	setTimer(function()
-		maps100Timer = setTimer(function() 
-			exports.messages:outputGameMessage("Vote now for the Mr.Green Maps top 100!", 3, 255, 255, 255)
-			setTimer(function()
-				exports.messages:outputGameMessage("Use /vote or press F1 to vote!", 2.4, 50, 205, 50)
-			end, 1000, 1)
-		end, 2700000, 0)
-	end, 1350000, 1)
+	--if isTimer(maps100Timer) then killTimer(maps100Timer) end
+	--setTimer(function()
+	--	maps100Timer = setTimer(function() 
+	--		exports.messages:outputGameMessage("Vote now for the Mr.Green Maps top 100!", 3, 255, 255, 255)
+	--		setTimer(function()
+	--			exports.messages:outputGameMessage("Use /vote or press F1 to vote!", 2.4, 50, 205, 50)
+	--		end, 1000, 1)
+	--	end, 2700000, 0)
+	--end, 1350000, 1)
 end
 addEventHandler("onClientResourceStart",resourceRoot,votes100_buildGUI)
 

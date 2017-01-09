@@ -60,7 +60,7 @@ function votes100_command(p)
 	votes100_fetch100(p)
 	triggerClientEvent(p,"votes100_openCloseGUI",resourceRoot)
 end
-addCommandHandler("vote", votes100_command)
+--addCommandHandler("vote", votes100_command)
 
 function votes100_voteMap(p, resname)
 	local logged = exports.gc:isPlayerLoggedInGC(p)
