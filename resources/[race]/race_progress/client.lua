@@ -338,7 +338,7 @@ function update()
 			local distanceToCp = distanceFromPlayerToCheckpoint(player,headingForCp)
 			if distanceToCp ~= false then
 				-- Add with numeric index to make shuffling possible
-				table.insert(players,{getPlayerName(player),calculateDistance(headingForCp,distanceToCp),player})
+				table.insert(players,{addTeamColor(player),calculateDistance(headingForCp,distanceToCp),player})
 				--players[v] = calculateDistance(headingForCp,distanceToCp)
 			end
 		end
@@ -362,7 +362,7 @@ function update()
 	-- (since it can't simply be access via the index anymore, because of the numeric indexes)
 	g_localPlayerDistance = nil
 	for _,table in pairs(players) do
-		if table[1] == getPlayerName(getLocalPlayer()) then
+		if table[1] == addTeamColor(getLocalPlayer()) then
 			g_localPlayerDistance = table[2]
 		end
 	end
@@ -533,7 +533,7 @@ function draw()
 	local backgroundColor = getColor("background")
 	local fontColor = getColor("font")
 	local color = getColor("font")
-	local localPlayerName = getPlayerName(getLocalPlayer())
+	local localPlayerName = addTeamColor(getLocalPlayer())
 
 	-- Dertemine local Players distance
 	local localPlayerDistance = g_localPlayerDistance
@@ -1161,4 +1161,43 @@ local keyTimer = nil
 -- 	toggleGui()
 -- end
 -- bindKey(toggleSettingsGuiKey,"both",keyHandler)
-
+-------------------------------------------------------------------------------------------------------------------------
+function addTeamColor(player)
+	local playerTeam = getPlayerTeam ( player ) 
+	if ( playerTeam ) then
+		local r,g,b = getTeamColor ( playerTeam )
+		local n1 = toHex(r)
+		local n2 = toHex(g)
+		local n3 = toHex(b)
+		if r <= 16 then n1 = "0"..n1 end
+		if g <= 16 then n2 = "0"..n2 end
+		if b <= 16 then n3 = "0"..n3 end
+		return "#"..n1..""..n2..""..n3..""..getPlayerNametagText(player)
+	else
+		return getPlayerNametagText(player)
+	end
+end
+-------------------------------------------------------------------------------------------------------------------------
+function toHex(n)
+    local hexnums = {"0","1","2","3","4","5","6","7",
+                     "8","9","A","B","C","D","E","F"}
+    local str,r = "",n%16
+    if n-r == 0 then str = hexnums[r+1]
+    else str = toHex((n-r)/16)..hexnums[r+1] end
+    return str
+end
+------------------------------------------------------------------------------------------------------------------------
+function getPrefix(number)
+	if number == 11 or number == 12 or number == 13 then
+		return 'th'
+	end	
+	number = number % 10
+	if number == 1 then
+		return 'st'
+	elseif number == 2 then
+		return 'nd'
+	elseif number == 3 then
+		return 'rd'
+	else return 'th'
+    end	
+end
