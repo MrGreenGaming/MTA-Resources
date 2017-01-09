@@ -641,11 +641,8 @@ function draw()
 			local textWidth = dxGetTextWidth(tostring(rank)..getPrefix(rank)..': '..playerName,fontScale,font)
 			--dxDrawImage(x-15,level-10,40,15.5,"car.png",90,0,0,tocolor(0,0,0,255)) -- 194x75 2,58
 			dxDrawRectangle(	x - 10,			level,		20,	2,	color)
-			if rank == 1 then
-				drawText(tostring(rank)..getPrefix(rank)..': '..playerName,	x - textWidth - 20,	level - fontHeight / 2,tocolor(255, 0, 0),backgroundColor)
-			else
-				drawText(tostring(rank)..getPrefix(rank)..': '..playerName,	x - textWidth - 20,	level - fontHeight / 2,fontColor,backgroundColor)
-			end	
+			dxDrawText("#000000"..tostring(rank)..getPrefix(rank)..": ".."#000000"..playerName:gsub('#%x%x%x%x%x%x', ''), x -200+1, level - fontHeight/2+1, x -200+185+1, level - fontHeight/2+15+1, tocolor(0, 0, 0, 255), 1, "default-bold", "right", "center", false, false, false, true, false)
+			dxDrawText("#FF0000"..tostring(rank)..getPrefix(rank)..": ".."#FFFFFF"..playerName, x -200, level - fontHeight / 2, x -200+185, level - fontHeight/2+15, tocolor(255, 255, 255, 255), 1, "default-bold", "right", "center", false, false, false, true, false)
 			local indent = 20
 			if s("drawDistance") then
 				drawText(distance,x+ indent, level - fontHeight / 2,fontColor,backgroundColor)
@@ -678,13 +675,14 @@ function draw()
 	end
 	local fontColor = getColor("font2")
 	local backgroundColor = getColor("background2")
+	local rank = tonumber(getElementData(localPlayer, 'race rank'))
 	dxDrawRectangle(x - 10,localPlayerLevel,20,2,fontColor)
 	if showLocalPlayer then
-		local textWidth = dxGetTextWidth(localPlayerName,fontScale,font)
-		local leftX = x - textWidth - 20
+		local leftX = x - 200
 		local topY = localPlayerLevel - fontHeight / 2
 		
-		drawText(localPlayerName,leftX,topY,fontColor,backgroundColor)
+		dxDrawText("#000000"..tostring(rank)..getPrefix(rank)..": ".."#000000"..localPlayerName:gsub('#%x%x%x%x%x%x', ''), leftX+1, topY+1, leftX+185+1, topY+15+1, tocolor(0, 0, 0, 255), 1, "default-bold", "right", "center", false, false, false, true, false)
+		dxDrawText("#00FF00"..tostring(rank)..getPrefix(rank)..": ".."#FFFFFF"..localPlayerName, leftX, topY, leftX+185, topY+15, tocolor(255, 255, 255, 255), 1, "default-bold", "right", "center", false, false, false, true, false)
 		if s("mode") == "miles" then
 			localPlayerDistance = localPlayerDistance / 1.609344
 		end
