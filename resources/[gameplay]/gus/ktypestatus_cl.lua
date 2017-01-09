@@ -29,7 +29,11 @@ function chatCheckPulse()
 end
 
 function showTextIcon()
+	local target = getCameraTarget()
 	local playerx,playery,playerz = getElementPosition(localPlayer)
+	if target then
+		playerx,playery,playerz = getElementPosition(target)
+	end
 	for player, truth in pairs(chattingPlayers) do
 		
 		if (player == localPlayer) then
