@@ -29,7 +29,7 @@ addEventHandler("showDelay", g_Root,
 			else
 				cps = "(-"..cps.."CPs) "
 			end
-			delayDisplayBehind:text("-"..msToTimeStr(delayTime).." "..cps.."#FFFFFF"..getPlayerName(source))
+			delayDisplayBehind:text("-"..msToTimeStr(delayTime).." "..cps.."#FFFFFF"..addTeamColor(source))
 			delayDisplayBehind:visible(true)
 			behindTick = getTickCount()
 			setTimer(hideDelayDisplay, TIME_TO_DISPLAY, 1, false)
@@ -53,7 +53,7 @@ addEventHandler("showDelay", g_Root,
 			else
 				cps = "(+"..cps.."CPs) "
 			end
-			delayDisplayFront:text("+"..msToTimeStr(delayTime).." "..cps.."#FFFFFF"..getPlayerName(source))
+			delayDisplayFront:text("+"..msToTimeStr(delayTime).." "..cps.."#FFFFFF"..addTeamColor(source))
 			delayDisplayFront:color(248,28,11)
 			delayDisplayFront:visible(true)
 			frontTick = getTickCount()
@@ -159,4 +159,30 @@ end
 
 function hideCPDelays()
 	triggerServerEvent( "onClientHideCPDelays", resourceRoot )
+end
+
+-------------------------------------------------------------------------------------------------------------------------
+function addTeamColor(player)
+	local playerTeam = getPlayerTeam ( player ) 
+	if ( playerTeam ) then
+		local r,g,b = getTeamColor ( playerTeam )
+		local n1 = toHex(r)
+		local n2 = toHex(g)
+		local n3 = toHex(b)
+		if r <= 16 then n1 = "0"..n1 end
+		if g <= 16 then n2 = "0"..n2 end
+		if b <= 16 then n3 = "0"..n3 end
+		return "#"..n1..""..n2..""..n3..""..getPlayerNametagText(player)
+	else
+		return getPlayerNametagText(player)
+	end
+end
+-------------------------------------------------------------------------------------------------------------------------
+function toHex(n)
+    local hexnums = {"0","1","2","3","4","5","6","7",
+                     "8","9","A","B","C","D","E","F"}
+    local str,r = "",n%16
+    if n-r == 0 then str = hexnums[r+1]
+    else str = toHex((n-r)/16)..hexnums[r+1] end
+    return str
 end
