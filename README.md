@@ -1,5 +1,6 @@
 # Mr.Green-MTA-Resources
 All resources used on the MrGreenGaming.com Multi Theft Auto: San Andreas (MTASA) servers (Race &amp; Race Mix).
+
 # Setting up a local server
 - Checkout the resources into your local MTA server folder.
 - Example maps, server config file, ACL example and SQL tables can be found in the `config` folder.
