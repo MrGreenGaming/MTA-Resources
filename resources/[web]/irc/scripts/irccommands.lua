@@ -71,7 +71,7 @@ end
 local function ircGetUserLevel (...)
 	if (usingDiscordCommand) then
 		for _, role in pairs(discordRoles) do
-			if role == "Admins" then
+			if role == "Admins" or role == "Top" then
 				return 6
 			end
 		end
