@@ -254,7 +254,7 @@ function drawBlips(rot)
 	local blipSize = 32
 	table.sort(blips,function(b1,b2) return getBlipOrdering(b1)<getBlipOrdering(b2)	end)
 	for _,blip in ipairs(blips) do
-		if getElementInterior(target)==getElementInterior(blip) and getElementDimension(target)==getElementDimension(blip) and not (getElementData(target, 'state') and getElementData(target, 'state') ~= 'alive') then
+		if getElementInterior(target)==getElementInterior(blip) and getElementDimension(target)==getElementDimension(blip) and not (getElementData(target, 'state') and getElementData(target, 'state') ~= 'alive') and not (getElementAttachedTo(blip) and getElementData(getElementAttachedTo(blip), 'state') and getElementData(getElementAttachedTo(blip), 'state') ~= 'alive') then
 			local ex,ey,ez=getElementPosition(blip)
 			local a = 4/9
 			local blipPointRot = 0
