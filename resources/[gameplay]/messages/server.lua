@@ -1,10 +1,13 @@
-function outputGameMessage(text, triggerFor, size, r, g, b)
+function outputGameMessage(text, triggerFor, size, r, g, b, priority, chat, floating)
+	if priority == nil then priority = false end
+	if chat == nil then chat = true end
+	if floating == nil then floating = true end
 	if (r == nil) and (g == nil) and (b == nil) then
 		r = 255
 		g = 255
 		b = 255
 	end	
-	triggerClientEvent(triggerFor, "onGameMessageSend", triggerFor, text,size,r, g, b)
+	triggerClientEvent(triggerFor, "onGameMessageSend", triggerFor, text,size,r, g, b, priority, chat, floating)
 end
 
 addEventHandler('onMapStarting', getRootElement(),
