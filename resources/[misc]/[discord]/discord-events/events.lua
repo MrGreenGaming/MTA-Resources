@@ -72,10 +72,53 @@ addEventHandler("onInterchatMessage", root,
     end
 )
 
+local mutes = {}
+local lastchatid, lastchatnick
+
+function discordmutelast(p, c)
+	if not lastchatid then
+		outputChatBox('No last discord chatter', p, 255,0,0)
+	else
+		outputChatBox('Discord user ' .. lastchatnick .. ' muted by ' .. getPlayerName(p), root, 255,0,0)
+		mutes[lastchatid] = getPlayerName(p)
+	end
+end
+addCommandHandler('discordmutelast', discordmutelast, true)
+
+function discordmuteid(p, c, id)
+	if not id then
+		outputChatBox('usage: /discordmuteid <discordid>', p, 255,0,0)
+	else
+		outputChatBox('Discord user ' .. id .. ' by muted ' .. getPlayerName(p), root, 255,0,0)
+		mutes[id] = getPlayerName(p)
+	end
+end
+addCommandHandler('discordmuteid', discordmuteid, true)
+
+function discordunmuteid(p, c, id)
+	if not id then
+		outputChatBox('usage: /discordunmuteid <discordid>', p, 255,0,0)
+	else
+		outputChatBox('Discord user ' .. id .. ' unmuted by ' .. getPlayerName(p), root, 255,0,0)
+		mutes[id] = nil
+	end
+end
+addCommandHandler('discordunmuteid', discordunmuteid, true)
+
+function discordmutes(p, c)
+	outputChatBox('Discord mutes: ', p, 255,0,0)
+	for id,by in pairs(mutes) do
+		outputChatBox('Discord user ' .. id .. ' muted by ' .. by, p, 255,0,0)
+	end
+end
+addCommandHandler('discordmutes', discordmutes, true)
+
 addEvent("onDiscordPacket")
 addEventHandler("onDiscordPacket", root,
     function (packet, payload)
+		if mutes[payload.author.id] then return end
         if packet == "text.message" then
+			lastchatid, lastchatnick = tostring(payload.author.id), payload.author.name
             outputServerLog(("DISCORD: %s: %s"):format(payload.author.name, payload.message.text))
             outputChatBox(("#69BFDB[Đ] #FFFFFF%s: #E7D9B0%s"):format(payload.author.name, payload.message.text), root, 255, 255, 255, true)
             exports.discord:send("chat.confirm.message", { author = payload.author.name, message = payload.message })
