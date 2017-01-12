@@ -17,7 +17,8 @@ end
 addCommandHandler('hidemsg', function() hidemsg = not hidemsg; outputChatBox('Hidemsg: ' .. tostring(hidemsg)) end)
 
 
-function outputGameMessage(tex, size, r, g, b, priority)
+function outputGameMessage(tex, size, r, g, b, priority, chat, floating)
+	if priority == nil then priority = false end
 	text = string.gsub(tex, '#%x%x%x%x%x%x', '' )
 	if size == nil then size = 2.2 end
 	if (r == nil) or (g == nil) or (b == nil) then 
@@ -26,7 +27,8 @@ function outputGameMessage(tex, size, r, g, b, priority)
 		b = 255
 	end	
 	if hidemsg then
-            outputChatBox("[Game Message] "..text,r,g,b)
+			if chat == false and priority == false then return end
+			outputChatBox("[Game Message] "..text,r,g,b)
         return
     end
 	if priority then
@@ -39,6 +41,7 @@ function outputGameMessage(tex, size, r, g, b, priority)
 			setTimer(function(localText) dxText:create(localText) localText:destroy()  end, 9000, 1, textVar)
 			return
 	end
+	if floating == false then return end
 	if lastTick then
 		k = 0
 		for i,j in pairs(textDelayTable) do 
@@ -104,8 +107,8 @@ end
 
 addEvent("onGameMessageSend", true)
 addEventHandler("onGameMessageSend", getRootElement(),
-function(text, size, r, g, b)
-	outputGameMessage(text, size, r, g, b)
+function(text, size, r, g, b, priority, chat, floating)
+	outputGameMessage(text, size, r, g, b, priority, chat, floating)
 end
 )
 
