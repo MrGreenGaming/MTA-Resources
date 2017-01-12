@@ -1,4 +1,4 @@
-﻿---
+---
 -- Main client file with drawing and calculating.
 --
 -- @author	driver2
@@ -338,7 +338,7 @@ function update()
 			local distanceToCp = distanceFromPlayerToCheckpoint(player,headingForCp)
 			if distanceToCp ~= false then
 				-- Add with numeric index to make shuffling possible
-				table.insert(players,{getPlayerName(player),calculateDistance(headingForCp,distanceToCp),player})
+				table.insert(players,{addTeamColor(player),calculateDistance(headingForCp,distanceToCp),player})
 				--players[v] = calculateDistance(headingForCp,distanceToCp)
 			end
 		end
@@ -362,7 +362,7 @@ function update()
 	-- (since it can't simply be access via the index anymore, because of the numeric indexes)
 	g_localPlayerDistance = nil
 	for _,table in pairs(players) do
-		if table[1] == getPlayerName(getLocalPlayer()) then
+		if table[1] == addTeamColor(getLocalPlayer()) then
 			g_localPlayerDistance = table[2]
 		end
 	end
@@ -533,7 +533,7 @@ function draw()
 	local backgroundColor = getColor("background")
 	local fontColor = getColor("font")
 	local color = getColor("font")
-	local localPlayerName = getPlayerName(getLocalPlayer())
+	local localPlayerName = addTeamColor(getLocalPlayer())
 
 	-- Dertemine local Players distance
 	local localPlayerDistance = g_localPlayerDistance
@@ -638,13 +638,13 @@ function draw()
 			else
 				distance = string.format("%.2f",distance/1000)
 			end
-			local textWidth = dxGetTextWidth(tostring(rank)..getPrefix(rank)..': '..playerName,fontScale,font)
+			local textWidth = dxGetTextWidth(tostring(rank)..getPrefix(rank)..': '..playerName:gsub( '#%x%x%x%x%x%x', '' ),fontScale,font)
 			--dxDrawImage(x-15,level-10,40,15.5,"car.png",90,0,0,tocolor(0,0,0,255)) -- 194x75 2,58
 			dxDrawRectangle(	x - 10,			level,		20,	2,	color)
 			if rank == 1 then
-				drawText(tostring(rank)..getPrefix(rank)..': '..playerName,	x - textWidth - 20,	level - fontHeight / 2,tocolor(255, 0, 0),backgroundColor)
+				drawText("#FF0000"..tostring(rank)..getPrefix(rank)..': '..playerName:gsub( '#%x%x%x%x%x%x', '' ),	x - textWidth - 20,	level - fontHeight / 2,tocolor(255, 0, 0),backgroundColor)
 			else
-				drawText(tostring(rank)..getPrefix(rank)..': '..playerName,	x - textWidth - 20,	level - fontHeight / 2,fontColor,backgroundColor)
+				drawText("#FFFFFF"..tostring(rank)..getPrefix(rank)..': '..playerName,	x - textWidth - 20,	level - fontHeight / 2,fontColor,backgroundColor)
 			end	
 			local indent = 20
 			if s("drawDistance") then
@@ -676,21 +676,24 @@ function draw()
 	if localPlayerDistance == g_TotalDistance then
 		return
 	end
+	local rank = tonumber(getElementData(localPlayer, 'race rank'))
+	if rank then
 	local fontColor = getColor("font2")
 	local backgroundColor = getColor("background2")
 	dxDrawRectangle(x - 10,localPlayerLevel,20,2,fontColor)
 	if showLocalPlayer then
-		local textWidth = dxGetTextWidth(localPlayerName,fontScale,font)
+		local textWidth = dxGetTextWidth(tostring(rank)..getPrefix(rank)..": "..localPlayerName:gsub( '#%x%x%x%x%x%x', '' ),fontScale,font)
 		local leftX = x - textWidth - 20
 		local topY = localPlayerLevel - fontHeight / 2
 		
-		drawText(localPlayerName,leftX,topY,fontColor,backgroundColor)
+		drawText("#FFFFFF"..tostring(rank)..getPrefix(rank)..": "..localPlayerName,leftX,topY,fontColor,backgroundColor)
 		if s("mode") == "miles" then
 			localPlayerDistance = localPlayerDistance / 1.609344
 		end
 		if s("drawDistance") then
 			drawText(string.format("%.2f",localPlayerDistance/1000),x + 20,localPlayerLevel - fontHeight / 2,fontColor,backgroundColor)
 		end
+	end
 	end
 
 	--zeitmessung = getTickCount() - zeitmessungBeginn
@@ -747,7 +750,7 @@ function drawText(text,x,y,color,backgroundColor)
 	local font = s("fontType")
 	local fontScale = s("fontSize")
 
-	local textWidth = math.floor(dxGetTextWidth(text,fontScale,font))
+	local textWidth = math.floor(dxGetTextWidth(text:gsub( '#%x%x%x%x%x%x', '' ),fontScale,font))
 	local fontHeight = math.floor(dxGetFontHeight(fontScale,font))
 	
 	local cornerSize = math.floor(fontHeight / 2.5)
@@ -788,7 +791,7 @@ function drawText(text,x,y,color,backgroundColor)
 		dxDrawLine(x+textWidth+cornerSize/2,y-1,x+textWidth+cornerSize/2,y+fontHeight,tocolor(0,0,0,255))
 		]]
 	end
-	dxDrawText(text,x,y,x,y,color,fontScale,font)
+	dxDrawText(text,x,y,x,y,color,fontScale,font,_, _, false, false, false, true, false)
 	--dxDrawText(tostring(y),0,0,0)
 end
 
@@ -1161,4 +1164,41 @@ local keyTimer = nil
 -- 	toggleGui()
 -- end
 -- bindKey(toggleSettingsGuiKey,"both",keyHandler)
+-------------------------------------------------------------------------------------------------------------------------
+function addTeamColor(player)
+	local playerTeam = getPlayerTeam ( player ) 
+	if ( playerTeam ) then
+		local r,g,b = getTeamColor ( playerTeam )
+		local n1 = toHex(r)
+		local n2 = toHex(g)
+		local n3 = toHex(b)
+		if r <= 16 then n1 = "0"..n1 end
+		if g <= 16 then n2 = "0"..n2 end
+		if b <= 16 then n3 = "0"..n3 end
+		return "#"..n1..""..n2..""..n3..""..getPlayerNametagText(player)
+	else
+		return getPlayerNametagText(player)
+	end
+end
+-------------------------------------------------------------------------------------------------------------------------
+function toHex ( n )
+    local hexnums = {"0","1","2","3","4","5","6","7",
+                     "8","9","A","B","C","D","E","F"}
+    local str,r = "",n%16
+    if n-r == 0 then str = hexnums[r+1]
+    else str = toHex((n-r)/16)..hexnums[r+1] end
+    return str
+end
 
+
+
+
+function onswitch()
+		settingsObject:set("enabled",true)
+end
+
+function offswitch()
+	if s("enabled") then
+		settingsObject:set("enabled",false)
+	end
+end
