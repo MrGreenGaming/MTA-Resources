@@ -9,7 +9,6 @@
     <script src="admin.lua" />
     <script src="getSerial.lua" />
     <script src="recent_topics.lua" />
-    <script src="mapmodefix.lua" />
 	<script src="rankboard_s.lua" />
 	<script src="rankboard_c.lua" type="client" protected="true" />
     <script src="antipickups.lua" />

@@ -3,6 +3,7 @@
 
 	<script src="mm_c.lua" type="client"/>
 	<script src="mm.lua" type="server"/>
+	<script src="mapmodefix.lua" type="server"/>
 	
 	<export function="newMap" http="true" />
 
