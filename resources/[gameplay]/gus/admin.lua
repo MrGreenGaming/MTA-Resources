@@ -271,54 +271,53 @@ end
 
 --facilitating map deletion--
 --it puts the deleted maps in resource-cache/trash folder
--- addEvent('onMapStarting', true)
-
--- function onNewMapStart()
---     local map = g_Map
---     if map == exports.mapmanager:getRunningGamemodeMap() then   --if map that was deleted gets replayed before deletion, halt deletion for the next map.
---         return
---     end
---     local name = getResourceInfo(map, "name")
---     local delete = deleteResource(getResourceName(map))
---     if not delete then
---         if isElement(g_P) then outputChatBox("Error: Map cannot be deleted.", g_P) end
---         canUseCommand = true
---         g_Map = nil
---         g_P = nil
---         removeEventHandler('onMapStarting', root, onNewMapStart)
---         return
---     end
---     if isElement(g_P) then
---         outputChatBox("Map deleted: "..name, g_P)
---     end
---     refreshResources()
---     canUseCommand = true
---     g_Map = nil
---     g_P = nil
---     removeEventHandler('onMapStarting', root, onNewMapStart)
--- end
+addEvent('onMapStarting', true)
+function onNewMapStart()
+     local map = g_Map
+     if map == exports.mapmanager:getRunningGamemodeMap() then   --if map that was deleted gets replayed before deletion, halt deletion for the next map.
+         return
+     end
+     local name = getResourceInfo(map, "name")
+     local delete = deleteResource(getResourceName(map))
+     if not delete then
+         if isElement(g_P) then outputChatBox("Error: Map cannot be deleted.", g_P) end
+         canUseCommand = true
+         g_Map = nil
+         g_P = nil
+         removeEventHandler('onMapStarting', root, onNewMapStart)
+         return
+     end
+     if isElement(g_P) then
+         outputChatBox("Map deleted: "..name, g_P)
+     end
+     refreshResources()
+     canUseCommand = true
+     g_Map = nil
+     g_P = nil
+     removeEventHandler('onMapStarting', root, onNewMapStart)
+end
 
 -- canUseCommand = true
 -- g_Map = nil
 -- g_P = nil
 
--- addCommandHandler('deletemap',
--- function(p)
+addCommandHandler('deletemap',
+function(p)
 --     --powerful command. should be used only by staff. add ur name if u want access
---     -- if (getPlayerName(p) ~= "BinSlayer" and getPlayerName(p) ~= "#CC22CCH#FFFF00ulpje") then return end
+       if (getPlayerName(p) ~= "BinSlayer" and getPlayerName(p) ~= "#CC22CCH#FFFF00ulpje") and getPlayerName(p) ~= "[SiK]#FEFE22Megas") then return end
 --     --second check, just to be sure.
 --     if not (hasObjectPermissionTo(p, "function.banPlayer", false)) then return end
 --     --get current map running, copy it over as a backup and delete it from map list via refresh.
---     if not canUseCommand then outputChatBox("Error: Can't use command. An admin has already deleted this map.", p) return end
---     local map = exports.mapmanager:getRunningGamemodeMap()
---     if not map then outputChatBox("Error: No map.", p) return end
---     outputChatBox("Deleting current map at the start of the next map!", root, 255, 0, 0)
---     g_Map = map
---     g_P = p
---     addEventHandler('onMapStarting', root, onNewMapStart)
---     canUseCommand = false
--- end
--- )
+       if not canUseCommand then outputChatBox("Error: Can't use command. An admin has already deleted this map.", p) return end
+       local map = exports.mapmanager:getRunningGamemodeMap()
+       if not map then outputChatBox("Error: No map.", p) return end
+       outputChatBox("Deleting current map at the start of the next map!", root, 255, 0, 0)
+       g_Map = map
+       g_P = p
+       addEventHandler('onMapStarting', root, onNewMapStart)
+       canUseCommand = false
+end
+)
 
 function remcol(str)
 	return string.gsub (str, '#%x%x%x%x%x%x', '' )
