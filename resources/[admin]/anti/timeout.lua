@@ -55,5 +55,5 @@ function checkSuspectPlayers() -- Check if FPS and Ping are constant before real
 	end
 
 end
-setTimer(checkSuspectPlayers,2000,0)
+-- setTimer(checkSuspectPlayers,2000,0)
 

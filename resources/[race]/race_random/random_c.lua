@@ -218,7 +218,7 @@ addEventHandler("onClientBrowserCreated", root,
 	function()
 
 		if source ~= raveBreakBrowser then return end
-		loadBrowserURL(raveBreakBrowser, "ravebreak.html")
+		loadBrowserURL(raveBreakBrowser, "http://mta/local/ravebreak.html")
 		
 		
 		addEventHandler("onClientRender", root, renderRaveBreak)
@@ -245,7 +245,10 @@ function stopRaveBreak()
 end
 addEventHandler("stopRaveBreak",root,stopRaveBreak)
 
-
+addCommandHandler("freeravebreak", function()
+	c_ravebreak()
+	setTimer ( stopRaveBreak, 10000, 1 )
+end)
 
 
 -- nuked http://community.mtasa.com/index.php?p=resources&s=details&id=71
