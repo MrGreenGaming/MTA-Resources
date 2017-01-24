@@ -124,6 +124,7 @@ addEventHandler('onCTFTeamWon', root, CTFTeamWon)
 -- 13 DD: Win 5 rounds
 -- 14 DD: Win 20 rounds
 function playerFinishDD (player, rank)
+	if not g_Players[player] then return end
 	local kills = tonumber(getElementData(player, 'kills')) or 0
 	if kills >= 5 then
 		addPlayerAchievementMix ( player, 4 )

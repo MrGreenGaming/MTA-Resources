@@ -480,7 +480,7 @@ function changeSpawn (player)
 	setElementHealth(veh, 1000)
 		
 	modShopCheckVehicleAgain(player)
-	local distance = math.floor(100*getDistanceBetweenPoints3D(x,y,z,getElementPosition(getElementsByType('checkpoint')[1])))/100
+	local distance = getElementsByType('checkpoint')[1] and math.floor(100*getDistanceBetweenPoints3D(x,y,z,getElementPosition(getElementsByType('checkpoint')[1])))/100 or 0
 	return id, distance, spawnIndex[player]
 end
 addCommandHandler ( 'gcspawn', callSpawn, false, false )

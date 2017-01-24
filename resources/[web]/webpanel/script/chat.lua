@@ -41,7 +41,7 @@ function addMessage(array)
 end
 
 function newMessage(gracz, tekst, typ)
-	if(gracz and isElement(gracz))and(tekst ~= nil)and(typ ~= nil)then
+	if(gracz and isElement(gracz) and getElementType(gracz) == 'player')and(tekst ~= nil)and(typ ~= nil)then
 		local r, g, b = getPlayerNametagColor(gracz)
 		addMessage({["player"]=getPlayerName(gracz),["msg"]=tekst,["type"]=typ})
 		return true

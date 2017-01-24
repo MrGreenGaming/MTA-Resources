@@ -83,9 +83,9 @@ addEventHandler("onPlayerChat",root,
 		message = string.gsub (message, '#%x%x%x%x%x%x', '' )
         if type == 0 then
 			local accName = getAccountName ( getPlayerAccount ( source ) )
-			if accName and isObjectInACLGroup ("user."..accName, aclGetGroup ( "Admin" ) ) then
+			if accName and aclGetGroup ( "Admin" ) and isObjectInACLGroup ("user."..accName, aclGetGroup ( "Admin" ) ) then
 				outputIRC("12"..getNameNoColor(source)..": "..message)
-			elseif accName and isObjectInACLGroup ("user."..accName, aclGetGroup ( "Killers" ) ) then
+			elseif accName and aclGetGroup ( "Killers" ) and isObjectInACLGroup ("user."..accName, aclGetGroup ( "Killers" ) ) then
 				outputIRC("4"..getNameNoColor(source)..": "..message)
 			elseif getElementData ( source, "adminapplicant" ) then
 				outputIRC("13"..getNameNoColor(source)..": "..message)

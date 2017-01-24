@@ -57,6 +57,8 @@ function RTF:hitColshape(object, player)
 end
 
 function RTF:playerWon(player)
+
+	if not isElement(player) then return end
 	-- outputDebugString('player won')
 	showMessage(getPlayerName(player) .. ' has reached the flag!', 0, 255, 0)
 	playSoundFrontEnd(player, 11)

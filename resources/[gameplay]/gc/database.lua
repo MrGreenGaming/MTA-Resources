@@ -74,7 +74,9 @@ function getPlayerLoginInfo(email, pw, callback)
 			else
 				local result = fromJSON(r)
 				if result.error ~= 0 then
-					outputDebugString("getPlayerLoginInfo: api login error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
+					if result.error ~=2 then --ignore wrong passwords
+						outputDebugString("getPlayerLoginInfo: api login error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
+					end
 					return callback(false)
 				else
 					-- outputDebugString(tostring(r))
