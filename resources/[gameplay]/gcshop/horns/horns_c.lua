@@ -292,6 +292,8 @@ hornsTable = {
 	[289] = "Big Smoke - burger order",
 	[290] = "Excuse me, princess",
 	[291] = "TF2 - knee slap",
+	[292] = "Saving Light 1",
+	[293] = "Saving Light 2",
 }
 
 
