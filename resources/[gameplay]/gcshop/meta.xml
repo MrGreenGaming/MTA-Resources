@@ -407,6 +407,8 @@
 	<file src="horns\files\289.mp3" download="false"/>
 	<file src="horns\files\290.mp3" download="false"/>
 	<file src="horns\files\291.mp3" download="false"/>
+	<file src="horns\files\292.mp3" download="false"/>
+	<file src="horns\files\293.mp3" download="false"/>
 	<file src="horns\icon.png" />
 	
 	<export function="disableReRoll" type="server"/>
