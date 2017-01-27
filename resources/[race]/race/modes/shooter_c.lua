@@ -156,6 +156,7 @@ local scaleW = screenW/1920
 local scaleH = screenH/1080
 
 local isLocalPlayerDead
+carGameLevelBrowser = createBrowser(screenW, screenH, true, true)
 function cgStart()
 	isLocalPlayerDead = false
 	playerLevel = 1
@@ -164,7 +165,8 @@ function cgStart()
 	txtcolor = tocolor(255,255,255,200)
 	lvlcolor = tocolor(255,255,255,200)
 
-	carGameLevelBrowser = createBrowser(screenW, screenH, true, true)
+	-- carGameLevelBrowser = createBrowser(screenW, screenH, true, true)
+	addEventHandler("onClientRender",root,drawCargameLevel)
 	cg_playerDamage = {}
 	carGameKillDetection = true
 	addEventHandler("onClientExplosion",root,cg_handleExplosions)
@@ -178,7 +180,7 @@ addEventHandler("onClientBrowserCreated", root,
 		loadBrowserURL(carGameLevelBrowser, "http://mta/local/modes/cargamefiles/cargame.html")
 		
 		
-		addEventHandler("onClientRender",root,drawCargameLevel)
+		-- addEventHandler("onClientRender",root,drawCargameLevel)
 	end
 )
 
@@ -186,7 +188,7 @@ addEventHandler("onClientBrowserCreated", root,
 function cgEnd()
 	removeEventHandler("onClientRender",root,drawCargameLevel)
 	removeEventHandler("onClientRender",root,sh_draw_timerbars)
-	if isElement(carGameLevelBrowser) then destroyElement(carGameLevelBrowser) carGameLevelBrowser = false end
+	-- if isElement(carGameLevelBrowser) then destroyElement(carGameLevelBrowser) carGameLevelBrowser = false end
 	playerLevel = 1
 	cg_playerDamage = {}
 	carGameKillDetection = false
