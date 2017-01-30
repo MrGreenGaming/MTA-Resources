@@ -4,7 +4,8 @@
     <export function="getFont" type="client"/>
 	<export function="createDXFont" type="client"/>
 	<export function="createCEGUIFont" type="client"/>
-
+	<download_priority_group>10</download_priority_group>
+	
     <!-- FONTS -->
     <file src="fonts/Century Gothic Bold.ttf" type="client" /> 
     <file src="fonts/OpenSans.ttf" type="client" /> 
