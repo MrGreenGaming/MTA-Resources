@@ -100,4 +100,37 @@ end
 addEvent('onRaceStateChanging', true)
 addEventHandler('onRaceStateChanging', root, function(state) local gm = exports.race:getRaceMode() if state == "Running" then executeModState(gm) end end)
 
+local virtualMachineWhitelist = {
+	-- ["serial"] == true,
+}
+function handleOnPlayerACInfo( detectedACList, d3d9Size, d3d9MD5, d3d9SHA256 )
+    -- outputDebugString( "ACInfo for " .. getPlayerName(source)
+                -- .. " detectedACList:" .. table.concat(detectedACList,",")
+                -- .. " d3d9Size:" .. d3d9Size
+                -- .. " d3d9SHA256:" .. d3d9SHA256
+                -- )
+	for _, AC in ipairs(detectedACList) do
+		if AC == 14 then
+			if (virtualMachineWhitelist[getPlayerSerial(source)]) then
+				outputConsole("AC 14 Virtual Machine: Whitelisted serial")
+			else
+				kickPlayer(source, "AC14 Virtual Machine: Your serial is not on the whitelist")
+				return
+			end
+		end
+	end
+end	
+addEventHandler( "onPlayerACInfo", root, handleOnPlayerACInfo)
 
+addEventHandler( "onResourceStart", resourceRoot,
+    function()
+        for _,player in ipairs( getElementsByType("player") ) do
+            resendPlayerACInfo( player )
+            resendPlayerModInfo( player )
+        end
+    end
+)
+addEventHandler('onPlayerJoin', root, function()
+	resendPlayerACInfo(source)
+	resendPlayerModInfo(source)
+end)
