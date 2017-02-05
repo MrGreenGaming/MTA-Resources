@@ -109,14 +109,14 @@ local screenW, screenH = guiGetScreenSize()
         GUIEditor.combobox["skybox"] = guiCreateComboBox(292, 125+19, 136, 65, "", false, GUIEditor.tab[1])
         guiComboBoxAddItem(GUIEditor.combobox["skybox"], "Dynamic Sky")
         guiComboBoxAddItem(GUIEditor.combobox["skybox"], "SkyBox 2")
-        guiComboBoxSetSelected(GUIEditor.combobox["skybox"], "Dynamic Sky")
+        guiComboBoxSetSelected(GUIEditor.combobox["skybox"], 0)
 
         GUIEditor.checkbox["carpaint"] = guiCreateCheckBox(292, 174, 15, 15, "", false, false, GUIEditor.tab[1])
         GUIEditor.label["carpaint"] = guiCreateLabel(324, 174, 209, 14, "Enable Car Paint Shader", false, GUIEditor.tab[1])
         GUIEditor.combobox["carpaint"] = guiCreateComboBox(292, 174+19, 136, 65, "", false, GUIEditor.tab[1])
         guiComboBoxAddItem(GUIEditor.combobox["carpaint"], "Car Paint 1")
         guiComboBoxAddItem(GUIEditor.combobox["carpaint"], "Car Paint 2")
-        guiComboBoxSetSelected(GUIEditor.combobox["carpaint"], "Car Paint 1")
+        guiComboBoxSetSelected(GUIEditor.combobox["carpaint"], 0)
 
 
 
