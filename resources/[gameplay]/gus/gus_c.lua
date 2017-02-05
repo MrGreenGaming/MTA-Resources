@@ -219,6 +219,7 @@ function detectMap(theRes)
 end
 addEventHandler("onClientResourceStart", root, detectMap)
 
+addEvent("onClientMapLaunched", true)
 addEventHandler("onClientMapLaunched", root, function()
 	for f, u in pairs(MapSound) do
 		setSoundPaused( u, false )
