@@ -102,6 +102,7 @@ function updateCMD(p, c, resname)
 	else
 		table.insert(updates, {resname, p})
 		outputChatBox(c .. ': restarting ' .. tostring(resname) .. ' after map is finished', p, 255)
+		outputDebugString(c .. ': restarting ' .. tostring(resname) .. ' after map is finished for ' .. getPlayerName(p))
 	end
 end
 addCommandHandler('update', updateCMD, true, true)
