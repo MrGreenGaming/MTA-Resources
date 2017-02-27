@@ -51,7 +51,7 @@ function getPlayerFromPartialName (name)
                 if getPlayerName(player) == name then
                         return player
                 end
-                if string.find(string.lower(getPlayerName(player)),string.lower(name),0,false) then
+                if string.find(string.lower(getPlayerName(player):gsub('#%x%x%x%x%x%x', '')),string.lower(name),0,false) then
                         table.insert(matches,player)
                 end
         end
