@@ -409,6 +409,15 @@
 	<file src="horns\files\291.mp3" download="false"/>
 	<file src="horns\files\292.mp3" download="false"/>
 	<file src="horns\files\293.mp3" download="false"/>
+	<file src="horns\files\294.mp3" download="false"/>	
+	<file src="horns\files\295.mp3" download="false"/>	
+	<file src="horns\files\296.mp3" download="false"/>	
+	<file src="horns\files\297.mp3" download="false"/>	
+	<file src="horns\files\298.mp3" download="false"/>	
+	<file src="horns\files\299.mp3" download="false"/>	
+	<file src="horns\files\300.mp3" download="false"/>	
+	<file src="horns\files\301.mp3" download="false"/>	
+	
 	<file src="horns\icon.png" />
 	
 	<export function="disableReRoll" type="server"/>
