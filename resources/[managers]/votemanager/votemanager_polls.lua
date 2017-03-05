@@ -433,7 +433,7 @@ function voteKick(player, reason)
 			visibleTo = rootElement,
 			timeout = vote.kick.timeout,
 			allowchange = vote.kick.allowchange;
-			[1]={"Yes",kickPlayer,player,serverConsole,reason},
+			[1]={"Yes",kickPlayer,player,nil,reason},
 			[2]={"No",outputVoteManager,"votekick: not enough votes to kick "..getPlayerName(player)..".",rootElement,vR,vG,vB;default=true},
 		}
 	end
