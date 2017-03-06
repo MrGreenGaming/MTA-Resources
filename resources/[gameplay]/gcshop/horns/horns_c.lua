@@ -294,6 +294,14 @@ hornsTable = {
 	[291] = "TF2 - knee slap",
 	[292] = "Saving Light 1",
 	[293] = "Saving Light 2",
+	[294] = "Fart SFX 2",
+	[295] = "Hello motherfucker",
+	[296] = "CJ - shut up",	
+	[297] = "CJ - did you buy your license?",
+	[298] = "CJ - move your body",
+	[299] = "CJ - rollercoaster",
+	[300] = "Sweet - oh fuck",	
+	[301] = "Ryder - shit, man",
 }
 
 
