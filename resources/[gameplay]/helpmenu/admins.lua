@@ -11,5 +11,6 @@
 	{ name = "Stig", title = "Old Admin", accountName = "Stig" },
 	{ name = "Hulpje", title = "Dota Admin", accountName = "hulpje" },
 	{ name = "Besweeet", title = "4th Admin", accountName = "besweeet" },
-	{ name = "Bierbuikje", title = "NIU Admin", accountName = "bierbuikje" }
+	{ name = "Bierbuikje", title = "NIU Admin", accountName = "bierbuikje" },
+	{ name = "Santiii733", title = "Re-Volt Master", accountName = "santiii733" },
 }
