@@ -1,4 +1,4 @@
-﻿admins = {
+admins = {
 	{ name = "Ywa", title = "Founder/Owner", accountName = "Ywa" },
 	{ name = "Flipper", title = "Manager", accountName = "KoM|Flipper" },
 	{ name = "FantomicanYoshi", title = "Manager", accountName = "BlueYoshi97" },        
