@@ -885,7 +885,8 @@ function outputCommands (server,channel,user,command)
 					if not usingDiscordCommand then
                                         	table.insert(cmds,cmd)
 					else
-						table.insert(cmds,cmd:gsub( '!', '.'))
+						cmd = cmd:gsub( '!', '.')
+						table.insert(cmds,cmd)
 					end
                                 end
                         end
