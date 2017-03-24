@@ -882,7 +882,11 @@ function outputCommands (server,channel,user,command)
                 if ircIsCommandEchoChannelOnly(cmd) then
                         if ircIsEchoChannel(channel) then
                                 if (tonumber(ircGetCommandLevel(cmd) or 6)) <= (tonumber(ircGetUserLevel(user,channel)) or 0) then
-                                        table.insert(cmds,cmd)
+					if not usingDiscordCommand then
+                                        	table.insert(cmds,cmd)
+					else
+						table.insert(cmds,cmd:gsub( '!', '.'))
+					end
                                 end
                         end
                 else
