@@ -110,7 +110,8 @@ function soundHandling(reason)
 
     if theResource == currentMap then -- If the sound comes from the map --
         table.insert(MapSound, source) -- Insert the sound in the MapSound table --
-        setVol("map")
+		setSoundVolume(theSound, tonumber(Volumes["map"]))
+        -- setVol("map")
         setElementData( theSound, "soundSource", "map", false ) -- Mark sound for source
 
     elseif theResource == theResources["announcer"] then
