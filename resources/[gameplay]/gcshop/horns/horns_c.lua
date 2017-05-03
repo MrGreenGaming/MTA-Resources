@@ -303,7 +303,7 @@ hornsTable = {
 	[300] = "Sweet - oh fuck",	
 	[301] = "Ryder - shit, man",
 	[302] = "Pingu - Noot noot!",
-	[302] = "Pingu - Angry noot noot!",
+	[303] = "Pingu - Angry noot noot!",
 }
 
 
