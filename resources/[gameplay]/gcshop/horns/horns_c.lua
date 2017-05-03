@@ -302,6 +302,7 @@ hornsTable = {
 	[299] = "CJ - rollercoaster",
 	[300] = "Sweet - oh fuck",	
 	[301] = "Ryder - shit, man",
+	[302] = "Pingu - Noot noot!"
 }
 
 
