@@ -3,7 +3,7 @@ admins = {
 	{ name = "Flipper", title = "Manager", accountName = "KoM|Flipper" },
 	{ name = "FantomicanYoshi", title = "Manager", accountName = "BlueYoshi97" },        
 	{ name = "Bob_Taylor", title = "Map Manager", accountName = "Bob_Taylor" },
-	{ name = "Cena", title = "Map Manager", accountName = "Cena" },
+	{ name = "Moh", title = "Map Manager", accountName = "Moh" },
 	{ name = "MoshPit", title = "Map Manager", accountName = "MoshMosh" },
 	{ name = "neox.", title = "Map Assistant", accountName = "neox" },
 	{ name = "Goldberg", title = "Map Assistant", accountName = "Goldberg" },
