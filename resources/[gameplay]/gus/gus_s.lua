@@ -210,17 +210,17 @@ addCommandHandler("lol",
     function(player, cmd, arg)
 		if g_lolPlayers[player] and getTickCount() - g_lolPlayers[player] < 5000 then return end
 		if isPlayerMuted(player) or chat_is_disabled then outputChatBox('You\'re muted.', player) return end
-		local nick = getPlayerName(player)
+		local nick = addTeamColor(player)
 		if not arg then
-			outputChatBox(nick.."#FFD700 is laughing out loud.", root, 255, 215, 0, true)
+			outputChatBox("#FFFFFF"..nick.."#FFD700 is laughing out loud.", root, 255, 215, 0, true)
 			exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud." )
 			g_lolPlayers[player] = getTickCount()
 		else
 			local who = findPlayerByName(arg)
 			if not who then outputChatBox("No player found", player)
 			else
-				local whoName = getPlayerName(who)
-				outputChatBox(nick.."#FFD700 is laughing out loud at "..whoName, root, 255, 215, 0, true)
+				local whoName = addTeamColor(who)
+				outputChatBox("#FFFFFF"..nick.."#FFD700 is laughing out loud at #FFFFFF"..whoName, root, 255, 215, 0, true)
 				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
 				g_lolPlayers[player] = getTickCount()
 			end
@@ -379,4 +379,29 @@ function correctWeather()
 		outputDebugString("Weather changed from "..tostring(getWeather()).." to 1.")
 		setWeather(1)
 	end
+end
+-------------------------------------------------------------------------------------------------------------------------
+function addTeamColor(player)
+	local playerTeam = getPlayerTeam ( player ) 
+	if ( playerTeam ) then
+		local r,g,b = getTeamColor ( playerTeam )
+		local n1 = toHex(r)
+		local n2 = toHex(g)
+		local n3 = toHex(b)
+		if r <= 16 then n1 = "0"..n1 end
+		if g <= 16 then n2 = "0"..n2 end
+		if b <= 16 then n3 = "0"..n3 end
+		return "#"..n1..""..n2..""..n3..""..getPlayerNametagText(player)
+	else
+		return getPlayerNametagText(player)
+	end
+end
+-------------------------------------------------------------------------------------------------------------------------
+function toHex ( n )
+    local hexnums = {"0","1","2","3","4","5","6","7",
+                     "8","9","A","B","C","D","E","F"}
+    local str,r = "",n%16
+    if n-r == 0 then str = hexnums[r+1]
+    else str = toHex((n-r)/16)..hexnums[r+1] end
+    return str
 end
