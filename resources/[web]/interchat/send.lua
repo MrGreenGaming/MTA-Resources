@@ -40,14 +40,14 @@ outputDebugString("Interchat " .. other_ipandport .. " " ..other_port .. " " .. 
 function redirect()
 	local player = client
 	local tick, hoursPlayed = getElementData(player, 'jointick'), getElementData(player, 'hoursPlayed')
-	callRemote ( other_ipandport, "default", resourceName, "playerRedirect", function (response, serial)
-		if response ~= "ok" then
+	callRemote ( other_ipandport, "default", resourceName, "playerRedirect", function(response)
+		if response == nil or response == "ERROR" then
 			outputChatBox(other_server .. ' server is not responding!', player, 255, 0, 0)
 		else
 			setElementData( player , 'gotomix', true)
 			redirectPlayer ( player, other_ip, other_port) 
 		end
-	end, getPlayerSerial(player), getElementData(player,'playtime'), tick, hoursPlayed )
+	end, getPlayerSerial(player), getElementData(player,'playtime'), tick, hoursPlayed)
 end
 addEvent('onRequestRedirect', true)
 addEventHandler('onRequestRedirect', root, redirect)

@@ -12,7 +12,9 @@ local joiningSerials = {}
 function playerRedirect ( serial, playtime, tick, hoursPlayed )
 	joiningSerials[serial] = {tick=getTickCount(), playtime=playtime}
 	triggerEvent('onPlayerReplaceTime', root, serial, tick, hoursPlayed)
-	return "ok", serial
+	return {
+		serial = serial
+	}
 end
 
 function onPlayerConnect(nick, ip, username, serial)

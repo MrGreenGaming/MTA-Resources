@@ -53,7 +53,7 @@ function()
 
 	label_TotalOnline_font = exports.fonts:createCEGUIFont("Arial", math.floor(20*screenX/1920))
 	label_TotalOnline_posY = 0.96
-	label_TotalOnline = guiCreateLabel(0, label_TotalOnline_posY*screenY, screenX, label_TotalOnline_posY*screenY, "Total players online: ", false, img_Background)
+	label_TotalOnline = guiCreateLabel(0, label_TotalOnline_posY*screenY, screenX, label_TotalOnline_posY*screenY, "0 players online", false, img_Background)
 	guiLabelSetHorizontalAlign(label_TotalOnline, "center")
 	guiSetFont(label_TotalOnline, label_TotalOnline_font)
 
@@ -78,7 +78,7 @@ function()
 	setTimer(function()		
 				guiSetText(label_RaceOnline, getElementData(resourceRoot, "Race Players"))		
 				guiSetText(label_MixOnline, getElementData(resourceRoot, "Mix Players"))		
-				guiSetText(label_TotalOnline, "Total players online: "..getElementData(resourceRoot, "Total players online"))		
+				guiSetText(label_TotalOnline, getElementData(resourceRoot, "Total players online") .." players online")
 				end,		
 	1100, 1)	
 	
@@ -202,7 +202,7 @@ function (dataName)
 		guiSetText(label_MixOnline, players_mix)
 	elseif source == resourceRoot and dataName == "Total players online" then
 		local players_total = getElementData(resourceRoot, dataName)
-		guiSetText(label_TotalOnline, "Total players online: "..players_total)
+		guiSetText(label_TotalOnline, players_total .." players online")
 	end
 end
 )
