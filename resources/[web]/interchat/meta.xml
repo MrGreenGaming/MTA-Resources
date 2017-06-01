@@ -20,6 +20,8 @@
 	<file src="images/info.png" />
 	<file src="images/sprite.png" />
 	
+	<min_mta_version client="1.5.4" server="1.5.4" />
+	
 	
 	<!-- Exported functions -->
 	<export function="playerRedirect" http="true" />

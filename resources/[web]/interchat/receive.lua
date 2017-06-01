@@ -51,7 +51,10 @@ function playerChatBoxRemote ( name, message)
 	outputServerLog(out)
 	exports.irc:outputIRC("08[" .. other_server:upper() .. "] " .. tostring(name) .. "> " .. tostring(message) .. "")
 	triggerEvent('onInterchatMessage', resourceRoot, other_server:upper(), tostring(name), tostring(message))
-	return name, message  
+	return {
+		name = name,
+		message = message
+	}
 end
 
 
@@ -129,8 +132,6 @@ function sendMapInfo ( name, author, gmname, outputMap, returnMapInfo )
 				mapInfo = s.mapInfo 
 			else
 				mapInfo = {}
-				mapInfo.name = ""
-				mapInfo.author = ""
 			end
 		end
 		return mapInfo
@@ -196,7 +197,10 @@ end
 -- Online players F2 --
 -----------------------
 
-function sendOnlinePlayers ( )
+function sendOnlinePlayers()
 	local players = #getElementsByType('player')
-	return tostring(players), max_players
+	return {
+		players = players,
+		maxPlayers = getMaxPlayers()
+	}
 end

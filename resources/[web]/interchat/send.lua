@@ -17,8 +17,6 @@ mapInfo_other = {}
 mapInfo_other.name = ""
 mapInfo_other.author = ""
 
-max_players = getMaxPlayers()
-
 function getServersInfo()
 	triggerClientEvent(client, "receiveServersInfo", client, this_server, other_server)
 end
@@ -28,7 +26,7 @@ addEventHandler("getServersInfo", root, getServersInfo)
 
 -- Test connection with other server
 outputDebugString("Interchat " .. other_ipandport .. " " ..other_port .. " " .. tostring(
-	callRemote(other_ipandport, resourceName, "testConnection", function(response)
+	callRemote(other_ipandport, "default", resourceName, "testConnection", function(response)
 		if response ~= "ERROR" then
 			outputDebugString('Interchat response: ' .. tostring(response))
 		end
@@ -42,7 +40,7 @@ outputDebugString("Interchat " .. other_ipandport .. " " ..other_port .. " " .. 
 function redirect()
 	local player = client
 	local tick, hoursPlayed = getElementData(player, 'jointick'), getElementData(player, 'hoursPlayed')
-	callRemote ( other_ipandport, resourceName, "playerRedirect", function (response, serial)
+	callRemote ( other_ipandport, "default", resourceName, "playerRedirect", function (response, serial)
 		if response ~= "ok" then
 			outputChatBox(other_server .. ' server is not responding!', player, 255, 0, 0)
 		else
@@ -87,18 +85,24 @@ function playerChat ( message, messageType )
 	return outputChatBox ( 'Server chat is moved to the U key now. Press U to chat with ' .. other_server, source, 255, 0, 0)
 	-- local name = removeColorCoding(getPlayerName(source))
 	-- message = removeColorCoding(message:sub(2))
-    -- callRemote ( other_ipandport, resourceName, "playerChatBoxRemote", checkPlayerChat, name, message )
+    -- callRemote ( other_ipandport, "default", resourceName, "playerChatBoxRemote", checkPlayerChat, name, message )
 	-- cancelEvent()
 end
 addEventHandler ( "onPlayerChat", getRootElement(), playerChat)
 
-function checkPlayerChat(name, message)
-	if type(name) == "string" and type(message) == "string" then
-		local out = "[" .. string.upper(this_server) .. "] " .. name .. "> " .. message .. ""
+function checkPlayerChat(data)
+	if data == nil or data == "ERROR" then
+		return
+	end
+
+	data = fromJSON(data)
+
+	if type(data.name) == "string" and type(data.message) == "string" then
+		local out = "[" .. string.upper(this_server) .. "] " .. data.name .. "> " .. data.message .. ""
 		outputChatBox(out, root, 0xFF, 0xD7, 0x00)
 		outputServerLog(out)
-		exports.irc:outputIRC("08[" .. this_server:upper() .. "] " .. tostring(name) .. "> " .. tostring(message) .. "")
-		triggerEvent('onInterchatMessage', resourceRoot, this_server:upper(), tostring(name), tostring(message))
+		exports.irc:outputIRC("08[" .. this_server:upper() .. "] " .. tostring(data.name) .. "> " .. tostring(data.message) .. "")
+		triggerEvent('onInterchatMessage', resourceRoot, this_server:upper(), tostring(data.name), tostring(data.message))
 	else
 		outputDebugString("Serverchat: no/wrong response from other server! (" .. other_ipandport .. ")", 1)
 	end
@@ -114,7 +118,7 @@ function chatCommand(player, cmd, ...)
 	end
 	local name = removeColorCoding(getPlayerName(player))
 	message = removeColorCoding(table.concat({...},' '))
-    callRemote ( other_ipandport, resourceName, "playerChatBoxRemote", checkPlayerChat, name, message )
+    callRemote ( other_ipandport, "default", resourceName, "playerChatBoxRemote", checkPlayerChat, name, message )
 end
 addCommandHandler(other_server, chatCommand)
 
@@ -136,7 +140,7 @@ addEventHandler('onPlayerJoin', root, join)
 
 function getOtherServerPlayers ( player, cmd, server )
 	if server and server:lower() == other_server:lower() then
-		callRemote ( other_ipandport, resourceName, "sendPlayerNames", receivePlayerNames, getPlayerName(player) )
+		callRemote ( other_ipandport, "default", resourceName, "sendPlayerNames", receivePlayerNames, getPlayerName(player) )
 	end
 end
 addCommandHandler("players", getOtherServerPlayers, false, false)
@@ -179,7 +183,7 @@ end
 ------------
 
 function getOtherServerAdmins ( player, cmd )
-	callRemote ( other_ipandport, resourceName, "sendAdminNames", receiveAdminNames, getPlayerSerial(player) )
+	callRemote ( other_ipandport, "default", resourceName, "sendAdminNames", receiveAdminNames, getPlayerSerial(player) )
 end
 addCommandHandler("admins", getOtherServerAdmins)
 
@@ -207,7 +211,7 @@ end
 
 function mapStarted (mapinfo)
 	mapInfo = mapinfo
-	callRemote ( other_ipandport, resourceName, "sendMapInfo", (function() end), mapInfo.name, mapInfo.author, exports.race:getRaceMode(), true, false ) --Send mapInfo and update F2 GUI for clients of the other server
+	callRemote ( other_ipandport, "default", resourceName, "sendMapInfo", (function() end), mapInfo.name, mapInfo.author, exports.race:getRaceMode(), true, false ) --Send mapInfo and update F2 GUI for clients of the other server
 	triggerClientEvent("updateF2GUI", resourceRoot, this_server.." Map", "Map: "..mapInfo.name.."\nAuthor: "..mapInfo.author) --Update F2 GUI for clients of this server
 end
 addEvent("onMapStarting")
@@ -220,14 +224,20 @@ function getServersMapInfo ( sendTo )
 			mapInfo = s.mapInfo
 		else
 			mapInfo = {}
+		end
+
+		if mapInfo.name == nil then
 			mapInfo.name = ""
+		end
+
+		if mapInfo.author == nil then
 			mapInfo.author = ""
 		end
 	end
 	
 	if sendTo == "sendToAll" then
 		sendToElement = root
-		callRemote ( other_ipandport, resourceName, "sendMapInfo", receiveMapInfo, mapInfo.name, mapInfo.author, nil, false, true ) --Get mapInfo from the other server and update F2 GUI for clients of this server
+		callRemote ( other_ipandport, "default", resourceName, "sendMapInfo", receiveMapInfo, mapInfo.name, mapInfo.author, nil, false, true ) --Get mapInfo from the other server and update F2 GUI for clients of this server
 	elseif sendTo == "client" then
 		sendToElement = client
 		triggerClientEvent(sendToElement, "updateF2GUI", sendToElement, other_server.." Map", "Map: "..mapInfo_other.name.."\nAuthor: "..mapInfo_other.author) --Update F2 GUI for clients of this server
@@ -240,12 +250,17 @@ addEventHandler("getServersMapInfo", root, getServersMapInfo)
 
 
 function receiveMapInfo ( mapinfo )
-	if mapinfo == "ERROR" or mapinfo == nil then 
-		mapInfo_other = {}
-		mapInfo_other.name = ""
-		mapInfo_other.author = ""
+	if mapinfo ~= nil and mapinfo ~= "ERROR" then 
+		mapInfo_other = fromJSON(mapinfo)
 	else
-		mapInfo_other = mapinfo
+		mapInfo_other = {}
+	end
+
+	if mapInfo_other.name == nil then
+		mapInfo_other.name = ""
+	end
+	if mapInfo_other.author == nil then
+		mapInfo_other.author = ""
 	end
 	
 	triggerClientEvent(root, "updateF2GUI", resourceRoot, other_server.." Map", "Map: "..mapInfo_other.name.."\nAuthor: "..mapInfo_other.author)
@@ -263,7 +278,7 @@ end
 ---------------
 
 function gcLogin ( forumID, amount )
-	callRemote ( other_ipandport, resourceName, "greencoinsLogin", (function() end), forumID )
+	callRemote ( other_ipandport, "default", resourceName, "greencoinsLogin", (function() end), forumID )
 end
 addEventHandler("onGCLogin" , root, gcLogin )
 
@@ -278,7 +293,7 @@ addEventHandler ( "aPlayer", root, function ( player, action, data, additional, 
 	if ( action == "mute" )  then
 		local seconds = tonumber(additional) and tonumber(additional) > 0 and tonumber(additional)
 		if seconds then
-			callRemote ( other_ipandport, resourceName, "aAddSerialUnmuteTimer", (function() end), getPlayerSerial(player), seconds )
+			callRemote ( other_ipandport, "default", resourceName, "aAddSerialUnmuteTimer", (function() end), getPlayerSerial(player), seconds )
 		end
 	end
 end, true, 'high')
@@ -291,7 +306,7 @@ addEventHandler("onBan",root,
 		local admin = getBanAdmin(ban)
 		local serial = getBanSerial(ban)
 		local seconds = getUnbanTime(ban)
-		callRemote ( other_ipandport, resourceName, "addSyncBan", (function() end), ip, serial, reason, seconds )
+		callRemote ( other_ipandport, "default", resourceName, "addSyncBan", (function() end), ip, serial, reason, seconds )
 	end
 )
 
@@ -304,29 +319,39 @@ addEventHandler("onUnban",root,
 		local ip = getBanIP(ban)
 		local serial = getBanSerial(ban)
 		
-		callRemote ( other_ipandport, resourceName, "removeSyncBan", (function() end), admin, ip, serial )
+		callRemote ( other_ipandport, "default", resourceName, "removeSyncBan", (function() end), admin, ip, serial )
 	end
 )
 
 -----------------------
 -- Online players F2 --
 -----------------------
-
-function getServerPlayersOnline ( )
+local players
+function getServerPlayersOnline()
 	players = #getElementsByType('player')
-	setElementData(resourceRoot, this_server.." Players", players.."/"..max_players, true)
+	setElementData(resourceRoot, this_server.." Players", players .."/".. getMaxPlayers(), true)
 	
-	callRemote ( other_ipandport, resourceName, "sendOnlinePlayers", receivePlayersOnline) --getOtherServerPlayersOnline
+	callRemote(other_ipandport, "default", resourceName, "sendOnlinePlayers", receivePlayersOnline) --getOtherServerPlayersOnline
 end
 setTimer(getServerPlayersOnline, 1000, 0)
 
+function receivePlayersOnline(responseData, errno)
+	local players2 = 0
+	local max_players2 = 0
+	if responseData ~= nil and responseData ~= "ERROR" then
+		responseData = fromJSON(responseData)
+		if responseData.players ~= nil then
+			players2 = responseData.players
+		end
 
-function receivePlayersOnline ( players2, max_players2 )
-	if players2 == "ERROR" or players2 == nil then players2 = "0" end
-	if max_players2 == nil then max_players2 = "0" end
-	
-	setElementData(resourceRoot, other_server.." Players", players2.."/"..max_players2, true)
-	
-	local players_total = tostring(tonumber(players) + tonumber(players2))
+		if responseData.maxPlayers ~= nil then
+			max_players2 = responseData.maxPlayers
+		end
+	end
+
+	setElementData(resourceRoot, other_server.." Players", tostring(players2) .."/".. tostring(max_players2), true)
+
+	--Total
+	local players_total = tostring(players + players2)
 	setElementData(resourceRoot, "Total players online", players_total, true)
 end
