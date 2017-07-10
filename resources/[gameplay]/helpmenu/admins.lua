@@ -1,9 +1,9 @@
 admins = {
 	{ name = "Ywa", title = "Founder/Owner", accountName = "Ywa" },
 	{ name = "FantomicanYoshi", title = "Manager", accountName = "BlueYoshi97" }, 
-	{ name = "Bierbuikje", title = "developer", accountName = "bierbuikje" },
+	{ name = "Bierbuikje", title = "Developer", accountName = "bierbuikje" },
 	{ name = "Bob_Taylor", title = "Map Manager", accountName = "Bob_Taylor" },
-	{ name = "Moh", title = "Map Manager", accountName = "Moh" },
+	{ name = "Cena", title = "Map Manager", accountName = "Cena" },
 	{ name = "MoshPit", title = "Map Manager", accountName = "MoshMosh" },
 	{ name = "neox.", title = "Map Assistant", accountName = "neox" },
 	{ name = "Goldberg", title = "Map Assistant", accountName = "Goldberg" },
