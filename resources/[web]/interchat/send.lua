@@ -95,8 +95,6 @@ function checkPlayerChat(data)
 		return
 	end
 
-	data = fromJSON(data)
-
 	if type(data.name) == "string" and type(data.message) == "string" then
 		local out = "[" .. string.upper(this_server) .. "] " .. data.name .. "> " .. data.message .. ""
 		outputChatBox(out, root, 0xFF, 0xD7, 0x00)
@@ -251,7 +249,7 @@ addEventHandler("getServersMapInfo", root, getServersMapInfo)
 
 function receiveMapInfo ( mapinfo )
 	if mapinfo ~= nil and mapinfo ~= "ERROR" then 
-		mapInfo_other = fromJSON(mapinfo)
+		mapInfo_other = mapinfo
 	else
 		mapInfo_other = {}
 	end
@@ -339,7 +337,6 @@ function receivePlayersOnline(responseData, errno)
 	local players2 = 0
 	local max_players2 = 0
 	if responseData ~= nil and responseData ~= "ERROR" then
-		--responseData = fromJSON(responseData)
 		if responseData.players ~= nil then
 			players2 = responseData.players
 		end
