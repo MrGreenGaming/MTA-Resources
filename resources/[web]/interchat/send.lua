@@ -339,7 +339,7 @@ function receivePlayersOnline(responseData, errno)
 	local players2 = 0
 	local max_players2 = 0
 	if responseData ~= nil and responseData ~= "ERROR" then
-		responseData = fromJSON(responseData)
+		--responseData = fromJSON(responseData)
 		if responseData.players ~= nil then
 			players2 = responseData.players
 		end
