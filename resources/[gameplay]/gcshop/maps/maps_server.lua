@@ -1,6 +1,6 @@
 ﻿PRICE = 1000
 mp_maxBuyAmount = 3 -- Daily map buy amount
-mp_cooldownTime = 480*60 -- Minutes of cooldown
+mp_cooldownTime = 360*60 -- Minutes of cooldown
 ----------------------
 -- Winners discount --
 ----------------------
