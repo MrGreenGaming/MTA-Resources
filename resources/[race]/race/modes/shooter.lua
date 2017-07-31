@@ -541,7 +541,7 @@ function Shooter:start()
 	if round == 1 then
 		shooterMode = "shooter"
 	elseif round == 2 or round > 3 then
-		shooterMode = "cargame"
+		shooterMode = "shooter"
 	elseif round == 3 then
 		shooterMode = "shooter" 
 	end
