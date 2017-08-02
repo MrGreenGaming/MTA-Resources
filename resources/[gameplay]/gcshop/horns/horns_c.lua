@@ -304,6 +304,23 @@ hornsTable = {
 	[301] = "Ryder - shit, man",
 	[302] = "Pingu - Noot noot!",
 	[303] = "Pingu - Angry noot noot!",
+	[304] = "Would You Feel",
+	[305] = "Andre&Michelle",
+	[306] = "Five Hours",
+	[307] = "Gimme More",
+	[308] = "Hard Style",
+	[309] = "Hit'em Up",
+	[310] = "Holy Wars",
+	[311] = "Omen",
+	[312] = "Out Of Space",
+	[313] = "Peace Sells",
+	[314] = "Ready4Pumpin",
+	[315] = "Royal Flush",
+	[316] = "R U Ready",
+	[317] = "Still D.R.E. beat"
+	[318] = "VooDoo People",
+	[319] = "Wind Of Change",	
+	
 }
 
 
