@@ -304,6 +304,15 @@ hornsTable = {
 	[301] = "Ryder - shit, man",
 	[302] = "Pingu - Noot noot!",
 	[303] = "Pingu - Angry noot noot!",
+	[304] = "Me Arnold Swarzenegger",
+	[305] = "Learning computer",
+	[306] = "John Kimble",
+	[307] = "Aaarg",
+	[308] = "How are you",
+	[309] = "Arnold song",
+	[310] = "Women respect",
+	[311] = "Fuck you asshole",
+	[312] = "Don't do that",
 }
 
 
