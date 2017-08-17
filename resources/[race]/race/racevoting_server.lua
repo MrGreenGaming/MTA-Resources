@@ -241,9 +241,25 @@ function startNextMapVote()
 		allowchange=true;
 		}
 	
+	local setEventMapQueue = false
 	local usedGcMapQueue = false
 
-	if getResourceFromName('gcshop') and getResourceState(getResourceFromName('gcshop')) == 'running' and exports.gcshop:isAnyMapQueued(true) and skipMapQueue ~= exports.mapmanager:getRunningGamemodeMap() then
+	if getResourceFromName('eventmanager') and getResourceState(getResourceFromName('eventmanager')) == 'running' and exports.eventmanager:isAnyMapQueued(true) then
+		-- Event next queued map
+		-- [1] = mapResName, [2] = eventname
+		local map = exports.eventmanager:getCurrentMapQueued(true)
+		local mapRes = getResourceFromName(map[1])
+		if mapRes then
+			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
+			local mapName = "["..map[2].."] "..mapName
+
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes, "eventmanager", map[2]})
+			setEventMapQueue = true
+		else-- normal next map
+			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap})
+		end
+	elseif getResourceFromName('gcshop') and getResourceState(getResourceFromName('gcshop')) == 'running' and exports.gcshop:isAnyMapQueued(true) and skipMapQueue ~= exports.mapmanager:getRunningGamemodeMap() then
 		-- GCshop next queued map
 		-- [1] = mapName, [2] = mapResName, [3] = gamemode, [4] = playername
 		local map = exports.gcshop:getCurrentMapQueued(true)
@@ -252,7 +268,7 @@ function startNextMapVote()
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local mapName = "[Maps-Center] "..mapName
 
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes,map[4]})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes,"gcshop",map[4]})
 			usedGcMapQueue = true
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
@@ -269,6 +285,17 @@ function startNextMapVote()
 	if currentMap then
 		if not times[currentMap] or times[currentMap] < maxPlayAgain+1 then
 			table.insert(poll, {"Play again", 'nextMapVoteResult', getRootElement(), currentMap})
+		elseif setEventMapQueue then -- Start event manager map
+			outputChatBox('Maximum \'Play Again\' times('..maxPlayAgain..') has been reached. Changing to next event map ..')
+			
+			local map = exports.eventmanager:getCurrentMapQueued()
+			if not exports.mapmanager:changeGamemodeMap ( getResourceFromName(map[1]), nil, true ) then
+				outputWarning( 'Forced next map failed' )
+				startRandomMap()
+			else
+				outputChatBox("["..map[2].."] Starting next map", root, 0, 255, 0)
+			end
+			return
 		elseif usedGcMapQueue then -- Start GC mapcenter map
 			outputChatBox('Maximum \'Play Again\' times('..maxPlayAgain..') has been reached. Changing to next map in Maps-Center queue ..')
 			
@@ -403,9 +430,9 @@ end
 ----------------------------------------------------------------------------
 addEvent('nextMapVoteResult')
 addEventHandler('nextMapVoteResult', getRootElement(),
-	function( map, mapBuyer )
+	function( map, category, var )
 		if stateAllowsNextMapVoteResult() then
-			if not mapBuyer then 
+			if not category then 
 				if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
 					problemChangingMap()
 				elseif lastPlayed ~= map then
@@ -413,13 +440,21 @@ addEventHandler('nextMapVoteResult', getRootElement(),
 					if currentmode > #modes then currentmode = 1 end
 					-- outputDebugString('Next mode ' .. modes[currentmode] .. ' ' .. currentmode)
 				end
-			else -- mapBuyer =  Mapcenter buyer
+			elseif category == "eventmanager" then -- var = Event name
+				exports.eventmanager:getCurrentMapQueued()
+				
+				if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
+					problemChangingMap()
+				else
+					outputChatBox("["..var.."] Starting next map", root, 0, 255, 0)
+				end
+			elseif category == "gcshop" then -- var =  Mapcenter buyer
 				exports.gcshop:getCurrentMapQueued() -- Removes from queue
 
 				if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
 					problemChangingMap()
 				else
-					outputChatBox("[Maps-Center] Starting queued map for " .. mapBuyer:gsub( '#%x%x%x%x%x%x', '' ), root, 0, 255, 0)
+					outputChatBox("[Maps-Center] Starting queued map for " .. var:gsub( '#%x%x%x%x%x%x', '' ), root, 0, 255, 0)
 				end
 				skipMapQueue = map
 			end
