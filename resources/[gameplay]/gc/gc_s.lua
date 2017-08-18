@@ -382,19 +382,21 @@ addCommandHandler('debuggc', debuggc, true, false )
 
 setTimer(function()
 	for _,player in ipairs(getElementsByType('player')) do
-		local acc = accounts[player]
-		local playtime = getElementData(player, "playtime")
-		if acc and acc.gcRecord[4] and acc.gcRecord[4] > 0 and playtime then
-			playtime = split(playtime, ':')
-			local gpm = acc.gcRecord[4] / (playtime[1] + playtime[2]/60)
-			setElementData(player, 'gpm', math.ceil(gpm))
-			setElementData(player, 'sessiongc', acc.gcRecord[4])
-		elseif acc and acc.gcRecord[4] == 0 then
-			setElementData(player, 'gpm', 0)
-			setElementData(player, 'sessiongc', 0)
-		else
-			setElementData(player, 'gpm', nil)
-			setElementData(player, 'sessiongc', nil)
+		if getElementData(player, "state") then
+			local acc = accounts[player]
+			local playtime = getElementData(player, "playtime")
+			if acc and acc.gcRecord[4] and acc.gcRecord[4] > 0 and playtime then
+				playtime = split(playtime, ':')
+				local gpm = acc.gcRecord[4] / (playtime[1] + playtime[2]/60)
+				setElementData(player, 'gpm', math.ceil(gpm))
+				setElementData(player, 'sessiongc', acc.gcRecord[4])
+			elseif acc and acc.gcRecord[4] == 0 then
+				setElementData(player, 'gpm', 0)
+				setElementData(player, 'sessiongc', 0)
+			else
+				setElementData(player, 'gpm', nil)
+				setElementData(player, 'sessiongc', nil)
+			end
 		end
 	end
 end, 1000, 0)

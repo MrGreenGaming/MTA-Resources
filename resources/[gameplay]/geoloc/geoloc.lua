@@ -66,9 +66,9 @@ end
 -- fetchip(nil,nil, "201.22.14.45")
 
 -- events
-addEventHandler("onPlayerConnect", root, function(name)
-	checkIP ( getPlayerFromName(name) )
-end)
+--addEventHandler("onPlayerConnect", root, function(name)
+--	checkIP ( getPlayerFromName(name) )
+--end)
 
 addEventHandler("onPlayerJoin", root, function()
 	checkIP( source )
