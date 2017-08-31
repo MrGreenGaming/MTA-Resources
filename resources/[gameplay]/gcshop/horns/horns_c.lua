@@ -313,6 +313,14 @@ hornsTable = {
 	[310] = "Women respect",
 	[311] = "Fuck you asshole",
 	[312] = "Don't do that",
+	[313] = "Why nigga?",
+	[314] = "Relax man",
+	[315] = "All we had to do was follow the damn train",
+	[316] = "Aah oeh oeh",
+	[317] = "Law have mercy on me",
+	[318] = "Come on damn bitch",
+	[319] = "Slowmotion ooh",
+	[320] = "Keep up motherfucker",
 }
 
 
