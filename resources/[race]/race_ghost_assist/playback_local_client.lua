@@ -1,23 +1,23 @@
-﻿g_Root = getRootElement()
-
--- // =====================[ important variables ] ===================//
-
--- TODO: TOO MANY UNUSED VARS, BUT BAD CONCURRENCES CAN HAPPEN (node1, node1, prev ..)
+﻿-- // =====================[ important variables ] ===================//
+g_Root = getRootElement()
 
 local nextNode = nil -- !!!
-local node, prev, curr
+local prev, curr
 local node1, node2
+local lastNodeID = 1 -- gotta start at 1
+local nextNodeID = 1 -- gotta start at 1
 
 local id, idx
 local x, y, z
+local xx, yy, zz
+local xx2, yy2, zz2
 local rx, ry, rz
-local fx, fy, fz, gz
-local vx, vy, vz
+-- local fx, fy, fz
+local gx, gy, gz
 
 local ghost_speed
 local my_speed
 local my_dst
-
 local prev_dst = math.huge
 local dst = 0
 	
@@ -25,51 +25,63 @@ local vehicle
 local vType
 -- local theType
 local color_r, color_g, color_b, color_a
-
 local my_weight = 1500
 local arrowSize = 2
 
-
-local lastNodeID = 1 -- gotta start at 1
-local nextNodeID = 1 -- gotta start at 1
 local drawRacingLine_HANDLER = nil
 local assistTimer = nil
 local recording = nil
-
 local img = dxCreateTexture("arrow.png")
 
--- ghost assist thing object
-local assist = nil
-local assistEnabled = false -- disabled by default
----------------------------------------------------
+-- trying to buy some time
+local sin = math.sin
+local cos = math.cos
+local rad = math.rad
+local abs = math.abs
+--------------------------------------------------------------------------
 
 
--- // =============================[ racing lines toggle on/off ] ============================================//
+-- // ================[ racing lines local/server mode] ============//
+function assistMode(player, mode)
+	Settings["mode"] = mode
+	-- outputDebug("racing assist mode: ".. inspect(Settings["mode"])) -- DEBUG
+	
+	saveSettings()
+end
+addCommandHandler('assistmode', assistMode)
+
+
+-- // =========================[ racing lines toggle on/off ] ======================================//
 function assistToggle(player, mode)
-	mode = tonumber(mode)
-
--- TODO: TIMER ALWAYS RESUMES IT
+	-- mode = tonumber(mode)
 
 	-- assist on/off
-	if mode == 1 then
-		outputChatBox("* Racing assist enabled.", 230, 220, 180)
-		assistEnabled = true
-		if recording then show() end
-	elseif mode == 0 then
-		outputChatBox("* Racing assist disabled.", 230, 220, 180)
-		assistEnabled = false
+	if mode == "off" then
+		outputChatBox("[Racing Assist] #ffffffby disabled.", 255, 170, 64, true)
+		Settings["enable"] = "off"
 		if recording then hide() end
-	end
+		-- TODO: exports.messages:outputGameMessage("Racing assist disabled", g_Root, 2, 230, 220, 180)
+	-- assist on
+	else --if mode == anything
+		outputChatBox("[Racing Assist] #ffffffby #ffaa40fak #ffffffstarted.", 255, 170, 64, true)
+		Settings["enable"] = "on"
+		if recording then 
+			show() 
+		else
+			-- inform if no ghost is available when turning on
+			outputChatBox("[Racing Assist] #ffffffLaunching on the next map.", 255, 170, 64, true)
+		end
+		-- TODO: exports.messages:outputGameMessage("Racing assist enabled", g_Root, 2, 230, 220, 180)
+	end -- mode
 	
-	outputDebug("racing assist: ".. inspect(assistEnabled)) -- DEBUG
-	
+	saveSettings()
+
+	-- outputDebug("racing assist: ".. inspect(Settings["enable"])) -- DEBUG
 end -- assistToggle
 addCommandHandler('assist', assistToggle)
 
 
-
 -- // =============================[ resume/show ] ============================================//
--- TODO: notice here
 -- show the racing line
 function show()
 	if not drawRacingLine_HANDLER then
@@ -89,34 +101,51 @@ function hide()
 	end
 end
 
--- // =============================[ destroy ] ============================================//
+-- // =============================[ destroy ] ===================================//
 function destroy()
+	-- who triggered it?
+	outputDebug("@destroy, source: "..inspect(eventName))
+	
+	-- must have
+	if isTimer(assistTimer) then 
+		killTimer(assistTimer) 
+		assistTimer = nil
+	end 
+
 	if drawRacingLine_HANDLER then 
 		removeEventHandler("onClientPreRender", g_Root, drawRacingLine_HANDLER) 
 		drawRacingLine_HANDLER = nil 
-		outputDebug("Racingline destroyed")
+		-- outputDebug("Racingline destroyed")
 	end
 
-	if isTimer(assistTimer) then killTimer(assistTimer) end -- must have
-	
 	recording = nil
 end
+
 -- cleanup at finish/map change			
 addEventHandler("onClientResourceStart", getRootElement(),
-    function()
-		if startedRes == "race_ghost_assist" then
+    function(startedRes)
+		if startedRes == getThisResource() then
+			-- !!!
 			outputDebug("onClientResourceStart")
+			loadSettings()
 			addEventHandler("onClientPlayerFinish", g_Root, destroy)	
-			addEventHandler("onClientMapStopping", g_Root, destroy)
+			-- TODO: THIS DELETES MY GHOST AT THE WRONG TIME
+			-- TODO: GHOST IS NOT DESTROYED WHEN MAP STOPS
+			-- addEventHandler("onClientMapStopping", g_Root, destroy)
 		end
     end
 )
 
 
 
--- // =============================[ load ghost ] ============================================//
+-- // ====================================================[ load ghost ] ===========================================================//
 function loadGhost(mapName)
-	-- local res = getResourceFromName("race_ghost")
+
+	-- race_ghost is required to run
+	if not getResourceFromName("race_ghost") then
+		outputChatBox("[Racing Assist] #ffffffPlease start the race_ghost resource.", 255, 170, 64, true)
+		return false
+	end	
 	
 	-- local ghosts are in the "race_ghost" resource!!!
 	local ghost = xmlLoadFile(":race_ghost/ghosts/" .. mapName .. ".ghost")
@@ -152,19 +181,19 @@ function loadGhost(mapName)
 			node = xmlFindChild(ghost, "n", index)
 		end -- while
 		
-		-- outputDebug("Found a valid local ghost for " .. mapName)
-		-- outputDebug("ghost loaded " .. mapName)
-
 		-- Retrieve info about the ghost
+		-- outputDebug("Found a valid local ghost for " .. mapName)
 		-- local info = xmlFindChild(ghost, "i", 0)
 		-- outputChatBox("* Race assist loaded. (" ..xmlNodeGetAttribute(info, "r").. ") " ..FormatDate(xmlNodeGetAttribute(info, "timestamp")), 0, 255, 0)
-		-- outputChatBox("* Race assist loaded.", 0, 255, 0)
+		
+-- TODO: exports.messages:outputGameMessage("Racing assist loaded", g_Root, 2, 230, 220, 180, true)
+		-- outputChatBox("* Racing assist loaded.", 230, 220, 180)
 
 		xmlUnloadFile(ghost)
 		return recording
 	else
 		outputDebug("loading ghost failed") -- DEBUG
-		-- outputChatBox("* Race assist: you have no ghost for this map.", 0, 255, 0)
+		outputChatBox("[Racing Assist] #ffffffGhost for this map was not found.", 255, 170, 64, true)
 		return false
 	end -- ghost
 	
@@ -172,43 +201,91 @@ end -- loadGhost
 
 
 
--- // =============================[ create and prepare, onClientMapStarting ] ============================================//
+-- // =================[ setup ghost from your LOCAL FOLDERS, onClientMapStarting ] ==========================//
 addEventHandler("onClientMapStarting", g_Root,
 	function (mapInfo)
 		outputDebug("onClientMapStarting") -- DEBUG
-		-- outputDebug("mapInfo: " .. inspect(mapInfo)) -- DEBUG
 		
 		-- !!!
-		if assistEnabled then
-			-- destroy any leftover ghosts
+		if Settings["enable"] == "on" and Settings["mode"] == "local" then
+			-- disable for NTS
+			local currentGameMode = string.upper(mapInfo.modename)
+			if currentGameMode == "NEVER THE SAME" then
+				return
+			end
+			
+			-- destroy any leftover stuff
 			if recording then
 				destroy()
 			end
-		
 			-- !!! 
 			recording = loadGhost(mapInfo.resname)
-			-- !!!
 			
 			-- ghost was read successfully
 			if recording then
-				outputDebug("ghost loaded, starting assist") -- DEBUG
 				
+				-- !!!
 				lastNodeID = 1 
 				nextNodeID = 1
-				-- !!!
 				-- start a assistTimer that updates raceline parameters
-				assistTimer = setTimer(updateRacingLine, 100, 0)
-				
+				assistTimer = setTimer(updateRacingLine, 150, 0)
 				-- show racing line at race start
 				show()
-			end
-			
-		end -- assistEnabled
+				outputDebug("ghost loaded, starting assist") -- DEBUG
+				-- outputChatBox("[Racing Assist] #ffffffLocal ghost loaded.", 255, 170, 64, true)		
+			end -- rec
+		end -- setting
 	end -- function
 )
 
 
--- // =============================[ convert ] ============================================//
+-- // =============================[ setup ghost received from SERVER, onClientGhostDataReceive ] ============================================//
+addEventHandler("onClientGhostDataReceive", g_Root,
+	function(rec, bestTime, racer, _, _)
+		outputDebug("onClientGhostDataReceive") -- DEBUG
+		
+		-- !!!
+		if Settings["enable"] == "on" and Settings["mode"] == "top" then
+			
+			outputChatBox("[Racing Assist] #ffffffTop 1 ghost feature is disabled on Mr. Green.", 255, 170, 64, true)		
+		
+			-- -- destroy any leftover stuff
+			-- if recording then
+				-- destroy()
+			-- end		
+		
+			-- -- ghost data from "race_ghost" folder must be converted
+			-- recording = {}
+			
+			-- -- "While a table with three elements needs three rehashings, a table with one
+			-- -- million elements needs only twenty"
+			-- -- copy and filter things
+			-- local i = 1
+			-- while(rec[i]) do
+				-- -- only need po type
+				-- if (rec[i].ty == "po") then
+					-- table.insert(recording, rec[i])
+				-- end		
+				-- i = i + 1			
+			-- end -- while
+				
+			-- lastNodeID = 1 
+			-- nextNodeID = 1
+			-- -- !!!
+			-- -- start a timer that updates raceline parameters
+			-- assistTimer = setTimer(updateRacingLine, 150, 0)
+			-- -- start drawing the racing line
+			-- show()	
+			
+			-- outputDebug("ghost loaded, starting assist") -- DEBUG
+			-- outputChatBox("[Racing Assist] #ffffffGhost by " .. RemoveHEXColorCode(racer) .. " @".. msToTimeStr(bestTime).. " loaded.", 255, 170, 64, true)
+			
+		end -- if		
+	end -- function
+)
+
+
+-- // ================[ convert ] ==============//
 function convert(value)
 	if tonumber(value) ~= nil then
 		return tonumber(value)
@@ -224,21 +301,15 @@ function convert(value)
 end
 
 
--- // =============================[ getPositionAboveElement ] ============================================//
-function getPositionAboveElement(rx, ry, rz, x, y, z)
+-- // ============[ getPositionFromElementOffset ] =========================//
+local function getPositionFromElementOffset(x, y, z, rx, ry, rz, offZ)
+	rx, ry, rz = rad(rx), rad(ry), rad(rz)
 
-	-- rx, ry, rz, x, y, z are all element data
-    rx, ry, rz = math.rad(rx), math.rad(ry), math.rad(rz)
+	local tx =  offZ * (cos(rz)*sin(ry) + cos(ry)*sin(rz)*sin(rx)) + x
+	local ty =  offZ * (sin(rz)*sin(ry) - cos(rz)*cos(ry)*sin(rx)) + y
+	local tz =  offZ * (cos(rx)*cos(ry)) + z
 
-	-- apply transformation on a unit vector + xyz offset 
-	local offX = (math.cos(rz)*math.sin(ry) + math.cos(ry)*math.sin(rz)*math.sin(rx)) + x
-	local offY = (math.sin(rz)*math.sin(ry) - math.cos(rz)*math.cos(ry)*math.sin(rx)) + y
-	local offZ = (math.cos(rx)*math.cos(ry)) + z
-	
-	-- DEBUG
-	-- dxDrawLine3D(x, y, z, offX, offY, offZ, tocolor(255, 0, 0), 10)
-
-	return offX, offY, offZ	
+    return tx, ty, tz
 end
 -- read more:
 -- https://wiki.multitheftauto.com/wiki/GetElementMatrix
@@ -246,22 +317,17 @@ end
 
 -- // =============================[ updateRacingLine, runs in assistTimer ] ============================================//
 function updateRacingLine()
--- took me 0.05 ms to run
--- -- start time measurement -------------------------------------//
--- local eleje = getTickCount() local m = 1 for m=1, 20 do -------//
--- ---------------------------------------------------------------//	
+-- took me 0.02 ms to run
+-- start time measurement -------------------------------------//
+-- local eleje = getTickCount() local m = 1 for m=1, 500 do -------//
+---------------------------------------------------------------//	
 
 	-- outputDebug("@updateRacingLine")
 
-	-- // ====================[ loop stuff ] =======================//
-	nextNode = nil
-	prev_dst = math.huge
-	dst = 0
-
-
--- TODO: DONT CALL THIS ON EVERY RUN
+	-- TODO: DONT CALL THIS ON EVERY RUN
+	vehicle = getPedOccupiedVehicle(getLocalPlayer()) -- keep this
 	-- no need lines for air vehicles
-	if assistEnabled and vehicle then
+	if Settings["enable"] == "on" and vehicle then
 		vType = getVehicleType(vehicle)
 		if (vType == "Plane" or vType == "Helicopter" or vType == "Boat") then
 			hide()
@@ -270,20 +336,18 @@ function updateRacingLine()
 		end
 	end
 
-	
-	-- max time: 0,022 ms
 	-- // ====================[ Find the next valid ghostpoint ] ==========================//
-	-- look for nearby nodes, one with the smallest ID difference, so that the line will grip nicely to the car
-	nextNode = nil	
+	prev_dst = math.huge
+	dst = 0	
+	nextNode = nil
+	-- looking for the first unvisited node within range
+	-- search starts from the last visited node and then only looking forward!
+	-- !!!
 	-- save the last, before looking for a new one
+	lastNodeID = nextNodeID -- remove this to see visited routes
 	-- !!!
-	lastNodeID = nextNodeID -- remove this, if you wanna see lines on visited routes
-	-- !!!
-	-- search starts from the last visited node!! only looking forward
 	id = lastNodeID
 	while(recording[id]) do
-		if recording[id].ty == "po" then	
-		
 			x, y, z = recording[id].x, recording[id].y, recording[id].z
 			dst = getDistanceBetweenPoints3D(x, y, z, getElementPosition(getLocalPlayer()))	
 			-- get nearby unvisited points
@@ -291,64 +355,56 @@ function updateRacingLine()
 				nextNode = id
 				break
 			end	
-			
-		end -- type
 		id = id + 1			
 	end -- while
 
 	-- // ====================[ Find the nearest valid ghostpoint ] ==========================//
-	-- if a valid next node was found, scroll trough a few nodes and find one near the player
+	-- if a valid next node was found, scroll trough a few nodes and find one closest to player
 	if (nextNode ~= nil) then
 		prev_dst = math.huge
 		dst = 0
 	
 		if (vehicle) then
-			-- looking for a node pair, where "next" is further than "prev", that will be close to player
-			-- NOTE: this isnt supposed to work
-			for id = 1,6 do
-				x, y, z = getElementPosition(vehicle)
-				prev = recording[nextNode]	
+			x, y, z = getElementPosition(vehicle)
+			-- looking for a node pair, where "i+1" is further than "i"
+			-- move it one step closer to player on every iteration
+			prev = recording[nextNode]	
+			
+			idx = nextNode + 1			
+			curr = recording[idx]				
+			if (curr and prev) then
+				prev_dst = getDistanceBetweenPoints3D(prev.x, prev.y, prev.z, x, y, z) or 0
+				dst = getDistanceBetweenPoints3D(curr.x, curr.y, curr.z, x, y, z) or 0
 				
-				idx = nextNode + 1			
-				curr = recording[idx]
-				if (curr and prev) then
-					prev_dst = getDistanceBetweenPoints3D(prev.x, prev.y, prev.z, x, y, z) or 0
-					dst = getDistanceBetweenPoints3D(curr.x, curr.y, curr.z, x, y, z) or 0
-					
-					if (prev_dst > dst) then
-						-- !!!
-						-- this will be the nearest valid node to player
-						nextNodeID = idx
-						-- !!!
-						-- outputChatBox("break at: "..id) -- DEBUG
-						break
-					end
-					-- DEBUG
-					-- outputChatBox("i: "..id) -- DEBUG
-					-- dxDrawText( inspect(prev), 200, 440, 250)	
-					-- dxDrawText( inspect("prev id: "..nextNode .." ".. prev_dst), 200, 420, 250)
-					-- dxDrawText( inspect(curr), 400, 440, 250)	
-					-- dxDrawText( inspect("next id: "..idx .." ".. dst), 400, 420, 250)		
-				end -- if
-			end -- for
+				if (prev_dst > dst) then
+					-- !!!
+					-- this will be the nearest valid node to player
+					nextNodeID = idx
+					-- !!!
+				end
+				-- DEBUG
+				-- outputChatBox("i: "..id) -- DEBUG
+				-- dxDrawText( inspect(prev), 200, 440, 250)	
+				-- dxDrawText( inspect("prev id: "..nextNode .." ".. prev_dst), 200, 420, 250)
+				-- dxDrawText( inspect(curr), 400, 440, 250)	
+				-- dxDrawText( inspect("next id: "..idx .." ".. dst), 400, 420, 250)		
+			end -- if
 		end -- vehicle
 	
 		-- old solution: not the nearest node, but grips nicely to the car
 		-- nextNodeID = nextNode
 			
 	end -- nil
-
 	
-	-- // =====================[ Calculate arrow size] ============================//
+	-- // ========================[ Calculate arrow size] ==============================//
 	-- resize arrow based on vehicle size
 	my_weight = 1500
 	arrowSize = 2
 	if (vehicle) then
 		my_weight = (getVehicleHandling(vehicle).mass)
-		-- outputChatBox(my_weight)
+		arrowSize = math.clamp(1, (0.04*my_weight+180)/200, 3) -- dirt 3 style arrow size
+		-- arrowSize = math.clamp(1.5, (0.04*my_weight+180)/150, 5) -- forza style arrow size
 	end		
-	arrowSize = math.clamp(1, (0.04*my_weight+180)/200, 3) -- dirt 3 style arrow size
-	-- arrowSize = math.clamp(1.5, (0.04*my_weight+180)/150, 5) -- forza style arrow size
 	
 -- -- stop time measurement -------------------------------------------------------------------------------//
 -- end local vege = getTickCount()	outputDebug( "ms time spent: " .. vege-eleje) --//	
@@ -358,14 +414,13 @@ end -- updateRacingLine
 
 -- // =============================[ drawRacingLine onClientPreRender ] ============================================//
 function drawRacingLine()
-	-- took me 1-2 ms to run
+	-- took me about 0.6 - 1.2 ms to run
 	-- -- start time measurement -------------------------------------//
-	-- local eleje = getTickCount() local m = 1 for m=1,20 do --------//
+	-- local eleje = getTickCount() local m = 1 for m=1, 40 do --------//
 	-- ---------------------------------------------------------------//	
-
 	
-	-- // ====================[ DEBUG: Show the full racing line, highlight nearby and next nodes ] =======================//
-	-- local nearbyNodes = {}
+	-- -- // ==================[ DEBUG: Show the full racing line, highlight nearby and next nodes ] =====================//
+	-- -- local nearbyNodes = {}
 	-- local i = 1
 	-- node1 = recording[i]
 	-- node2 = recording[i+1]
@@ -378,128 +433,122 @@ function drawRacingLine()
 			-- -- one nearby node
 			-- dxDrawLine3D (node1.x, node1.y, node1.z-0.6, node1.x, node1.y, node1.z-0.4, tocolor (255,0,0, 255), 25)
 			-- -- store nearby points
-			-- table.insert(nearbyNodes, i, dst) 				
+			-- -- table.insert(nearbyNodes, i, dst) 				
 		-- end		
 		-- i = i + 1	
 		-- node1 = recording[i]
 		-- node2 = recording[i+1]	
 	-- end
 	-- -- show the table of nearby nodes
-	-- if (nearbyNodes) then
-		-- dxDrawText(inspect(nearbyNodes), 200, 500, 250)
-	-- end	
+	-- -- if (nearbyNodes) then
+		-- -- dxDrawText(inspect(nearbyNodes), 200, 500, 250)
+	-- -- end	
 	-- -- draw the next node
 	-- node1 = recording[nextNodeID] 
 	-- if (node1) then
 		-- dxDrawLine3D (node1.x, node1.y, node1.z-0.6, node1.x, node1.y, node1.z-0.4, tocolor(0,255,0, 255), 40)
 	-- end		
 	
-	
 	-- DEBUG
-	-- dxDrawText( getVehicleType(vehicle), 800, 440, 1920, 1080, tocolor(255, 128, 0, 255), 1, "pricedown")
+	-- dxDrawText(getVehicleType(vehicle), 800, 440, 1920, 1080, tocolor(255, 128, 0, 255), 1, "pricedown")
+	
 	
 	-- // =================================[ Draw racing line section near player ] =====================================//	
 	vehicle = getPedOccupiedVehicle(getLocalPlayer()) -- keep this
 	local start = nextNodeID
 	
 	-- draw the next few nodes
-	for i = start, start+15, 1 do -- ugly constant here
+	for i = start, start+Settings["linelength"], 1 do
 		node1 = recording[i]
-		node2 = recording[i+1]
 		-- need 2 valid nodes to make a line AND being in a vehicle to continue
-		if (node1 and node2 and vehicle) then
+		if (node1 and vehicle) then
 
-			-- looks better
-			rx, ry, rz = node1.rX, node1.rY, node1.rZ
-			if (rx > 180) then rx = rx - 360 end
-			if (ry > 180) then ry = ry - 360 end	
-		
 			-- // =================[ get ghost and player speed at EVERY PIECE OF RACE LINE ] =======================//
-			vx, vy, vz = node1.vX, node1.vY, node1.vZ
-			ghost_speed = getDistanceBetweenPoints3D(0, 0, 0, vx, vy, vz)
+			ghost_speed = getDistanceBetweenPoints3D(0, 0, 0, node1.vX, node1.vY, node1.vZ)
 			my_speed = getDistanceBetweenPoints3D(0, 0, 0, getElementVelocity(vehicle))
 			my_dst = getDistanceBetweenPoints3D(node1.x, node1.y, node1.z, getElementPosition(vehicle))
+
+			-- !!!
+			speed_err = Settings["sensitivity"] * ((my_speed - ghost_speed)/ghost_speed)  -- relative speed error
 			-- speed_err = (ghost_speed - my_speed) * 160 -- old: speed difference roughly in kmh
-			-- !!!
--- TODO: need a sensitivity setting here, somewhere. careful with saturation
-			speed_err = 1*((my_speed - ghost_speed)/ghost_speed)  -- relative speed error
-			-- !!!
 			
 			-- DEBUG
 			-- if i == start then dxDrawText ("speed error: "..math.floor(speed_err*100).. " %", 800, 440, 1920, 1080, tocolor(255, 128, 0, 255), 1, "pricedown") end 
 			-- if i == start then dxDrawText ("my speed: ".. math.floor(my_speed*160), 800, 480, 1920, 1080, tocolor(255, 128, 0, 255), 1, "pricedown") end 
 			-- if i == start then dxDrawText ("ghost speed: ".. math.floor(ghost_speed*160), 800, 520, 1920, 1080, tocolor(255, 128, 0, 255), 1, "pricedown") end 						
 
+			
 			-- // =========================[ Speed color coding ] ==============================//
 			-- speed color coding FOR RELATIVE SPEED ERROR, red=too fast, green=okay, white=too slow
 			-- scaled to [-50%, 50%] relative speed error interval
 			-- speed_err = 0.5 means u go 50% faster than the ghost
 			color_r = math.clamp(0, 510*math.abs(speed_err), 255)
 			color_g = math.clamp(0, -510*speed_err + 255, 255)
-			color_b = math.clamp(0, -510*speed_err, 255)
+			color_b = math.clamp(0, -510*speed_err, 255)	
 			color_a = math.clamp(0, 0.5*my_dst^2, 175) -- sharp fade				
 			
-			-- -- different color for every line piece based on speed difference, simple linear funcs
-			-- -- speed color coding, red=too fast, white=normal, green=too slow
-			-- color_r = math.clamp(0, -10*speed_err + 255, 255)
-			-- color_g = math.clamp(0, 10*speed_err + 255, 255)
-			-- color_b = math.clamp(0, -0.8*speed_err^2 + 255, 255)
-			-- color_a = math.clamp(0, -5*speed_err, 255) -- shows only brake lines
-			
-			-- -- -- speed color coding, red=too fast, green=normal, white=too slow
+			-- -- speed color coding, red=too fast, green=normal, white=too slow
 			-- -- scaled to [-25, 25] kmh speed diff interval
 			-- color_r = math.clamp(0, math.abs(-10*speed_err), 255)
 			-- color_g = math.clamp(0, 10*speed_err + 255, 255)
 			-- color_b = math.clamp(0, 10*speed_err, 255)
-			-- -- color_a = math.clamp(0, 40*my_dst, 175) -- fades near player	
 			-- color_a = math.clamp(0, 0.5*my_dst^2, 175) -- sharper fade
-			
-			-- -- speed color coding, red=too fast, green=normal or slow
-			-- -- scaled to [-25, 25] kmh speed diff interval
-			-- color_r = math.clamp(0, -10*speed_err, 255)
-			-- color_g = math.clamp(0, 10*speed_err + 255, 255)
-			-- color_b = 0
-			-- color_a = math.clamp(0, 0.5*my_dst^2, 175)		
-
-			
-			-- // =======================================[ Draw one line piece ]===========================================//
-			-- RGBcolored forza arrows, faced straight up
-			-- dxDrawMaterialLine3D (x, y, z-0.5, node2.x, node2.y, node2.z-0.5, img, 2, tocolor(color_r, color_g, color_b, 100), x, y, z)
-			
-			-- forza arrows, dynamic RGBA, facing original ghost orientation
-			-- getGroundPosition sucks for sideways coaster maps
-			-- fx, fy, fz = getPositionAboveElement(rx, ry, rz, x, y, z)
-			-- dxDrawMaterialLine3D(x, y, z-0.5,node2.x, node2.y, node2.z-0.5, img, arrowSize, tocolor(color_r, color_g, color_b, color_a), fx, fy, fz)		
-			
-			-- forza arrows, dynamic RGBA, facing original ghost orientation, snapped to ground
-			-- dxDrawMaterialLine3D(x, y, getGroundPosition(x,y,z)+0.15, node2.x, node2.y, getGroundPosition(node2.x,node2.y,node2.z)+0.15, img, arrowSize, tocolor(color_r, color_g, color_b, color_a), fx, fy, fz)
-			
-			-- simple  colored line
-			-- dxDrawLine3D (node1.x, node1.y, node1.z, node2.x, node2.y, node2.z, tocolor(color_r, color_g, color_b, color_a), 20)	
-			
-			-- !!!
-			-- place them near ground
-			gz = getGroundPosition(node1.x, node1.y, node1.z)
-			-- rotate the arrows correctly
-			fx, fy, fz = getPositionAboveElement(rx, ry, rz, node1.x, node1.y, gz)
-			-- rx > 80: going straight up or upside down
-			-- ry > 70 going sideways on a wall
-			if (math.abs(rx) < 80 and math.abs(ry) < 70 and math.abs(gz - node1.z) < 10) then
-				dxDrawMaterialLine3D(
-					node1.x, node1.y, gz + 0.15, 
-					node2.x, node2.y, getGroundPosition(node2.x, node2.y, node2.z) + 0.15, 
-					img, arrowSize, tocolor(color_r, color_g, color_b, color_a), 
-					fx, fy, fz
-				)
-			end	
-
-			-- DEBUG
-			-- outputChatBox(rx ..", ".. ry ..", ".. rz)
-			-- outputChatBox(speed_err) -- DEBUG
-			-- outputChatBox(color_a) -- DEBUG
-			-- outputChatBox(getGroundPosition(x,y,z)-z)
+		
+			-- // =================================================[ Draw one line piece ]=================================================//
+			-- looks better
+			rx, ry, rz = node1.rX, node1.rY, node1.rZ
+			if (rx > 180) then rx = rx - 360 end
+			if (ry > 180) then ry = ry - 360 end	
 					
+			-- (xx, yy, zz) <--> (node1.x, node1.y, node1.z) is perpendicular line under the car, used for facing arrows and collision check
+			xx, yy, zz = getPositionFromElementOffset(node1.x, node1.y, node1.z, rx, ry, rz, -4)
+			-- check hitpoints on the road
+			_, gx, gy, gz, _ = processLineOfSight(node1.x, node1.y, node1.z, xx, yy, zz, true, false, false, true)
+		
+			-- plan b if there was no collision
+			-- rx > 80: going straight up or upside down
+			-- ry > 70 going sideways on a wall			
+			if not gx and abs(rx) < 80 and abs(ry) < 70 then
+				gx, gy, gz = node1.x, node1.y, getGroundPosition(node1.x, node1.y, node1.z)
+				-- dont snap to the road if too far
+				if abs(gz - node1.z) > 15 then
+					gx, gy, gz = nil
+				end
+			end
+
+			-- there was collision under the car or node was simply snapped to ground
+			if gx then
+				-- push it above the road a little, works upside down too
+				gx, gy, gz = getPositionFromElementOffset(gx, gy, gz, rx, ry, rz, 0.2)	
+				
+				-- DEBUG: keep this
+				-- one node and scanline
+				-- dxDrawLine3D(gx, gy, gz-0.1, gx, gy, gz+0.1, tocolor(0,255,0, 255), 15)
+				-- dxDrawLine3D(xx, yy, zz, node1.x, node1.y, node1.z)
+	
+				-- !!!
+				if gx and xx2 and i ~= start then
+					dxDrawMaterialLine3D(
+						gx, gy, gz, 
+						xx2, yy2, zz2,
+						img, arrowSize, tocolor(color_r, color_g, color_b, color_a), 
+						xx, yy, zz
+					)
+				end -- xx2
+				-- !!!
+				-- node1 and node1 from previous iteration are connected into a line
+				xx2, yy2, zz2 = gx, gy, gz				
+			-- there was no collision
+			else
+				xx2, yy2, zz2 = nil, nil, nil	
+				-- DEBUG: keep this
+				-- one node and scanline
+				-- dxDrawLine3D(xx, yy, zz-0.1, xx, yy, zz+0.1, tocolor(255,0,0, 255), 15)
+				-- dxDrawLine3D(xx, yy, zz, node1.x, node1.y, node1.z, tocolor(255,0,0, 255))
+				
+			end -- gx	
 		end	-- node check
+		
 	end	-- for
 
 	-- -- stop time measurement -------------------------------------------------------------------------------//
@@ -509,3 +558,4 @@ function drawRacingLine()
 end -- drawRacingLine
 -- read more:
 -- http://mathworld.wolfram.com/RelativeError.html
+-- https://www.lua.org/gems/sample.pdf
