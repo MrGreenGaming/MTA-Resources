@@ -1,18 +1,23 @@
-local eventQueue = {} -- { i = { [1] = mapResName, [2] = eventname } }
+local eventQueue = {} -- { i = { [1] = mapResName, [2] = eventname, [3] = triggerEvent, args ... } }
 
 --------------------
 -- Resource start --
 --------------------
 
 function serverStart()
-	for i=1,3 do
-		table.insert(eventQueue, {"race-neverthesame", "Bierbuikje Event"})
-	end
+	--for i=1,2 do
+	--	table.insert(eventQueue, {"race-neverthesame", "Bierbuikje Event"})
+	--end
 	
-	--local rootNode = xmlCreateFile("eventManager.xml", "events")
-	--local newNode = xmlCreateChild(rootNode, "event")
-	--xmlSaveFile(rootNode)
-	--xmlUnloadFile(rootNode)
+	local xml
+	xml = xmlLoadFile("eventManager.xml")
+	if not xml then
+		xml = xmlCreateFile("eventManager.xml", "events")
+		xmlSaveFile(xml)
+	end
+	xmlUnloadFile(xml)
+	
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
 end
 addEventHandler('onResourceStart', getResourceRootElement(),serverStart)
 
@@ -42,6 +47,7 @@ function getCurrentMapQueued(noRemove)
     end
     if not getResourceFromName(eventQueue[1][1]) then
         outputChatBox("[Event Manager] Error: Queued map may have been deleted.", root, 255, 0, 0)
+		table.remove(eventQueue, 1)
         return false
     end
     local choice = eventQueue[1]
@@ -50,8 +56,15 @@ function getCurrentMapQueued(noRemove)
         if #eventQueue > 0 then
             triggerEvent('onNextmapSettingChange', root, getResourceFromName(eventQueue[1][1]))
         end
+		if choice[3] then
+			triggerEvent(choice[3], root, choice)
+		end
     end
     return choice
+end
+
+function getCurrentQueue()
+	return eventQueue
 end
 
 function fetchCurrentEvent(p)
@@ -399,3 +412,11 @@ function eventMove(p, current, event, row, resname, n, cat)
 end
 addEvent("eventmanager_eventMove_s",true)
 addEventHandler("eventmanager_eventMove_s",root,eventMove)
+
+function eventInject(t)
+	for a,b in ipairs(t) do
+		eventQueue[#eventQueue + 1 ] = b
+	end
+end
+addEvent("eventmanager_eventInject",true)
+addEventHandler("eventmanager_eventInject",root,eventInject)

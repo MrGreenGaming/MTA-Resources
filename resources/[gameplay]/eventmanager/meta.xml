@@ -5,7 +5,13 @@
 	<script src="eventmanager_s.lua" type="server" />
 	<script src="eventmanager_c.lua" type="client" />
 	<script src="eventmanager_gui.lua" type="client" />
+	<script src="teamwars_s.lua" type="server" />
+	<script src="teamwars_c.lua" type="client" />
 	
+	<!-- general -->
 	<export function='isAnyMapQueued' type='server' />
 	<export function='getCurrentMapQueued' type='server' />
+	
+	<!-- Team Wars -->
+	<export function='startTeamWar' type='server' />
 </meta>	
