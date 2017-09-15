@@ -631,13 +631,10 @@ function sendTWRequest(challengerPlayer, arg)
 	end
 	
 	local challengerTeamName
+	local victimTeamName
 	for a,b in ipairs(teams) do
 		if tostring(b.teamid) == tostring(challengerTeam) then challengerTeamName = b.name end
-	end
-	
-	local victimTeamName
-	for a,b in ipairs(t) do
-		if tostring(b[1]) == tostring(victimTeam) then victimTeamName = b[3] end
+		if tostring(b.teamid) == tostring(victimTeam) then victimTeamName = b.name end
 	end
 	
 	local victimForumID
