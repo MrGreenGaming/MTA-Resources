@@ -86,10 +86,12 @@ function onMapStop(res)
 		end
 	end
 	if not match then return end
+	local challengerTeam = currentMap[1][4]
+	local victimTeam = currentMap[1][5]
 	currentMap = {}
 	removeEventHandler("onPlayerFinish", root, finish)
 	--outputChatBox("stop: " .. getTWState(true))
-	if getTWState() == "stopped" then stopTeamWar() end
+	if getTWState() == "stopped" then stopTeamWar(challengerTeam, victimTeam) end
 	
 end
 addEventHandler("onResourceStop", getRootElement(), onMapStop)
@@ -126,13 +128,15 @@ function finish(rank, time)
 end
 addEvent("onPlayerFinish",true)
 
-function stopTeamWar()
+function stopTeamWar(challengerTeam, victimTeam)
 	local teamid = false
 	local points = 0
 	for a,b in ipairs(ranking) do
-		if b[2] > points then
-			teamid = b[1]
-			points = b[2]
+		if b[1] == challengerTeam or b[1] == victimTeam then
+			if b[2] > points then
+				teamid = b[1]
+				points = b[2]
+			end
 		end
 	end
 	if not teamid then return end
