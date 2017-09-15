@@ -66,7 +66,7 @@ function onShopInit ( tabPanel )
 	
 	GUIEditor.tab[3] = guiCreateTab("Team Wars", GUIEditor.tabpanel[1])
 	
-	GUIEditor.label[6] = guiCreateLabel(46, 22, 128, 16, "Select maps, update 5", false, GUIEditor.tab[3])
+	GUIEditor.label[6] = guiCreateLabel(46, 22, 128, 16, "Select maps, update 6", false, GUIEditor.tab[3])
 	guiSetFont(GUIEditor.label[6], "default-bold-small")
 	GUIEditor.label[7] = guiCreateLabel(46, 38, 256, 16, "Select maps to be played in a Team War: ", false, GUIEditor.tab[3])
 	GUIEditor.gridlist[2] = guiCreateGridList(48, 58, 256, 256, false, GUIEditor.tab[3])
