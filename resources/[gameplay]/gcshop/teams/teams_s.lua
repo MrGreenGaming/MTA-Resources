@@ -616,7 +616,10 @@ function sendTWRequest(challengerPlayer, arg)
 	for a,b in ipairs(r1) do
 		local match = false
 		for c,d in ipairs(t) do
-			if tostring(b) == tostring(d[1]) then match = true end
+			if tostring(b) == tostring(d[1]) then
+				match = true
+				outputDebugString("Matching team: " .. d[3],0)
+			end
 		end
 		if match then table.insert(r2, b) end
 	end
