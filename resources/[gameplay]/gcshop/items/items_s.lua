@@ -113,23 +113,23 @@ local perks = {
 
 }
 
-discount = false
-function perkdiscount()
-	local d = 2
-	if not discount then d = 0.5 end
-	discount = not discount
-	for a,b in ipairs(perks) do
-		local p = b.price
-		b.price = math.ceil(p * d)
-	end
-	
-	local players = getElementsByType("player")
-	for a,b in ipairs(players) do
-		local forumID = tonumber(exports.gc:getPlayerForumID(b))
-		if forumID then triggerClientEvent( b, 'itemLogin', b, perks, getPerks(forumID) ) end
-	end
-end
-addCommandHandler("perkdiscount", perkdiscount, true, true)
+--discount = false
+--function perkdiscount()
+--	local d = 2
+--	if not discount then d = 0.5 end
+--	discount = not discount
+--	for a,b in ipairs(perks) do
+--		local p = b.price
+--		b.price = math.ceil(p * d)
+--	end
+--	
+--	local players = getElementsByType("player")
+--	for a,b in ipairs(players) do
+--		local forumID = tonumber(exports.gc:getPlayerForumID(b))
+--		if forumID then triggerClientEvent( b, 'itemLogin', b, perks, getPerks(forumID) ) end
+--	end
+--end
+--addCommandHandler("perkdiscount", perkdiscount, true, true)
 
 function onGCShopLogin (forumID)
 	for _, perk in pairs(getPerks(forumID)) do
