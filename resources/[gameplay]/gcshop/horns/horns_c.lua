@@ -321,6 +321,7 @@ hornsTable = {
 	[318] = "Come on damn bitch",
 	[319] = "Slowmotion ooh",
 	[320] = "Keep up motherfucker",
+	[321] = "Darude - Russian Sandstorm",
 }
 
 
