@@ -294,7 +294,7 @@ function addPlayerGreencoins ( player, amount )
 			amount = amount * 2
 		end
 		
-		if (accounts[player]:getGreencoins() + amount) >= 0 then
+		if ((accounts[player]:getGreencoins() + amount) >= 0) or (accounts[player]:getGreencoins() < 0 and amount > 0) then
 			GCTextPopUp (player, amount)
 			accounts[player]:addGreencoins(amount)
 			return true
