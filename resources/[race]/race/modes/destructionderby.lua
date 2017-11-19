@@ -3,7 +3,8 @@ DestructionDerby.__index = DestructionDerby
 
 DestructionDerby:register('Destruction derby')
 
-local ntsMode = true
+local ntsMode = false
+local bombModeNext, bombMode = false, true
 
 
 local _carsFirstSpawn = { 602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585,
@@ -76,13 +77,24 @@ function DestructionDerby:onPlayerJoin(player, spawnpoint)
 		local newModel = _carsFirstSpawn[math.random(#_carsFirstSpawn)]
 		setVehicleID(self.getPlayerVehicle(player), newModel)
 	end
+	removeElementData(player, 'ddbomb', nil)
 end
 
+addCommandHandler('dabomb', function()
+	outputChatBox('da bomb next!')
+	bombModeNext = true
+end, true)
+
 function DestructionDerby:start()
-	ntsMode = true
+	if bombModeNext then
+		bombMode = true
+		outputChatBox("Pass da bomb started!")
+	else
+		ntsMode = true
+	end
 	self:resetChangeTimer()
 
-
+	bombModeNext = false
 end
 
 
@@ -106,14 +118,53 @@ function DestructionDerby:launch()
 	RaceMode.launch(self)
 	if ntsMode then
 		self:startChangeTimer()
+	elseif bombMode then
+		outputChatBox("Pass da bomb launched!")
+		self:startBombTimer()
+	end
+
+end
+
+addEvent('ddbombtouch', true)
+addEventHandler('ddbombtouch', resourceRoot, function(bombHolder)
+	if bombMode and getElementData(bombHolder, 'ddbomb') and (not getElementData(client, 'ddbombtick') or getTickCount()-getElementData(client, 'ddbombtick')>1000) then
+		setElementData(client, 'ddbomb', true)
+		setElementData(client, 'ddbombtick', getTickCount())
+		outputGameMessageSmart(getPlayerName(client) .. " has the bomb now!")
+		setElementData(bombHolder, 'ddbomb', false)
+	end
+end)
+
+function DestructionDerby:startBombTimer()
+	self.bombTimer = Countdown.create(20, self.startBombTimer, "Bombs explode in: ", 0, 0, 255, 0.10, 2.5, true, self)
+	self.bombTimer:start()
+	
+	outputDebugString('bombs1 '..#getActivePlayers())
+	for _, p in ipairs(getActivePlayers()) do
+		iprint(_, p, getElementData(p, 'ddbomb'))
+		if getElementData(p, 'ddbomb') == true then
+			iprint('boom', p)
+			removeElementData(p, 'ddbomb', nil)
+			blowVehicle(self.getPlayerVehicle(p))
+		end
+	end
+	
+	outputDebugString('bombs2 '..#getActivePlayers())
+	local players = table.deepcopy(getActivePlayers())
+	local bombs = math.ceil(#players/5)
+	iprint(bombs, players)
+	for i=1,bombs do
+		local p = table.remove(players, math.random(#players))
+		iprint('boom', p)
+		setElementData(p, 'ddbomb', true)
+		outputGameMessageSmart(tostring(getPlayerName(p)) .. " has a bomb!")
 	end
 
 end
 
 
 
-
-local function outputGameMessageSmart(text, who)
+function outputGameMessageSmart(text, who)
 	if getResourceFromName"messages" and getResourceState(getResourceFromName"messages") == "running" then
 		exports.messages:outputGameMessage(text, who or root, nil, 0, 255, 0)
 	else
@@ -183,10 +234,23 @@ function DestructionDerby:resetChangeTimer()
 		end
 		self.changeSecondWarningTimer = nil
 	end
+	
+
 end
 
 function DestructionDerby:endMap()
 	self:resetChangeTimer()
+	if bombMode then
+		bombMode = false
+		if self.bombTimer then
+			self.bombTimer:destroy()
+			self.bombTimer = nil
+		end
+	end
+	for k,p in ipairs(getElementsByType'players') do
+		setElementData(p, 'ddbomb', nil)
+	end
+	ntsMode = false 
 	RaceMode.endMap(self)
 end
 
@@ -196,6 +260,17 @@ function DestructionDerby:destroy()
 		self.rankingBoard = nil
 	end
 	self:resetChangeTimer()
+	if bombMode then
+		bombMode = false
+		if self.bombTimer then
+			self.bombTimer:destroy()
+			self.bombTimer = nil
+		end
+	end
+	for k,p in ipairs(getElementsByType'players') do
+		setElementData(p, 'ddbomb', nil)
+	end
+	ntsMode = false 
 	RaceMode.destroy(self)
 end
 --]]
