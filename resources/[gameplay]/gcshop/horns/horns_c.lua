@@ -358,6 +358,11 @@ hornsTable = {
 	[355] = "Boom Headshot",
 	[356] = "aint nobody fuckin my wife",
 	[357] = "aaaaaaaa laugh",
+	[358] = "Dota",
+	[359] = "F*ck My A**",
+	[360] = "My D*ck Is Big",
+	[361] = "Ouuh MotherF*cker",
+	[362] = "Tic Tac MotherF*cker",
 
 }
 
