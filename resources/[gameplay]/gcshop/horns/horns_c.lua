@@ -363,6 +363,11 @@ hornsTable = {
 	[360] = "My D*ck Is Big",
 	[361] = "Ouuh MotherF*cker",
 	[362] = "Tic Tac MotherF*cker",
+	[363] = "Hey Newbo",
+	[364] = "U Got One Shoot",
+	[365] = "Vadia Vadia",
+	[366] = "Wuajaja",
+	[367] = "Bruh",
 
 }
 
