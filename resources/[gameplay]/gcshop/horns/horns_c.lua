@@ -711,7 +711,7 @@ function createSoundForCar(car, horn)
 			guiSetAlpha(icon[car], globalalpha)
 			guiSetSize(icon[car], relx, rely, false)
 			if(screenX and screenY) then
-				guiSetPosition(icon[car], screenX, screenY, false)
+				guiSetPosition(icon[car], screenX-50, screenY+50, false)
 				guiSetVisible(icon[car], true)
 			else
 				guiSetVisible(icon[car], false)
