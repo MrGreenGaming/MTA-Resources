@@ -211,7 +211,6 @@ addCommandHandler("autologin",
 MapSound = {}
 function detectMap(theRes)
     if #getElementsByType('spawnpoint', source) > 0 then
-		setWindowFlashing(true)
         MapSound = getElementsByType( "sound", source )
         for f, u in pairs(MapSound) do
             setSoundPaused( u, true )
@@ -222,7 +221,6 @@ addEventHandler("onClientResourceStart", root, detectMap)
 
 addEvent("onClientMapLaunched", true)
 addEventHandler("onClientMapLaunched", root, function()
-	setWindowFlashing(false)
 	for f, u in pairs(MapSound) do
 		setSoundPaused( u, false )
 	end
