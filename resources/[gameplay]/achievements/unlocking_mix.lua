@@ -20,6 +20,7 @@ achievementListMix = {
 	{ s = "DD: Win 20 rounds", 											id = 14,	reward = 200,	max = 20 },
 	{ s = "DD: Make 20 kills", 											id = 15,	reward = 100,	max = 20 },
 	{ s = "DD: Make 200 kills", 										id = 16,	reward = 300,	max = 200 },
+	{ s = "DD: Win a round on fire", 										id = 34,	reward = 300},
 	
 	{ s = "SH: Spectator - Be the first to get killed", 				id = 28, 	reward = 15 },
 	{ s = "SH: Badass - Accumulate 5 kills in 1 round", 				id = 7, 	reward = 100 },
@@ -141,6 +142,9 @@ function playerFinishDD (player, rank)
 	if rank == 1 then
 		addAchievementProgressMix ( player, 13, 1 )
 		addAchievementProgressMix ( player, 14, 1 )
+		if math.ceil( getElementHealth (  getPedOccupiedVehicle ( localPlayer ) ) /10 ) <= 25 then
+			addPlayerAchievementMix ( target, 34 )
+			end
 	elseif rank == 4 then
 		addAchievementProgressMix ( player, 33, 1 )
 	end

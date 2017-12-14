@@ -32,7 +32,7 @@ function build_itemsWidget(parent, offsetX, offsetY)
 		addEventHandler("onClientGUIClick", gui["btnBuyPerk_2"], on_btnBuyPerk_2_clicked, false)
 	end
 	
-	gui["labelInfo_2"] = guiCreateLabel(21, 141, 481, 71, "Respawn time will be limited to 1 second. \nIf you hit a checkpoint, it will be chosen as the respawn point much faster now (normally 5 seconds) but you will keep your health.\nExpires after 60 days", false, gui["scrollAreaItems"])
+	gui["labelInfo_2"] = guiCreateLabel(21, 141, 481, 71, "Respawn time will be limited to 1 second. \nIf you hit a checkpoint, it will be chosen as the respawn point much faster now (normally 5 seconds) but you will keep your health.\n\nExpires after 60 days", false, gui["scrollAreaItems"])
 	guiLabelSetHorizontalAlign(gui["labelInfo_2"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelInfo_2"], "top")
 	
