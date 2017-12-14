@@ -55,7 +55,10 @@ function startDuel(p, c, t)
 	
 	exports.race:disableNTSModeForDD()
 	exports.gcshop:disableReRoll()
-		
+	
+	-- Reset water level
+	resetWaterLevel ()
+	
 	-- Find spawns
 	local spawns = getElementsByType('spawnpoint', maproot)
 	
