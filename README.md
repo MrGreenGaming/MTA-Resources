@@ -7,7 +7,8 @@ All resources used on the MrGreenGaming.com Multi Theft Auto: San Andreas (MTASA
 - A lot of resources need access to a MySQL server and/or to GC accounts to work:
 
   1. Setup gc devmode, with this you can gclogin with a testing account: `/srun set("*gc.devmode", true)`
-    * Now you can login with `/gclogin <forumid> admin`, pick a forumid or a random name. You will start with 99999 GC.
+    * Restart the MTA server. Now you can login with `/gclogin <forumid> admin` or using F6, just pick a forumid as any random number. 
+    You will start with 99999 GC. Important to use a number as login and 'admin' as the password.
   2. Setup a MySQL server (you'll need its host adress, username and a password optionally)
     * The web development packet WAMP (or XAMPP) has a mysql server and phpmyadmin builtin, you can download it and install from here http://www.wampserver.com/
     * phpmyadmin is a very handy tool to help with configuring and importing data, learn how to use it
