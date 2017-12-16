@@ -672,7 +672,7 @@ killOtherTimer = {}
 local screenSizex, screenSizey = guiGetScreenSize()
 local guix = screenSizex * 0.1
 local guiy = screenSizex * 0.1
-local globalscale = 1
+local globalscale = 1.35
 local globalalpha = 1
 icon = {}
 
@@ -701,17 +701,17 @@ function createSoundForCar(car, horn)
 		if target then
 			playerx, playery, playerz = getElementPosition(target)
 		end
-		cp_x, cp_y, cp_z = getElementPosition( car)
+		cp_x, cp_y, cp_z = getElementPosition( car )
 		local dist = getDistanceBetweenPoints3D ( cp_x, cp_y, cp_z, playerx, playery, playerz )
-		if dist and dist < 40 and ( isLineOfSightClear(cp_x, cp_y, cp_z+1.2, playerx, playery, playerz, true, false, false, false )) then
-			local screenX, screenY = getScreenFromWorldPosition ( cp_x, cp_y, cp_z+1.2 )
+		if dist and dist < 40 and ( isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false )) then
+			local screenX, screenY = getScreenFromWorldPosition ( cp_x, cp_y, cp_z )
 			local scaled = screenSizex * (1/(2*(dist+5))) *.85
 			local relx, rely = scaled * globalscale, scaled * globalscale
 			
 			guiSetAlpha(icon[car], globalalpha)
 			guiSetSize(icon[car], relx, rely, false)
 			if(screenX and screenY) then
-				guiSetPosition(icon[car], screenX-50, screenY+50, false)
+				guiSetPosition(icon[car], screenX-relx/2, screenY-rely/1.3, false)
 				guiSetVisible(icon[car], true)
 			else
 				guiSetVisible(icon[car], false)

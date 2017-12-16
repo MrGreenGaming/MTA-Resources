@@ -284,6 +284,9 @@ function getPlayerGreencoins ( player )
 end
 
 local anniversary = { day = 16, month = 9 }
+local christmas_eve = { day = 24, month = 12 }
+local christmas_day1 = { day = 25, month = 12 }
+local christmas_day2 = { day = 26, month = 12 }
 function addPlayerGreencoins ( player, amount )
 	if accounts[player] and type(amount) == 'number' then
 		amount = math.ceil(amount)
@@ -291,6 +294,17 @@ function addPlayerGreencoins ( player, amount )
 		-- Double gc if it's the anniversary
 		local time = getRealTime()
 		if time.monthday == anniversary.day and time.month+1 == anniversary.month and amount > 0 then
+			amount = amount * 2
+		end
+		
+		-- Double gc if it's christmas
+		if time.monthday == christmas_eve.day and time.month+1 == christmas_eve.month and time.hour > 17 and amount > 0 then
+			amount = amount * 2
+		end
+		if time.monthday == christmas_day1.day and time.month+1 == christmas_day1.month and amount > 0 then
+			amount = amount * 2
+		end
+		if time.monthday == christmas_day2.day and time.month+1 == christmas_day2.month and amount > 0 then
 			amount = amount * 2
 		end
 		
