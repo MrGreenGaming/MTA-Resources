@@ -74,7 +74,7 @@ function updateToptimes(forumID)
 
 	for i=1, #racemodes do
 		local racemode = racemodes[i]
-		if tops[racemode] then
+		if tops ~= false and tops[racemode] then
 			local topsString = ""
 			if tops[racemode][1] then
 				topsString = tops[racemode][1]
