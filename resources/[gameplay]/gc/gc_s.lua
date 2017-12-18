@@ -307,6 +307,8 @@ function isHoliday()
 		end
 	end
 	
+	outputDebugString("Holiday? " .. tostring(bool))
+	
 	return bool
 end
 
