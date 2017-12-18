@@ -12,6 +12,7 @@
 	
 	<config src="help.xml" type="client"/>
 	
+	<export function="isHoliday" type="server"/>
 	<export function="isPlayerLoggedInGC" type="server"/>
 	<export function="getPlayerForumID" type="server"/>
 	<export function="getPlayerForumJoinTimestamp" type="server"/>

@@ -283,30 +283,36 @@ function getPlayerGreencoins ( player )
 	return getSerialGreencoins (player) or 0
 end
 
-local anniversary = { day = 16, month = 9 }
-local christmas_eve = { day = 24, month = 12 }
-local christmas_day1 = { day = 25, month = 12 }
-local christmas_day2 = { day = 26, month = 12 }
+local holidays = {
+	{ day = 16, month = 9 }, -- anniversary
+	{ day = 24, month = 12, hour = 18 }, -- christmas evening
+	{ day = 25, month = 12 }, -- first christmas day
+	{ day = 26, month = 12 } -- second christmas day
+}
+function isHoliday()
+	local bool = false
+	local time = getRealTime()
+	
+	for a,b in ipairs(holidays) do
+		if time.monthday == b.day and time.month+1 == b.month then
+			
+			if b.hour then
+				if time.hour >= b.hour then
+					bool = true
+				end
+			else
+				bool = true
+			end
+			
+		end
+	end
+	
+	return bool
+end
+
 function addPlayerGreencoins ( player, amount )
 	if accounts[player] and type(amount) == 'number' then
 		amount = math.ceil(amount)
-		
-		-- Double gc if it's the anniversary
-		local time = getRealTime()
-		if time.monthday == anniversary.day and time.month+1 == anniversary.month and amount > 0 then
-			amount = amount * 2
-		end
-		
-		-- Double gc if it's christmas
-		if time.monthday == christmas_eve.day and time.month+1 == christmas_eve.month and time.hour > 17 and amount > 0 then
-			amount = amount * 2
-		end
-		if time.monthday == christmas_day1.day and time.month+1 == christmas_day1.month and amount > 0 then
-			amount = amount * 2
-		end
-		if time.monthday == christmas_day2.day and time.month+1 == christmas_day2.month and amount > 0 then
-			amount = amount * 2
-		end
 		
 		if ((accounts[player]:getGreencoins() + amount) >= 0) or (accounts[player]:getGreencoins() < 0 and amount > 0) then
 			GCTextPopUp (player, amount)
