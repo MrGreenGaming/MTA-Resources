@@ -283,18 +283,38 @@ function getPlayerGreencoins ( player )
 	return getSerialGreencoins (player) or 0
 end
 
-local anniversary = { day = 16, month = 9 }
+local holidays = {
+	{ day = 16, month = 9 }, -- anniversary
+	{ day = 24, month = 12, hour = 18 }, -- christmas evening
+	{ day = 25, month = 12 }, -- first christmas day
+	{ day = 26, month = 12 } -- second christmas day
+}
+function isHoliday()
+	local bool = false
+	local time = getRealTime()
+	
+	for a,b in ipairs(holidays) do
+		if time.monthday == b.day and time.month+1 == b.month then
+			
+			if b.hour then
+				if time.hour >= b.hour then
+					bool = true
+				end
+			else
+				bool = true
+			end
+			
+		end
+	end
+	
+	return bool
+end
+
 function addPlayerGreencoins ( player, amount )
 	if accounts[player] and type(amount) == 'number' then
 		amount = math.ceil(amount)
 		
-		-- Double gc if it's the anniversary
-		local time = getRealTime()
-		if time.monthday == anniversary.day and time.month+1 == anniversary.month and amount > 0 then
-			amount = amount * 2
-		end
-		
-		if (accounts[player]:getGreencoins() + amount) >= 0 then
+		if ((accounts[player]:getGreencoins() + amount) >= 0) or (accounts[player]:getGreencoins() < 0 and amount > 0) then
 			GCTextPopUp (player, amount)
 			accounts[player]:addGreencoins(amount)
 			return true
@@ -382,19 +402,21 @@ addCommandHandler('debuggc', debuggc, true, false )
 
 setTimer(function()
 	for _,player in ipairs(getElementsByType('player')) do
-		local acc = accounts[player]
-		local playtime = getElementData(player, "playtime")
-		if acc and acc.gcRecord[4] and acc.gcRecord[4] > 0 and playtime then
-			playtime = split(playtime, ':')
-			local gpm = acc.gcRecord[4] / (playtime[1] + playtime[2]/60)
-			setElementData(player, 'gpm', math.ceil(gpm))
-			setElementData(player, 'sessiongc', acc.gcRecord[4])
-		elseif acc and acc.gcRecord[4] == 0 then
-			setElementData(player, 'gpm', 0)
-			setElementData(player, 'sessiongc', 0)
-		else
-			setElementData(player, 'gpm', nil)
-			setElementData(player, 'sessiongc', nil)
+		if getElementData(player, "state") then
+			local acc = accounts[player]
+			local playtime = getElementData(player, "playtime")
+			if acc and acc.gcRecord[4] and acc.gcRecord[4] > 0 and playtime then
+				playtime = split(playtime, ':')
+				local gpm = acc.gcRecord[4] / (playtime[1] + playtime[2]/60)
+				setElementData(player, 'gpm', math.ceil(gpm))
+				setElementData(player, 'sessiongc', acc.gcRecord[4])
+			elseif acc and acc.gcRecord[4] == 0 then
+				setElementData(player, 'gpm', 0)
+				setElementData(player, 'sessiongc', 0)
+			else
+				setElementData(player, 'gpm', nil)
+				setElementData(player, 'sessiongc', nil)
+			end
 		end
 	end
 end, 1000, 0)

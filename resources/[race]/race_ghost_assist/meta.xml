@@ -1,0 +1,8 @@
+<meta>
+	<info type="script" name="Dynamic Racing Assist" description="" addon="race" author="Awwu, fak" version="1.0"/>
+	<script src="global_client.lua" type="client" />
+	<script src="settings_client.lua" type="client" />
+	<script src="playback_local_client.lua" type="client" />
+	<file src="arrow.png" />	
+	<min_mta_version server="1.4" client="1.4" />
+</meta>

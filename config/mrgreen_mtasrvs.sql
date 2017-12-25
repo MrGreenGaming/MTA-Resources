@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.7.5
+-- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 06, 2015 at 11:21 PM
--- Server version: 5.6.19
--- PHP Version: 5.6.14
+-- Generation Time: Dec 16, 2017 at 02:22 PM
+-- Server version: 5.6.38-log
+-- PHP Version: 7.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -52,6 +54,46 @@ CREATE TABLE `achievements` (
   `unlockedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `unlocked` tinyint(1) NOT NULL DEFAULT '0',
   `progress` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `achievements_race`
+--
+
+CREATE TABLE `achievements_race` (
+  `forumID` int(11) NOT NULL,
+  `achievementID` int(11) NOT NULL,
+  `unlockedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `unlocked` tinyint(1) NOT NULL DEFAULT '0',
+  `progress` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `blockers`
+--
+
+CREATE TABLE `blockers` (
+  `serial` varchar(32) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `expireTimestamp` int(30) NOT NULL,
+  `byAdmin` varchar(100) NOT NULL,
+  `timeOfMark` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `canmodsoverride` varchar(5) NOT NULL DEFAULT 'true'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `country`
+--
+
+CREATE TABLE `country` (
+  `forum_id` int(11) NOT NULL,
+  `country` char(2) NOT NULL DEFAULT 'XX'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -214,6 +256,36 @@ CREATE TABLE `mapratings` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `maps`
+--
+
+CREATE TABLE `maps` (
+  `mapId` int(11) UNSIGNED NOT NULL,
+  `resname` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `mapname` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `racemode` varchar(255) CHARACTER SET latin1 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mapstop100`
+--
+
+CREATE TABLE `mapstop100` (
+  `id` int(11) NOT NULL,
+  `mapresourcename` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `mapname` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `author` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `gamemode` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `rank` int(11) DEFAULT NULL,
+  `votes` int(11) DEFAULT NULL,
+  `balance` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `maps_del`
 --
 
@@ -230,17 +302,17 @@ CREATE TABLE `maps_del` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `nickprotection`
+-- Table structure for table `mute`
 --
-CREATE TABLE `nickprotection` (
-`pNick` varchar(50)
-,`accountID` text
-,`forum_id` int(11)
-,`forum_name` varchar(255)
-,`email` varchar(150)
-,`steam_name` varchar(64)
-,`mta_name` varchar(64)
-);
+
+CREATE TABLE `mute` (
+  `serial` varchar(32) NOT NULL,
+  `name` varchar(22) NOT NULL,
+  `expireTimestamp` varchar(10) NOT NULL,
+  `byAdmin` varchar(22) NOT NULL,
+  `whenMuted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `IP` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -271,15 +343,44 @@ CREATE TABLE `serialsDB` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `stats`
+--
+
+CREATE TABLE `stats` (
+  `forumID` int(11) NOT NULL,
+  `id1` int(11) DEFAULT '0' COMMENT 'Race Starts',
+  `id2` int(11) DEFAULT '0' COMMENT 'Race Finishes',
+  `id3` int(11) DEFAULT '0' COMMENT 'Race Wins',
+  `id4` int(11) DEFAULT '0' COMMENT 'Checkpoints Collected',
+  `id5` bigint(20) DEFAULT '0' COMMENT 'Hours In-Game',
+  `id6` int(11) DEFAULT '0' COMMENT 'Total Deaths',
+  `id7` int(11) DEFAULT '0' COMMENT 'NTS Starts',
+  `id8` int(11) DEFAULT '0' COMMENT 'NTS Finishes',
+  `id9` int(11) DEFAULT '0' COMMENT 'NTS Wins',
+  `id10` int(11) DEFAULT '0' COMMENT 'RTF Starts',
+  `id11` int(11) DEFAULT '0' COMMENT 'RTF Wins',
+  `id12` int(11) DEFAULT '0' COMMENT 'DD Deaths',
+  `id13` int(11) DEFAULT '0' COMMENT 'DD Wins',
+  `id14` int(11) DEFAULT '0' COMMENT 'DD Kills',
+  `id15` int(11) DEFAULT '0' COMMENT 'CTF Flags Delivered',
+  `id16` int(11) DEFAULT '0' COMMENT 'Shooter Deaths',
+  `id17` int(11) DEFAULT '0' COMMENT 'Shooter Wins',
+  `id18` int(11) DEFAULT '0' COMMENT 'Shooter Kills'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `team`
 --
 
 CREATE TABLE `team` (
   `teamid` smallint(5) UNSIGNED NOT NULL,
   `owner` mediumint(8) NOT NULL,
-  `timestamp` int(11) NOT NULL,
+  `create_timestamp` int(11) NOT NULL,
+  `renew_timestamp` int(11) NOT NULL COMMENT 'timestamp when last renewed',
   `name` varchar(20) NOT NULL,
-  `tag` varchar(6) NOT NULL,
+  `tag` varchar(7) NOT NULL,
   `colour` varchar(7) NOT NULL,
   `message` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -293,7 +394,7 @@ CREATE TABLE `team` (
 CREATE TABLE `team_members` (
   `forumid` mediumint(8) NOT NULL,
   `teamid` smallint(5) UNSIGNED NOT NULL,
-  `timestamp` int(11) NOT NULL COMMENT 'timestamp when joined team',
+  `join_timestamp` int(11) NOT NULL COMMENT 'timestamp when joined current team',
   `status` int(11) NOT NULL COMMENT '1 = in team'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -347,11 +448,18 @@ CREATE TABLE `uploaded_maps` (
 -- --------------------------------------------------------
 
 --
--- Structure for view `nickprotection`
+-- Table structure for table `votestop100`
 --
-DROP TABLE IF EXISTS `nickprotection`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`mrgreen_gcmta`@`localhost` SQL SECURITY DEFINER VIEW `nickprotection`  AS  select `nick`.`pNick` AS `pNick`,`nick`.`accountID` AS `accountID`,`gc`.`forum_id` AS `forum_id`,`members`.`name` AS `forum_name`,`members`.`email` AS `email`,`gc`.`steam_name` AS `steam_name`,`gc`.`mta_name` AS `mta_name` from ((`gc_nickprotection` `nick` join `mrgreen_gc`.`green_coins` `gc`) join `mrgreen_forums`.`x_utf_l4g_members` `members`) where ((`nick`.`accountID` = `gc`.`id`) and (`gc`.`forum_id` = `members`.`member_id`)) ;
+CREATE TABLE `votestop100` (
+  `id` int(11) NOT NULL,
+  `forumid` int(10) UNSIGNED NOT NULL,
+  `choice1` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `choice2` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `choice3` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `choice4` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `choice5` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
@@ -362,6 +470,19 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`mrgreen_gcmta`@`localhost` SQL SECURITY DEFI
 --
 ALTER TABLE `achievements`
   ADD PRIMARY KEY (`forumID`,`achievementID`);
+
+--
+-- Indexes for table `blockers`
+--
+ALTER TABLE `blockers`
+  ADD PRIMARY KEY (`serial`);
+
+--
+-- Indexes for table `country`
+--
+ALTER TABLE `country`
+  ADD PRIMARY KEY (`forum_id`),
+  ADD UNIQUE KEY `forumid` (`forum_id`);
 
 --
 -- Indexes for table `custom_skins`
@@ -414,11 +535,31 @@ ALTER TABLE `gc_rocketcolor`
   ADD UNIQUE KEY `forumid` (`forumid`);
 
 --
+-- Indexes for table `maps`
+--
+ALTER TABLE `maps`
+  ADD PRIMARY KEY (`mapId`),
+  ADD UNIQUE KEY `resname` (`resname`);
+
+--
+-- Indexes for table `mapstop100`
+--
+ALTER TABLE `mapstop100`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `maps_del`
 --
 ALTER TABLE `maps_del`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
+
+--
+-- Indexes for table `mute`
+--
+ALTER TABLE `mute`
+  ADD PRIMARY KEY (`serial`),
+  ADD UNIQUE KEY `serial` (`serial`);
 
 --
 -- Indexes for table `playersettings`
@@ -433,6 +574,12 @@ ALTER TABLE `serialsDB`
   ADD PRIMARY KEY (`serialid`),
   ADD KEY `playername` (`playername`),
   ADD KEY `serial` (`serial`);
+
+--
+-- Indexes for table `stats`
+--
+ALTER TABLE `stats`
+  ADD UNIQUE KEY `forumID` (`forumID`);
 
 --
 -- Indexes for table `team`
@@ -469,6 +616,12 @@ ALTER TABLE `uploaded_maps`
   ADD PRIMARY KEY (`uploadid`);
 
 --
+-- Indexes for table `votestop100`
+--
+ALTER TABLE `votestop100`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -476,43 +629,60 @@ ALTER TABLE `uploaded_maps`
 -- AUTO_INCREMENT for table `gc_items`
 --
 ALTER TABLE `gc_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1155;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7644;
+
+--
+-- AUTO_INCREMENT for table `maps`
+--
+ALTER TABLE `maps`
+  MODIFY `mapId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=527130;
+
+--
+-- AUTO_INCREMENT for table `mapstop100`
+--
+ALTER TABLE `mapstop100`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=202;
+
 --
 -- AUTO_INCREMENT for table `maps_del`
 --
 ALTER TABLE `maps_del`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+
 --
 -- AUTO_INCREMENT for table `serialsDB`
 --
 ALTER TABLE `serialsDB`
-  MODIFY `serialid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=663842;
+  MODIFY `serialid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=983188;
+
 --
 -- AUTO_INCREMENT for table `team`
 --
 ALTER TABLE `team`
-  MODIFY `teamid` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `teamid` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
+
 --
 -- AUTO_INCREMENT for table `uploaded_maps`
 --
 ALTER TABLE `uploaded_maps`
-  MODIFY `uploadid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=636;
+  MODIFY `uploadid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5160;
+
+--
+-- AUTO_INCREMENT for table `votestop100`
+--
+ALTER TABLE `votestop100`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `team`
---
-ALTER TABLE `team`
-  ADD CONSTRAINT `Team owner forumid` FOREIGN KEY (`owner`) REFERENCES `mrgreen_forums`.`x_utf_l4g_members` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Constraints for table `team_members`
 --
 ALTER TABLE `team_members`
-  ADD CONSTRAINT `Forum account` FOREIGN KEY (`forumid`) REFERENCES `mrgreen_forums`.`x_utf_l4g_members` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Team members` FOREIGN KEY (`teamid`) REFERENCES `team` (`teamid`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

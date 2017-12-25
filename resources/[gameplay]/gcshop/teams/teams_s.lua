@@ -1,5 +1,6 @@
 local team_price = 2500
 local teams = {}	-- [teamid] = <teamelement>
+local teamwars = {} -- i = {player element challenger, player element victim}
 local playerteams = {}
 local playertimestamp = {}
 local invites = {}
@@ -380,4 +381,357 @@ function getPlayerFromName_ ( name )
 		end
 	end
 	return false
+end
+
+-------------------
+--Team War update--
+-------------------
+
+function xmlCreate()
+	local xml
+	xml = xmlLoadFile("teams/teamwars.xml")
+	if not xml then
+		xml = xmlCreateFile("teams/teamwars.xml", "maps")
+		xmlSaveFile(xml)
+	end
+	xmlUnloadFile(xml)
+end
+addEventHandler('onResourceStart', getResourceRootElement(),xmlCreate)
+
+function fetchMaps(p)
+	local teamid, isOwner = isTeamOwner(p)
+	if not isOwner then
+		outputChatBox("[Team Wars] #ffffffOnly team owners are allowed to choose maps for a team war.", p, 206, 163, 131, true)
+		return
+	end
+	
+	local raceMaps = exports.mapmanager:getMapsCompatibleWithGamemode(getResourceFromName("race"))
+	if not raceMaps then return false end
+	
+	local t = {}
+    for a,b in ipairs(raceMaps) do
+        local name = getResourceInfo(b,"name")
+        local author = getResourceInfo(b,"author")
+        local resname = getResourceName(b)
+
+        if not name then name = resname end
+        if not author then author = "N/A" end
+		
+        local r = {name, author, resname}
+		
+        table.insert(t,r)
+    end
+
+	table.sort(t,function(a,b) return tostring(a[1]) < tostring(b[1]) end)
+	
+	triggerClientEvent(p,"gcshop_teams_fetchMaps_c",resourceRoot,t)
+end
+addEvent("gcshop_teams_fetchMaps_s",true)
+addEventHandler("gcshop_teams_fetchMaps_s",root,fetchMaps)
+
+function fetchQueue_s(p)
+	local t = fetchQueue(p)
+	triggerClientEvent(p,"gcshop_teams_updateTWQueue_c",resourceRoot,t)
+end
+addEvent("gcshop_teams_fetchQueue_s",true)
+addEventHandler("gcshop_teams_fetchQueue_s",root,fetchQueue_s)
+
+function fetchQueue(p)
+	local teamid, isOwner = isTeamOwner(p)
+	
+	local xml = xmlLoadFile("teams/teamwars.xml")
+	if not xml then return end
+	local tms = xmlNodeGetChildren(xml)
+	local t = {}
+	for a,b in ipairs(tms) do
+		if xmlNodeGetAttribute(b, "teamid") == tostring(teamid) then
+			local mps = xmlNodeGetChildren(b)
+			for c,d in ipairs (mps) do
+				local map = xmlNodeGetValue(d)
+				if not map then break end
+				
+				local name = getResourceInfo(getResourceFromName(map), "name")
+				local author = getResourceInfo(getResourceFromName(map), "author")
+				if not author then author = "N/A" end
+				
+				t[c] = {name, author, map}
+			end
+		end
+	end
+	xmlUnloadFile(xml)
+	
+	return t
+end
+
+function fetchTeams()
+	local qh = dbQuery(handlerConnect, "SELECT * FROM `team`")
+	local t = dbPoll(qh,-1)
+	if not t then return false end
+	return t
+end
+
+function fetchMembers()
+	local qh = dbQuery(handlerConnect, "SELECT * FROM `team_members`")
+	local t = dbPoll(qh,-1)
+	if not t then return false end
+	return t
+end
+
+function isTeamOwner(p)
+	local forumID = tonumber(exports.gc:getPlayerForumID(p))
+	local members = fetchMembers()
+	local teams = fetchTeams()
+	if not forumID or not members or not teams then return end
+	
+	local teamid = false
+	for a,b in ipairs(members) do
+		if b.forumid == forumID then teamid = b.teamid end
+	end
+	if not teamid then return end
+	
+	local owner = false
+	for a,b in ipairs(teams) do
+		if b.teamid == teamid then owner = b.owner end
+	end
+	if not owner then return end
+	
+	local isOwner = false
+	if forumID == owner then isOwner = true end
+	
+	return teamid, isOwner
+end
+
+function addMaps(p, resname)
+	local teamid, isOwner = isTeamOwner(p)
+	
+	local bool = false
+	local xml = xmlLoadFile("teams/teamwars.xml")
+	if not xml then return end
+	local tms = xmlNodeGetChildren(xml)
+	for a,b in ipairs(tms) do
+		if xmlNodeGetAttribute(b, "teamid") == tostring(teamid) then
+			bool = true
+			local mps = xmlNodeGetChildren(b)
+			if #mps >= 3 then
+				outputDebugString("Maximum maps added", 0)
+			else
+				local map = xmlCreateChild(b, "map")
+				xmlNodeSetValue(map, resname)
+			end
+		end
+	end
+	if bool == false then
+		local child = xmlCreateChild(xml, "team")
+		xmlNodeSetAttribute(child, "teamid", teamid)
+		local map = xmlCreateChild(child, "map")
+		xmlNodeSetValue(map, resname)
+	end
+	
+	xmlSaveFile(xml)
+	xmlUnloadFile(xml)
+end
+addEvent("gcshop_teams_addMaps_s",true)
+addEventHandler("gcshop_teams_addMaps_s",root,addMaps)
+
+function removeMaps(p, resname)
+	local teamid, isOwner = isTeamOwner(p)
+	
+	local xml = xmlLoadFile("teams/teamwars.xml")
+	if not xml then return end
+	local tms = xmlNodeGetChildren(xml)
+	for a,b in ipairs(tms) do
+		if xmlNodeGetAttribute(b, "teamid") == tostring(teamid) then
+			local mps = xmlNodeGetChildren(b)
+			for c,d in ipairs(mps) do
+				local map = xmlNodeGetValue(d)
+				if map == resname then
+					xmlDestroyNode(d)
+					break
+				end
+			end
+		end
+	end
+	
+	xmlSaveFile(xml)
+	xmlUnloadFile(xml)
+end
+addEvent("gcshop_teams_removeMaps_s",true)
+addEventHandler("gcshop_teams_removeMaps_s",root,removeMaps)
+
+function startTW(p, cmd, arg)
+	if arg then
+		sendTWRequest(p, arg)
+	else
+		acceptTWRequest(p)
+	end
+end
+addCommandHandler("teamwar", startTW, true, true)
+
+function sendTWRequest(challengerPlayer, arg)
+	local challengerTeam, isOwner = isTeamOwner(challengerPlayer)
+	
+	if not isOwner then
+		outputChatBox("[Team Wars] #ffffffOnly team owners are allowed to start a team war.", challengerPlayer, 206, 163, 131, true)
+		return
+	end
+	
+	if getResourceFromName('eventmanager') and getResourceState(getResourceFromName('eventmanager')) == 'running' and exports.eventmanager:isAnyMapQueued(true) then
+		outputChatBox("[Team Wars] #ffffffIt's not possible to start team wars during events.", challengerPlayer, 206, 163, 131, true)
+		return
+	end
+	
+	local teams = fetchTeams()
+	local t = {}
+	for a,b in ipairs(teams) do
+		local match = false
+		local f = string.find(string.lower( tostring(b.name) ),arg)
+		if type(f) == "number" then match = true end
+		if match then table.insert(t,{b.teamid, b.owner, b.name}) end
+	end
+	
+	local players = getElementsByType("player")
+	local members = fetchMembers()
+	local m = {}
+	for a,b in ipairs(players) do
+		local forumID = tonumber(exports.gc:getPlayerForumID(b))
+		for c,d in ipairs(members) do
+			if tostring(d.forumid) == tostring(forumID) then
+				table.insert(m,{b, d.forumid, d.teamid})
+			end
+		end
+	end
+	if #m == 0 then return end
+	
+	local r1 = {}
+	for a,b in ipairs(m) do
+		local match = false
+		for c,d in ipairs(r1) do
+			if tostring(d) == tostring(b[3]) then match = true end
+		end
+		if not match then table.insert(r1,b[3]) end
+	end
+	
+	local victimTeam
+	local r2 = {}
+	for a,b in ipairs(r1) do
+		local match = false
+		for c,d in ipairs(t) do
+			if tostring(b) == tostring(d[1]) then
+				match = true
+				outputDebugString("Matching team: " .. d[3],0)
+			end
+		end
+		if match then table.insert(r2, b) end
+	end
+	if #r2 > 1 then
+		outputChatBox("[Team Wars] #ffffffFound more than 1 matching team, try to choose something more specific.", challengerPlayer, 206, 163, 131, true)
+		return
+	else
+		victimTeam = r2[1]
+	end
+	
+	local challengerTeamName
+	local victimTeamName
+	for a,b in ipairs(teams) do
+		if tostring(b.teamid) == tostring(challengerTeam) then challengerTeamName = b.name end
+		if tostring(b.teamid) == tostring(victimTeam) then victimTeamName = b.name end
+	end
+	
+	local victimForumID
+	for a,b in ipairs(t) do
+		if tostring(b[1]) == tostring(victimTeam) then
+			victimForumID = b[2]
+		end
+	end
+	
+	local victimPlayer
+	for a,b in ipairs(m) do
+		if tostring(b[2]) == tostring(victimForumID) then
+			victimPlayer = b[1]
+		end
+	end
+	
+	local match = false
+	for a,b in ipairs(teamwars) do
+		if b[1] == challengerPlayer and b[2] == victimPlayer then match = true end
+	end
+	if match then
+		outputChatBox("[Team Wars] #ffffffYou already challenged " .. victimTeamName .. ".", challengerPlayer, 206, 163, 131, true)
+		return
+	else
+		cleanupTW(challengerPlayer, victimPlayer)
+		table.insert(teamwars, {challengerPlayer, victimPlayer})
+		outputChatBox("[Team Wars] #ffffffYou challenged " .. victimTeamName .. " for a team war.", challengerPlayer, 206, 163, 131, true)
+		outputChatBox("[Team Wars] #ffffff" .. challengerTeamName .. " challenged you for a team war!", victimPlayer, 206, 163, 131, true)
+		outputChatBox("[Team Wars] #ffffffType /teamwar to accept the challenge.", victimPlayer, 206, 163, 131, true)
+	end
+end
+
+function acceptTWRequest(victimPlayer)
+	local challengerPlayer
+	local match = false
+	for a,b in ipairs(teamwars) do
+		if b[2] == victimPlayer then
+			match = true
+			challengerPlayer = b[1]
+		end
+	end
+	if getResourceFromName('eventmanager') and getResourceState(getResourceFromName('eventmanager')) == 'running' and exports.eventmanager:isAnyMapQueued(true) then
+		outputChatBox("[Team Wars] #ffffffIt's not possible to start team wars during events.", victimPlayer, 206, 163, 131, true)
+		return
+	end
+	if not match then
+		outputChatBox("[Team Wars] #ffffffYou are not challenged for a team war.", victimPlayer, 206, 163, 131, true)
+		outputChatBox("[Team Wars] #ffffffType /teamwar <team name> to challenge a team.", victimPlayer, 206, 163, 131, true)
+		return
+	else
+		cleanupTW(challengerPlayer, victimPlayer)
+	end
+	
+	local challengerTeam, isChallengerOwner = isTeamOwner(challengerPlayer)
+	local victimTeam, isVictimOwner = isTeamOwner(victimPlayer)
+	
+	if not isChallengerOwner or not isVictimOwner then
+		--outputChatBox("at least 1 player is not owner")
+		return
+	end
+	
+	local teams = fetchTeams()
+	local t = {}
+	for a,b in ipairs(teams) do
+		table.insert(t,{b.teamid, b.owner, b.name})
+	end
+	
+	local challengerTeamName
+	local victimTeamName
+	for a,b in ipairs(t) do
+		if tostring(b[1]) == tostring(challengerTeam) then challengerTeamName = b[3] end
+		if tostring(b[1]) == tostring(victimTeam) then victimTeamName = b[3] end
+	end
+	
+	outputChatBox("[Team Wars] #ffffff" .. challengerTeamName .. " accepted your team war!", challengerPlayer, 206, 163, 131, true)
+	
+	local cha_t = fetchQueue(challengerPlayer)
+	local vic_t = fetchQueue(victimPlayer)
+	local maps = {}
+	for a,b in ipairs(cha_t) do table.insert(maps,b) end
+	for a,b in ipairs(vic_t) do table.insert(maps,b) end
+	
+	local bool = exports.eventmanager:startTeamWar(challengerTeam, victimTeam, maps)
+	if bool then
+		outputChatBox("[Team Wars] #ffffffA team war between " .. challengerTeamName .. " and " .. victimTeamName .. " will start shortly!", getRootElement(), 206, 163, 131, true)
+	else
+		outputChatBox("[Team Wars] #ffffffOops, something went wrong. The team war was not started.", challengerPlayer, 206, 163, 131, true)
+		outputChatBox("[Team Wars] #ffffffOops, something went wrong. The team war was not started.", victimPlayer, 206, 163, 131, true)
+	end
+end
+
+function cleanupTW(p1, p2)
+	local i = #teamwars
+	while i > 0 do
+		if teamwars[i][1] == p1 or teamwars[i][2] == p2 or not getPlayerNametagText(teamwars[i][1]) or not getPlayerNametagText(teamwars[i][2]) then
+			table.remove(teamwars, i)
+		end
+		i = i - 1
+	end
 end

@@ -231,6 +231,7 @@ function addTime(player,checkpoint,time)
 		if prevTime then
 			local diff = -(time - prevTime)
 			g_delay[player] = {diff,getTickCount()}
+			--outputDebugString("1 " .. type(g_delay[player]) .. " 2 " .. type(player) .. " 3 " .. type(diff), 0)
 		end
 	end
 end

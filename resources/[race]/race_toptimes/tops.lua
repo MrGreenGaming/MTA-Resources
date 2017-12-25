@@ -253,7 +253,7 @@ function updatePlayerTop(player, rank, value)
 		newTime = value
 		if not toptime then
 			q = [[	
-					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname` ) VALUES (?,?,?,?);
+					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname` ) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE date=VALUES(date), value=VALUES(value);
 					INSERT INTO `maps`( `resname`,`mapname`, `racemode` ) VALUES (?,?,?) ON DUPLICATE KEY UPDATE resname=resname;
 				]]
 			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), country = exports.geoloc:getPlayerCountry(player), new=true})

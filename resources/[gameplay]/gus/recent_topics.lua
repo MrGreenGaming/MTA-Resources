@@ -28,7 +28,7 @@ addEventHandler('onPlayerChat', root, delayFetch);
 function fetch()
 	fetchRemote ( url , fetchCallback );
 end
-addCommandHandler('recent', fetch);
+-- addCommandHandler('recent', fetch);
 
 function fetchCallback ( data, errno, ... )
 	if (errno ~= 0) then

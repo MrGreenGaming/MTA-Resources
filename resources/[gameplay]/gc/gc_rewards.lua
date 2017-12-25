@@ -70,6 +70,7 @@ function updatePlaytimes()
 				local hourstring, anotherString = " hours",  " another "
 				if hoursPlayed == 1 then hourstring = " hour" anotherString = " an " end
 				local reward = math.floor (rewardPerHour / ( getElementData(p, 'player state') ~= 'away' and 1 or 2))
+				if isHoliday() then reward = reward * 2 end
 				outputChatBox ( prefix .. "#00FF00 You have been rewarded " .. tostring(reward) .. " Green-Coins for playing for"..anotherString.."hour! (" .. tostring(hoursPlayed) .. hourstring .. ")", p, 0, 255, 0, true)
 				-- outputDebugString("Player: "..getPlayerName(p).." triggered time reward ("..hoursPlayed.."H)")
 				addPlayerGreencoins(p, reward)
@@ -188,7 +189,8 @@ function finish(rank)
 			rewarded_Players[player] = {}
 		end
 		rewarded_Players[player].finishReward = calcFinishReward(player, rank)
-		rewarded_Players[player].rank = rank 
+		rewarded_Players[player].rank = rank
+		if isHoliday() then rewarded_Players[player].finishReward = rewarded_Players[player].finishReward * 2 end
 		
 		if rewarded_Players[player].finishReward > 1 then
 			addPlayerGreencoins(player, rewarded_Players[player].finishReward)

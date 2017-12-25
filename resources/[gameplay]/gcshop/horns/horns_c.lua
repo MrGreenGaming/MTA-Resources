@@ -304,23 +304,76 @@ hornsTable = {
 	[301] = "Ryder - shit, man",
 	[302] = "Pingu - Noot noot!",
 	[303] = "Pingu - Angry noot noot!",
-	[304] = "Would You Feel",
-	[305] = "Andre&Michelle",
-	[306] = "Five Hours",
-	[307] = "Gimme More",
-	[308] = "Hard Style",
-	[309] = "Hit'em Up",
-	[310] = "Holy Wars",
-	[311] = "Omen",
-	[312] = "Out Of Space",
-	[313] = "Peace Sells",
-	[314] = "Ready4Pumpin",
-	[315] = "Royal Flush",
-	[316] = "R U Ready",
-	[317] = "Still D.R.E. beat"
-	[318] = "VooDoo People",
-	[319] = "Wind Of Change",	
-	
+	[304] = "Me Arnold Swarzenegger",
+	[305] = "Learning computer",
+	[306] = "John Kimble",
+	[307] = "Aaarg",
+	[308] = "How are you",
+	[309] = "Arnold song",
+	[310] = "Women respect",
+	[311] = "Fuck you asshole",
+	[312] = "Don't do that",
+	[313] = "Ryder nigga",
+	[314] = "Relax man",
+	[315] = "All we had to do was follow the damn train",
+	[316] = "Aah oeh oeh",
+	[317] = "Law have mercy on me",
+	[318] = "Come on damn bitch",
+	[319] = "Slowmotion ooh",
+	[320] = "Keep up motherfucker",
+	[321] = "Darude - Russian Sandstorm",
+	[322] = "I smoke 2 joints",
+	[323] = "Worthless Madafuca",
+	[324] = "Weher the hood",
+	[325] = "Wasted",
+	[326] = "Osas",
+	[327] = "TRIPALOSKY",
+	[328] = "FUCK HER RIGHT IN THE PU**Y",
+	[329] = "Take Out Your Clothes",
+	[330] = "Surprise muthafucka",
+	[331] = "Stig Song",
+	[332] = "Siuu",
+	[333] = "Shooting Stars",
+	[334] = "Sandy Polish Song",
+	[335] = "Pokemon GO EveryDay",
+	[336] = "Oh no its retarded",
+	[337] = "Move Bii Get Out",
+	[338] = "Lose my mind",
+	[339] = "John Cena",
+	[340] = "Ice Ice Baby",
+	[341] = "I Dont Fuck With U",
+	[342] = "How Could This Happen To Me",
+	[343] = "Ho Ho Ho Muthafucka!",
+	[344] = "FU*K YOU",
+	[345] = "First blood",
+	[346] = "Evil Laugh",
+	[347] = "Epic Sax Boy",
+	[348] = "Eat a sack of baby d-cks!",
+	[349] = "EA Sports",
+	[350] = "Dont Worry Be happy",
+	[351] = "DO IT JUST DO IT",
+	[352] = "Courage Laugh",
+	[353] = "China China China Trump",
+	[354] = "Can't be stopped",
+	[355] = "Boom Headshot",
+	[356] = "aint nobody fuckin my wife",
+	[357] = "aaaaaaaa laugh",
+	[358] = "Dota",
+	[359] = "Fuck it all",
+	[360] = "My D*ck Is Big",
+	[361] = "Ouuh MotherF*cker",
+	[362] = "Tic Tac MotherF*cker",
+	[363] = "Hey Newbo",
+	[364] = "U Got One Shoot",
+	[365] = "Vadia Vadia",
+	[366] = "Wuajaja",
+	[367] = "Bruh",
+	[368] = "Five Hours",
+	[369] = "Omen",
+	[370] = "Out Of Space",
+	[371] = "Ready4Pumpin",
+	[372] = "Still D.R.E. beat"
+	[373] = "VooDoo People",
 }
 
 
@@ -624,7 +677,7 @@ killOtherTimer = {}
 local screenSizex, screenSizey = guiGetScreenSize()
 local guix = screenSizex * 0.1
 local guiy = screenSizex * 0.1
-local globalscale = 1
+local globalscale = 1.35
 local globalalpha = 1
 icon = {}
 
@@ -653,17 +706,17 @@ function createSoundForCar(car, horn)
 		if target then
 			playerx, playery, playerz = getElementPosition(target)
 		end
-		cp_x, cp_y, cp_z = getElementPosition( car)
+		cp_x, cp_y, cp_z = getElementPosition( car )
 		local dist = getDistanceBetweenPoints3D ( cp_x, cp_y, cp_z, playerx, playery, playerz )
-		if dist and dist < 40 and ( isLineOfSightClear(cp_x, cp_y, cp_z+1.2, playerx, playery, playerz, true, false, false, false )) then
-			local screenX, screenY = getScreenFromWorldPosition ( cp_x, cp_y, cp_z+1.2 )
+		if dist and dist < 40 and ( isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false )) then
+			local screenX, screenY = getScreenFromWorldPosition ( cp_x, cp_y, cp_z )
 			local scaled = screenSizex * (1/(2*(dist+5))) *.85
 			local relx, rely = scaled * globalscale, scaled * globalscale
 			
 			guiSetAlpha(icon[car], globalalpha)
 			guiSetSize(icon[car], relx, rely, false)
 			if(screenX and screenY) then
-				guiSetPosition(icon[car], screenX, screenY, false)
+				guiSetPosition(icon[car], screenX-relx/2, screenY-rely/1.3, false)
 				guiSetVisible(icon[car], true)
 			else
 				guiSetVisible(icon[car], false)

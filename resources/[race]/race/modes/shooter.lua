@@ -86,7 +86,35 @@ end
 
 
 function Shooter:timeout()
-	Shooter:handlePlayerWin(self:updateRanks()[1],Shooter.playerLevels)
+	if shooterMode == "cargame" then
+		Shooter:handlePlayerWin(self:updateRanks()[1],Shooter.playerLevels)
+	else
+		local activePlayers = getActivePlayers()
+
+		if #activePlayers == 2 then
+			if type(getElementData(activePlayers[1], "kills")) == "number" and type(getElementData(activePlayers[2], "kills")) == "number" then
+				--outputChatBox(getPlayerName(activePlayers[1])..": "..getElementData(activePlayers[1], "kills").." - "..getPlayerName(activePlayers[2])..": "..getElementData(activePlayers[2], "kills"))
+				if getElementData(activePlayers[1], "kills") < getElementData(activePlayers[2], "kills") then
+					self:handleFinishActivePlayer(activePlayers[1])
+				elseif getElementData(activePlayers[2], "kills") < getElementData(activePlayers[1], "kills") then
+					self:handleFinishActivePlayer(activePlayers[2])
+				end
+			elseif type(getElementHealth(getPedOccupiedVehicle(activePlayers[1]))) == "number" and type(getElementHealth(getPedOccupiedVehicle(activePlayers[2]))) == "number" then
+				--outputChatBox(getPlayerName(activePlayers[1])..": "..getElementHealth(getPedOccupiedVehicle(activePlayers[1])).." - "..getPlayerName(activePlayers[2])..": "..getElementHealth(getPedOccupiedVehicle(activePlayers[2])))
+				if getElementHealth(getPedOccupiedVehicle(activePlayers[1])) < getElementHealth(getPedOccupiedVehicle(activePlayers[2])) then
+					self:handleFinishActivePlayer(activePlayers[1])
+				elseif getElementHealth(getPedOccupiedVehicle(activePlayers[2])) < getElementHealth(getPedOccupiedVehicle(activePlayers[1])) then
+					self:handleFinishActivePlayer(activePlayers[2])
+				end
+			else
+				self:handleFinishActivePlayer(activePlayers[math.random(1, 2)])
+			end
+		elseif #activePlayers >= 2 then
+			for i=1, #activePlayers do
+				self:handleFinishActivePlayer(activePlayers[i])
+			end
+		end
+	end
 end
 
 
@@ -537,17 +565,18 @@ Shooter.__Levels = { -- cache Levels with all possible vehicles in it, will get 
 
 function Shooter:start()
 	local currentMap = exports.mapmanager:getRunningGamemodeMap()
-	local round = (times[currentMap] or 0) + 1
+	--Uncomment this if you want to make SH->CG->SH order (1st round SH, 2nd CG, 3rd SH)
+	--[[local round = (times[currentMap] or 0) + 1
 	if round == 1 then
 		shooterMode = "shooter"
 	elseif round == 2 or round > 3 then
 		shooterMode = "cargame"
 	elseif round == 3 then
 		shooterMode = "shooter" 
-	end
+	end]]
 
 	if shooterMode == "cargame" then
-		outputChatBox("Shooter launched in CarGame mode, next mode : Shooter",root,0,255,0)
+		--outputChatBox("Shooter launched in CarGame mode, next mode : Shooter",root,0,255,0)
 		Shooter.spawnProtectionCountdown = {}
 		Shooter.playerRespawnTimers = {}
 		Shooter.UpdateLevels = true
@@ -592,7 +621,7 @@ function Shooter:start()
 		end
 		
 	else
-		outputChatBox("Shooter launched in Shooter mode, next mode : CarGame",root,0,255,0)
+		--outputChatBox("Shooter launched in Shooter mode, next mode : CarGame",root,0,255,0)
 		local options = {
 			duration = 5 * 60 * 1000,
 			respawn = 'none',

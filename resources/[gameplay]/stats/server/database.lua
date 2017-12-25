@@ -99,7 +99,7 @@ end
 --- Query Player Stats from MySQL and cache them ---
 ----------------------------------------------------
 function cachePlayerStats(tableForumIDs)
-	if not database then outputDebugString(resName..": no db connection", 0, 255, 0, 0) return false end
+	if not database then return false end
 	
 	local query = dbQuery(database, "SELECT * FROM `stats` WHERE forumID IN(??)", table.concat(tableForumIDs, ','))
 	local result = dbPoll(query, -1)
@@ -190,7 +190,7 @@ end
 ----------------------------------
 function savePlayerSpecificStats(tableForumIDs, logout)
 	if not tableForumIDs then return false end
-	if not database then outputDebugString(resName..": savePlayerSpecificStats() - no db connection", 0, 255, 0, 0) return false end
+	if not database then return false end
 	
 	local queryString = ""
 	local debugString = ""

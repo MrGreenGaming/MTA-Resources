@@ -76,6 +76,10 @@ local mutes = {}
 local lastchatid, lastchatnick
 
 function discordmutelast(p, c)
+	if not hasObjectPermissionTo(p, 'command.mute') then
+		outputDebugString('no access to discord command')
+		return
+	end
 	if not lastchatid then
 		outputChatBox('No last discord chatter', p, 255,0,0)
 	else
@@ -83,9 +87,13 @@ function discordmutelast(p, c)
 		mutes[lastchatid] = getPlayerName(p)
 	end
 end
-addCommandHandler('discordmutelast', discordmutelast, true)
+addCommandHandler('discordmutelast', discordmutelast)
 
 function discordmuteid(p, c, id)
+	if not hasObjectPermissionTo(p, 'command.mute') then
+		outputDebugString('no access to discord command')
+		return
+	end
 	if not id then
 		outputChatBox('usage: /discordmuteid <discordid>', p, 255,0,0)
 	else
@@ -93,9 +101,13 @@ function discordmuteid(p, c, id)
 		mutes[id] = getPlayerName(p)
 	end
 end
-addCommandHandler('discordmuteid', discordmuteid, true)
+addCommandHandler('discordmuteid', discordmuteid)
 
 function discordunmuteid(p, c, id)
+	if not hasObjectPermissionTo(p, 'command.mute') then
+		outputDebugString('no access to discord command')
+		return
+	end
 	if not id then
 		outputChatBox('usage: /discordunmuteid <discordid>', p, 255,0,0)
 	else
@@ -103,7 +115,7 @@ function discordunmuteid(p, c, id)
 		mutes[id] = nil
 	end
 end
-addCommandHandler('discordunmuteid', discordunmuteid, true)
+addCommandHandler('discordunmuteid', discordunmuteid)
 
 function discordmutes(p, c)
 	outputChatBox('Discord mutes: ', p, 255,0,0)
@@ -111,7 +123,7 @@ function discordmutes(p, c)
 		outputChatBox('Discord user ' .. id .. ' muted by ' .. by, p, 255,0,0)
 	end
 end
-addCommandHandler('discordmutes', discordmutes, true)
+addCommandHandler('discordmutes', discordmutes)
 
 addEvent("onDiscordPacket")
 addEventHandler("onDiscordPacket", root,

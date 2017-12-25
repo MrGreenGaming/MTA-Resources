@@ -208,9 +208,16 @@ addCommandHandler("autologin",
 	end
 )
 
+addCommandHandler("mapflash", function()
+	dontMapFlash = not dontMapFlash
+end)
+
 MapSound = {}
 function detectMap(theRes)
     if #getElementsByType('spawnpoint', source) > 0 then
+		if not dontMapFlash then
+			setWindowFlashing(true, 0)
+		end
         MapSound = getElementsByType( "sound", source )
         for f, u in pairs(MapSound) do
             setSoundPaused( u, true )
