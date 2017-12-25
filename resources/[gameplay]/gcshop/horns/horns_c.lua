@@ -368,6 +368,9 @@ hornsTable = {
 	[365] = "Vadia Vadia",
 	[366] = "Wuajaja",
 	[367] = "Bruh",
+	[368] = "The Ting Go Skrra",
+	[369] = "Spooky Scary Skeletons",
+	[370] = "Gibberish",
 
 }
 
