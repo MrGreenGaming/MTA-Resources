@@ -368,7 +368,12 @@ hornsTable = {
 	[365] = "Vadia Vadia",
 	[366] = "Wuajaja",
 	[367] = "Bruh",
-
+	[368] = "Five Hours",
+	[369] = "Omen",
+	[370] = "Out Of Space",
+	[371] = "Ready4Pumpin",
+	[372] = "Still D.R.E. beat"
+	[373] = "VooDoo People",
 }
 
 
