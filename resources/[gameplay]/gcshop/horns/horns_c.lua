@@ -383,6 +383,8 @@ hornsTable = {
 	[380] = "The Ting Go Skrra",
 	[381] = "Spooky Scary Skeletons",
 	[382] = "Gibberish",
+	[383] = "Haka",
+	[384] = "Turn Down For What",
 }
 
 
