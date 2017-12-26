@@ -376,6 +376,13 @@ hornsTable = {
 	[373] = "VooDoo People",
 	[374] = "ESKETIIIT",
 	[375] = "EsketitEsketitESKETIIIT",
+	[376] = "Hello There",
+	[377] = "Retard",
+	[378] = "Why you heff to be mad",
+	[379] = "You spin me right round",
+	[380] = "The Ting Go Skrra",
+	[381] = "Spooky Scary Skeletons",
+	[382] = "Gibberish",
 }
 
 
