@@ -260,7 +260,7 @@ hornsTable = {
 	[257] = "Que boludo - Coco Basile",
 	[258] = "Surface",
 	[259] = "The Trooper",
-    [260] = "GLP Dubstep",
+    	[260] = "GLP Dubstep",
 	[261] = "Espectacular",
 	[262] = "I Am Optimus Prime",
 	[263] = "NyanCat",
@@ -368,9 +368,14 @@ hornsTable = {
 	[365] = "Vadia Vadia",
 	[366] = "Wuajaja",
 	[367] = "Bruh",
-	[368] = "ESKETIIIT",
-	[369] = "EsketitEsketitESKETIIIT",
-
+	[368] = "Five Hours",
+	[369] = "Omen",
+	[370] = "Out Of Space",
+	[371] = "Ready4Pumpin",
+	[372] = "Still D.R.E. beat",
+	[373] = "VooDoo People",
+	[374] = "ESKETIIIT",
+	[375] = "EsketitEsketitESKETIIIT",
 }
 
 
