@@ -374,6 +374,8 @@ hornsTable = {
 	[371] = "Ready4Pumpin",
 	[372] = "Still D.R.E. beat",
 	[373] = "VooDoo People",
+	[374] = "ESKETIIIT",
+	[375] = "EsketitEsketitESKETIIIT",
 }
 
 
