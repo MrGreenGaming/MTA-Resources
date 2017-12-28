@@ -1,0 +1,10 @@
+<meta>
+    <info author="AleksCore" type="script" name="Data Saving System" description="Save and load all settings in one file stored client-side by using exported functions" version="0.0.1" />
+	
+	<script src="main_c.lua" type="client"/>
+	<script src="default_settings_c.lua" type="client"/> <!-- Here you can setup default settings. -->
+	
+	<!-- Last argument optional for both functions below. Default argument is the resource name of the resource which called the exported function. -->
+	<export function="setLocalData" type="client" /> <!-- Usage: exports.datasaves:setLocalData(key, value [, resourceName]); Returns true if value was successfully set, false otherwise. -->
+	<export function="getLocalData" type="client" /> <!-- Usage: exports.datasaves:getLocalData(key, [, resourceName]); Returns the value of the key if it was received successfully, nil otherwise.  -->
+</meta>
