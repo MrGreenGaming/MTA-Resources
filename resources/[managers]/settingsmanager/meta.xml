@@ -1,0 +1,8 @@
+<meta>
+    <info author="AleksCore" type="script" name="Settings Manager" description="Saves/Loads player settings in/from private XML file stored client-side." version="0.0.3" />
+	
+	<script src="settingsmanager_client.lua" type="client"/>
+	
+	<export function="saveSetting" type="client" /> 
+	<export function="loadSetting" type="client" /> 
+</meta>

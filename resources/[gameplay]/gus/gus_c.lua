@@ -209,18 +209,22 @@ addCommandHandler("autologin",
 )
 
 addCommandHandler("mapflash", function()
-	dontMapFlash = not exports.datasaves:getLocalData("dontMapFlash")
+	dontMapFlash = not exports.settingsmanager:loadSetting("dontMapFlash")
 	if dontMapFlash then
 		outputChatBox("#ffffff* Taskbar flashing on map change was #ff0000DISABLED", 255, 0, 0, true)
 	else
 		outputChatBox("#ffffff* Taskbar flashing on map change was #00FF00ENABLED", 0, 255, 0, true)
 	end
-	exports.datasaves:setLocalData("dontMapFlash", dontMapFlash)
+	exports.settingsmanager:saveSetting("dontMapFlash", dontMapFlash)
 end)
 
 MapSound = {}
 function detectMap(theRes)
-	dontMapFlash = exports.datasaves:getLocalData("dontMapFlash")
+	dontMapFlash = exports.settingsmanager:loadSetting("dontMapFlash")
+	if dontMapFlash == nil then --if not set
+		dontMapFlash = false --set defaults
+		exports.settingsmanager:saveSetting("dontMapFlash", false) --and save
+	end
     if #getElementsByType('spawnpoint', source) > 0 then
 		if not dontMapFlash then
 			setWindowFlashing(true, 0)

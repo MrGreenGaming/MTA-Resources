@@ -23,7 +23,7 @@
     <file src="chat.png" />
     <file src="text.png" />
     <include resource="freecam" />
-	<include resource="datasaves" />
+	<include resource="settingsmanager" />
     
     <min_mta_version server="1.3.0-9.03739"></min_mta_version>
 
