@@ -385,6 +385,9 @@ hornsTable = {
 	[382] = "Gibberish",
 	[383] = "Haka",
 	[384] = "Turn Down For What",
+	[385] = "Fuck My Door",
+	[386] = "MrGreen Drift",
+	[387] = "Au Au",
 }
 
 
