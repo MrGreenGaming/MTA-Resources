@@ -122,6 +122,7 @@
     <export function="getWhichDataSourceToUse" type="client" />
     <export function="getWatchedPlayer" type="client" />
     <export function="e_getPickups" type="client" />
+	<export function="enableNametags" type="client" />
     <export function="getShooterMode" type="server" />
 	<export function="export_setPlayerVehicle" type="server" />
 	

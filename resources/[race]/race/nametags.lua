@@ -2,6 +2,7 @@ nametag = {}
 local nametags = {}
 local g_screenX,g_screenY = guiGetScreenSize()
 local bHideNametags, bOnlyHealthBar = false, false
+local bEnableNametags = true -- use enableNametags() to change it
 
 enableCustomNametags = false
 -- Vanilla nametag values --
@@ -94,8 +95,7 @@ function nametag.destroy ( player )
 	nametags[player] = nil
 end
 
-addEventHandler ( "onClientRender", g_Root,
-	function()
+function nametagHandler()
 		-- Hideous quick fix --
 		for i,player in ipairs(g_Players) do
 			if player ~= g_Me then
@@ -254,8 +254,8 @@ addEventHandler ( "onClientRender", g_Root,
 				break
 			end
 		end
-	end
-)
+end
+addEventHandler ( "onClientRender", g_Root, nametagHandler)
 
 
 ---------------THE FOLLOWING IS THE MANAGEMENT OF NAMETAGS-----------------
@@ -306,3 +306,23 @@ end
 function showOnlyHealthBar ( bool )	-- reset on map switch
 	bOnlyHealthBar = not not bool
 end
+
+-- use /enablenametags or exports.race:enableNametags(false|true)
+-- "mode" parameter is optional
+function enableNametags(mode) 
+
+	if type(mode) == "boolean" then
+		bEnableNametags = mode
+    -- no parameter was received
+	else bEnableNametags = not bEnableNametags 
+	end
+	
+	if bEnableNametags then
+		addEventHandler("onClientRender", g_Root, nametagHandler)
+		outputConsole("Showing nametags.")
+	else
+		removeEventHandler("onClientRender", g_Root, nametagHandler) 
+		outputConsole("Hiding nametags.")
+	end
+end -- function
+addCommandHandler("enablenametags", enableNametags)
