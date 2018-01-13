@@ -309,20 +309,30 @@ end
 
 -- use /enablenametags or exports.race:enableNametags(false|true)
 -- "mode" parameter is optional
-function enableNametags(mode) 
-
+function enableNametags(mode)
+    -- check function parameter
 	if type(mode) == "boolean" then
 		bEnableNametags = mode
-    -- no parameter was received
-	else bEnableNametags = not bEnableNametags 
+	else bEnableNametags = not bEnableNametags
 	end
 	
+	-- show
 	if bEnableNametags then
 		addEventHandler("onClientRender", g_Root, nametagHandler)
 		outputConsole("Showing nametags.")
+	-- hide
 	else
-		removeEventHandler("onClientRender", g_Root, nametagHandler) 
+		removeEventHandler("onClientRender", g_Root, nametagHandler)
+		-- hide default nametags too (they keep reappearing)
+		addEventHandler("onClientMapStarting", g_Root,
+			function()
+				for key, player in ipairs(getElementsByType("player")) do 
+					setPlayerNametagShowing(player, false)
+				end 
+			end
+		)
 		outputConsole("Hiding nametags.")
 	end
 end -- function
 addCommandHandler("enablenametags", enableNametags)
+-- addEvent("onClientMapStarting", true) -- might need this
