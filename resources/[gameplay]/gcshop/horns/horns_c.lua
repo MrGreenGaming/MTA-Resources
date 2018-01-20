@@ -385,8 +385,13 @@ hornsTable = {
 	[382] = "Gibberish",
 	[383] = "Haka",
 	[384] = "Turn Down For What",
-}
-
+}       [385] = "Kylie",
+        [386] = "KungFlo Fighthing",
+        [387] = "Suck a Dick",
+        [388] = "Where the weed",
+        [389] = "Broken Record",
+        [390] = "Kings Never Die",
+        [391] = "Fuck this pussy boy",
 
 
 function onShopInit ( tabPanel )
