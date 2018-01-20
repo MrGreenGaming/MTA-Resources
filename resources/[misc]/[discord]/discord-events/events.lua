@@ -134,6 +134,7 @@ addEventHandler("onDiscordPacket", root,
             outputServerLog(("DISCORD: %s: %s"):format(payload.author.name, payload.message.text))
             outputChatBox(("#69BFDB[Đ] #FFFFFF%s: #E7D9B0%s"):format(payload.author.name, payload.message.text), root, 255, 255, 255, true)
             exports.discord:send("chat.confirm.message", { author = payload.author.name, message = payload.message })
+	     exports.irc:outputIRC(("7* [DISCORD] %s: %s"):format(payload.author.name, payload.message.text))
         elseif packet == "text.command" then
             triggerEvent("onDiscordUserCommand", resourceRoot, payload.author, payload.message)
         end
