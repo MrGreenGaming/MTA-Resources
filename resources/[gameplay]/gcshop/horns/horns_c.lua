@@ -348,12 +348,14 @@ hornsTable = {
 	[345] = "First blood",
 	[346] = "Evil Laugh",
 	[347] = "Epic Sax Boy",
+
 	[348] = "Eat a sack of baby d-cks!",
 	[349] = "EA Sports",
 	[350] = "Dont Worry Be happy",
 	[351] = "DO IT JUST DO IT",
 	[352] = "Courage Laugh",
 	[353] = "China China China Trump",
+
 	[354] = "Can't be stopped",
 	[355] = "Boom Headshot",
 	[356] = "aint nobody fuckin my wife",
@@ -384,8 +386,8 @@ hornsTable = {
 	[381] = "Spooky Scary Skeletons",
 	[382] = "Gibberish",
 	[383] = "Haka",
-	[384] = "Turn Down For What",
-}
+	[384] = "Dont Poison"
+        [385] = "Davis"
 
 
 
