@@ -706,13 +706,16 @@ function createSoundForCar(car, horn)
 
 	local sound = playSound3D(horn, x, y, z, false) -- Horn argument is passed as path
 	setSoundMaxDistance(sound, 50)
+	setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch as gamespeed changes
 	local length = getSoundLength(sound)
 	length = length * 1000
+	
+	-- update horn icon position/alpha
 	soundTimer[car] = setTimer(function(sound, car)
 		if not isElement(sound) or not isElement(car) then return end
 		local rx,ry,rz = getElementPosition(car)
 		setElementPosition(sound, rx, ry, rz)
-		
+		setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch 
 		
 		local target = getCameraTarget()
 		local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
@@ -737,9 +740,7 @@ function createSoundForCar(car, horn)
 		else
 		 guiSetVisible(icon[car], false)
 		end
-		
-		
-		
+	
 	end, 50, 0, sound,car)
 	
 	killOtherTimer[car] = setTimer(function(theTimer, car) if isTimer(theTimer) then killTimer(theTimer) if isElement(icon[car]) then destroyElement(icon[car]) end end  end, length, 50, soundTimer[car], car)
