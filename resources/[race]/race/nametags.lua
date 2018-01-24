@@ -308,9 +308,9 @@ function showOnlyHealthBar ( bool )	-- reset on map switch
 end
 
 -- use /enablenametags or exports.race:enableNametags(false|true)
--- "mode" parameter is optional
+-- toggle player names and health bars
 function enableNametags(mode)
-    -- check function parameter
+    -- check function parameter, "mode" is optional
 	if type(mode) == "boolean" then
 		bEnableNametags = mode
 	else bEnableNametags = not bEnableNametags
@@ -323,16 +323,19 @@ function enableNametags(mode)
 	-- hide
 	else
 		removeEventHandler("onClientRender", g_Root, nametagHandler)
-		-- hide default nametags too (they keep reappearing)
-		addEventHandler("onClientMapStarting", g_Root,
-			function()
-				for key, player in ipairs(getElementsByType("player")) do 
-					setPlayerNametagShowing(player, false)
-				end 
-			end
-		)
 		outputConsole("Hiding nametags.")
 	end
 end -- function
 addCommandHandler("enablenametags", enableNametags)
 -- addEvent("onClientMapStarting", true) -- might need this
+
+-- hide default nametags too (they kept reappearing)
+addEventHandler("onClientMapStarting", g_Root,
+	function()
+		if bEnableNametags == false then
+			for key, player in ipairs(getElementsByType("player")) do 
+				setPlayerNametagShowing(player, false)
+			end 
+		end
+	end -- function
+)
