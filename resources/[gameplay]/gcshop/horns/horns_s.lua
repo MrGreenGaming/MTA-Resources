@@ -239,11 +239,44 @@ end
 )
 
 function playerUsingHorn_s(horn,car)
-	if (getElementData(source, "state") == "alive") then
+	if getElementData(source, "state") == "alive" and getPedOccupiedVehicle(source) then
+		if horn == 389 then -- Wololo horn from Age of Empires 2. Changes target's vehicle color to the color of the source's vehicle.
+			local c = {}
+			local c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12] = getVehicleColor(getPedOccupiedVehicle(source), true)
+			local d = {} -- delta
+			local s = {} -- source
+			local t = {} -- target
+			local dis = {50, false}
+			
+			local p = getElementsByType("player")
+			local dim = getElementData(source, "dim")
+			s[1],s[2],s[3] = getElementPosition(getPedOccupiedVehicle(localPlayer))
+			
+			for a,b in ipairs(p) do
+				if getElementData(b, "state") == "alive" and getElementData(b, "dim") == dim and getPedOccupiedVehicle(b) then
+					t[1],t[2],t[3] = getElementPosition(getPedOccupiedVehicle(b))
+					d[1] = s[1] - t[1] -- pythagoras
+					d[2] = s[2] - t[2]
+					d[3] = s[3] - t[3]
+					local py = math.pow ( math.pow( math.pow(d[1],2) + math.pow(d[2],2) , 0.5) + math.pow(d[3],2) , 0.5)
+					
+					if py < dis[1] then
+						dis[1] = py
+						dis[2] = b
+					end
+				end
+			end
+			
+			if dis[1] < 50 and getPedOccupiedVehicle(dis[2]) and getElementData(dis[2], "state") == "alive" then
+				outputDebugString("Player: " .. getPlayerNametagText(source) .. " is the nearest on " .. dis[1] .. " distance", 0)
+				setVehicleColor(getPedOccupiedVehicle(dis[2]), c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12])
+			end
+		end
 		--local x,y,z = getElementPosition(getPedOccupiedVehicle(localPlayer))
-		outputDebugString("Player: " .. getPlayerNametagText(source) .. " hornID: " .. horn, 0)
+		--outputDebugString("Player: " .. getPlayerNametagText(source) .. " hornID: " .. horn, 0)
 			
 	end	
 end
 addEvent("onPlayerUsingHorn_s", true)
 addEventHandler("onPlayerUsingHorn_s", root,playerUsingHorn_s)
+
