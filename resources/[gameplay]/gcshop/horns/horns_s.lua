@@ -239,8 +239,11 @@ end
 )
 
 function playerUsingHorn_s(horn,car)
+	outputDebugString("0", 0)
 	if getElementData(source, "state") == "alive" and getPedOccupiedVehicle(source) then
+		outputDebugString("1 horn: " .. horn, 0)
 		if horn == 389 then -- Wololo horn from Age of Empires 2. Changes target's vehicle color to the color of the source's vehicle.
+			outputDebugString("2", 0)
 			local c = {}
 			local d = {} -- delta
 			local s = {} -- source
@@ -254,6 +257,7 @@ function playerUsingHorn_s(horn,car)
 			
 			for a,b in ipairs(p) do
 				if getElementData(b, "state") == "alive" and getElementData(b, "dim") == dim and getPedOccupiedVehicle(b) then
+					outputDebugString("3", 0)
 					t[1],t[2],t[3] = getElementPosition(getPedOccupiedVehicle(b))
 					d[1] = s[1] - t[1] -- pythagoras
 					d[2] = s[2] - t[2]
@@ -261,6 +265,7 @@ function playerUsingHorn_s(horn,car)
 					local py = math.pow ( math.pow( math.pow(d[1],2) + math.pow(d[2],2) , 0.5) + math.pow(d[3],2) , 0.5)
 					
 					if py < dis[1] then
+						outputDebugString("4", 0)
 						dis[1] = py
 						dis[2] = b
 					end
