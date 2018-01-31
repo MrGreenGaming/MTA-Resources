@@ -268,7 +268,7 @@ function playerUsingHorn_s(horn,car)
 			end
 			
 			if dis[1] < 50 and getPedOccupiedVehicle(dis[2]) and getElementData(dis[2], "state") == "alive" then
-				outputDebugString("Player: " .. getPlayerNametagText(b) .. " is the nearest on " .. dis[1] .. " distance. Update #9", 0)
+				outputDebugString("Player: " .. getPlayerNametagText(dis[2]) .. " is the nearest on " .. dis[1] .. " distance. Update #10", 0)
 				setTimer(function() setVehicleColor(getPedOccupiedVehicle(dis[2]), c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12]) end, 1515, 1)
 			end
 		end
