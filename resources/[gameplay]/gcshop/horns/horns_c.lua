@@ -703,7 +703,11 @@ function createSoundForCar(car, horn)
 	if isElement(icon[car]) then destroyElement(icon[car]) end
 	if isTimer(soundTimer[car]) then killTimer(soundTimer[car]) end
 	if isTimer(killOtherTimer[car]) then killTimer(killOtherTimer[car]) end
-	icon[car] = guiCreateStaticImage(0, 0, guix, guiy, "horns/icon.png", false )
+	if fileExists("horns/" .. tostring(horn) .. ".png") then
+		icon[car] = guiCreateStaticImage(0, 0, guix, guiy, "horns/" .. tostring(horn) .. ".png", false )
+	else
+		icon[car] = guiCreateStaticImage(0, 0, guix, guiy, "horns/icon.png", false )
+	end
 	guiSetVisible(icon[car], false)
 	local x,y,z = getElementPosition(car)
 
