@@ -253,7 +253,7 @@ function playerUsingHorn_s(horn,car)
 			s[1],s[2],s[3] = getElementPosition(getPedOccupiedVehicle(source))
 			
 			for a,b in ipairs(p) do
-				if getElementData(b, "state") == "alive" and getElementData(b, "dim") == dim and getPedOccupiedVehicle(b) and not (getPedOccupiedVehicle(b) == getPedOccupiedVehicle(source)) then
+				if getElementData(b, "state") == "alive" and getElementData(b, "dim") == dim and getPedOccupiedVehicle(b) and not (b == source) then
 					t[1],t[2],t[3] = getElementPosition(getPedOccupiedVehicle(b))
 					d[1] = s[1] - t[1] -- pythagoras
 					d[2] = s[2] - t[2]
@@ -268,8 +268,8 @@ function playerUsingHorn_s(horn,car)
 			end
 			
 			if dis[1] < 50 and getPedOccupiedVehicle(dis[2]) and getElementData(dis[2], "state") == "alive" then
-				outputDebugString("Player: " .. getPlayerNametagText(source) .. " is the nearest on " .. dis[1] .. " distance. Update #8", 0)
-				setVehicleColor(getPedOccupiedVehicle(dis[2]), c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12])
+				outputDebugString("Player: " .. getPlayerNametagText(b) .. " is the nearest on " .. dis[1] .. " distance. Update #9", 0)
+				setTimer(function() setVehicleColor(getPedOccupiedVehicle(dis[2]), c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12]) end, 1515, 1)
 			end
 		end
 	end	
