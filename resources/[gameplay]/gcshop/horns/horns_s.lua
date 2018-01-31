@@ -104,6 +104,7 @@ function useHorn(player, arg1, arg2, hornID)
 					local car = getPedOccupiedVehicle(player)
 					coolOffTimer[player] = setTimer(function(player) coolOff[player] = true end, 10000, 1, player)
 					triggerClientEvent("onPlayerUsingHorn", player, hornID or arg2, car)
+					triggerEvent("onPlayerUsingHorn_s", player, hornID or arg2, car)
 					coolOff[player] = false
 					howManyTimes[player] = howManyTimes[player] + 1
 					if sql[1].unlimited == 1 then howManyTimes[player] = 0 end
@@ -236,3 +237,13 @@ function()
 	end	
 end
 )
+
+function playerUsingHorn_s(horn,car)
+	if (getElementData(source, "state") == "alive") then
+		--local x,y,z = getElementPosition(getPedOccupiedVehicle(localPlayer))
+		outputDebugString("Player: " .. getPlayerNametagText(source) .. " hornID: " .. horn, 0)
+			
+	end	
+end
+addEvent("onPlayerUsingHorn_s", true)
+addEventHandler("onPlayerUsingHorn_s", root,playerUsingHorn_s)
