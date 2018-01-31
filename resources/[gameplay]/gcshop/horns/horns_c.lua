@@ -387,6 +387,9 @@ hornsTable = {
 	[384] = "Turn Down For What",
 	[385] = "DARE",
 	[386] = "Harley-Davidson",
+	[387] = "Davis",
+	[388] = "Kylie",
+	[389] = "Wololo",
 }
 
 
