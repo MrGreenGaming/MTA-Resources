@@ -253,7 +253,7 @@ function playerUsingHorn_s(horn,car)
 			s[1],s[2],s[3] = getElementPosition(getPedOccupiedVehicle(source))
 			
 			for a,b in ipairs(p) do
-				if getElementData(b, "state") == "alive" and getElementData(b, "dim") == dim and getPedOccupiedVehicle(b) then
+				if getElementData(b, "state") == "alive" and getElementData(b, "dim") == dim and getPedOccupiedVehicle(b) and b ~= source then
 					t[1],t[2],t[3] = getElementPosition(getPedOccupiedVehicle(b))
 					d[1] = s[1] - t[1] -- pythagoras
 					d[2] = s[2] - t[2]
