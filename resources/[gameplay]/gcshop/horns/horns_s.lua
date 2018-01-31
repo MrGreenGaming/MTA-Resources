@@ -242,7 +242,6 @@ function playerUsingHorn_s(horn,car)
 	if getElementData(source, "state") == "alive" and getPedOccupiedVehicle(source) then
 		if horn == 389 then -- Wololo horn from Age of Empires 2. Changes target's vehicle color to the color of the source's vehicle.
 			local c = {}
-			local c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12] = getVehicleColor(getPedOccupiedVehicle(source), true)
 			local d = {} -- delta
 			local s = {} -- source
 			local t = {} -- target
@@ -250,6 +249,7 @@ function playerUsingHorn_s(horn,car)
 			
 			local p = getElementsByType("player")
 			local dim = getElementData(source, "dim")
+			c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12] = getVehicleColor(getPedOccupiedVehicle(source), true)
 			s[1],s[2],s[3] = getElementPosition(getPedOccupiedVehicle(localPlayer))
 			
 			for a,b in ipairs(p) do
