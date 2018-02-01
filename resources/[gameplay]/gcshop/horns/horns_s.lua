@@ -239,7 +239,7 @@ end
 )
 
 function playerUsingHorn_s(horn,car)
-	if getElementData(source, "state") == "alive" and getPedOccupiedVehicle(source) then
+	if getElementData(source, "state") == "alive" and getPedOccupiedVehicle(source) then -- and not (exports.mapmanager:getRunningGamemode() == "ctf") then
 		if tonumber(horn) == 389 then -- Wololo horn from Age of Empires 2. Changes target's vehicle color to the color of the source's vehicle. Adds opponent to source's team for 5 minutes.
 			local c = {}
 			local d = {} -- delta
@@ -270,7 +270,7 @@ function playerUsingHorn_s(horn,car)
 			end
 			
 			if dis[1] < dist and getPedOccupiedVehicle(dis[2]) and getElementData(dis[2], "state") == "alive" then
-				--outputDebugString("Player: " .. getPlayerNametagText(dis[2]) .. " is the nearest on " .. dis[1] .. " distance. Update #14", 0)
+				--outputDebugString("Player: " .. getPlayerNametagText(dis[2]) .. " is the nearest on " .. dis[1] .. " distance. Update #15", 0)
 				--setTimer(function()
 				
 				setVehicleColor(getPedOccupiedVehicle(dis[2]), c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12])
