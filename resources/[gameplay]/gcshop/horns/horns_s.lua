@@ -270,7 +270,7 @@ function playerUsingHorn_s(horn,car)
 			end
 			
 			if dis[1] < dist and getPedOccupiedVehicle(dis[2]) and getElementData(dis[2], "state") == "alive" then
-				outputDebugString("Player: " .. getPlayerNametagText(dis[2]) .. " is the nearest on " .. dis[1] .. " distance. Update #13", 0)
+				--outputDebugString("Player: " .. getPlayerNametagText(dis[2]) .. " is the nearest on " .. dis[1] .. " distance. Update #14", 0)
 				--setTimer(function()
 				
 				setVehicleColor(getPedOccupiedVehicle(dis[2]), c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12])
@@ -290,7 +290,7 @@ function playerUsingHorn_s(horn,car)
 					setTimer(function()
 						for c,d in ipairs(teamSwitches) do
 							if d[1] == dis[2] then
-								setPlayerTeam(d[1], d[2])
+								if isElement(d[1]) and getElementType(d[1]) == "player" then setPlayerTeam(d[1], d[2]) end
 								table.remove(teamSwitches,c)
 							end
 						end
