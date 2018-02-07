@@ -1,0 +1,12 @@
+<meta>
+	<info name="Data" longname="Data collection resource" description="Collects data to get insight in the server" author="Bierbuikje" type="script" version="1.0" />
+	<download_priority_group>-1</download_priority_group>
+	
+	<script src="data_s.lua" type="server" />
+	<script src="data_c.lua" type="client" />
+	<script src="data_chisquare.lua" type="client" />
+	<script src="data_gui.lua" type="client" />
+	<script src="data_maps_s.lua" type="server" />
+	<script src="data_maps_c.lua" type="client" />
+	<script src="data_maps_gui.lua" type="client" />
+</meta>	

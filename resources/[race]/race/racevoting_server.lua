@@ -294,6 +294,7 @@ function startNextMapVote()
 				startRandomMap()
 			else
 				outputChatBox("["..map[2].."] Starting next map", root, 0, 255, 0)
+				triggerEvent("data_onEventMapStart", root, getResourceFromName(map[1]))
 			end
 			return
 		elseif usedGcMapQueue then -- Start GC mapcenter map
@@ -305,6 +306,7 @@ function startNextMapVote()
 				startRandomMap()
 			else
 				outputChatBox("[Maps-Center] Starting queued map for " .. map[4]:gsub( '#%x%x%x%x%x%x', '' ), root, 0, 255, 0)
+				triggerEvent("data_onGCShopMapStart", root, getResourceFromName(map[1]))
 			end
 			skipMapQueue = getResourceFromName(map[2])
 			return
@@ -447,6 +449,7 @@ addEventHandler('nextMapVoteResult', getRootElement(),
 					problemChangingMap()
 				else
 					outputChatBox("["..var.."] Starting next map", root, 0, 255, 0)
+					triggerEvent("data_onEventMapStart", root, map)
 				end
 			elseif category == "gcshop" then -- var =  Mapcenter buyer
 				exports.gcshop:getCurrentMapQueued() -- Removes from queue
@@ -455,6 +458,7 @@ addEventHandler('nextMapVoteResult', getRootElement(),
 					problemChangingMap()
 				else
 					outputChatBox("[Maps-Center] Starting queued map for " .. var:gsub( '#%x%x%x%x%x%x', '' ), root, 0, 255, 0)
+					triggerEvent("data_onGCShopMapStart", root, map)
 				end
 				skipMapQueue = map
 			end
