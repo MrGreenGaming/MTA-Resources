@@ -471,26 +471,52 @@ function callSpawn ( player )
 		elementID, distance, index = changeSpawn(player)
 	end
 	if elementID then
-		return outputChatBox('[GC] Changed to spawnpoint \"' .. tostring(elementID) .. '\" .. ('..index..'/'..distance..'m)', player, 0,255,0)
+		return outputChatBox("[GC] Changed to spawnpoint "..index..". Distance: "..distance.."m", player, 0,255,0) -- less info
+		-- return outputChatBox('[GC] Changed to spawnpoint \"' .. tostring(elementID) .. '\" .. ('..index..'/'..distance..'m)', player, 0,255,0)
 	end
 end
 	
 function changeSpawn (player)
+	local x, y, z, id, vehID, rot
+	local newSpawnpoint, currentSP
+	local x2, y2, z2
+	local distance
+	
+	local veh = getPedOccupiedVehicle(player)
+	if not veh then return end
+
+	-- create a new spawnpoint entry
 	if not spawnIndex[player] then
 		spawnIndex[player] = 1
 	else
-		spawnIndex[player] = spawnIndex[player] + ( getShiftState ( player ) and -1 or 1)
+		-- try to skip spawns at the same position
+		for i=1,25 do 
+			-- go to next/previous spawn 
+			currentSP = spawnIndex[player] -- current sp
+			spawnIndex[player] = spawnIndex[player] + (getShiftState(player) and -1 or 1) -- next sp
+			-- check bounds
+			if spawnIndex[player] > #allSpawnpoints then spawnIndex[player] = 1 
+			elseif spawnIndex[player] < 1 then spawnIndex[player] = #allSpawnpoints
+			end			
+			-- check distance between spawn i and i+1
+			x2, y2, z2, _, _, _ = getSpawnpointPosition( allSpawnpoints[currentSP] )
+			x, y, z, _, _, _ = getSpawnpointPosition( allSpawnpoints[spawnIndex[player]] )
+			distance = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
+			-- outputChatBox("sp "..currentSP.." -> "..spawnIndex[player]..", dist: ".. distance) -- debug
+			
+			-- next sp is far enough, stop searching, example:
+			-- spawn 1 -> 2, dist: 0		bad
+			-- spawn 2 -> 3, dist: 0		bad
+			-- spawn 3 -> 4, dist: 1.5		ok
+			if distance > 0.5 then
+				break
+			end
+			
+		end -- for
 	end
-	if spawnIndex[player] > #allSpawnpoints then
-		spawnIndex[player] = 1
-	elseif spawnIndex[player] < 1 then
-		spawnIndex[player] = #allSpawnpoints
-	end
-	local newSpawnpoint = allSpawnpoints[spawnIndex[player]]
-	local veh = getPedOccupiedVehicle(player)
-	if not veh then return end
 	
-	local x, y, z, id, vehID, rot = getSpawnpointPosition ( newSpawnpoint )
+	newSpawnpoint = allSpawnpoints[spawnIndex[player]]
+	x, y, z, id, vehID, rot = getSpawnpointPosition(newSpawnpoint)
 	
 	setElementPosition(veh, x,y,z)
 	setElementRotation(veh, 0,0,rot)
@@ -498,10 +524,10 @@ function changeSpawn (player)
 	setElementHealth(veh, 1000)
 		
 	modShopCheckVehicleAgain(player)
-	local distance = getElementsByType('checkpoint')[1] and math.floor(100*getDistanceBetweenPoints3D(x,y,z,getElementPosition(getElementsByType('checkpoint')[1])))/100 or 0
+	distance = getElementsByType('checkpoint')[1] and math.floor(100*getDistanceBetweenPoints3D(x,y,z,getElementPosition(getElementsByType('checkpoint')[1])))/100 or 0
 	return id, distance, spawnIndex[player]
 end
-addCommandHandler ( 'gcspawn', callSpawn, false, false )
+addCommandHandler('gcspawn', callSpawn, false, false)
 
 function getSpawnpointPosition ( element )
 	-- returns: posX, posY, posZ, element_id, vehicle_id, vehicle_rotation
