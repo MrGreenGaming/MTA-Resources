@@ -79,8 +79,7 @@ addEventHandler("onPlayerChat",root,
         function (message,type)
 		if getElementData(source, "spam") == 1 then
 			return 
-		end	
-		outputDebugString("IRC: " .. tostring(exports.censorship:isBlockedMsg(message)),0)
+		end
 		if exports.censorship:isBlockedMsg(message) then return end
 		message = string.gsub (message, '#%x%x%x%x%x%x', '' )
         if type == 0 then

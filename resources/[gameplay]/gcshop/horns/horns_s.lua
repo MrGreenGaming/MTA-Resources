@@ -241,7 +241,7 @@ end
 function playerUsingHorn_s(horn,car)
 	if getElementData(source, "state") == "alive" and getPedOccupiedVehicle(source) then
 		local gamemode = exports.race:getRaceMode()
-		outputDebugString("Player: " .. getPlayerNametagText(source) .. " used horn " .. horn .. " in gamemode " .. gamemode, 0)
+		--outputDebugString("Player: " .. getPlayerNametagText(source) .. " used horn " .. horn .. " in gamemode " .. gamemode, 0)
 		
 		if tonumber(horn) == 389 and not (gamemode == "Capture the flag") then -- Wololo horn from Age of Empires 2. Changes target's vehicle color to the color of the source's vehicle. Adds opponent to source's team for 5 minutes.
 			local c = {}
