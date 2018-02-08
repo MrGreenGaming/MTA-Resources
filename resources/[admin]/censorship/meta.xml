@@ -4,4 +4,6 @@
 	
 	<script src="censorship_s.lua" type="server" />
 	<script src="censorship_c.lua" type="client" />
+	
+	<export function='isBlockedMsg' type='server' />
 </meta>	
