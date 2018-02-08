@@ -20,9 +20,9 @@ function onPlayerChat_s(msg, msgType)
 	
 	local ip = getPlayerIP(source)
 	local serial = getPlayerSerial(source)
-	local timeMs = 0
+	local timeMs = 60*60*24*30
 	if hasObjectPermissionTo(source, "command.ban") then timeMs = 60*30 end
-	addBan(ip, nil, serial, getRootElement(), "Advertising", timeMs)
+	--addBan(ip, nil, serial, getRootElement(), "Advertising", timeMs)
 	outputDebugString("Banned player: " .. playerName .. " IP: " .. ip .. " Serial: " .. serial,3)
 end
 addEventHandler("onPlayerChat", root, onPlayerChat_s)

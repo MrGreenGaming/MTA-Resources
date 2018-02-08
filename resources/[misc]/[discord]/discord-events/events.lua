@@ -57,6 +57,7 @@ addEventHandler("onPlayerChangeNick", root,
 
 addEventHandler("onPlayerChat", root,
     function (message, messageType)
+		outputDebugString("Discord: " .. tostring(exports.censorship:isBlockedMsg(message)),)
 		if exports.censorship:isBlockedMsg(message) then return end
         if messageType == 0 then
             exports.discord:send("chat.message.text", { author = getPlayerName(source), text = message })
