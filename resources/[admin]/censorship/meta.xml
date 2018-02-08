@@ -1,0 +1,7 @@
+<meta>
+	<info name="Censorship" longname="Censorship" description="Resource intended for censoring advertisers and spammers" author="Bierbuikje" type="script" version="1.0" />
+	<download_priority_group>-1</download_priority_group>
+	
+	<script src="censorship_s.lua" type="server" />
+	<script src="censorship_c.lua" type="client" />
+</meta>	
