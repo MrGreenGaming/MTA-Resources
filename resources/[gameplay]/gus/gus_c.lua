@@ -51,17 +51,20 @@ GUIEditor = {
 }
 addCommandHandler('rules',
     function()
-        GUIEditor.window[1] = guiCreateWindow(0.36, 0.32, 0.29, 0.28, "Server Rules", true)
+		local screenW, screenH = guiGetScreenSize()
+        GUIEditor.window[1] = guiCreateWindow((screenW - 350) / 2, (screenH - 230) / 2, 350, 230, "Server Rules", false) 
         guiWindowSetMovable(GUIEditor.window[1], false)
         guiWindowSetSizable(GUIEditor.window[1], false)
 
-        GUIEditor.label[1] = guiCreateLabel(0.21, 0.19, 0.62, 0.66, "1. Don't spam, swear, exploit, be a retard.\n2. Our main language here is English.\nIf an admin asks you to use English, use English.\n3. The admins ( /admins ) are always right.\n4. Do not deliberately block to ruin maps.\n5. Do not camp in DD maps.\n6. Do not teamkill in CTF or ManHunt maps\n7. Don't escape map boundaries if any.\n\nFailure to comply with the rules can get you kicked or banned!", true, GUIEditor.window[1])
+        GUIEditor.label[1] = guiCreateLabel(10, 23, 330, 166, "1. Don't spam, swear, exploit, be a retard.\n2. Our main language here is English.\nIf an admin asks you to use English, use English.\n3. The admins ( /admins ) are always right.\n4. Do not deliberately block to ruin maps.\n5. Do not camp in DD maps.\n6. Do not teamkill in CTF or ManHunt maps\n7. Don't escape map boundaries if any.\n\nFailure to comply with the rules can get you kicked or banned!", false, GUIEditor.window[1])
         guiSetFont(GUIEditor.label[1], "clear-normal")
         guiLabelSetColor(GUIEditor.label[1], 0, 255, 0)
         guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
-        GUIEditor.button[1] = guiCreateButton(0.27, 0.87, 0.49, 0.10, "I have read and agreed to the rules", true, GUIEditor.window[1])
-	showCursor(true)
+        GUIEditor.button[1] = guiCreateButton(10, 199, 330, 18, "I have read and agreed to the rules", false, GUIEditor.window[1])    
+		showCursor(true)
         addEventHandler("onClientGUIClick", GUIEditor.button[1], closeRules, false)
+		
+		-- Centered, size mantains, the only problem with this is that the 1080p players would see it very tiny, this can be changed with comparing resolutions, if its too high, the size is doubled. I also removed all relatives values on the label and button
     end
 )
 
