@@ -28,7 +28,10 @@ menuItemFont = "bankgothic"
 
 -- Date and time
 dateTimeTop = screenH*0.0
-timeDateTextScale = 0.5 * scaleW 
+timeDateTextScale = 0.5 * scaleW
+if timeDateTextScale < 0.35 then
+	timeDateTextScale = 0.35
+end
 timeDateFont = "bankgothic"
 
 -- -- Server/Room Name
@@ -36,6 +39,9 @@ timeDateFont = "bankgothic"
 serverName = ""
 serverNameFont = "sans"
 serverNameTextScale = 1 * scaleW
+if serverNameTextScale < 0.75 then
+	serverNameTextScale = 0.75
+end
 _serverNameTextScale = serverNameTextScale
 
 serverNameHeight = screenH * 0.050
@@ -45,6 +51,9 @@ serverNameStartY = (screenH * 1) - serverNameHeight
 accountInfoStartHeight = 0.055 * screenH
 
 usernameTextScale = 1.5 * scaleW
+if usernameTextScale < 0.75 then
+	usernameTextScale = 0.75
+end
 _usernameTextScale = usernameTextScale -- Cashe for originalye
 
 gcTopStart = 0.05 * screenH --0.2 * screenH
@@ -164,7 +173,11 @@ function drawAccountInfo()
 			end
 		end
 	end
-
+	
+	if _gcFontScale < 0.4 then
+		_gcFontScale = 0.4
+	end
+	
 	dxDrawText(gcString,_sidebarLeft,sidebarTop + gcTopStart+ accountInfoStartHeight,_sidebarLeft+sidebarWidth,sidebarTop+menuItemHeight+gcTopStart+ accountInfoStartHeight,tocolor(255,255,255,255),_gcFontScale,gcFont,"center","center",true,false,true,true)
 end
 
@@ -365,7 +378,7 @@ addEventHandler("receiveServerName",resourceRoot,
 		serverName = nm
 	end
 
-		 )
+)
 
 
 
@@ -426,5 +439,3 @@ function FormatDate(format, escaper, timestamp)
  
 	return formattedDate
 end
-
-
