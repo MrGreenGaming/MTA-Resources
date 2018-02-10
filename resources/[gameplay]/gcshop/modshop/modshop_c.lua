@@ -161,7 +161,7 @@ function vehicleSelected(button, state, absoluteX, absoluteY)
 			guiSetEnabled(modshop_gui["buyVehicleButton"], false)
 			guiSetEnabled(modshop_gui["upgradeVehicleButton"], true)
 		else
-			guiSetEnabled(modshop_gui["buyVehicleButton"], false) -- temp disabled
+			guiSetEnabled(modshop_gui["buyVehicleButton"], true)
 			guiSetEnabled(modshop_gui["upgradeVehicleButton"], false)
 		end
 	end
