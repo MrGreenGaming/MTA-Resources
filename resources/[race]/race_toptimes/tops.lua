@@ -391,8 +391,8 @@ function gcLogin ( forumid, amount )
 	-- Check if player has unrewarded most monthly tops in the past months
 	local q = [[
 	SELECT forumid, month, c FROM (
-		SELECT * FROM (
-			SELECT *, COUNT(*) c FROM (
+		SELECT ANY_VALUE(forumid) forumid, month, ANY_VALUE(c) c FROM (
+			SELECT forumid, month, COUNT(*) c FROM (
 				SELECT * FROM `toptimes_month` ORDER BY date
 			) AS dated WHERE rewarded = 0 GROUP BY forumid, month ORDER BY `month` ASC, `c`  DESC
 		) AS counted GROUP BY month
