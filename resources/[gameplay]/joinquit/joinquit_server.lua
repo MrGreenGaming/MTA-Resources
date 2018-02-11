@@ -1,5 +1,5 @@
 addEventHandler("onPlayerJoin", root,
-    function()
+    function()		
         local country = exports.geoloc:getPlayerCountryName(source)
 		country = country and (' (' .. country .. ')') or ''
 		local redirect = ''

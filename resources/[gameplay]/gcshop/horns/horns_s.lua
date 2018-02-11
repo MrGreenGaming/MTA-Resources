@@ -250,7 +250,6 @@ function playerUsingHorn_s(horn,car)
 			local t = {} -- target
 			local dist = 15
 			local dis = {dist, false}
-			local teamSwitches = {}
 			
 			local p = getElementsByType("player")
 			local dim = getElementData(source, "dim")
@@ -273,35 +272,10 @@ function playerUsingHorn_s(horn,car)
 			end
 			
 			if dis[1] < dist and getPedOccupiedVehicle(dis[2]) and getElementData(dis[2], "state") == "alive" then
-				--outputDebugString("Player: " .. getPlayerNametagText(dis[2]) .. " is the nearest on " .. dis[1] .. " distance. Update #20", 0)
-				--setTimer(function()
-				
+				local ct = {}
+				ct[1], ct[2], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12] = getVehicleColor(getPedOccupiedVehicle(dis[2]), true)
+				if ct[1] == 255 and ct[2] == 255 and ct[3] == 255 then return end -- disabled for paintjobs
 				setVehicleColor(getPedOccupiedVehicle(dis[2]), c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12])
-				
-				local bool = true
-				if gamemode == "Destruction derby" or gamemode == "Shooter" then bool = false end
-				for e,f in ipairs(teamSwitches) do if f[1] == dis[2] then bool = false end end
-				
-				if bool then
-					local teamSource = getPlayerTeam(source)
-					local teamTarget = getPlayerTeam(dis[2])
-					if teamSource == false then teamSource = nil end
-					if teamTarget == false then teamTarget = nil end
-					
-					table.insert(teamSwitches,{dis[2],teamTarget})
-					setPlayerTeam(dis[2], teamSource)
-					
-					setTimer(function()
-						for c,d in ipairs(teamSwitches) do
-							if d[1] == dis[2] then
-								if isElement(d[1]) and getElementType(d[1]) == "player" then setPlayerTeam(d[1], d[2]) end
-								table.remove(teamSwitches,c)
-							end
-						end
-					end, 1000*60*5, 1)
-				end
-				
-				--end, 1515, 1)
 			end
 		end
 	end	
