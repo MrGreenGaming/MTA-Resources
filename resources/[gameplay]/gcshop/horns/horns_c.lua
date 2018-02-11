@@ -392,6 +392,11 @@ hornsTable = {
 	[389] = "Wololo",
 	[390] = "Don't Poison Your hert",
 	[391] = "UMTSSUMTSS"
+	[392] = "Shut the fuck UP",
+	[393] = "Mmm Mmm yeah yeah",
+	[394] = "Kung Flo Fighting",
+	[395] = "Fuck dat pssy",
+	[396] = "Suck a dick",
 }
 
 
