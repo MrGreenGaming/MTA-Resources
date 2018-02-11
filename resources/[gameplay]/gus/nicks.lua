@@ -6,7 +6,7 @@
 function joinPlayer ( )
 	local joinedPlayerName = getPlayerName ( source )
 	local noColorName = removeColorCoding( getPlayerName ( source ) )
-	if (joinedPlayerName == 'Player') or (noColorName:len() == 0) or isNameInUse(joinedPlayerName) or noColorName:gsub ( '#%x%x%x%x%x%x', '' ) ~= noColorName then
+	if (joinedPlayerName == 'Player') or (noColorName:len() == 0) or isNameInUse(joinedPlayerName) or isPlayerMuted(source) or noColorName:gsub ( '#%x%x%x%x%x%x', '' ) ~= noColorName then
 		if (joinedPlayerName == 'Player') then
 			setTimer(outputChatBox, 3000, 1, 'Please use an other nickname then "Player"', source, 0xFF, 0x00, 0x00 )
 		elseif isNameInUse(joinedPlayerName) then
