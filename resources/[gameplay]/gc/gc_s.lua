@@ -339,15 +339,18 @@ function giveGC( source, cmd, amount, argPl)
 	else
 		player = source											--if no arg, use the source
 	end
-		if accounts[player] and tonumber(amount) then
-			accounts[player]:addGreencoins(tonumber(amount))
-			if (source ~= player) then 
-				outputChatBox('[GC] ' .. getPlayerName(source) .. ' gave ' .. amount .. ' GC to ' .. getPlayerName(player), source, 0x00, 0xFF, 0x00)
-			end
-			outputChatBox('[GC] ' .. getPlayerName(source) .. ' gave ' .. amount .. ' GC to ' .. getPlayerName(player), player, 0x00, 0xFF, 0x00)
-		else
-			outputChatBox('[GC] Failed to give "' .. tostring(amount) .. '" GC to "' .. tostring(argPl or getPlayerName(source)) .. '"', source)
+	
+	if accounts[player] and tonumber(amount) then
+		accounts[player]:addGreencoins(tonumber(amount))
+		if (source ~= player) then 
+			outputChatBox('[GC] ' .. getPlayerName(source) .. ' gave ' .. amount .. ' GC to ' .. getPlayerName(player), source, 0x00, 0xFF, 0x00)
 		end
+		outputChatBox('[GC] ' .. getPlayerName(source) .. ' gave ' .. amount .. ' GC to ' .. getPlayerName(player), player, 0x00, 0xFF, 0x00)
+		addToLog ( '[ADDGC] "' .. getPlayerName(source) .. '" gave ' .. tostring(amount) .. ' GC to "' .. getPlayerName(player) .. '"')
+	else
+		outputChatBox('[GC] Failed to give "' .. tostring(amount) .. '" GC to "' .. tostring(argPl or getPlayerName(source)) .. '"', source)
+		addToLog ( '[ADDGC] "' .. getPlayerName(source) .. '" failed to give ' .. tostring(amount) .. ' GC to "' .. tostring(argP1 or getPlayerName(player)) .. '"')
+	end
 end
 addCommandHandler("addGC", giveGC, true, false)
 
@@ -421,3 +424,28 @@ setTimer(function()
 	end
 end, 1000, 0)
 addCommandHandler('gpm', function(p) exports.scoreboard:scoreboardAddColumn('gpm', p, 35); exports.scoreboard:scoreboardAddColumn('sessiongc', p, 35) end)
+
+
+----------------
+--  Logging   --
+----------------
+
+local logFile = false
+
+function addToLog(text)
+	local t = getRealTime()
+	if not isElement(logFile) then
+		logFile = fileOpen("gc.log")
+		if not logFile then
+			logFile = fileCreate("gc.log")
+		else
+			fileSetPos(logFile, fileGetSize(logFile))
+		end
+		--fileWrite(logFile, "\r\n\r\n****** GC LOG OPENED - ".. getRealDateTimeString(t) .." ******\r\n\r\n")
+	end
+	text = "[" .. getRealDateTimeString(t) .. "] " .. tostring(text or '')
+	fileWrite(logFile, text.."\r\n")
+	fileFlush(logFile)
+	fileClose(logFile)
+	return true
+end
