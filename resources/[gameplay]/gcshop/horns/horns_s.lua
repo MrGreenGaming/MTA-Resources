@@ -273,8 +273,8 @@ function playerUsingHorn_s(horn,car)
 			
 			if dis[1] < dist and getPedOccupiedVehicle(dis[2]) and getElementData(dis[2], "state") == "alive" then
 				local ct = {}
-				ct[1], ct[2], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12] = getVehicleColor(getPedOccupiedVehicle(dis[2]), true)
-				if ct[1] == 255 and ct[2] == 255 and ct[3] == 255 then return end -- disabled for paintjobs
+				ct[1], ct[2], ct[3], ct[4] = getVehicleColor(getPedOccupiedVehicle(dis[2]))
+				if ct[1] == 1 and ct[2] == 1 and ct[3] == 0 and ct[4] == 0 then return end -- disabled for paintjobs
 				setVehicleColor(getPedOccupiedVehicle(dis[2]), c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12])
 			end
 		end
