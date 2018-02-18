@@ -13,5 +13,6 @@ admins = {
 	{ name = "Hulpje", title = "Dota Admin", accountName = "hulpje" },
 	{ name = "Besweeet", title = "4th Admin", accountName = "besweeet" },
 	{ name = "Santiii733", title = "Re-Volt Master", accountName = "santiii733" },
-	{ name = "Maher", title = "NIU Admin", accountName = "maher" },
+	{ name = "Maher", title = "Sheikh", accountName = "maher" },
+	{ name = "Abrahax", title = "Kadabrahax", accountName = "abrahax" },
 }
