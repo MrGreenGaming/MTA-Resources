@@ -155,18 +155,19 @@ end
 
 local limit
 function clientFPSLimit(cmd, limit_)
-	if (tonumber(limit_) and tonumber(limit_) > 19 and tonumber(limit_) < 61) then
-		outputChatBox('Your FPS limit will be changed on next map change')
-		limit = tonumber(limit_)
-	else
-		outputChatBox('Bad limit.')
-	end
+	--if (tonumber(limit_) and tonumber(limit_) > 19 and tonumber(limit_) < 61) then
+	--	outputChatBox('Your FPS limit will be changed on next map change')
+	--	limit = tonumber(limit_)
+	--else
+	--	outputChatBox('Bad limit.')
+	--end
+	triggerEvent("gus_c_fpslimit", root, limit_)
 end
 addCommandHandler ( 'fpslimit', clientFPSLimit)
 
-addEventHandler('onClientMapStarting', root, function ()
-	if limit then setFPSLimit(limit) end
-end)
+--addEventHandler('onClientMapStarting', root, function ()
+--	if limit then setFPSLimit(limit) end
+--end)
 
 addCommandHandler('votekut', function() playSound(":gcshop/horns/files/38.mp3", false) end)
 

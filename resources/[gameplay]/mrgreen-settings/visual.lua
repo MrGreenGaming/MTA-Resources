@@ -688,3 +688,9 @@ function setIMGcolor(hex)
 	local hex = hex:gsub("#","")
 	return "tl:FF"..hex.." tr:FF"..hex.." bl:FF"..hex.." br:FF"..hex
 end
+
+function gus_c_fpslimit(nr)
+	guiSetText(GUIEditor.edit["fpslimit"], tostring(nr))
+	triggerEvent("onClientGUIClick", GUIEditor.button["fpslimit"])
+end
+addEventHandler("gus_c_fpslimit", resourceRoot, gus_c_fpslimit)
