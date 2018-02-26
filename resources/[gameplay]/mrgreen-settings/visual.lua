@@ -693,4 +693,4 @@ function gus_c_fpslimit(nr)
 	guiSetText(GUIEditor.edit["fpslimit"], tostring(nr))
 	triggerEvent("onClientGUIClick", GUIEditor.button["fpslimit"])
 end
-addEventHandler("gus_c_fpslimit", resourceRoot, gus_c_fpslimit)
+addEventHandler("gus_c_fpslimit", root, gus_c_fpslimit)
