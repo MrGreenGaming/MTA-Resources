@@ -326,7 +326,7 @@ function makeowner(sender, c, playername)
 	elseif not tonumber(exports.gc:getPlayerForumID ( player )) then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not logged in to GC', sender, 0,255,0)
 	-- Check if the sender is the owner and if the player can join the team
-	elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) then
+	elseif not ( (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) or ((not isGuestAccount(getPlayerAccount(sender))) and isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(sender)), aclGetGroup("ServerManager"))) ) then
 		return outputChatBox('[TEAMS] Only team owners can do this!', sender, 255,0,0)
 	elseif playerteams[player] and (playerteams[player].status~=1 or playerteams[player].teamid ~= playerteams[sender].teamid) then
 		return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not in your team', sender, 0,255,0)
