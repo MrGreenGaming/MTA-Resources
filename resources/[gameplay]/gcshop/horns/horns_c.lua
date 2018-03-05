@@ -397,6 +397,7 @@ hornsTable = {
 	[394] = "Kung Flo Fighting",
 	[395] = "Fuck dat pssy",
 	[396] = "Suck a dick",
+	[397] = "Hola pinche putita",
 }
 
 
