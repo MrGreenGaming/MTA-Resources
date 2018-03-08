@@ -37,9 +37,9 @@ function connect()
 	if devmode then
 		return outputDebugString("GreenCoins started in devmode")
 	end
-	handlerForum = dbConnect( 'mysql', 'host='..forumData.host..';dbname='..forumData.database, forumData.username, forumData.password)
+	handlerForum = dbConnect( 'mysql', 'host='..forumData.host..';dbname='..forumData.database .. ';charset=utf8mb4', forumData.username, forumData.password)
 	if not handlerForum then return false end
-	handlerGC = dbConnect( 'mysql', 'host='..gcData.host..';dbname='..gcData.database, gcData.username, gcData.password) 
+	handlerGC = dbConnect( 'mysql', 'host='..gcData.host..';dbname='..gcData.database .. ';charset=utf8mb4', gcData.username, gcData.password) 
 end
 
 addEventHandler("onResourceStart", resourceRoot, connect)

@@ -2,7 +2,7 @@ local theCon = false
 
 addEventHandler('onResourceStart', resourceRoot,
 	function()
-		theCon = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+		theCon = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 		dbExec( theCon, "CREATE TABLE IF NOT EXISTS `mapratings` ( `forumid` INT, `serial` TINYTEXT, `playername` TINYTEXT, `mapresourcename` VARCHAR(70) BINARY NOT NULL, `rating` BOOLEAN NOT NULL, `time` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP )" )
 	end
 )

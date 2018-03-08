@@ -7,7 +7,7 @@ handlerConnect = nil
 
 -- Setup sql database --
 function startup()
-	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 end
 
 addEventHandler("onResourceStart", resourceRoot, startup)

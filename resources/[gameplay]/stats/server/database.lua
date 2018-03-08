@@ -32,7 +32,7 @@ addEventHandler("onResourceStart", resourceRoot,
 			destroyElement(database)
 		end
 
-		database = dbConnect( 'mysql', 'host='..dbSettings.host..';dbname='..dbSettings.database, dbSettings.username, dbSettings.password, "multi_statements=1") 
+		database = dbConnect( 'mysql', 'host='..dbSettings.host..';dbname='..dbSettings.database .. ';charset=utf8mb4', dbSettings.username, dbSettings.password, "multi_statements=1") 
 		
 		queryStatsAll()
 	end
