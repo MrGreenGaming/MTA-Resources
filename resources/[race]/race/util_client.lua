@@ -36,7 +36,7 @@ server = createServerCallInterface()
 -- GUI
 
 function showHUD(show)
-	for i,name in ipairs({ 'ammo', 'area_name', 'armour', 'breath', 'clock', 'health', 'money', 'vehicle_name', 'weapon' }) do
+	for i,name in ipairs({ 'ammo', 'armour', 'breath', 'clock', 'health', 'money', 'weapon' }) do
 		setPlayerHudComponentVisible(name, show)
 	end
 end
