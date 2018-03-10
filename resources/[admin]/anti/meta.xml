@@ -28,6 +28,9 @@
 	<script src="timeout.lua" type="server" />
 	-->
 	
+	<script src="tick.lua" type="server" /> <!-- This resource checks whether the client tick and server tick are out of sync. -->
+	<script src="tick_c.lua" type="client" />
+	
 	<settings>
 		<setting name='@differenceBetweenMessages_ms' value='[4000]' /> <!-- in this time (in miliseconds), player can send specific amount of messages -->
 		<setting name='@messagesNumber' value='[4]' /> <!-- the amount of messages player can send in the amount of ms set above -->
