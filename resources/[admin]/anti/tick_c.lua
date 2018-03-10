@@ -80,11 +80,11 @@ function tickTable_c(t)
 		guiGridListSetItemText(GUI.gridlist[1],row,4,tostring(d_secc),false,false,true)
 		guiGridListSetItemText(GUI.gridlist[1],row,5,tostring(p_secc),false,false,true)
 		
-		if math.abs(d_join) > b[8] * 3 then
+		if math.abs(d_join) > (b[8] + 1) then
 			guiGridListSetItemColor(GUI.gridlist[1],row,2,255,0,0)
 			guiGridListSetItemColor(GUI.gridlist[1],row,3,255,0,0)
 		end
-		if math.abs(d_secc) > b[8] * 3 then
+		if math.abs(d_secc) > (b[8] + 1) then
 			guiGridListSetItemColor(GUI.gridlist[1],row,4,255,0,0)
 			guiGridListSetItemColor(GUI.gridlist[1],row,5,255,0,0)
 		end
