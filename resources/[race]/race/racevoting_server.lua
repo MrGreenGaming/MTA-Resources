@@ -253,11 +253,11 @@ function startNextMapVote()
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local mapName = "["..map[2].."] "..mapName
 
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes, "eventmanager", map[2]})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes, "eventmanager", map[2];default=true})
 			setEventMapQueue = true
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 		end
 	elseif getResourceFromName('gcshop') and getResourceState(getResourceFromName('gcshop')) == 'running' and exports.gcshop:isAnyMapQueued(true) and skipMapQueue ~= exports.mapmanager:getRunningGamemodeMap() then
 		-- GCshop next queued map
@@ -268,15 +268,15 @@ function startNextMapVote()
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local mapName = "[Maps-Center] "..mapName
 
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes,"gcshop",map[4]})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes,"gcshop",map[4];default=true})
 			usedGcMapQueue = true
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 		end
 	else -- Normal next map
 		local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 	end
 	
 	
