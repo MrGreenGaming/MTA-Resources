@@ -392,6 +392,7 @@ hornsTable = {
 	[389] = "Wololo",
 	[390] = "Don't Poison Your hert"
 	[391] = "UMTSSUMTSS"
+	[392] = "heyay"
 }
 
 
