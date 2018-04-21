@@ -8,7 +8,7 @@ admins = {
 	{ name = "Haze", title = "Map Assistant", accountName = "renopopper" },
 	{ name = "Jack123", title = "Mother Russia", accountName = "Jack123" },
 	{ name = "Stig", title = "Old Admin", accountName = "Stig" },
-	{ name = "Santiii733", title = "Re-Volt Master", accountName = "santiii733" },
+	{ name = "Santiii733", title = "Discord Admin", accountName = "santiii733" },
 	{ name = "Maher", title = "Sheikh", accountName = "maher" },
 	{ name = "Abrahax", title = "Kadabrahax", accountName = "abrahax" },
 }
