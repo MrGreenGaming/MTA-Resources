@@ -398,14 +398,12 @@ hornsTable = {
 	[395] = "Fuck dat pssy",
 	[396] = "Suck a dick",
 	[397] = "Princeless",
-	[398] = "My neim is Jeff",
-	[399] = "Tokyo Race",
-	[400] = "Drunk Singer",
-	[401] = "Formula 1",
-	[402] = "BMW i8",
-	[403] = "Cant Touch This V2",
-	[404] = "Ijueputa",
-	[405] = "EXTREME FAP",
+        [398] = "Tokyo Race",
+	[399] = "Drunk Singer",
+	[400] = "BMW i8",
+	[401] = "Cant Touch This V2",
+	[402] = "Ijueputa",
+	[403] = "EXTREME FAP",
 }
 
 
