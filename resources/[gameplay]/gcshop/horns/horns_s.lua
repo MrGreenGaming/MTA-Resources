@@ -1,4 +1,4 @@
-local price = 1500
+local price = 2000
 local unlimitedUses = 5000
 local canHornBeUsed = {}
 local howManyTimes = {}
