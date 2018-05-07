@@ -1,5 +1,5 @@
 gcSkins = {}
-local price = 3000
+local price = 1500
 
 function handleBuying(player, id)
 	-- exports.gc:addPlayerGreencoins(player, (-1*price))
