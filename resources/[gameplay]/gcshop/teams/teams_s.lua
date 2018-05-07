@@ -5,7 +5,7 @@ local playerteams = {}
 local playertimestamp = {}
 local invites = {}
 local duration = 1
-local team_duration = 30 * 24 * 60 * 60
+local team_duration = 20 * 24 * 60 * 60
 
 local team_sql = [[CREATE TABLE IF NOT EXISTS `team` (
 	`teamid` smallint(5) unsigned NOT NULL AUTO_INCREMENT, 
