@@ -6,7 +6,7 @@ mp_cooldownTime = 360*60 -- Minutes of cooldown
 ----------------------
 
 lastWinner = nil
-lastWinnerPrice = 350
+lastWinnerPrice = 750
 
 -- Race, NTS, RTF
 function finish( rank )
