@@ -407,7 +407,7 @@ hornsTable = {
 	[404] = "Whats good niuggaah",
 	[405] = "Whats really goood",
 	[406] = "Eat a dick nigga",
-	[406] = "Hop Hop Floleta",
+	[407] = "Hop Hop Floleta",
 }
 
 
