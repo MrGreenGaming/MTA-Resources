@@ -446,7 +446,7 @@ function onShopInit ( tabPanel )
 	
 	
 	--// Buttons //--
-	local buy = guiCreateButton(0.05, 0.83, 0.22, 0.12, "Buy selected horn\nPrice: 1500 GC (each)", true, buyHornsTab)
+	local buy = guiCreateButton(0.05, 0.83, 0.22, 0.12, "Buy selected horn\nPrice: 2000 GC (each)", true, buyHornsTab)
 	local unbindall = guiCreateButton(0.53, 0.83, 0.14, 0.12, "Unbind\nall horns", true, buyHornsTab)
 	local bindForGamepads = guiCreateButton(0.69, 0.83, 0.26, 0.12, "Bind to a horn control name\n(Esc -> Settings -> Binds)", true, buyHornsTab)
 	unlimited = guiCreateButton(0.77, 0.05, 0.20, 0.15, "Buy unlimited usage\nPrice: 5000 GC", true, perkTab)	

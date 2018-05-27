@@ -1,5 +1,5 @@
 ﻿PRICE = 1000
-lastWinnerPrice = 350
+lastWinnerPrice = 750
 
 local main_window
 local tab_panel
