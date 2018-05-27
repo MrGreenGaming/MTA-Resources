@@ -404,6 +404,9 @@ hornsTable = {
 	[401] = "Cant Touch This V2",
 	[402] = "Ijueputa",
 	[403] = "EXTREME FAP",
+	[404] = "Whats Good Niegah",
+	[405] = "Eat it Nigga",
+	[406] = "Hop Hop",
 }
 
 
