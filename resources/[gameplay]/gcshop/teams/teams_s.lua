@@ -84,9 +84,9 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
 		if result == true then
 			local added
 			if r.owner ~= forumID then
-				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=? WHERE `teamid`=?]], math.max(getRealTime().timestamp + team_duration, math.min(r.renew_timestamp + team_duration, getRealTime().timestamp + 2 * team_duration)), r.teamid)
+				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=? WHERE `teamid`=?]], math.max(getRealTime().timestamp + team_duration, math.min(r.renew_timestamp + team_duration, getRealTime().timestamp + 3 * team_duration)), r.teamid)
 			else
-				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=?, `name`=?, `tag`=?, `colour`=?, `message`=? WHERE `teamid`=?]], math.max(getRealTime().timestamp + team_duration, math.min(r.renew_timestamp + team_duration, getRealTime().timestamp + 2 * team_duration)), teamname, teamtag, teamcolour, teammsg, r.teamid)
+				added = dbExec(handlerConnect, [[UPDATE `team` SET `renew_timestamp`=?, `name`=?, `tag`=?, `colour`=?, `message`=? WHERE `teamid`=?]], math.max(getRealTime().timestamp + team_duration, math.min(r.renew_timestamp + team_duration, getRealTime().timestamp + 3 * team_duration)), teamname, teamtag, teamcolour, teammsg, r.teamid)
 				setTeamName(teams[r.teamid], teamtag .. ' ' .. teamname)
 				setTeamColor(teams[r.teamid], getColorFromString(teamcolour))
 			end
