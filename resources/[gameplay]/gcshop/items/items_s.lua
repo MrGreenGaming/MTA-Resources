@@ -103,7 +103,7 @@ local perks = {
 	[2] = { ID = 2, price =  3000, description = 'Faster respawn for 60 days', func = 'loadGCRespawn', exp = 60},
 	[3] = { ID = 3, price =  2000, description = 'HP Regen for 30 days', func = 'loadGCRegenHP', exp = 30},
 	[4] = { ID = 4, price = 15000, description = 'Custom paintjob', func = 'loadGCCustomPaintjob', defaultAmount = 1, extraPrice = 15000, modes = {'Sprint', 'Never the same'}},
-	[5] = { ID = 5, price =  2500, description = 'Voice', func = 'loadGCVoice', disabled = true},
+	[5] = { ID = 5, price =  2500, description = 'Voice', func = 'loadGCVoice'},
 	[6] = { ID = 6, price =  2000, description = 'Longer burnup time', func = 'loadGCBurn'},
 	[7] = { ID = 7, price =  3000, description = 'Extra long burnup time', func = 'loadGCBurnExtra', requires = {6}, exp = 30},
 	[8] = { ID = 8, price =  3000, description = 'Health transfer', func = 'loadGCBurnTransfer', requires = {6}, exp = 30, disabled = true},
@@ -303,12 +303,12 @@ end
 function loadPerk(player, ID)
 	if not isElement(player) or not perks[ID] then return end
 	_G[perks[ID].func](player, true, getPerkSettings(player, ID))
-	--outputDebugString('Perk loaded: ' .. getPlayerName(player) .. ' ' .. ID .. ' ' .. perks[ID].description .. (tonumber(getPerkSettings(player, ID).amount) and ' (' .. getPerkSettings(player, ID).amount .. ')' or ''))
+	outputDebugString('Perk loaded: ' .. getPlayerName(player) .. ' ' .. ID .. ' ' .. perks[ID].description .. (tonumber(getPerkSettings(player, ID).amount) and ' (' .. getPerkSettings(player, ID).amount .. ')' or ''))
 end
 
 function unloadPerk(player, ID)
 	if not isElement(player) or not perks[ID] then return end
-	--outputDebugString('Perk unloading: ' .. getPlayerName(player) .. ' ' .. ID .. ' ' .. perks[ID].description)
+	outputDebugString('Perk unloading: ' .. getPlayerName(player) .. ' ' .. ID .. ' ' .. perks[ID].description)
 	_G[perks[ID].func](player, false)
 end
 
