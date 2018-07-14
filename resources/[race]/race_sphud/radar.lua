@@ -401,7 +401,7 @@ function getRot() --function extracted from customblips resource
 				local px,py,_,lx,ly = getCameraMatrix()
 				camRot = getVectorRotation(px,py,lx,ly)
 			-- end
-		elseif getControlState('look_behind') then
+		elseif getPedControlState(getLocalPlayer(), "look_behind") then
 			camRot = -math.rad(getPedRotation(localPlayer))
 		else
 			local px,py,_,lx,ly = getCameraMatrix()
