@@ -35,4 +35,6 @@
 		<setting name='@differenceBetweenMessages_ms' value='[4000]' /> <!-- in this time (in miliseconds), player can send specific amount of messages -->
 		<setting name='@messagesNumber' value='[4]' /> <!-- the amount of messages player can send in the amount of ms set above -->
 	</settings>
+
+	<min_mta_version server="1.5.1-9.07633" />
 </meta>
