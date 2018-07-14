@@ -3,7 +3,7 @@ All resources used on the MrGreenGaming.com Multi Theft Auto: San Andreas (MTASA
 
 # Local server setup
 - Checkout the resources into your local MTASA server folder.
-- Example maps, server config file, ACL example and SQL tables can be found in the `config` folder.
+- Example maps, server config file and an ACL example can be found in the `config` folder.
 - Setup GreenCoins development mode, with this you can `gclogin` with a testing account. Run this command on an admin client: `/srun set("*gc.devmode", true)`
 - Restart the MTA server. Now you can login with `/gclogin <forumid> admin` or using F6, just pick a forumid as any random number. You will start with 99999 GC. Important to use a number as login and 'admin' as the password.
 - Setup a MySQL database and import `config/database.sql`.
