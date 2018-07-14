@@ -8,6 +8,7 @@
 /resources/\[gameplay\]/helpmenu/motd.xml
 /resources/\[gameplay\]/chatbox_ads/ads.xml
 /resources/\[admin\]/admin/conf/reports.xml
+/resources/\[gameplay\]/gcshop/teams/teamwars.xml
 
 # Web settings
 www/mta/mtasettings.php
