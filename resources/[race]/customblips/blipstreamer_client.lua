@@ -214,18 +214,18 @@ addEventHandler("onClientRender",g_root,
 				camRot = getVectorRotation(camX,camY,camTargetX,camTargetY)
 			else
 				local vehicle = getPedOccupiedVehicle(localPlayer)
-				if ( vehicle ) then
+				if vehicle then
 					--Look back works on all vehicles
-					if getControlState"vehicle_look_behind" or
-					( getControlState"vehicle_look_left" and getControlState"vehicle_look_right" ) or
+					if getPedControlState(getLocalPlayer(), "vehicle_look_behind") or
+					( getPedControlState(getLocalPlayer(), "vehicle_look_left") and getPedControlState(getLocalPlayer(), "vehicle_look_right" )) or
 					--Look left/right on any vehicle except planes and helis (these rotate them)
-					( getVehicleType(vehicle)~="Plane" and getVehicleType(vehicle)~="Helicopter" and 
-					( getControlState"vehicle_look_left" or getControlState"vehicle_look_right" ) ) then
+					( getVehicleType(vehicle)~="Plane" and getVehicleType(vehicle)~="Helicopter" and
+					( getPedControlState(getLocalPlayer(), "vehicle_look_left") or getPedControlState(getLocalPlayer(), "vehicle_look_right" )) ) then
 						camRot = -math.rad(getPedRotation(localPlayer))
 					else
 						camRot = getVectorRotation(camX,camY,camTargetX,camTargetY)
 					end
-				elseif getControlState"look_behind" then
+				elseif getPedControlState(getLocalPlayer(), "look_behind") then
 					camRot = -math.rad(getPedRotation(localPlayer))
 				else
 					camRot = getVectorRotation(camX,camY,camTargetX,camTargetY)
