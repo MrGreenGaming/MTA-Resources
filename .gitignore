@@ -10,5 +10,8 @@
 /resources/\[admin\]/admin/conf/reports.xml
 /resources/\[gameplay\]/gcshop/teams/teamwars.xml
 
+# Ignore MTASA upgrade backups
+*.lua.old
+
 # Web settings
 www/mta/mtasettings.php
