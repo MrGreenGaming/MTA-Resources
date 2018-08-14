@@ -1,187 +1,139 @@
-local gcData = {
-    host = get "*gcshop.host",
-    username = get("*gcshop.user"),
-    password = get("*gcshop.pass"),
-    database = "mrgreen_gc",
-    gcTable = "green_coins"
-}
+local devMode = get "devmode" == true
 
+--[[
+Quickly enable development mode: /srun set("*gc.devmode", true)
 
-local forumData = {
-    host = get "*gcshop.host",
-    username = get("*gcshop.user"),
-    password = get("*gcshop.pass"),
-    database = "mrgreen_forums",
-    fTable = "x_utf_l4g_members"
-}
-
-local devmode = get "devmode" == true
-useSQL = false
-
---[[--
-Quickly enable devmode: /srun set("*gc.devmode", true)
-
-Devmode skips the need for a mysql db installed to test stuff with GC.
+Development mode skips the need to run a fork of the website when testing GCs.
 You can login to GreenCoins with any username, the password is always 'admin'.
 
 If you want to login with a specific forumID, input it as the username:
 /gclogin 546 admin
---]] --
+--]]
 
-
-local function connect()
-    destroyElement(handlerGC)
-
-    if devmode then
-        outputDebugString("GreenCoins started in devmode")
-    else
-        handlerGC = dbConnect('mysql', 'host=' .. gcData.host .. ';dbname=' .. gcData.database, gcData.username, gcData.password)
-    end
-end
-addEventHandler("onResourceStart", resourceRoot, connect)
-
-function gcConnected()
-    return (handlerGC and true) or false
-end
-
+--Cache
 local accountDetailsCache = {}
 
 function getPlayerLoginInfo(email, pw, callback)
-    if devmode then
+    if not email or not pw then
+        outputDebugString("getPlayerLoginInfo: Missing details", 1)
+        callback(false)
+        return
+    end
+
+    if devMode then
         -- /gclogin <choose a forumID> <admin>
         if pw == 'admin' then
             local forumID = math.floor(math.abs(tonumber(email))) or 1337
-            return callback(forumID)
+            callback(forumID)
+        else
+            callback(false)
         end
-        return callback(false)
+        return
     end
 
-    if email and pw then
-        local url = 'https://mrgreengaming.com/api/account/login' -- returns {"error":0,"userId":591,"user":"SDK","name":"SDK","emailAddress":"sdk@gmail.com","greenCoins":0,"profile.photo":"http://forum_avatar.jpg","profile.photoThumb":"http://forum_avatar.jpg","profile.title":"custom forum title"}
-        local post = toJSON { user = email, password = pw, appId = get "appId", appSecret = get "appSecretPass" }
-        -- outputDebugString(post)
-        fetchRemote(url, function(r, e)
-            if e ~= 0 then
-                outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. e, 1)
-                return callback(false)
-            elseif not fromJSON(r) then
-                outputDebugString("getPlayerLoginInfo: api query error! " .. r, 1)
-                return callback(false)
-            else
-                local result = fromJSON(r)
-                if result.error ~= 0 then
-                    return callback(false)
-                else
-                    -- outputDebugString(tostring(r))
-                    accountDetailsCache[result.userId] = result
-                    return callback(result.userId, result.name, result.emailAddress, result.profile, result.joinTimestamp)
-                end
-            end
-        end, post)
-    else
-        outputDebugString("getPlayerLoginInfo: No db connection or missing details!", 1)
-        return callback(false)
-    end
+    local fetchOptions = {
+        queueName = "API",
+        connectionAttempts = 3,
+        connectTimeout = 4000,
+        method = "POST",
+        postData = toJSON { user = email, password = pw, appId = get "appId", appSecret = get "appSecretPass" }
+    }
+
+    fetchRemote("https://mrgreengaming.com/api/account/login", fetchOptions, function(res, info)
+        if not info.success or not res then
+            outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. info.statusCode, 1)
+            callback(false)
+            return
+        end
+
+        local result = fromJSON(res)
+        if not result or result.error then
+            callback(false)
+            return
+        end
+
+        --Push to cache
+        accountDetailsCache[result.userId] = result
+
+        callback(result.userId, result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance)
+    end)
 end
 
 function getForumAccountDetails(forumID, callback)
-    if devmode then
-        return callback(forumID)
+    if devMode then
+        callback(forumID)
+        return
     end
 
-    if forumID then
-        if accountDetailsCache[forumID] then return callback(accountDetailsCache[forumID].name, accountDetailsCache[forumID].emailAddress, accountDetailsCache[forumID].profile, accountDetailsCache[forumID].joinTimestamp) end
-        local url = 'https://mrgreengaming.com/api/account/details' -- returns {"error":0,"userId":591,"name":"SDK","emailAddress":"sdk@gmail.com","greenCoins":0,"profile.photo":"http://forum_avatar.jpg","profile.photoThumb":"http://forum_avatar.jpg","profile.title":"custom forum title"}
-        local post = toJSON { userId = forumID, appId = get "appId", appSecret = get "appSecretPass" }
-        fetchRemote(url, function(r, e)
-            if e ~= 0 then
-                outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. e, 1)
-                return callback(false)
-            elseif not fromJSON(r) then
-                outputDebugString("getPlayerLoginInfo: api query error! " .. tostring(r), 1)
-                return callback(false)
-            else
-                local result = fromJSON(r)
-                if result.error ~= 0 then
-                    outputDebugString("getForumAccountDetails: api error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
-                    return callback(false)
-                else
-                    -- outputDebugString(tostring(r))
-                    accountDetailsCache[forumID] = result
-                    return callback(result.name, result.emailAddress, result.profile, result.joinTimestamp)
-                end
-            end
-        end, post)
-    else
-        outputDebugString("getForumAccountDetails: No db connection or missing details!", 1)
-        return callback(false)
+    if not forumID then
+        outputDebugString("getForumAccountDetails: Missing details", 1)
+        callback(false)
+        return
     end
+
+    --Check cache
+    if accountDetailsCache[forumID] then
+        --Cache hit
+        callback(accountDetailsCache[forumID].name, accountDetailsCache[forumID].emailAddress, accountDetailsCache[forumID].profile, accountDetailsCache[forumID].joinTimestamp, accountDetailsCache[forumID].coinsBalance)
+        return
+    end
+
+    local fetchOptions = {
+        queueName = "API",
+        connectionAttempts = 3,
+        connectTimeout = 4000,
+        method = "POST",
+        postData = toJSON { userId = forumID, appId = get "appId", appSecret = get "appSecretPass" }
+    }
+
+    fetchRemote("https://mrgreengaming.com/api/account/details", fetchOptions, function(res, info)
+        if not info.success or not res then
+            outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. info.statusCode, 1)
+            callback(false)
+            return
+        end
+
+        local result = fromJSON(res)
+        if not result or result.error then
+            outputDebugString("getForumAccountDetails: api error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
+            callback(false)
+            return
+        end
+
+        --Push to cache
+        accountDetailsCache[forumID] = result
+
+        callback(result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance)
+    end)
 end
 
-function getPlayerGCInfo(forumID)
-    if devmode then
-        if tonumber(forumID) then
-            return tonumber(forumID) * 10, 99999 --gcID and gcAmount
-        end
-        return false
-    end
-
-    if handlerGC and forumID then
-        local cmd = "SELECT * FROM " .. gcData.gcTable .. " WHERE forum_id = ? AND valid = 1"
-        local query = dbQuery(handlerGC, cmd, forumID)
-        if query then
-            local result = dbPoll(query, -1)
-            if not result then outputDebugString("Error: Query not ready or error") dbFree(query) return false end
-            if not result[1] then dbFree(query) return false end
-            if not result[1].id or not result[1].amount_current then --DEBUG PURPOSES.
-                outputDebugString('ERROR: Couldn\'t find GC columns for forumid: ' .. tostring(forumID))
-            end
-            return result[1].id, result[1].amount_current
-        else
-            outputDebugString("getPlayerGCInfo: SELECT query failed!", 1)
-        end
-    else
-        outputDebugString("getPlayerGCInfo: No db connection!", 1)
-    end
-    return false
-end
-
-
-function setAccountGCInfo(account, gcID, amount, quick)
-    if devmode then
+function setAccountGCInfo(forumID, amount)
+    if devMode then
         return true
     end
 
-    local cmd
-    local query
-    local result
-    local gc
-    if not quick then
-        if handlerGC then
-            cmd = "UPDATE " .. gcData.gcTable .. " SET amount_current = amount_current + ?, mta_name = ?, last_edit = ? WHERE id = ? AND valid = 1"
-            dbExec(handlerGC, cmd, amount, getPlayerName(account.player), getRealDateTimeNowString(), gcID)
-        else
-            outputDebugString("setPlayerGCInfo: No db connection!", 1)
+    local fetchOptions = {
+        queueName = "APISubmit",
+        connectionAttempts = 3,
+        connectTimeout = 5000,
+        method = "POST",
+        postData = toJSON { amount = amount, appId = get "appId", appSecret = get "appSecretPass" }
+    }
+
+    fetchRemote("https://mrgreengaming.com/api/users/".. forumID .."/coins/submitTransaction", fetchOptions, function(res, info)
+        if not info.success or not res then
+            outputDebugString("setAccountGCInfo: fetchRemote query failed " .. info.statusCode, 1)
+            callback(false)
+            return
         end
-        return false
-    else
-        if handlerGC then
-            cmd = "SELECT * FROM " .. gcData.gcTable .. " WHERE id = ? AND valid = 1"
-            query = dbQuery(handlerGC, cmd, gcID)
-            if query then
-                result = dbPoll(query, -1)
-                if not result then outputDebugString("Error: Query not ready or error") dbFree(query) return end
-                gc = result[1].amount_current + amount
-                cmd = "UPDATE " .. gcData.gcTable .. " SET amount_current = ?, mta_name = ?, last_edit = ? WHERE id = ? AND valid = 1"
-                dbExec(handlerGC, cmd, tostring(gc), removeColorCoding(getPlayerName(account.player)), getRealDateTimeNowString(), gcID)
-            else
-                outputDebugString("mysql_query failed: (")
-            end
-        else
-            outputDebugString("setPlayerGCInfo: No db connection!", 1)
+
+        local result = fromJSON(res)
+        if not result or result.error then
+            outputDebugString("setAccountGCInfo: api error " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
+            callback(false)
+            return
         end
-        return false
-    end
+    end)
 end
 
 ---------------------------------------------------------------------------
