@@ -29,7 +29,7 @@ local teammem_sql = [[
 	`join_timestamp` int(11) NOT NULL COMMENT 'timestamp when joined current team', 
 	`status` int(11) NOT NULL COMMENT '1 = in team', 
 	PRIMARY KEY (`forumid`), 
-	KEY `teamid` (`teamid`),  
+	KEY `teamid` (`teamid`),
 	CONSTRAINT `Team members` FOREIGN KEY (`teamid`) REFERENCES `team` (`teamid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;]]
 
