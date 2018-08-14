@@ -12,22 +12,20 @@ end
 function shooterJump()
 	local veh = getPedOccupiedVehicle(localPlayer)
 	local vehID = getElementModel( veh )
-		if vehID == 444 or 556 or 557 then -- If veh is a monster --
-			local posX, posY, posZ = getElementPosition( veh )
-			local grndZ = getGroundPosition(posX,posY,posZ)
-			
+	if vehID == 444 or vehID == 556 or vehID == 557 then -- If veh is a monster --
+		local posX, posY, posZ = getElementPosition( veh )
+		local grndZ = getGroundPosition(posX,posY,posZ)
 
-			if posZ-grndZ < 2 then
-				local vx, vy, vz = getElementVelocity ( veh )
+		if posZ-grndZ < 2 then
+			local vx, vy, vz = getElementVelocity ( veh )
        			setElementVelocity ( veh ,vx, vy, vz + 0.25 )
        			sh_cd_handler("jump")
-			end
-
-		elseif (isVehicleOnGround(veh)) then
-			local vx, vy, vz = getElementVelocity ( veh )
+		end
+	elseif (isVehicleOnGround(veh)) then
+		local vx, vy, vz = getElementVelocity ( veh )
        		setElementVelocity ( veh ,vx, vy, vz + 0.25 )
        		sh_cd_handler("jump")
-		end
+	end
 end
 
 
@@ -39,7 +37,6 @@ local sh_shootCDTimer = false
 
 
 function sh_redGreen_prc(percent)
-
 	return tocolor(r,g,0)
 end
 
