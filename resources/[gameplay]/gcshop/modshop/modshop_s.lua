@@ -464,14 +464,14 @@ function mapRestart ( mapInfo, mapOptions, gameOptions )
 end
 addEventHandler ( "onMapStarting", root, mapRestart )
 
-function shopLogIn ( forumID, amount )
-	local playerMods = getModsFromDB(forumID,true)
+function shopLogIn(forumID, amount)
+	local playerMods = getModsFromDB(forumID, true)
 	-- if gcMods[forumID] then
 		local veh = getPedOccupiedVehicle(source)
 		if veh then
 			prev_vehid[source] = getElementModel(veh)
 		end
-		addUpgradeHandlers( source )
+		addUpgradeHandlers(source)
 	-- end
 
 	
@@ -498,22 +498,43 @@ addEvent('onPlayerReachCheckpoint', true)
 addEvent('onPlayerPickUpRacePickup', true)
 addEvent('onClientModMapIsStarting', true)
 
-function addUpgradeHandlers ( player )
-	addEventHandler('onPlayerVehicleEnter', player, vehicleChecker)			-- p = source
-	addEventHandler('onClientModMapIsStarting', player, vehicleChecker)		-- p = source
-	addEventHandler('onPlayerQuit', player, removeUpgradeHandlers)
+local function addUpgradeHandlers(player)
+	local function isEventHandlerAdded(sEventName, pElementAttachedTo, func)
+		if type(sEventName) == 'string' and
+				isElement(pElementAttachedTo) and
+				type(func) == 'function' then
+			local aAttachedFunctions = getEventHandlers(sEventName, pElementAttachedTo)
+			if type(aAttachedFunctions) == 'table' and #aAttachedFunctions > 0 then
+				for i, v in ipairs(aAttachedFunctions) do
+					if v == func then
+						return true
+					end
+				end
+			end
+		end
+
+		return false
+	end
+
+	if not isEventHandlerAdded('onPlayerVehicleEnter', player, vehicleChecker) then
+		addEventHandler('onPlayerVehicleEnter', player, vehicleChecker)
+	end
+	if not isEventHandlerAdded('onClientModMapIsStarting', player, vehicleChecker) then
+		addEventHandler('onClientModMapIsStarting', player, vehicleChecker)
+	end
+	if not isEventHandlerAdded('onPlayerQuit', player, removeUpgradeHandlers) then
+		addEventHandler('onPlayerQuit', player, removeUpgradeHandlers)
+	end
 end
 
-function removeUpgradeHandlers ( player )
+local function removeUpgradeHandlers(player)
 	player = source or player
 	removeEventHandler('onPlayerVehicleEnter', player, vehicleChecker)
 	removeEventHandler('onClientModMapIsStarting', player, vehicleChecker)
 	removeEventHandler('onPlayerQuit', player, removeUpgradeHandlers)
 end
 
-
-addEventHandler('onElementModelChange', root,
-function()
+addEventHandler('onElementModelChange', root, function()
 	if getElementType(source) == 'vehicle' then
 		local player = getVehicleOccupant(source)
 		if not player then return end
@@ -521,69 +542,67 @@ function()
 		if not gcMods[exports.gc:getPlayerForumID(player)] then return end
 		setTimer(vehicleChecker2, 50, 1, player)
 	end
-end
-)
+end)
 
-
-function vehicleChecker2 ( player )
+local function vehicleChecker2(player)
 	player = source or player
-	if isElement(player) and getPedOccupiedVehicle ( player ) and map_allows_shop then
+	if isElement(player) and getPedOccupiedVehicle(player) and map_allows_shop then
 		local previd = prev_vehid[player]
-		local id = getElementModel ( getPedOccupiedVehicle ( player ) )
+		local id = getElementModel(getPedOccupiedVehicle(player))
 		if not previd or previd ~= id then
 			prev_vehid[player] = id
 			local veh = getPedOccupiedVehicle(player)
-			cleanVehicle ( veh, player )
+			cleanVehicle(veh, player)
 		end
-		local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
-		return upgradeVehicle ( player, forumID )
+		local forumID = tonumber(exports.gc:getPlayerForumID(player))
+		return upgradeVehicle(player, forumID)
 	end
 end
 
-function vehicleChecker ( player )
+local function vehicleChecker(player)
 	player = source or player
 	setTimer(vehicleChecker2, 50, 1, player)
 end
+
 modShopCheckVehicleAgain = vehicleChecker
 
-function upgradeVehicle(player,forumID)
+local function upgradeVehicle(player, forumID)
 	local veh = getPedOccupiedVehicle(player)
 	if not veh then
 		outputDebugString('upgradeVehicle: no vehicle', 2)
 		return
 	end
-	
-	
+
 	local vehID = getElementModel(veh)
 	--local upgrades = getUpgInDatabase (forumID, vehID )
 	--outputDebugString('Instead of outputting error @ indexing say why: ForumID '.. tostring(forumID))
-	if not gcMods[forumID] or not gcMods[forumID]["ID-"..vehID] then return end
-	local upgrades = gcMods[forumID]["ID-"..vehID]
+	if not gcMods[forumID] or not gcMods[forumID]["ID-" .. vehID] then return end
+	local upgrades = gcMods[forumID]["ID-" .. vehID]
 	if not upgrades or not upgrades['vehicle'] then return end
-	
+
 	local addUpg = {}
-	for i = 0,24 do
+	for i = 0, 24 do
 		if #split(tostring(upgrades['slot' .. i]), ",") <= 1 then
 			addUpg[i] = tonumber(upgrades['slot' .. i])
 		else
 			addUpg[i] = {}
-			for k,v in ipairs(split(tostring(upgrades['slot' .. i]), ",")) do
+			for k, v in ipairs(split(tostring(upgrades['slot' .. i]), ",")) do
 				addUpg[i][k] = tonumber(v)
 			end
 		end
-		if i <= 16 and addUpg[i] and (i~=8 and i~=9) then
+		if i <= 16 and addUpg[i] and (i ~= 8 and i ~= 9) then
 			addVehicleUpgrade(veh, addUpg[i])
 		elseif i == 17 and addUpg[i] then
 			if permissions.colour[exports.race:getRaceMode()] then
-				local col1, col2, col3, col4 = getVehicleColor ( veh )
+				local col1, col2, col3, col4 = getVehicleColor(veh)
 				if addUpg[17] < 4 then
 					--outputDebugString("s 1")
 					setVehiclePaintjob(veh, addUpg[17])
-					removeCustomPaintJob (player)
+					removeCustomPaintJob(player)
 				else
 					--outputDebugString("s 2")
 					setVehiclePaintjob(veh, 3)
-					applyCustomPaintJob( player, addUpg[17] - 3 )
+					applyCustomPaintJob(player, addUpg[17] - 3)
 				end
 				if isVehColorAllowed() then
 					setVehicleColor(veh, col1, col2, col3, col4)
@@ -592,102 +611,100 @@ function upgradeVehicle(player,forumID)
 		elseif i == 21 and addUpg[18] then
 			if permissions.colour[exports.race:getRaceMode()] then
 				if type(addUpg[18]) == 'number' then
-					local col1, col2, col3, col4 = getVehicleColor ( veh )
+					local col1, col2, col3, col4 = getVehicleColor(veh)
 					if isVehColorAllowed() then
-						setVehicleColor(veh, math.range(addUpg[18],0,255) or col1, math.range(addUpg[19],0,255) or col2, math.range(addUpg[20],0,255) or col3, math.range(addUpg[21],0,255) or col4)
+						setVehicleColor(veh, math.range(addUpg[18], 0, 255) or col1, math.range(addUpg[19], 0, 255) or col2, math.range(addUpg[20], 0, 255) or col3, math.range(addUpg[21], 0, 255) or col4)
 					end
 				else
 					addUpg[19] = type(addUpg[19]) == 'table' and addUpg[19] or {}
 					addUpg[20] = type(addUpg[20]) == 'table' and addUpg[20] or {}
 					addUpg[21] = type(addUpg[21]) == 'table' and addUpg[21] or {}
 					if isVehColorAllowed() then
-						setVehicleColor(veh,addUpg[18][1], addUpg[18][2], addUpg[18][3],
-											addUpg[19][1], addUpg[19][2], addUpg[19][3],
-											addUpg[20][1], addUpg[20][2], addUpg[20][3],
-											addUpg[21][1], addUpg[21][2], addUpg[21][3]
-											)
+						setVehicleColor(veh, addUpg[18][1], addUpg[18][2], addUpg[18][3],
+							addUpg[19][1], addUpg[19][2], addUpg[19][3],
+							addUpg[20][1], addUpg[20][2], addUpg[20][3],
+							addUpg[21][1], addUpg[21][2], addUpg[21][3])
 					end
 				end
 			end
-		elseif i == 24 and addUpg[i-2] then
-			setVehicleHeadLightColor(veh, math.range(addUpg[22],0,255) or 255, math.range(addUpg[23],0,255) or 255, math.range(addUpg[24],0,255) or 255)
+		elseif i == 24 and addUpg[i - 2] then
+			setVehicleHeadLightColor(veh, math.range(addUpg[22], 0, 255) or 255, math.range(addUpg[23], 0, 255) or 255, math.range(addUpg[24], 0, 255) or 255)
 		end
 	end
-    --if doesHaveExtraMods ( forumID ) then
-        if neons[upgrades['slot26']] then
-            updateNeon(player, upgrades['slot26'])
-        end
-  --  end
+	--if doesHaveExtraMods ( forumID ) then
+	if neons[upgrades['slot26']] then
+		updateNeon(player, upgrades['slot26'])
+	end
+	--  end
 end
 
-function cleanVehicle ( veh, player )
-	for k,v in ipairs(getVehicleUpgrades(veh)) do
-		if (v~=1008 and v~=1009 and v~=1010) then
+local function cleanVehicle(veh, player)
+	for k, v in ipairs(getVehicleUpgrades(veh)) do
+		if (v ~= 1008 and v ~= 1009 and v ~= 1010) then
 			removeVehicleUpgrade(veh, v)
 		end
 	end
 	setVehiclePaintjob(veh, 3)
-	removeCustomPaintJob (player)
+	removeCustomPaintJob(player)
 	setVehicleHeadLightColor(veh, 255, 255, 255)
-    for k, element in ipairs ( getElementChildren(veh) ) do
-        if getElementData(element, "neon", false) == true then
-            destroyElement( element )
-        end
-    end
+	for k, element in ipairs(getElementChildren(veh)) do
+		if getElementData(element, "neon", false) then
+			destroyElement(element)
+		end
+	end
 	return true
 end
 
-function updateNeon (player, color)
-    local veh = getPedOccupiedVehicle(player)
-    if not veh then return end
-    local pos_data = getModelNeonData(getElementModel(veh))
-    -- { 1=1+2/math.abs(left+right), 2=1+2/z, 3=1+2/scale, 4=3/front, 5=3/z, 6=3/scale, 7=4/back, 8=4/z, 9=4/scale)
-    if not pos_data then return end
-    local object = neons[color][2]
+local function updateNeon(player, color)
+	local veh = getPedOccupiedVehicle(player)
+	if not veh then return end
+	local pos_data = getModelNeonData(getElementModel(veh))
+	-- { 1=1+2/math.abs(left+right), 2=1+2/z, 3=1+2/scale, 4=3/front, 5=3/z, 6=3/scale, 7=4/back, 8=4/z, 9=4/scale)
+	if not pos_data then return end
+	local object = neons[color][2]
 	local dim = getElementDimension(veh) or 0;
-    
-    local obj1 = createObject(object,0,0,0)
-    local obj2 = createObject(object,0,0,0)
-    local obj3 = createObject(object,0,0,0)
-    local obj4 = createObject(object,0,0,0)
-	
+
+	local obj1 = createObject(object, 0, 0, 0)
+	local obj2 = createObject(object, 0, 0, 0)
+	local obj3 = createObject(object, 0, 0, 0)
+	local obj4 = createObject(object, 0, 0, 0)
+
 	setElementDimension(obj1, dim);
 	setElementDimension(obj2, dim);
 	setElementDimension(obj3, dim);
 	setElementDimension(obj4, dim);
-	
-    setObjectScale( obj1, pos_data[3] )
-    setObjectScale( obj2, pos_data[3] )
-    setObjectScale( obj3, pos_data[6] )
-    setObjectScale( obj4, pos_data[9] )
-    
-    setElementData(obj1, "neon", true)
-    setElementData(obj2, "neon", true)
-    setElementData(obj3, "neon", true)
-    setElementData(obj4, "neon", true)
-    
-    local b = attachElements(obj1, veh, pos_data[1], 0, pos_data[2], 0, 0,  0 )
-    attachElements(obj2, veh, -pos_data[1], 0, pos_data[2], 0, 0,  0 )
-    attachElements(obj3, veh, 0, pos_data[4], pos_data[5], 0, 0, 90 )
-    attachElements(obj4, veh, 0, pos_data[7], pos_data[8], 0, 0, 90 )
-    
-    setElementParent(obj1, veh)
-    setElementParent(obj2, veh)
-    setElementParent(obj3, veh)
-    setElementParent(obj4, veh)
-	
-	setElementCollisionsEnabled(obj1, false)  --not sure if needed but players seem to crash in neons at times
+
+	setObjectScale(obj1, pos_data[3])
+	setObjectScale(obj2, pos_data[3])
+	setObjectScale(obj3, pos_data[6])
+	setObjectScale(obj4, pos_data[9])
+
+	setElementData(obj1, "neon", true)
+	setElementData(obj2, "neon", true)
+	setElementData(obj3, "neon", true)
+	setElementData(obj4, "neon", true)
+
+	local b = attachElements(obj1, veh, pos_data[1], 0, pos_data[2], 0, 0, 0)
+	attachElements(obj2, veh, -pos_data[1], 0, pos_data[2], 0, 0, 0)
+	attachElements(obj3, veh, 0, pos_data[4], pos_data[5], 0, 0, 90)
+	attachElements(obj4, veh, 0, pos_data[7], pos_data[8], 0, 0, 90)
+
+	setElementParent(obj1, veh)
+	setElementParent(obj2, veh)
+	setElementParent(obj3, veh)
+	setElementParent(obj4, veh)
+
+	setElementCollisionsEnabled(obj1, false) --not sure if needed but players seem to crash in neons at times
 	setElementCollisionsEnabled(obj2, false)
 	setElementCollisionsEnabled(obj3, false)
 	setElementCollisionsEnabled(obj4, false)
 end
 
 addEvent('onShopInit', true)
-addEventHandler('onShopInit', root, 
+addEventHandler('onShopInit', root,
 	function()
-        triggerClientEvent(client, "installNeon", client, neons)
-    end
-)
+		triggerClientEvent(client, "installNeon", client, neons)
+	end)
 
 
 -------------------------------
@@ -698,13 +715,13 @@ addEventHandler('onShopInit', root,
 local currentRaceState
 local dimensions = {}
 
-function onRaceStateChanging( newStateName, oldStateName)
+local function onRaceStateChanging( newStateName, oldStateName)
 	currentRaceState = newStateName
 end
 addEvent('onRaceStateChanging')
 addEventHandler('onRaceStateChanging', root, onRaceStateChanging)
 
-function modshopTestVehicle(player, c , vehicleID)
+local function modshopTestVehicle(player, c , vehicleID)
 	local playerState = getElementData(player, 'state', false)
 	local vehicleID = getVehicleModelFromString(vehicleID)
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
@@ -760,7 +777,7 @@ addCommandHandler('gctestveh', modshopTestVehicle);
 addEvent('gctestveh', true);
 addEventHandler('gctestveh', root, modshopTestVehicle);
 
-function wasted()
+local function wasted()
 	if getElementData(source,'gcmodshop.testing') or dimensions[source] then
 		if dimensions[source] then
 			dimensions[dimensions[source]] = nil;
