@@ -79,7 +79,7 @@ function getForumAccountDetails(forumID, callback)
     end
 
     local fetchOptions = {
-        queueName = "API",
+        queueName = "API-User".. forumID,
         connectionAttempts = 3,
         connectTimeout = 4000,
         method = "POST",
@@ -113,14 +113,15 @@ function setAccountGCInfo(forumID, amount)
     end
 
     local fetchOptions = {
-        queueName = "APISubmit",
+        queueName = "API-User".. forumID,
         connectionAttempts = 3,
         connectTimeout = 5000,
         method = "POST",
         postData = toJSON { amount = amount, appId = get "appId", appSecret = get "appSecretPass" }
     }
 
-    fetchRemote("https://mrgreengaming.com/api/users/".. forumID .."/coins/submitTransaction", fetchOptions, function(res, info)
+    --We'd rather use submitTransaction but we would need to handle transaction denies and such
+    fetchRemote("https://mrgreengaming.com/api/users/".. forumID .."/coins/changeBalance", fetchOptions, function(res, info)
         if not info.success or not res then
             outputDebugString("setAccountGCInfo: fetchRemote query failed " .. info.statusCode, 1)
             callback(false)
