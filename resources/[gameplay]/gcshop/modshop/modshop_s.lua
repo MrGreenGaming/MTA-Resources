@@ -566,7 +566,7 @@ end
 
 modShopCheckVehicleAgain = vehicleChecker
 
-local function upgradeVehicle(player, forumID)
+function upgradeVehicle(player, forumID)
 	local veh = getPedOccupiedVehicle(player)
 	if not veh then
 		outputDebugString('upgradeVehicle: no vehicle', 2)
@@ -638,7 +638,7 @@ local function upgradeVehicle(player, forumID)
 	--  end
 end
 
-local function cleanVehicle(veh, player)
+function cleanVehicle(veh, player)
 	for k, v in ipairs(getVehicleUpgrades(veh)) do
 		if (v ~= 1008 and v ~= 1009 and v ~= 1010) then
 			removeVehicleUpgrade(veh, v)
@@ -655,7 +655,7 @@ local function cleanVehicle(veh, player)
 	return true
 end
 
-local function updateNeon(player, color)
+function updateNeon(player, color)
 	local veh = getPedOccupiedVehicle(player)
 	if not veh then return end
 	local pos_data = getModelNeonData(getElementModel(veh))
