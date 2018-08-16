@@ -125,7 +125,7 @@ end
 addEvent("onGCSetVisible", true)
 addEventHandler("onGCSetVisible", root, setVisible)
 
-function loginSuccess(gcAmount, name, email)
+local function loginSuccess(gcAmount, name, email)
 	if gcAmount then
 		setGC(gcAmount)
 	end
@@ -140,13 +140,11 @@ end
 addEvent("onLoginSuccess", true)
 addEventHandler("onLoginSuccess", root, loginSuccess)
 
-function loginFail(alreadyLoggedIn, databaseDown)
-	if alreadyLoggedIn then
-		outputChatBox("[GC] You are already logged in as " .. gc_name .. '/' .. gc_email ..".", 255, 0, 0)
-	elseif databaseDown then
-		outputChatBox("[GC] GreenCoins database is not available at this moment. Please try again at a later moment.", 255, 0, 0)
+local function loginFail(apiDown)
+	if apiDown then
+		outputChatBox("[GC] GreenCoins are not available at this moment.", 255, 0, 0)
 	else
-		outputChatBox("[GC] Wrong email or password entered.", 255, 0, 0)
+		outputChatBox("[GC] Wrong username/emailaddress or password entered. There is a Lost Password page on the Forums.", 255, 0, 0)
 	end
 end
 

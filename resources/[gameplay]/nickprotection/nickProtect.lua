@@ -19,13 +19,13 @@ function doesPlayerMatchNick(nick, id)
     local cmd = ''
     local query
     if handlerConnect then
-        cmd = "SELECT pNick, accountID FROM gc_nickprotection WHERE pNick = ?"
+        cmd = "SELECT pNick, forumId, accountID FROM gc_nickprotection WHERE pNick = ?"
         query = dbQuery(handlerConnect, cmd, nick)
         if not query then return false end
         local sql = dbPoll(query, -1)
         if not sql then return false end
         if #sql > 0 then
-            if sql[1].accountID == id then
+            if sql[1].forumId == id then
                 return true
             else
                 return false
@@ -55,7 +55,7 @@ end
 
 function isNickProtected(nick)
     if handlerConnect then
-        local cmd = "SELECT pNick, accountID FROM gc_nickprotection WHERE LOWER(pNick) = ? LIMIT 0,1"
+        local cmd = "SELECT pNick, forumId, accountID FROM gc_nickprotection WHERE LOWER(pNick) = ? LIMIT 0,1"
         local query = dbQuery(handlerConnect, cmd, string.lower(nick))
         if not query then
             return false
@@ -187,18 +187,24 @@ addEventHandler('nickProtectionLoaded', getRootElement(),
             return
         end
         g_JoinHandler[source] = setTimer(function(player)
-            if isElement(player) then
-                local isCurrentNickProtected = isNickProtected(safeString(getPlayerName(player)))
-                local isLogged = exports.gc:isPlayerLoggedInGC(player)
-                if isLogged then
-                    id = exports.gc:getPlayerGreencoinsID(player)
-                    id = tostring(id)
-                end
-                if isCurrentNickProtected and not isLogged then
-                    warnPlayer(player)
-                elseif isCurrentNickProtected and not doesPlayerMatchNick(safeString(getPlayerName(player)), id) then
-                    warnPlayer(player)
-                end
+            if not isElement(player) then
+                return
+            end
+
+            local isCurrentNickProtected = isNickProtected(safeString(getPlayerName(player)))
+            if not isCurrentNickProtected then
+                return
+            end
+
+            local isLogged = exports.gc:isPlayerLoggedInGC(player)
+            if not isLogged then
+                warnPlayer(player)
+                return
+            end
+
+            local id = exports.gc:getPlayerGreencoinsID(player)
+            if not doesPlayerMatchNick(safeString(getPlayerName(player)), id) then
+                warnPlayer(player)
             end
         end, 15000, 1, source)
     end)
@@ -212,32 +218,38 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
             return
         end
 
-        local nick = newNick
         local player = source
 
-        if isElement(player) then
-            local isCurrentNickProtected = isNickProtected(safeString(nick))
-            local isLogged = exports.gc:isPlayerLoggedInGC(player)
-            if isLogged then
-                id = exports.gc:getPlayerGreencoinsID(player)
-                id = tostring(id)
-            end
-            if isCurrentNickProtected and not isLogged then
-                cancelEvent()
-                outputChatBox('This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-                setTimer(function() if getPlayerName(player) == nick then warnPlayer(player, oldNick) end end, 10000, 1)
+        if not isElement(player) then
+            return
+        end
 
-            elseif isCurrentNickProtected and not doesPlayerMatchNick(safeString(nick), id) then
-                cancelEvent()
-                outputChatBox('This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-                setTimer(function() if getPlayerName(player) == nick then warnPlayer(player, oldNick) end end, 500, 1)
-            end
+        local nick = newNick
+
+        local isCurrentNickProtected = isNickProtected(safeString(nick))
+        if not isCurrentNickProtected then
+            return
+        end
+
+        local isLogged = exports.gc:isPlayerLoggedInGC(player)
+        if not isLogged then
+            cancelEvent()
+            outputChatBox('This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
+            setTimer(function() if getPlayerName(player) == nick then warnPlayer(player, oldNick) end end, 10000, 1)
+            return
+        end
+
+        local id = exports.gc:getPlayerGreencoinsID(player)
+        if not doesPlayerMatchNick(safeString(nick), id) then
+            cancelEvent()
+            outputChatBox('This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
+            setTimer(function() if getPlayerName(player) == nick then warnPlayer(player, oldNick) end end, 500, 1)
         end
     end)
 
 
 addEvent('onGreencoinsLogin', true)
-addEventHandler('onGreencoinsLogin', getRootElement(),
+--[[addEventHandler('onGreencoinsLogin', getRootElement(),
     function()
         if not canScriptWork then
             return
@@ -245,7 +257,7 @@ addEventHandler('onGreencoinsLogin', getRootElement(),
 
         id = exports.gc:getPlayerGreencoinsID(source)
         id = tostring(id)
-    end)
+    end)]]
 
 
 addEventHandler('onPlayerQuit', getRootElement(), function()
@@ -284,4 +296,3 @@ function nickChangeSpamProtection(player)
         last[player] = getTickCount()
     end
 end
-

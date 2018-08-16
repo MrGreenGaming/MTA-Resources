@@ -498,7 +498,7 @@ addEvent('onPlayerReachCheckpoint', true)
 addEvent('onPlayerPickUpRacePickup', true)
 addEvent('onClientModMapIsStarting', true)
 
-local function addUpgradeHandlers(player)
+function addUpgradeHandlers(player)
 	local function isEventHandlerAdded(sEventName, pElementAttachedTo, func)
 		if type(sEventName) == 'string' and
 				isElement(pElementAttachedTo) and
@@ -527,7 +527,7 @@ local function addUpgradeHandlers(player)
 	end
 end
 
-local function removeUpgradeHandlers(player)
+function removeUpgradeHandlers(player)
 	player = source or player
 	removeEventHandler('onPlayerVehicleEnter', player, vehicleChecker)
 	removeEventHandler('onClientModMapIsStarting', player, vehicleChecker)
@@ -544,7 +544,7 @@ addEventHandler('onElementModelChange', root, function()
 	end
 end)
 
-local function vehicleChecker2(player)
+function vehicleChecker2(player)
 	player = source or player
 	if isElement(player) and getPedOccupiedVehicle(player) and map_allows_shop then
 		local previd = prev_vehid[player]
@@ -559,7 +559,7 @@ local function vehicleChecker2(player)
 	end
 end
 
-local function vehicleChecker(player)
+function vehicleChecker(player)
 	player = source or player
 	setTimer(vehicleChecker2, 50, 1, player)
 end

@@ -3,55 +3,65 @@ accounts = {}
 ----------------------------
 --- Logging in and out  ---
 ----------------------------
-
-local function onLoginSuccessfull(result, player)
-    if result then
-        updateAutologin(player, accounts[player]:getForumID())
-        triggerClientEvent(player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getForumName(), accounts[player]:getLoginEmail())
-        triggerEvent('onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getForumName())
-        local serialGreencoins = getSerialGreencoins(player)
-        -- Transfer gc's from serial storage to the forum storage and delete the serial greencoins
-        if (serialGreencoins) then
-            deleteSerialGreencoins(player)
-            addPlayerGreencoins(player, serialGreencoins)
-            outputChatBox('[GC] Adding ' .. serialGreencoins .. ' GC from your rewards without an account', player, 0, 255, 0)
-        end
-        downloadAvatar(player)
-        return true
-    else
-        triggerClientEvent(player, "onLoginFail", player, true)
-        accounts[player]:destroy()
-        accounts[player] = nil
+local function onLoginSuccessfull(player)
+    updateAutologin(player, accounts[player]:getForumID())
+    triggerClientEvent(player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getForumName(), accounts[player]:getLoginEmail())
+    triggerEvent('onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getForumName())
+    local serialGreencoins = getSerialGreencoins(player)
+    -- Transfer gc's from serial storage to the forum storage and delete the serial greencoins
+    if serialGreencoins then
+        deleteSerialGreencoins(player)
+        addPlayerGreencoins(player, serialGreencoins)
+        outputChatBox('[GC] Adding ' .. serialGreencoins .. ' GC from your rewards without an account', player, 0, 255, 0)
     end
+    downloadAvatar(player)
+end
+
+local function onLoginFailed(player, silent)
+    if not silent then
+        triggerClientEvent(player, "onLoginFail", player, false)
+    end
+    accounts[player]:destroy()
+    accounts[player] = nil
 end
 
 
 -- email: forum email or nickname
 -- pw: forum password
-function onLogin(user, pw, autologin)
+function onLogin(user, pw)
     local player = source
     if not accounts[player] then
         accounts[player] = SAccount:create(player)
-        accounts[player]:login(user, pw, player, onLoginSuccessfull)
+        accounts[player]:login(user, pw, player, function(result, player)
+            if result then
+                onLoginSuccessfull(player)
+            else
+                onLoginFailed(player, false)
+            end
+        end)
     else
-        triggerClientEvent(player, "onLoginFail", player, true)
+        onLoginFailed(player, false)
     end
-    return false
 end
 
 function onAutoLogin(forumID, player)
     if not accounts[player] then
         accounts[player] = SAccount:create(player)
-        accounts[player]:loginViaForumID(forumID, player, onLoginSuccessfull)
+        accounts[player]:loginViaForumID(forumID, player, function(result, player)
+            if result then
+                onLoginSuccessfull(player)
+            else
+                onLoginFailed(player, true)
+            end
+        end)
     else
-        triggerClientEvent(player, "onLoginFail", player, true)
+        onLoginFailed(player, true)
     end
-    return false
 end
 
 
 
-addEvent('onGCLogin') -- broadcast event
+addEvent("onGCLogin") -- broadcast event
 addEvent("onLogin", true)
 addEventHandler("onLogin", root, onLogin)
 
@@ -230,8 +240,9 @@ end
 function isPlayerLoggedInGC(player)
     if accounts[player] then
         return true
+    else
+        return false
     end
-    return false
 end
 
 function getPlayerForumID(player)

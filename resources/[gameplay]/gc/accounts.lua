@@ -6,9 +6,6 @@ SAccount = {}
 SAccount.__index = SAccount
 SAccount.instances = {}
 
-accDB = "gc"
-gcDB = "gc"
-
 ---------------------------------------------------------------------------
 --
 -- SAccount:create()
@@ -80,9 +77,9 @@ function SAccount:login(username, pw, player, callback)
             end
         end
 
-        self.gcRecord[1] = forumID
+        self.gcRecord[1] = tonumber(forumID)
         self.gcRecord[2] = nil
-        self.gcRecord[3] = gcAmount
+        self.gcRecord[3] = tonumber(gcAmount)
         self.gcRecord[4] = 0 -- earned gc this session
         self.gcRecord[5] = name
         self.gcRecord[6] = emailAddress
@@ -101,10 +98,11 @@ end
 --
 ---------------------------------------------------------------------------
 function SAccount:loginViaForumID(givenForumID, player, callback)
-    if not forumID then
+    if not givenForumID then
         callback(false, player)
         return
     end
+
     if self.gcRecord[1] then
         callback(true, player)
         return
@@ -129,9 +127,9 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
             end
         end
 
-        self.gcRecord[1] = forumID
+        self.gcRecord[1] = tonumber(forumID)
         self.gcRecord[2] = nil
-        self.gcRecord[3] = gcAmount
+        self.gcRecord[3] = tonumber(gcAmount)
         self.gcRecord[4] = 0 -- earned gc this session
         self.gcRecord[5] = name
         self.gcRecord[6] = emailAddress
