@@ -40,8 +40,14 @@ function getPlayerLoginInfo(email, pw, callback)
     }
 
     fetchRemote("https://mrgreengaming.com/api/account/login", fetchOptions, function(res, info)
-        if not info.success or not res then
+        if not res then
             outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. info.statusCode, 1)
+            callback(false)
+            return
+        end
+
+        if not info.success then
+            outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. info.statusCode .. " ".. res, 1)
             callback(false)
             return
         end
