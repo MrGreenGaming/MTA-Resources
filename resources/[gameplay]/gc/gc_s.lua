@@ -25,6 +25,14 @@ local function onLoginFailed(player, silent)
     accounts[player] = nil
 end
 
+local function onLoginFailed(player, silent)
+    if not silent then
+        triggerClientEvent(player, "onLoginFail", player, false)
+    end
+    accounts[player]:destroy()
+    accounts[player] = nil
+end
+
 
 -- email: forum email or nickname
 -- pw: forum password
@@ -58,8 +66,6 @@ function onAutoLogin(forumID, player)
         onLoginFailed(player, true)
     end
 end
-
-
 
 addEvent("onGCLogin") -- broadcast event
 addEvent("onLogin", true)

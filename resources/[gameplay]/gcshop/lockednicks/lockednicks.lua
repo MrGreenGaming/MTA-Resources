@@ -126,8 +126,6 @@ function removeNick(id,nick)
 	local cmd = ''
 	local query 
 	if handlerConnect then
-
-
 		cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE pNick = ? AND forumId = ?"
 		query = dbQuery(handlerConnect, cmd, nick,id)
 		if not query then return false end
