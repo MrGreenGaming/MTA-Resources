@@ -36,7 +36,16 @@ function getPlayerLoginInfo(email, pw, callback)
         connectionAttempts = 3,
         connectTimeout = 4000,
         method = "POST",
-        postData = toJSON { user = email, password = pw, appId = get "appId", appSecret = get "appSecretPass" }
+        postData = toJSON({
+            user = email,
+            password = pw,
+            appId = get("appId"),
+            appSecret = get("appSecretPass")
+        }, true),
+        headers = {
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
+        }
     }
 
     fetchRemote("https://mrgreengaming.com/api/account/login", fetchOptions, function(res, info)
@@ -86,7 +95,15 @@ function getForumAccountDetails(forumID, callback)
         connectionAttempts = 3,
         connectTimeout = 4000,
         method = "POST",
-        postData = toJSON { userId = forumID, appId = get "appId", appSecret = get "appSecretPass" }
+        postData = toJSON({
+            userId = forumID,
+            appId = get("appId"),
+            appSecret = get("appSecretPass")
+        }, true),
+        headers = {
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
+        }
     }
 
     fetchRemote("https://mrgreengaming.com/api/account/details", fetchOptions, function(res, info)
@@ -123,7 +140,15 @@ function setAccountGCInfo(forumID, amount)
         connectionAttempts = 3,
         connectTimeout = 5000,
         method = "POST",
-        postData = toJSON { amount = amount, appId = get "appId", appSecret = get "appSecretPass" }
+        postData = toJSON({
+            amount = amount,
+            appId = get("appId"),
+            appSecret = get("appSecretPass")
+        }, true),
+        headers = {
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
+        }
     }
 
     --We'd rather use submitTransaction but we would need to handle transaction denies and such
