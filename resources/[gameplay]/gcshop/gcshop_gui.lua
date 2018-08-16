@@ -13,7 +13,7 @@ function build_mainGCShopWindow()
 	local windowWidth, windowHeight = 750, 540
 	local left = screenWidth/2 - windowWidth/2
 	local top = screenHeight/2 - windowHeight/2
-	gui["_root"] = guiCreateWindow(left, top, windowWidth, windowHeight, "Green-Coins Shop (F6 to close)", false)
+	gui["_root"] = guiCreateWindow(left, top, windowWidth, windowHeight, "GreenCoins Shop (F6 to close)", false)
 	guiWindowSetSizable(gui["_root"], false)
 	
 	gui["shopTabs"] = guiCreateTabPanel(10, 70, 730, 460, false, gui["_root"])
@@ -22,7 +22,7 @@ function build_mainGCShopWindow()
 	
 	gui["scrollAreaHome"] = guiCreateScrollPane(60, 30, 621, 360, false, gui["tab_home"])
 	
-	gui["labelHome"] = guiCreateLabel(11, 11, 581, 251, "Hello and welcome to the Grand Guide to Green-Coins!\n\nWTF are Green-Coins?\n--------------------\nThey are a currency used by the Mr. Green community. We created a global database where players can connect their Green-Coins to one account, and use them on different game servers.\n\nWhat can I do with Green-Coins in MTA?\n-------------------------------\nYou can buy car mods, skins, or other fancy stuff that you can use ingame!\n\nWhat do I need to get Green-Coins?\n----------------------------------\nYou need to register a Green-Coins account, go to the \"Register\" tab for more info.\n\nHow do I get Green-Coins?\n------------------------------------------\n", false, gui["scrollAreaHome"])
+	gui["labelHome"] = guiCreateLabel(11, 11, 581, 251, "Hello and welcome to the Grand Guide to GreenCoins!\n\nWTF are Green-Coins?\n--------------------\nThey are a currency used by the Mr. Green community. We created a global database where players can connect their Green-Coins to one account, and use them on different game servers.\n\nWhat can I do with Green-Coins in MTA?\n-------------------------------\nYou can buy car mods, skins, or other fancy stuff that you can use ingame!\n\nWhat do I need to get Green-Coins?\n----------------------------------\nYou need to register a Green-Coins account, go to the \"Register\" tab for more info.\n\nHow do I get Green-Coins?\n------------------------------------------\n", false, gui["scrollAreaHome"])
 	guiLabelSetHorizontalAlign(gui["labelHome"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelHome"], "top")
 	
@@ -30,7 +30,7 @@ function build_mainGCShopWindow()
 	
 	gui["tab_Donate"] = guiCreateTab("Donate", gui["tabDonate"])
 	
-	gui["labelDonate"] = guiCreateLabel(10, 10, 251, 210, "You can donate. For each euro donated you get 1000 Green-Coins.\n\nHow do I donate?\n-----------------------\nGo to mrgreengaming.com and click\"Green-Coins\".\n\nIf you log into your account, you see a conveniently placed button that says \"Send donation\".\n\nJust follow the simple instructions on there and you're done!\n", false, gui["tab_Donate"])
+	gui["labelDonate"] = guiCreateLabel(10, 10, 251, 210, "You can donate. For each euro donated you get 1000 GreenCoins.\n\nHow do I donate?\n-----------------------\nGo to mrgreengaming.com and click\"Green-Coins\".\n\nIf you log into your account, you see a conveniently placed button that says \"Send donation\".\n\nJust follow the simple instructions on there and you're done!\n", false, gui["tab_Donate"])
 	guiSetEnabled(gui["labelDonate"], false)
 	guiLabelSetHorizontalAlign(gui["labelDonate"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelDonate"], "top")
@@ -40,7 +40,7 @@ function build_mainGCShopWindow()
 	
 	gui["tab_Win"] = guiCreateTab("Win", gui["tabWin"])
 	
-	gui["labelWin"] = guiCreateLabel(10, 10, 261, 210, "The second way to get Green-Coins is racing. \n\nWinning races: you earn GC based on the map length (10 - 40)\n(new maps do not count)\n\nNew toptime: If you're good and manage to get a new top1, top2 or top3 you will earn extra GC!\n\nEven if you didnt win or finish you earn Green-Coins based on your results, so don't give up!\n\n", false, gui["tab_Win"])
+	gui["labelWin"] = guiCreateLabel(10, 10, 261, 210, "The second way to get GreenCoins is racing. \n\nWinning races: you earn GC based on the map length (10 - 40)\n(new maps do not count)\n\nNew toptime: If you're good and manage to get a new top1, top2 or top3 you will earn extra GC!\n\nEven if you didnt win or finish you earn Green-Coins based on your results, so don't give up!\n\n", false, gui["tab_Win"])
 	guiSetEnabled(gui["labelWin"], false)
 	guiLabelSetHorizontalAlign(gui["labelWin"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelWin"], "top")
@@ -52,7 +52,7 @@ function build_mainGCShopWindow()
 	
 	gui["tab_login"] = guiCreateTab("Register / Login", gui["shopTabs"])
 	
-	gui["label_step2"] = guiCreateLabel(180, 40, 351, 131, '1. Register on our forum (http://mrgreengaming.com/)\n\n\n2. Go to forum -> click "GreenCoins" button and log in using forum account.\n(This step is needed to activate your Green-Coins counter)\n\n\n3. Log in here using your forum account:', false, gui["tab_login"])
+	gui["label_step2"] = guiCreateLabel(180, 40, 351, 131, '1. Register an account on our Forums ( https://mrgreengaming.com/forums )\n\n\n2. Log in using your Forums account:', false, gui["tab_login"])
 	guiLabelSetHorizontalAlign(gui["label_step2"], "left", true)
 	guiLabelSetVerticalAlign(gui["label_step2"], "top")
 	
