@@ -19,7 +19,7 @@ function doesPlayerMatchNick(nick, id)
     local cmd = ''
     local query
     if handlerConnect then
-        cmd = "SELECT pNick, forumId, accountID FROM gc_nickprotection WHERE pNick = ?"
+        cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE pNick = ?"
         query = dbQuery(handlerConnect, cmd, nick)
         if not query then return false end
         local sql = dbPoll(query, -1)
@@ -55,7 +55,7 @@ end
 
 function isNickProtected(nick)
     if handlerConnect then
-        local cmd = "SELECT pNick, forumId, accountID FROM gc_nickprotection WHERE LOWER(pNick) = ? LIMIT 0,1"
+        local cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE LOWER(pNick) = ? LIMIT 0,1"
         local query = dbQuery(handlerConnect, cmd, string.lower(nick))
         if not query then
             return false
