@@ -25,27 +25,6 @@ local function onLoginFailed(player, silent)
     accounts[player] = nil
 end
 
-local function onLoginSuccessfull(result, player)
-    if result then
-        updateAutologin(player, accounts[player]:getForumID())
-        triggerClientEvent(player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getForumName(), accounts[player]:getLoginEmail())
-        triggerEvent('onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getForumName())
-        local serialGreencoins = getSerialGreencoins(player)
-        -- Transfer gc's from serial storage to the forum storage and delete the serial greencoins
-        if (serialGreencoins) then
-            deleteSerialGreencoins(player)
-            addPlayerGreencoins(player, serialGreencoins)
-            outputChatBox('[GC] Adding ' .. serialGreencoins .. ' GC from your rewards without an account', player, 0, 255, 0)
-        end
-        downloadAvatar(player)
-        return true
-    else
-        triggerClientEvent(player, "onLoginFail", player, true)
-        accounts[player]:destroy()
-        accounts[player] = nil
-    end
-end
-
 
 -- email: forum email or nickname
 -- pw: forum password
@@ -79,6 +58,8 @@ function onAutoLogin(forumID, player)
         onLoginFailed(player, true)
     end
 end
+
+
 
 addEvent("onGCLogin") -- broadcast event
 addEvent("onLogin", true)
