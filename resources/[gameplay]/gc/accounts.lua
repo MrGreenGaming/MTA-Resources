@@ -22,8 +22,7 @@ function SAccount:create(player)
         id = id,
         player = player,
         gcRecord = {},
-    },
-        self)
+    }, self)
     return SAccount.instances[id]
 end
 
@@ -50,31 +49,48 @@ end
 --
 --
 ---------------------------------------------------------------------------
-function SAccount:login(email, pw, player, callback)
-    if not self.gcRecord[1] and pw then
-        getPlayerLoginInfo(email, pw, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount)
-            if not self.gcRecord[1] and forumID then
-                for id, account in pairs(SAccount.instances) do
-                    if account:getForumID() == forumID then
-                        return callback(false, player)
-                    end
-                end
-                self.gcRecord[1] = forumID
-                self.gcRecord[2] = nil
-                self.gcRecord[3] = gcAmount
-                self.gcRecord[4] = 0 -- earned gc this session
-                self.gcRecord[5] = name
-                self.gcRecord[6] = emailAddress
-                self.gcRecord[7] = profile
-                self.gcRecord[8] = joinTimestamp
-                triggerEvent('onGreencoinsLogin', self.player)
-                return callback(true, player)
-            end
-            return callback(false, player)
-        end)
-    else
-        return callback(false, player)
+function SAccount:login(username, pw, player, callback)
+    if not username or not pw then
+        callback(false, player)
+        return
     end
+
+    --Check if we already know our forum id
+    if self.gcRecord[1] then
+        callback(true, player)
+        return
+    end
+
+    getPlayerLoginInfo(username, pw, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount)
+        if self.gcRecord[1] then
+            callback(true, player)
+            return
+        end
+
+        if not forumID then
+            callback(false, player)
+            return
+        end
+
+        --Check if already logged in somewhere else
+        for id, account in pairs(SAccount.instances) do
+            if account:getForumID() == forumID then
+                callback(false, player)
+                return
+            end
+        end
+
+        self.gcRecord[1] = forumID
+        self.gcRecord[2] = nil
+        self.gcRecord[3] = gcAmount
+        self.gcRecord[4] = 0 -- earned gc this session
+        self.gcRecord[5] = name
+        self.gcRecord[6] = emailAddress
+        self.gcRecord[7] = profile
+        self.gcRecord[8] = joinTimestamp
+        triggerEvent('onGreencoinsLogin', self.player)
+        callback(true, player)
+    end)
 end
 
 ---------------------------------------------------------------------------
@@ -84,26 +100,46 @@ end
 --
 --
 ---------------------------------------------------------------------------
-function SAccount:loginViaForumID(forumID, player, callback)
-    if not self.gcRecord[1] and forumID then
-        getForumAccountDetails(forumID, function(name, emailAddress, profile, joinTimestamp, gcAmount)
-            for id, account in pairs(SAccount.instances) do
-                if account:getForumID() == forumID then return callback(false, player) end
-            end
-            self.gcRecord[1] = forumID
-            self.gcRecord[2] = nil
-            self.gcRecord[3] = gcAmount
-            self.gcRecord[4] = 0 -- earned gc this session
-            self.gcRecord[5] = name
-            self.gcRecord[6] = emailAddress
-            self.gcRecord[7] = profile
-            self.gcRecord[8] = joinTimestamp
-            triggerEvent('onGreencoinsLogin', self.player)
-            return callback(true, player)
-        end)
-    else
-        return callback(false, player)
+function SAccount:loginViaForumID(givenForumID, player, callback)
+    if not forumID then
+        callback(false, player)
+        return
     end
+    if self.gcRecord[1] then
+        callback(true, player)
+        return
+    end
+
+    getForumAccountDetails(givenForumID, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount)
+        if self.gcRecord[1] then
+            callback(true, player)
+            return
+        end
+
+        if not forumID then
+            callback(false, player)
+            return
+        end
+
+        --Check if already logged in somewhere else
+        for id, account in pairs(SAccount.instances) do
+            if account:getForumID() == forumID then
+                callback(false, player)
+                return
+            end
+        end
+
+        self.gcRecord[1] = forumID
+        self.gcRecord[2] = nil
+        self.gcRecord[3] = gcAmount
+        self.gcRecord[4] = 0 -- earned gc this session
+        self.gcRecord[5] = name
+        self.gcRecord[6] = emailAddress
+        self.gcRecord[7] = profile
+        self.gcRecord[8] = joinTimestamp
+        triggerEvent('onGreencoinsLogin', self.player)
+        callback(true, player)
+    end)
 end
 
 ---------------------------------------------------------------------------

@@ -40,14 +40,11 @@ function getPlayerLoginInfo(email, pw, callback)
     }
 
     fetchRemote("https://mrgreengaming.com/api/account/login", fetchOptions, function(res, info)
-        if not res then
-            outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. info.statusCode, 1)
-            callback(false)
-            return
-        end
-
-        if not info.success then
-            outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. info.statusCode .. " ".. res, 1)
+        if not info.success or not res then
+            if not res then
+                res = "EMPTY"
+            end
+            outputDebugString("getPlayerLoginInfo: invalid response (status " .. info.statusCode .. "). Res: " .. res, 1)
             callback(false)
             return
         end
@@ -85,7 +82,7 @@ function getForumAccountDetails(forumID, callback)
     end
 
     local fetchOptions = {
-        queueName = "API-User".. forumID,
+        queueName = "API-User" .. forumID,
         connectionAttempts = 3,
         connectTimeout = 4000,
         method = "POST",
@@ -94,7 +91,10 @@ function getForumAccountDetails(forumID, callback)
 
     fetchRemote("https://mrgreengaming.com/api/account/details", fetchOptions, function(res, info)
         if not info.success or not res then
-            outputDebugString("getPlayerLoginInfo: fetchRemote query failed! " .. info.statusCode, 1)
+            if not res then
+                res = "EMPTY"
+            end
+            outputDebugString("getForumAccountDetails: invalid response (status " .. info.statusCode .. "). Res: " .. res, 1)
             callback(false)
             return
         end
@@ -109,7 +109,7 @@ function getForumAccountDetails(forumID, callback)
         --Push to cache
         accountDetailsCache[forumID] = result
 
-        callback(result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance)
+        callback(result.userId, result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance)
     end)
 end
 
@@ -119,7 +119,7 @@ function setAccountGCInfo(forumID, amount)
     end
 
     local fetchOptions = {
-        queueName = "API-User".. forumID,
+        queueName = "API-User" .. forumID,
         connectionAttempts = 3,
         connectTimeout = 5000,
         method = "POST",
@@ -127,9 +127,12 @@ function setAccountGCInfo(forumID, amount)
     }
 
     --We'd rather use submitTransaction but we would need to handle transaction denies and such
-    fetchRemote("https://mrgreengaming.com/api/users/".. forumID .."/coins/changeBalance", fetchOptions, function(res, info)
+    fetchRemote("https://mrgreengaming.com/api/users/" .. forumID .. "/coins/changeBalance", fetchOptions, function(res, info)
         if not info.success or not res then
-            outputDebugString("setAccountGCInfo: fetchRemote query failed " .. info.statusCode, 1)
+            if not res then
+                res = "EMPTY"
+            end
+            outputDebugString("setAccountGCInfo: invalid response (status " .. info.statusCode .. "). Res: " .. res, 1)
             callback(false)
             return
         end
