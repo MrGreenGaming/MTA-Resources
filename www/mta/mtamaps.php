@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$user = trim($_POST['user']); //Username or emailaddress. Latter is preferred.
 		$password = trim($_POST['pass']);
 		 
-		$url = 'http://api.mrgreengaming.com:8080/account/login';
+		$url = 'https://mrgreengaming.com/api/account/login';
 		$fields = array(
 		'user' => urlencode($user),
 		'password' => urlencode($password),
