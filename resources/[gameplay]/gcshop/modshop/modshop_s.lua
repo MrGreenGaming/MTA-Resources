@@ -638,7 +638,7 @@ function upgradeVehicle(player, forumID)
 	--  end
 end
 
-local function cleanVehicle(veh, player)
+function cleanVehicle(veh, player)
 	for k, v in ipairs(getVehicleUpgrades(veh)) do
 		if (v ~= 1008 and v ~= 1009 and v ~= 1010) then
 			removeVehicleUpgrade(veh, v)
