@@ -7,7 +7,7 @@ function getLockedNicks(forumID)
 	if not theID then return end
 
 	-- Get all locked nicks
-	local nameQuery = dbQuery(handlerConnect,"SELECT pNick FROM gc_nickprotection WHERE accountID=?",theID)
+	local nameQuery = dbQuery(handlerConnect,"SELECT pNick FROM gc_nickprotection WHERE forumID=?",theID)
 	local nameResult = dbPoll(nameQuery,-1) 
 
 	local theNames = {}
@@ -82,7 +82,7 @@ function isNickProtected(nick)
 	local cmd = ''
 	local query 
 	if handlerConnect then
-		cmd = "SELECT pNick, accountID FROM gc_nickprotection WHERE LOWER(pNick) = ?"
+		cmd = "SELECT pNick, forumId, accountID FROM gc_nickprotection WHERE LOWER(pNick) = ?"
 		query = dbQuery(handlerConnect, cmd, string.lower(nick))
 		if not query then return false end
 		local sql = dbPoll(query, -1)
@@ -103,7 +103,7 @@ function protectNick(id, name)
 	local cmd = ''
 	local query 
 	if handlerConnect then
-		cmd = "SELECT pNick, accountID FROM gc_nickprotection WHERE accountID = ?"
+		cmd = "SELECT pNick, forumId, accountID FROM gc_nickprotection WHERE forumId = ?"
 		query = dbQuery(handlerConnect, cmd, id)
 
 		if not query then return false end
@@ -128,7 +128,7 @@ function removeNick(id,nick)
 	if handlerConnect then
 
 
-		cmd = "SELECT pNick, accountID FROM gc_nickprotection WHERE pNick = ? AND accountID = ?"
+		cmd = "SELECT pNick, forumId, accountID FROM gc_nickprotection WHERE pNick = ? AND forumId = ?"
 		query = dbQuery(handlerConnect, cmd, nick,id)
 		if not query then return false end
 		local sql = dbPoll(query, -1)
@@ -136,7 +136,7 @@ function removeNick(id,nick)
 
 		if #sql > 0 then
 
-			cmd = "DELETE FROM gc_nickprotection WHERE pNick = ? AND accountID = ?"
+			cmd = "DELETE FROM gc_nickprotection WHERE pNick = ? AND forumId = ?"
 			dbExec(handlerConnect, cmd, nick,id)
 			return true	
 		end

@@ -99,16 +99,11 @@ end
 addEvent("cShopGCLogin", true)
 addEventHandler("cShopGCLogin", root, gcLogin)
 
-function gcLoginFail(alreadyLoggedIn)
+function gcLoginFail()
     guiSetText(shop_GUI["buttonLink"], "Login")
-    --[[if alreadyLoggedIn then
-        guiSetText(shop_GUI["labelGreencoinsShadow1"], '')
-        guiSetText(shop_GUI["labelGreencoins"], '')
-        guiSetText(shop_GUI["labelLoginInfo"], "You are already logged in!")
-    else]]
-        forumID = nil
-        guiSetText(shop_GUI["labelLoginInfo"], "Wrong username/emailaddress or password! There is a Lost Password functionality on the forums.")
-    --end
+    loggedInGC = false
+    forumID = nil
+    guiSetText(shop_GUI["labelLoginInfo"], "Wrong username/emailaddress or password! There is a Lost Password functionality on the Forums.")
     guiLabelSetColor(shop_GUI["labelLoginInfo"], 0xFF, 0x00, 0x00)
 end
 

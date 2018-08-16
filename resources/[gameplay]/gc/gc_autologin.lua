@@ -2,14 +2,13 @@
 --- Autologin  ---
 -------------------
 
-loginTable = "gc_autologin"
-handlerConnect = nil
+local loginTable = "gc_autologin"
+local handlerConnect
 
 -- Setup sql database --
 local function startup()
     handlerConnect = dbConnect('mysql', 'host=' .. get "*gcshop.host" .. ';dbname=' .. get "*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
 end
-
 addEventHandler("onResourceStart", resourceRoot, startup)
 
 local function clientStart()
@@ -17,7 +16,7 @@ local function clientStart()
     checkPlayerSerialGreencoins(player)
     local serial = getPlayerSerial(player)
     if handlerConnect then
-        local query = dbQuery(autologinInfoReceived, { player }, handlerConnect, "SELECT forumid FROM `??` WHERE last_serial=?", loginTable, serial)
+        local query = dbQuery(autologinInfoReceived, { player }, handlerConnect, "SELECT forumid FROM `??` WHERE `last_serial` = ? LIMIT 0,1", loginTable, serial)
     end
 end
 

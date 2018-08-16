@@ -10,9 +10,6 @@ If you want to login with a specific forumID, input it as the username:
 /gclogin 546 admin
 --]]
 
---Cache
-local accountDetailsCache = {}
-
 function getPlayerLoginInfo(email, pw, callback)
     if not email or not pw then
         outputDebugString("getPlayerLoginInfo: Missing details", 1)
@@ -64,9 +61,6 @@ function getPlayerLoginInfo(email, pw, callback)
             return
         end
 
-        --Push to cache
-        accountDetailsCache[result.userId] = result
-
         callback(result.userId, result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance)
     end)
 end
@@ -80,13 +74,6 @@ function getForumAccountDetails(forumID, callback)
     if not forumID then
         outputDebugString("getForumAccountDetails: Missing details", 1)
         callback(false)
-        return
-    end
-
-    --Check cache
-    if accountDetailsCache[forumID] then
-        --Cache hit
-        callback(accountDetailsCache[forumID].name, accountDetailsCache[forumID].emailAddress, accountDetailsCache[forumID].profile, accountDetailsCache[forumID].joinTimestamp, accountDetailsCache[forumID].coinsBalance)
         return
     end
 
@@ -122,9 +109,6 @@ function getForumAccountDetails(forumID, callback)
             callback(false)
             return
         end
-
-        --Push to cache
-        accountDetailsCache[forumID] = result
 
         callback(result.userId, result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance)
     end)
