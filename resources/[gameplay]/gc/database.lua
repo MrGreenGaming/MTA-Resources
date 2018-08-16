@@ -48,8 +48,6 @@ function getPlayerLoginInfo(email, pw, callback)
         }
     }
 
-    outputDebugString("getPlayerLoginInfo: " .. fetchOptions.postData, 1)
-
     fetchRemote("https://mrgreengaming.com/api/account/login", fetchOptions, function(res, info)
         if not info.success or not res then
             if not res then
