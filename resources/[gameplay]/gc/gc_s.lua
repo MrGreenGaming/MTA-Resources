@@ -44,7 +44,7 @@ function onLogin(user, pw)
 end
 
 function onAutoLogin(forumID, player)
-    if not forumId then
+    if not forumID then
         return
     end
 
