@@ -44,6 +44,10 @@ function onLogin(user, pw)
 end
 
 function onAutoLogin(forumID, player)
+    if not forumId then
+        return
+    end
+
     if not accounts[player] then
         accounts[player] = SAccount:create(player)
         accounts[player]:loginViaForumID(forumID, player, function(result, player)
@@ -119,18 +123,18 @@ addEventHandler('onOtherServerGCLogin', root, onOtherServerGCLogin)
 
 
 function onLogout(playerElement)
-    local source = source or playerElement
-    if accounts[source] then
-        local email = accounts[source]:getLoginEmail()
-        local forumID = accounts[source]:getForumID()
-        accounts[source]:destroy()
-        accounts[source] = nil
-        outputChatBox("[GC] Successfully logged out!", source, 0, 255, 0)
-        triggerClientEvent(source, "onLogoutSuccess", root)
-        triggerEvent('onGCLogout', source, forumID)
+    local player = source or playerElement
+    if accounts[player] then
+        local email = accounts[player]:getLoginEmail()
+        local forumID = accounts[player]:getForumID()
+        accounts[player]:destroy()
+        accounts[player] = nil
+        outputChatBox("[GC] Successfully logged out.", player, 0, 255, 0)
+        triggerClientEvent(player, "onLogoutSuccess", root)
+        triggerEvent('onGCLogout', player, forumID)
         deleteAutologin(forumID)
     else
-        outputChatBox("[GC] You're not logged in!", source, 255, 0, 0)
+        outputChatBox("[GC] Unable to logout. You're not logged in.", player, 255, 0, 0)
     end
 end
 
