@@ -70,12 +70,12 @@ function SAccount:login(username, pw, player, callback)
         end
 
         --Check if already logged in somewhere else
-        for id, account in pairs(SAccount.instances) do
+        --[[for id, account in pairs(SAccount.instances) do
             if account:getForumID() == forumID then
                 callback(false, player)
                 return
             end
-        end
+        end]]
 
         self.gcRecord[1] = tonumber(forumID)
         self.gcRecord[2] = nil
@@ -120,12 +120,12 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
         end
 
         --Check if already logged in somewhere else
-        for id, account in pairs(SAccount.instances) do
+        --[[for id, account in pairs(SAccount.instances) do
             if account:getForumID() == forumID then
                 callback(false, player)
                 return
             end
-        end
+        end]]
 
         self.gcRecord[1] = tonumber(forumID)
         self.gcRecord[2] = nil
