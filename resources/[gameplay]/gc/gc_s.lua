@@ -25,15 +25,6 @@ local function onLoginFailed(player, silent)
     accounts[player] = nil
 end
 
-local function onLoginFailed(player, silent)
-    if not silent then
-        triggerClientEvent(player, "onLoginFail", player, false)
-    end
-    accounts[player]:destroy()
-    accounts[player] = nil
-end
-
-
 -- email: forum email or nickname
 -- pw: forum password
 function onLogin(user, pw)
