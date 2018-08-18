@@ -30,12 +30,8 @@ local teammem_sql = [[
 	`join_timestamp` int(11) NOT NULL COMMENT 'timestamp when joined current team', 
 	`status` int(11) NOT NULL COMMENT '1 = in team', 
 	PRIMARY KEY (`forumid`), 
-<<<<<<< HEAD
-	KEY `teamid` (`teamid`),
-=======
 	KEY `teamid` (`teamid`), 
-	CONSTRAINT `Forum account` FOREIGN KEY (`forumid`) REFERENCES `mrgreen_forums`.`x_utf_l4g_members` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE, 
->>>>>>> parent of 59f7409... Remove team forum constraints
+	CONSTRAINT `Forum account` FOREIGN KEY (`forumid`) REFERENCES `mrgreen_forums`.`x_utf_l4g_members` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT `Team members` FOREIGN KEY (`teamid`) REFERENCES `team` (`teamid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;]]
 
