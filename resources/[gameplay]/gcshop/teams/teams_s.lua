@@ -146,7 +146,7 @@ end
 
 -- Looks up which team the player is in and puts him in it
 function checkPlayerTeam(player, bLogin)
-    dbQuery(checkPlayerTeam2, { player, bLogin }, handlerConnect, [[SELECT * FROM `team_members` INNER JOIN `team` ON `team_members`.`teamid` = `team`.`teamid`  INNER JOIN `mrgreen_gc`.green_coins g ON `team_members`.`forumid` = g.forum_id ORDER BY `team`.`create_timestamp`, `join_timestamp`]])
+    dbQuery(checkPlayerTeam2, { player, bLogin }, handlerConnect, [[SELECT * FROM `team_members` INNER JOIN `team` ON `team_members`.`teamid` = `team`.`teamid` ORDER BY `team`.`create_timestamp`, `join_timestamp`]])
 end
 
 function checkPlayerTeam2(qh, player, bLogin)
