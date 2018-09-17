@@ -1,4 +1,4 @@
-﻿PRICE = 500
+﻿PRICE = 1000
 mp_maxBuyAmount = 3 -- Daily map buy amount
 mp_cooldownTime = 360*60 -- Minutes of cooldown
 ----------------------
@@ -6,7 +6,7 @@ mp_cooldownTime = 360*60 -- Minutes of cooldown
 ----------------------
 
 lastWinner = nil
-lastWinnerPrice = 300
+lastWinnerPrice = 500
 
 -- Race, NTS, RTF
 function finish( rank )
