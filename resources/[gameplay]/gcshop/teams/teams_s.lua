@@ -161,25 +161,39 @@ function checkPlayerTeam2(qh, player, bLogin)
     -- Store player and team data for later usage
     local r
     local forumid = tonumber(exports.gc:getPlayerForumID(player))
+    local age
+    local processedNames = 0
     for i, j in ipairs(result) do
+        --Check if requesting player
         if j.forumid == forumid then
             r = j
+
+            --Set team age
+            age = (j.renew_timestamp - getRealTime().timestamp)
+            j.age = string.format("%.2f", age / (24 * 60 * 60))
+            outputConsole('[TEAMS] Team days left: ' .. j.age, player)
+
             playerteams[player] = j
         end
+        --Check if owner
         if j.forumid == j.owner then
             j.age = string.format("%.2f", (j.renew_timestamp - getRealTime().timestamp) / (24 * 60 * 60))
         end
-    end
 
-    local age
-    if r then
-        -- Check team age
-        age = (r.renew_timestamp - getRealTime().timestamp)
-        r.age = string.format("%.2f", age / (24 * 60 * 60))
-        outputConsole('[TEAMS] Team days left: ' .. r.age, player)
-    end
+        exports.gc:getForumAccountDetails(j.forumid, function(userId, name)
+            if not userId then
+               --Invalid data. Error here?
+            else
+                j.mta_name = name
+            end
 
-    triggerClientEvent('teamsData', resourceRoot, result, player, r)
+            processedNames = processedNames + 1
+
+            if processedNames == #ipairs(result) then
+                triggerClientEvent('teamsData', resourceRoot, result, player, r)
+            end
+        end)
+    end
 
     -- Check if player is in a team
     if not r then
