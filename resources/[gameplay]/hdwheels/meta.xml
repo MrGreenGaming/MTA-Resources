@@ -1,0 +1,20 @@
+<meta>
+    <file src="wheels/wheel_or1.dff" type="client"></file>
+	<file src="wheels/wheel_sr6.dff" type="client"></file>
+	<file src="wheels/wheel_sr3.dff" type="client"></file>
+	<file src="wheels/wheel_sr2.dff" type="client"></file>
+	<file src="wheels/wheel_lr4.dff" type="client"></file>
+	<file src="wheels/wheel_lr1.dff" type="client"></file>
+	<file src="wheels/wheel_lr3.dff" type="client"></file>
+	<file src="wheels/wheel_sr1.dff" type="client"></file>
+	<file src="wheels/wheel_sr5.dff" type="client"></file>
+	<file src="wheels/wheel_sr4.dff" type="client"></file>
+	<file src="wheels/wheel_gn1.dff" type="client"></file>
+	<file src="wheels/wheel_lr2.dff" type="client"></file>
+	<file src="wheels/wheel_lr5.dff" type="client"></file>
+	<file src="wheels/wheel_gn2.dff" type="client"></file>
+	<file src="wheels/wheel_gn3.dff" type="client"></file>
+	<file src="wheels/wheel_gn4.dff" type="client"></file>
+	<file src="wheels/wheel_gn5.dff" type="client"></file>
+    <script src="script.lua" type="client"></script>
+</meta>
