@@ -1,0 +1,10 @@
+<meta>
+	<info author="Mihoje" type="script" name="Player record" version="1.0" descriprion="A script that gives green coins to all online players when a new peak record occurs"/>
+	
+	<script src="playerrecord.lua" type="server" />
+	
+	<settings>
+		<setting name="*greencoinsamount" value="100" friendlyname="Green coins amount" desc="The amount of green coins that the players are given when a new peak record occurs" />
+		<setting name="*resettime" value="2592000" friendlyname="Time to reset the record" desc="The amount of time to reset the record in seconds" />
+	</settings>
+</meta>
