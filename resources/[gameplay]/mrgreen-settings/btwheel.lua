@@ -59,6 +59,7 @@ function loadBTWheels(load)
     engineRestoreModel(1084)
     engineRestoreModel(1025)
     -- outputDebugString("Chrome Wheels unloaded")
+          triggerEvent("onBtWheelsUnload", getResourceRootElement())
     diditload = false
   end
 end
