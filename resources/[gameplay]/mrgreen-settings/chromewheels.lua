@@ -57,6 +57,7 @@ function replaceWheels(load)
     engineRestoreModel(1080)
     engineRestoreModel(1073)
     -- outputDebugString("Chrome Wheels unloaded")
+          triggerEvent("onBtWheelsUnload", getResourceRootElement())
     diditload = false
   end
 end
