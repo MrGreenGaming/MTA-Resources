@@ -1,6 +1,27 @@
 local peak = 0
 local timeToReset = false
 
+--Command
+function command(player)
+	local reset = ""
+	local rTime = timeToReset - getTimestamp()
+	
+	if rTime < 86400 then	--If the record is gonna reset in less than a day
+		local hours = math.floor(rTime / 60 / 60)
+		local minutes = math.floor((rTime - (hours * 60 * 60)) / 60)
+		reset = " and it's going to reset in " .. hours .. " hours and " .. minutes .. " minutes"
+	else
+		local days = math.floor(rTime / 86400)
+		local hours = math.floor((rTime - (days * 86400)) / 60 / 60)
+		reset = " and it's going to reset in " .. days .. " days and " .. hours .. " hours"
+	end
+	
+	outputChatBox("The current player record is " .. peak .. " player(s)" .. reset, player, 0, 255, 0)
+end
+addCommandHandler("currentrecord", command)
+
+
+
 function playerJoin()
 	local current = getPlayerCount()
 	if tonumber(current) > tonumber(peak) then
@@ -67,11 +88,13 @@ function Timer()
 		outputDebugString("[Player record] Resetting record...")
 		-- Reset the record
 		local days = tonumber(get("resettime")) / 60 / 60 / 24
-		outputChatBox(days .. " days have passed since the last player record! Resetting the record and giving everyone " .. get("greencoinsamount") .. " GCs!", getRootElement(), 0, 255, 0)
+		
 		local current = getPlayerCount()
+		local gcs = tonumber(get("greencoinsamount")) * current
 		outputDebugString("[Player record] Giving all players gcs!")
+		outputChatBox(days .. " days have passed since the last player record! Resetting the record and giving everyone " .. gcs .. " GCs!", getRootElement(), 0, 255, 0)
 		for i,p in ipairs(getElementsByType("player")) do
-			exports.gc:addPlayerGreencoins(p, tonumber(get("greencoinsamount")))
+			exports.gc:addPlayerGreencoins(p, gcs)
 		end
 		peak = current
 		local file = xmlCreateFile("peak.xml", "peak")
