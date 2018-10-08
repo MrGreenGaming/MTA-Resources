@@ -3,9 +3,10 @@
 GC Bike Trails  (Required perk)
 1, 2, 3, 4, 5 - Each of these do different animations when the bike is in the air.
 
-F1      - Show your achievements
-F2      - Press twice to be redirected to the other server
+F1      - Show your sidebar menu
+F2      - To join Race/Mix server
 F3      - Open Private Messaging
+F4      - Show your achievements 
 F5      - View current map toptimes
 F6      - Open GreenCoins Shop
 F7      - Open/Close SoundCloud Music Player
@@ -18,7 +19,7 @@ F12     - Take a screen shot
 Enter   - Kills yourself
 LCtrl   - Makes your bike jump if held a few seconds and then released    
 Tab     - Displays the scoreboard. 
-Z       - Voice Chat. Can only be used once the feature has been bought from the GC Shop (F6)    
+Z       - Voice Chat. Can only be used once the feature has been bought from the GC Shop > GC Perks (F6)    
 
    
 	  -------------------------------> Commands <-------------------------------
@@ -73,3 +74,4 @@ Z       - Voice Chat. Can only be used once the feature has been bought from the
 /stats [player]                                     Show race/mix stats for player
 /toggleicon                                         Toggle typing icon
 /upload                                             Show upload adres
+/currentrecord                                      Shows the current server record with most players online
