@@ -1563,7 +1563,7 @@ local mute_sql = [[CREATE TABLE IF NOT EXISTS `mute` (
 
 addEventHandler("onResourceStart",resourceRoot,
 	function() 
-		dbHandler = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+		dbHandler = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 		if dbHandler then
 		
 			dbExec ( dbHandler, mute_sql )

@@ -100,7 +100,7 @@ function onStart()
 	setTimer(function() exports.messages:outputGameMessage("Support us with a small donation at MrGreenGaming.com", root, 2.4, 50, 205, 50, true) end, 1000, 1)
 	end, 2700000, 0)
 	
-	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 	addToLog ( "\r\n\r\n****** GCSHOP LOG OPENED - ".. getRealDateTimeString(getRealTime()) .." ******\r\n\r\n" )
 	if not handlerConnect then
 		outputDebugString('GCSHOP Database error: could not connect to the mysql db')
