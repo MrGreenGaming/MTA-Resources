@@ -9,7 +9,7 @@ admins = {
 	{ name = "Santiii733", title = "Discord Admin", accountName = "santiii733" },
 	{ name = "Maher", title = "Sheikh", accountName = "maher" },
 	{ name = "Abrahax", title = "Kadabrahax", accountName = "abrahax" },
-	{ name = "DubStep", title = "Niu Admin", accountName = "michael" },
+	{ name = "Dubby", title = "Quality Onion", accountName = "michael" },
 	{ name = "P0L", title = "Silent Admin", accountName = "P0L" },
 	
 }
