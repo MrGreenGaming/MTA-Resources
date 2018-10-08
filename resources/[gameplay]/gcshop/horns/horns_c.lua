@@ -414,7 +414,10 @@ hornsTable = {
     [411] = "RAP GOD",
     [412] = "1 2 3 Lets Go",
     [413] = "DMX",
-    [414] = "It's over 9000!!"
+    [414] = "It's over 9000!!",
+    [415] = "Watch Bitch",
+    [416] = "Gaaaryyyy",
+    [417] = "Yeah Boyyyy"
 }
 
 
