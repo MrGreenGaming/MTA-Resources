@@ -45,7 +45,7 @@ addEventHandler('onMapStarting', root,
 
 addEventHandler('onResourceStart', resourceRoot,
 	function()
-		handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"), "multi_statements=1")
+		handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"), "multi_statements=1")
 		local raceInfo = getRaceInfo()
 		if not handlerConnect then
 			outputDebugString('Serial/IP Database error: could not connect to the mysql db')

@@ -125,7 +125,7 @@ local cid2countryname = {"Asia/Pacific Region","Europe","Andorra","United Arab E
 handlerConnect = nil
 addEventHandler('onResourceStart', getResourceRootElement(),
 	function()
-	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 	end
 )		
 

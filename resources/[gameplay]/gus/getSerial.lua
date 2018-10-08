@@ -45,7 +45,7 @@ end
 --local canScriptWork = true
 addEventHandler('onResourceStart', g_ResRoot,
 	function()
-		handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+		handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 		if not handlerConnect then
 				outputDebugString('Serial/IP Database error: could not connect to the mysql db')
 				--canScriptWork = false

@@ -16,7 +16,7 @@ local achievements_race_sql = [[CREATE TABLE IF NOT EXISTS `achievements_race` (
 ]]
 
 function onStart()
-	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 	if not handlerConnect then
 		return outputDebugString('achievements: could not connect to the mysql db')
 	end

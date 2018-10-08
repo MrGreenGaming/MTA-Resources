@@ -28,16 +28,17 @@ local dbSettings = {
 ---------------------------------------------------------
 --- onResourceStart: Connect to DB and do MySQL query ---
 ---------------------------------------------------------
-addEventHandler("onResourceStart", resourceRoot,
-    function()
-        if isElement(database) then
-            destroyElement(database)
-        end
+addEventHandler("onResourceStart", resourceRoot, 
+	function()
+		if isElement(database) then
+			destroyElement(database)
+		end
 
-        database = dbConnect('mysql', 'host=' .. dbSettings.host .. ';dbname=' .. dbSettings.database, dbSettings.username, dbSettings.password, "multi_statements=1")
-
-        queryStatsAll()
-    end)
+		database = dbConnect( 'mysql', 'host='..dbSettings.host..';dbname='..dbSettings.database .. ';charset=utf8mb4', dbSettings.username, dbSettings.password, "multi_statements=1") 
+		
+		queryStatsAll()
+	end
+)
 
 -------------------------------------------
 --- onResourceStop: Save specific stats ---

@@ -37,14 +37,14 @@ end
 handlerConnect = nil
 canScriptWork = true
 addEventHandler('onResourceStart', getResourceRootElement(),
-    function()
-        handlerConnect = dbConnect('mysql', 'host=' .. get "*gcshop.host" .. ';dbname=' .. get "*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
-        if not handlerConnect then
-            outputDebugString('Nickprotection error: could not connect to the mysql db')
-            canScriptWork = false
-            return
-        end
-    end)
+function()
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
+	if not handlerConnect then
+		outputDebugString('Nickprotection error: could not connect to the mysql db')
+		canScriptWork = false
+		return
+	end
+end)
 
 function safeString(playerName)
     playerName = string.gsub(playerName, "?", "")

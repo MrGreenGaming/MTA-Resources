@@ -105,7 +105,7 @@ deletedMapsPath = "[maps]\\[deletedmaps]"
 addEvent('onMapStarting', true)
 function connectToDB()
 	if handlerConnect then return true end
-	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 
 	if not handlerConnect then
 		return outputDebugString('maptools: could not connect to the mysql db')

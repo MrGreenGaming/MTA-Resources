@@ -2,7 +2,7 @@ handlerConnect = nil
 canScriptWork = true
 addEventHandler('onResourceStart', getResourceRootElement(),
 function()
-	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 	if handlerConnect then
 		dbExec( handlerConnect, "CREATE TABLE IF NOT EXISTS `mapstop100` ( `id` int(11) NOT NULL AUTO_INCREMENT, `mapresourcename` VARCHAR(70) BINARY NOT NULL, `mapname` VARCHAR(70) BINARY NOT NULL, `author` VARCHAR(70) BINARY NOT NULL, `gamemode` VARCHAR(70) BINARY NOT NULL, `rank` INTEGER, `votes` INTEGER, `balance` INTEGER, PRIMARY KEY (`id`) )" )
 		dbExec( handlerConnect, "CREATE TABLE IF NOT EXISTS `votestop100` ( `id` int(11) NOT NULL AUTO_INCREMENT, `forumid` int(10) unsigned NOT NULL, `choice1` VARCHAR(70) BINARY NOT NULL, `choice2` VARCHAR(70) BINARY NOT NULL, `choice3` VARCHAR(70) BINARY NOT NULL, `choice4` VARCHAR(70) BINARY NOT NULL, `choice5` VARCHAR(70) BINARY NOT NULL, PRIMARY KEY (`id`) )" )

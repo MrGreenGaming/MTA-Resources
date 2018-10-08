@@ -260,7 +260,7 @@ end
 
 addEventHandler("onResourceStart",resourceRoot,
 	function() 
-		dbHandler = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname", get("*gcshop.user"), get("*gcshop.pass"))
+		dbHandler = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 		if dbHandler then
 			for _,p in ipairs(getElementsByType("player")) do
 				checkBlockerJoin(p)
