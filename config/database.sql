@@ -227,15 +227,19 @@ CREATE TABLE `stats` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `team` (
-  `teamid` smallint(5) UNSIGNED NOT NULL,
-  `owner` mediumint(8) NOT NULL,
-  `create_timestamp` int(11) NOT NULL,
-  `renew_timestamp` int(11) NOT NULL COMMENT 'timestamp when last renewed',
-  `name` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
-  `tag` varchar(7) CHARACTER SET utf8mb4 NOT NULL,
-  `colour` varchar(7) NOT NULL,
-  `message` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	`teamid` smallint(5) unsigned NOT NULL AUTO_INCREMENT, 
+	`owner` mediumint(8) NOT NULL, 
+	`create_timestamp` int(11) NOT NULL, 
+	`renew_timestamp` int(11) NOT NULL COMMENT 'timestamp when last renewed', 
+	`name` varchar(50) NOT NULL, 
+	`tag` varchar(6) NOT NULL, 
+	`colour` varchar(7) NOT NULL, 
+	`message` varchar(255) DEFAULT NULL, 
+	PRIMARY KEY (`teamid`), 
+	KEY `teamname` (`name`) USING BTREE, 
+	KEY `teamtag` (`tag`) USING BTREE, 
+	KEY `teamowner` (`owner`) USING BTREE, 
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 CREATE TABLE `team_members` (
   `forumid` mediumint(8) NOT NULL,
@@ -346,12 +350,6 @@ ALTER TABLE `serialsDB`
 ALTER TABLE `stats`
   ADD UNIQUE KEY `forumID` (`forumID`);
 
-ALTER TABLE `team`
-  ADD PRIMARY KEY (`teamid`),
-  ADD KEY `teamname` (`name`) USING BTREE,
-  ADD KEY `teamtag` (`tag`) USING BTREE,
-  ADD KEY `teamowner` (`owner`) USING BTREE;
-
 ALTER TABLE `team_members`
   ADD PRIMARY KEY (`forumid`),
   ADD KEY `teamid` (`teamid`);
@@ -393,9 +391,6 @@ ALTER TABLE `uploaded_maps`
 ALTER TABLE `votestop100`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
-
-ALTER TABLE `team_members`
-  ADD CONSTRAINT `Team members` FOREIGN KEY (`teamid`) REFERENCES `team` (`teamid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

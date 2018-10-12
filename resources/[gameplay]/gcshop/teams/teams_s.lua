@@ -7,40 +7,6 @@ local invites = {}
 local duration = 1
 local team_duration = 20 * 24 * 60 * 60
 
-local team_sql = [[CREATE TABLE IF NOT EXISTS `team` (
-	`teamid` smallint(5) unsigned NOT NULL AUTO_INCREMENT, 
-	`owner` mediumint(8) NOT NULL, 
-	`create_timestamp` int(11) NOT NULL, 
-	`renew_timestamp` int(11) NOT NULL COMMENT 'timestamp when last renewed', 
-	`name` varchar(20) NOT NULL, 
-	`tag` varchar(6) NOT NULL, 
-	`colour` varchar(7) NOT NULL, 
-	`message` varchar(255) DEFAULT NULL, 
-	PRIMARY KEY (`teamid`), 
-	KEY `teamname` (`name`) USING BTREE, 
-	KEY `teamtag` (`tag`) USING BTREE, 
-	KEY `teamowner` (`owner`) USING BTREE, 
-	CONSTRAINT `Team owner forumid` FOREIGN KEY (`owner`) REFERENCES `mrgreen_forums`.`x_utf_l4g_members` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
-]]
-local teammem_sql = [[
- CREATE TABLE IF NOT EXISTS `team_members` (
-	`forumid` mediumint(8) NOT NULL, 
-	`teamid` smallint(5) unsigned NOT NULL, 
-	`join_timestamp` int(11) NOT NULL COMMENT 'timestamp when joined current team', 
-	`status` int(11) NOT NULL COMMENT '1 = in team', 
-	PRIMARY KEY (`forumid`), 
-	KEY `teamid` (`teamid`), 
-	CONSTRAINT `Forum account` FOREIGN KEY (`forumid`) REFERENCES `mrgreen_forums`.`x_utf_l4g_members` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT `Team members` FOREIGN KEY (`teamid`) REFERENCES `team` (`teamid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;]]
-
-addEventHandler('shopStarted', root, function()
-    -- Create tables if they don't exist yet on shop start
-    dbExec(handlerConnect, team_sql)
-    dbExec(handlerConnect, teammem_sql)
-end)
-
 addEventHandler('onShopInit', root, function()
 end)
 
