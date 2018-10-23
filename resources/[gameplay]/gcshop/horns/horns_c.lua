@@ -418,6 +418,14 @@ hornsTable = {
     [415] = "Watch Bitch",
     [416] = "Gaaaryyyy",
     [417] = "Yeah Boyyyy"
+    [418] = "Michaeeeel"
+    [419] = "Fuck Cop John Kimble"
+    [420] = "Mother Russia"
+    [421] = "Give me candy nigga"
+    [422] = "Turk things"
+    [423] = "Why hurt babe"
+    
+ 
 }
 
 
