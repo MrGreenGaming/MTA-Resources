@@ -425,6 +425,7 @@ hornsTable = {
     [422] = "Turk things",
     [423] = "Why hurt babe",
     [424] = "Shit game bro",
+    [425] = "Gerizekalı",
     
  
 }
