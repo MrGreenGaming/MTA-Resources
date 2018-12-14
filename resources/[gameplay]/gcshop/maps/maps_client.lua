@@ -1,5 +1,14 @@
-﻿PRICE = 1000
-lastWinnerPrice = 500
+﻿prices = {}
+
+prices["race"] = 1000
+prices["rtf"] = 800
+prices["ctf"] = 800
+prices["nts"] = 1000
+prices["shooter"] = 1200
+
+lastWinnerDiscount = 50
+
+PRICE = 1000
 
 local main_window
 local tab_panel
@@ -16,8 +25,9 @@ function createNextmapWindow(tabPanel)
     guiCreateStaticImage ( 0.34, 0.225, 0.035, 0.05, "nextmap/search.png", true, tab.maps )
     tab.MapList = guiCreateGridList ( 0.03, 0.30, 0.94, 0.55, true, tab.maps )
     guiGridListSetSortingEnabled(tab.MapList, false)
-					  guiGridListAddColumn( tab.MapList, "Map Name", 0.55)
-					  guiGridListAddColumn( tab.MapList, "Author", 0.5)					  
+					  guiGridListAddColumn( tab.MapList, "Map Name", 0.45)
+					  guiGridListAddColumn( tab.MapList, "Author", 0.4)
+					  guiGridListAddColumn( tab.MapList, "Price", 0.2)
 					  guiGridListAddColumn( tab.MapList, "Resource Name", 1)
 					  guiGridListAddColumn( tab.MapList, "Gamemode", 0.5)
 
@@ -31,16 +41,17 @@ function createNextmapWindow(tabPanel)
 	guiGridListSetSortingEnabled(tab.QueueList, false)
                 guiGridListAddColumn( tab.QueueList, "Priority", 0.15)
                 guiGridListAddColumn( tab.QueueList, "Map Name", 2)
+				
         tab.label1 = guiCreateLabel(0.40, 0.05, 0.50, 0.11, "This is the Maps-Center. Here you can buy maps.", true, tab.maps)
         tab.label2 = guiCreateLabel(0.40, 0.13, 0.50, 0.12, "Select a map you like and click \"Buy selected map\"", true, tab.maps)
         tab.label3 = guiCreateLabel(0.40, 0.18, 0.50, 0.17, "The map will be added to the Server Queue, where all bought maps are stored until they're played", true, tab.maps)
+		
         guiLabelSetHorizontalAlign(tab.label3, "left", true)
         -- tab.label4 = guiCreateLabel(0.40, 0.28, 0.50, 0.13, "The queued maps will have priority against the usual server map cycler!", true, tab.maps)
         -- guiLabelSetHorizontalAlign(tab.label4, "left", true)
-        tab.label5 = guiCreateLabel(0.125, 0.1, 0.50, 0.12, "Price: " .. PRICE .. " GC", true, tab.maps)
-        tab.label6 = guiCreateLabel(0.125, 0.14, 0.50, 0.08, "Price will be " .. lastWinnerPrice .. " GC \nafter you win a map", true, tab.maps)
-        guiLabelSetColor( tab.label5, 0, 255, 0 )
-        guiLabelSetColor( tab.label6, 255, 0, 0 )
+		
+		tab.label5 = guiCreateLabel(0.03, 0.03, 0.30, 0.12, "The winner of the last map played\ngets ".lastWinnerDiscount."% off!", true, tab.maps)
+        guiLabelSetColor( tab.label5, 255, 0, 0 )
         guiSetFont( tab.label5, "default-bold-small" )
         guiSetFont( tab.label6, "default-bold-small" )
 
@@ -48,6 +59,10 @@ function createNextmapWindow(tabPanel)
 end
 
 addEventHandler('onShopInit', getResourceRootElement(), createNextmapWindow )
+
+function getGamemodePrice(gamemode)
+	return prices[gamemode] or PRICE
+end
 
 
 function loadMaps(gamemodeMapTable, queuedList)
@@ -60,6 +75,8 @@ function loadMaps(gamemodeMapTable, queuedList)
 				guiGridListSetItemText ( tab.MapList, row, 1, gamemode.name, true, false )
 				guiGridListSetItemText ( tab.MapList, row, 2, gamemode.resname, true, false )
 				guiGridListSetItemText ( tab.MapList, row, 3, gamemode.resname, true, false )
+				guiGridListSetItemText ( tab.MapList, row, 4, gamemode.resname, true, false )
+				guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, true, false )
 			else
 				for id,map in ipairs (gamemode.maps) do
 					local row = guiGridListAddRow ( tab.MapList )
@@ -69,8 +86,10 @@ function loadMaps(gamemodeMapTable, queuedList)
 
 					guiGridListSetItemText ( tab.MapList, row, 1, map.name, false, false )
 					
-					guiGridListSetItemText ( tab.MapList, row, 3, map.resname, false, false )
-					guiGridListSetItemText ( tab.MapList, row, 4, gamemode.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
+					
+					guiGridListSetItemText ( tab.MapList, row, 4, map.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
 
 				end
 			end
@@ -118,8 +137,8 @@ function guiClickBuy(button)
             return
         end
         local mapName = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 1 )
-        local mapResName = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 3 )
-        local gamemode = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 4 )
+        local mapResName = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 4 )
+        local gamemode = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 5 )
         triggerServerEvent("sendPlayerNextmapChoice", getLocalPlayer(), { mapName, mapResName, gamemode, getPlayerName(localPlayer) })
     end
 end
@@ -144,8 +163,9 @@ function guiChanged()
 				if map.author then
 					guiGridListSetItemText ( tab.MapList, row, 2, map.author, false, false )
 				end
-				guiGridListSetItemText ( tab.MapList, row, 3, gamemode.resname, false, false )
+				guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
 				guiGridListSetItemText ( tab.MapList, row, 4, gamemode.resname, false, false )
+				guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
 			else
 				for id,map in ipairs (gamemode.maps) do
 					local row = guiGridListAddRow ( tab.MapList )
@@ -153,8 +173,9 @@ function guiChanged()
 					if map.author then
 						guiGridListSetItemText ( tab.MapList, row, 2, map.author, false, false )
 					end
-					guiGridListSetItemText ( tab.MapList, row, 3, map.resname, false, false )
-					guiGridListSetItemText ( tab.MapList, row, 4, gamemode.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
+					guiGridListSetItemText ( tab.MapList, row, 4, map.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
 				end
 			end
 		end
@@ -170,8 +191,9 @@ function guiChanged()
 					if map.author then
 						guiGridListSetItemText ( tab.MapList, row, 2, map.author, false, false )
 					end
-					guiGridListSetItemText ( tab.MapList, row, 3, gamemode.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
 					guiGridListSetItemText ( tab.MapList, row, 4, gamemode.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
 					noMaps = false
 				end
 			else
@@ -187,8 +209,9 @@ function guiChanged()
 						if map.author then
 							guiGridListSetItemText ( tab.MapList, row, 2, map.author, false, false )
 						end
-						guiGridListSetItemText ( tab.MapList, row, 3, map.resname, false, false )
-						guiGridListSetItemText ( tab.MapList, row, 4, gamemode.resname, false, false )
+						guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
+						guiGridListSetItemText ( tab.MapList, row, 4, map.resname, false, false )
+						guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
 						noMaps = false
 					end
 				end
@@ -203,11 +226,11 @@ end
 addEvent('onGCShopWinnerDiscount', true)
 addEventHandler('onGCShopWinnerDiscount', root, function()
 	if source == localPlayer then
-		guiLabelSetColor( tab.label5, 255, 0, 0 )
-		guiSetText(tab.label5, "Winner Discount Price: " .. lastWinnerPrice .. " GC" )
-	else
 		guiLabelSetColor( tab.label5, 0, 255, 0 )
-		guiSetText(tab.label5, "Price: " .. PRICE .. " GC" )
+		guiSetText(tab.label5, "Every map is ".lastWinnerDiscount."% off\nbecause you have won the last map!" )
+	else
+		guiLabelSetColor( tab.label5, 255, 0, 0 )
+		guiSetText(tab.label5, "The winner of the last map played\ngets ".lastWinnerDiscount."% off!" )
 	end
 end)
 
