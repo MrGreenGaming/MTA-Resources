@@ -1,4 +1,13 @@
-﻿PRICE = 1000
+﻿prices = {}
+
+prices["race"] = 1000
+prices["rtf"] = 800
+prices["ctf"] = 800
+prices["nts"] = 1000
+prices["shooter"] = 1200
+
+PRICE = 1000
+
 mp_maxBuyAmount = 3 -- Daily map buy amount
 mp_cooldownTime = 360*60 -- Minutes of cooldown
 ----------------------
@@ -6,7 +15,7 @@ mp_cooldownTime = 360*60 -- Minutes of cooldown
 ----------------------
 
 lastWinner = nil
-lastWinnerPrice = 500
+lastWinnerDiscount = 50
 
 -- Race, NTS, RTF
 function finish( rank )
@@ -92,18 +101,24 @@ function(choice)
     if not hasObjectPermissionTo(source, "command.deletemap", false) then -- Check for map bought amount if not admin
         if isDailyLimitReached(tostring(choice[2])) then return end
     end
-
+	
+	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
 
     if isPlayerEligibleToBuy(source, choice) then
         if playerHasBoughtMap(source, choice) then
             queue(choice, source)
         else
-            outputChatBox("[Maps-Center] You do not have enough GCs to buy a nextmap. Current price: "..tostring(PRICE), source, 255, 0, 0)
+			local mapprice = source == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode)
+            outputChatBox("[Maps-Center] You do not have enough GCs to buy a nextmap. Current price: "..tostring(mapprice), source, 255, 0, 0)--here
         end
     else
         outputChatBox("[Maps-Center] Error. You can only queue one map, you're not logged in or map was deleted", source, 255, 0, 0)
     end
 end)
+
+function getGamemodePrice(gamemode)
+	return prices[gamemode] or PRICE
+end
 
 function isDailyLimitReached(mapname)
     -- Check if element data exists first
@@ -227,8 +242,9 @@ function playerHasBoughtMap(player, choice)
     if (hasObjectPermissionTo(player, "command.deletemap", false)) then  --if admin then dont take GC
 		return true
 	end
-	local mapprice = player == lastWinner and lastWinnerPrice or PRICE
-    local money = exports.gc:getPlayerGreencoins(player)
+	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
+	local mapprice = player == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode) --if the player is the last winner it gives them the price discounted by 'lastWinnerDiscount' percent, if not it takes the regular price
+	local money = exports.gc:getPlayerGreencoins(player)
     if money < mapprice then return false end
     -- exports.gc:addPlayerGreencoins(player, PRICE*(-1))
 	local ok = gcshopBuyItem ( player, mapprice, 'Map: ' .. choice[1])
