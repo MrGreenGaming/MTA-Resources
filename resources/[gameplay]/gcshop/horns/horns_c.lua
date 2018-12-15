@@ -503,7 +503,7 @@ addEventHandler('onShopInit', root, onShopInit)
 
 local cooldown = false
 function sellHorn(button, state) --literally coppied all of your code from buyButton, sorry :P
-	if button == "left" and state == "up" then
+	if button == "left" and state == "up" and cooldown == false then
 		local row, col = guiGridListGetSelectedItem(myHornsList)
         if row == -1 or row == false then
             outputChatBox("Select a horn first", 255, 0, 0)
