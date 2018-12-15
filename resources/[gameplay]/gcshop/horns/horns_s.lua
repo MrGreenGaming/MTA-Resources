@@ -182,12 +182,10 @@ addEvent('onPlayerSellHorn', true)
 addEventHandler('onPlayerSellHorn', root,
 function(horn)
 	local logged = exports.gc:isPlayerLoggedInGC(source)
-	if not logged then triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) end
-	
-	if not hasObjectPermissionTo(source, "command.deletemap", false) then
-		outputChatBox("We are currently testing this, you can't access it until we make sure it works!", source, 255, 0, 0)
-		return
-    	end
+	if not logged then 
+		triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) 
+		return 
+	end
 		
 	--player is logged in
 	local forumid = exports.gc:getPlayerForumID(source)
@@ -195,7 +193,10 @@ function(horn)
 	
 	local query = dbQuery(handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)
 	local sql = dbPoll(query,-1)
-	if #sql == 0 then triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) end
+	if #sql == 0 then 
+		triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) 
+		return
+	end
 	
 	--There is a row
 	local hornString = ""

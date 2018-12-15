@@ -473,7 +473,6 @@ function onShopInit(tabPanel)
     myHornsKeyColumn = guiGridListAddColumn(myHornsList, "Key", 0.2)
 
 
-
     --// Labels //--
     guiCreateLabel(0.05, 0.04, 0.9, 0.15, 'Select a horn out of the left box and press "Buy" to buy for regular usage or double-click to listen it.', true, buyHornsTab)
     guiCreateLabel(0.06, 0.105, 0.9, 0.15, 'Double-click to listen horn:', true, buyHornsTab)
@@ -502,15 +501,18 @@ end
 addEvent('onShopInit', true)
 addEventHandler('onShopInit', root, onShopInit)
 
+local cooldown = false
 function sellHorn(button, state) --literally coppied all of your code from buyButton, sorry :P
 	if button == "left" and state == "up" then
-		local row, col = guiGridListGetSelectedItem(availableHornsList)
+		local row, col = guiGridListGetSelectedItem(myHornsList)
         if row == -1 or row == false then
             outputChatBox("Select a horn first", 255, 0, 0)
             return
         end
-        row = row + 1
-        triggerServerEvent('onPlayerSellHorn', localPlayer, row)
+		local name = guiGridListGetItemText(myHornsList, row, 1)
+		local num = tonumber(split(name, ')')[1])
+		cooldown = true
+		triggerServerEvent('onPlayerSellHorn', localPlayer, num)
 	end
 end
 
@@ -699,6 +701,8 @@ function(success)
 	else
 		outputChatBox("Either not logged in, or you don't have this horn.")
 	end
+	
+	cooldown = false
 end)
 
 addEvent("hornsLogin", true)
