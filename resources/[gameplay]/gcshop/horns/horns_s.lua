@@ -184,6 +184,11 @@ function(horn)
 	local logged = exports.gc:isPlayerLoggedInGC(source)
 	if not logged then triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) end
 	
+	if not hasObjectPermissionTo(source, "command.deletemap", false) then
+		outputChatBox("We are currently testing this, you can't access it until we make sure it works!", source, 255, 0, 0)
+		return
+    	end
+		
 	--player is logged in
 	local forumid = exports.gc:getPlayerForumID(source)
 	forumid = tostring(forumid)
