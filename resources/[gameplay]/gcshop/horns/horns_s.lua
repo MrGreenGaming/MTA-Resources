@@ -178,6 +178,40 @@ function()
 end
 )
 
+addEvent('onPlayerSellHorn', true)
+addEventHandler('onPlayerSellHorn', root,
+function(horn)
+	local logged = exports.gc:isPlayerLoggedInGC(source)
+	if not logged then triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) end
+	
+	--player is logged in
+	local forumid = exports.gc:getPlayerForumID(source)
+	forumid = tostring(forumid)
+	
+	local query = dbQuery(handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)
+	local sql = dbPoll(query,-1)
+	if #sql == 0 then triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) end
+	
+	--There is a row
+	local hornString = ""
+	local hasTheHorn = false
+	local allHorns = split(sql[1].horns, string.byte(','))
+	for i,j in ipairs(allHorns) do
+		if j == tostring(horn) then
+			hasTheHorn = true
+		else 
+			hornString = hornString .. "," .. j
+		end
+	end
+	
+	if not hasTheHorn or hasTheHorn == false then triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) end
+	
+	--Player has the selected horn
+	result = dbExec(handlerConnect, "UPDATE gc_horns SET horns=? WHERE forumid=?", hornString, forumid)
+	exports.gc:addPlayerGreencoins(source, price / 2)
+	triggerClientEvent(source, 'onClientSuccessSellHorn', source, true)
+end)
+
 
 addEvent('onPlayerBuyHorn', true)
 addEventHandler('onPlayerBuyHorn', root,
