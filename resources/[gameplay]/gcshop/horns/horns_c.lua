@@ -479,15 +479,15 @@ function onShopInit(tabPanel)
     guiCreateLabel(0.06, 0.105, 0.9, 0.15, 'Double-click to listen horn:', true, buyHornsTab)
     guiCreateLabel(0.04, 0.08, 0.9, 0.15, "Horns can only be used 3 times per map (10 secs cool-off). However, you can buy\nunlimited usage of the custom horn for 5000 GC. This item applies to all horns.", true, perkTab)
     guiCreateLabel(0.54, 0.105, 0.9, 0.15, 'Double-click to bind horn to a key:', true, buyHornsTab)
-    guiCreateLabel(0.753, 0.94, 0.9, 0.15, '(for gamepads)', true, buyHornsTab)
+    guiCreateLabel(0.41, 0.95, 0.90, 0.15, '(for gamepads)', true, buyHornsTab)
 
 
     --// Buttons //--
     local buy = guiCreateButton(0.05, 0.83, 0.22, 0.12, "Buy selected horn\nPrice: 2000 GC (each)", true, buyHornsTab)
-    local unbindall = guiCreateButton(0.53, 0.83, 0.14, 0.12, "Unbind\nall horns", true, buyHornsTab)
-    local bindForGamepads = guiCreateButton(0.69, 0.83, 0.26, 0.12, "Bind to a horn control name\n(Esc -> Settings -> Binds)", true, buyHornsTab)
+    local unbindall = guiCreateButton(0.61, 0.83, 0.14, 0.12, "Unbind\nall horns", true, buyHornsTab)
+    local bindForGamepads = guiCreateButton(0.34, 0.83, 0.26, 0.12, "Bind to a horn control name\n(Esc -> Settings -> Binds)", true, buyHornsTab)
+	local sell = guiCreateButton(0.81, 0.83, 0.14, 0.12, "Sell horn", true, buyHornsTab)
     unlimited = guiCreateButton(0.77, 0.05, 0.20, 0.15, "Buy unlimited usage\nPrice: 5000 GC", true, perkTab)
-
 
     --// Event Handlers //--
     addEventHandler("onClientGUIClick", buy, buyButton, false)
@@ -495,11 +495,25 @@ function onShopInit(tabPanel)
     addEventHandler("onClientGUIDoubleClick", availableHornsList, playButton, false)
     addEventHandler("onClientGUIClick", unbindall, unbindAllHorns, false)
     addEventHandler("onClientGUIClick", bindForGamepads, bindToHornControlName, false)
+    addEventHandler("onClientGUIClick", sell, sellHorn, false)
     addEventHandler("onClientGUIClick", unlimited, unlimitedHorn, false)
 end
 
 addEvent('onShopInit', true)
 addEventHandler('onShopInit', root, onShopInit)
+
+function sellHorn(button, state) --literally coppied all of your code from buyButton, sorry :P
+	if button == "left" and state == "up" then
+		local row, col = guiGridListGetSelectedItem(availableHornsList)
+        if row == -1 or row == false then
+            outputChatBox("Select a horn first", 255, 0, 0)
+            return
+        end
+        row = row + 1
+        triggerServerEvent('onPlayerSellHorn', localPlayer, row)
+	end
+end
+
 
 local previewHornList = {}
 function playButton(button, state)
@@ -675,6 +689,17 @@ addEventHandler('onClientSuccessBuyHorn', root,
             outputChatBox("Either not logged in, or not enough GC, or you already have this horn.")
         end
     end)
+	
+addEvent('onClientSuccessSellHorn', true)
+addEventHandler('onClientSuccessSellHorn', root,
+function(success)
+	if success then
+		outputChatBox("Horn successfully sold")
+		triggerServerEvent('getHornsData', localPlayer)
+	else
+		outputChatBox("Either not logged in, or you don't have this horn.")
+	end
+end)
 
 addEvent("hornsLogin", true)
 addEventHandler("hornsLogin", root,
