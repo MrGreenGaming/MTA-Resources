@@ -38,7 +38,7 @@ function transfer(player, cmd, argAmount, argTransferTo)
 	
 	-- Amount is valid
 	
-	local transferTo = getPlayerFromName(argTransferTo)
+	local transferTo = getPlayerFromPrtialName(argTransferTo)
 	
 	if not transferTo then
 		throwError(player, "The player with that name was not found!")
@@ -91,7 +91,7 @@ function transfer(player, cmd, argAmount, argTransferTo)
 	local serial, email = getPlayerSerial (player),  tostring(exports.gc:getPlayerGreencoinsLogin( player ) )
 	local fid = tostring(exports.gc:getPlayerForumID( transferTo ))
 	
-	pcall(addToLog, 'GC TRANSFER - TRANSFER - TIME: ' .. getTimestamp() .. ' - ' .. amount .. ' GCS TO FORUM ID: ' .. fid .. ' (TAKEN GCS: ' .. tostring(check1) .. ' | GIVEN GCS: ' .. tostring(check2) .. ') - ' .. name ..'/'.. acc ..'/'.. forumid ..'/'.. serial ..'/'.. email)
+	pcall(addToLog, 'GC TRANSFER - TRANSFER - ' .. amount .. ' GCS TO FORUM ID: ' .. fid .. ' (TAKEN GCS: ' .. tostring(check1) .. ' | GIVEN GCS: ' .. tostring(check2) .. ') - ' .. name ..'/'.. acc ..'/'.. forumid ..'/'.. serial ..'/'.. email)
 end
 addCommandHandler("givegc", transfer)
 
@@ -104,9 +104,40 @@ function success(player, transferedTo, amount)
 	outputChatBox("[GC Transfer] " .. tostring(amount) .. " GCs have been sent to your account by " .. getPlayerName(player) .. "#00FF00!", transferedTo, 0, 255, 0, true)
 end
 
+local logFile = false
+handlerConnect = nil			-- mysql handler
+
+function addToLog(text)
+	local t = getRealTime()
+	if not isElement(logFile) then
+		logFile = fileOpen("transfer.log")
+		if not logFile then
+			logFile = fileCreate("transfer.log")
+		else
+			fileSetPos(logFile, fileGetSize(logFile))
+		end
+	end
+	text = "[" .. getRealDateTimeString(t) .. "] " .. tostring(text or '')
+	fileWrite(logFile, text.."\r\n")
+	fileFlush(logFile)
+	fileClose(logFile)
+	return true
+end
+addCommandHandler ( "addToLog", function(p, c, text) outputChatBox(tostring(addToLog(text))) end, true, true )
 
 
 
+function getPlayerFromPartialName(name) --https://wiki.multitheftauto.com/wiki/GetPlayerFromPartialName
+    local name = name and name:gsub("#%x%x%x%x%x%x", ""):lower() or nil
+    if name then
+        for _, player in ipairs(getElementsByType("player")) do
+            local name_ = getPlayerName(player):gsub("#%x%x%x%x%x%x", ""):lower()
+            if name_:find(name, 1, true) then
+                return player
+            end
+        end
+    end
+end
 
 function getTimestamp(year, month, day, hour, minute, second) -- https://wiki.multitheftauto.com/wiki/GetTimestamp
     -- initiate variables
