@@ -2,6 +2,7 @@ admins = {
 	{ name = "Ywa", title = "Founder", accountName = "Ywa" },
 	{ name = "Cena", title = "Server Manager", accountName = "Cena" },
 	{ name = "Bierbuikje", title = "Developer", accountName = "bierbuikje" },
+	{ name = "Mihoje", title = "Developer", accountName = "Mihoje" },
 	{ name = "Bob_Taylor", title = "Map Manager", accountName = "Bob_Taylor" },
 	{ name = "MoshPit", title = "Map Manager", accountName = "MoshMosh" },
 	{ name = "Dubby", title = "Map Manager", accountName = "michael" },
