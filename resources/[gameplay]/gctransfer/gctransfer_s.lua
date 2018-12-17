@@ -2,7 +2,7 @@ local transfers = {}
 local cooldown = 60
 
 function transfer(player, cmd, argAmount, argTransferTo)
-	if not hasObjectPermissionTo(player, "command.ban", false) then return end -- Admin exclusive command for testing purposes
+	--if not hasObjectPermissionTo(player, "command.ban", false) then return end -- Admin exclusive command for testing purposes removed
 	
 	if not argAmount or not argTransferTo then
 		throwError(player, "Usage: /" .. cmd .. " [amount] [exact player name]")
