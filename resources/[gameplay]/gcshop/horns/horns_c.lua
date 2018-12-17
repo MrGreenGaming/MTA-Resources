@@ -504,15 +504,21 @@ addEventHandler('onShopInit', root, onShopInit)
 local cooldown = false
 function sellHorn(button, state) --literally coppied all of your code from buyButton, sorry :P
 	if button == "left" and state == "up" and cooldown == false then
+		cooldown = true
 		local row, col = guiGridListGetSelectedItem(myHornsList)
         if row == -1 or row == false then
             outputChatBox("Select a horn first", 255, 0, 0)
+			cooldown = false
             return
         end
 		local name = guiGridListGetItemText(myHornsList, row, 1)
-		local num = tonumber(split(name, ')')[1])
-		cooldown = true
+		local num = tonumber(split(name, ')')[1])		
 		triggerServerEvent('onPlayerSellHorn', localPlayer, num)
+		setTimer(function()
+			cooldown = false
+		end, 5000, 1)
+	elseif button == "left" and state == "up" and cooldown == true then
+		outputChatBox("You can sell a horn once every 5 seconds!", 255, 0, 0)
 	end
 end
 
@@ -700,9 +706,8 @@ function(success)
 		triggerServerEvent('getHornsData', localPlayer)
 	else
 		outputChatBox("Either not logged in, or you don't have this horn.")
+		cooldown = false
 	end
-	
-	cooldown = false
 end)
 
 addEvent("hornsLogin", true)
