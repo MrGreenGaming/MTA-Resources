@@ -38,7 +38,7 @@ function transfer(player, cmd, argAmount, argTransferTo)
 	
 	-- Amount is valid
 	
-	local transferTo = getPlayerFromPrtialName(argTransferTo)
+	local transferTo = getPlayerFromPartialName(argTransferTo)
 	
 	if not transferTo then
 		throwError(player, "The player with that name was not found!")
