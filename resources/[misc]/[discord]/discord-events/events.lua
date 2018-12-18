@@ -57,7 +57,7 @@ addEventHandler("onPlayerChangeNick", root,
 
 addEventHandler("onPlayerChat", root,
     function (message, messageType)
-		if exports.censorship:isBlockedMsg(message) then return end
+		if getResourceFromName('censorship') and getResourceState(getResourceFromName('censorship')) == 'running' and exports.censorship:isBlockedMsg(message) then return end
         if messageType == 0 then
             exports.discord:send("chat.message.text", { author = getPlayerName(source), text = message })
         elseif messageType == 1 then
