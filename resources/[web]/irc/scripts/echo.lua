@@ -80,7 +80,7 @@ addEventHandler("onPlayerChat",root,
 		if getElementData(source, "spam") == 1 then
 			return 
 		end
-		if exports.censorship:isBlockedMsg(message) then return end
+		if getResourceFromName('censorship') and getResourceState(getResourceFromName('censorship')) == 'running' and exports.censorship:isBlockedMsg(message) then return end
 		message = string.gsub (message, '#%x%x%x%x%x%x', '' )
         if type == 0 then
 			local accName = getAccountName ( getPlayerAccount ( source ) )
