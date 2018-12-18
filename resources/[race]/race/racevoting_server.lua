@@ -328,6 +328,9 @@ function startNextMapVote()
 	if pollDidStart then
 		gotoState('NextMapVote')
 		addEventHandler("onPollEnd", getRootElement(), chooseRandomMap)
+	else
+		startRandomMap()
+		return true
 	end
 
 	return pollDidStart
