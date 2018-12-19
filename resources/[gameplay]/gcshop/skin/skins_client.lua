@@ -147,7 +147,7 @@ function onShopInit ( tabPanel )
 			guiGridListSetItemText(skinGrid, row, colId, skinID, false, false)
 		end
 	end	
-	guiCreateLabel(0.4274,0.0505,0.45,0.05,"Skin price: 1500 GCs",true,skinTab)
+	guiCreateLabel(0.4274,0.0505,0.45,0.05,"Buy price: 1500 GCs | Sell price: 750 GCs",true,skinTab)
 	guiCreateLabel(0.4274,0.1009,0.45,0.05,"You can own multiple skins, but only use one.",true, skinTab)
 	exactSkins = guiCreateLabel(0.4274,0.1537,0.55,0.05,"Your ID purchases so far: none",true,skinTab)
 	exactSkins2 = guiCreateLabel(0.4274,0.2037,0.55,0.05,"",true,skinTab)
@@ -182,6 +182,9 @@ addEvent("sendPlayerSkinPurchases", true)
 addEventHandler("sendPlayerSkinPurchases", root,
 function(purchases, current)
 	if purchases == false then
+		guiSetText(exactSkins, 'Your ID purchases so far: none')
+		guiSetText(exactSkins2, '')
+		guiSetText(exactSkins3, '')
 		local rows = guiGridListGetRowCount(skinGrid)
 		for i = 0, rows do 
 			if not string.find(guiGridListGetItemText(skinGrid, i, 1), 'Group') then

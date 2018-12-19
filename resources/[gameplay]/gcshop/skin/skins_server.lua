@@ -70,11 +70,6 @@ end
 addEvent('onPlayerSellSkin', true)
 addEventHandler('onPlayerSellSkin', root,
 function(skinID)
-	if not hasObjectPermissionTo(source, "command.ban", false) then -- Admin exclusive function for testing purposes
-		outputChatBox("This is currently only an admin function until we test it and make sure it works. Sorry.", source, 255, 0, 0)
-		return 
-	end 
-	
 	if not handlerConnect then return end
 	local isLogged = exports.gc:isPlayerLoggedInGC(source)
 	if not isLogged then 
