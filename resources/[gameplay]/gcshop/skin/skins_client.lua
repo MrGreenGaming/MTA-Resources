@@ -186,6 +186,9 @@ function(purchases, current)
 	currentID = tonumber(current) or 0
 	local _table = split(purchases, ',')
 	local rows = guiGridListGetRowCount(skinGrid)
+	guiSetText(exactSkins, 'Your ID purchases so far: none')
+	guiSetText(exactSkins2, '')
+	guiSetText(exactSkins3, '')
 	for i, purchase in ipairs(_table) do 
 		if i < 10 then
 			if guiGetText(exactSkins) == 'Your ID purchases so far: none' then
@@ -213,6 +216,9 @@ function(purchases, current)
 		if string.find(oPurchases, ','..gridID..',') and not string.find(guiGridListGetItemText(skinGrid, i, 1), 'Group') then
 			guiGridListSetItemColor(skinGrid, i, 1, 0, 255, 0)
 			guiGridListSetItemColor(skinGrid, i, 2, 0, 255, 0)
+		elseif not string.find(oPurchases, ','..gridID..',') and not string.find(guiGridListGetItemText(skinGrid, i, 1), 'Group') then
+			guiGridListSetItemColor(skinGrid, i, 1, 255, 255, 255)
+			guiGridListSetItemColor(skinGrid, i, 2, 255, 255, 255)
 		end	
 	end
 	--guiSetText(exactSkins, "Your ID purchases so far: "..purchases)
