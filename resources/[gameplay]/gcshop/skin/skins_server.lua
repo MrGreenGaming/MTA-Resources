@@ -164,7 +164,10 @@ function()
 		local cmd = "SELECT forumid, skin, setting FROM custom_skins WHERE forumid = ? LIMIT 1"
 		local query = dbQuery(handlerConnect, cmd, forumid)
 		local sql = dbPoll(query, -1)
-		if #sql == 0 then return end
+		if #sql == 0 then
+			triggerClientEvent(source, "sendPlayerSkinPurchases", source, false, false)
+			return 
+		end
 		triggerClientEvent(source, "sendPlayerSkinPurchases", source, sql[1].skin, sql[1].setting)
 		if sql[1].setting == "none" then     
 			return

@@ -1,5 +1,6 @@
 local shopTabPanel
 local cdTime = 5 -- selling skins cooldown time in sec, prevents a bug where you can spam and sell one item at twice the price
+local cooldown = false
 
 function previewSkin(button, state)
 	if state == "up" and button == "left" then
@@ -57,7 +58,6 @@ function(success)
 end)
 
 
-
 function buySkin(button, state)
 	if state == "up" and button == "left" then
 		local row, col = guiGridListGetSelectedItem(skinGrid)
@@ -70,7 +70,7 @@ function buySkin(button, state)
 	end
 end
 
-local cooldown = false
+
 function sellSkin(button, state)
 	if state == "up" and button == "left" and cooldown == false then
 		cooldown = true
@@ -181,6 +181,16 @@ addEventHandler('onShopInit', root, onShopInit )
 addEvent("sendPlayerSkinPurchases", true)
 addEventHandler("sendPlayerSkinPurchases", root,
 function(purchases, current)
+	if purchases == false then
+		local rows = guiGridListGetRowCount(skinGrid)
+		for i = 0, rows do 
+			if not string.find(guiGridListGetItemText(skinGrid, i, 1), 'Group') then
+				guiGridListSetItemColor(skinGrid, i, 1, 255, 255, 255)
+				guiGridListSetItemColor(skinGrid, i, 2, 255, 255, 255)
+			end	
+		end
+		return
+	end
 	oPurchases = purchases
 	oPurchases = ','..oPurchases..','
 	currentID = tonumber(current) or 0
