@@ -1,4 +1,5 @@
 local shopTabPanel
+local cdTime = 5 -- selling skins cooldown time in sec, prevents a bug where you can spam and sell one item at twice the price
 
 function previewSkin(button, state)
 	if state == "up" and button == "left" then
@@ -37,6 +38,25 @@ function(success)
 end
 )
 
+addEvent('onServerSuccessfulSkinSell', true)
+addEventHandler('onServerSuccessfulSkinSell', root,
+function(success)
+	if success then
+		if isTimer(changeBack) then killTimer(changeBack) end
+		triggerServerEvent('getSkinPurchases', getLocalPlayer())
+		if guiGetVisible(failLabel) or guiGetVisible(failLabel3) then
+			guiSetVisible(failLabel, false)
+			guiSetVisible(failLabel2, false)
+			guiSetVisible(failLabel3, false)
+		end
+		guiSetVisible(successLabel, true)
+	else
+		outputChatBox("Selling failed! You are either not logged in or don't have that skin!", 255, 0, 0)
+		cooldown = false
+	end
+end)
+
+
 
 function buySkin(button, state)
 	if state == "up" and button == "left" then
@@ -47,6 +67,32 @@ function buySkin(button, state)
 		if isTimer(changeBack) then killTimer(changeBack) end
 		setElementModel(getLocalPlayer(), currentID)
 		triggerServerEvent('onPlayerChooseSkin', getLocalPlayer(), tostring(id))
+	end
+end
+
+local cooldown = false
+function sellSkin(button, state)
+	if state == "up" and button == "left" and cooldown == false then
+		cooldown = true
+		local row, col = guiGridListGetSelectedItem(skinGrid)
+		if row == -1 or col == -1 or row == false then
+			cooldown = false
+			return 
+		end
+		local id = guiGridListGetItemText(skinGrid, row, colId)
+		if id == "" then 
+			cooldown = false
+			outputChatBox("Please select the skin you want to sell!", 255, 0, 0)
+			return 
+		end
+		
+		setTimer(function()
+			cooldown = false
+		end, cdTime * 1000, 1)
+		
+		triggerServerEvent('onPlayerSellSkin', getLocalPlayer(), tostring(id))
+	elseif state == "up" and button == "left" and cooldown == true then
+		outputChatBox("You can sell skins once every " .. cdTime .. " seconds!", 255, 0, 0)
 	end
 end
 
@@ -109,7 +155,7 @@ function onShopInit ( tabPanel )
 	failLabel = guiCreateLabel(0.55, 0.75, 0.45, 0.1, "Not enough money/skin already bought", true, skinTab)
 	failLabel3 = guiCreateLabel(0.55, 0.75, 0.45, 0.1, "Please input a number.", true, skinTab)
 	failLabel2 = guiCreateLabel(0.55, 0.80, 0.45, 0.1, "Or not logged in", true, skinTab)
-	successLabel = guiCreateLabel(0.55, 0.75, 0.45, 0.1, "Skin bought successfully!", true, skinTab)
+	successLabel = guiCreateLabel(0.55, 0.75, 0.45, 0.1, "Skin bought/sold successfully!", true, skinTab)
 	guiSetVisible(failLabel, false)
 	guiSetVisible(failLabel2, false)
 	guiSetVisible(successLabel, false)
@@ -118,6 +164,8 @@ function onShopInit ( tabPanel )
 	addEventHandler ( "onClientGUIClick", preview, previewSkin,false )
 	local buy = guiCreateButton(0.75, 0.85, 0.15, 0.05, "Buy skin", true,skinTab) 
 	addEventHandler ( "onClientGUIClick", buy, buySkin,false)
+	local sell = guiCreateButton(0.75, 0.92, 0.15, 0.05, "Sell skin", true,skinTab) 
+	addEventHandler ( "onClientGUIClick", sell, sellSkin,false)
 	local use = guiCreateButton(0.4342,0.5298,0.15,0.05,"Set primary skin",true,skinTab) 
 	addEventHandler ( "onClientGUIClick",use, useButton,false)
 	--edit = guiCreateEdit(0.4342,0.4151,0.15,0.05, "Enter skin ID", true, skinTab)

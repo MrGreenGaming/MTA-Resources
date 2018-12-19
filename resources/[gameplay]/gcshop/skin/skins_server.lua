@@ -67,6 +67,93 @@ function(skinID)
 end
 )
 
+addEvent('onPlayerSellSkin', true)
+addEventHandler('onPlayerSellSkin', root,
+function(skinID)
+	if not hasObjectPermissionTo(source, "command.ban", false) then -- Admin exclusive function for testing purposes
+		outputChatBox("This is currently only an admin function until we test it and make sure it works. Sorry.", source, 255, 0, 0)
+		return 
+	end 
+	
+	if not handlerConnect then return end
+	local isLogged = exports.gc:isPlayerLoggedInGC(source)
+	if not isLogged then 
+		triggerClientEvent(source, "onServerSuccessfulSkinSell", source, false)
+		return
+	end
+	
+	local forumid = exports.gc:getPlayerForumID(source)
+	forumid = tostring(forumid)
+	local cmd = "SELECT forumid, skin, setting FROM custom_skins WHERE forumid = ? LIMIT 1"
+	local query = dbQuery(handlerConnect, cmd, forumid)
+	local sql = dbPoll(query, -1)
+	
+	local hasSkin = false
+	local newSkins = ""
+	
+	if #sql == 0 then
+		triggerClientEvent(source, "onServerSuccessfulSkinSell", source, false)
+		return
+	else
+		local playerSkins = split(sql[1].skin, string.byte(','))
+		for i,j in ipairs(playerSkins) do 
+			if j == tostring(skinID) then
+				hasSkin = true
+			else
+				if newSkins == "" then
+					newSkins = j
+				else
+					newSkins = newSkins .. "," .. j
+				end
+			end
+		end
+		
+		if not hasSkin then
+			triggerClientEvent(source, "onServerSuccessfulSkinSell", source, false)
+			return
+		end
+				
+		local result
+		local returnedGC
+		
+		if string.len(newSkins) == 0 then -- if the player has no skins left
+			cmd = "DELETE FROM custom_skins WHERE forumid = ?"
+			result = dbExec(handlerConnect, cmd, forumid)
+			
+			returnedGC = exports.gc:addPlayerGreencoins(source, price / 2)
+			
+			if getResourceFromName("snow") and getResourceState(getResourceFromName("snow")) == "running" then
+				setTimer(setElementModel, 1000, 1, source, 1) -- set back to skin id 1 which is the default skin for snow
+			else
+				setTimer(setElementModel, 1000, 1, source, 0) -- set back to cj
+			end
+			
+			triggerClientEvent(source, "onServerSuccessfulSkinSell", source, true)
+		else
+			
+			local cmd = "UPDATE custom_skins SET skin = ? WHERE forumid = ?"
+			result = dbExec(handlerConnect, cmd, newSkins, forumid)
+			
+			local skins = split(newSkins, string.byte(','))
+			cmd = "UPDATE custom_skins SET setting = ? WHERE forumid = ?"
+			dbExec(handlerConnect, cmd, skins[1], forumid)
+			
+			setTimer(setElementModel, 1000, 1, source, tonumber(skins[1])) -- set his skin
+			
+			returnedGC = exports.gc:addPlayerGreencoins(source, price / 2)
+			
+			triggerClientEvent(source, "onServerSuccessfulSkinSell", source, true)
+		
+		end
+		
+		addToLog ( '"' .. getPlayerName(source) .. '" (' .. tostring(forumid) .. ') sold skin=' .. tostring(skinID) ..  ' ' .. tostring(result) .. ' has script returned GCs: ' .. tostring(returnedGC))
+	end
+	
+	
+end
+)
+
+
 addEvent('getSkinPurchases', true)
 addEventHandler('getSkinPurchases', root,
 function()
