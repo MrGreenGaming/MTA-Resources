@@ -20,7 +20,6 @@ A non-dramatic 'The MIT License' applies. See `LICENSE` file for details.
 ## Project team
 * Jarno Veuger (Ywa) - Founder, merger, issue management
 * EsDeKa (SDK) - Merger, issue management
-* Alexey Yakubovskii (AleksCore) - Merger, issue management
 * Hans Swart (Bierbuikje) - Merger, issue management
 
 ## Implementation
