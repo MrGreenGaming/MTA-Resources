@@ -56,7 +56,7 @@ addCommandHandler('rules',
         guiWindowSetMovable(GUIEditor.window[1], false)
         guiWindowSetSizable(GUIEditor.window[1], false)
 
-        GUIEditor.label[1] = guiCreateLabel(10, 23, 330, 166, "1. Don't spam, swear, exploit, be a retard.\n2. Our main language here is English.\nIf an admin asks you to use English, use English.\n3. The admins ( /admins ) are always right.\n4. Do not deliberately block to ruin maps.\n5. Do not camp in DD maps.\n6. Do not teamkill in CTF or ManHunt maps\n7. Don't escape map boundaries if any.\n\nFailure to comply with the rules can get you kicked or banned!", false, GUIEditor.window[1])
+        GUIEditor.label[1] = guiCreateLabel(10, 23, 330, 166, "1. Don't spam, swear, exploit, be a retard.\n2. Our main language here is English.\nIf an admin asks you to use English, use English.\n3. The admins ( /admins ) are always right.\n4. Do not deliberately block to ruin maps.\n5. Do not camp in DD and/or SH maps.\n6. Do not teamkill in CTF maps\n7. Don't escape map boundaries if any.\n\nFailure to comply with the rules can get you kicked or banned!", false, GUIEditor.window[1])
         guiSetFont(GUIEditor.label[1], "clear-normal")
         guiLabelSetColor(GUIEditor.label[1], 0, 255, 0)
         guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
