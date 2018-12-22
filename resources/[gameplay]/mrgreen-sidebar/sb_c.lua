@@ -70,6 +70,7 @@ MenuItems = { -- Name, Icon
 	{name = "Server Info", event = "sb_showServerInfo"},
 	{name = "My Account", event = "sb_showMyAccount"},
 	{name = "GC Shop", event = "sb_showGCShop"},
+	{name = "Transfer GCs", event = "sb_transferGC"},
 	{name = "Achievements", event = "sb_showAchievements"},
 	{name = "My Stats", event = "sb_showStats"},
 	{name = "Settings", event = "sb_showSettings"},

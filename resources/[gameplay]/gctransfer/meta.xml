@@ -1,6 +1,7 @@
 <meta>
-	<info author="Mihoje" version="1.0" name="Greencoin transfer" description="A small script that gives the players the ability to transfer greencoins to other players." type="script" />
+	<info author="Mihoje" version="2.0" name="Greencoin transfer" description="A small script that gives the players the ability to transfer greencoins to other players." type="script" />
 	<script src="gctransfer_s.lua" type="server" />
+	<script src="gctransfer_c.lua" type="client" />
 	
 	<include resource="gc" />
 </meta>
