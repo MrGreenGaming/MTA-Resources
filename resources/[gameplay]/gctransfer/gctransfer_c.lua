@@ -1,28 +1,25 @@
 function buildGUI()
-	windowTransfer = guiCreateWindow(0.64, 0.12, 0.26, 0.38, "Greencoin Transfer", true)
+	windowTransfer = guiCreateWindow(0.56, 0.03, 0.34, 0.58, "Greencoin Transfer", true)
 	guiWindowSetSizable(windowTransfer, false)
 
-	gridPlayers = guiCreateGridList(0.03, 0.15, 0.60, 0.82, true, windowTransfer)
+	gridPlayers = guiCreateGridList(0.03, 0.14, 0.56, 0.84, true, windowTransfer)
 	guiGridListAddColumn(gridPlayers, "Name", 0.9)
 	
-	txtAmount = guiCreateEdit(0.67, 0.15, 0.30, 0.08, "", true, windowTransfer)
+	txtAmount = guiCreateEdit(0.67, 0.14, 0.31, 0.05, "", true, windowTransfer)
 	guiEditSetMaxLength(txtAmount, 5)
 
-	local lblAmount = guiCreateLabel(0.67, 0.09, 0.14, 0.05, "Amount:", true, windowTransfer)
-	local lblSelectPlayer = guiCreateLabel(0.03, 0.09, 0.26, 0.05, "Select a player:", true, windowTransfer)
-	local btnSend = guiCreateButton(0.67, 0.26, 0.30, 0.06, "Send", true, windowTransfer)
+	lblAmount = guiCreateLabel(0.67, 0.09, 0.14, 0.05, "Amount:", true, windowTransfer)
+	lblSelectPlayer = guiCreateLabel(0.03, 0.09, 0.26, 0.05, "Select a player:", true, windowTransfer)
+	btnSend = guiCreateButton(0.67, 0.20, 0.31, 0.04, "Send", true, windowTransfer)
 	guiSetProperty(btnSend, "NormalTextColour", "FFAAAAAA")
-	local btnClose = guiCreateButton(0.67, 0.33, 0.30, 0.06, "Close", true, windowTransfer)
-	guiSetProperty(btnClose, "NormalTextColour", "FFAAAAAA")
-	
-    addEventHandler("onClientGUIClick", btnSend, sendTransferRequest, false)
+	btnClose = guiCreateButton(0.67, 0.25, 0.31, 0.04, "Close", true, windowTransfer)
+	guiSetProperty(btnClose, "NormalTextColour", "FFAAAAAA")   
+
+	addEventHandler("onClientGUIClick", btnSend, sendTransferRequest, false)
     addEventHandler("onClientGUIClick", btnClose, hideGUI, false)
 	guiSetInputMode("no_binds_when_editing")
-	guiSetVisible(windowTransfer, false)
+	guiSetVisible(windowTransfer, false)		
 end
-
-
-
 
 -- Button functions
 

@@ -5,10 +5,12 @@ function getPlayersTable()
 	local players = {}
 	local logged
 	local temp
+	local name
 	for i, p in ipairs(getElementsByType("player")) do
 		logged = exports.gc:isPlayerLoggedInGC(p)
 		temp = {}
-		table.insert(temp, getPlayerName(p))
+		name = string.gsub(getPlayerName(p), "#%x%x%x%x%x%x", "")
+		table.insert(temp, name)
 		table.insert(temp, logged)
 		table.insert(players, temp)
 	end
