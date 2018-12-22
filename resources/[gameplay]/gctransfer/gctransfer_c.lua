@@ -8,11 +8,11 @@ function buildGUI()
 	txtAmount = guiCreateEdit(0.67, 0.14, 0.31, 0.05, "", true, windowTransfer)
 	guiEditSetMaxLength(txtAmount, 5)
 
-	lblAmount = guiCreateLabel(0.67, 0.09, 0.14, 0.05, "Amount:", true, windowTransfer)
-	lblSelectPlayer = guiCreateLabel(0.03, 0.09, 0.26, 0.05, "Select a player:", true, windowTransfer)
-	btnSend = guiCreateButton(0.67, 0.20, 0.31, 0.04, "Send", true, windowTransfer)
+	local lblAmount = guiCreateLabel(0.67, 0.09, 0.14, 0.05, "Amount:", true, windowTransfer)
+	local lblSelectPlayer = guiCreateLabel(0.03, 0.09, 0.26, 0.05, "Select a player:", true, windowTransfer)
+	local btnSend = guiCreateButton(0.67, 0.20, 0.31, 0.04, "Send", true, windowTransfer)
 	guiSetProperty(btnSend, "NormalTextColour", "FFAAAAAA")
-	btnClose = guiCreateButton(0.67, 0.25, 0.31, 0.04, "Close", true, windowTransfer)
+	local btnClose = guiCreateButton(0.67, 0.25, 0.31, 0.04, "Close", true, windowTransfer)
 	guiSetProperty(btnClose, "NormalTextColour", "FFAAAAAA")   
 
 	addEventHandler("onClientGUIClick", btnSend, sendTransferRequest, false)
@@ -48,7 +48,7 @@ end
 function hideGUI(btn, state)
 	if btn == "left" and state == "up" then
 		guiSetVisible(windowTransfer, false)
-		showCursor(false, false)
+		showCursor(false)
 	end
 end
 
@@ -65,7 +65,7 @@ addEvent("sb_transferGC", false)
 addEventHandler("sb_transferGC", root,
 function(playersTable)
 	guiSetVisible(windowTransfer, true)
-	showCursor(true, true)
+	showCursor(true)
 	triggerServerEvent("GCTransfer.RequestPlayerData", localPlayer)
 end)
 

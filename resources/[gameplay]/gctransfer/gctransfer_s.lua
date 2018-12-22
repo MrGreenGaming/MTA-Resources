@@ -184,16 +184,13 @@ function doTransfer(player, argTransferTo, argAmount)
 	-- Refunds
 	if not check1 and check2 then -- failed to take GCs
 		exports.gc:addPlayerGreencoins(transferTo, -amount) --take the GCs
-		return false
 	elseif check1 and not check2 then -- failed to give GCs
 		exports.gc:addPlayerGreencoins(player, amount) --give back GCs
-		return false
 	elseif not check1 and not check2 then -- both failed
-		return false
+
 	elseif check1 and check2 then -- both succeded
 		success(player, transferTo, amount)
 		transfers[player] = getTimestamp()
-		return true
 	end
 	
 	local name, acc = getPlayerName(player), (isGuestAccount(getPlayerAccount(player)) and '') or getAccountName(getPlayerAccount(player))
@@ -201,6 +198,7 @@ function doTransfer(player, argTransferTo, argAmount)
 	
 	
 	pcall(addToLog, 'GC TRANSFER - TRANSFER - ' .. amount .. ' GCS TO FORUM ID: ' .. fid .. ' (TAKEN GCS: ' .. tostring(check1) .. ' | GIVEN GCS: ' .. tostring(check2) .. ') - ' .. name ..'/'.. acc ..'/'.. forumid ..'/'.. serial ..'/'.. email)
+	return (check1 and check2)
 end
 
 local logFile = false
