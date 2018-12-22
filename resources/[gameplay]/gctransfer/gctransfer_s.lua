@@ -1,4 +1,4 @@
-glocal transfers = {}
+local transfers = {}
 local cooldown = 60
 
 function getPlayersTable()
