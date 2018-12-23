@@ -56,7 +56,7 @@ end
 
 -- Events
 
-addEventHandler("onClientResourceStart", root, 
+addEventHandler("onClientResourceStart", getResourceRootElement(), 
 function()
 	buildGUI()
 end)
