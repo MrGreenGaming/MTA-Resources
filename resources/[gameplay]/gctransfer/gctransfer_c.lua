@@ -73,19 +73,17 @@ addEvent("GCTransfer.TransferResponse", true)
 addEventHandler("GCTransfer.TransferResponse", root, 
 function(success, response)
 	if success then
-		outputChatBox(response, 0, 255, 0)
+		outputChatBox(response, 0, 255, 0, true)
 		guiSetVisible(windowTransfer, false)
+		showCursor(false)
 	else 
-		outputChatBox(response, 255, 0, 0)
+		outputChatBox(response, 255, 0, 0, true)
 	end
 end)
 addEvent("GCTransfer.PlayerDataResponse", true)
 addEventHandler("GCTransfer.PlayerDataResponse", root,
 function(players)
-	if not players then 
-		outputChatBox("error")
-		return 
-	end
+	if not players then return end
 	guiGridListClear(gridPlayers)
 	
 	for i, p in ipairs(players) do

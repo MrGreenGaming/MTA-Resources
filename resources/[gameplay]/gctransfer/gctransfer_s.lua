@@ -23,7 +23,7 @@ function throwError(player, text)
 end
 
 function success(player, transferedTo, amount)
-	outputChatBox("[GC Transfer] " .. tostring(amount) .. " GCs have been successfully sent to " .. getPlayerName(transferedTo) .. "#00FF00!", player, 0, 255, 0, true)
+	--outputChatBox("[GC Transfer] " .. tostring(amount) .. " GCs have been successfully sent to " .. getPlayerName(transferedTo) .. "#00FF00!", player, 0, 255, 0, true)
 	outputChatBox("[GC Transfer] " .. tostring(amount) .. " GCs have been sent to your account by " .. getPlayerName(player) .. "#00FF00!", transferedTo, 0, 255, 0, true)
 end
 
@@ -43,10 +43,6 @@ end)
 addEvent("GCTransfer.SendTransferRequest", true)
 addEventHandler("GCTransfer.SendTransferRequest", root,
 function(pName, amount)
-	if not hasObjectPermissionTo(source, "command.ban", false) then -- Admin exclusive function for testing purposes
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "This is currently only an admin function until we test it and make sure it works. Sorry.")
-		return 
-	end 
 	--Do all kinds of checks
 	if not pName or not amount then
 		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You didn't enter a player name or amount!")
