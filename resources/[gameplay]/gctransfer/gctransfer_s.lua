@@ -66,8 +66,7 @@ end
 
 addEventHandler("onPlayerJoin", getRootElement(), 
 function()
-	local players = getPlayersTable()
-	triggerClientEvent(getRootElement(), "GCTransfer.PlayerDataResponse", source, players)
+	triggerClientEvent(getRootElement(), "GCTransfer.UpdatePlayerData", source)
 end)
 
 addEvent("GCTransfer.RequestPlayerData", true)

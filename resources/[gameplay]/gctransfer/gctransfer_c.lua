@@ -26,7 +26,7 @@ function buildGUI()
 	addEventHandler("onClientGUIClick", btnSend, sendTransferRequest, false)
     addEventHandler("onClientGUIClick", btnClose, hideGUI, false)
     addEventHandler("onClientGUIChanged", txtSearch, search, false)
-    addEventHandler("onClientGUIChanged", checkTeammates, search, false)
+    addEventHandler("onClientGUIClick", checkTeammates, search, false)
 	guiSetInputMode("no_binds_when_editing")
 	guiSetVisible(windowTransfer, false)
 end
@@ -34,7 +34,8 @@ end
 
 -- GUI functions
 
-function search()
+function search(btn, state)
+	if btn and btn ~= "left" and state and state ~= "up" then return end
 	local team = guiCheckBoxGetSelected(checkTeammates)
 	local searchTerm = guiGetText(txtSearch)
 	if not searchTerm or searchTerm == "" then
@@ -123,4 +124,15 @@ function(players)
 			guiGridListSetItemColor(gridPlayers, row, 1, 255, 0, 0, 255)
 		end
 	end
+end)
+addEvent("GCTransfer.UpdatePlayerData", true)
+addEventHandler("GCTransfer.UpdatePlayerData", root,
+function()
+	local team = guiCheckBoxGetSelected(checkTeammates)
+	local searchTerm = guiGetText(txtSearch)
+	if not searchTerm or searchTerm == "" then
+		searchTerm = false
+	end
+	
+	triggerServerEvent("GCTransfer.RequestPlayerData", localPlayer, team, searchTerm)
 end)
