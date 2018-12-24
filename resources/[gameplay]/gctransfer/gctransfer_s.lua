@@ -18,6 +18,25 @@ function getPlayersTable()
 	return players
 end
 
+function getPlayersTableByTeam(team)
+	local players = {}
+	local logged
+	local temp
+	local name
+	for i, p in ipairs(getElementsByType("player")) do
+		if getPlayerTeam(p) == team then
+			logged = exports.gc:isPlayerLoggedInGC(p)
+			temp = {}
+			name = string.gsub(getPlayerName(p), "#%x%x%x%x%x%x", "")
+			table.insert(temp, name)
+			table.insert(temp, logged)
+			table.insert(players, temp)
+		end
+	end
+	
+	return players
+end
+
 function throwError(player, text)
 	outputChatBox("[GC Transfer] " .. text, player, 255, 0, 0, true)
 end
@@ -25,6 +44,24 @@ end
 function success(player, transferedTo, amount)
 	--outputChatBox("[GC Transfer] " .. tostring(amount) .. " GCs have been successfully sent to " .. getPlayerName(transferedTo) .. "#00FF00!", player, 0, 255, 0, true)
 	outputChatBox("[GC Transfer] " .. tostring(amount) .. " GCs have been sent to your account by " .. getPlayerName(player) .. "#00FF00!", transferedTo, 0, 255, 0, true)
+end
+
+function getTeammates(player)
+	local team = getPlayerTeam(player)
+	if not team then return getPlayersTable() end
+	return getPlayersTableByTeam(team)
+end
+
+function filterSearch(tbl, search)
+	if not tbl or not search then return tbl end
+	local retTable = {}
+	for i, p in ipairs(tbl) do
+		if string.find(string.lower(p[1]), string.lower(search)) then
+			table.insert(retTable, p)
+		end
+	end
+	
+	return retTable
 end
 
 addEventHandler("onPlayerJoin", getRootElement(), 
@@ -35,9 +72,20 @@ end)
 
 addEvent("GCTransfer.RequestPlayerData", true)
 addEventHandler("GCTransfer.RequestPlayerData", root, 
-function()
-	local players = getPlayersTable()
-	triggerClientEvent(source, "GCTransfer.PlayerDataResponse", source, players)
+function(team, search)
+	local tbl = {}
+	
+	if team then
+		tbl = getTeammates(source)
+	else
+		tbl = getPlayersTable()
+	end
+	
+	if search then
+		tbl = filterSearch(tbl, search)
+	end
+	
+	triggerClientEvent(source, "GCTransfer.PlayerDataResponse", source, tbl)
 end)
 
 addEvent("GCTransfer.SendTransferRequest", true)
