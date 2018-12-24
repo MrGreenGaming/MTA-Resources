@@ -60,6 +60,11 @@ function(pName, amount)
 		return
 	end
 	
+	if amount ~= math.floor(amount) then
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "The amount must be a whole number!")
+		return
+	end
+	
 	if amount < 1 or amount > 10000 then
 		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "The amount must be between 1 and 10000!")
 		return
@@ -132,6 +137,8 @@ function doTransfer(player, argTransferTo, argAmount)
 	local amount = tonumber(argAmount)
 	
 	if not amount then
+		return false
+	elseif amount ~= math.floor(amount) then
 		return false
 	elseif amount < 1 or amount > 10000 then
 		return false
