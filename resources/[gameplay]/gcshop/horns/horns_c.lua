@@ -438,10 +438,11 @@ hornsTable = {
     [435] = "Santi horn 1",
     [436] = "Santi horn 2",
     [437] = "100% TURK",
-
+    [438] = "Shit man",
+    [439] = "Jackjones",
+    [440] = "Brotherfucker",
+    [441] = "2 Nokia",
     
-    
- 
 }
 
 
