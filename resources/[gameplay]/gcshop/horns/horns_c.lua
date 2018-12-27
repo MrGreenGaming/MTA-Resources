@@ -436,7 +436,7 @@ hornsTable = {
     [433] = "AAAAAAAAAH",
     [434] = "Why running level 2",
     [435] = "Johnny Allon",
-    [436] = "Papito jugo al DOOM",
+    [436] = "Papito jugó al DOOM",
     [437] = "100% TURK",
 
     
