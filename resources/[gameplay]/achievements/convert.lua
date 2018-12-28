@@ -21,7 +21,7 @@ for _,row in ipairs(results) do
 	end
 	
 end
-fileWrite ( fileHandle, 'UPDATE `achievements` SET `forumID`= (SELECT `green_coins`.`forum_id` FROM `mrgreen_gc`.`green_coins` WHERE `id` = `forumID`);\n\r')
+fileWrite ( fileHandle, 'UPDATE `achievements` SET `forumID`= (SELECT `green_coins`.`forum_id` FROM `mrgreengaming_gc`.`green_coins` WHERE `id` = `forumID`);\n\r')
 fileClose(fileHandle)
 
 function getElementResource (element)

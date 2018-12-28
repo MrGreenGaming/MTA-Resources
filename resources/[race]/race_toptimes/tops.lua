@@ -67,10 +67,10 @@ function queryMapTimes (mapInfo, bStart)
 	mapnameFull = mapInfo.name
 	racemode = racemodes[ exports.race:getRaceMode() ] or "(NULL)"
 	info = mapInfo
-	local q = "SELECT forumid, mapname, pos, value, date, g.mta_name, h.country FROM toptimes, mrgreen_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY pos"
+	local q = "SELECT forumid, mapname, pos, value, date, g.mta_name, h.country FROM toptimes, mrgreengaming_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY pos"
 	dbQuery(maptimes, {mapInfo, bStart}, handlerConnect, q, mapname)
 	if not score[exports.race:getRaceMode()] then
-		local q = "SELECT forumid, mapname, value, date, month, g.mta_name, h.country FROM toptimes_month, mrgreen_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY date DESC"
+		local q = "SELECT forumid, mapname, value, date, month, g.mta_name, h.country FROM toptimes_month, mrgreengaming_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY date DESC"
 		dbQuery(monthlytime, {mapInfo, bStart}, handlerConnect, q, mapname, getRealTime().month+1)
 	else
 		sendMonthTime()	-- send empty month time
