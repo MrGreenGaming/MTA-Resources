@@ -3,9 +3,9 @@ settings = {
 ['adminTag'] = {
     ['enabled'] = true,
     ['ACL'] = { -- A bit more advanced.
-        { 'Developer', '#FFA500[Developer] ', '[Developer]', '#FFFFFF' },
+        { 'Developer', '#FFA500[Dev] ', '[Dev]', '#FFFFFF' },
         { 'Admin', '#0099FF[Admin] ', '[Admin]', '#FFFFFF' },
-        { 'Killers', '#00FFFF[Moderator] ', '[Moderator]', '#FFFFFF' },
+        { 'Killers', '#00FFFF[Mod] ', '[Mod]', '#FFFFFF' },
         { 'Everyone', '', '', '#DDDDDD' },
     }
 },
