@@ -3,9 +3,9 @@ settings = {
 ['adminTag'] = {
     ['enabled'] = true,
     ['ACL'] = { -- A bit more advanced.
-        { 'Developer', '#FFA500[Dev] ', '[Dev]', '#FFFFFF' },
-        { 'Admin', '#0099FF[Admin] ', '[Admin]', '#FFFFFF' },
-        { 'Killers', '#00FFFF[Mod] ', '[Mod]', '#FFFFFF' },
+        { 'Developer', '#FFA500[Dev] ', '[Dev]', '#FFFFFF', '%[Dev%]' },
+        { 'Admin', '#0099FF[Admin] ', '[Admin]', '#FFFFFF', '%[Admin%]' },
+        { 'Killers', '#00FFFF[Mod] ', '[Mod]', '#FFFFFF', '%[Mod%]' },
         { 'Everyone', '', '', '#DDDDDD' },
     }
 },
@@ -97,13 +97,15 @@ function chatbox(message, msgtype)
         for _,v in ipairs(settings['adminTag']['ACL']) do
             if isObjectInACLGroup('user.' .. account, aclGetGroup(v[1])) and check == 0 and not spam[serial] then
 				local text1 = text
-				aclgroup = split(settings['colorFilter']['allowedGroups'], ',') or settings['colorFilter']['allowedGroups']
-                for i, v in ipairs(aclgroup) do if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(source)), aclGetGroup(v)) then colorCheck = true end end
-				if not colorCheck then
-					if string.match(text, "#%x%x%x%x%x%x") then
-						outputChatBox("#736F6EYou are not allowed to use ColorCodes in chat, so we have remeoved them", source, 255,255,255,true)
+				if settings['colorFilter']['enabled'] then
+					aclgroup = split(settings['colorFilter']['allowedGroups'], ',') or settings['colorFilter']['allowedGroups']
+					for i, v in ipairs(aclgroup) do if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(source)), aclGetGroup(v)) then colorCheck = true end end
+					if not colorCheck then
+						if string.match(text, "#%x%x%x%x%x%x") then
+							outputChatBox("#736F6EYou are not allowed to use ColorCodes in chat, so we have remeoved them", source, 255,255,255,true)
+						end
+						text1 = text:gsub("#%x%x%x%x%x%x", "")
 					end
-					text1 = text:gsub("#%x%x%x%x%x%x", "")
 				end
 				message = RGBToHex(r, g, b) .. name .. "#FFFFFF:"..v[4].. text1
                 local message = v[2] .. RGBToHex(r, g, b) .. name .. "#FFFFFF:"..v[4].." " .. text1
@@ -146,6 +148,38 @@ function(msg, logmsg)
 	outputServerLog(logmsg)
 end)
  
+addEventHandler("onPlayerConnect", getRootElement(),
+function(nick)
+	if not settings['adminTag']['enabled'] then return end
+	local name = nick:gsub("#%x%x%x%x%x%x", "")
+	local newName
+	local changed = false
+	for i,v in ipairs(settings['adminTag']['ACL']) do
+		if i == #settings['adminTag']['ACL'] then break end
+		if string.find(string.lower(name), string.lower(v[5])) then
+			cancelEvent(true, "Your name contains illegal tags.\nPlease change your name and rejoin.")
+		end
+	end
+end)
+
+addEventHandler("onPlayerChangeNick", getRootElement(),
+function(old, new)
+	if not settings['adminTag']['enabled'] then return end
+	local name = new:gsub("#%x%x%x%x%x%x", "")
+	local newName
+	for i,v in ipairs(settings['adminTag']['ACL']) do
+		if i == #settings['adminTag']['ACL'] then break end
+		if string.find(string.lower(name), string.lower(v[5])) then
+			cancelEvent()
+			outputChatBox("You name has not been changed because it contained illegal tags!", source, 255, 0, 0)
+		end
+	end
+end)
+
+function trim(s)
+   return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+ 
 addEventHandler("onPlayerQuit", getRootElement(),
 function()
     local serial = getPlayerName(source)
@@ -156,7 +190,17 @@ end )
 addCommandHandler(settings['freezeChat']['command'],
 function(player)
     if not settings['freezeChat']['enabled'] then return end
-    if not isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(player)), aclGetGroup("Admin")) then return end
+	
+	local aclgroup = split(settings['freezeChat']['allowedGroups'], ',') or settings['freezeChat']['allowedGroups']
+	local allow = false
+	for i, v in ipairs(aclgroup) do 
+		if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(player)), aclGetGroup(v)) then 
+			allow = true
+			break
+		end
+	end
+   
+   if not allow then return end
    
     if not stopChat then
         outputChatBox('#FF0000[FREEZECHAT] #FFFFFF'..getPlayerName(player)..' has frozen the chat!', getRootElement(), 255, 255, 255, true)
@@ -172,15 +216,16 @@ end
 -- Clear chat
 addCommandHandler(settings['clearChat']['command'],
 function(player)
+	local check = false
     if not settings['clearChat']['enabled'] then return end
     aclgroup = split(settings['clearChat']['allowedGroups'], ',') or settings['clearChat']['allowedGroups']
     for i, v in ipairs(aclgroup) do if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(player)), aclGetGroup(v)) then check = true end end
     if not check then return end
    
-    for i = 2, getElementData(player, 'chatLines') do
+    for i = 1, 500 do
         outputChatBox(' ')
     end
-    outputChatBox('#FF0000[CLEARCHAT]#FFFFFF '..getPlayerName(player)..'  has cleared the chat', getRootElement(), 255, 255, 255, true)
+    outputChatBox('#FF0000[CLEARCHAT]#FFFFFF '..getPlayerName(player)..'  #FFFFFFhas cleared the chat', getRootElement(), 255, 255, 255, true)
 end
 )
  
