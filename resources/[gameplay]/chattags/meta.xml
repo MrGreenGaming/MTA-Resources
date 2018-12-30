@@ -1,0 +1,6 @@
+<meta>
+	<info author="Mihoje" version="2.0" name="Chat tags" description="A resource that adds tags to admins, developers and moderatord in the chat"/>
+	<script src="server.lua" type="server" />
+	
+	<include resource="anti" />
+</meta>

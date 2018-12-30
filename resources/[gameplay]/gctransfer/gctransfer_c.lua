@@ -14,14 +14,36 @@ function buildGUI()
 	guiSetProperty(btnSend, "NormalTextColour", "FFAAAAAA")
 	local btnClose = guiCreateButton(0.67, 0.25, 0.31, 0.04, "Close", true, windowTransfer)
 	guiSetProperty(btnClose, "NormalTextColour", "FFAAAAAA")   
+	
+	local lblSearch = guiCreateLabel(0.67, 0.33, 0.17, 0.03, "Search:", true, windowTransfer)   	
+	
+	txtSearch = guiCreateEdit(0.67, 0.37, 0.31, 0.05, "", true, windowTransfer)
+	guiEditSetMaxLength(txtSearch, 100)
+	
+	checkTeammates = guiCreateCheckBox(0.67, 0.44, 0.31, 0.04, "Show teammates only", false, true, windowTransfer)
+	   
 
 	addEventHandler("onClientGUIClick", btnSend, sendTransferRequest, false)
     addEventHandler("onClientGUIClick", btnClose, hideGUI, false)
+    addEventHandler("onClientGUIChanged", txtSearch, search, false)
+    addEventHandler("onClientGUIClick", checkTeammates, search, false)
 	guiSetInputMode("no_binds_when_editing")
-	guiSetVisible(windowTransfer, false)		
+	guiSetVisible(windowTransfer, false)
 end
 
--- Button functions
+
+-- GUI functions
+
+function search(btn, state)
+	if btn and btn ~= "left" and state and state ~= "up" then return end
+	local team = guiCheckBoxGetSelected(checkTeammates)
+	local searchTerm = guiGetText(txtSearch)
+	if not searchTerm or searchTerm == "" then
+		searchTerm = false
+	end
+	
+	triggerServerEvent("GCTransfer.RequestPlayerData", localPlayer, team, searchTerm)
+end
 
 function sendTransferRequest(btn, state)
 	if btn == "left" and state == "up" then
@@ -66,7 +88,14 @@ addEventHandler("sb_transferGC", root,
 function(playersTable)
 	guiSetVisible(windowTransfer, true)
 	showCursor(true)
-	triggerServerEvent("GCTransfer.RequestPlayerData", localPlayer)
+	
+	local team = guiCheckBoxGetSelected(checkTeammates)
+	local searchTerm = guiGetText(txtSearch)
+	if not searchTerm or searchTerm == "" then
+		searchTerm = false
+	end
+	
+	triggerServerEvent("GCTransfer.RequestPlayerData", localPlayer, team, searchTerm)
 end)
 
 addEvent("GCTransfer.TransferResponse", true)
@@ -95,4 +124,15 @@ function(players)
 			guiGridListSetItemColor(gridPlayers, row, 1, 255, 0, 0, 255)
 		end
 	end
+end)
+addEvent("GCTransfer.UpdatePlayerData", true)
+addEventHandler("GCTransfer.UpdatePlayerData", root,
+function()
+	local team = guiCheckBoxGetSelected(checkTeammates)
+	local searchTerm = guiGetText(txtSearch)
+	if not searchTerm or searchTerm == "" then
+		searchTerm = false
+	end
+	
+	triggerServerEvent("GCTransfer.RequestPlayerData", localPlayer, team, searchTerm)
 end)
