@@ -49,6 +49,11 @@
     <script src="util_client.lua" type="client" />
     <script src="fancyprogress.lua" type="client" />
     <script src="nametags.lua" type="client" />
+
+    <!-- VIP BADGE TEST COMMANDS, SHOULD BE REMOVED WHEN LIVE -->
+    <script src="nametags_vipbadge_test.lua" type="server" />
+    <!-- VIP BADGE TEST, SHOULD BE REMOVED WHEN LIVE -->
+
     <script src="client_anim.lua" type="client" />
     <script src="countdown_client.lua" type="client" />
     <script src="customcountdown/customcountdown_c.lua" type="client" />
@@ -85,6 +90,10 @@
     <file src="img/arrow-up.png" />
     <file src="img/rocket66.png" />
     
+    <file src="img/mrgreen_vip_plus.png" />
+    <file src="img/mrgreen_vip.png" />
+    
+    
     <file src="modes/cargamefiles/Roboto-Black.ttf" />
     <!-- SHADERS -->
     <file src="shaders/paintjob.fx"/>
@@ -111,6 +120,8 @@
     <file src="edf/checkpoint.png" />
     <file src="edf/pickup.png" />
     <file src="edf/spawnpoint.png" />
+
+
     
     <export function="getTimePassed" type="server" />
     <export function="getPlayerRank" type="server" />

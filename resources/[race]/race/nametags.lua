@@ -22,6 +22,9 @@ NAMETAG_ALPHA_DIFF = NAMETAG_DISTANCE - NAMETAG_ALPHA_DISTANCE
 NAMETAG_SCALE = 1/NAMETAG_SCALE * 800 / g_screenY 
 font = "default"
 
+NAMETAG_VIP_TEX = nil
+NAMETAG_VIP_PLUS_TEX = nil
+
 enableCustomNametags = false
 function setNametagValues(bool)
 	if bool then
@@ -66,6 +69,14 @@ function setNametagValues(bool)
 	end
 end
 -- addEventHandler("onClientResourceStart",resourceRoot,setNametagValues)
+
+-- Set VIP Badge Textures
+addEventHandler("onClientResourceStart",resourceRoot,function ()
+	NAMETAG_VIP_TEX = dxCreateTexture('img/mrgreen_vip.png')
+	NAMETAG_VIP_PLUS_TEX = dxCreateTexture('img/mrgreen_vip_plus.png')
+end)
+
+
 
 
 -- Ensure the name tag doesn't get too big
@@ -178,6 +189,24 @@ function nametagHandler()
 						elseif enableCustomNametags then
 							dxDrawText ( name:gsub("#%x%x%x%x%x%x",""), sx+NAMETAG_TEXTBORDERSIZE, sy - offset+NAMETAG_TEXTBORDERSIZE, sx+NAMETAG_TEXTBORDERSIZE, sy - offset+NAMETAG_TEXTBORDERSIZE, tocolor(0,0,0,textalpha/100*50), textscale*NAMETAG_TEXTSIZE/100*7, font, "center", "bottom", false, false, false, false ,true)
 							dxDrawText ( name, sx, sy - offset, sx, sy - offset, tocolor(r,g,b,textalpha), textscale*NAMETAG_TEXTSIZE/100*7, font, "center", "bottom", false, false, false, true,true )
+							
+							local isPlayerVIP = getElementData(player,'gcshop.vip')
+							
+							if isPlayerVIP then
+								local vipBadgeSize = textscale*NAMETAG_TEXTSIZE*20
+								local badgeMarginBottom = vipBadgeSize/4
+								local badge_drawX = sx - (vipBadgeSize/2)
+								local badge_drawY = sy - offset - vipBadgeSize - (NAMETAG_HEIGHT*scale) - badgeMarginBottom
+								dxDrawImage( badge_drawX, badge_drawY, vipBadgeSize, vipBadgeSize, NAMETAG_VIP_TEX, 0, 0, 0, tocolor(255,255,255,textalpha) )
+								if isPlayerVIP == 'vip' and NAMETAG_VIP_TEX then
+									dxDrawImage( badge_drawX, badge_drawY, vipBadgeSize, vipBadgeSize, NAMETAG_VIP_TEX, 0, 0, 0, tocolor(255,255,255,textalpha) )
+								elseif isPlayerVIP == 'vip+' and NAMETAG_VIP_PLUS_TEX then
+									dxDrawImage( badge_drawX, badge_drawY, vipBadgeSize, vipBadgeSize, NAMETAG_VIP_PLUS_TEX, 0, 0, 0, tocolor(255,255,255,textalpha) )
+								end
+
+								
+							end
+
 						end
 					end
 					--We draw three parts to make the healthbar.  First the outline/background
