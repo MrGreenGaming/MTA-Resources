@@ -9,13 +9,13 @@ function setPlayerVIP(psource,command,nickname)
 
 		if isElement( playerToSet ) and getElementType( playerToSet ) == 'player' then
 			if command == "setvipname" then
-				setElementData( playerToSet, "gcshop.vip", "vip")
+				setElementData( playerToSet, "gcshop.vipbadge", "vip")
 				outputChatBox( "You set VIP badge for: "..getPlayerName(playerToSet), psource )
 			elseif command == "setvipplusname" then
-				setElementData( playerToSet, "gcshop.vip", "vip+")
+				setElementData( playerToSet, "gcshop.vipbadge", "vip+")
 				outputChatBox( "You set VIP+ badge for: "..getPlayerName(playerToSet), psource )
 			elseif command == "removevipname" then
-				setElementData(playerToSet,"gcshop.vip",false)
+				setElementData(playerToSet,"gcshop.vipbadge",false)
 				outputChatBox( "You removed VIP badge for: "..getPlayerName(playerToSet), psource )
 			end
 		end

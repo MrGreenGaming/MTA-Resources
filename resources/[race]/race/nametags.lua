@@ -190,7 +190,7 @@ function nametagHandler()
 							dxDrawText ( name:gsub("#%x%x%x%x%x%x",""), sx+NAMETAG_TEXTBORDERSIZE, sy - offset+NAMETAG_TEXTBORDERSIZE, sx+NAMETAG_TEXTBORDERSIZE, sy - offset+NAMETAG_TEXTBORDERSIZE, tocolor(0,0,0,textalpha/100*50), textscale*NAMETAG_TEXTSIZE/100*7, font, "center", "bottom", false, false, false, false ,true)
 							dxDrawText ( name, sx, sy - offset, sx, sy - offset, tocolor(r,g,b,textalpha), textscale*NAMETAG_TEXTSIZE/100*7, font, "center", "bottom", false, false, false, true,true )
 							
-							local isPlayerVIP = getElementData(player,'gcshop.vip')
+							local isPlayerVIP = getElementData(player,'gcshop.vipbadge')
 							
 							if isPlayerVIP then
 								local vipBadgeSize = textscale*NAMETAG_TEXTSIZE*20
