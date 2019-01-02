@@ -47,6 +47,7 @@ local items = {
 				['Manhunt'] = false,
 				['Capture the flag'] = false,
 				['Reach the flag'] = true,
+				['Deadline'] = true,
 			};
 			playerState = {
 				alive = true;
@@ -110,6 +111,7 @@ local perks = {
 	[9] = { ID = 9, price =  3000, description = 'Double sided objects', func = 'loadDoubleSided'},
 	[10] = { ID = 10, price =  2000, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
 	[11] = { ID = 11, price =  1000, description = 'NTS/DD Vehicle reroll for 30 days', func = 'loadVehicleReroll', exp = 30},
+	[12] = { ID = 12, price =  2000, description = 'Deadline color change', func = 'loadDeadlineColorChange', exp = 30},
 
 }
 
@@ -619,6 +621,71 @@ function insertPlayerRocketColorToDB(player)
 	if not forumID then return false end
 
 	return dbExec(handlerConnect, "INSERT INTO gc_rocketcolor (forumid,color) VALUES (?,?)", forumID,"00FF00" )
+end
+
+
+--------------------------
+---   DeadLine Colors  ---
+--------------------------
+function loadDeadlineColorChange ( player, bool )
+	if bool then
+		local color = getPlayerDeadLineColor(player)
+		if not color then
+			outputDebugString("Could not find Color for "..getPlayerName(player))
+			insertDeadLineColorToDB(player)
+			color = "00FF00"
+		end
+		
+		setElementData(player,"gcshop_deadlinecolor","#"..color) 
+	else
+		removeElementData( player, 'gcshop_deadlinecolor' )
+	end
+end
+
+addEvent("serverDeadLineColorChange",true)
+function deadlineColorChange(hex)
+	local thePlayer = client
+	if not thePlayer or not isElement(thePlayer) or getElementType(thePlayer) ~= "player" then return end
+	local setColor = setPlayerDeadLineColor(thePlayer,hex)
+	
+	triggerClientEvent(thePlayer,"clientDeadLineColorChangeConfirm",resourceRoot,setColor or false)
+
+end
+addEventHandler("serverDeadLineColorChange",root,deadlineColorChange)
+
+function setPlayerDeadLineColor(player,color)
+	local fID = exports.gc:getPlayerForumID ( player )
+	if not color or #color ~= 7 then outputChatBox("Something went wrong, please try again!",player) return false end
+	if not fID then outputChatBox("You are not logged in to a gc account!",player) return false end
+
+	local exec = dbExec(handlerConnect, "UPDATE gc_deadlinecolor SET color=? WHERE forumid=?", color:gsub("#",""), fID)
+
+	
+	if exec then setElementData(player,"gcshop_deadlinecolor","#"..color) return true end
+
+	return false
+
+end
+
+function getPlayerDeadLineColor(player)
+	local forumID = exports.gc:getPlayerForumID ( player )
+	if not forumID then return false end
+
+	local query = dbQuery(handlerConnect, "SELECT color FROM gc_deadlinecolor WHERE forumid=?", forumID)
+	local result = dbPoll(query,-1)
+
+	if result[1] and result[1]["color"] then
+		return result[1]["color"]
+	end
+
+	return false
+end
+
+function insertDeadLineColorToDB(player)
+	local forumID = exports.gc:getPlayerForumID ( player )
+	if not forumID then return false end
+
+	return dbExec(handlerConnect, "INSERT INTO gc_deadlinecolor (forumid,color) VALUES (?,?)", forumID,"00FF00" )
 end
 
 --------------------------

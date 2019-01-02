@@ -192,6 +192,42 @@ function build_itemsWidget(parent, offsetX, offsetY)
 		addEventHandler("onClientGUIClick", gui["btnBuyPerk_11"], on_btnBuyPerk_11_clicked, false)
 	end
 	
+
+	-- DeadLine Color Change
+
+	gui["labelTitle_12"] = guiCreateLabel(21, 1221, 400, 13, "12. DeadLine color change for 30 days", false, gui["scrollAreaItems"])
+	guiSetFont(gui["labelTitle_12"], "default-bold-small")
+	guiLabelSetHorizontalAlign(gui["labelTitle_12"], "left", false)
+	guiLabelSetVerticalAlign(gui["labelTitle_12"], "center")
+	
+	gui["labelInfo_12"] = guiCreateLabel(21, 1241, 481, 71, "Change your DeadLine color.\nClick on the Set Color button to change it.", false, gui["scrollAreaItems"])
+	guiLabelSetHorizontalAlign(gui["labelInfo_12"], "left", true)
+	guiLabelSetVerticalAlign(gui["labelInfo_12"], "top")
+
+	gui["labelInfo_12_Coloring"] = guiCreateLabel(21, 1285, 481, 71, "Color:", false, gui["scrollAreaItems"])
+	guiLabelSetHorizontalAlign(gui["labelInfo_12_Coloring"], "left", true)
+	guiSetFont(gui["labelInfo_12_Coloring"], "default-bold-small")
+	guiLabelSetVerticalAlign(gui["labelInfo_12_Coloring"], "top")
+
+	deadlineColorImage = guiCreateStaticImage(65, 1285, 18, 18, "items/coloredprojectiles/dot_white.png", false,gui["scrollAreaItems"])
+    guiSetProperty(deadlineColorImage, "ImageColours", "tl:FF00FF00 tr:FF00FF00 bl:FF00FF00 br:FF00FF00") 
+
+    gui["setDeadlineButton"] = guiCreateButton(95, 1285, 101, 20, "Set Color", false, gui["scrollAreaItems"])   
+	guiSetEnabled(gui["setDeadlineButton"], false)
+	if button_set_deadlinecolor then
+		addEventHandler("onClientGUIClick", gui["setDeadlineButton"],button_set_deadlinecolor,false)
+	end
+
+	gui["btnBuyPerk_12"] = guiCreateButton(541, 1221, 101, 101, "Price:\n2000 GC", false, gui["scrollAreaItems"])
+	
+	if on_btnBuyPerk_10_clicked then
+		addEventHandler("onClientGUIClick", gui["btnBuyPerk_12"], on_btnBuyPerk_12_clicked, false)
+	end
+
+
+
+
+
 	return gui, widgetWidth, widgetHeight
 end
 

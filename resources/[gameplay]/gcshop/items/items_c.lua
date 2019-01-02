@@ -54,6 +54,14 @@ function itemLogin ( perks_, player_perks_ )
 						if theColor then
 							guiSetProperty(RocketColorImage, "ImageColours", setIMGcolor(theColor:gsub("#","")))
 						end
+					elseif id == 12 then -- if Deadline colors are bought
+						guiSetEnabled(items_gui["setDeadlineButton"],true)
+						local theColor = getElementData(localPlayer,"gcshop_deadlinecolor")
+						if theColor then
+							guiSetProperty(deadlineColorImage, "ImageColours", setIMGcolor(theColor:gsub("#","")))
+						end
+						
+
 					end
 				elseif perk.defaultAmount then
 					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], 'Extra Price:\n ' .. (tostring(perk.extraPrice)) .. '\n\nCurrent amount:\n' .. perk.options.amount )
@@ -149,8 +157,17 @@ function on_btnBuyPerk_11_clicked(button, state, absoluteX, absoluteY)
 	button_buy_perk (11);
 end
 
+function on_btnBuyPerk_12_clicked(button, state, absoluteX, absoluteY)
+	if (button ~= "left") or (state ~= "up") then
+		return
+	end
+	button_buy_perk (12);
+end
 
 function button_buy_perk ( id )
+	-- Testing Purposes, remove later --
+	if id == 12 and getPlayerName(localPlayer) ~= '#026928KaliBwo#ff0000y' then outputChatBox('Perk is not available for purchase yet!') return end
+	-- Testing Purposes, remove later --
 	if not player_perks[id] then
 		triggerServerEvent('gcbuyperk', localPlayer, localPlayer, 'gcbuyperk', id);
 		if perks[id].defaultAmount and amount_GCS >= perks[id].extraPrice then
@@ -163,6 +180,40 @@ function button_buy_perk ( id )
 		triggerServerEvent('gcbuyperkextra', localPlayer, localPlayer, 'gcbuyperkextra', id, 1);
 	end
 end
+
+
+
+-- Handle Deadline color setting
+function button_set_deadlinecolor()
+	openPicker(201,"#FF0000","Nitro Color")
+end
+
+local deadlineColorCache = false
+function deadlineColorChangeHandler(id, color, alpha)
+	if id == 201 then -- if it's the rocket colorpicker
+		
+		deadlineColorCache = color
+		local askServer = triggerServerEvent( "serverDeadLineColorChange", root, deadlineColorCache )
+
+		if not askServer then deadlineColorChangeConfirm(false) end -- if fail then continue with next function
+		-- rocketColorChangeConfirm(true)
+
+		
+	end
+end
+addEventHandler("onColorPickerOK", resourceRoot, deadlineColorChangeHandler)
+
+addEvent("clientDeadLineColorChangeConfirm",true)
+function deadlineColorChangeConfirm(bool)
+	if bool then
+		outputChatBox( "DeadLine color is now: "..colorCache.."COLOR", 255, 255, 255, true )
+		outputChatBox( "Colored DeadLine will only appear when you have bought the perk.", 255, 255, 255, true )
+		guiSetProperty(deadlineColorImage, "ImageColours", setIMGcolor(colorCache:gsub("#","")))
+	else
+		deadlineColorCache = false
+	end
+end
+addEventHandler("clientDeadLineColorChangeConfirm",root,deadlineColorChangeConfirm)
 
 
 -- Handle projectile color setting
