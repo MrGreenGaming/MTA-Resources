@@ -164,7 +164,10 @@ function Deadline.record()
 		while true do
 		
 			local vehicle = getPedOccupiedVehicle(player)
-			
+			if isPedDead(player) then 
+				Deadline.recordData[player] = nil
+				break 
+			end
 			if not vehicle then break end
 
 			if not Deadline.recordData[player] then
@@ -226,6 +229,9 @@ function Deadline.draw()
 		while true do
 
 			if not Deadline.recordData[player] or #Deadline.recordData[player] < 2 then break end
+			if isPedDead( player ) then 
+				break 
+			end
 
 			if not getPedOccupiedVehicle(player) then break end
 
@@ -243,7 +249,7 @@ function Deadline.draw()
 				r1, g1, b1 = gcshop_color['r'],gcshop_color['b'],gcshop_color['g']
 			end
 
-		
+			
 		
 			for i = 2, #Deadline.recordData[player], 1 do
 				
