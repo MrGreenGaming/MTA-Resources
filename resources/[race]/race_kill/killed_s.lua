@@ -20,14 +20,6 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 				end
 				exports.scoreboard:scoreboardAddColumn ('kills', root, 40, "Kills", 5)
 
-			-- elseif exports.race:getRaceMode() == "CarGame" then
-			-- 	for _, pl in ipairs(getElementsByType('player')) do
-			-- 		setElementData(pl, 'kills', 0)
-			-- 		g_PlayersKills[pl] = 0
-			-- 	end
-			-- 	exports.scoreboard:addScoreboardColumn('kills')
-			-- 	triggerClientEvent('startShooterKillDetection', resourceRoot)
-			
 
 			elseif exports.race:getRaceMode() == "Shooter" then
 				for _, pl in ipairs(getElementsByType('player')) do
@@ -42,7 +34,16 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 				end
 				triggerClientEvent('startShooterKillDetection', resourceRoot)
 			
+			elseif exports.race:getRaceMode() == "Deadline" then
+				for _, pl in ipairs(getElementsByType('player')) do
+					setElementData(pl, 'kills', 0)
+					g_PlayersKills[pl] = 0
+				end
+				
+				exports.scoreboard:scoreboardAddColumn('kills', root, 40, "Kills", 5)
 
+
+			
 			elseif exports.race:getRaceMode() == "Capture the flag" then
 				triggerClientEvent('killedCTFMapRunning', resourceRoot, true)
 				for _, pl in ipairs(getElementsByType('player')) do
@@ -78,12 +79,15 @@ addEventHandler("onPlayerJoin",root,
 			setElementData(source, 'kills', 0)
 			g_PlayersKills[source] = 0
 			triggerClientEvent(source,'startShooterKillDetection', source)
+		elseif exports.race:getRaceMode() == 'Deadline' then
+			setElementData(source, 'kills', 0)
+			g_PlayersKills[source] = 0
 		end
 	end)
 
 
 function onRaceAddRank(time)
-	if not g_PlayersKills or (exports.race:getRaceMode() ~= "Destruction derby" and exports.race:getRaceMode() ~= "Shooter") then return end
+	if not g_PlayersKills or (exports.race:getRaceMode() ~= "Destruction derby" and exports.race:getRaceMode() ~= "Shooter" and exports.race:getRaceMode() ~= "Deadline") then return end
 	local player = source
 	
 	cancelEvent(true, 'Kills: ' .. g_PlayersKills[player])
@@ -342,6 +346,28 @@ function shooterKill(killer)
 end
 addEvent('shooterKill', true)
 addEventHandler('shooterKill', root, shooterKill)
+
+-- Deadline
+function deadlineKill(killer)
+
+	if exports.race:getRaceMode() == "Deadline" then
+		local victim = source
+		local a = string.gsub (getPlayerName(victim), '#%x%x%x%x%x%x', '' )
+		local b = string.gsub (getPlayerName(killer), '#%x%x%x%x%x%x', '' )
+		
+		exports.messages:outputGameMessage(a .. " was killed by " .. b, root, 2.5, 255, 255, 255)
+		g_PlayersKills[killer] = g_PlayersKills[killer] + 1
+		setElementData(killer, 'kills', g_PlayersKills[killer])
+
+		triggerEvent('onDeadlinePlayerKill', killer, victim)
+		victimKillerTable[victim] = killer
+	end
+end
+addEvent('deadlineKill', true)
+addEventHandler('deadlineKill', root, deadlineKill)
+
+
+
 
 
 function getKiller(deadplyr)

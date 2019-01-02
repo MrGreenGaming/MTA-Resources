@@ -6,6 +6,7 @@ gamemodes['manhunt'] = true
 gamemodes['ctf'] = true
 gamemodes['rtf'] = true
 gamemodes['shooter'] = true
+gamemodes['deadline'] = true
 
 function checkNoGamemodeMaps()
     local incompatibleMaps = getMapsCompatibleWithNoGamemode()

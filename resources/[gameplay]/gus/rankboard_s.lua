@@ -7,6 +7,7 @@ local upModes = { -- Count Up modes
 }
 local downModes = {
 	["Shooter"] = true,
+	["Deadline"] = true,
 	["Destruction derby"] = true,
 }
 
@@ -28,6 +29,8 @@ addEvent("onPlayerFinishDD")
 addEvent("onPlayerWinDD")
 addEvent("onPlayerFinishShooter")
 addEvent("onPlayerWinShooter")
+addEvent("onPlayerFinishDeadline")
+addEvent("onPlayerWinDeadline")
 
 function downCountModes(rank,time)
 
@@ -48,6 +51,8 @@ addEventHandler('onPlayerFinishDD', getRootElement(),downCountModes)
 addEventHandler('onPlayerWinDD', getRootElement(),downCountModes)
 addEventHandler('onPlayerFinishShooter', getRootElement(),downCountModes)
 addEventHandler('onPlayerWinShooter', getRootElement(),downCountModes)
+addEventHandler('onPlayerFinishDeadline', getRootElement(),downCountModes)
+addEventHandler('onPlayerWinDeadline', getRootElement(),downCountModes)
 
 
 

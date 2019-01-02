@@ -15,6 +15,7 @@ local racemodes = {
 					["Never the same"] = "nts",
 					["Destruction derby"] = "dd",
 					["Shooter"] = "sh",
+					["Deadline"] = "dl",
 					["Reach the flag"] = "rtf",
 					--["Capture the flag"] = "ctf",
 }
@@ -30,6 +31,7 @@ local country_sql_table = [[CREATE TABLE IF NOT EXISTS `country` (
 score = {}
 score['Destruction derby'] = true
 score['Shooter'] = true
+score['Deadline'] = true
 
 
 addEvent('onMapStarting')
@@ -378,6 +380,28 @@ addEventHandler('onPlayerWinShooter', root,
 , true, 'low')
 
 
+
+addEventHandler('onPlayerFinishDeadline', root,
+	function(rank)
+		local kills = tonumber(getElementData(source, 'kills'))
+		if kills and kills > 0 then
+			updatePlayerTop(source, rank, kills)
+		end
+	end
+, true, 'low')
+--]]
+
+addEventHandler('onPlayerWinDeadline', root,
+	function()
+		-- timer to wait for clientside confirmation of a kill from the last killed guy
+		setTimer(function(source)
+			local kills = tonumber(getElementData(source, 'kills'))
+			if kills and kills > 0 then
+				updatePlayerTop(source, 1, kills)
+			end
+		end, 500, 1, source)
+	end
+, true, 'low')
 ----------------
 -- GC rewards --
 ----------------
