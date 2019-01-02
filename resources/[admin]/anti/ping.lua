@@ -77,7 +77,7 @@ function doubleCheck ( needKill )
 	if punishedForMap[thePlayer] then return end
 	if (needKill) and (getPlayerPing(thePlayer) > pingLimit) and getElementData(thePlayer, 'state') == "alive" then
 		local action = "killed"
-		if exports.race:getRaceMode() == "Shooter" or exports.race:getRaceMode() == "Destruction derby" then
+		if exports.race:getRaceMode() == "Shooter" or exports.race:getRaceMode() == "Destruction derby" or exports.race:getRaceMode() == "Deadline" then
 			setElementHealth(thePlayer, 0)
 		else
 			-- triggerClientEvent(thePlayer, 'spectate', resourceRoot)

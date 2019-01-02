@@ -79,7 +79,7 @@ function isModSafe ( mod )
 end
 
 function executeModState(gamemode)
-	if gamemode == "Destruction derby" or gamemode == "Shooter" then
+	if gamemode == "Destruction derby" or gamemode == "Shooter" or gamemode == "Deadline" then
 		for f,u in pairs(moddedPlayerTable) do
 			if isElement(f) then		
 				if isElement(getPedOccupiedVehicle(f)) and not isPedDead(f) then

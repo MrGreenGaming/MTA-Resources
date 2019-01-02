@@ -16,10 +16,12 @@ reversed = {}
 reversed['Manhunt'] = true
 reversed['Destruction derby'] = true
 reversed['Shooter'] = true
+reversed['Deadline'] = true
 
 score = {}
 score['Destruction derby'] = true
 score['Shooter'] = true
+score['Deadline'] = true
 
 
 ---------------------------------------------------------------------------

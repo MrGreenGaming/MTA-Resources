@@ -2,7 +2,7 @@ addEvent('onRaceStateChanging', true)
 addEventHandler('onRaceStateChanging', getRootElement(),
 	function(state)
 		local mode = getResourceRootElement(getResourceFromName'race') and getElementData(getResourceRootElement(getResourceFromName'race'), 'info') and getElementData(getResourceRootElement(getResourceFromName'race'), 'info').mapInfo.modename
-        if  mode == "Destruction derby" or mode == "Shooter" then
+        if  mode == "Destruction derby" or mode == "Shooter" or mode == "Deadline" then
                 triggerClientEvent('DDMapRunning', resourceRoot, state == "Running")
 				
         end    
