@@ -16,7 +16,7 @@ end)
 -- addEvent("onPlayerVehicleIDChange",true)
 function setCollision()
 	local mode = getResourceFromName'race' and getResourceState(getResourceFromName'race')=='running' and exports.race:getRaceMode()
-	if not mode or mode == "Shooter" or mode == "Deadline" then return end
+	if not mode or mode == "Shooter" then return end
 	
 	for p,_ in pairs(theCollisionlessTable) do
 

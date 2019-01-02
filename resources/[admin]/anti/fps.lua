@@ -46,7 +46,7 @@ function checkFPS()
 			if fpsStrikes[thePlayer] > maxStrikes then
 				if not hasObjectPermissionTo ( thePlayer, "general.adminpanel" ) then
 					local action = "killed"
-					if exports.race:getRaceMode() == "Shooter" or exports.race:getRaceMode() == "Destruction derby" or exports.race:getRaceMode() == "Deadline" then
+					if exports.race:getRaceMode() == "Shooter" or exports.race:getRaceMode() == "Destruction derby" then
 						setElementHealth(thePlayer, 0)
 					else
 						-- triggerClientEvent(thePlayer, 'spectate', resourceRoot)

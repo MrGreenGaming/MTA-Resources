@@ -222,7 +222,6 @@ end
 
 local minPlayers = 5
 function areRewardsActivated()
-	-- return true -- Testing Purposes
 	return getPlayerCount() >= minPlayers
 end
 
@@ -325,56 +324,6 @@ function CTFTeamWon()
 	end
 end
 addEventHandler('onCTFTeamWon', root, CTFTeamWon)
-
--------------------
----   DeadLine   ---
--------------------
-
-rewardDeadline = {16, 12, 8}
-rewardKillDeadline = 1
-
-function deadlineFinish(rank)
-
-	if isMapTesting() or string.lower(modename) ~= "deadline" or not rewardDeadline[rank] then return end
-	local player = source
-
-	local str = rankSuffix(rank)
-	if not areRewardsActivated() then
-		outputChatBox(prefix .. getPlayerName(player) ..'#00FF00 finished ' .. rank .. str .. ' but ' .. minPlayers .. ' or more players required to get GCs', root, 0, 255, 0, true)
-	else
-	-- elseif isPlayerLoggedInGC(player) then
-		local reward = getRewardAmount(rewardDeadline[rank])
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
-	-- else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
-	end		
-end
-addEvent('onPlayerFinishDeadline')
-addEventHandler('onPlayerFinishDeadline', root, deadlineFinish)
-
-function deadlineWin()
-	deadlineFinish(1)
-end
-addEvent('onPlayerWinDeadline')
-addEventHandler('onPlayerWinDeadline', root, deadlineWin)
-
-function onDeadlinePlayerKill()
-
-	if isMapTesting() or string.lower(modename) ~= "deadline" or not rewardKillDeadline then return end
-	local player = source
-	if areRewardsActivated() then
-		local reward = rewardKillDeadline
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
-	else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
-	end		
-end
-addEvent('onDeadlinePlayerKill')
-addEventHandler('onDeadlinePlayerKill', root, onDeadlinePlayerKill)
 
 
 -------------------

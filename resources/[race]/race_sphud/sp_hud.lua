@@ -459,7 +459,7 @@ function drawIVHud (player, g_Veh, rank, players, currentCheckpoint, totalCheckp
 			dxDrawText ( "CHECKPOINT", l, t, m, b, textColor, labelScale, 0.5, "right", "center", false, false, false, false, true)
 			-- Don't really know if this will help, it makes the font more tiny, won't change entire code cuz a letter is outside, this should kind of fix it, don't so important to add
 		end
-	elseif exports.race:getRaceMode() == 'Shooter' or exports.race:getRaceMode() == 'Destruction derby' or exports.race:getRaceMode() == 'Deadline' then
+	elseif exports.race:getRaceMode() == 'Shooter' or exports.race:getRaceMode() == 'Destruction derby' then
 		local t, b = sy * ( y - fontHeight * 3 - dy * 2), sy * (y - fontHeight * 2 - dy * 2)
 		local sKills = getElementData(player, 'kills') or 0
 				

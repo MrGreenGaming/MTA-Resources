@@ -139,7 +139,7 @@ end)
 -- Game mode specific afk handler --
 -- triggerPlayerSpectate --Spec EVENT
 function executeAfkState(gamemode)
-	if gamemode == "Destruction derby" or gamemode == "Shooter" or gamemode == "Deadline" and not exports.race:getShooterMode() == "cargame" then
+	if gamemode == "Destruction derby" or gamemode == "Shooter" and not exports.race:getShooterMode() == "cargame" then
 		for f,u in pairs(AfkTable) do
 			if u then
 				
@@ -170,7 +170,7 @@ function setPlayerAFK(p,bln)
 		if bln == true then
 			AfkTable[p] = true
 			notifyPlayer(p)
-			if currentGamemode == "Destruction derby" or currentGamemode == "Shooter" or currentGamemode == "Deadline" then
+			if currentGamemode == "Destruction derby" or currentGamemode == "Shooter" then
 				
 				setElementData(p,"player state","away")
 				
