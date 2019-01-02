@@ -441,7 +441,8 @@ hornsTable = {
     [438] = "Hello",	
     [439] = "JackAss",
     [440] = "Brotherfucker",
-    [441] = "2u Nokias",	
+    [441] = "2u Nokias",
+    [442] = "Careless Whisper",
 
     
     
