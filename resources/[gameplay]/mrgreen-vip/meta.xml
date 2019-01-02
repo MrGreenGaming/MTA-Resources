@@ -1,0 +1,11 @@
+<meta>
+    <info author="Mihoje & KaliBwoy" version="1.5" type="script" />
+
+    <script src="vip_c.lua" type="client" />
+    <script src="vip.lua" type="server" />
+    
+
+
+    
+
+</meta>
