@@ -60,7 +60,7 @@ function itemLogin ( perks_, player_perks_ )
 						if theColor then
 							guiSetProperty(deadlineColorImage, "ImageColours", setIMGcolor(theColor:gsub("#","")))
 						end
-						
+
 
 					end
 				elseif perk.defaultAmount then
@@ -165,9 +165,7 @@ function on_btnBuyPerk_12_clicked(button, state, absoluteX, absoluteY)
 end
 
 function button_buy_perk ( id )
-	-- Testing Purposes, remove later --
-	if id == 12 and getPlayerName(localPlayer) ~= '#026928KaliBwo#ff0000y' then outputChatBox('Perk is not available for purchase yet!') return end
-	-- Testing Purposes, remove later --
+
 	if not player_perks[id] then
 		triggerServerEvent('gcbuyperk', localPlayer, localPlayer, 'gcbuyperk', id);
 		if perks[id].defaultAmount and amount_GCS >= perks[id].extraPrice then
@@ -185,7 +183,7 @@ end
 
 -- Handle Deadline color setting
 function button_set_deadlinecolor()
-	openPicker(201,"#FF0000","Nitro Color")
+	openPicker(201,"#FF0000","DeadLine Color")
 end
 
 local deadlineColorCache = false
@@ -197,8 +195,6 @@ function deadlineColorChangeHandler(id, color, alpha)
 
 		if not askServer then deadlineColorChangeConfirm(false) end -- if fail then continue with next function
 		-- rocketColorChangeConfirm(true)
-
-		
 	end
 end
 addEventHandler("onColorPickerOK", resourceRoot, deadlineColorChangeHandler)
@@ -206,9 +202,9 @@ addEventHandler("onColorPickerOK", resourceRoot, deadlineColorChangeHandler)
 addEvent("clientDeadLineColorChangeConfirm",true)
 function deadlineColorChangeConfirm(bool)
 	if bool then
-		outputChatBox( "DeadLine color is now: "..colorCache.."COLOR", 255, 255, 255, true )
+		outputChatBox( "DeadLine color is now: "..deadlineColorCache.."COLOR", 255, 255, 255, true )
 		outputChatBox( "Colored DeadLine will only appear when you have bought the perk.", 255, 255, 255, true )
-		guiSetProperty(deadlineColorImage, "ImageColours", setIMGcolor(colorCache:gsub("#","")))
+		guiSetProperty(deadlineColorImage, "ImageColours", setIMGcolor(deadlineColorCache:gsub("#","")))
 	else
 		deadlineColorCache = false
 	end
@@ -218,7 +214,7 @@ addEventHandler("clientDeadLineColorChangeConfirm",root,deadlineColorChangeConfi
 
 -- Handle projectile color setting
 function button_set_rocketcolor()
-	openPicker(200,"#FF0000","Nitro Color") -- TODO set saved color
+	openPicker(200,"#FF0000","Rocket Color") -- TODO set saved color
 end
 
 function setIMGcolor(hex)
