@@ -6,7 +6,7 @@ gamemodes['manhunt'] = true
 gamemodes['ctf'] = true
 gamemodes['rtf'] = true
 gamemodes['shooter'] = true
-
+gamemodes['deadline'] = true
 
 function checkNoGamemodeMaps()
     local incompatibleMaps = getMapsCompatibleWithNoGamemode()
@@ -159,6 +159,8 @@ function updateMapToNewFormat(resource)
             if edit then xmlSaveFile(map) end
             xmlUnloadFile(map)
         end
+        setResourceInfo(resource, "mrgreen", '2')
+    elseif mode == "deadline" then
         setResourceInfo(resource, "mrgreen", '2')
     end
 end
