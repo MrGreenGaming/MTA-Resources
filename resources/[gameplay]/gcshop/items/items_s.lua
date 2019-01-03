@@ -636,7 +636,7 @@ function loadDeadlineColorChange ( player, bool )
 			color = "00FF00"
 		end
 		
-		setElementData(player,"gcshop_deadlinecolor","#"..color) 
+		setElementData(player,"gcshop_deadlinecolor","#"..color:gsub("#","")) 
 	else
 		removeElementData( player, 'gcshop_deadlinecolor' )
 	end
@@ -661,7 +661,7 @@ function setPlayerDeadLineColor(player,color)
 	local exec = dbExec(handlerConnect, "UPDATE gc_deadlinecolor SET color=? WHERE forumid=?", color:gsub("#",""), fID)
 
 	
-	if exec then setElementData(player,"gcshop_deadlinecolor","#"..color) return true end
+	if exec then setElementData(player,"gcshop_deadlinecolor","#"..color:gsub("#","")) return true end
 
 	return false
 
