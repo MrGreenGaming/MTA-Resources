@@ -165,6 +165,10 @@ function Deadline:launch()
 		bindKey(player, "vehicle_secondary_fire", "down", self.jump)
 		bindKey(player, "mouse2", "down", self.jump)
 		self.cooldowns[player] = {boost = tick, jump = tick}
+
+		removeElementData( player, 'deadline.jumpOnCooldown' )
+		removeElementData( player, 'deadline.boostOnCooldown' )
+		
 	end
 
 
@@ -208,7 +212,7 @@ function Deadline.boost(player, key, keyState)
 	if not isActivePlayer( player ) then return end
 	local veh = g_CurrentRaceMode.getPlayerVehicle(player)
 
-	if not g_CurrentRaceMode:checkAndSetJumpCooldown(player) then return end
+	if not g_CurrentRaceMode:checkAndSetJumpCooldown(player,'boost') then return end
 	-- outputDebugString('Shooter ' .. 'jump ' .. getPlayerName(player)) 
 	clientCall(player, 'deadlineBoost')
 	-- clientCall(player, 'dl_cd_handler', 'boost')
@@ -221,7 +225,7 @@ function Deadline.jump(player, key, keyState)
 	if not isActivePlayer( player ) then return end
 	local veh = g_CurrentRaceMode.getPlayerVehicle(player)
 
-	if not g_CurrentRaceMode:checkAndSetJumpCooldown(player) then return end
+	if not g_CurrentRaceMode:checkAndSetJumpCooldown(player,'jump') then return end
 	-- outputDebugString('Shooter ' .. 'jump ' .. getPlayerName(player)) 
 	clientCall(player, 'deadlineJump')
 	-- clientCall(player, 'dl_cd_handler', 'jump')
@@ -229,12 +233,29 @@ function Deadline.jump(player, key, keyState)
 	
 end
 
-function Deadline:checkAndSetJumpCooldown ( player )
-	if (getTickCount() > self.cooldowns[player].jump) then
-		self.cooldowns[player].jump = getTickCount() + 500
-		return true
-	else
+function Deadline:checkAndSetJumpCooldown ( player,boostOrJump )
+	-- if (getTickCount() > self.cooldowns[player].jump) then
+	-- 	self.cooldowns[player].jump = getTickCount() + 50
+	-- 	return true
+	-- else
+	-- 	return false
+	-- end
+	
+	local action = false
+	if boostOrJump == "jump" then
+		action = 'deadline.jumpOnCooldown'
+	elseif boostOrJump == "boost" then
+		action = 'deadline.boostOnCooldown'
+	else 
 		return false
+	end
+
+	local canDo = getElementData( player, action)
+
+	if canDo then
+		return false
+	else
+		return true
 	end
 
 end
@@ -271,6 +292,9 @@ function Deadline:cleanup()
 	deadlineDrawLines = false
 	-- Remove binds
 	for k, v in ipairs(getElementsByType'player') do
+		removeElementData( player, 'deadline.jumpOnCooldown' )
+		removeElementData( player, 'deadline.boostOnCooldown' )
+		
 		if isKeyBound(v, 'vehicle_fire', 'down', self.boost) then
 			unbindKey(v, 'vehicle_fire', 'both', self.boost)
 		end

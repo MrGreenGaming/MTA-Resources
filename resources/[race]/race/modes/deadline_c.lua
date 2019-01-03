@@ -120,9 +120,8 @@ function Deadline.handleSpeed()
 			if timeDiff > (DeadlineOptions.notMovingKillTime/2) and warnedPlayerNotMoving == false then -- warn player for not moving forward, warns at half time of killing
 				outputChatBox("WARNING: you will be killed if you don't move forward!", 255, 0, 0)
 				outputChatBox("WARNING: you will be killed if you don't move forward!", 255, 0, 0)
-				outputChatBox("WARNING: you will be killed if you don't move forward!", 255, 0, 0)
 				warnedPlayerNotMoving = true
-				-- setElementHealth( localPlayer, 0 )
+
 			elseif timeDiff > DeadlineOptions.notMovingKillTime then -- Kill player for not moving forward
 				setElementHealth( localPlayer, 0 )
 				warnedPlayerNotMoving = false
@@ -346,10 +345,12 @@ function dl_cd_handler(boostorjump)
 
 	if boostorjump == "boost" and isTimer(Deadline.boostCooldownTimer) == false then
 		-- deadlineBoost()
-		Deadline.boostCooldownTimer = setTimer(function() Deadline.boostCooldownTimer = false end,DeadlineOptions.boost_cooldown,1)
+		setElementData( localPlayer, 'deadline.boostOnCooldown', true)
+		Deadline.boostCooldownTimer = setTimer(function() Deadline.boostCooldownTimer = false setElementData( localPlayer, 'deadline.boostOnCooldown', false) end,DeadlineOptions.boost_cooldown,1)
 	elseif boostorjump == "jump" and isTimer(Deadline.jumpCooldownTimer) == false then
 		-- deadlineJump()
-		Deadline.jumpCooldownTimer = setTimer(function() Deadline.jumpCooldownTimer = false end,DeadlineOptions.jump_cooldown,1)
+		setElementData( localPlayer, 'deadline.jumpOnCooldown', true)
+		Deadline.jumpCooldownTimer = setTimer(function() Deadline.jumpCooldownTimer = false setElementData( localPlayer, 'deadline.jumpOnCooldown', false) end,DeadlineOptions.jump_cooldown,1)
 	end
 end
 
