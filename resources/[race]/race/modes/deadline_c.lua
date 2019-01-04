@@ -253,7 +253,7 @@ function Deadline.draw()
 			for i = 2, #Deadline.recordData[player], 1 do
 				
 				local r, g, b = r1, g1, b1
-				local opacity = 200
+				local opacity = 255
 				if player == localPlayer then
 					opacity = 140
 				end
@@ -262,7 +262,9 @@ function Deadline.draw()
 				
 				while true do
 					
-
+					if player ~= localPlayer then
+						dxDrawLine3D(Deadline.recordData[player][i-1].position.x, Deadline.recordData[player][i-1].position.y, Deadline.recordData[player][i-1].position.z, Deadline.recordData[player][i].position.x, Deadline.recordData[player][i].position.y, Deadline.recordData[player][i].position.z, tocolor ( 255, 255, 255, 150 ), (Deadline.recordData[player][i-1].size+2) )
+					end
 					dxDrawLine3D(Deadline.recordData[player][i-1].position.x, Deadline.recordData[player][i-1].position.y, Deadline.recordData[player][i-1].position.z, Deadline.recordData[player][i].position.x, Deadline.recordData[player][i].position.y, Deadline.recordData[player][i].position.z, tocolor ( r, g, b, opacity ), Deadline.recordData[player][i-1].size)
 
 					if Deadline.wasAlreadyHit then break end
