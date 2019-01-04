@@ -153,7 +153,8 @@ function Deadline:launch()
 	RaceMode.launch(self)
 
 	
-	if math.random(2) == 1 then clientCall(g_Root, 'showOnlyHealthBar', true) end
+	--if math.random(2) == 1 then clientCall(g_Root, 'showOnlyHealthBar', true) end -- Use this to hide names 50% of the time
+	clientCall(g_Root, 'showOnlyHealthBar', true) -- Use this to hide names 100% of the time
 	-- Add binds for rockets/jumps and cooldown at start
 	deadlineBindsActive = false
 	self.cooldowns = {}
