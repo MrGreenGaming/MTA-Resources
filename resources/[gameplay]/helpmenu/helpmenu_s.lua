@@ -60,7 +60,8 @@ end
 -- Fetch changelog --
 ---------------------
 function startChangelogDownload()
-	fetchRemote ( "https://github.com/JarnoVgr/Mr.Green-MTA-Resources/commits/master.atom/", receiveChangelog)
+	-- Old link: https://github.com/JarnoVgr/Mr.Green-MTA-Resources/commits/master.atom/
+	fetchRemote ( "https://github.com/MrGreenGaming/MTA-Resources/commits/master.atom", receiveChangelog)
 end
 
 function receiveChangelog(responseData, errno)
@@ -83,7 +84,7 @@ end
 function updateChangelogString()
 	local logNode = xmlLoadFile("changelog.xml")
 		
-	changelog = "Server changelog from https://github.com/JarnoVgr/Mr.Green-MTA-Resources/commits/master\r\n"
+	changelog = "Server changelog from https://github.com/MrGreenGaming/MTA-Resources/commits/master.atom\r\n"
 	changelog = changelog .. "Last 20 changes at " .. makeCurrentDatetime() .. '\r\n'
 	changelog = changelog .. "_________________________________________________________\r\n\r\n"
 	
