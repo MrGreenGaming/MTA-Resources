@@ -23,6 +23,9 @@
 	<script src="anti_flood.lua" type="server" />
 	<script src="anti_flood_c.lua" type="client" />
 	
+	<script src="minimize_s.lua" type="server" />
+	<script src="minimize.lua" type="client" />
+
 	<!--
 	<script src="timeout_c.lua" type="client" />
 	<script src="timeout.lua" type="server" />

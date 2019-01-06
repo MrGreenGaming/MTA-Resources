@@ -5,6 +5,7 @@ Deadline:register('Deadline')
 
 deadlineBindsActive = false
 deadlineDrawLines = false -- Bool for late joiners, draw lines or not
+deadlineActivationTimer = {}
 ------------------------
 -- Gameplay Variables Standards --
 DeadlineOptions = {}
@@ -149,10 +150,10 @@ end
 addEvent('onPlayerFinishDeadline')
 addEvent('onPlayerWinDeadline')
 
+
 function Deadline:launch()
 	RaceMode.launch(self)
 
-	
 	--if math.random(2) == 1 then clientCall(g_Root, 'showOnlyHealthBar', true) end -- Use this to hide names 50% of the time
 	clientCall(g_Root, 'showOnlyHealthBar', true) -- Use this to hide names 100% of the time
 	-- Add binds for rockets/jumps and cooldown at start
@@ -174,14 +175,14 @@ function Deadline:launch()
 
 
 
-	setTimer(showMessage, 50, 1, "Dead Lines will be enabled in 5 seconds!", 255, 0, 0, root)
-	setTimer(showMessage, 1000, 1, "Dead Lines will be enabled in 4 seconds!", 255, 127, 0, root)
-	setTimer(showMessage, 2000, 1, "Dead Lines will be enabled in 3 seconds!", 254, 255, 0, root)
-	setTimer(showMessage, 3000, 1, "Dead Lines will be enabled in 2 seconds!", 127, 255, 0, root)
-	setTimer(showMessage, 4000, 1, "Dead Lines will be enabled in 1 seconds!", 0, 255, 0, root)
-	setTimer(showMessage, 5000, 1, "Kill players with your line while avoiding other lines", 0, 255, 0, root)
-	setTimer(showMessage, 8000, 1, "Press fire to speed boost and alt-fire/rmb to jump!", 0, 255, 0, root)
-	setTimer(function() deadlineDrawLines = true clientCall(g_Root, 'Deadline.load',DeadlineOptions) deadlineBindsActive = true end,5000,1)
+	deadlineActivationTimer[1] = setTimer(showMessage, 50, 1, "Dead Lines will be enabled in 5 seconds!", 255, 0, 0, root)
+	deadlineActivationTimer[2] = setTimer(showMessage, 1000, 1, "Dead Lines will be enabled in 4 seconds!", 255, 127, 0, root)
+	deadlineActivationTimer[3] = setTimer(showMessage, 2000, 1, "Dead Lines will be enabled in 3 seconds!", 254, 255, 0, root)
+	deadlineActivationTimer[4] = setTimer(showMessage, 3000, 1, "Dead Lines will be enabled in 2 seconds!", 127, 255, 0, root)
+	deadlineActivationTimer[5] = setTimer(showMessage, 4000, 1, "Dead Lines will be enabled in 1 seconds!", 0, 255, 0, root)
+	deadlineActivationTimer[6] = setTimer(showMessage, 5000, 1, "Kill players with your line while avoiding other lines", 0, 255, 0, root)
+	deadlineActivationTimer[7] = setTimer(showMessage, 8000, 1, "Press fire to speed boost and alt-fire/rmb to jump!", 0, 255, 0, root)
+	deadlineActivationTimer[8] = setTimer(function() deadlineDrawLines = true clientCall(g_Root, 'Deadline.load',DeadlineOptions) deadlineBindsActive = true end,5000,1)
 	
 end
 
@@ -291,6 +292,15 @@ function Deadline:cleanup()
 	clientCall(g_Root, 'Deadline.unload')
 	deadlineBindsActive = false
 	deadlineDrawLines = false
+
+	for i, t in ipairs(deadlineActivationTimer) do
+
+		if isTimer( t ) then
+			killTimer( t )
+		end
+	end
+	deadlineActivationTimer = {}
+
 	-- Remove binds
 	for k, v in ipairs(getElementsByType'player') do
 		removeElementData( player, 'deadline.jumpOnCooldown' )
