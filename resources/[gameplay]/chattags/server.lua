@@ -111,7 +111,7 @@ function chatbox(message, msgtype)
                 local message = v[2] .. RGBToHex(r, g, b) .. name .. "#FFFFFF:"..v[4].." " .. text1
 				local ass = v[4].." " .. text1
                 if 200 <= #message then
-                    outputChatBox('#FF0000Error: The message you entered is too big, please lower it!', source, 255, 255, 255, true)
+                    outputChatBox('#FF0000Error: The message you entered is too long, please shorten it!', source, 255, 255, 255, true)
                     check = 1
                 else
                     check = 1
@@ -141,11 +141,39 @@ function chatbox(message, msgtype)
 end
 addEventHandler("onPlayerChat", getRootElement(), chatbox)
 
+
+
 addEvent("antiResp")
 addEventHandler("antiResp", root, 
 function(msg, logmsg)
-	outputChatBox(msg, getRootElement(), 255, 255, 255, true)
-	outputServerLog(logmsg)
+    -- Ignored Player Check
+    if getElementType( source ) == 'player' then
+        local sourceSerial = getPlayerSerial( source )
+        for i,player in ipairs ( getElementsByType("player") ) do
+            local playerIgnoreSettings = getElementData( player, 'mrgreen-settings.ignorelist' )
+            if playerIgnoreSettings then
+                local isSourceIgnored = false
+                playerIgnoreSettings = fromJSON( playerIgnoreSettings )
+                for i,serial in ipairs(playerIgnoreSettings) do
+                    if sourceSerial == serial then
+                        isSourceIgnored = true
+                        break
+                    end
+                end
+
+                if not isSourceIgnored then
+                  outputChatBox(msg, player, 255, 255, 255, true)
+                end  
+
+            else
+              outputChatBox(msg, player, 255, 255, 255, true)
+            end
+        end 
+
+    else
+    	outputChatBox(msg, getRootElement(), 255, 255, 255, true)
+    end
+    outputServerLog(logmsg)
 end)
  
 addEventHandler("onPlayerConnect", getRootElement(),

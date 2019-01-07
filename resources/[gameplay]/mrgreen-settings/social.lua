@@ -225,7 +225,8 @@ addEventHandler("onClientResourceStart",resourceRoot,askAdminTable)
 -------------------
 
 
-ignoredPlayers = {} 
+ignoredPlayers = {}
+-- Element data: mrgreen-settings.ignorelist
 
 
 function findPlayerByName(playerPart)
@@ -240,7 +241,8 @@ function findPlayerByName(playerPart)
 		end
     end
  end
- 
+
+
 function ignorePlayer(cmd, playername)
 	local player = findPlayerByName(playername)
 	if player == localPlayer then
@@ -254,8 +256,8 @@ function ignorePlayer(cmd, playername)
 			local theName = getPlayerName(player)
 			local theSer = getElementData( player, "pser")
 			local theName = string.gsub(theName, '#%x%x%x%x%x%x', '')
-			local theName = string.gsub(theName, '%W','')
 			ignoredPlayers[theSer] = theName -- add to table
+			setIgnoreElementData()
 			saveIgnoredPlayers()
 			reloadIgnoreGridList()
 		else
@@ -268,28 +270,38 @@ addCommandHandler ( 'ignore', ignorePlayer)
 
 
 
-function onClientChatMessageHandler( text )
-	local text_firstThreeChar = string.sub(text,1,3)
-	if tablelength(ignoredPlayers) == 0 or not text then return end
+----------------------------------------------------------
+------------REPLACED BY 'chattags' RESOURCE---------------
 
-	for key, plyr in pairs(getElementsByType("player")) do
+-- function onClientChatMessageHandler( text )
+-- 	local srcName = false
+-- 	if getElementType( source ) == 'player' then
+-- 		srcName = getPlayerName( source )
+-- 	end
+-- 	outputDebugString( 'source: '..getElementType( source )..' - if player, name is: '..tostring(srcName)..' and message is: '..text )
+-- 	local text_firstThreeChar = string.sub(text,1,3)
+-- 	if tablelength(ignoredPlayers) == 0 or not text then return end
 
-		local playername = getPlayerName( plyr )
-		local playername_firstThreeChar = string.sub(playername,1,3)
+-- 	for key, plyr in pairs(getElementsByType("player")) do
 
-		if text_firstThreeChar == playername_firstThreeChar then -- if first three letters match
+-- 		local playername = getPlayerName( plyr )
+-- 		local playername_firstThreeChar = string.sub(playername,1,3)
 
-			local playerserial = getElementData( plyr, "pser")
-			local findplayername = text:find(playername,1,true)
+-- 		if text_firstThreeChar == playername_firstThreeChar then -- if first three letters match
 
-			if findplayername and ignoredPlayers[playerserial] and playerserial ~= "admin" then
-				return cancelEvent()
-			end
-		end
-	end
-end
-addEventHandler("onClientChatMessage", getRootElement(), onClientChatMessageHandler)
+-- 			local playerserial = getElementData( plyr, "pser")
+-- 			local findplayername = text:find(playername,1,true)
 
+-- 			if findplayername and ignoredPlayers[playerserial] and playerserial ~= "admin" then
+-- 				return cancelEvent()
+-- 			end
+-- 		end
+-- 	end
+-- end
+-- addEventHandler("onClientChatMessage", getRootElement(), onClientChatMessageHandler)
+
+------------REPLACED BY 'chattags' RESOURCE---------------
+----------------------------------------------------------
 function removePlayerfromIgnoreList(theSer)
 	if not theSer then return false end
 	if ignoredPlayers[theSer] then
@@ -304,7 +316,7 @@ function removePlayerfromIgnoreList(theSer)
 		end
 	end
 	xmlUnloadFile(theXML)
-
+	setIgnoreElementData()
 	reloadIgnoreGridList()
 end
 
@@ -350,6 +362,7 @@ function loadIgnoredPlayers()
 			end
 		xmlUnloadFile( load_ignoredXML )
 	end
+	setIgnoreElementData()
 	reloadIgnoreGridList()
 end
 addEventHandler( "onClientResourceStart", resourceRoot, loadIgnoredPlayers)
@@ -363,6 +376,18 @@ function isPlayerIgnoredPM(plyr)
 	return false
 end
 
+
+function setIgnoreElementData()
+	if tablelength(ignoredPlayers) > 0 then
+		local ignoreData = {}
+		for serial,pname in pairs(ignoredPlayers) do
+        	table.insert(ignoreData,serial)
+    	end
+		setElementData( localPlayer, 'mrgreen-settings.ignorelist', toJSON( ignoreData ) )
+	else
+		setElementData( localPlayer, 'mrgreen-settings.ignorelist', false )
+	end
+end
 
 ------ Utils ------
 -------------------
