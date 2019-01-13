@@ -11,26 +11,9 @@ addEventHandler('onShopInit', root, function()
 end)
 
 addEventHandler("onGCShopLogin", root, function()
-	local fid = exports.gc:getPlayerForumID(source)
-	dbQuery(nameCache, {source, forumid}, handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], fid)
-	
+    checkPlayerTeam(source, true)
     triggerClientEvent(source, "teamLogin", resourceRoot)
 end)
-
-function nameCache(qh, player, forumid)
-	local result = dbPoll(qh, -1)
-	local pName = getPlayerName(player)
-	if #result == 0 then
-		dbExec(handlerConnect, [[INSERT INTO gc_nickcache(forumid, name) VALUES (?,?)]], forumid, pName)
-	else
-		local row = result[1]
-		if row.name ~= pName then
-			dbExec(handlerConnect, [[UPDATE gc_nickcache SET name=? WHERE forumid=?]], pName, forumid)
-		end
-	end
-	
-	checkPlayerTeam(player, true)
-end
 
 addEventHandler("onGCShopLogout", root, function()
     playerteams[source] = nil
@@ -132,38 +115,6 @@ function checkPlayerTeam(player, bLogin)
     dbQuery(checkPlayerTeam2, { player, bLogin }, handlerConnect, [[SELECT * FROM `team_members` INNER JOIN `team` ON `team_members`.`teamid` = `team`.`teamid` ORDER BY `team`.`create_timestamp`, `join_timestamp`]])
 end
 
-function sendClientData(qh, result, player, r)
-	local nicks = dbPoll(qh, -1)
-	local fid
-	local c = false
-	for i, row in ipairs(result) do
-		fid = row.forumid
-		
-		for j, r in ipairs(nicks) do
-			if row.forumid == r.forumid then
-				row.mta_name = r.name:gsub("#%x%x%x%x%x%x", "")
-				c = true
-				break
-			end
-		end
-		
-		if not c then
-			row.mta_name = getForumName(row.forumid) .. "(#" .. row.forumid .. ") "
-		end
-		c = false
-	end
-	
-	triggerClientEvent('teamsData', resourceRoot, result, player, r)
-end
-
-local fName
-function getForumName(id)
-	exports.gc:getForumAccountDetails(id, function(id, name, email, profile, join, cb)
-		fName = name
-	end)
-	return fName
-end
-
 function checkPlayerTeam2(qh, player, bLogin)
     local result = dbPoll(qh, -1)
 
@@ -193,10 +144,8 @@ function checkPlayerTeam2(qh, player, bLogin)
         r.age = string.format("%.2f", age / (24 * 60 * 60))
         outputConsole('[TEAMS] Team days left: ' .. r.age, player)
     end
-	
-	dbQuery(sendClientData, {result, player, r}, handlerConnect, [[SELECT * FROM gc_nickcache]])
-	
-    --triggerClientEvent('teamsData', resourceRoot, result, player, r)
+
+    triggerClientEvent('teamsData', resourceRoot, result, player, r)
 
     -- Check if player is in a team
     if not r then
