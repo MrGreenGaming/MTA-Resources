@@ -1,5 +1,4 @@
 admins = {
-	{ name = "Ywa", title = "Founder", accountName = "Ywa" },
 	{ name = "Cena", title = "Owner", accountName = "Cena" },
 	{ name = "Bierbuikje", title = "Developer", accountName = "bierbuikje" },
 	{ name = "Mihoje", title = "Developer", accountName = "Mihoje" },
@@ -12,5 +11,4 @@ admins = {
 	{ name = "Stig", title = "Old Admin", accountName = "Stig" },
 	{ name = "Maher", title = "Sheikh", accountName = "maher" },
 	{ name = "Abrahax", title = "Kadabrahax", accountName = "abrahax" },
-	
 }
