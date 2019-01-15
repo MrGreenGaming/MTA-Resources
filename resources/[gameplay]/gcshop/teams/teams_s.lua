@@ -137,11 +137,13 @@ function sendClientData(nicks, res, player, r)
 	for i, row in ipairs(result) do
 		fid = row.forumid
 		
-		for j, r in ipairs(nicks) do
-			if row.forumid == r.forumid then
-				row.mta_name = r.name:gsub("#%x%x%x%x%x%x", "")
-				c = true
-				break
+		if nicks then
+			for j, r in ipairs(nicks) do
+				if row.forumid == r.forumid then
+					row.mta_name = r.name:gsub("#%x%x%x%x%x%x", "")
+					c = true
+					break
+				end
 			end
 		end
 		
