@@ -138,9 +138,9 @@ function sendClientData(nicks, res, player, r)
 		fid = row.forumid
 		
 		if nicks then
-			for j, r in ipairs(nicks) do
-				if row.forumid == r.forumid then
-					row.mta_name = r.name:gsub("#%x%x%x%x%x%x", "")
+			for j, ro in ipairs(nicks) do
+				if row.forumid == ro.forumid then
+					row.mta_name = ro.name:gsub("#%x%x%x%x%x%x", "")
 					c = true
 					break
 				end
@@ -154,7 +154,7 @@ function sendClientData(nicks, res, player, r)
 	end
 	
 	if #forumNameTable > 0 then
-		exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, 'getForumDetails')
+		exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, player, 'getForumDetails')
 	else
 		triggerClientEvent('teamsData', resourceRoot, result, player, r)
 	end
@@ -162,7 +162,7 @@ end
 
 addEvent('getForumDetails')
 addEventHandler('getForumDetails', root, 
-function(resp, res, r)
+function(resp, res, r, player)
 	local result = res
 	if not resp then
 		triggerClientEvent('teamsData', resourceRoot, result, player, r)

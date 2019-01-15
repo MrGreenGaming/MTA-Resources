@@ -168,9 +168,9 @@ function getMultipleForumAccountDetails(forumids, callback)
     end)
 end
 
-function getForumAccountDetailsMultiple(forumids, result, r, eventToTrigger)
+function getForumAccountDetailsMultiple(forumids, result, r, player, eventToTrigger)
 	getMultipleForumAccountDetails(forumids, function(resp)
-		triggerEvent(eventToTrigger, root, resp, result, r)
+		triggerEvent(eventToTrigger, root, resp, result, r, player)
 	end)
 end
 
