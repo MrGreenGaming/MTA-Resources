@@ -210,7 +210,7 @@ function checkPlayerTeam2(qh, player, bLogin)
     end
 	
 	local q = dbQuery(handlerConnect, [[SELECT * FROM gc_nickcache]])
-	local nicks = dbPoll(p, -1)
+	local nicks = dbPoll(q, -1)
 	
 	sendClientData(nicks, result, player, r)
     --triggerClientEvent('teamsData', resourceRoot, result, player, r)
