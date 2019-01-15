@@ -160,7 +160,7 @@ function getMultipleForumAccountDetails(forumids, callback)
         end
 		
 		local output = {}
-		for _, p in ipairs(tbl.users) do
+		for _, p in ipairs(result.users) do
 		  table.insert(output, { forumid = p.users, name = p.name, joinDate = p.joinDate, joinTimestamp = p.joinTimestamp, coinsBalance = p.coinsBalance, profile = p.profile })
 		end
 		
