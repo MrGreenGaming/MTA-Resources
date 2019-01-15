@@ -14,7 +14,7 @@
 
     <export function="isHoliday" type="server"/>
     <export function="isPlayerLoggedInGC" type="server"/>
-    <export function="getMultipleForumAccountDetails" type="server"/>
+    <export function="getForumAccountDetailsMultiple" type="server"/>
     <export function="getPlayerForumID" type="server"/>
     <export function="getPlayerForumJoinTimestamp" type="server"/>
     <export function="getPlayerForumProfileData" type="server"/>

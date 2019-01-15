@@ -168,6 +168,12 @@ function getMultipleForumAccountDetails(forumids, callback)
     end)
 end
 
+function getForumAccountDetailsMultiple(forumids, eventToTrigger)
+	getMultipleForumAccountDetails(forumids, function(resp)
+		triggerEvent(eventToTrigger, root, resp)
+	end)
+end
+
 function setAccountGCInfo(forumID, amount)
     if devMode then
         return true
