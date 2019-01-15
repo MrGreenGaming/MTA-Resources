@@ -162,7 +162,7 @@ addEventHandler("onPlayerToptimeImprovement", root, ontoptime)
 --]]
 
 function finish(rank)
-	if isMapTesting() or modename ~= "Sprint" then
+	if modename ~= "Sprint" then
 		return
 	end
 	local player = source
@@ -253,7 +253,7 @@ local maxCTFIndivKill = 2 -- max amount players can kill eachother, to prevent g
 -- addEventHandler("onCTFPlayerKill",root,CTFPlayerKill)
 
 function CTFFlagCarrierKill(victim)
-	if isMapTesting() or modename ~= "Capture the flag" then return end
+	if modename ~= "Capture the flag" then return end
 	local player = source
 	if not areRewardsActivated() then
 		outputChatBox(prefix..getPlayerName(player)..'#00FF00 killed the flag carrier, but '..minPlayers..' or more players are required to get GC.',root,0,255,0,true)
@@ -272,7 +272,7 @@ addEvent("onCTFFlagCarrierKill")
 addEventHandler("onCTFFlagCarrierKill",root,CTFFlagCarrierKill)
 
 function CTFFlagDelivered()
-	if isMapTesting() or modename ~= "Capture the flag" then return end
+	if modename ~= "Capture the flag" then return end
 	local player = source
 	local team = getPlayerTeam(player)
 
@@ -307,7 +307,7 @@ end
 addEventHandler('onCTFFlagDelivered', root, CTFFlagDelivered)
 
 function CTFTeamWon()
-	if isMapTesting() or modename ~= "Capture the flag" then return end
+	if modename ~= "Capture the flag" then return end
 	local team = source
 	if not areRewardsActivated() then
 		outputChatBox( prefix .. minPlayers .. ' or more players required to get GCs', root, getTeamColor(team))
@@ -335,7 +335,7 @@ rewardKillDeadline = 1
 
 function deadlineFinish(rank)
 
-	if isMapTesting() or string.lower(modename) ~= "deadline" or not rewardDeadline[rank] then return end
+	if string.lower(modename) ~= "deadline" or not rewardDeadline[rank] then return end
 	local player = source
 
 	local str = rankSuffix(rank)
@@ -362,7 +362,7 @@ addEventHandler('onPlayerWinDeadline', root, deadlineWin)
 
 function onDeadlinePlayerKill()
 
-	if isMapTesting() or string.lower(modename) ~= "deadline" or not rewardKillDeadline then return end
+	if string.lower(modename) ~= "deadline" or not rewardKillDeadline then return end
 	local player = source
 	if areRewardsActivated() then
 		local reward = rewardKillDeadline
@@ -385,7 +385,7 @@ rewardShooter = {16, 12, 8}
 rewardKill = 1
 
 function shooterFinish(rank)
-	if isMapTesting() or modename ~= "Shooter" or not rewardShooter[rank] then return end
+	if modename ~= "Shooter" or not rewardShooter[rank] then return end
 	local player = source
 
 	local str = rankSuffix(rank)
@@ -411,7 +411,7 @@ addEvent('onPlayerWinShooter')
 addEventHandler('onPlayerWinShooter', root, shooterWin)
 
 function onShooterPlayerKill()
-	if isMapTesting() or modename ~= "Shooter" or not rewardKill then return end
+	if modename ~= "Shooter" or not rewardKill then return end
 	local player = source
 	if areRewardsActivated() then
 		local reward = rewardKill
@@ -432,7 +432,7 @@ addEventHandler('onShooterPlayerKill', root, onShooterPlayerKill)
 rewardCarGame = {16, 12, 8}
 rewardCarGameLevel = 1
 function winCargame(t)
-	if not isMapTesting() and exports.race:getShooterMode() == "cargame" then
+	if exports.race:getShooterMode() == "cargame" then
 
 		for rank,tab in ipairs(t) do
 			local theLVL = tab.level
@@ -473,7 +473,7 @@ rewardDD = {16, 12, 8}
 rewardKill = 1
 
 function ddFinish(rank)
-	if isMapTesting() or modename ~= "Destruction derby" or not rewardDD[rank] then return end
+	if modename ~= "Destruction derby" or not rewardDD[rank] then return end
 	local player = source
 
 	local str = rankSuffix(rank)
@@ -499,7 +499,7 @@ addEvent('onPlayerWinDD')
 addEventHandler('onPlayerWinDD', root, ddWin)
 
 function onDDPlayerKill()
-	if isMapTesting() or modename ~= "Destruction derby" or not rewardKill then return end
+	if modename ~= "Destruction derby" or not rewardKill then return end
 	local player = source
 	if areRewardsActivated() then
 		local reward = rewardKill
@@ -520,7 +520,7 @@ addEventHandler('onDDPlayerKill', root, onDDPlayerKill)
 
 local rewardRTFwinner = 20	-- greencoins
 function RTFfinish( rank, time )
-	if isMapTesting() or modename ~= "Reach the flag" then return end
+	if modename ~= "Reach the flag" then return end
 	local player = source
 
 	if not areRewardsActivated() then
@@ -544,7 +544,7 @@ addEventHandler("onPlayerFinish", root, RTFfinish)
 
 rewardNTS = {16, 12, 8, 5, 3}
 function NTSfinish( rank, time )
-	if isMapTesting() or modename ~= "Never the same" or not rewardNTS[rank] then return end
+	if modename ~= "Never the same" or not rewardNTS[rank] then return end
 	local player = source
 
 	local str = rankSuffix(rank)
@@ -576,7 +576,7 @@ function onManhuntRoundEnded( results )
 end
 
 function manhuntFinish (player, rank)
-	if isMapTesting() or not rewardManhunt[rank] then return end
+	if not rewardManhunt[rank] then return end
 	local str = rankSuffix(rank)
 	if not areRewardsActivated() then
 		outputChatBox(prefix .. getPlayerName(player) ..'#00FF00 finished ' .. rank .. str .. ' but ' .. minPlayers .. ' or more players required to get GCs', root, 0, 255, 0, true)
