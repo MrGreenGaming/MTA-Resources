@@ -154,7 +154,7 @@ function sendClientData(nicks, res, player, r)
 	end
 	
 	if #forumNameTable > 0 then
-		exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, 'getForumDetails')
+		exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, 'getForumDetails')
 	else
 		triggerClientEvent('teamsData', resourceRoot, result, player, r)
 	end
@@ -162,7 +162,7 @@ end
 
 addEvent('getForumDetails')
 addEventHandler('getForumDetails', root, 
-function(resp, res)
+function(resp, res, r)
 	local result = res
 	if not resp then
 		triggerClientEvent('teamsData', resourceRoot, result, player, r)
