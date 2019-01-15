@@ -11,25 +11,9 @@ addEventHandler('onShopInit', root, function()
 end)
 
 addEventHandler("onGCShopLogin", root, function()
-	local fid = exports.gc:getPlayerForumID(source)
-	dbQuery(nameCache, {source, forumid}, handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], fid)
-	
-	triggerClientEvent(source, "teamLogin", resourceRoot)
-	checkPlayerTeam(player, true)
+    checkPlayerTeam(source, true)
+    triggerClientEvent(source, "teamLogin", resourceRoot)
 end)
-
-function nameCache(qh, player, forumid)
-	local result = dbPoll(qh, -1)
-	local pName = getPlayerName(player)
-	if #result == 0 then
-		dbExec(handlerConnect, [[INSERT INTO gc_nickcache(forumid, name) VALUES (?,?)]], forumid, pName)
-	else
-		local row = result[1]
-		if row.name ~= pName then
-			dbExec(handlerConnect, [[UPDATE gc_nickcache SET name=? WHERE forumid=?]], pName, forumid)
-		end
-	end
-end
 
 addEventHandler("onGCShopLogout", root, function()
     playerteams[source] = nil
@@ -131,50 +115,6 @@ function checkPlayerTeam(player, bLogin)
     dbQuery(checkPlayerTeam2, { player, bLogin }, handlerConnect, [[SELECT * FROM `team_members` INNER JOIN `team` ON `team_members`.`teamid` = `team`.`teamid` ORDER BY `team`.`create_timestamp`, `join_timestamp`]])
 end
 
-function sendClientData(nicks, res, player, r)
-	local result = res
-	local fid
-	local c = false
-	local forumNameTable = {}
-	for i, row in ipairs(result) do
-		fid = row.forumid
-		
-		for j, r in ipairs(nicks) do
-			if row.forumid == r.forumid then
-				row.mta_name = r.name:gsub("#%x%x%x%x%x%x", "")
-				c = true
-				break
-			end
-		end
-		
-		if not c then
-			table.insert(forumNameTable, {userId=fid})
-		end
-		c = false
-	end
-	
-	if #forumNameTable > 0 then
-		exports.gc:getMultipleForumAccountDetails(forumNameTable, function(resp)
-			if not resp then
-				triggerClientEvent('teamsData', resourceRoot, result, player, r)
-			else
-				for _, p in ipairs(resp) do
-					for _, row in ipairs(result) do
-						if row.forumid == p.forumid then
-							row.mta_name = p.name
-							break
-						end
-					end
-				end
-				triggerClientEvent('teamsData', resourceRoot, result, player, r)
-			end
-		end)
-		return
-	end
-	
-	triggerClientEvent('teamsData', resourceRoot, result, player, r)
-end
-
 function checkPlayerTeam2(qh, player, bLogin)
     local result = dbPoll(qh, -1)
 
@@ -204,12 +144,8 @@ function checkPlayerTeam2(qh, player, bLogin)
         r.age = string.format("%.2f", age / (24 * 60 * 60))
         outputConsole('[TEAMS] Team days left: ' .. r.age, player)
     end
-	
-	local q = dbQuery(handlerConnect, [[SELECT * FROM gc_nickcache]])
-	local nicks = dbPoll(p, -1)
-	
-	sendClientData(nicks, result, player, r)
-    --triggerClientEvent('teamsData', resourceRoot, result, player, r)
+
+    triggerClientEvent('teamsData', resourceRoot, result, player, r)
 
     -- Check if player is in a team
     if not r then

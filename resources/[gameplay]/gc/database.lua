@@ -114,60 +114,6 @@ function getForumAccountDetails(forumID, callback)
     end)
 end
 
-function getMultipleForumAccountDetails(forumids, callback)
-	if devMode then
-        callback(forumids)
-        return
-    end
-
-    if not forumids then
-        outputDebugString("getMultipleForumAccountDetails: Missing details", 1)
-        callback(false)
-        return
-    end
-
-    local fetchOptions = {
-        queueName = "API-User" .. forumID,
-        connectionAttempts = 3,
-        connectTimeout = 4000,
-        method = "POST",
-        postData = toJSON({
-            users = forumids,
-            appId = get("appId"),
-            appSecret = get("appSecretPass")
-        }, true),
-        headers = {
-            ["Content-Type"] = "application/json",
-            ["Accept"] = "application/json"
-        }
-    }
-
-    fetchRemote("https://mrgreengaming.com/api/account/details-multiple", fetchOptions, function(res, info)
-        if not info.success or not res then
-            if not res then
-                res = "EMPTY"
-            end
-            outputDebugString("getMultipleForumAccountDetails: invalid response (status " .. info.statusCode .. "). Res: " .. res, 1)
-            callback(false)
-            return
-        end
-
-        local result = fromJSON(res)
-        if not result or result.error then
-            outputDebugString("getMultipleForumAccountDetails: api error! " .. result.error .. ' ' .. tostring(result.errorMessage), 1)
-            callback(false)
-            return
-        end
-		
-		local output = {}
-		for _, p in ipairs(tbl.users) do
-		  table.insert(output, { forumid = p.users, name = p.name, joinDate = p.joinDate, joinTimestamp = p.joinTimestamp, coinsBalance = p.coinsBalance, profile = p.profile })
-		end
-		
-		callback(output)
-    end)
-end
-
 function setAccountGCInfo(forumID, amount)
     if devMode then
         return true
