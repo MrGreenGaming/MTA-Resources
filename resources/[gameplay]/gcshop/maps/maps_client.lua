@@ -5,6 +5,7 @@ prices["rtf"] = 800
 prices["ctf"] = 800
 prices["nts"] = 1000
 prices["shooter"] = 1200
+prices["deadline"] = 900
 
 lastWinnerDiscount = 50
 
