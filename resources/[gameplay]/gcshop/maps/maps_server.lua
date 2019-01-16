@@ -5,6 +5,7 @@ prices["rtf"] = 800
 prices["ctf"] = 800
 prices["nts"] = 1000
 prices["shooter"] = 1200
+prices["deadline"] = 900
 
 PRICE = 1000
 
@@ -36,6 +37,11 @@ function ddWin()
 end
 addEvent('onPlayerWinDD')
 addEventHandler('onPlayerWinDD', root, ddWin)
+
+function dlWin(position, timePassed)
+	setWinner(source)
+end
+addEventHandler('onPlayerWinDeadline', root, dlWin)
 
 function setWinner(player)
 	lastWinner = player
