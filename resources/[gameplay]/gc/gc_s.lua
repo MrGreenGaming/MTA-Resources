@@ -47,7 +47,7 @@ end
 
 function onAutoLogin(forumID, player)
     removeElementData( player,'gc.autoLoginCache') -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
-    
+
     if not forumID then
         return
     end
@@ -55,7 +55,7 @@ function onAutoLogin(forumID, player)
     if not accounts[player] then
         accounts[player] = SAccount:create(player)
         accounts[player]:loginViaForumID(forumID, player, function(result, player)
-            if result then8
+            if result then
                 onLoginSuccessfull(player)
             else 
                 onLoginFailed(player, true)
