@@ -26,6 +26,7 @@ addEventHandler('onClientGreenCoinsStart', root, clientStart)
 function autologinInfoReceived(query, player)
     local results = dbPoll(query, -1)
     if results and #results > 0 and tonumber(results[1].forumid) then
+        setElementData( player, 'gc.autoLoginCache', tonumber(results[1].forumid) ) -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
         onAutoLogin(tonumber(results[1].forumid), player)
     end
 end
