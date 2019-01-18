@@ -103,16 +103,16 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
         return
     end
 
-    -- if self.gcRecord[1] and getElementData( player, 'gc.autoLoginCache') == self.gcRecord[1] then -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
-    --     callback(true, player)
-    --     return
-    -- end
+    if self.gcRecord[1] and getElementData( player, 'gc.autoLoginCache') and tonumber(getElementData( player, 'gc.autoLoginCache')) == tonumber(self.gcRecord[1]) then -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
+        callback(true, player)
+        return
+    end
 
     getForumAccountDetails(givenForumID, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount)
-        -- if self.gcRecord[1] and getElementData( player, 'gc.autoLoginCache') == self.gcRecord[1] then -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
-        --     callback(true, player)
-        --     return
-        -- end
+        if self.gcRecord[1] and getElementData( player, 'gc.autoLoginCache') and tonumber(getElementData( player, 'gc.autoLoginCache')) == tonumber(self.gcRecord[1]) then -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
+            callback(true, player)
+            return
+        end
 
         if not forumID then
             callback(false, player)
@@ -121,7 +121,7 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
 
         
         if not getElementData( player, 'gc.autoLoginCache') or tonumber(forumID) ~= tonumber(getElementData( player, 'gc.autoLoginCache'))  then -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
-            outputDebugString( 'GC AUTOLOGIN BUG: "'..getPlayerName( player )..'": Autologin DB forumID: '..tostring(getElementData( player, 'gc.autoLoginCache')..' - Api forumID: '..tostring(forumID) ),  3, 0, 0, 255  )
+            outputDebugString( 'GC AUTOLOGIN BUG: "'..tostring(getPlayerName( player ))..'": Autologin DB forumID: '..tostring(getElementData( player, 'gc.autoLoginCache')..' - Api forumID: '..tostring(forumID) ),  3, 0, 0, 255  )
             callback(false,player)
             return
         end
