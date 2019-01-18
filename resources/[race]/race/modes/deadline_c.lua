@@ -63,7 +63,7 @@ addEventHandler("onClientSetUpDeadlineDefinitions", root, Deadline.load)
 
 
 function Deadline.unload()
-	outputDebugString('unloaded Deadline')
+
 	dl_stopTimeBars()
 	Deadline.notMovingTick = false
 	warnedPlayerNotMoving = false
@@ -427,6 +427,7 @@ end
 function dl_stopTimeBars()
 	removeEventHandler("onClientRender",root,dl_draw_timerbars)
 end
+addEventHandler( 'onClientMapStarting',resourceRoot, dl_stopTimeBars )
 
 function dl_getColorFromPercent(percentage)
 	local percentage = tonumber(percentage)

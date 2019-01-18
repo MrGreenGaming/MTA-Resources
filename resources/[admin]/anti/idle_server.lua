@@ -98,6 +98,7 @@ function(state)
 	end	
 
 	if state == "Running" then
+
 		executeAfkState(exports.race:getRaceMode())
 
 		if exports.race:getRaceMode() == "Capture the flag" or exports.race:getRaceMode() == "Destruction derby" or exports.race:getRaceMode() == "Shooter" or exports.race:getRaceMode() == "Deadline" then -- timemode short
@@ -139,7 +140,9 @@ end)
 -- Game mode specific afk handler --
 -- triggerPlayerSpectate --Spec EVENT
 function executeAfkState(gamemode)
-	if gamemode == "Destruction derby" or gamemode == "Shooter" or gamemode == "Deadline" or gamemode == "Deadline" and not exports.race:getShooterMode() == "cargame" then
+
+	if gamemode == "Destruction derby" or gamemode == "Deadline" or gamemode == "Shooter" and exports.race:getShooterMode() ~= "cargame" then
+
 		for f,u in pairs(AfkTable) do
 			if u then
 				

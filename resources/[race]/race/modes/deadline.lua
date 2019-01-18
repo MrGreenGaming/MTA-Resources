@@ -303,8 +303,9 @@ function Deadline:cleanup()
 
 	-- Remove binds
 	for k, v in ipairs(getElementsByType'player') do
-		removeElementData( player, 'deadline.jumpOnCooldown' )
-		removeElementData( player, 'deadline.boostOnCooldown' )
+		
+		removeElementData( v, 'deadline.jumpOnCooldown' )
+		removeElementData( v, 'deadline.boostOnCooldown' )
 		
 		if isKeyBound(v, 'vehicle_fire', 'down', self.boost) then
 			unbindKey(v, 'vehicle_fire', 'both', self.boost)
