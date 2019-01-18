@@ -73,22 +73,6 @@ function spawnAFKchecker()
 end
 
 
--- function onClientRender() -- OLD AFK DETECTION
--- 		if (getControlState('accelerate')) or (getControlState('handbrake')) or (getControlState('brake_reverse')) or (getControlState('vehicle_right')) or (getControlState('vehicle_left')) then
--- 			-- The player is moving, reset everything
--- 			if warned ~= false then 
--- 				triggerServerEvent("warnPlayerIdle", localPlayer, "removeWarn")
--- 				warned = false
--- 				afk  = 0
--- 			end
-
--- 			if commandAFK == true then
--- 				triggerServerEvent("warnPlayerIdle", localPlayer, "removeWarn")
--- 				commandAFK = false
--- 			end	
--- 		end
--- end
--- addEventHandler('onClientRender', root, onClientRender)
 
 function detectInput(button,pressOrRelease)
 	if pressOrRelease and button ~= "lalt" and button ~= "tab" and button ~= "escape" then
