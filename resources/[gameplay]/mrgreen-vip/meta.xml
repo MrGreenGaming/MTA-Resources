@@ -6,6 +6,8 @@
     
 
 
-    
+    <!-- Rainbow Colors -->
+    <script src="items/rainbowcolors/rainbowcolors_c.lua" type="client" />
+	<script src="items/rainbowcolors/rainbowcolors_s.lua" type="server" />
 
 </meta>
