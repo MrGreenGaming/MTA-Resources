@@ -218,7 +218,7 @@ function build_itemsWidget(parent, offsetX, offsetY)
 		addEventHandler("onClientGUIClick", gui["setDeadlineButton"],button_set_deadlinecolor,false)
 	end
 
-	gui["btnBuyPerk_12"] = guiCreateButton(541, 1221, 101, 101, "Price:\n2000 GC", false, gui["scrollAreaItems"])
+	gui["btnBuyPerk_12"] = guiCreateButton(541, 1221, 101, 101, "Price:\n1000 GC", false, gui["scrollAreaItems"])
 	
 	if on_btnBuyPerk_10_clicked then
 		addEventHandler("onClientGUIClick", gui["btnBuyPerk_12"], on_btnBuyPerk_12_clicked, false)
