@@ -9,6 +9,5 @@ admins = {
 	{ name = "P0L", title = "Map Assistant", accountName = "P0L" },
 	{ name = "Jack123", title = "Mother Russia", accountName = "Jack123" },
 	{ name = "Stig", title = "Old Admin", accountName = "Stig" },
-	{ name = "Maher", title = "Sheikh", accountName = "maher" },
 	{ name = "Abrahax", title = "Kadabrahax", accountName = "abrahax" },
 }
