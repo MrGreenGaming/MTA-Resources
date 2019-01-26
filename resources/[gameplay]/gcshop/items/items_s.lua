@@ -111,7 +111,7 @@ local perks = {
 	[9] = { ID = 9, price =  3000, description = 'Double sided objects', func = 'loadDoubleSided'},
 	[10] = { ID = 10, price =  2000, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
 	[11] = { ID = 11, price =  1000, description = 'NTS/DD Vehicle reroll for 30 days', func = 'loadVehicleReroll', exp = 30},
-	[12] = { ID = 12, price =  2000, description = 'Deadline color change', func = 'loadDeadlineColorChange', exp = 30},
+	[12] = { ID = 12, price =  1000, description = 'Deadline color change', func = 'loadDeadlineColorChange', exp = 30},
 
 }
 
