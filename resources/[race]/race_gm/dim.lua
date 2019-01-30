@@ -31,9 +31,9 @@ function onMapStarting(mapInfo, mapOptions, gameOptions)
 		return false;
 	end
 
-	if getPlayerCount() > 29 then
-		exports.scoreboard:scoreboardAddColumn("dim", root, 30, "Dim", 10)
-		if getPlayerCount() > 40 then
+	if getPlayerCount() > 19 then
+		exports.scoreboard:scoreboardAddColumn("dim", root, 20, "Dim", 10)
+		if getPlayerCount() > 30 then
 			dimensionsEnabled = 3
 		else
 			dimensionsEnabled = 2
