@@ -73,7 +73,7 @@ local voteOutcomes = {
 	{'Falling Rocks on %s', 'fallingRocksEvent', root},
 	{'Weather', 'weatherEvent', root},
 	{'Blocker mode for %s', 'blockerEvent', root},
-	{'Give %s a Hunter', 'K', root},
+	{'Give %s a Hunter', 'R', root},
 }
 local pollDidStart
 
@@ -737,7 +737,7 @@ function fallingRocksHandler(victim)
 end
 
 --Hunter!
-addEvent("Z", true)
+addEvent("R", true)
 function typeK(victim)
 	pollDidStart = nil
 
@@ -752,7 +752,7 @@ function typeK(victim)
 
 	setElementModel(getPedOccupiedVehicle(victim), 425)
 end
-	addEventHandler("z", root, typeK)
+	addEventHandler("r", root, typeK)
   
 
 	-- if not isPlayerAlive(victim) then
