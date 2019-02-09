@@ -89,9 +89,17 @@
     <file src="img/pj_red.png" />
     <file src="img/pj_blue.png" />
     <file src="img/arrow-up.png" />
+    
+    <!-- DeadLine -->
     <file src="img/rocket66.png" />
     <file src="img/speedicon.png" />
-        
+     <file src="img/dl_DeadWallIcon.png" />
+    <file src="img/dl_colorTex.png" />
+    <file src="img/dl_DeadWallTex.gif" />
+    <file src='img/dl_DeadWallTex.html' />
+    
+
+    <!-- MrGreen VIP    -->
     <file src="img/mrgreen_vip_plus.png" />
     <file src="img/mrgreen_vip.png" />
     

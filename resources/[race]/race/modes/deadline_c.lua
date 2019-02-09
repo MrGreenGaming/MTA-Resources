@@ -8,6 +8,17 @@ Deadline.jumpCooldownTimer = false
 Deadline.notMovingTick = false
 Deadline.speedTimer = false
 Deadline.wasAlreadyHit = false
+
+
+Deadline.deadWallTex = false
+Deadline.deadWallColorTex = false
+Deadline.deadWallTexWidth = 500 -- Width of .gif texture used
+Deadline.deadWallTexHeight = 432 -- Height of .gif texture used
+Deadline.deadWallTexMover = 0 
+Deadline.deadWallAlpha = 0
+Deadline.texSplitInto_Cache = false
+Deadline.deadWallBlip = false
+
 Deadline.gcshop_deadlinecolor_table = {}
 ------------------------
 -- Gameplay Variables Standards - Will be updated serversided --
@@ -21,7 +32,12 @@ DeadlineOptions = {}
 -- DeadlineOptions.notMovingKillTime = 10000 -- Kill time for not moving, also counts if reversing (ms)
 -- DeadlineOptions.godmode = true -- set bool if vehicles should be immume to collisions or not
 -- DeadlineOptions.lineAliveTime = 1600 -- Set how long a line should be alive (in ms) -- 1200
-
+-- DeadlineOptions.deadWallRadiusMin -- Minimum dead wall radius
+-- DeadlineOptions.deadWallRadiusMax -- Maxiumum dead wall radius
+-- DeadlineOptions.deadWallX -- deadWall X pos
+-- DeadlineOptions.deadWallY -- deadwall Y pos
+-- DeadlineOptions.deadWallRadius = getElementData(resourceRoot,'deadline.radius')
+-- 
 -- Gameplay Variables Standards - Will be updated serversided --
 ------------------------
 
@@ -37,8 +53,22 @@ function Deadline.load(settings)
 	Deadline.unload()
 	dl_initTimeBars()
 
+	Deadline.deadWallTex = createBrowser(Deadline.deadWallTexWidth,Deadline.deadWallTexHeight,true,true)
+	Deadline.deadWallColorTex = dxCreateTexture("img/dl_colorTex.png")
+
+
+
 
 	DeadlineOptions = settings
+	if getResourceFromName'customblips' then
+		Deadline.deadWallBlip1 = exports.customblips:createCustomBlip ( DeadlineOptions.deadWallX, DeadlineOptions.deadWallY, 90, 90, 'img/dl_DeadWallIcon.png', 50000 )
+	end
+		
+	Deadline.deadWallBlip2 = createBlip( DeadlineOptions.deadWallX, DeadlineOptions.deadWallY, 0, 56, 10 )
+	setBlipVisibleDistance(Deadline.deadWallBlip2,0) -- Hide real blip, only show custom blip
+	setElementData(Deadline.deadWallBlip2,"customBlipPath",':race/img/dl_DeadWallIcon.png')
+	setElementData(Deadline.deadWallBlip2,"customBlipIgnoreDist", true)
+
 	--------------------------------
 	-----Load GC shop line color----
 	for id, player in ipairs(getElementsByType("player")) do 
@@ -60,7 +90,13 @@ function Deadline.load(settings)
 end
 addEvent("onClientSetUpDeadlineDefinitions", true)
 addEventHandler("onClientSetUpDeadlineDefinitions", root, Deadline.load)
-
+addEventHandler('onClientBrowserCreated',root,
+	function()
+		if source == Deadline.deadWallTex then
+			loadBrowserURL(Deadline.deadWallTex,'http://mta/local/img/dl_DeadWallTex.html')
+		end
+	end
+)
 
 function Deadline.unload()
 
@@ -87,6 +123,18 @@ function Deadline.unload()
 	
 	removeEventHandler("onClientRender", root, Deadline.record)
 	removeEventHandler("onClientRender", root, Deadline.draw)
+
+	-- Deadwall unload
+	if Deadline.deadWallBlip1 then
+		if getResourceFromName'customblips' then
+			exports.customblips:destroyCustomBlip(Deadline.deadWallBlip1)
+		end
+	Deadline.deadWallBlip1 = false
+	end
+
+	if isElement(Deadline.deadWallBlip2) then destroyElement(Deadline.deadWallBlip2) end
+	if isElement(Deadline.deadWallTex) then destroyElement( Deadline.deadWallTex ) end
+	if isElement(Deadline.deadWallColorTex) then destroyElement(Deadline.deadWallColorTex) end
 	
 end
 addEvent("onClientSetDownDeadlineDefinitions", true)
@@ -220,8 +268,10 @@ end
 
 
 function Deadline.draw()
-
-	
+	local wallRadius = getElementData(resourceRoot,'deadline.radius')
+	if tonumber(wallRadius) and DeadlineOptions.deadWallEnabled then
+		Deadline.drawWall(DeadlineOptions.deadWallX,DeadlineOptions.deadWallY,wallRadius)
+	end
 
 	for i, player in pairs(getElementsByType('player')) do
 		
@@ -317,6 +367,9 @@ function Deadline.checkHit(player, x, y, z, x1, y1, z1)
 	
 end
 
+
+
+
 -- Late joiners, draw lines
 addEventHandler( "onClientResourceStart", getResourceRootElement(),
     function ( )
@@ -328,6 +381,8 @@ function Deadline.drawLinesLateJoiner(bool,settings)
 	if bool then
 		DeadlineOptions = settings
 		Deadline.wasAlreadyHit = true
+		Deadline.deadWallTex = createBrowser(Deadline.deadWallTexWidth,Deadline.deadWallTexHeight,true,true)
+		Deadline.deadWallColorTex = dxCreateTexture("img/dl_colorTex.png")
 		addEventHandler("onClientRender", root, Deadline.record)
 		addEventHandler("onClientRender", root, Deadline.draw)
 	end
@@ -477,6 +532,117 @@ function Deadline.receiveNewSettings (settings)
 		DeadlineOptions = settings
 	end
 end
+
+
+
+-- Death Wall
+function Deadline.drawWall(x,y,rad)
+	if not Deadline.deadWallTex or not Deadline.deadWallColorTex then return end
+
+	Deadline.handleDeadWallAlpha()
+
+	local theTarget = getCameraTarget()
+	if not isElement(theTarget) or not getElementType(theTarget) then
+		theTarget = getLocalPlayer()
+	end
+
+	local a,b,c = getElementPosition(theTarget)
+	local lowerZ = c - 500 -- lowest point to start drawing
+	local upperZ = lowerZ + 10000 -- highest point to stop drawing
+	local originx,originy = x,y
+	local connections = 150
+	
+	local point = math.pi * 2 / connections
+	local sx,sy
+
+	local widthPart = 1
+
+	local texHeightRepeatTimes = 200
+	local radiusBase = 500
+	local widthBase = 20.95
+	local singleWidth = rad/100*4.19
+	local theRatio = widthBase/singleWidth
+
+	local texSplitInto =  math.ceil(theRatio*4)
+	if texSplitInto > 10 then -- If bigger then 10, only change every 25, to reduce jenky resizing when small
+		if not texSplitInto_Cache then
+			texSplitInto_Cache = texSplitInto
+		elseif texSplitInto > texSplitInto_Cache + 25 then
+			texSplitInto_Cache = texSplitInto
+			texSplitInto = texSplitInto_Cache
+		elseif texSplitInto_Cache then
+			texSplitInto = texSplitInto_Cache
+		end
+	end
+
+
+
+	local texSplitSingle = Deadline.deadWallTexWidth/texSplitInto
+
+	-- Move texture downwards
+	Deadline.deadWallTexMover = Deadline.deadWallTexMover + 0.25
+	if Deadline.deadWallTexMover > Deadline.deadWallTexHeight then
+		Deadline.deadWallTexMover = 0
+	end
+	
+
+
+	for i=0,connections do
+		local ex = math.cos ( i * point ) * rad
+		local ey = math.sin ( i * point ) * rad
+		
+		if sx then
+
+			-- if (math.fmod(i,6) == 0) then
+				-- dxDrawMaterialLine3D( x+sx, y+sy, c+2+(alpha/100*3),x+sx, y+sy, c-1+(alpha/100*3), mrgreenfaceTexture, 4,tocolor(255,255,255,255),false, originx,originy,0 ) -- mrgreen texture
+			-- end
+
+
+			-- Color Texture
+			dxDrawMaterialLine3D( x+sx, y+sy, lowerZ, x+sx, y+sy, upperZ,Deadline.deadWallColorTex, rad/100*4.19, tocolor( 0, 255, 0, (Deadline.deadWallAlpha/100)*15 ), originx,originy,0 )
+			
+			-- Wall Texture
+			dxDrawMaterialSectionLine3D( x+sx, y+sy, lowerZ, x+sx, y+sy, upperZ, texSplitSingle*widthPart-texSplitSingle, Deadline.deadWallTexMover, texSplitSingle, Deadline.deadWallTexHeight*texHeightRepeatTimes, Deadline.deadWallTex, rad/100*4.19 , tocolor( 0, 255, 0, Deadline.deadWallAlpha ), originx,originy,0 )
+			
+			widthPart = widthPart + 1
+			if widthPart > texSplitInto then
+				widthPart = 1
+			end
+
+		end
+
+
+		sx,sy = ex,ey
+	end
+end
+
+
+local dl_alphaMode = 'up' -- 'up' or 'down'
+local dl_alphaMax = 180
+local dl_alphaMin = 80
+local dl_alphaStepUp = 4
+local dl_alphaStepDown = 3
+local dl_alphaTiming = 50 --ms
+local dl_alphaLast = false
+function Deadline.handleDeadWallAlpha()
+	if not dl_alphaLast then dl_alphaLast = getTickCount() return end
+
+	if getTickCount() < dl_alphaLast + dl_alphaTiming then return end
+
+	if dl_alphaMode == 'up' then
+		if Deadline.deadWallAlpha > dl_alphaMax then dl_alphaMode = 'down' return end
+
+		Deadline.deadWallAlpha = Deadline.deadWallAlpha+dl_alphaStepUp
+		dl_alphaLast = getTickCount()
+		return
+	elseif dl_alphaMode == 'down' then
+		if Deadline.deadWallAlpha < dl_alphaMin then dl_alphaMode = 'up' return end
+
+		Deadline.deadWallAlpha = Deadline.deadWallAlpha-dl_alphaStepDown
+		dl_alphaLast = getTickCount()
+		return
+	end
+end 
 
 -- UTIL
 

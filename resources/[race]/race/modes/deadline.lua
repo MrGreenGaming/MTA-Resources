@@ -6,11 +6,13 @@ Deadline:register('Deadline')
 deadlineBindsActive = false
 deadlineDrawLines = false -- Bool for late joiners, draw lines or not
 deadlineActivationTimer = {}
+
+
 ------------------------
 -- Gameplay Variables Standards --
 DeadlineOptions = {}
 DeadlineOptions.size = 40 -- Size of line
-DeadlineOptions.minimumSpeed = 60 -- Minimum speed (in km/h)
+DeadlineOptions.minimumSpeed = 70 -- Minimum speed (in km/h)
 DeadlineOptions.boostSpeed = 100 -- Boost Speed (added to current speed)
 DeadlineOptions.boost_cooldown = 35000 -- boost cooldown in ms
 DeadlineOptions.jumpHeight = 0.25 -- Jump Height
@@ -18,6 +20,17 @@ DeadlineOptions.jump_cooldown = 15000 -- jump cooldown in ms
 DeadlineOptions.notMovingKillTime = 10000 -- Kill time for not moving, also counts if reversing (ms)
 DeadlineOptions.godmode = true -- set bool if vehicles should be immume to collisions or not
 DeadlineOptions.lineAliveTime = 2500 -- Set how long a line should be alive (in ms) -- 1350
+-- Dead Wall
+DeadlineOptions.deadWallRadiusMin = 100
+DeadlineOptions.deadWallRadiusMax = 2000 -- Affects timing, timer is set to 100ms/-1 radius.
+DeadlineOptions.deadWallRadius = DeadlineOptions.deadWallRadiusMax
+DeadlineOptions.deadWallX = false --Set to random spawn point
+DeadlineOptions.deadWallY = false --Set to random spawn point
+DeadlineOptions.deadWallEnabled = true
+
+deadlineDeadWallElement = false -- Colshape element
+deadlineDeadWallDecreaseSizeTimer = false -- Timer for decreasing deadwall size
+
 
 
 DeadlineOptionsDefaults = DeadlineOptions
@@ -173,8 +186,23 @@ function Deadline:launch()
 		
 	end
 
+	-- Dead Wall
+	setElementData(getResourceRootElement(getThisResource()), 'deadline.radius',DeadlineOptions.deadWallRadiusMax)
+	local spawnPoints = self.getSpawnpoints()
+	local randomSpawn = spawnPoints[math.random(#spawnPoints)] -- Deadwall center position to random spawnpoint
+	local spX = tonumber(randomSpawn.position[1])
+	local spY = tonumber(randomSpawn.position[2])
+	DeadlineOptions.deadWallX = spX
+	DeadlineOptions.deadWallY = spY
+	DeadlineOptions.deadWallRadius = DeadlineOptions.deadWallRadiusMax
+
+	deadlineDeadWallElement = createColCircle( DeadlineOptions.deadWallX, DeadlineOptions.deadWallY, DeadlineOptions.deadWallRadius )
+	deadlineDeadWallDecreaseSizeTimer = setTimer( dl_deacreaseDeadWallSize, 100, 0 )
+	-- dl_deacreaseDeadWallSize()
 
 
+
+	-- Start timers
 	deadlineActivationTimer[1] = setTimer(showMessage, 50, 1, "Dead Lines will be enabled in 5 seconds!", 255, 0, 0, root)
 	deadlineActivationTimer[2] = setTimer(showMessage, 1000, 1, "Dead Lines will be enabled in 4 seconds!", 255, 127, 0, root)
 	deadlineActivationTimer[3] = setTimer(showMessage, 2000, 1, "Dead Lines will be enabled in 3 seconds!", 254, 255, 0, root)
@@ -182,8 +210,11 @@ function Deadline:launch()
 	deadlineActivationTimer[5] = setTimer(showMessage, 4000, 1, "Dead Lines will be enabled in 1 seconds!", 0, 255, 0, root)
 	deadlineActivationTimer[6] = setTimer(showMessage, 5000, 1, "Kill players with your line while avoiding other lines", 0, 255, 0, root)
 	deadlineActivationTimer[7] = setTimer(showMessage, 8000, 1, "Press fire to speed boost and alt-fire/rmb to jump!", 0, 255, 0, root)
-	deadlineActivationTimer[8] = setTimer(function() deadlineDrawLines = true clientCall(g_Root, 'Deadline.load',DeadlineOptions) deadlineBindsActive = true end,5000,1)
+	deadlineActivationTimer[8] = setTimer(function()  deadlineDrawLines = true clientCall(g_Root, 'Deadline.load',DeadlineOptions) deadlineBindsActive = true end,5000,1)
 	
+
+
+
 end
 
 
@@ -292,6 +323,10 @@ function Deadline:cleanup()
 	clientCall(g_Root, 'Deadline.unload')
 	deadlineBindsActive = false
 	deadlineDrawLines = false
+
+	if isElement(deadlineDeadWallElement) then destroyElement(deadlineDeadWallElement) end
+	if isTimer(deadlineDeadWallDecreaseSizeTimer) then killTimer(deadlineDeadWallDecreaseSizeTimer) end
+
 
 	for i, t in ipairs(deadlineActivationTimer) do
 
@@ -446,8 +481,46 @@ function Deadline.admincommands (playerSource, commandName, option, value)
 			outputChatBox( getPlayerName(playerSource)..' set DeadLine Line Alive Time from'..DeadlineOptions.lineAliveTime..' to '..value..'ms')
 			DeadlineOptions.lineAliveTime = tonumber(value)
 			clientCall(getRootElement(), 'Deadline.receiveNewSettings', DeadlineOptions)
+
+		elseif option == 'deadwall' then
+			if value == 'true' then
+				outputChatBox( getPlayerName(playerSource)..' Enabled DL DeadWall')
+				DeadlineOptions.deadWallEnabled = true
+				clientCall(getRootElement(), 'Deadline.receiveNewSettings', DeadlineOptions)				
+			elseif value == 'false' then
+				outputChatBox( getPlayerName(playerSource)..' Disabled DL DeadWall')
+				DeadlineOptions.deadWallEnabled = false
+				clientCall(getRootElement(), 'Deadline.receiveNewSettings', DeadlineOptions)	
+			end
 		end
 	end
 
 end
 addCommandHandler( 'deadline', Deadline.admincommands )
+
+
+
+-- DeadWall
+function dl_deacreaseDeadWallSize ()
+	if not DeadlineOptions.deadWallEnabled then return end
+	if DeadlineOptions.deadWallRadius > DeadlineOptions.deadWallRadiusMin then
+
+		DeadlineOptions.deadWallRadius = DeadlineOptions.deadWallRadius - 1
+		setElementData(getResourceRootElement(getThisResource()), 'deadline.radius',DeadlineOptions.deadWallRadius)
+		destroyElement( deadlineDeadWallElement )
+		deadlineDeadWallElement = createColCircle( DeadlineOptions.deadWallX, DeadlineOptions.deadWallY,DeadlineOptions.deadWallRadius  )
+	end
+	dl_checkWallKillDetection()
+end
+
+
+function dl_checkWallKillDetection()
+	if not deadlineDeadWallElement then return end
+	if getTimePassed() < 1 * 60 * 1000 then return end -- Don't kill before 1 minute passed
+	for i,player in ipairs(getActivePlayers()) do
+		
+		if not isInsideColShape(deadlineDeadWallElement,getElementPosition(player)) then
+			blowVehicle( getPedOccupiedVehicle( player ) )
+		end
+	end
+end
