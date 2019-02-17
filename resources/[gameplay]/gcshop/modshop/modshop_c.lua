@@ -355,8 +355,8 @@ function updateColor()
 	guiSetProperty(modshop_gui[gui_square[editing]], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
 	local editingVehicle = getPedOccupiedVehicle(localPlayer)
 	if editingVehicle and current_vehicle == getElementModel(editingVehicle) then
-		local r1_, g1_, b1_, r2_, g2_, b2_ = getVehicleColor(editingVehicle, true)
-		setVehicleColor(editingVehicle, r1 or r1_, g1 or g1_, b1 or b1_, r2 or r2_, g2 or g2_, b2 or b2_)
+		local r1_, g1_, b1_, r2_, g2_, b2_, r3_, g3_, b3_ = getVehicleColor(editingVehicle, true)
+		setVehicleColor(editingVehicle, r1 or r1_, g1 or g1_, b1 or b1_, r2 or r2_, g2 or g2_, b2 or b2_, r3 or r3_, g3 or g3_, b3 or b3_)
 		local rl_, gl_, bl_ = getVehicleHeadLightColor(editingVehicle)
 		setVehicleHeadLightColor(editingVehicle, rl or rl_, gl or gl_, bl or bl_)
 	end
