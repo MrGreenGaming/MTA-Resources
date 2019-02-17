@@ -77,17 +77,23 @@ function build_modshopWidget(parent, offsetX, offsetY)
 	guiLabelSetHorizontalAlign(gui["lblCol2"], "left", false)
 	guiLabelSetVerticalAlign(gui["lblCol2"], "center")	
 	
-	gui["lblLight"] = guiCreateLabel(30, 159, 51, 21, "Lights:", false, gui["tabVehicleColors"])
+	gui["lblCol3"] = guiCreateLabel(30, 159, 51, 21, "Wheels:", false, gui["tabVehicleColors"])
+	guiLabelSetHorizontalAlign(gui["lblCol3"], "left", false)
+	guiLabelSetVerticalAlign(gui["lblCol3"], "center")
+	
+	gui["lblLight"] = guiCreateLabel(30, 199, 51, 21, "Lights:", false, gui["tabVehicleColors"])
 	guiLabelSetHorizontalAlign(gui["lblLight"], "left", false)
 	guiLabelSetVerticalAlign(gui["lblLight"], "center")
 	
 	gui["squareCol1"] = guiCreateStaticImage(181, 79, 24, 24, "utilites/img/blank_white.png", false, gui["tabVehicleColors"])
 	gui["squareCol2"] = guiCreateStaticImage(181, 119, 24, 24, "utilites/img/blank_white.png", false, gui["tabVehicleColors"])
-	gui["squareLight"] = guiCreateStaticImage(181, 159, 24, 24, "utilites/img/blank_white.png", false, gui["tabVehicleColors"])
+	gui["squareCol3"] = guiCreateStaticImage(181, 159, 24, 24, "utilites/img/blank_white.png", false, gui["tabVehicleColors"])
+	gui["squareLight"] = guiCreateStaticImage(181, 199, 24, 24, "utilites/img/blank_white.png", false, gui["tabVehicleColors"])
 	
 	local col = rgbaToHex(0, 0, 0, 0)
 	guiSetProperty(gui["squareCol1"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
 	guiSetProperty(gui["squareCol2"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
+	guiSetProperty(gui["squareCol3"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
 	guiSetProperty(gui["squareLight"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
 	
 	gui["editCol1"] = guiCreateEdit(80, 80, 91, 20, "", false, gui["tabVehicleColors"])
@@ -96,7 +102,10 @@ function build_modshopWidget(parent, offsetX, offsetY)
 	gui["editCol2"] = guiCreateEdit(80, 120, 91, 20, "", false, gui["tabVehicleColors"])
 	guiEditSetMaxLength(gui["editCol2"], 11)
 	
-	gui["editLight"] = guiCreateEdit(80, 160, 91, 20, "", false, gui["tabVehicleColors"])
+	gui["editCol3"] = guiCreateEdit(80, 160, 91, 20, "", false, gui["tabVehicleColors"])
+	guiEditSetMaxLength(gui["editCol3"], 11)
+	
+	gui["editLight"] = guiCreateEdit(80, 200, 91, 20, "", false, gui["tabVehicleColors"])
 	guiEditSetMaxLength(gui["editLight"], 11)
 	
 	
@@ -104,7 +113,7 @@ function build_modshopWidget(parent, offsetX, offsetY)
 	guiLabelSetHorizontalAlign(gui["lblVehColText"], "left", true)
 	guiLabelSetVerticalAlign(gui["lblVehColText"], "top")
 	
-	gui["btnApplyColor"] = guiCreateButton(30, 210, 90, 23, "Save colors", false, gui["tabVehicleColors"])
+	gui["btnApplyColor"] = guiCreateButton(30, 250, 90, 23, "Save colors", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnApplyColor"], false)
 	if on_btnApplyColor_clicked then
 		addEventHandler("onClientGUIClick", gui["btnApplyColor"], on_btnApplyColor_clicked, false)
@@ -169,13 +178,19 @@ function build_modshopWidget(parent, offsetX, offsetY)
 		addEventHandler("onClientGUIClick", gui["btnCol2"], on_btnCol2_clicked, false)
 	end
 	
-	gui["btnLight"] = guiCreateButton(214, 160, 57, 23, "Change", false, gui["tabVehicleColors"])
+	gui["btnCol3"] = guiCreateButton(214, 160, 57, 23, "Change", false, gui["tabVehicleColors"])
+	guiSetEnabled(gui["btnCol3"], false)
+	if on_btnCol3_clicked then
+		addEventHandler("onClientGUIClick", gui["btnCol3"], on_btnCol3_clicked, false)
+	end
+	
+	gui["btnLight"] = guiCreateButton(214, 200, 57, 23, "Change", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnLight"], false)
 	if on_btnLight_clicked then
 		addEventHandler("onClientGUIClick", gui["btnLight"], on_btnLight_clicked, false)
 	end
 	
-	gui["btnApplyColor_2"] = guiCreateButton(141, 210, 130, 23, "Save colors for all", false, gui["tabVehicleColors"])
+	gui["btnApplyColor_2"] = guiCreateButton(141, 250, 130, 23, "Save colors for all", false, gui["tabVehicleColors"])
 	guiSetEnabled(gui["btnApplyColor_2"], false)
 	if on_btnApplyColor_2_clicked then
 		addEventHandler("onClientGUIClick", gui["btnApplyColor_2"], on_btnApplyColor_2_clicked, false)

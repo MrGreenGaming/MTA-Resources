@@ -236,19 +236,23 @@ function fillInCurrentUpgrades ( vehID )
 	-- Vehicle colors
 	guiSetText(modshop_gui["editCol1"], tonumber(upgrades.slot18) and '' or tostring(upgrades.slot18 or ''))
 	guiSetText(modshop_gui["editCol2"], tonumber(upgrades.slot19) and '' or tostring(upgrades.slot19 or ''))
+	guiSetText(modshop_gui["editCol3"], tonumber(upgrades.slot20) and '' or tostring(upgrades.slot20 or ''))
 	guiSetText(modshop_gui["editLight"], tonumber(upgrades.slot22) and upgrades.slot22..','..upgrades.slot23..','..upgrades.slot24 or '')
 	
-	local t1, t2 = split(tostring(upgrades.slot18), ','), split(tostring(upgrades.slot19), ',')
+	local t1, t2, t3 = split(tostring(upgrades.slot18), ','), split(tostring(upgrades.slot19), ','), split(tostring(upgrades.slot20), ',')
 	tempColors["veh_color1"] = #t1 == 3 and {r = t1[1], g = t1[2], b = t1[3]} or {}
 	tempColors["veh_color2"] = #t2 == 3 and {r = t2[1], g = t2[2], b = t2[3]} or {}
+	tempColors["veh_color3"] = #t3 == 3 and {r = t3[1], g = t3[2], b = t3[3]} or {}
 	tempColors["light_color"] = tonumber(upgrades.slot22) and {r = tonumber(upgrades.slot22), g = tonumber(upgrades.slot23), b = tonumber(upgrades.slot24)} or {}
 	
 	local col1 = rgbaToHex(tonumber(t1[1]), tonumber(t1[2]), tonumber(t1[3]), 255)
 	guiSetProperty(modshop_gui["squareCol1"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col1), tostring(col1), tostring(col1), tostring(col1)))
 	local col2 = rgbaToHex(tonumber(t2[1]), tonumber(t2[2]), tonumber(t2[3]), 255)
 	guiSetProperty(modshop_gui["squareCol2"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col2), tostring(col2), tostring(col2), tostring(col2)))
-	local col3 = rgbaToHex(tonumber(upgrades.slot22), tonumber(upgrades.slot23), tonumber(upgrades.slot24), 255)
-	guiSetProperty(modshop_gui["squareLight"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col3), tostring(col3), tostring(col3), tostring(col3)))
+	local col3 = rgbaToHex(tonumber(t3[1]), tonumber(t3[2]), tonumber(t3[3]), 255)
+	guiSetProperty(modshop_gui["squareCol3"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col3), tostring(col3), tostring(col3), tostring(col3)))
+	local coll = rgbaToHex(tonumber(upgrades.slot22), tonumber(upgrades.slot23), tonumber(upgrades.slot24), 255)
+	guiSetProperty(modshop_gui["squareLight"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(coll), tostring(coll), tostring(coll), tostring(coll)))
 end
 
 
@@ -260,12 +264,14 @@ local editing = ''
 local gui = {
 	["veh_color1"] = "editCol1",
 	["veh_color2"] = "editCol2",
+	["veh_color3"] = "editCol3",
 	["light_color"] = "editLight"
 }
 
 local gui_square = {
 	["veh_color1"] = "squareCol1",
 	["veh_color2"] = "squareCol2",
+	["veh_color3"] = "squareCol3",
 	["light_color"] = "squareLight"
 }
 
@@ -282,7 +288,14 @@ tempColors = {
 		["g"] = nil,
 		["b"] = nil,
 		["a"] = nil,
-		["gui"] = "editCol1"
+		["gui"] = "editCol2"
+	},
+	["veh_color3"] = {
+		["r"] = nil,
+		["g"] = nil,
+		["b"] = nil,
+		["a"] = nil,
+		["gui"] = "editCol3"
 	},
 	["light_color"] = {
 		["r"] = nil,
@@ -307,6 +320,13 @@ function on_btnCol2_clicked(button, state, absoluteX, absoluteY)
 	openColorPicker("veh_color2")
 end
 
+function on_btnCol3_clicked(button, state, absoluteX, absoluteY)
+	if (button ~= "left") or (state ~= "up") then
+		return
+	end
+	openColorPicker("veh_color3")
+end
+
 function on_btnLight_clicked(button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") then
 		return
@@ -326,6 +346,7 @@ function updateColor()
 	if (not colorPicker.isSelectOpen) then return end
 	local r1, g1, b1 = tempColors.veh_color1.r, tempColors.veh_color1.g, tempColors.veh_color1.b
 	local r2, g2, b2 = tempColors.veh_color2.r, tempColors.veh_color2.g, tempColors.veh_color2.b
+	local r3, g3, b3 = tempColors.veh_color3.r, tempColors.veh_color3.g, tempColors.veh_color3.b
 	local rl, gl, bl = tempColors.light_color.r, tempColors.light_color.g, tempColors.light_color.b
 	guiSetText(modshop_gui[gui[editing]], tempColors[editing].r ..','.. tempColors[editing].g ..','.. tempColors[editing].b)
 	
@@ -353,8 +374,9 @@ function on_btnApplyColor_clicked(button, state, absoluteX, absoluteY)
 	end
 	local col1 = split(guiGetText(modshop_gui["editCol1"]), ',')
 	local col2 = split(guiGetText(modshop_gui["editCol2"]), ',')
+	local col3 = split(guiGetText(modshop_gui["editCol3"]), ',')
 	local coll = split(guiGetText(modshop_gui["editLight"]), ',')
-	triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', tostring(current_vehicle), 'vcolor2', col1[1], col1[2], col1[3], col2[1], col2[2], col2[3])
+	triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', tostring(current_vehicle), 'vcolor2', col1[1], col1[2], col1[3], col2[1], col2[2], col2[3], col3[1], col3[2], col3[3])
 	triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', tostring(current_vehicle), 'lcolor', coll[1], coll[2], coll[3])
 end
 
@@ -364,8 +386,9 @@ function on_btnApplyColor_2_clicked(button, state, absoluteX, absoluteY)
 	end
 	local col1 = split(guiGetText(modshop_gui["editCol1"]), ',')
 	local col2 = split(guiGetText(modshop_gui["editCol2"]), ',')
+	local col3 = split(guiGetText(modshop_gui["editCol3"]), ',')
 	local coll = split(guiGetText(modshop_gui["editLight"]), ',')
-	triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', '*', 'vcolor2', col1[1], col1[2], col1[3], col2[1], col2[2], col2[3])
+	triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', '*', 'vcolor2', col1[1], col1[2], col1[3], col2[1], col2[2], col2[3],col3[1], col3[2], col3[3])
 	triggerServerEvent ( 'gcsetmod', resourceRoot, localPlayer, 'gcsetmod', '*', 'lcolor', coll[1], coll[2], coll[3])
 end
 
