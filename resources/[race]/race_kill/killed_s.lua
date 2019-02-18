@@ -124,7 +124,7 @@ function wasted()
 	if exports.race:getRaceMode() == "Destruction derby" then
 		if hitby[source] and isElement(hitby[source][3]) and getElementHealth(hitby[source][3]) > 0.1 and (getTickCount() - hitby[source][2]) < 10000 then
 
-			exports.messages:outputGameMessage(string.gsub (getPlayerName(source), '#%x%x%x%x%x%x', '' ) .. " was killed by " .. hitby[source][1], root, 2.5, 255, 255, 255)
+			exports.messages:outputGameMessage(string.gsub (getElementData(source, 'vip.colorNick') or getPlayerName(source), '#%x%x%x%x%x%x', '' ) .. " was killed by " .. (getElementData(hitby[source][3], 'vip.colorNick') or hitby[source][1]), root, 2.5, 255, 255, 255)
 
 			g_PlayersKills[hitby[source][3]] = g_PlayersKills[hitby[source][3]] + 1
 			setElementData(hitby[source][3], 'kills', g_PlayersKills[hitby[source][3]])
@@ -314,8 +314,8 @@ function shooterKill(killer)
 	if exports.race:getRaceMode() == "Shooter" then
 		if exports.race:getShooterMode() == "shooter" then
 			local victim = source
-			local a = string.gsub (getPlayerName(victim), '#%x%x%x%x%x%x', '' )
-			local b = string.gsub (getPlayerName(killer), '#%x%x%x%x%x%x', '' )
+			local a = string.gsub (getElementData(victim, 'vip.colorNick') or getPlayerName(victim), '#%x%x%x%x%x%x', '' )
+			local b = string.gsub (getElementData(killer, 'vip.colorNick') or getPlayerName(killer), '#%x%x%x%x%x%x', '' )
 			
 			exports.messages:outputGameMessage(a .. " was killed by " .. b, root, 2.5, 255, 255, 255)
 			g_PlayersKills[killer] = g_PlayersKills[killer] + 1
@@ -352,8 +352,8 @@ function deadlineKill(killer)
 
 	if exports.race:getRaceMode() == "Deadline" then
 		local victim = source
-		local a = string.gsub (getPlayerName(victim), '#%x%x%x%x%x%x', '' )
-		local b = string.gsub (getPlayerName(killer), '#%x%x%x%x%x%x', '' )
+		local a = string.gsub (getElementData(victim, 'vip.colorNick') or getPlayerName(victim), '#%x%x%x%x%x%x', '' )
+		local b = string.gsub (getElementData(killer, 'vip.colorNick') or getPlayerName(killer), '#%x%x%x%x%x%x', '' )
 		
 		exports.messages:outputGameMessage(a .. " was killed by " .. b, root, 2.5, 255, 255, 255)
 		g_PlayersKills[killer] = g_PlayersKills[killer] + 1
