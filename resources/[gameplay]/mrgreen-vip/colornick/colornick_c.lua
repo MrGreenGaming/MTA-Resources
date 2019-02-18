@@ -15,7 +15,7 @@ end)
 function spawnGUI()
 	triggerServerEvent('onClientRequestNickSettings', localPlayer)
 
-	guiItems.windowNick = guiCreateWindow(0.36, 0.39, 0.32, 0.14, "New nick", true)
+	guiItems.windowNick = guiCreateWindow(0.36, 0.39, 0.32, 0.14, "Longer nicknames", true)
 	guiWindowSetSizable(guiItems.windowNick, false)
 
 	guiItems.lblText = guiCreateLabel(0.02, 0.21, 0.58, 0.15, "Enter your new name:", true, guiItems.windowNick)
@@ -37,7 +37,7 @@ function spawnGUI()
 	addEventHandler("onClientGUIClick", guiItems.btnCancel, btnCancelClick, false)
 	
 	
-	guiItems.btnReset = guiCreateButton(0.38, 0.71, 0.24, 0.19, "Reset nick", true, guiItems.windowNick)
+	guiItems.btnReset = guiCreateButton(0.3, 0.71, 0.4, 0.19, "Remove custom nick", true, guiItems.windowNick)
 	guiSetProperty(guiItems.btnReset, "NormalTextColour", "FFAAAAAA")
 	
 	addEventHandler("onClientGUIClick", guiItems.btnReset, btnResetClick, false)
@@ -129,4 +129,5 @@ end
 function showWindow()
 	showGUI(true)
 end
-addCommandHandler('nickwindow', showWindow)
+addEvent('onPlayerRequestCustomNickWindow', true)
+addEventHandler('onPlayerRequestCustomNickWindow', root, showWindow)

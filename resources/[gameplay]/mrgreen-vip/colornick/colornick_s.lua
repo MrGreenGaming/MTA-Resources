@@ -10,6 +10,11 @@ end)
 addEvent('onClientChangeCustomNickname', true)
 addEventHandler('onClientChangeCustomNickname', root,
 function(nick)
+	if not hasObjectPermissionTo(source, "command.ban", false) then 
+		respondToClient(source, false, "Admin only feature!")
+		return 
+	end
+	
 	local colorlessNick = string.gsub(nick, "#%x%x%x%x%x%x", "")
 	local nickLength = string.len(colorlessNick)
 	
@@ -20,6 +25,15 @@ function(nick)
 		respondToClient(source, false, "Nick can't be empty")
 		return
 	end
+	
+	for i, p in ipairs(getElementsByType("player")) do
+		if p ~= source and string.lower(getPlayerName(p):gsub("#%x%x%x%x%x%x", "")) == string.lower(colorlessNick) then
+			respondToClient(source, false, "Nick already in use!")
+			return
+		end
+	end
+	
+	setPlayerName(source, string.gsub(nick, '#%x%x%x%x%x%x', ''))
 	
 	setElementData(source, "vip.colorNick", nick)
 	respondToClient(source, true, "Nick successfully set!")
@@ -36,11 +50,23 @@ function()
 	end
 end)
 
+addEventHandler('onPlayerChangeNick', root,
+function()
+	if getElementData(source, 'vip.colorNick') then
+		setElementData(source, 'vip.colorNick', false)
+	end
+end)
+
 function respondToClient(player, success, message)
-	--triggerClientEvent(player, 'onServerChangeCustomNicknameResponse', player, success, message)
 	if success then
 		outputChatBox(message, player, 0, 255, 100)
 	else
-		outputChatBox(message, player, 255, 100, 0)
+		outputChatBox(message, player, 255, 50, 0)
 	end
 end
+
+addCommandHandler('nickwindow', 
+function(player)
+	if not hasObjectPermissionTo(player, "command.ban", false) then return end
+	triggerClientEvent(player, 'onPlayerRequestCustomNickWindow', player)
+end)
