@@ -156,7 +156,7 @@ function Deadline:handleFinishActivePlayer(player)
 	local activePlayers = getActivePlayers()
 	if #activePlayers == 1 then
 		-- self.rankingBoard:add(activePlayers[1], timePassed)
-		showMessage(getPlayerName(activePlayers[1]) .. ' is the final survivor!', 0, 255, 0)
+		showMessage((string.gsub((getElementData(activePlayers[1], 'vip.colorNick') or getPlayerName(activePlayers[1])), '#%x%x%x%x%x%x', '')) .. ' is the final survivor!', 0, 255, 0)
 		triggerEvent( "onPlayerWinDeadline",activePlayers[1],1,timePassed )
 	end
 end
@@ -310,7 +310,7 @@ function Deadline:handleFinishActivePlayer(player)
 
 	if #activePlayers == 1 then
 		-- self.rankingBoard:add(activePlayers[1], timePassed)
-		showMessage(getPlayerName(activePlayers[1]) .. ' is the final survivor!', 0, 255, 0)
+		showMessage((string.gsub((getElementData(activePlayers[1], 'vip.colorNick') or getPlayerName(activePlayers[1])), '#%x%x%x%x%x%x', '')) .. ' is the final survivor!', 0, 255, 0)
 		triggerEvent( "onPlayerWinDeadline",activePlayers[1],1,timePassed )
 	end
 

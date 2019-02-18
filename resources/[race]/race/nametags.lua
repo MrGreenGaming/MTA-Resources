@@ -168,11 +168,11 @@ function nametagHandler()
 					--Draw our text
 					local r,g,b = 255,255,255
 					local team = getPlayerTeam(player)
-					local name = _getPlayerName(player)
+					local name = getElementData(player, 'colorNick') or _getPlayerName(player)
 					if team then
 						r,g,b = getTeamColor(team)
 						if not getElementData(team, 'gcshop.teamid') then
-							name = getPlayerName(player)
+							name = getElementData(player, 'colorNick') or getPlayerName(player)
 						end
 					end
 					if player and getElementData(player, 'markedblocker') then

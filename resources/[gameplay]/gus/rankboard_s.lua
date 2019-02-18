@@ -35,7 +35,7 @@ addEvent("onPlayerWinDeadline")
 function downCountModes(rank,time)
 
 
-	local name = getPlayerName(source)
+	local name = getElementData(source, 'vip.colorNick') or getPlayerName(source)
 	local t = {}
 	t.name = name
 	t.rank = rank
@@ -101,9 +101,9 @@ function addTeamColor(player)
 		if r <= 16 then n1 = "0"..n1 end
 		if g <= 16 then n2 = "0"..n2 end
 		if b <= 16 then n3 = "0"..n3 end
-		return "#"..n1..""..n2..""..n3..""..getPlayerNametagText(player)
+		return "#"..n1..""..n2..""..n3.."".. (getElementData(player, 'vip.colorNick') or getPlayerNametagText(player))
 	else
-		return getPlayerNametagText(player)
+		return (getElementData(player, 'vip.colorNick') or getPlayerNametagText(player))
 	end
 end
 

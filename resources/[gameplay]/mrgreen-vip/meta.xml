@@ -3,6 +3,8 @@
 
     <script src="vip_c.lua" type="client" />
     <script src="vip.lua" type="server" />
+    <script src="colornick/colornick_s.lua" type="server" />
+    <script src="colornick/colornick_c.lua" type="client" />
     
 
 

@@ -49,7 +49,7 @@ function chatbox(message, msgtype)
 		outputChatBox('#FF0000[FREEZECHAT] #FFFFFFAn admin has recently frozen chat.', source, 255, 255, 255, true) 
 		return 
 	end
-    local name = getPlayerName(source)
+    local name = getElementData(source, "vip.colorNick") or getPlayerName(source)
     local serial = getPlayerSerial(source)
     local r, g, b = getPlayerNametagColor(source)
     local text = message--:gsub("%a", string.upper, 1)

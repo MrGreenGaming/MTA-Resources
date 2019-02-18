@@ -71,7 +71,7 @@ function updateWhiteList()
 		if rank <= ranksTop and rank <= g_Rank --top ranks
 		or ranksBefore <= rank and #g_DrawList < lines --front and back ranks
 		or #players - rank < lines - #g_DrawList then
-			g_DrawList[#g_DrawList + 1] = { rank = rank, player = player, name = getPlayerName(player) }
+			g_DrawList[#g_DrawList + 1] = { rank = rank, player = player, name = (getElementData(player, 'vip.colorNick') or getPlayerName(player)) }
 			if g_DrawList[#g_DrawList].rank > 1 and g_DrawList[#g_DrawList].rank - g_DrawList[#g_DrawList - 1].rank ~= 1 then
 				g_DrawList[#g_DrawList - 1].line = true
 			elseif rank <= splitsTop or (g_Rank - splitsBefore <= rank and rank <= g_Rank + splitsBehind) then

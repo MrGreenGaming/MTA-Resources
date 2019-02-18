@@ -52,7 +52,7 @@ function(playerTable,downup)
 
 		if localPlayerFinishInfo == false then
 			for _,t in ipairs(clientTable) do
-				if t.name == getPlayerName(localPlayer) then
+				if t.name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then
 					localPlayerFinishInfo = t
 				end
 			end
@@ -134,7 +134,7 @@ function()
 				local theColor = tocolor(255,255,255,255)
 				local timeColor = "#FFFFFF"
 
-				if name == getPlayerName(localPlayer) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
+				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
 
 
 				if (add == 0) then
@@ -183,7 +183,7 @@ function()
 		-- if not false then -- Test 
 		if not localPlayerRendered and localPlayerFinishInfo ~= false then -- if local player isnt rendered but is finished
 
-			local name = getPlayerName(localPlayer)
+			local name = (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer))
 			local rank = localPlayerFinishInfo.rank
 			local time = localPlayerFinishInfo.time
 
@@ -238,7 +238,7 @@ function()
 				local theColor = tocolor(255,255,255,255)
 				local timeColor = "#FFFFFF"
 
-				if name == getPlayerName(localPlayer) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
+				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
 
 
 				if (add == 0) then
@@ -287,7 +287,7 @@ function()
 		-- if not false then -- Test 
 		if not localPlayerRendered and localPlayerFinishInfo ~= false then -- if local player isnt rendered but is finished
 
-			local name = getPlayerName(localPlayer)
+			local name = (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer))
 			local rank = localPlayerFinishInfo.rank
 			local time = localPlayerFinishInfo.time
 			local kills = localPlayerFinishInfo.kills or false
@@ -349,7 +349,7 @@ function()
 				local theColor = tocolor(255,255,255,255)
 				local timeColor = "#FFFFFF"
 
-				if name == getPlayerName(localPlayer) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
+				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
 
 
 				if (add == 0) then
@@ -398,7 +398,7 @@ function()
 		-- if not false then -- Test 
 		if not localPlayerRendered and localPlayerFinishInfo ~= false then -- if local player isnt rendered but is finished
 
-			local name = getPlayerName(localPlayer)
+			local name = (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer))
 			local rank = localPlayerFinishInfo.rank
 			local time = localPlayerFinishInfo.time
 			local kills = localPlayerFinishInfo.kills or false

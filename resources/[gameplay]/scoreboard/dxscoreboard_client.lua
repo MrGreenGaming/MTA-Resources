@@ -343,7 +343,7 @@ function doDrawScoreboard( rtPass, onlyAnim, sX, sY )
 					for key, column in ipairs( scoreboardColumns ) do
 						local content
 						if column.name == "name" then
-							local playerName = getPlayerName( player )
+							local playerName = getElementData( player, "vip.vip.colorNick" ) or getPlayerName( player )
 							if serverInfo.allowcolorcodes then
 								if string.find( playerName, "#%x%x%x%x%x%x" ) then
 									local colorCodes = {}
@@ -449,7 +449,7 @@ function doDrawScoreboard( rtPass, onlyAnim, sX, sY )
 						for key, column in ipairs( scoreboardColumns ) do
 							local content
 							if column.name == "name" then
-								local playerName = getPlayerName( player )
+								local playerName = getElementData( player, "vip.vip.colorNick" ) or getPlayerName( player )
 								if serverInfo.allowcolorcodes then
 									if string.find( playerName, "#%x%x%x%x%x%x" ) then
 										local colorCodes = {}
