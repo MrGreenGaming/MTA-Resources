@@ -1,5 +1,6 @@
 local acceptedChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 local nickLimit = 22
+local handlerConnect = nil
 
 addEvent('onClientRequestNickSettings', true)
 addEventHandler('onClientRequestNickSettings', root, 
@@ -14,6 +15,14 @@ function(nick)
 		respondToClient(source, false, "Admin only feature!")
 		return 
 	end
+	
+	local isLogged = exports.gc:isPlayerLoggedInGC(source)
+	if not isLogged then 
+		respondToClient(source, false, "Not logged in!")
+		return
+	end
+	
+	local forumid = exports.gc:getPlayerForumID(source)
 	
 	local colorlessNick = string.gsub(nick, "#%x%x%x%x%x%x", "")
 	local nickLength = string.len(colorlessNick)
@@ -33,7 +42,10 @@ function(nick)
 		end
 	end
 	
-	setPlayerName(source, string.gsub(nick, '#%x%x%x%x%x%x', ''))
+	
+	dbExec(handlerConnect, "UPDATE gc_nickcache SET colorname=? WHERE forumid=?", nick, forumid)
+	
+	setPlayerName(source, colorlessNick)
 	
 	setElementData(source, "vip.colorNick", nick)
 	respondToClient(source, true, "Nick successfully set!")
@@ -42,7 +54,17 @@ end)
 addEvent('onClientResetCustomNickname', true)
 addEventHandler('onClientResetCustomNickname', root,
 function()
+	local isLogged = exports.gc:isPlayerLoggedInGC(source)
+	if not isLogged then 
+		respondToClient(source, false, "Not logged in!")
+		return
+	end
+	
+	local forumid = exports.gc:getPlayerForumID(source)
+	
 	local success = setElementData(source, 'vip.colorNick', false)
+	success = success and dbExec(handlerConnect, "UPDATE gc_nickcache SET colorname=null WHERE forumid=?", forumid)
+	
 	if success then
 		respondToClient(source, success, "Your name was successfully reset!")
 	else
@@ -52,9 +74,40 @@ end)
 
 addEventHandler('onPlayerChangeNick', root,
 function()
+	local isLogged = exports.gc:isPlayerLoggedInGC(source)
+	if not isLogged then 
+		respondToClient(source, false, "Not logged in!")
+		return
+	end
+	
+	local forumid = exports.gc:getPlayerForumID(source)
+	
 	if getElementData(source, 'vip.colorNick') then
 		setElementData(source, 'vip.colorNick', false)
+		dbExec(handlerConnect, "UPDATE gc_nickcache SET colorname=null WHERE forumid=?", forumid)
 	end
+end)
+
+addEventHandler('onResourceStart', resourceRoot,
+function()
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
+	if not handlerConnect then
+		outputDebugString('colornick error: could not connect to the mysql db')
+		return
+	end
+end)
+
+addEvent('onGCShopLogin', true)
+addEventHandler('onGCShopLogin', root,
+function(forumid)
+	local qh = dbQuery(handlerConnect, "SELECT colorname FROM gc_nickcache WHERE forumid=?", forumid)
+	local res = dbPoll(qh, -1)
+	if #res ~= 1 then return end
+	if not res[1].colorname then return end
+	
+	setElementData(source, 'vip.colorNick', res[1].colorname)
+	setPlayerName(source, string.gsub(res[1].colorname, "#%x%x%x%x%x%x", ""))
+	respondToClient(source, true, "Your nickname has been set to your VIP nickname.")
 end)
 
 function respondToClient(player, success, message)
