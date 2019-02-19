@@ -1,5 +1,4 @@
 settings = {
-['enableTeamChat'] = true,
 ['adminTag'] = {
     ['enabled'] = true,
     ['ACL'] = { -- A bit more advanced.
@@ -79,7 +78,7 @@ function chatbox(message, msgtype)
                 outputChatBox('#FF0000Error: The message you entered is too big, please lower it!', source, 255, 255, 255, true)
             else
                 --outputChatBox(message, getRootElement(), 255, 255, 255, true)
-				triggerEvent("playerMessage", source, originalmsg, message, 'CHAT: ' .. name .. ': ' .. text)
+				triggerEvent("playerMessage", source, originalmsg, message, 'CHAT: ' .. name .. ': ' .. text, false)
                 aclgroup = split(settings['antiSpamFilter']['execeptionGroups'], ', ') or settings['antiSpamFilter']['execeptionGroups']
                 for i, v in ipairs(aclgroup) do if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(source)), aclGetGroup(v)) then spamCheck = true end end
                 if not spamCheck then
@@ -110,13 +109,14 @@ function chatbox(message, msgtype)
 				message = RGBToHex(r, g, b) .. name .. "#FFFFFF:"..v[4].. text1
                 local message = v[2] .. RGBToHex(r, g, b) .. name .. "#FFFFFF:"..v[4].." " .. text1
 				local ass = v[4].." " .. text1
-                if 200 <= #message then
+				local colorlessMessage = message:gsub("#%x%x%x%x%x%x", "")
+                if 200 <= #colorlessMessage then
                     outputChatBox('#FF0000Error: The message you entered is too long, please shorten it!', source, 255, 255, 255, true)
                     check = 1
                 else
                     check = 1
                     --outputChatBox(message, getRootElement(), 255, 255, 255, true)
-					triggerEvent("playerMessage", source, originalmsg, message, 'CHAT: '.. v[3] .. name .. ': ' .. text1)
+					triggerEvent("playerMessage", source, originalmsg, message, 'CHAT: '.. v[3] .. name .. ': ' .. text1, false)
                     if settings['antiSpamFilter']['enabled'] then
                         aclgroup = split(settings['antiSpamFilter']['execeptionGroups'], ', ') or settings['antiSpamFilter']['execeptionGroups']
                         for i, v in ipairs(aclgroup) do if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(source)), aclGetGroup(v)) then spamCheck = true end end
@@ -135,8 +135,13 @@ function chatbox(message, msgtype)
                 check = 1
             end
         end
-    elseif msgtype == 1 and not settings['enableTeamChat'] then
+    elseif msgtype == 2 then
         cancelEvent()
+		local team = getPlayerTeam(source)
+		if not team then return end
+		local teamR, teamG, teamB = getTeamColor(team)
+		local message = RGBToHex(teamR, teamG, teamB).."(TEAM) "..name..": #FFFFFF"..originalmsg
+		triggerEvent("playerMessage", source, originalmsg, message, 'TEAMCHAT: '..getTeamName(team)..' - '..name.. ': ' ..originalmsg, true)
     end
 end
 addEventHandler("onPlayerChat", getRootElement(), chatbox)
@@ -145,32 +150,59 @@ addEventHandler("onPlayerChat", getRootElement(), chatbox)
 
 addEvent("antiResp")
 addEventHandler("antiResp", root, 
-function(msg, logmsg)
+function(msg, logmsg, teamChat)
     -- Ignored Player Check
     if getElementType( source ) == 'player' then
-        local sourceSerial = getPlayerSerial( source )
-        for i,player in ipairs ( getElementsByType("player") ) do
-            local playerIgnoreSettings = getElementData( player, 'mrgreen-settings.ignorelist' )
-            if playerIgnoreSettings then
-                local isSourceIgnored = false
-                playerIgnoreSettings = fromJSON( playerIgnoreSettings )
-                for i,serial in ipairs(playerIgnoreSettings) do
-                    if sourceSerial == serial then
-                        isSourceIgnored = true
-                        break
-                    end
-                end
+		if not teamChat then
+			local sourceSerial = getPlayerSerial( source )
+			for i,player in ipairs ( getElementsByType("player") ) do
+				local playerIgnoreSettings = getElementData( player, 'mrgreen-settings.ignorelist' )
+				if playerIgnoreSettings then
+					local isSourceIgnored = false
+					playerIgnoreSettings = fromJSON( playerIgnoreSettings )
+					for i,serial in ipairs(playerIgnoreSettings) do
+						if sourceSerial == serial then
+							isSourceIgnored = true
+							break
+						end
+					end
 
-                if not isSourceIgnored then
-                  outputChatBox(msg, player, 255, 255, 255, true)
-                end  
+					if not isSourceIgnored then
+					  outputChatBox(msg, player, 255, 255, 255, true)
+					end  
 
-            else
-              outputChatBox(msg, player, 255, 255, 255, true)
-            end
-        end 
+				else
+				  outputChatBox(msg, player, 255, 255, 255, true)
+				end
+			end 
+		else
+			local team = getPlayerTeam(source)
+			local sourceSerial = getPlayerSerial( source )
+			for i,player in ipairs ( getElementsByType("player") ) do
+				if team == getPlayerTeam(player) then
+					local playerIgnoreSettings = getElementData( player, 'mrgreen-settings.ignorelist' )
+					if playerIgnoreSettings then
+						local isSourceIgnored = false
+						playerIgnoreSettings = fromJSON( playerIgnoreSettings )
+						for i,serial in ipairs(playerIgnoreSettings) do
+							if sourceSerial == serial then
+								isSourceIgnored = true
+								break
+							end
+						end
 
-    else
+						if not isSourceIgnored then
+						  outputChatBox(msg, player, 255, 255, 255, true)
+						end  
+
+					else
+					  outputChatBox(msg, player, 255, 255, 255, true)
+					end
+				end
+			end 
+		end
+
+    elseif not teamChat then
     	outputChatBox(msg, getRootElement(), 255, 255, 255, true)
     end
     outputServerLog(logmsg)

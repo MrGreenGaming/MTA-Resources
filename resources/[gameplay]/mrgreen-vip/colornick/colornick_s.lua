@@ -105,8 +105,8 @@ function(forumid)
 	if #res ~= 1 then return end
 	if not res[1].colorname then return end
 	
-	setElementData(source, 'vip.colorNick', res[1].colorname)
 	setPlayerName(source, string.gsub(res[1].colorname, "#%x%x%x%x%x%x", ""))
+	setElementData(source, 'vip.colorNick', res[1].colorname)
 	respondToClient(source, true, "Your nickname has been set to your VIP nickname.")
 end)
 
