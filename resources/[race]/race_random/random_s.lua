@@ -73,6 +73,7 @@ local voteOutcomes = {
 	{'Falling Rocks on %s', 'fallingRocksEvent', root},
 	{'Weather', 'weatherEvent', root},
 	{'Blocker mode for %s', 'blockerEvent', root},
+	{'Give %s a Hunter', 'R', root},
 }
 local pollDidStart
 
@@ -732,6 +733,27 @@ addEventHandler ( "lowfps", root, lowfps )
 
 function fallingRocksHandler(victim)
 	pollDidStart = nil
+	
+end
+
+--Hunter!
+addEvent("R", true)
+function typeK(victim)
+	pollDidStart = nil
+
+	if not isPlayerAlive(victim) then
+		poll()
+		return
+	end
+	currentVictim = victim
+	local victimName = getPlayerStrippedName(victim)
+	outputChatBox(victimName .." became a Hunter")
+	outputVictimNotice(victim,victimName)
+
+	setElementModel(getPedOccupiedVehicle(victim), 425)
+end
+	addEventHandler("r", root, typeK)
+  
 
 	-- if not isPlayerAlive(victim) then
 	-- 	poll()
