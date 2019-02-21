@@ -373,6 +373,15 @@ end
 addEvent( "serverLowFPS", true )
 addEventHandler( "serverLowFPS", resourceRoot, serverLowFPS )
 
+-- Server gave victim a hunter
+function serverHunter()
+	local veh = getPedOccupiedVehicle(localPlayer)
+	if veh then
+		setHelicopterRotorSpeed(veh,0.2)
+	end
+end
+addEvent("onServerVotedHunter", true)
+addEventHandler("onServerVotedHunter", resourceRoot, serverHunter)
 
 -- Quick spectate victims
 addEvent("onSpectateVictim",true)

@@ -499,7 +499,7 @@ function typeM(victim)
 end
 addEventHandler("M", root, typeM)
 
---??
+--Stairway to heaven
 addEvent("N", true)
 function typeN(victim)
 	pollDidStart = nil
@@ -744,10 +744,15 @@ function hunterHandler(victim)
 	end
 	currentVictim = victim
 	local victimName = getPlayerStrippedName(victim)
+	local veh = getPedOccupiedVehicle(victim)
+	local posx, posy, posz = getElementPosition(veh)
+	setElementPosition(veh,posx,posy,posz+1)
+	setElementModel(veh, 425)
+	triggerClientEvent(victim, "onServerVotedHunter", victim) -- Moved clientsided because of setHelicopterRotorSpeed()
 	outputChatBox(victimName .." became a Hunter")
 	outputVictimNotice(victim,victimName)
-
-	setElementModel(getPedOccupiedVehicle(victim), 425)
+	
+	
 end
 addEventHandler("onRandomHunter", root, hunterHandler)
   
