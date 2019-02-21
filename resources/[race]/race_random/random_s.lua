@@ -73,7 +73,7 @@ local voteOutcomes = {
 	{'Falling Rocks on %s', 'fallingRocksEvent', root},
 	{'Weather', 'weatherEvent', root},
 	{'Blocker mode for %s', 'blockerEvent', root},
-	{'Give %s a Hunter', 'R', root},
+	{'Give %s a Hunter', 'onRandomHunter', root},
 }
 local pollDidStart
 
@@ -731,14 +731,11 @@ end
 addEvent ( "lowfps", true )
 addEventHandler ( "lowfps", root, lowfps )
 
-function fallingRocksHandler(victim)
-	pollDidStart = nil
-	
-end
+
 
 --Hunter!
-addEvent("R", true)
-function typeK(victim)
+addEvent("onRandomHunter", true)
+function hunterHandler(victim)
 	pollDidStart = nil
 
 	if not isPlayerAlive(victim) then
@@ -752,14 +749,14 @@ function typeK(victim)
 
 	setElementModel(getPedOccupiedVehicle(victim), 425)
 end
-	addEventHandler("r", root, typeK)
+addEventHandler("onRandomHunter", root, hunterHandler)
   
-
+function fallingRocksHandler(victim)
+	pollDidStart = nil
 	-- if not isPlayerAlive(victim) then
 	-- 	poll()
 	-- 	return
 	-- end
-
 	currentVictim = victim
 	outputChatBox("Falling rocks at  "..getPlayerStrippedName(victim).."'s position!")
 	outputVictimNotice(victim,getPlayerStrippedName(victim))
@@ -773,7 +770,10 @@ end
 
 			
 			local veh = getPedOccupiedVehicle(victim)
-			if not (veh and isElement(veh)) then return end
+			if not (veh and isElement(veh)) then 
+				return 
+			end
+
 			local speed = getElementSpeed(veh,1)
 			local x, y, z = getElementPosition( veh )
 			local rX,rY,rZ = getElementRotation(veh)
@@ -798,18 +798,27 @@ end
 
 			setElementVelocity( vehicle, 0, 0, -0.5)
 
-			setTimer(function() -- Destroy rc car 
-				detachElements(rock,vehicle)
-				destroyElement(vehicle)
-				end,100,1)
+			setTimer(
+				function() -- Destroy rc car 
+					detachElements(rock,vehicle)
+					destroyElement(vehicle)
+				end
+			,100,1)
 			
 			
 		end
 	,200,math.random(25,35))
+
 	local remaining, executes = getTimerDetails(rockTimer)
-	setTimer(function() for _,rocks in ipairs(theRocks) do if isElement(rocks) then destroyElement(rocks) end end end,remaining*executes+10000,1)
-
-
+	setTimer(
+		function()
+			for _,rocks in ipairs(theRocks) do 
+				if isElement(rocks) then 
+					destroyElement(rocks)
+				end 
+			end 
+		end
+	,remaining*executes+10000,1)
 				
 end
 addEvent ( "fallingRocksEvent", true )
@@ -897,5 +906,6 @@ addEventHandler("onPlayerWasted",root,
 		if source == currentVictim then
 			currentVictim = false
 		end
-	end)
+	end
+)
 
