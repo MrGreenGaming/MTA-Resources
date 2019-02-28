@@ -255,12 +255,12 @@ function updatePlayerTop(player, rank, value)
 		newTime = value
 		if not toptime then
 			q = [[	
-					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname` ) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE date=VALUES(date), value=VALUES(value);
+					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname`, `racemode` ) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE date=VALUES(date), value=VALUES(value);
 					INSERT INTO `maps`( `resname`,`mapname`, `racemode` ) VALUES (?,?,?) ON DUPLICATE KEY UPDATE resname=resname;
 				]]
 			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), country = exports.geoloc:getPlayerCountry(player), new=true})
 			-- outputDebugString('new top for ' .. getPlayerName(player))
-			dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, mapname, mapnameFull, racemode)
+			dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, racemode, mapname, mapnameFull, racemode)
 		elseif (not times.kills and value < toptime.value) or (times.kills and value > toptime.value) then
 			oldPos, oldTime = toptime.pos, toptime.value
 			q = [[
