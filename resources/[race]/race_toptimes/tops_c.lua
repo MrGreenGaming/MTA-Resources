@@ -1,10 +1,10 @@
-local tops = 8
+local tops = 10
 local posx, posy = 0.55, 0.015
-local sizex, sizey = 350, 46+15*(tops+3)
+local sizex, sizey = 350, 46+15*(tops+1)
 local image = 'backg1a.png'
 local imageColor = tocolor(255,255,255,255)
 local titleHeight = 38
-local topsAreaHeight = 227
+local topsAreaHeight = 220
 local personalTopHeight = 34
 local monthlyTopHeight = 34
 local textColor = tocolor(255,255,255)
