@@ -75,3 +75,4 @@ Z       - Voice Chat. Can only be used once the feature has been bought from the
 /toggleicon                                         Toggle typing icon
 /upload                                             Show upload adres
 /currentrecord                                      Shows the current server record with most players online
+/lodrange [range]                                   Changes the current map load & fog distance.
