@@ -166,7 +166,7 @@ function TravelScreen.init()
 	g_dxGUI['travelText1'] = dxText:create('Travelling to', screenWidth/2, screenHeight/2-130, false, 'default-bold', 1.60, 'center' )
 	g_dxGUI['travelText2'] = dxText:create('', screenWidth/2, screenHeight/2-100, false, 'default-bold', 1.70, 'center' )
 	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-70, false, 'default-bold', 1.70, 'center' )
-	g_dxGUI['travelText4'] = dxText:create('', screenWidth/2, screenHeight/2-40, false, 'default-bold', 0.45, 'center' )
+	g_dxGUI['travelText4'] = dxText:create('', screenWidth/2, screenHeight/2-40, false, 'default-bold', 1.45, 'center' )
 	-- colors 
 	g_dxGUI['travelText1']:color(104, 232, 44)
 	g_dxGUI['travelText2']:color(244, 244, 244)
