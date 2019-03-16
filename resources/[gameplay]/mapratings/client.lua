@@ -35,7 +35,7 @@ function(map,likes,dislikes,timesPlayed, author, description, lastTimePlayed, pl
 	mapName = string.sub(mapName, 1, 35)
 	mapAuthor = string.sub(mapAuthor, 1, 48)
 	mapDescription = string.sub(mapDescription, 1, 106)
-	tWidth = dxGetTextWidth(mapName, 0.75, "bankgothic")
+	tWidth = dxGetTextWidth(mapName, 1.75, "default-bold")
 	lWidth = dxGetTextWidth("Likes: "..mapLikes,1.3, "arial")
 	dWidth = dxGetTextWidth("Dislikes: "..mapDislikes,1.3, "arial")
 	--info = true 
@@ -50,11 +50,11 @@ function show()
 	if info then
 		dxDrawRectangle(x,y,width,height, tocolor(0, 0 , 0, backgroundAlpha))
 		if info.mapName then
-			dxDrawText(mapName, x+26, y+14, x+width-24, y+34, tocolor(0, 0, 0, alpha), 0.75, "bankgothic", "center", "center", true, false, false)
-			dxDrawText(mapName, x+28, y+10, x+width-24, y+34, tocolor(0, 0, 0, alpha), 0.75, "bankgothic", "center", "center", true, false, false)
-			dxDrawText(mapName, x+24, y+6, x+width-24, y+34, tocolor(0, 0, 0, alpha), 0.75, "bankgothic", "center", "center", true, false, false)
-			dxDrawText(mapName, x+20, y+10, x+width-24, y+34, tocolor(0, 0, 0, alpha), 0.75, "bankgothic", "center", "center", true, false, false)
-			dxDrawText(mapName, x+24, y+10, x+width-24, y+34, tocolor(255, 255, 255,alpha), 0.75, "bankgothic", "center", "center", true, false, false)
+			dxDrawText(mapName, x+26, y+14, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
+			dxDrawText(mapName, x+28, y+10, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
+			dxDrawText(mapName, x+24, y+6, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
+			dxDrawText(mapName, x+20, y+10, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
+			dxDrawText(mapName, x+24, y+10, x+width-24, y+34, tocolor(255, 255, 255,alpha), 1.75, "default-bold", "center", "center", true, false, false)
 		end	
 		if info.mapLikes then
 			dxDrawText("Likes: "..mapLikes, x+26, y+65, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
@@ -86,10 +86,10 @@ function show()
 		end	
 			
 		if info.mapLastTimePlayed then	
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-19, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-21, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+9, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+11, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
+			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-19, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "center", "center", true, false, false)
+			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-21, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "center", "center", true, false, false)
+			dxDrawText("Last time played: "..mapLastTimePlayed, x+9, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "center", "center", true, false, false)
+			dxDrawText("Last time played: "..mapLastTimePlayed, x+11, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "center", "center", true, false, false)
 			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-20, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "arial", "left", "center", true, false, false)
 		end	
 		-- if info.mapDescription then	
@@ -107,7 +107,7 @@ function show()
 			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-20-23, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "arial", "left", "center", true, false, false)
 		-- end	
 		if info.mapName then
-			dxDrawLine(x+((width-tWidth)/2), y+34, ((x+(width-tWidth)/2)+tWidth), y+34, tocolor(255, 255, 255, 70), 3)
+			dxDrawLine(x+((width-tWidth)/2), y+34, ((x+(width-tWidth)/2)+tWidth), y+34, tocolor(104, 232, 44, 70), 3)
 		end	
 	end	
 end
