@@ -3,6 +3,17 @@
 --
 
 --------------------------------
+-- Dice / Haxardous 3/16/2019
+--------------------------------
+
+addCommandHandler('dice',
+    function()
+		g_rn = math.random(1,6)
+		outputChatBox ("#00EC0B[#FFFFFFDice#00EC0B] A random number between 1 & 6 / Result: #FFFFFF".. g_rn .."#00EC0B.", Source, 255, 255, 255, true)
+	end
+)
+
+--------------------------------
 -- The Command
 --------------------------------
 addCommandHandler('config',
