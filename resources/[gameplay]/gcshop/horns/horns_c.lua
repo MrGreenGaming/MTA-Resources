@@ -451,7 +451,12 @@ hornsTable = {
     [448] = "AAAAhheh",
     [449] = "Careless Whisper",
     [450] = "Zamknij Morde",
-    [451] = "In The Air Tonight",	
+    [451] = "In The Air Tonight",
+    [452] = "Can't Kill Me Motherfuckers",
+    [453] = "Dale Boludo",
+    [454] = "Pinche Putitta",
+    [455] = "La Puta",
+    [456] = "Broom Bom",
 
     
     
