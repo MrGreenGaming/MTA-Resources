@@ -183,7 +183,7 @@ function TravelScreen.show( mapName, authorName )
     g_dxGUI['travelText2']:text(mapName) 
 	g_dxGUI['travelText3']:text(authorName and "Author: " .. authorName or "")
 	-- Edit #4, server ad
-	g_dxGUI['travelText4']:text('Want to try something else? Join our Race server! Press F2')
+	g_dxGUI['travelText4']:text('Want to try something else? Join our second server! Press F2')
 	-- Edit #4, server ad
     showGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3', 'travelText4')
 end
