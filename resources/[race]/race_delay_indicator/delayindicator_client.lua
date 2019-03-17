@@ -163,6 +163,8 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------
 function addTeamColor(player)
+	local customNick = getElementData(player, "vip.colorNick")
+	if customNick then return customNick end
 	local playerTeam = getPlayerTeam ( player ) 
 	if ( playerTeam ) then
 		local r,g,b = getTeamColor ( playerTeam )
