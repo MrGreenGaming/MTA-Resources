@@ -210,7 +210,7 @@ addCommandHandler("lol",
     function(player, cmd, arg)
 		if g_lolPlayers[player] and getTickCount() - g_lolPlayers[player] < 5000 then return end
 		if isPlayerMuted(player) or chat_is_disabled then outputChatBox('You\'re muted.', player) return end
-		local nick = getPlayerName(player)
+		local nick = getElementData(player, "vip.colorNick") or getPlayerName(player)
 		if not arg then
 			outputChatBox(nick.."#FFD700 is laughing out loud.", root, 255, 215, 0, true)
 			exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud." )
@@ -219,7 +219,7 @@ addCommandHandler("lol",
 			local who = findPlayerByName(arg)
 			if not who then outputChatBox("No player found", player)
 			else
-				local whoName = getPlayerName(who)
+				local whoName = getElementData(who, "vip.colorNick") or getPlayerName(who)
 				outputChatBox(nick.."#FFD700 is laughing out loud at "..whoName, root, 255, 215, 0, true)
 				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
 				g_lolPlayers[player] = getTickCount()
