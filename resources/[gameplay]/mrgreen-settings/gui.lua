@@ -14,10 +14,10 @@ GUIEditor = {
 addEventHandler("onClientResourceStart", resourceRoot,
     function()
 local screenW, screenH = guiGetScreenSize()
-        GUIEditor.window[1] = guiCreateWindow((screenW - 586) / 2, (screenH - 458) / 2, 586, 458, "Settings", false)
+        GUIEditor.window[1] = guiCreateWindow((screenW - 586) / 2, (screenH - 500) / 2, 586, 500, "Settings", false)
         guiWindowSetSizable(GUIEditor.window[1], false)
 
-        GUIEditor.tabpanel[1] = guiCreateTabPanel(9, 19, 567, 404, false, GUIEditor.window[1])
+        GUIEditor.tabpanel[1] = guiCreateTabPanel(9, 19, 567, 450, false, GUIEditor.window[1])
 
         GUIEditor.tab[1] = guiCreateTab("Visual Settings", GUIEditor.tabpanel[1])
 
@@ -37,9 +37,20 @@ local screenW, screenH = guiGetScreenSize()
         GUIEditor.edit["drawdistance"] = guiCreateEdit(36, 256+85, 81, 24, "", false, GUIEditor.tab[1])
         guiEditSetMaxLength( GUIEditor.edit["drawdistance"], 5 )
         guiSetProperty(GUIEditor.edit["drawdistance"], "ValidationString", "^[0-9]*$")
-
         GUIEditor.button["drawdistance"] = guiCreateButton(36+85, 256+85, 33, 25, "OK", false, GUIEditor.tab[1])
         guiSetProperty(GUIEditor.button["drawdistance"], "NormalTextColour", "FFAAAAAA")
+  
+
+
+        GUIEditor.label["lodrange"] = guiCreateLabel(36, 237+133, 222, 15, "Set LOD range (1 - 200), 0 to disable", false, GUIEditor.tab[1])
+        setTooltip(GUIEditor.label["lodrange"], "This number represents how far out you can look into the game world. Increasing it may cause low FPS!")
+        GUIEditor.edit["lodrange"] = guiCreateEdit(36, 256+133, 81, 24, "", false, GUIEditor.tab[1])
+        guiEditSetMaxLength( GUIEditor.edit["lodrange"], 5 )
+        guiSetProperty(GUIEditor.edit["lodrange"], "ValidationString", "^[0-9]*$")
+        GUIEditor.button["lodrange"] = guiCreateButton(36+85, 256+133, 33, 25, "OK", false, GUIEditor.tab[1])
+        guiSetProperty(GUIEditor.button["lodrange"], "NormalTextColour", "FFAAAAAA")
+      
+
         GUIEditor.label["bloom"] = guiCreateLabel(72, 75, 209, 14, "Enable Bloom", false, GUIEditor.tab[1])
 
         GUIEditor.label["fpslimit"] = guiCreateLabel(292, 272, 222, 15, "Set client FPS Limit (25 - 100)", false, GUIEditor.tab[1])
@@ -258,9 +269,9 @@ local screenW, screenH = guiGetScreenSize()
         
 
 
-        GUIEditor.button[3] = guiCreateButton(505, 425, 71, 23, "Close", false, GUIEditor.window[1])
+        GUIEditor.button[3] = guiCreateButton(505, 475, 71, 23, "Close", false, GUIEditor.window[1])
         guiSetProperty(GUIEditor.button[3], "NormalTextColour", "FFAAAAAA")
-        GUIEditor.label[33] = guiCreateLabel(9, 427, 262, 21, "Settings for the Mr. Green Servers.", false, GUIEditor.window[1])
+        GUIEditor.label[33] = guiCreateLabel(9, 467, 262, 21, "Settings for the Mr. Green Servers.", false, GUIEditor.window[1])
         guiSetFont(GUIEditor.label[33], "default-small")
         guiLabelSetVerticalAlign(GUIEditor.label[33], "bottom")
 
