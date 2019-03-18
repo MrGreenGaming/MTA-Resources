@@ -157,23 +157,21 @@ function Deadline.handleSpeed()
 
 	local currentSpeed = dl_getElementSpeed(localVehicle,'km/h')
 	if not currentSpeed then return end
-	-- Deadline.notMovingTick
+
 	-- Anti Camp Check
 	if currentSpeed == 0 or dl_isVehicleReversing(localVehicle) then
 		if Deadline.notMovingTick then -- If tick already exists,
 			local timeDiff = getTickCount() - Deadline.notMovingTick
-			-- outputDebugString('Not Moving/ Reversing time Difference = '..tostring(timeDiff))
-			-- outputDebugString('Diff: '..tostring(timeDiff)..' - notmovingTime: '..DeadlineOptions.notMovingKillTime)
+
 
 			if timeDiff > (DeadlineOptions.notMovingKillTime/2) and warnedPlayerNotMoving == false then -- warn player for not moving forward, warns at half time of killing
-				outputChatBox("WARNING: you will be killed if you don't move forward!", 255, 0, 0)
-				outputChatBox("WARNING: you will be killed if you don't move forward!", 255, 0, 0)
+				triggerServerEvent("dl_warnPlayerNotMoving", resourceRoot,"warn")
 				warnedPlayerNotMoving = true
 
 			elseif timeDiff > DeadlineOptions.notMovingKillTime then -- Kill player for not moving forward
 				setElementHealth( localPlayer, 0 )
 				warnedPlayerNotMoving = false
-				outputChatBox("You have been killed for not moving forward!", 255, 0, 0)
+				triggerServerEvent("dl_warnPlayerNotMoving", resourceRoot,"kill")
 			end
 
 		else -- If tick doesnt exist, make tick
@@ -186,8 +184,6 @@ function Deadline.handleSpeed()
 
 	if currentSpeed < DeadlineOptions.minimumSpeed then
 		-- Instead of putting speed to minimumSpeed, gradually increase it.
-		-- dl_setElementSpeed(localVehicle,'km/h',DeadlineOptions.minimumSpeed)
-		-- outputDebugString( 5+currentSpeed)
 		local incrSpeed = (DeadlineOptions.minimumSpeed/3)+currentSpeed
 		dl_setElementSpeed(localVehicle,'km/h',(incrSpeed))
 
@@ -618,7 +614,7 @@ end
 
 
 local dl_alphaMode = 'up' -- 'up' or 'down'
-local dl_alphaMax = 180
+local dl_alphaMax = 145
 local dl_alphaMin = 80
 local dl_alphaStepUp = 4
 local dl_alphaStepDown = 3

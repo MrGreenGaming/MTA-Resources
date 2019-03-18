@@ -22,7 +22,7 @@ DeadlineOptions.godmode = true -- set bool if vehicles should be immume to colli
 DeadlineOptions.lineAliveTime = 2500 -- Set how long a line should be alive (in ms) -- 1350
 -- Dead Wall
 DeadlineOptions.deadWallRadiusMin = 100
-DeadlineOptions.deadWallRadiusMax = 2000 -- Affects timing, timer is set to 100ms/-1 radius.
+DeadlineOptions.deadWallRadiusMax = 1800 -- Affects timing, timer is set to 100ms/-1 radius.
 DeadlineOptions.deadWallRadius = DeadlineOptions.deadWallRadiusMax
 DeadlineOptions.deadWallX = false --Set to random spawn point
 DeadlineOptions.deadWallY = false --Set to random spawn point
@@ -222,7 +222,7 @@ end
 function Deadline:start()
 	self:cleanup()
 	local options = {
-		duration = 5 * 60 * 1000,
+		duration = 4 * 60 * 1000,
 		respawn = 'none',
 		autopimp = false,
 		autopimp_map_can_override = false,
@@ -407,6 +407,20 @@ function deadlineClientPlayerKillDetection(killer)
 
 end
 addEventHandler( 'onPlayerDeadlineWasted',getRootElement(),deadlineClientPlayerKillDetection )
+
+addEvent("dl_warnPlayerNotMoving",true)
+addEventHandler( 'dl_warnPlayerNotMoving', resourceRoot, 
+	function (action)
+		if client and getElementType(client) == "player" then
+			destroyMessage(client)
+			if action == "warn" then
+				showMessage("WARNING: you will be killed if you don't move forward!",255,0,0,client)
+			elseif action == "kill" then
+				showMessage("You have been killed for not moving forward!",255,0,0,client)
+			end
+		end
+	end
+)
 
 function Deadline.admincommands (playerSource, commandName, option, value)
 	-- Deadline.receiveNewSettings
