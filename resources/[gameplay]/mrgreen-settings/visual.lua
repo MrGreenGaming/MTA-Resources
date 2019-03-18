@@ -265,7 +265,7 @@ function visual_ButtonHandler()
 		local nr = tonumber(guiGetText( GUIEditor.edit["lodrange"] ))
 
 		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
-		if nr > 200 or nr < 0 then outputChatBox("[SETTINGS] LOD range must be inbetween 1 and 200. Set to 0 to disable.",255) return end
+		if nr > 300 or nr < 0 then outputChatBox("[SETTINGS] LOD range must be inbetween 1 and 300. Set to 0 to disable.",255) return end
 		if nr == 0 then
 			outputChatBox("[SETTINGS] LOD range disabled",0,255)
 		else
@@ -439,7 +439,7 @@ end
 
 function setLODRange(nr)
 	if not nr then nr = getLODRange() end
-	if nr >=1 and nr <= 200 then
+	if nr >=1 and nr <= 300 then
 		for k,v in ipairs(getElementsByType'object') do 
 			engineSetModelLODDistance(getElementModel(v), tonumber(nr)) 
 		end
@@ -636,7 +636,7 @@ function setVisualGUI()
 			end
 
 		elseif f == "lodrange" then
-			if u >= 1 and u <= 200 then
+			if u >= 1 and u <= 300 then
 				guiSetText( GUIEditor.edit["lodrange"], u )
 				setLODRange(u)
 			end

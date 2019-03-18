@@ -42,7 +42,7 @@ local screenW, screenH = guiGetScreenSize()
   
 
 
-        GUIEditor.label["lodrange"] = guiCreateLabel(36, 237+133, 222, 15, "Set LOD range (1 - 200), 0 to disable", false, GUIEditor.tab[1])
+        GUIEditor.label["lodrange"] = guiCreateLabel(36, 237+133, 222, 15, "Set LOD range (1 - 300), 0 to disable", false, GUIEditor.tab[1])
         setTooltip(GUIEditor.label["lodrange"], "This number represents how far out you can look into the game world. Increasing it may cause low FPS!")
         GUIEditor.edit["lodrange"] = guiCreateEdit(36, 256+133, 81, 24, "", false, GUIEditor.tab[1])
         guiEditSetMaxLength( GUIEditor.edit["lodrange"], 5 )
