@@ -380,3 +380,14 @@ function correctWeather()
 		setWeather(1)
 	end
 end
+
+--------------------------------
+-- Dice / Haxardous
+--------------------------------
+
+addCommandHandler('dice',
+    function()
+		local g_rn = math.random(1,6)
+		outputChatBox ("#00EC0B[#FFFFFFDice#00EC0B] A random number between 1 & 6 / Result: #FFFFFF".. g_rn .."#00EC0B.", Source, 255, 255, 255, true)
+	end
+)
