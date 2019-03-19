@@ -1,7 +1,7 @@
 local mostMonthlyReward = 20		-- GC for having the most monthly tops in a month
 local monthlyReward = 5				-- GC for having a monthly top
 local baseTop1Reward = 5			-- Base top1 reward, multiplied with amount of months on server
-local displayTopCount = 8
+local displayTopCount = 10
 
 local times = {}					-- [top] = {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), new=true}
 local monthtimes = {}
@@ -328,7 +328,7 @@ addEventHandler('onPlayerFinish', root,
 		if forumid then
 			updatePlayerTop(source, rank, time)
 		else
-			return outputChatBox("You need to login to your Green-Coins account in order to do toptimes!", source)
+			return outputChatBox("You need to login to your Green-Coins account in order to do toptimes!", source, 255, 0, 0, true)
 		end
 	end
 , true, 'low')
@@ -621,16 +621,16 @@ addCommandHandler('tops',
 		ex = ex and ex < 11 and ex or 3 
 		local forumid = exports.gc:getPlayerForumID(p)
 		if not forumid then
-			return outputChatBox("You are not logged in to Greencoins!", p)
+			return outputChatBox("You are not logged in to Greencoins!", p, 255, 0, 0, true)
 		end
 		dbQuery(function(qh)
 			local result = dbPoll(qh, 0)
 			if not result then
 				return outputDebugString('/tops failed ' .. forumid, 2)
 			elseif #result == 0 then
-				outputChatBox("You have no tops!", p)
+				outputChatBox("You have no tops!", p, 255, 0, 0, true)
 			else
-				outputChatBox('Your toptimes: ' , p)
+				outputChatBox('Your toptimes: ' , p, 0, 255, 0, true)
 				for pos = 1,ex do
 					local r = nil
 					for _,row in ipairs(result) do
@@ -640,9 +640,9 @@ addCommandHandler('tops',
 						end
 					end
 					if not r then
-						outputChatBox('* Top' .. pos .. '\'s = ' .. 0 , p)
+						outputChatBox('* Top' .. pos .. '\'s = #FFFFFF' .. 0 , p, 0, 255, 0, true)
 					else
-						outputChatBox('* Top' .. pos .. '\'s = ' .. r.count , p)
+						outputChatBox('* Top' .. pos .. '\'s = #FFFFFF' .. r.count , p, 0, 255, 0, true)
 						outputConsole(r.mapnames)
 					end
 				end
