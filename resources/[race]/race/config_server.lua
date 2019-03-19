@@ -2,10 +2,6 @@
 -- config_server.lua
 --
 
---------------------------------
--- Dice / Haxardous 3/16/2019
---------------------------------
-
 addCommandHandler('dice',
     function()
 		g_rn = math.random(1,6)
