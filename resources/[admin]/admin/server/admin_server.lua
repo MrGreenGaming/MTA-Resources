@@ -531,6 +531,7 @@ function aAdminMenu ( player, command )
 end
 addCommandHandler ( "admin", aAdminMenu )
 
+
 function aAction ( type, action, admin, player, data, more )
 	if ( aLogMessages[type] ) then
 		function aStripString ( string )
@@ -1541,6 +1542,13 @@ end
 addEventHandler("onPlayerChangeNick", root, checkNickOnChange)
 
 
+addEvent("forceReconnect", true)
+addEventHandler("forceReconnect", root, 
+function (name)
+executeCommandHandler("freconnect", client, name)
+end
+)
+
 addEvent("getSerialNicks", true)
 addEventHandler("getSerialNicks", root, 
 function (serial)
@@ -1698,3 +1706,26 @@ function serialunmute(pAdmin, _, serial)
 	outputServerLog("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x",""))
 end
 addCommandHandler('serialunmute', serialunmute)
+
+function forceReconnect( player, command, target )
+	if ( hasObjectPermissionTo ( player, "command.kick" ) ) then
+		if not target then outputChatBox("Usage: /"..command.." [Target player partial name]", player, 255, 0, 0) return end
+		local targetPlayer = getPlayerFromPartialName(target)
+		if not targetPlayer then outputChatBox("Target player could not be found!", player, 255, 0, 0) return end
+		redirectPlayer(targetPlayer, "", 0, "")
+	end
+end
+addCommandHandler("freconnect", forceReconnect)
+addCommandHandler("freconn", forceReconnect)
+
+function getPlayerFromPartialName(name)
+    local name = name and name:gsub("#%x%x%x%x%x%x", ""):lower() or nil
+    if name then
+        for _, player in ipairs(getElementsByType("player")) do
+            local name_ = getPlayerName(player):gsub("#%x%x%x%x%x%x", ""):lower()
+            if name_:find(name, 1, true) then
+                return player
+            end
+        end
+    end
+end
