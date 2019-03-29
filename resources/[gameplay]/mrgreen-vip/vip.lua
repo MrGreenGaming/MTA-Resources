@@ -86,3 +86,30 @@ function blink(player)
 	
 	blinkTable[player] = playerObject
 end
+
+addEventHandler('onPlayerQuit', root, 
+function()
+	if blinkTable[source] and blinkTable[source]["blinking"] then
+		killTimer(blinkTable[source]["timer"])
+		blinkTable[source] = false
+	end
+end)
+
+addEventHandler('onResourceStop', resourceRoot,
+function()
+	for i, p in ipairs(getElementsByType('player')) do
+		if blinkTable[p] and blinkTable[p]["blinking"] then
+			killTimer(blinkTable[p]["timer"])
+			blinkTable[p] = false
+			
+			local veh = getPedOccupiedVehicle(p)
+			if veh then
+				setVehicleOverrideLights(veh, 0)				
+				setVehicleLightState(veh, 0, 0)
+				setVehicleLightState(veh, 3, 0)
+				setVehicleLightState(veh, 1, 0)
+				setVehicleLightState(veh, 2, 0)
+			end
+		end
+	end
+end)
