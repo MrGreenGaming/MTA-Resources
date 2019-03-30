@@ -2,6 +2,7 @@ settings = {
 ['adminTag'] = {
     ['enabled'] = true,
     ['ACL'] = { -- A bit more advanced.
+        { 'bday', '#FF00FF[Happy Birthday!] ', '[Happy Birthday!]', '#FFFFFF', '%[Happy Birthday!%]' },
         { 'Developer', '#FFA500[Dev] ', '[Dev]', '#FFFFFF', '%[Dev%]' },
         { 'Admin', '#0099FF[Admin] ', '[Admin]', '#FFFFFF', '%[Admin%]' },
         { 'Killers', '#00FFFF[Mod] ', '[Mod]', '#FFFFFF', '%[Mod%]' },
