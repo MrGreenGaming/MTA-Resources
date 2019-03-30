@@ -1732,9 +1732,9 @@ function muteList( player, command )
 				if timeLeft < 60 then
 					timeString = timeLeft..' s'
 				elseif timeLeft < 3600 then
-					timeString = math.floor(timeLeft / 60)..' m and '..math.ceil(timeLeft - (math.floor(timeLeft / 60) * 60))..' s'
+					timeString = math.floor(timeLeft / 60)..' m and '..math.floor(timeLeft - (math.floor(timeLeft / 60) * 60))..' s'
 				else
-					timeString = math.floor(timeLeft / 60 / 60)..' h and '..math.ceil((timeLeft - (math.floor(timeLeft / 60 / 60) * 60 * 60)) / 60)..' m'
+					timeString = math.floor(timeLeft / 60 / 60)..' h and '..math.floor((timeLeft - (math.floor(timeLeft / 60 / 60) * 60 * 60)) / 60)..' m'
 				end
 				
 				outputString = outputString .. string.gsub(getPlayerName(p),"#%x%x%x%x%x%x","") .. " (" .. timeString .. "), "
