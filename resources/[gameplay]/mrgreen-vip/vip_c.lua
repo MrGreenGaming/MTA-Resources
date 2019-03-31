@@ -32,6 +32,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
         guiSetProperty(btnPattern3, "NormalTextColour", "FFAAAAAA")
         btnDisable = guiCreateButton(0.46, 0.72, 0.19, 0.15, "Disable blinking lights", true, mainWindow)
         guiSetProperty(btnDisable, "NormalTextColour", "FFAAAAAA")    
+		checkTag = guiCreateCheckBox(0.03, 0.80, 0.21, 0.07, "Show VIP tag over nametag", true, true, mainWindow)
 		
 		addEventHandler('onClientGUIClick', btnSpeed1, speedClick, false)
 		addEventHandler('onClientGUIClick', btnSpeed2, speedClick, false)
@@ -48,9 +49,19 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		addEventHandler('onClientGUIClick', btnNickname, nickButtonClicked, false)
 		addEventHandler('onClientGUIClick', btnRainbow, rainbowButtonClicked, false)
 		
+		addEventHandler('onClientGUIClick', checkTag, nametagToggle, false)
+		
 		guiSetVisible(mainWindow, false)
     end
 )
+
+function nametagToggle(btn, state)
+	if btn~="left" or state~="up" then return end
+	
+	local showNametag = guiCheckBoxGetSelected(checkTag)
+	
+	triggerServerEvent('vip-showNametag', localPlayer, showNametag)
+end
 
 function nickButtonClicked(btn, state)
 	if btn~="left" or state~="up" then return end
@@ -120,6 +131,13 @@ end
 
 function toggleGUI()
 	guiShown = not guiShown
+	if guiShown then
+		if getElementData(localPlayer, 'gcshop.vipbadge') then
+			guiCheckBoxSetSelected(checkTag, true)
+		else
+			guiCheckBoxSetSelected(checkTag, false)
+		end
+	end
 	guiSetVisible(mainWindow, guiShown)
 	showCursor(guiShown)
 end

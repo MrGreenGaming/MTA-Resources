@@ -1,4 +1,4 @@
-function isPlayerVIP(player) --placeholder
+function isPlayerVIP(player)
 	if not exports.gc:isPlayerLoggedInGC(player) then return false end
 	
 	local rootNode = xmlLoadFile('vip.xml')
@@ -36,6 +36,8 @@ function addVIP(player, cmd, target)
 	
 	xmlSaveFile(rootNode)
 
+	setElementData(targetPlayer, 'gcshop.vipbadge', 'vip')
+	
 	outputChatBox('Success!', player, 100, 255, 100)
 end
 addCommandHandler('addvip', addVIP)
@@ -51,6 +53,13 @@ function removeVIP(player, cmd, forumid)
 		if xmlNodeGetValue(n) and tostring(xmlNodeGetValue(n)) == forumid then
 			xmlDestroyNode(n)
 			xmlSaveFile(rootNode)
+			
+			for i,p in ipairs(getElementsByType('player')) do
+				if exports.gc:isPlayerLoggedInGC(p) and tostring(exports.gc:getPlayerForumID(p)) == forumid then
+					setElementData(p, 'gcshop.vipbadge', false)
+				end
+			end
+			
 			outputChatBox("Success!", player, 100, 255, 100)
 			return
 		end
@@ -91,6 +100,21 @@ end)
 
 addEventHandler('onPlayerJoin', root, function()
 	bindKey(source, 'F7', 'down', toggleGUI)
+end)
+
+addEventHandler('onGCLogin', root, function()
+	if isPlayerVIP(source) then
+		setElementData(source, 'gcshop.vipbadge', 'vip')
+	end
+end)
+
+addEvent('vip-showNametag', true)
+addEventHandler('vip-showNametag', root, function(enable)
+	if enable then
+		setElementData(source, 'gcshop.vipbadge', 'vip')
+	else 
+		setElementData(source, 'gcshop.vipbadge', false)
+	end
 end)
 
 --Lights blinking

@@ -6,6 +6,7 @@ settings = {
         { 'Developer', '#FFA500[Dev] ', '[Dev]', '#FFFFFF', '%[Dev%]' },
         { 'Admin', '#0099FF[Admin] ', '[Admin]', '#FFFFFF', '%[Admin%]' },
         { 'Killers', '#00FFFF[Mod] ', '[Mod]', '#FFFFFF', '%[Mod%]' },
+        { 'VIP', '#FFFF00[VIP] ', '[VIP]', '#FFFFFF', '%[VIP%]' },
         { 'Everyone', '', '', '#DDDDDD' },
     }
 },
@@ -95,7 +96,7 @@ function chatbox(message, msgtype)
             return
         end
         for _,v in ipairs(settings['adminTag']['ACL']) do
-            if isObjectInACLGroup('user.' .. account, aclGetGroup(v[1])) and check == 0 and not spam[serial] then
+            if (v[1]~='VIP' and isObjectInACLGroup('user.' .. account, aclGetGroup(v[1])) and check == 0 and not spam[serial]) or (v[1] == 'VIP' and exports['mrgreen-vip']:isPlayerVIP(source) and check == 0 and not spam[serial])then
 				local text1 = text
 				if settings['colorFilter']['enabled'] then
 					aclgroup = split(settings['colorFilter']['allowedGroups'], ',') or settings['colorFilter']['allowedGroups']
