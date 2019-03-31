@@ -3,13 +3,15 @@
 
     <script src="vip_c.lua" type="client" />
     <script src="vip.lua" type="server" />
+	
+	<!-- Color Nick -->
     <script src="colornick/colornick_s.lua" type="server" />
     <script src="colornick/colornick_c.lua" type="client" />
-    
-
-
+	
     <!-- Rainbow Colors -->
     <script src="items/rainbowcolors/rainbowcolors_c.lua" type="client" />
 	<script src="items/rainbowcolors/rainbowcolors_s.lua" type="server" />
 
+	<!-- Exports -->
+	<export function="isPlayerVIP" type="server"/>
 </meta>

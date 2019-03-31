@@ -1,107 +1,217 @@
---Lights blinking
-local blinkTable = {}
-function cmdLightBlink(player, cmd, time)
-	if not hasObjectPermissionTo ( player, "command.ban" ) then return end  -- change it to vip only
+function isPlayerVIP(player) --placeholder
+	if not exports.gc:isPlayerLoggedInGC(player) then return false end
 	
-	local playerObject
+	local rootNode = xmlLoadFile('vip.xml')
+	if not rootNode then return false end
 	
-	if not time then 
-		if blinkTable[player] then
-			killTimer(blinkTable[player]["timer"])
-			blinkTable[player] = false
-			local vehicle = getPedOccupiedVehicle(player)
-			if vehicle then
-				setVehicleOverrideLights(vehicle, 2)
-				setVehicleLightState(vehicle, 0, 0)
-				setVehicleLightState(vehicle, 1, 0)
-				setVehicleLightState(vehicle, 2, 0)
-				setVehicleLightState(vehicle, 3, 0)
-			end
-			outputChatBox("Stopped blinking", player, 50, 255, 50)
-		else
-			outputChatBox("Usage: /"..cmd.." [time in milliseconds]", player, 255, 0, 0)
-		end
-		return
+	local forumid = exports.gc:getPlayerForumID(player)
+	
+	local vipNodes = xmlNodeGetChildren(rootNode)
+	for i,n in ipairs(vipNodes) do
+		if xmlNodeGetValue(n) and tostring(xmlNodeGetValue(n)) == tostring(forumid) then return true end
 	end
 	
-	if not tonumber(time) then
-		outputChatBox("Time in milliseconds must be a number!", player, 255, 0, 0)
-		return
-	end
-	
-	if tonumber(time) < 250 or tonumber(time) > 1000 then
-		outputChatBox("Time must be between 250 and 1000 milliseconds!", player, 255, 0, 0)
-		return
-	end
-	
-	if blinkTable[player] then
-		playerObject = blinkTable[player]
-	else
-		playerObject = {}
-	end
-	
-	if playerObject.blinking then
-		killTimer(blinkTable[player]["timer"])
-		blinkTable[player]["timer"] = setTimer(blink, tonumber(time), 0, player)
-		outputChatBox("Updated blinking time to "..time.." milliseconds", player, 50, 255, 50)
-	else
-		playerObject.blinking = true
-		playerObject.left = true
-		playerObject.timer = setTimer(blink, tonumber(time), 0, player)
-		blinkTable[player] = playerObject
-		outputChatBox("Started blinking every "..time.." milliseconds", player, 50, 255, 50)
-		outputChatBox("To stop the blinking, type /"..cmd, player, 50, 255, 50)
-	end
+	return false
 end
-addCommandHandler('lightblink', cmdLightBlink)
 
-function blink(player)
-	if not blinkTable[player] then return end
+function addVIP(player, cmd, target)
+	if not hasObjectPermissionTo(player, 'command.addGC') then return end
 	
-	local playerObject = blinkTable[player]
-	if not playerObject.blinking then return end
+	local targetPlayer = getPlayerFromName(target)
 	
-	local vehicle = getPedOccupiedVehicle(player)
-	if not vehicle then return end
+	if not targetPlayer then outputChatBox("Player not found!", player, 255, 0, 0) return end
+		
+	if not exports.gc:isPlayerLoggedInGC(targetPlayer) then outputChatBox("Player is not logged in!", player, 255, 0, 0) return end
 	
-	setVehicleOverrideLights(vehicle, 2)
+	local forumid = exports.gc:getPlayerForumID(targetPlayer)
 	
-	local leftValue
-	local rightValue
-	
-	if playerObject.left then
-		leftValue = 0
-		rightValue = 1
-	else
-		leftValue = 1
-		rightValue = 0
+	local rootNode = xmlLoadFile('vip.xml')
+	if not rootNode then
+		rootNode = xmlCreateFile('vip.xml', 'vips')
 	end
 	
-	setVehicleLightState(vehicle, 0, leftValue)
-	setVehicleLightState(vehicle, 3, leftValue)
-	setVehicleLightState(vehicle, 1, rightValue)
-	setVehicleLightState(vehicle, 2, rightValue)
+	local child = xmlCreateChild(rootNode, 'vip')
 	
-	playerObject.left = not playerObject.left
+	xmlNodeSetValue(child, tostring(forumid))
 	
-	blinkTable[player] = playerObject
+	xmlSaveFile(rootNode)
+
+	outputChatBox('Success!', player, 100, 255, 100)
+end
+addCommandHandler('addvip', addVIP)
+
+function removeVIP(player, cmd, forumid)
+	if not hasObjectPermissionTo(player, 'command.addGC') then return end
+	
+	local rootNode = xmlLoadFile('vip.xml')
+	if not rootNode then outputChatBox('No VIP file found!', player, 255, 0, 0) return end
+	
+	local vipNodes = xmlNodeGetChildren(rootNode)
+	for i,n in ipairs(vipNodes) do
+		if xmlNodeGetValue(n) and tostring(xmlNodeGetValue(n)) == forumid then
+			xmlDestroyNode(n)
+			xmlSaveFile(rootNode)
+			outputChatBox("Success!", player, 100, 255, 100)
+			return
+		end
+	end
+	
+	outputChatBox('Given forumid is not VIP!', player, 255, 0, 0)
+end
+addCommandHandler('removevip', removeVIP)
+
+function vipList(player, cmd)
+	if not hasObjectPermissionTo(player, 'command.addGC') then return end
+	
+	local rootNode = xmlLoadFile('vip.xml')
+	if not rootNode then outputChatBox('No VIP file found!', player, 255, 0, 0) return end
+	
+	local outputString = ''
+	local vipNodes = xmlNodeGetChildren(rootNode)
+	for i,n in ipairs(vipNodes) do
+		outputString = outputString .. xmlNodeGetValue(n) .. ', '
+	end
+	
+	outputString = string.sub(outputString, 0, string.len(outputString) - 2)
+	
+	outputChatBox('Current VIP players: '..outputString, player, 100, 255, 100)
+end
+addCommandHandler('viplist', vipList)
+
+function toggleGUI(player)
+	if not isPlayerVIP(player) then return end
+	triggerClientEvent(player, 'vip-toggleGUI', player)
+end
+
+addEventHandler('onResourceStart', resourceRoot, function()
+	for i,p in ipairs(getElementsByType('player')) do
+		bindKey(p, 'F7', 'down', toggleGUI)
+	end
+end)
+
+addEventHandler('onPlayerJoin', root, function()
+	bindKey(source, 'F7', 'down', toggleGUI)
+end)
+
+--Lights blinking
+local mainTimer = false
+local blinkTable = {}
+
+addEvent('vip-startBlinking', true)
+addEventHandler('vip-startBlinking', root,
+function(pattern, speed)
+	if not isPlayerVIP(source) then outputChatBox("You are not allowed to use this function. Only VIP members are allowed to use this function!", source, 255, 0, 0) return end
+	if pattern == 0 or speed == 0 then 
+		if blinkTable[source] then blinkTable[source] = nil end
+		local veh = getPedOccupiedVehicle(source)
+		if veh then
+			setVehicleOverrideLights(veh, 0)
+			setVehicleLightState(veh, 0, 0)
+			setVehicleLightState(veh, 1, 0)
+			setVehicleLightState(veh, 2, 0)
+			setVehicleLightState(veh, 3, 0)
+		end
+		outputChatBox('Light blinking is disabled!', source, 100, 255, 100)
+		return
+	end
+	
+	local playerObject = {}
+	
+	playerObject.pattern = pattern
+	playerObject.speed = speed
+	playerObject.cyclesLeft = speed
+	playerObject.stage = 1
+	
+	blinkTable[source] = playerObject
+	
+	if not mainTimer or not isTimer(mainTimer) then mainTimer = setTimer(doBlinking, 250, 0) end
+	
+	outputChatBox('Light blinking is enabled!', source, 100, 255, 100)
+end)
+
+function doBlinking()
+	local count = 0
+	for k,v in pairs(blinkTable) do
+		count = count + 1
+		local veh = getPedOccupiedVehicle(k)
+		if veh then
+			setVehicleOverrideLights(veh, 2)
+			
+			v.cyclesLeft = v.cyclesLeft - 1
+			
+			if v.cyclesLeft == 0 then
+				v.cyclesLeft = v.speed
+				if v.pattern == 1 then
+					if v.stage == 1 then
+						setVehicleLightState(veh, 0, 0)
+						setVehicleLightState(veh, 3, 0)
+						setVehicleLightState(veh, 1, 1)
+						setVehicleLightState(veh, 2, 1)
+						v.stage = v.stage + 1
+					elseif v.stage == 2 then
+						setVehicleLightState(veh, 0, 1)
+						setVehicleLightState(veh, 3, 1)
+						setVehicleLightState(veh, 1, 0)
+						setVehicleLightState(veh, 2, 0)
+						v.stage = 1
+					end
+				elseif v.pattern == 2 then
+					if v.stage == 1 then
+						setVehicleLightState(veh, 0, 0)
+						setVehicleLightState(veh, 3, 1)
+						setVehicleLightState(veh, 1, 1)
+						setVehicleLightState(veh, 2, 0)
+						v.stage = v.stage + 1
+					elseif v.stage == 2 then
+						setVehicleLightState(veh, 0, 1)
+						setVehicleLightState(veh, 3, 0)
+						setVehicleLightState(veh, 1, 0)
+						setVehicleLightState(veh, 2, 1)
+						v.stage = 1
+					end
+				elseif v.pattern == 3 then
+					if v.stage == 1 then
+						setVehicleLightState(veh, 0, 0)
+						setVehicleLightState(veh, 1, 1)
+						setVehicleLightState(veh, 2, 1)
+						setVehicleLightState(veh, 3, 1)
+						v.stage = v.stage + 1
+					elseif v.stage == 2 then
+						setVehicleLightState(veh, 0, 1)
+						setVehicleLightState(veh, 1, 0)
+						setVehicleLightState(veh, 2, 1)
+						setVehicleLightState(veh, 3, 1)
+						v.stage = v.stage + 1
+					elseif v.stage == 3 then
+						setVehicleLightState(veh, 0, 1)
+						setVehicleLightState(veh, 1, 1)
+						setVehicleLightState(veh, 2, 0)
+						setVehicleLightState(veh, 3, 1)
+						v.stage = v.stage + 1
+					elseif v.stage == 4 then
+						setVehicleLightState(veh, 0, 1)
+						setVehicleLightState(veh, 1, 1)
+						setVehicleLightState(veh, 2, 1)
+						setVehicleLightState(veh, 3, 0)
+						v.stage = 1
+					end
+				end
+			end
+		end
+	end
+	if count == 0 then killTimer(mainTimer) mainTimer = false end
 end
 
 addEventHandler('onPlayerQuit', root, 
 function()
-	if blinkTable[source] and blinkTable[source]["blinking"] then
-		killTimer(blinkTable[source]["timer"])
-		blinkTable[source] = false
-	end
+	if blinkTable[source] then blinkTable[source] = nil end
 end)
 
 addEventHandler('onResourceStop', resourceRoot,
 function()
 	for i, p in ipairs(getElementsByType('player')) do
-		if blinkTable[p] and blinkTable[p]["blinking"] then
-			killTimer(blinkTable[p]["timer"])
-			blinkTable[p] = false
-			
+		if blinkTable[p] then
+			blinkTable[p] = nil
 			local veh = getPedOccupiedVehicle(p)
 			if veh then
 				setVehicleOverrideLights(veh, 0)				
@@ -113,3 +223,4 @@ function()
 		end
 	end
 end)
+

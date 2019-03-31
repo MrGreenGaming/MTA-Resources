@@ -122,11 +122,13 @@ function showGUI(state)
 		guiSetText(guiItems.editName, '')
 		removeEventHandler('onClientRender', root, drawPreview)
 		name = ''
+		triggerEvent('vip-toggleGUI', localPlayer)
 	end
 	
 end
 
 function showWindow()
+	triggerEvent('vip-toggleGUI', localPlayer)
 	showGUI(true)
 end
 addEvent('onPlayerRequestCustomNickWindow', true)

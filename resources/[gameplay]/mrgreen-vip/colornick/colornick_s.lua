@@ -117,9 +117,3 @@ function respondToClient(player, success, message)
 		outputChatBox(message, player, 255, 50, 0)
 	end
 end
-
-addCommandHandler('nickwindow', 
-function(player)
-	if not hasObjectPermissionTo(player, "command.ban", false) then return end
-	triggerClientEvent(player, 'onPlayerRequestCustomNickWindow', player)
-end)

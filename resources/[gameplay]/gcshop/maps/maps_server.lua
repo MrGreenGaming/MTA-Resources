@@ -115,6 +115,9 @@ function(choice)
             queue(choice, source)
         else
 			local mapprice = source == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode)
+			if exports['mrgreen-vip']:isPlayerVIP(source) then
+				mapprice = (mapprice / 100) * 90
+			end
             outputChatBox("[Maps-Center] You do not have enough GCs to buy a nextmap. Current price: "..tostring(mapprice), source, 255, 0, 0)--here
         end
     else
@@ -250,6 +253,9 @@ function playerHasBoughtMap(player, choice)
 	end
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
 	local mapprice = player == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode) --if the player is the last winner it gives them the price discounted by 'lastWinnerDiscount' percent, if not it takes the regular price
+	if exports["mrgreen-vip"]:isPlayerVIP(player) then
+		mapprice = (mapprice / 100) * 90 -- 10% off if he is vip
+	end
 	local money = exports.gc:getPlayerGreencoins(player)
     if money < mapprice then return false end
     -- exports.gc:addPlayerGreencoins(player, PRICE*(-1))
