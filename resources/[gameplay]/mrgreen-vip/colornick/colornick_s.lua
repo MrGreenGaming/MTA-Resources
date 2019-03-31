@@ -11,8 +11,8 @@ end)
 addEvent('onClientChangeCustomNickname', true)
 addEventHandler('onClientChangeCustomNickname', root,
 function(nick)
-	if not hasObjectPermissionTo(source, "command.ban", false) then 
-		respondToClient(source, false, "Admin only feature!")
+	if not isPlayerVIP(source) then 
+		respondToClient(source, false, "VIP only feature")
 		return 
 	end
 	
