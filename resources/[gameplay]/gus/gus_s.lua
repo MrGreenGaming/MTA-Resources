@@ -387,7 +387,8 @@ end
 
 addCommandHandler('dice',
     function()
-		local g_rn = math.random(1,6)
-		outputChatBox ("#00EC0B[#FFFFFFDice#00EC0B] A random number between 1 & 6 / Result: #FFFFFF".. g_rn .."#00EC0B.", Source, 255, 255, 255, true)
+    	-- Needs a cooldown handler
+		-- local g_rn = math.random(1,6)
+		-- outputChatBox ("#00EC0B[#FFFFFFDice#00EC0B] A random number between 1 & 6 / Result: #FFFFFF".. g_rn .."#00EC0B.", source, 255, 255, 255, true)
 	end
 )
