@@ -151,12 +151,13 @@ function buildGUI()
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
 	
-	-- Arabic
+	-- Arabic / Haxardous
 	
 		RulesFaqsTab = guiCreateTab("العربية", TabPanel)
 
-    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ Rules _____\n\n\n  1. Do not cheat, hack or exploit to get any advantage\n\n  2. Do not insult or provoke any players or admins\n\n  3. Do not block other players or camp in DD and SH\n\n  4. Do not flood or spam the main chat\n\n  5. Do not advertise other servers\n\n  6. Do not TeamKill in CTF\n\n  7. Do not deliberately lock other people's name\n\n  Breaking any of these rules may result in ban.\n\n", false, RulesFaqsTab)
-    FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ Frequently Asked Questions _____\n\n\n  Q: What are GreenCoins?\n  \n  A: GreenCoins are our community currency, you can         use them on all of our servers.\n\n  Q: How do win GreenCoins?\n\n  A: You win GreenCoins by simply playing on our servers     you can also donate to get GreenCoins in return.\n\n  Q: What can I buy on this server with GreenCoins?\n\n  A: You can buy Perks, Maps, Custom Horns, Skins             and you can modify your vehicle on our GC Shop - F6\n\n If you have any other questions refer them to our staff", false, RulesFaqsTab)
+    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ القوانين _____\n\n\n  1. لا تغش او تستخدم اي اداة تمنحك الافضلية عن الاخرين\n\n  2. يمنع السب او الشتم او التعرض للاعبين او الاداريين\n\n  3. لا تعيق طريق اللاعبين او تعيق اللاعبين وقت اللعب\n\n  4. يمنع منعا باتا السبام واعاقة الشات العام\n\n  5. يمنع النشر او الترويج للسيرفرات الاخرى\n\n  6. لا تقوم باعاقة اعضاء فريقك في كابتشر ذا فلاج\n\n  7. لا تحاول استخدام اسماء الاخرين وتغلقها لصالحك\n\n  كسر اياً من القوانين قد يعرضك للحظر.\n\n", false, RulesFaqsTab)
+    FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ الاسئلة الشاعة _____\n\n\n  س: ماهو الجرين كوين؟?\n  \n  ج: الجرين كوين هي العملة التي تستخدم هنا, تستعمل في جميع سيرفراتنا.\n\n  س: كيف اربع الجرين كوينز؟\n\n  ج: تستطيع ان تربع الجرين كوينز فقط عن طريق اللعب داخل سيرفراتنا بكل سهولة.\n\n  س: ماذا استطيع ان اشتري بأستخادم الجرين كوينز؟\n\n  ج: تستطيع ان تشتري بعض الخواص, المابات, الابواق, الشخصيات و ايضاً تستطيع ان تضيف تعديلات على سياراتك من خلال 
+ متجر الجرين كوين.\n\n اذ هناك اي اسئلة اخرى يرجى التواصل مع الفريق الاداري.", false, RulesFaqsTab)
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
 	
