@@ -345,7 +345,7 @@ function deadlineFinish(rank)
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardDeadline[rank])
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 2 end
+		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
@@ -396,7 +396,7 @@ function shooterFinish(rank)
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardShooter[rank])
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 2 end
+		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
@@ -453,7 +453,7 @@ function winCargame(t)
 					if areRewardsActivated() then
 						local reward = rewardCarGame[rank]
 						if isHoliday() then reward = reward * 2 end
-						if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 2 end
+						if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 						addPlayerGreencoins(player, reward)
 						outputChatBox(prefix .. t[rank].name .. '#00FF00 has earned ' .. reward .. ' GC for finishing '.. rank .. str, root, 0, 255, 0, true)
 					else
@@ -486,7 +486,7 @@ function ddFinish(rank)
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardDD[rank])
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 2 end
+		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
@@ -533,7 +533,7 @@ function RTFfinish( rank, time )
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardRTFwinner)
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 2 end
+		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix..getPlayerName(player)..'#00FF00 has earned '.. reward .. ' GC for reaching the flag first! ', root, 0, 255, 0, true)
 	-- else
@@ -559,7 +559,7 @@ function NTSfinish( rank, time )
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardNTS[rank])
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 2 end
+		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
@@ -590,7 +590,7 @@ function manhuntFinish (player, rank)
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardManhunt[rank])
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 2 end
+		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
