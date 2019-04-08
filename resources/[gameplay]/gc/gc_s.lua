@@ -304,6 +304,14 @@ function getPlayerGreencoins(player)
     return getSerialGreencoins(player) or 0
 end
 
+function getPlayerVip(player)
+    if accounts[player] then
+        return accounts[player]:getVipTimestamp()
+    else 
+        return false
+    end
+end
+
 local holidays = {
     { day = 16, month = 9 }, -- anniversary
     { day = 24, month = 12, hour = 18 }, -- christmas evening

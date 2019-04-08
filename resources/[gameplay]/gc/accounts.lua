@@ -58,7 +58,7 @@ function SAccount:login(username, pw, player, callback)
         return
     end
 
-    getPlayerLoginInfo(username, pw, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount)
+    getPlayerLoginInfo(username, pw, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount, vipTimestamp)
         if self.gcRecord[1] then
             callback(true, player)
             return
@@ -85,6 +85,7 @@ function SAccount:login(username, pw, player, callback)
         self.gcRecord[6] = emailAddress
         self.gcRecord[7] = profile
         self.gcRecord[8] = joinTimestamp
+        self.gcRecord[9] = vipTimestamp
         triggerEvent('onGreencoinsLogin', self.player)
         callback(true, player)
     end)
@@ -108,7 +109,7 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
         return
     end
 
-    getForumAccountDetails(givenForumID, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount)
+    getForumAccountDetails(givenForumID, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount, vipTimestamp)
         if self.gcRecord[1] and getElementData( player, 'gc.autoLoginCache') and tonumber(getElementData( player, 'gc.autoLoginCache')) == tonumber(self.gcRecord[1]) then -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
             callback(true, player)
             return
@@ -141,6 +142,7 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
         self.gcRecord[6] = emailAddress
         self.gcRecord[7] = profile
         self.gcRecord[8] = joinTimestamp
+        self.gcRecord[9] = vipTimestamp
         triggerEvent('onGreencoinsLogin', self.player)
         callback(true, player)
     end)
@@ -232,6 +234,16 @@ end
 ---------------------------------------------------------------------------
 function SAccount:getJoinTimestamp()
     return self.gcRecord[8]
+end
+---------------------------------------------------------------------------
+--
+-- SAccount:getVipTimestamp()
+--
+--
+--
+---------------------------------------------------------------------------
+function SAccount:getVipTimestamp()
+    return self.gcRecord[9]
 end
 
 ---------------------------------------------------------------------------
