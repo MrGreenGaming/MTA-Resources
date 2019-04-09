@@ -297,6 +297,7 @@ function CTFFlagDelivered()
 		-- if pl ~= player and isPlayerLoggedInGC(pl) then
 			if not exports.anti:isPlayerAFK(pl) then
 				local reward = getRewardAmount(rewardCTFFlagDeliverTeam)
+				reward = vipRewardMult(player,reward)
 				if isHoliday() then reward = reward * 2 end
 				addPlayerGreencoins(player, reward)
 			end
@@ -344,8 +345,8 @@ function deadlineFinish(rank)
 	else
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardDeadline[rank])
+		reward = vipRewardMult(player,reward)
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
@@ -395,8 +396,8 @@ function shooterFinish(rank)
 	else
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardShooter[rank])
+		reward = vipRewardMult(player,reward)
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
@@ -452,8 +453,8 @@ function winCargame(t)
 					local str = rankSuffix(rank)
 					if areRewardsActivated() then
 						local reward = rewardCarGame[rank]
+						reward = vipRewardMult(player,reward)
 						if isHoliday() then reward = reward * 2 end
-						if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 						addPlayerGreencoins(player, reward)
 						outputChatBox(prefix .. t[rank].name .. '#00FF00 has earned ' .. reward .. ' GC for finishing '.. rank .. str, root, 0, 255, 0, true)
 					else
@@ -485,8 +486,8 @@ function ddFinish(rank)
 	else
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardDD[rank])
+		reward = vipRewardMult(player,reward)
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
@@ -532,8 +533,8 @@ function RTFfinish( rank, time )
 	else
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardRTFwinner)
+		reward = vipRewardMult(player,reward)
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix..getPlayerName(player)..'#00FF00 has earned '.. reward .. ' GC for reaching the flag first! ', root, 0, 255, 0, true)
 	-- else
@@ -558,8 +559,8 @@ function NTSfinish( rank, time )
 	else
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardNTS[rank])
+		reward = vipRewardMult(player,reward)
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
@@ -589,8 +590,8 @@ function manhuntFinish (player, rank)
 	else
 	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardManhunt[rank])
+		reward = vipRewardMult(player,reward)
 		if isHoliday() then reward = reward * 2 end
-		if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then reward = reward * 1.5 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	-- else
@@ -673,4 +674,36 @@ function comma_value(amount)
     end
   end
   return formatted
+end
+
+-- VIP: This function will be replaced.
+function vipRewardMult(player, theReward)
+	if not player then return theReward end
+	if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then
+		local theId = getPlayerForumID(player)
+		local multiplier = 1.5
+		if useOldMult(tostring(theId)) then
+			multiplier = 2
+		end
+
+		return theReward * multiplier
+	end
+	return theReward
+end
+
+-- Rewards have recently changed, use old rewards for these players
+local oldRewards = {
+	-- id = timestamp
+	["10262"] = 1561514211,
+	["14817"] = 1558999358,
+	["24343"] = 1556840507,
+	["14043"] = 1558395771,
+	["14672"] = 1557963888,
+	["23575"] = 1554940091
+}
+function useOldMult(id) 
+	if not oldRewards[id] or getRealTime().timestamp > oldRewards[id] then 
+		return false 
+	end
+	return true
 end
