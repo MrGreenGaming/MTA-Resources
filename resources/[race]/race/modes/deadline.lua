@@ -7,6 +7,23 @@ deadlineBindsActive = false
 deadlineDrawLines = false -- Bool for late joiners, draw lines or not
 deadlineActivationTimer = {}
 
+addEvent("onMapStarting")
+addEventHandler("onMapStarting", root, function(mapInfo)
+    local res = getResourceFromName(mapInfo.resname)
+    local racemode = res and getResourceInfo(res, "racemode") or nil
+    if racemode and racemode == "deadline" then
+        local minSpeedSetting = getNumber(mapInfo.resname..'.deadline_minimumspeed', 70)
+        if minSpeedSetting ~= 70 then
+			outputDebugString ("Deadline: custom setting was loaded from map meta. minimumspeed = " ..minSpeedSetting.."")
+		end
+		changeMinimumSpeed(minSpeedSetting)
+    end
+end)
+
+function changeMinimumSpeed(value)
+    DeadlineOptions.minimumSpeed = tonumber(value)
+	clientCall(root, 'Deadline.receiveNewSettings', DeadlineOptions)
+end
 
 ------------------------
 -- Gameplay Variables Standards --
