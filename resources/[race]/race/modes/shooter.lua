@@ -889,6 +889,22 @@ Shooter.modeOptions = {
 	ghostmode_map_can_override = false,
 }
 
+addEvent("onMapStarting")
+addEventHandler("onMapStarting", root, function(mapInfo)
+    local res = getResourceFromName(mapInfo.resname)
+    local racemode = res and getResourceInfo(res, "racemode") or nil
+    if racemode and racemode == "shooter" then
+        local jumpHeightSetting = getNumber(mapInfo.resname..'.shooter_jumpheight', 0.25)
+        if jumpHeightSetting ~= 0.25 then
+			outputDebugString ("Shooter: custom setting was loaded from map meta. JumpHeight = " ..jumpHeightSetting.."")
+		end
+		changeJumpHeight(jumpHeightSetting)
+    end
+end)
+
+function changeJumpHeight(value)
+    triggerClientEvent ("Get_JumpHeight_From_Server", root , value )
+end
 
 
 
