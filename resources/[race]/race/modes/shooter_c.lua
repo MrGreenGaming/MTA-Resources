@@ -9,6 +9,17 @@ function createRocket()
 
 end
 
+local jump_height = 0.25
+
+addEvent( "Get_JumpHeight_From_Server", true )
+addEventHandler("Get_JumpHeight_From_Server", root, function(value)
+	jump_height = value
+	if jump_height == 0 then
+		outputChatBox("Jumps have been turned OFF for this map")
+		toggle_jumpbar_color(jump_height)
+	end
+end)
+
 function shooterJump()
 	local veh = getPedOccupiedVehicle(localPlayer)
 	local vehID = getElementModel( veh )
@@ -18,12 +29,12 @@ function shooterJump()
 
 		if posZ-grndZ < 2 then
 			local vx, vy, vz = getElementVelocity ( veh )
-       			setElementVelocity ( veh ,vx, vy, vz + 0.25 )
+       			setElementVelocity ( veh ,vx, vy, vz + jump_height )
        			sh_cd_handler("jump")
 		end
 	elseif (isVehicleOnGround(veh)) then
 		local vx, vy, vz = getElementVelocity ( veh )
-       		setElementVelocity ( veh ,vx, vy, vz + 0.25 )
+       		setElementVelocity ( veh ,vx, vy, vz + jump_height )
        		sh_cd_handler("jump")
 	end
 end
@@ -43,7 +54,7 @@ end
 function sh_cd_handler(shootorjump)
 	if shootorjump == "shoot" then
 		sh_shootCDTimer = setTimer(function() sh_shootCDTimer = false end,sh_shootCD,1)
-	elseif shootorjump == "jump" then
+	elseif shootorjump == "jump" and jump_height ~= 0 then
 		sh_jumpCDTimer = setTimer(function() sh_jumpCDTimer = false end,sh_jumpCD,1)
 	end
 end
@@ -55,7 +66,15 @@ local jumpBar_x = math.ceil(screenW * 0.415)
 local jumpBar_y = math.ceil(screenH * 0.860)
 local jumpBar_w = math.ceil(screenW * 0.194)
 local jumpBar_h = math.ceil(screenH * 0.020)
+
 local jumpBar_color = tocolor(0, 255, 0, 100)
+function toggle_jumpbar_color(jump_height)
+	if jump_height ~= 0 then
+		jumpBar_color = tocolor(0, 255, 0, 100)
+	else
+		jumpBar_color = tocolor(0, 0, 0, 100)
+	end
+end
 
 local shootBar_x = math.ceil(screenW * 0.415)
 local shootBar_y = math.ceil(screenH * 0.824)
@@ -114,7 +133,6 @@ function sh_draw_timerbars()
 	
 	local rocketIMG = dxDrawImage(math.ceil(screenW * 0.393), math.ceil(screenH * 0.824), math.ceil(screenW * 0.013), math.ceil(screenW * 0.013), "img/rocket66.png", 0, 0, 0, shootDynamicColor, false)
 	local jumpIMG = dxDrawImage(math.ceil(screenW * 0.393), math.ceil(screenH * 0.859), math.ceil(screenW * 0.013), math.ceil(screenW * 0.013), "img/arrow-up.png", 0, 0, 0, jumpDynamicColor, false)
-
 
 end
 
