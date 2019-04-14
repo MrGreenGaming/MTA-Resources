@@ -51,9 +51,6 @@
     <script src="fancyprogress.lua" type="client" />
     <script src="nametags.lua" type="client" />
     
-    <!-- VIP BADGE TEST COMMANDS, SHOULD BE REMOVED WHEN LIVE -->
-    <script src="nametags_vipbadge_test.lua" type="server" />
-    <!-- VIP BADGE TEST, SHOULD BE REMOVED WHEN LIVE -->
 
     <script src="client_anim.lua" type="client" />
     <script src="countdown_client.lua" type="client" />

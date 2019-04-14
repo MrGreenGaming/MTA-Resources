@@ -5,7 +5,7 @@ function handleBuying(player, id)
 	-- exports.gc:addPlayerGreencoins(player, (-1*price))
 	local ok = gcshopBuyItem ( source, price, 'Skin:' .. id)
 	if ok then
-		setTimer(setElementModel, 1000, 1, player, tonumber(id))
+		setTimer(setPlayerGcSkin, 1000, 1, player, tonumber(id))
 		triggerClientEvent(source, "onServerSkinData", source, true)
 	end
 	return ok
@@ -15,7 +15,7 @@ end
 function setRandomSkinFromExistent(player, skin, forumid, skins)
 	if handlerConnect then
 		if getElementModel(player) ~= tonumber(skin) then
-			setTimer(setElementModel,1000,1, player, tonumber(skin))
+			setTimer(setPlayerGcSkin,1000,1, player, tonumber(skin))
 		end
 		local cmd = "UPDATE custom_skins SET skin = ? WHERE forumid = ?"
 		dbExec(handlerConnect, cmd, skins, forumid)
@@ -118,9 +118,9 @@ function(skinID)
 			returnedGC = exports.gc:addPlayerGreencoins(source, price / 2)
 			
 			if getResourceFromName("snow") and getResourceState(getResourceFromName("snow")) == "running" then
-				setTimer(setElementModel, 1000, 1, source, 1) -- set back to skin id 1 which is the default skin for snow
+				setTimer(setPlayerGcSkin, 1000, 1, source, 1) -- set back to skin id 1 which is the default skin for snow
 			else
-				setTimer(setElementModel, 1000, 1, source, 0) -- set back to cj
+				setTimer(setPlayerGcSkin, 1000, 1, source, 0) -- set back to cj
 			end
 			
 			triggerClientEvent(source, "onServerSuccessfulSkinSell", source, true)
@@ -133,7 +133,7 @@ function(skinID)
 			cmd = "UPDATE custom_skins SET setting = ? WHERE forumid = ?"
 			dbExec(handlerConnect, cmd, skins[1], forumid)
 			
-			setTimer(setElementModel, 1000, 1, source, tonumber(skins[1])) -- set his skin
+			setTimer(setPlayerGcSkin, 1000, 1, source, tonumber(skins[1])) -- set his skin
 			
 			returnedGC = exports.gc:addPlayerGreencoins(source, price / 2)
 			
@@ -173,7 +173,7 @@ function()
 			return
 		end
 		if getElementModel(source) ~= tonumber(sql[1].setting) then
-			setTimer(setElementModel, 1000, 1, source, tonumber(sql[1].setting))
+			setTimer(setPlayerGcSkin, 1000, 1, source, tonumber(sql[1].setting))
 		end	
 	end
 end
@@ -196,7 +196,7 @@ function(skin)
 		for i,j in ipairs(skins) do 
 			if j == skin then
 				if tonumber(sql[1].setting) ~= tonumber(skin) then
-					setElementModel(source, tonumber(skin))
+					setPlayerGcSkin(source, tonumber(skin))
 					outputChatBox('Success in changing skin.', source, 255, 0, 0)
 					cmd = "UPDATE custom_skins SET skin = ? WHERE forumid = ?"
 					dbExec(handlerConnect, cmd, sql[1].skin, forumid)
@@ -238,7 +238,7 @@ function()
 					if not tonumber(sql[1].setting) then
 						outputDebugString('Skin applied to '..getPlayerName(source).. " forum id: "..forumid.. " skin id: "..tostring(sql[1].setting))
 					end
-					setTimer(setElementModel, 1000, 1, source, tonumber(sql[1].setting))
+					setTimer(setPlayerGcSkin, 1000, 1, source, tonumber(sql[1].setting))
 				end	
 			end	
 		end	
@@ -280,3 +280,9 @@ end
 )
 
 
+function setPlayerGcSkin(player, id)
+	-- Do not change skin when a vip skin is active
+	if getElementData(player, "vip.skin") then return false end
+	return setElementModel( player, id )
+
+end

@@ -686,7 +686,7 @@ function vipRewardMult(player, theReward)
 			multiplier = 2
 		end
 
-		return theReward * multiplier
+		return math.ceil(theReward * multiplier)
 	end
 	return theReward
 end

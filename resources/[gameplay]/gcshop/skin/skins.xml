@@ -1,4 +1,5 @@
-<map>	
+<map>
+	<!-- Commented skins are used for VIP skins	 -->
 	<group name="Special">
 		<skin id="1" name="Truth" keywords="truth,male,white,hippie"/>
 		<skin id="2" name="Maccer" keywords="maccer,male,white,wanker"/>
@@ -77,7 +78,7 @@
 		<skin id="215" name="Explorer" keywords="pithy,helmet,hat,explore,goodall,black,girl,woman,heels"/>
 		<skin id="217" name="Staff Guy" keywords="store,clothing,cashier,clothes,white,guy,male,bartender,beard,mustache,bouncer"/>
 		<skin id="218" name="Old Woman" keywords="elderly,fat,heavy,dress,plaid,bandana,hat,black,girl,woman"/>
-		<skin id="220" name="African 2" keywords="black,guy,male,africa,beard,mustache,hat,shorts"/>
+		<!-- <skin id="220" name="African 2" keywords="black,guy,male,africa,beard,mustache,hat,shorts"/> -->
 		<skin id="221" name="Beardo Casual" keywords="beard,mustache,black,guy,male"/>
 		<skin id="222" name="Beardo Clubbing" keywords="beard,mustache,black,guy,male"/>
 		<skin id="224" name="Elderly Asian 1" keywords="girl,woman,chinese,oriental,heels,bracelet,old,jewelry,flowers,floral"/>
@@ -130,14 +131,14 @@
 		<skin id="261" name="Southerner" keywords="redneck,goatee,spinach,hat,racist,baseball,beard,white,guy,male,plaid"/>
 	</group>
 	<group name="Duplicates">
-		<skin id="25" name="Varsity jacket" keywords="sports,black,guy,male"/>
-		<skin id="66" name="Varsity Bandits" keywords="sports,black,guy,male,bandit"/>
-		<skin id="56" name="Legwarmers 1" keywords="white,socks,girl,woman,arm,bracelet,legwarmer,jewelry"/>
-		<skin id="226" name="Legwarmers 2" keywords="white,socks,girl,woman,arm,bracelet,legwarmer,jewelry"/>
-		<skin id="221" name="Beardo Casual" keywords="beard,mustache,black,guy,male"/>
+		<!-- <skin id="25" name="Varsity jacket" keywords="sports,black,guy,male"/> -->
+		<!-- <skin id="66" name="Varsity Bandits" keywords="sports,black,guy,male,bandit"/> -->
+		<!-- <skin id="56" name="Legwarmers 1" keywords="white,socks,girl,woman,arm,bracelet,legwarmer,jewelry"/> -->
+		<!-- <skin id="226" name="Legwarmers 2" keywords="white,socks,girl,woman,arm,bracelet,legwarmer,jewelry"/> -->
+		<!-- <skin id="221" name="Beardo Casual" keywords="beard,mustache,black,guy,male"/> -->
 		<skin id="222" name="Beardo Clubbing" keywords="beard,mustache,black,guy,male"/>
 		<skin id="247" name="Biker Vest" keywords="tattoo,bandana,bike,snake,beard,mustache,leather,bracelet,cobra,white,guy,male"/>
-		<skin id="254" name="Biker Vest b" keywords="tatoo,bandana,bike,snake,beard,mustache,leather,bracelet,cobra,white,guy,male"/>
+		<!-- <skin id="254" name="Biker Vest b" keywords="tatoo,bandana,bike,snake,beard,mustache,leather,bracelet,cobra,white,guy,male"/> -->
 	</group>
 	<group name="Emergency Workers">
 			<skin id="71" name="Security Guard" keywords="white,guy,male,authority,hat,watch,walkie,talkie,holster,mustache,baseball,jewelry"/>
@@ -202,7 +203,7 @@
 		<skin id="149" name="Businesswoman 2 b" keywords="suit,business,girl,woman,realestate,heels,formal,black"/>
 		<skin id="150" name="Businesswoman 3" keywords="suit,business,girl,woman,heels,pinstripe,formal,white"/>
 		<skin id="169" name="Asian Escort " keywords="kimono,chinese,oriental,girl,woman,hooker,whore,prostitute,heels"/>
-		<skin id="186" name="Teacher" keywords="suit,jacket,asian,chinese,oriental,guy,male"/>
+		<!-- <skin id="186" name="Teacher" keywords="suit,jacket,asian,chinese,oriental,guy,male"/> -->
 		<skin id="187" name="Japanese Businessman 1" keywords="suit,formal,asian,oriental,pinstripe,business,guy,male"/>
 		<skin id="219" name="Lady In Red" keywords="jacket,heels,black,girl,woman,realestate"/>
 		<skin id="227" name="Japanese Businessman 2" keywords="suit,formal,asian,oriental,bald,business,guy,male"/>
@@ -354,7 +355,7 @@
 		<skin id="37" name="Baseball Dad" keywords="hat,shorts,white,guy,male,watch"/>
 		<skin id="38" name="Old Golf Lady" keywords="old,visor,hat,fat,heavy,shorts,girl,woman,white"/>
 		<skin id="210" name="Sloppy Tourist" keywords="stripes,shirt,untucked,oriental,asian,chinese,guy,male"/>
-		<skin id="235" name="Retired Tourist" keywords="dragon,tour,old,elderly,bald,asian,chinese,oriental,guy,male"/>
+		<!-- <skin id="235" name="Retired Tourist" keywords="dragon,tour,old,elderly,bald,asian,chinese,oriental,guy,male"/> -->
 	</group>
 	<group name="Wealthy">
 		<skin id="12" name="Classy Gold Hooker" keywords="gold,necklace,bracelet,dress,girl,woman,whore,prostitute,jewelry,heels,black"/>
@@ -400,7 +401,7 @@
 			<skin id="189" name="Valet" keywords="vest,bowtie,beard,mustache,white,guy,male"/>
 			<skin id="213" name="Hobo Elvis" keywords="king,rock,impersonator,dirty,old,fat,homeless,ripped,torn,hairy,white,guy,male"/>
 			<skin id="214" name="Caligula Waitress" keywords="greek,trojan,greece,roman,toga,headband,ivy,ropes,bedsheet,server,heels,casino,waiter,bartender,black,girl,woman"/>
-			<skin id="16" name="Earmuff Worker" keywords="orange,vest,headphones,airport,work,guy,male"/>
+			<!-- <skin id="16" name="Earmuff Worker" keywords="orange,vest,headphones,airport,work,guy,male"/> -->
 			<skin id="27" name="Construction 1" keywords="worker,hardhat,hat,tattoo,white,guy,male,beard,mustache"/>
 			<skin id="153" name="Foreman" keywords="construction,worker,suit,formal,white,guy,male,helmet,hat,hardhat"/>
 			<skin id="260" name="Construction 2" keywords="crew,orange,vest,gloves,helmet,hardhat,hat,worker,builder,mustache,beard,black,guy,male"/>
