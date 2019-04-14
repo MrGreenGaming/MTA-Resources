@@ -7,12 +7,12 @@ deadlineBindsActive = false
 deadlineDrawLines = false -- Bool for late joiners, draw lines or not
 deadlineActivationTimer = {}
 
-
 ------------------------
 -- Gameplay Variables Standards --
 DeadlineOptions = {}
 DeadlineOptions.size = 40 -- Size of line
 DeadlineOptions.minimumSpeed = 70 -- Minimum speed (in km/h)
+DeadlineOptions.mapMinimumSpeed = false -- Map set minimum speed (between 40-120kmh)
 DeadlineOptions.boostSpeed = 100 -- Boost Speed (added to current speed)
 DeadlineOptions.boost_cooldown = 35000 -- boost cooldown in ms
 DeadlineOptions.jumpHeight = 0.25 -- Jump Height
@@ -50,7 +50,10 @@ DeadlineOptionsDefaults = DeadlineOptions
 ------------------------
 
 
-
+function changeMinimumSpeed(value)
+    DeadlineOptions.minimumSpeed = tonumber(value)
+	clientCall(root, 'Deadline.receiveNewSettings', DeadlineOptions)
+end
 
 
 function Deadline:isApplicable()
@@ -218,7 +221,6 @@ function Deadline:launch()
 end
 
 
-
 function Deadline:start()
 	self:cleanup()
 	local options = {
@@ -236,8 +238,20 @@ function Deadline:start()
 	for key,value in pairs(options) do
 		Deadline.setMapOption(key,value)
 	end
-	
 
+	-- Get custom map speed
+	local minimumMapSetSpeed = 40
+	local maximumMapSetSpeed = 120
+
+	local mapMinSpeed = getNumber(g_MapInfo.resname..".deadline_minimumspeed",DeadlineOptions.minimumSpeed)
+	if mapMinSpeed and mapMinSpeed ~= DeadlineOptions.minimumSpeed then
+		if mapMinSpeed >= minimumMapSetSpeed and mapMinSpeed <= maximumMapSetSpeed  then
+			outputDebugString('Deadline: Custom map min speed detected. Min speed set to: '..mapMinSpeed)
+			DeadlineOptions.mapMinimumSpeed = mapMinSpeed
+		else
+			outputDebugString("Deadline: Custom speed setting detected, but are outside of min/max range. (Setting: "..mapMinSpeed..", min: 40, max: 120)")
+		end
+	end
 end
 
 function Deadline.boost(player, key, keyState) 
@@ -320,6 +334,7 @@ addEvent('onPlayerWinDeadline')
 
 
 function Deadline:cleanup()
+	DeadlineOptions.mapMinimumSpeed = false
 	clientCall(g_Root, 'Deadline.unload')
 	deadlineBindsActive = false
 	deadlineDrawLines = false

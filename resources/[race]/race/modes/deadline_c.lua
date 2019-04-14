@@ -37,7 +37,7 @@ DeadlineOptions = {}
 -- DeadlineOptions.deadWallX -- deadWall X pos
 -- DeadlineOptions.deadWallY -- deadwall Y pos
 -- DeadlineOptions.deadWallRadius = getElementData(resourceRoot,'deadline.radius')
--- 
+-- DeadlineOptions.mapMinimumSpeed = false
 -- Gameplay Variables Standards - Will be updated serversided --
 ------------------------
 
@@ -181,10 +181,10 @@ function Deadline.handleSpeed()
 		return
 	end
 
-
-	if currentSpeed < DeadlineOptions.minimumSpeed then
+	local effectiveMinSpeed = DeadlineOptions.mapMinimumSpeed or DeadlineOptions.minimumSpeed
+	if currentSpeed < effectiveMinSpeed then
 		-- Instead of putting speed to minimumSpeed, gradually increase it.
-		local incrSpeed = (DeadlineOptions.minimumSpeed/3)+currentSpeed
+		local incrSpeed = (effectiveMinSpeed/3)+currentSpeed
 		dl_setElementSpeed(localVehicle,'km/h',(incrSpeed))
 
 	end
