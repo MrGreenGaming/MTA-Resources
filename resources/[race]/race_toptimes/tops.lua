@@ -69,10 +69,10 @@ function queryMapTimes (mapInfo, bStart)
 	mapnameFull = mapInfo.name
 	racemode = racemodes[ exports.race:getRaceMode() ] or "(NULL)"
 	info = mapInfo
-	local q = "SELECT forumid, mapname, pos, value, date, g.mta_name, h.country FROM toptimes, mrgreengaming_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY pos"
+	local q = "SELECT t.forumid, t.mapname, t.pos, t.value, t.date, n.name, g.mta_name, v.options as supernick, h.country FROM toptimes t LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN mrgreengaming_gc.green_coins g ON t.forumid = g.forum_id LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 WHERE t.mapname = ? ORDER BY t.pos"
 	dbQuery(maptimes, {mapInfo, bStart}, handlerConnect, q, mapname)
 	if not score[exports.race:getRaceMode()] then
-		local q = "SELECT forumid, mapname, value, date, month, g.mta_name, h.country FROM toptimes_month, mrgreengaming_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY date DESC"
+		local q = "SELECT t.forumid, t.mapname, t.value, t.date, t.month,v.options as supernick, n.name, g.mta_name, h.country FROM toptimes_month t LEFT JOIN mrgreengaming_gc.green_coins g ON t.forumid = g.forum_id LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 WHERE t.mapname = ? ORDER BY date DESC"
 		dbQuery(monthlytime, {mapInfo, bStart}, handlerConnect, q, mapname, getRealTime().month+1)
 	else
 		sendMonthTime()	-- send empty month time
@@ -94,6 +94,7 @@ function maptimes(qh, mapInfo, bStart)
 	else
 		-- outputDebugString('new map ' .. mapInfo.resname)
 	end
+
 	times.resname = mapInfo.resname
 	times.mapname = mapInfo.name
 	times.modename = mapInfo.modename
