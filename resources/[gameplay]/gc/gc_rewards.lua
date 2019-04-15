@@ -189,6 +189,7 @@ function finish(rank)
 			rewarded_Players[player] = {}
 		end
 		rewarded_Players[player].finishReward = calcFinishReward(player, rank)
+		rewarded_Players[player].finishReward = vipRewardMult(player,rewarded_Players[player].finishReward)
 		rewarded_Players[player].rank = rank
 		if isHoliday() then rewarded_Players[player].finishReward = rewarded_Players[player].finishReward * 2 end
 		
