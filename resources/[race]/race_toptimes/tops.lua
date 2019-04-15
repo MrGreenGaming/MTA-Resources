@@ -105,7 +105,7 @@ function maptimes(qh, mapInfo, bStart)
 			for _, t in ipairs(times) do
 				if forumid == t.forumid then
 					t.player = player
-					t.mta_name = getPlayerName(player)
+					t.name = getPlayerName(player)
 					break
 				end
 			end
