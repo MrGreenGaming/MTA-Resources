@@ -220,7 +220,13 @@ addCommandHandler("lol",
 			if not who then outputChatBox("No player found", player)
 			else
 				local whoName = getElementData(who, "vip.colorNick") or getPlayerName(who)
-				outputChatBox(nick.."#FFD700 is laughing out loud at "..whoName, root, 255, 215, 0, true)
+				local lolString = nick.."#FFD700 is laughing out loud at "..whoName
+				if string.len(lolString) > 256 then
+					outputChatBox(nick.."#FFD700 is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ), root, 255, 215, 0, true)
+				else
+					outputChatBox(lolString, root, 255, 215, 0, true)
+				end
+				
 				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
 				g_lolPlayers[player] = getTickCount()
 			end

@@ -108,7 +108,7 @@ end
 function supernick_showGUI(state)
 	guiSetVisible(supernick_guiItems.windowNick, state)
 	guiBringToFront(supernick_guiItems.windowNick,true)
-	showCursor(state, state)
+
 
 	
 	if state == true then

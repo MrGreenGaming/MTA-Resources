@@ -98,7 +98,7 @@ function updateTexture()
 		local textColor = r.player == localPlayer and selfTextColor or textColor
 		-- Name handling
 		local playerName = r.name or r.mta_name
-		if r.supernick then
+		if r.supernick and type(r.supernick) == "string" then
 			local sn = fromJSON( r.supernick )
 			if sn.supernick then
 				playerName = sn.supernick
@@ -129,7 +129,7 @@ function updateTexture()
 	end
 	if monthlyTopTime then
 		local monthlyTopPlayerName = monthlyTopTime.name or monthlyTopTime.mta_name
-		if monthlyTopTime.supernick then
+		if monthlyTopTime.supernick and type(monthlyTopTime.supernick) == "string" then
 			local sn = fromJSON(monthlyTopTime.mta_name.supernick)
 			if sn.supernick then
 				monthlyTopPlayerName = sn.supernick

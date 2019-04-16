@@ -1530,8 +1530,8 @@ function checkClient(checkAccess,player,...)
 	return false
 end
 
-function checkNickOnChange(old, new)
-	if aNickChangeTime[source] and aNickChangeTime[source] + tonumber(get("*nickChangeDelay")) > getTickCount() then
+function checkNickOnChange(old, new, byUser)
+	if aNickChangeTime[source] and aNickChangeTime[source] + tonumber(get("*nickChangeDelay")) > getTickCount() and byUser then
 		cancelEvent()
 		outputChatBox("You can only change your name once every "..(tonumber(get("*nickChangeDelay"))/1000).." seconds", source, 255, 0, 0)
 		return false

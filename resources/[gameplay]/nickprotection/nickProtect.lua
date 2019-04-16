@@ -211,9 +211,12 @@ addEventHandler('nickProtectionLoaded', getRootElement(),
 
 g_NickHandler = {}
 addEventHandler('onPlayerChangeNick', getRootElement(),
-    function(oldNick, newNick)
+    function(oldNick, newNick, byUser)
         if not canScriptWork then return end
-        nickChangeSpamProtection(source)
+        if byUser then
+            nickChangeSpamProtection(source)
+        end
+        
         if not getResourceFromName('gc') or getResourceState(getResourceFromName('gc')) ~= "running" then
             return
         end

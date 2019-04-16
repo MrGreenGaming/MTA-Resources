@@ -6,6 +6,27 @@ local originalName = {
 	-- [player] = name
 }
 
+function setSuperNick(player,bool)
+	-- originalName[source] = getPlayerName( source )
+	local playerSuperNick = getVipSetting(player, 2, 'supernick')
+	if bool == true and playerSuperNick and playerSuperNick ~= "" and isPlayerVIP(player) then
+		local colorlessNick = string.gsub(playerSuperNick, "#%x%x%x%x%x%x", "")
+		setElementData(player, "vip.colorNick", playerSuperNick)
+		setPlayerName(player, colorlessNick)
+		if getPlayerName( player ) ~= colorlessNick then
+			-- If name change is not succes, try again
+			setTimer( setPlayerName, 3000, 1, colorlessNick )
+		end
+		return true
+	elseif bool == false and player and isElement(player) and getElementType(player) == "player" then
+		removeElementData( player, "vip.colorNick" )
+		if originalName[player] then
+			setPlayerName(player, originalName[player])
+		end
+	end 
+end
+
+
 addEvent('onClientRequestNickSettings', true)
 addEventHandler('onClientRequestNickSettings', root, 
 function()
@@ -35,11 +56,8 @@ function(nick)
 		end
 	end
 	
-
-	originalName[source] = getPlayerName( source )
-	setElementData(source, "vip.colorNick", nick)
-	setPlayerName(source, colorlessNick)
 	saveVipSetting(source,2,"supernick",nick)
+	setSuperNick(source)
 	
 	vip_outputChatBox("Super Nick Successfully set!", source, 0, 255, 100)
 end)
@@ -67,9 +85,10 @@ function()
 end)
 
 addEventHandler('onPlayerChangeNick', root,
-function(_,_,byPlayer)
+function(old,new,byPlayer)
 	if getElementData(source, "vip.colorNick" ) and isPlayerVIP(source) and vipPlayers[source] and byPlayer then
 		-- removeElementData( source, 'vip.colorNick' )
+		vip_outputChatBox("Please remove VIP SuperNick before changing your name!",source,255,0,0)
 		cancelEvent( true, "Please remove VIP SuperNick first!" )
 	end
 end)
@@ -86,18 +105,12 @@ addEventHandler('onPlayerVip', resourceRoot,
 				local playerSuperNick = vipPlayers[player].options[2].supernick
 				if playerSuperNick and playerSuperNick ~= "" then
 					originalName[player] = getPlayerName(player)
-					setElementData(player, 'vip.colorNick', playerSuperNick)
-					setPlayerName(player, string.gsub(playerSuperNick, "#%x%x%x%x%x%x", ""))
+					setSuperNick(player,true)
 					-- vip_outputChatBox("Your nickname has been set to your VIP nickname.", player, 0, 255, 100)
 				end
 			else
 				-- Handle logout
-				-- setElementData(player, 'vip.colorNick', false)
-				removeElementData( player, 'vip.colorNick' )
-				if originalName[player] then
-					setPlayerName( player, originalName[player])
-					originalName[player] = nil
-				end
+				setSuperNick(source,false)
 			end
 		end
 	end
@@ -107,8 +120,8 @@ addEventHandler('onResourceStop', resourceRoot,
 function()
 	for i, p in ipairs(getElementsByType('player')) do
 		if originalName[p] then
-			removeElementData( p, 'vip.colorNick' )
 			setPlayerName( p, originalName[p] )
 		end
+		removeElementData( p, 'vip.colorNick' )
 	end
 end)
