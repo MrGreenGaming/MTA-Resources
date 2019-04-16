@@ -105,7 +105,7 @@ function maptimes(qh, mapInfo, bStart)
 			for _, t in ipairs(times) do
 				if forumid == t.forumid then
 					t.player = player
-					t.name = getPlayerName(player)
+					t.name = getElementData(player, "vip.colorNick") or getPlayerName(player)
 					break
 				end
 			end
@@ -143,7 +143,7 @@ function monthlytime(qh, mapInfo, bStart)
 					local forumid = exports.gc:getPlayerForumID(player)
 					if forumid and monthtTopTime.forumid == forumid then
 						monthtTopTime.player = player
-						monthtTopTime.mta_name = getPlayerName(player)
+						monthtTopTime.name = getElementData(player, "vip.colorNick") or getPlayerName(player)
 						break
 					end
 				end
