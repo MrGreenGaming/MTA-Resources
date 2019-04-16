@@ -38,13 +38,17 @@
     <script src="items/dynamicoverlay/files/dvoid_controller_c.lua" type="client" />
     <script src="items/dynamicoverlay/dynamicOverlay_s.lua" type="server" />
 
+    <!-- Free VIP map -->
+    <script src="items/freeVipMap/freeVipMap.lua" type="server" />
+
     <!-- Utilities -->
     <script src="utils_c.lua" type="client" />
     <script src="utils_s.lua" type="server" />
 
 	<!-- Exports -->
 	<export function="isPlayerVIP" type="server"/>
-
+    <export function="canBuyVipMap" type="server"/>
+    <export function="playerUsedFreeVipMap" type="server"/>
     <!-- Other Files -->
     <file src="img/vip_utils.png"></file>
     <file src="img/vip_main.png"></file>

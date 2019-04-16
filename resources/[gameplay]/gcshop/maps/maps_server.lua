@@ -115,9 +115,14 @@ function(choice)
             queue(choice, source)
         else
 			local mapprice = source == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode)
-			if exports['mrgreen-vip']:isPlayerVIP(source) then
+            local vipIsRunning = getResourceState( getResourceFromName( "mrgreen-vip" ) ) == "running"
+			if vipIsRunning and exports['mrgreen-vip']:isPlayerVIP(source) then
 				mapprice = (mapprice / 100) * 90
 			end
+
+            if vipIsRunning and exports['mrgreen-vip']:canBuyVipMap(source) then
+                mapprice = 0
+            end
             outputChatBox("[Maps-Center] You do not have enough GCs to buy a nextmap. Current price: "..tostring(mapprice), source, 255, 0, 0)--here
         end
     else
@@ -253,13 +258,23 @@ function playerHasBoughtMap(player, choice)
 	end
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
 	local mapprice = player == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode) --if the player is the last winner it gives them the price discounted by 'lastWinnerDiscount' percent, if not it takes the regular price
-	if exports["mrgreen-vip"]:isPlayerVIP(player) then
+	local vipIsRunning = getResourceState( getResourceFromName( "mrgreen-vip" ) ) == "running"
+    if exports["mrgreen-vip"]:isPlayerVIP(player) then
 		mapprice = (mapprice / 100) * 90 -- 10% off if he is vip
 	end
+    local isVipBuy = false
+    if vipIsRunning and exports['mrgreen-vip']:canBuyVipMap(source) then
+        isVipBuy = true
+        mapprice = 0
+    end
+
 	local money = exports.gc:getPlayerGreencoins(player)
-    if money < mapprice then return false end
+    if not isVipBuy and money < mapprice then return false end
     -- exports.gc:addPlayerGreencoins(player, PRICE*(-1))
 	local ok = gcshopBuyItem ( player, mapprice, 'Map: ' .. choice[1])
+    if isVipBuy and ok then
+        exports['mrgreen-vip']:playerUsedFreeVipMap(source)
+    end
     return ok
 end
 

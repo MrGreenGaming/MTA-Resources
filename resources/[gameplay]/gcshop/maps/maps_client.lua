@@ -8,6 +8,7 @@ prices["shooter"] = 1200
 prices["deadline"] = 900
 
 lastWinnerDiscount = 50
+isVipMap = false
 
 PRICE = 1000
 
@@ -54,7 +55,11 @@ function createNextmapWindow(tabPanel)
 		tab.label5 = guiCreateLabel(0.03, 0.03, 0.30, 0.12, "The winner of the last map played\ngets "..tostring(lastWinnerDiscount).."% off!", true, tab.maps)
         guiLabelSetColor( tab.label5, 255, 0, 0 )
         guiSetFont( tab.label5, "default-bold-small" )
-        guiSetFont( tab.label6, "default-bold-small" )
+
+        tab.viplabel = guiCreateLabel(0.03, 0.14, 0.50, 0.12, "Purchase VIP to get a free map every day!", true, tab.maps)
+        guiLabelSetColor( tab.viplabel, 255, 0, 0 )
+        guiSetFont( tab.viplabel, "default-bold-small" )
+        guiSetFont( tab.viplabel, "default-bold-small" )
 
 	triggerServerEvent('refreshServerMaps', localPlayer)
 end
@@ -232,6 +237,39 @@ addEventHandler('onGCShopWinnerDiscount', root, function()
 	else
 		guiLabelSetColor( tab.label5, 255, 0, 0 )
 		guiSetText(tab.label5, "The winner of the last map played\ngets "..lastWinnerDiscount.."% off!" )
+	end
+end)
+
+-- VIP free map
+local countdownTimer = false
+addEvent('onVipFreeMapInfo', true)
+addEventHandler('onVipFreeMapInfo', root, function(canUse)
+	if source ~= localPlayer then return end
+		
+	if canUse == true then
+		isVipMap = true
+		guiLabelSetColor( tab.viplabel, 0, 255, 0 )
+		guiSetText(tab.viplabel, "Your next map will be free! (VIP)" )
+	else
+		isVipMap = false
+		guiLabelSetColor( tab.viplabel, 255, 0, 0 )
+		guiSetText(tab.viplabel, "You have used your free VIP map. \nYou will get another one tomorrow! (00:00 CET)" )
+	end
+end)
+
+addEvent('onVipFreeMapLogOut', true)
+addEventHandler('onVipFreeMapLogOut', root, function()
+	if source ~= localPlayer then return end
+		
+	isVipMap = false
+	guiLabelSetColor( tab.viplabel, 255, 0, 0 )
+	guiSetText(tab.viplabel, "Purchase VIP to get a free map every day!" )
+
+end)
+
+addEventHandler( 'onClientResourceStart', resourceRoot, function()
+	if getResourceState(getResourceFromName( 'mrgreen-vip' )) == "running" then
+		triggerServerEvent( 'onClientRequestsVipMap', root)
 	end
 end)
 

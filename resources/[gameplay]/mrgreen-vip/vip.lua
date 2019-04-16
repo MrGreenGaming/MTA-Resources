@@ -19,6 +19,7 @@ vipItems = {
 	[7] = { ID = 7, description = 'Dynamic Vehicle Overlay'},
 	[8] = { ID = 8, description = 'VIP Join Message'},
 	[9] = { ID = 9, description = 'Personal Horn'},
+	[10] = { ID = 10, description = 'Free VIP Map'},
 }
 
 -- Standard options
@@ -31,7 +32,8 @@ vipStandardOptions = {
 	[6] = {enabled = false, style = 1},
 	[7] = {style = false, color = "FFFFFF"},
 	[8] = {message = ""},
-	[9] = {key = "J"}
+	[9] = {key = "J"},
+	[10] = {used = false}
 }
 
 -- Resource init
@@ -92,7 +94,7 @@ addEvent( 'onClientRequestsVip' , true )
 addEventHandler('onClientRequestsVip',resourceRoot,
 	function()
 		if isPlayerVIP(client) then
-			setPlayerVIP(client,true, "from onClientRequestsVip")
+			setPlayerVIP(client,true)
 		end
 	end
 )
