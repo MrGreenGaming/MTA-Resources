@@ -109,7 +109,7 @@ function updateTexture()
 		if k <= tops then
 			dxDrawText(k..'.', w*pos.x*sw, (titleHeight+(i-1)*topsAreaHeight/tops)*sh, w*pos.y*sw, (titleHeight+(i)*topsAreaHeight/tops)*sh, textColor, scaleX, scaleY, font, 'right', 'center')
 			dxDrawText((playerName), w*nick.x*sw, (titleHeight+(i-1)*topsAreaHeight/tops)*sh, w*nick.y*sw, (titleHeight+(i)*topsAreaHeight/tops)*sh, textColor, scaleX, scaleY, font, 'left', 'center', true, false, false, true)
-			if r.country ~= nil then dxDrawImage(w*flag.x*sw, (titleHeight+(i-0.85)*topsAreaHeight/tops)*sh, 16, 11, ":admin/client/images/flags_new/"..string.lower(r.country)..".png") end
+			if r.country ~= nil and type(r.country) == 'string' then dxDrawImage(w*flag.x*sw, (titleHeight+(i-0.85)*topsAreaHeight/tops)*sh, 16, 11, ":admin/client/images/flags_new/"..string.lower(r.country)..".png") end
 			dxDrawText(times.kills and r.value..' kills' or timeMsToTimeText(r.value), w*value.x*sw, (titleHeight+(i-1)*topsAreaHeight/tops)*sh, w*value.y*sw, (titleHeight+(i)*topsAreaHeight/tops)*sh, textColor, scaleX, scaleY, font, 'center', 'center')
 			dxDrawText(r.formatDate, w*date.x*sw, (titleHeight+(i-1)*topsAreaHeight/tops)*sh, w*date.y*sw, (titleHeight+(i)*topsAreaHeight/tops)*sh, textColor, scaleX, scaleY, font, 'right', 'center')
 			i = i + 1
@@ -138,7 +138,7 @@ function updateTexture()
 		local textColor = monthlyTopTime.player == localPlayer and selfTextColor or textColor
 		dxDrawText(months[monthlyTopTime.month], w*pos.x*sw, (titleHeight+topsAreaHeight+personalTopHeight)*sh, w*pos.y*sw, (titleHeight+topsAreaHeight+personalTopHeight+monthlyTopHeight)*sh, textColor, scaleX, scaleY, font, 'right', 'center')
 		dxDrawText((monthlyTopPlayerName), w*nick.x*sw, (titleHeight+topsAreaHeight+personalTopHeight)*sh, w*nick.y*sw, (titleHeight+topsAreaHeight+personalTopHeight+monthlyTopHeight)*sh, textColor, scaleX, scaleY, font, 'left', 'center', true, false, false, true)
-		if monthlyTopTime.country ~= nil then dxDrawImage(w*flag.x*sw, (titleHeight+topsAreaHeight+personalTopHeight+7.6)*sh, 16, 11, ":admin/client/images/flags_new/"..string.lower(monthlyTopTime.country)..".png") end
+		if monthlyTopTime.country ~= nil and type(monthlyTopTime.country) == 'string' then dxDrawImage(w*flag.x*sw, (titleHeight+topsAreaHeight+personalTopHeight+7.6)*sh, 16, 11, ":admin/client/images/flags_new/"..string.lower(monthlyTopTime.country)..".png") end
 		dxDrawText(monthlyTopTime.kills and monthlyTopTime.value..' kills' or timeMsToTimeText(monthlyTopTime.value), w*value.x*sw, (titleHeight+topsAreaHeight+personalTopHeight)*sh, w*value.y*sw, (titleHeight+topsAreaHeight+personalTopHeight+monthlyTopHeight)*sh, textColor, scaleX, scaleY, font, 'center', 'center')
 		dxDrawText(monthlyTopTime.formatDate, w*date.x*sw, (titleHeight+topsAreaHeight+personalTopHeight)*sh, w*date.y*sw, (titleHeight+topsAreaHeight+personalTopHeight+monthlyTopHeight)*sh, textColor, scaleX, scaleY, font, 'right', 'center')
 	end
