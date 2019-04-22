@@ -134,7 +134,7 @@ local maxRewardedFinishes = 5
 local minimumRewardTimeR = 2 * 60 * 1000
 local maximumRewardTimeR = 8 * 60 * 1000
 local defaultRewardTime = 2 * 60 * 1000
-local defaultRewardGC = 10
+local defaultRewardGC = 18
 
 
 --[[
