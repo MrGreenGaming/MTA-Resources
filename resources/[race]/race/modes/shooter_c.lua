@@ -1,3 +1,16 @@
+local shooterJumpHeight = 0.25
+
+function clientReceiveShooterSettings(jumpHeight,autoRepair)
+	shooterJumpHeight = jumpHeight or 0.25
+	if autoRepair then
+		removeEventHandler( 'onClientVehicleDamage', root, shooterAutoRepair )
+		addEventHandler('onClientVehicleDamage', root, shooterAutoRepair)
+	else
+		removeEventHandler( 'onClientVehicleDamage', root, shooterAutoRepair )
+	end
+end
+
+
 function createRocket()
 	local occupiedVehicle = getPedOccupiedVehicle(localPlayer)
 	local x,y,z = getElementPosition(occupiedVehicle)
@@ -9,6 +22,21 @@ function createRocket()
 
 end
 
+function shooterAutoRepair(attacker, weapon, loss)
+	if source ~= getPedOccupiedVehicle(localPlayer) then return end
+	
+	if weapon == 51 then
+		-- Do stuff when hit by rocket
+	elseif getElementHealth(source) > 249 then
+		for i=0, 6 do
+			setVehiclePanelState(source,i,0)
+			setVehicleDoorState(source,i,0)
+		end
+		cancelEvent()
+	end
+end
+
+
 function shooterJump()
 	local veh = getPedOccupiedVehicle(localPlayer)
 	local vehID = getElementModel( veh )
@@ -18,12 +46,12 @@ function shooterJump()
 
 		if posZ-grndZ < 2 then
 			local vx, vy, vz = getElementVelocity ( veh )
-       			setElementVelocity ( veh ,vx, vy, vz + 0.25 )
+       			setElementVelocity ( veh ,vx, vy, vz + shooterJumpHeight )
        			sh_cd_handler("jump")
 		end
 	elseif (isVehicleOnGround(veh)) then
 		local vx, vy, vz = getElementVelocity ( veh )
-       		setElementVelocity ( veh ,vx, vy, vz + 0.25 )
+       		setElementVelocity ( veh ,vx, vy, vz + shooterJumpHeight )
        		sh_cd_handler("jump")
 	end
 end
@@ -277,13 +305,13 @@ function cgJump()
 
 			if posZ-grndZ < 2 then
 				local vx, vy, vz = getElementVelocity ( veh )
-       			setElementVelocity ( veh ,vx, vy, vz + 0.25 )
+       			setElementVelocity ( veh ,vx, vy, vz + shooterJumpHeight )
        			sh_cd_handler("jump")
 			end
 
 		elseif (isVehicleOnGround(veh)) then
 			local vx, vy, vz = getElementVelocity ( veh )
-       		setElementVelocity ( veh ,vx, vy, vz + 0.25 )
+       		setElementVelocity ( veh ,vx, vy, vz + shooterJumpHeight )
        		sh_cd_handler("jump")
 		end
 end

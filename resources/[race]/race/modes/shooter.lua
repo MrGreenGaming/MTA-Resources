@@ -3,6 +3,11 @@ Shooter.__index = Shooter
 
 Shooter:register('Shooter')
 
+-- Options
+local shooterJumpHeight = 0.25 -- Standard shooter jump height
+local shooterAutoRepairTimer = false
+
+
 local shooterMode = "shooter"
 function getShooterMode()
 	return shooterMode
@@ -511,6 +516,37 @@ addEvent('onPlayerWinShooter')
 
 function Shooter:launch()
 	RaceMode.launch(self)
+	-- Read jump height from map
+	local jumpHeightSetting = (getNumber(g_MapInfo.resname..".shooter_jumpheight",25)/10)
+	if jumpHeightSetting ~= 0.25 then
+		-- Map has different setting for jump height
+		-- Check if its within range
+		local minJumpHeight = 0.2
+		local maxJumpHeight = 1.1
+		if not jumpHeightSetting then
+			jumpHeightSetting = shooterJumpHeight
+		elseif jumpHeightSetting < minJumpHeight or jumpHeightSetting > maxJumpHeight then
+			outputDebugString('Shooter: Map has a custom jump height, but is is outside of accepted range (Map setting: '..(jumpHeightSetting*10)..', min: - '..(minJumpHeight*10)..', max: '..(maxJumpHeight*10)..')')
+			jumpHeightSetting = shooterJumpHeight
+		else
+			outputDebugString('Shooter: Map has set custom jump height to: '..(jumpHeightSetting*10))
+		end
+	end
+	
+	-- Check and init auto repair
+	local autoRepairSetting = getBool(g_MapInfo.resname..".shooter_autorepair",false)
+	if autoRepairSetting then
+		if isTimer(shooterAutoRepairTimer) then
+			killTimer(shooterAutoRepairTimer)
+		end
+		-- Set auto repair timer
+		outputDebugString('Shooter: Auto repair initiated')
+		shooterAutoRepairTimer = setTimer( Shooter.autoRepair, 500, 0)
+	end
+	
+	-- Send jump height and autorepair to clients
+	clientCall(root, 'clientReceiveShooterSettings', jumpHeightSetting or false, autoRepairSetting)
+
 	if shooterMode == "cargame" then
 		Shooter.hasLaunched = true
 		clientCall(root, 'showLevelDX', true)
@@ -653,6 +689,17 @@ function Shooter:onGamemodeMapStart()
 	end
 end
 
+function Shooter.autoRepair()
+	for i,player in ipairs(g_Players) do
+		local theVeh = getPedOccupiedVehicle(player)
+		if getElementType(player) == "player" and theVeh and getElementHealth(theVeh) > 249 and not isPlayerFinished(player) then
+			for i=0, 6 do
+				setVehiclePanelState(theVeh,i,0)
+				setVehicleDoorState(theVeh,i,0)
+			end
+		end
+	end
+end
 
 function Shooter.shoot(player, key, keyState)
 	if shooterMode == "cargame" then
@@ -782,6 +829,8 @@ end
 
 
 function Shooter:cleanup()
+	-- Reset Map custom jump/autorepair
+	clientCall(root, 'clientReceiveShooterSettings', false, false)
 	if shooterMode == "cargame" then
 
 		-- Remove binds and element data
@@ -821,6 +870,9 @@ function Shooter:cleanup()
 				unbindKey(v, 'mouse2', 'both', self.jump)
 			end
 		end
+	end
+	if isTimer(shooterAutoRepairTimer) then
+		killTimer(shooterAutoRepairTimer)
 	end
 end
 
