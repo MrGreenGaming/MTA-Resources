@@ -22,7 +22,7 @@ function showtheWindowBrowser()
         showCursor(true)
     end 
     end
-addCommandHandler("leaderboard", showtheWindowBrowser, false, false)
+addCommandHandler("leaderboards", showtheWindowBrowser, false, false)
 
 addEventHandler("onClientBrowserCreated", g_root, function()
     requestBrowserDomains({"www.mrgreengaming.com"})
