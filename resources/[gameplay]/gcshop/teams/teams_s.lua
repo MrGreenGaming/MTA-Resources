@@ -6,7 +6,7 @@ local playertimestamp = {}
 local invites = {}
 local duration = 1
 local team_duration = 20 * 24 * 60 * 60
-local team_allowedcharacters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+local team_allowedcharacters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ "
 
 addEventHandler('onShopInit', root, function()
 end)
