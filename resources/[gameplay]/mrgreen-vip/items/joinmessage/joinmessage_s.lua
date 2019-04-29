@@ -1,7 +1,7 @@
 local sendJoinMessages = {
 	-- [id] = stamp
 }
-local joinMessageTimeBetween = 1800 -- in seconds
+local joinMessageTimeBetween = 30 -- in seconds
 
 addEvent('onClientChangeCustomJoinMessage', true)
 addEventHandler('onClientChangeCustomJoinMessage', root,

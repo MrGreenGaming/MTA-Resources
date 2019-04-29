@@ -68,6 +68,12 @@
     <file src="items/vipskin/skins/Goku.txd"></file>
     <file src="items/vipskin/skins/Spiderman.dff"></file>
     <file src="items/vipskin/skins/Spiderman.txd"></file>
+    <file src="items/vipskin/skins/hitman.dff"></file>
+    <file src="items/vipskin/skins/hitman.txd"></file>
+    <file src="items/vipskin/skins/skadi.dff"></file>
+    <file src="items/vipskin/skins/skadi.txd"></file>
+    <file src="items/vipskin/skins/waifu.dff"></file>
+    <file src="items/vipskin/skins/waifu.txd"></file>
 
     <!-- Dynamic Vehicle Overlay Files -->
     <!-- Dynamic overlay by: ~ Shadow ~ -->

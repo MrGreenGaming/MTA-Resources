@@ -10,6 +10,9 @@ local vipSkins = {
 	[4] = {name = "Marie Rose (DoA)", file = "MarieRose"},
 	[5] = {name = "Goku", file = "Goku"},
 	[6] = {name = "Spiderman", file = "Spiderman"},
+	[7] = {name = "Hitman", file = "hitman"},
+	[8] = {name = "Skadi (Smite)", file = "skadi"},
+	[9] = {name = "Anthony's Waifu", file = "waifu"}
 }
 
 -- Reserved skin ID's for VIP skin. If more are needed, please check unbought GC shop skins via database and remove them from there
