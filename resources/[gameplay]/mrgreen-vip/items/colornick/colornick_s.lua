@@ -57,7 +57,7 @@ function(nick)
 	end
 	
 	saveVipSetting(source,2,"supernick",nick)
-	setSuperNick(source)
+	setSuperNick(source, true)
 	
 	vip_outputChatBox("Super Nick Successfully set!", source, 0, 255, 100)
 end)
