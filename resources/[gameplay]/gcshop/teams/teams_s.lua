@@ -6,6 +6,7 @@ local playertimestamp = {}
 local invites = {}
 local duration = 1
 local team_duration = 20 * 24 * 60 * 60
+local team_allowedcharacters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
 addEventHandler('onShopInit', root, function()
 end)
@@ -60,6 +61,16 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
             outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
             return
         end
+				
+		-- Checking team name for illegal characters
+		for i=1,string.len(teamname) do
+			local char = string.sub(teamname, i, i)
+			if not string.find(team_allowedcharacters, char) then
+				outputChatBox('Team name contains illegal characters!', player, 255, 0, 0)
+				return
+			end
+		end
+		
         local result, error = gcshopBuyItem(player, team_price, 'Team renew: ' .. tostring(r.teamid))
         if result == true then
             local added
@@ -95,6 +106,15 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
             outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
             return
         end
+		
+		-- Checking team name for illegal characters
+		for i=1,string.len(teamname) do
+			local char = string.sub(teamname, i, i)
+			if not string.find(team_allowedcharacters, char) then
+				outputChatBox('Team name contains illegal characters!', player, 255, 0, 0)
+				return
+			end
+		end
 
         local result, error = gcshopBuyItem(player, team_price, 'Team: ' .. table.concat({ teamname, teamtag, teamcolour, teammsg }, ', '))
         if result == true then
