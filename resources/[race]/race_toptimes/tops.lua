@@ -489,44 +489,109 @@ function giveTop1Reward ( player )
 end
 
 
---------------------
--- Removing times --
---------------------
-
-function deletetop(p, c, pos, ...)
-	pos = tonumber(pos)
-	local reason = table.concat({...},' ')
-	if not (pos and times[pos]) then
-		return outputChatBox('Top not found ' .. tostring(pos), p)
-	elseif not reason or #reason < 2 then
-		return outputChatBox('Syntax: /deletetop <top> <reason>', p)
+--------------------------------------
+-- Removing times / admin functions --
+--------------------------------------
+function adminOpenedToptimesManager(p,c)
+	if not isAdminAuthorized(p) then return end
+	if c == "deletetop" or c == 'deletealltops' then
+		outputChatBox('/'..c..' is not in use anymore and may be removed in the future. Please use /managetops')
 	end
-	local top = table.remove(times, pos)
-	dbExec(handlerConnect, 'DELETE FROM toptimes WHERE forumid = ? and mapname = ?', top.forumid, top.mapname)
-	sendClientTimes()
-	outputChatBox('Top #' .. pos .. ' ' .. timeMsToTimeText(top.value) .. ' ' .. top.mta_name .. ' was deleted by ' .. _getPlayerName(p))
-	deletelog(("Top #%d (%s %s) on map \"%s\" was deleted by %s (%s): %s"):format(pos, timeMsToTimeText(top.value), top.mta_name, top.mapname, _getPlayerName(p), getAccountName(getPlayerAccount(p)), reason))
+	sendToptimesToAdmin(p)
 end
-addCommandHandler('deletetop', deletetop, true)
+addCommandHandler('managetops', adminOpenedToptimesManager )
+addCommandHandler('deletetop', adminOpenedToptimesManager )
+addCommandHandler('deletealltops', adminOpenedToptimesManager )
 
-function deletealltops(p, c, ...)
-	local reason = table.concat({...},' ')
-	if not reason or #reason < 2 then
-		return outputChatBox('Syntax: /deletealltops <reason>', p)
+addEvent('adminRequestedUpdatedTops',true)
+addEventHandler('adminRequestedUpdatedTops',resourceRoot,function()
+	sendToptimesToAdmin(client)
+end)
+
+function sendToptimesToAdmin(admin)
+	local amountToClient = 20
+	local topsToClient = {}
+	for i, v in ipairs(times) do
+		if i > amountToClient then
+			break
+		end 
+		table.insert(topsToClient,v)
 	end
-	local top = table.remove(times, pos)
-	if not top then return end
-	for i,v in ipairs(times) do
-		times[i] = nil
-	end
-	dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ?', times.resname)
-	sendClientTimes()
-	outputChatBox('All tops deleted for ' .. top.mapname .. ' by ' .. _getPlayerName(p))
-	deletelog(("All tops on map \"%s\" deleted by %s (%s): %s"):format(top.mapname, _getPlayerName(p), getAccountName(getPlayerAccount(p)), reason))
+	triggerClientEvent(admin, 'onAdminRequestOpenTopManager', admin, mapname, topsToClient)
 end
-addCommandHandler('deletealltops', deletealltops, true)
+
+
+function adminConfirmedAction(theAction)
+	if not isAdminAuthorized(client) then 
+		outputChatBox('You are not authorized to remove toptimes',client,255,0,0)
+		return 
+	end
+
+	-- Handle all top deletions here
+	if theAction.action == "deletePlayerTop" then
+		-- Delete Top action
+		if theAction.mapname == mapname then
+			-- Still the same map, search for the deleted top and remove it, then send to client
+			for i, row in ipairs(times) do
+				if row.forumid == theAction.forumid then
+					table.remove(times,i)
+					sendClientTimes()
+					break
+				end
+			end
+		end
+		
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.forumid = ? AND a.mapname = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, theAction.reason, getAccountName(getPlayerAccount(client)) or _getPlayerName(client), theAction.forumid, theAction.mapname)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE forumid = ? and mapname = ?', theAction.forumid, theAction.mapname)
+		
+		outputChatBox('[TOPS] Top #' .. theAction.position .. ' by ' .. theAction.playername .. ' on map "'..theAction.mapname..'" was deleted by ' .. _getPlayerName(client), root, 255,50,50)
+
+		deletelog(("Top #%d (%s %s) on map \"%s\" was deleted by %s (%s): %s"):format(theAction.position, timeMsToTimeText(theAction.value), theAction.playername, theAction.mapname, _getPlayerName(client), getAccountName(getPlayerAccount(client)), theAction.reason))
+	
+	elseif theAction.action == "deleteAllPlayerTops" then
+		-- Delete All Player Tops
+		for i, row in ipairs(times) do
+			if row.forumid == theAction.forumid then
+				table.remove(times,i)
+				sendClientTimes()
+				break
+			end
+		end
+		
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.forumid = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, theAction.reason, getAccountName(getPlayerAccount(client)) or _getPlayerName(client), theAction.forumid)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE forumid = ? ', theAction.forumid)
+		
+		outputChatBox('[TOPS] All tops from player ' .. theAction.playername .. ' have been removed by ' .. _getPlayerName(client), root, 255,50,50)
+
+		deletelog(("ALL tops by %s (forumid: %s) have been deleted by %s (%s): %s"):format(theAction.playername, theAction.forumid, _getPlayerName(client), getAccountName(getPlayerAccount(client)), theAction.reason))
+	
+	elseif theAction.action == "deleteAllMapTops" then
+		-- Remove all tops, then send to client
+		times = {}
+		sendClientTimes()
+
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.mapname = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, theAction.reason, getAccountName(getPlayerAccount(client)) or _getPlayerName(client), theAction.mapname)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ? ', theAction.mapname)
+
+		outputChatBox('[TOPS] All tops from map  "' .. theAction.mapname .. '" have been removed by ' .. _getPlayerName(client), root, 255,50,50)
+		deletelog(("ALL tops in map '%s' have been deleted by %s (%s): %s"):format(theAction.mapname, _getPlayerName(client), getAccountName(getPlayerAccount(client)), theAction.reason))
+
+	end
+end
+addEvent('onAdminConfirmedToptimesDeletionAction', true)
+addEventHandler( 'onAdminConfirmedToptimesDeletionAction', resourceRoot, adminConfirmedAction )
 
 function deletemonthtop(p, c)
+	if not isAdminAuthorized(p) then return end
 	if not monthtTopTime then
 		return outputChatBox('Month top not found', p)
 	end
@@ -652,10 +717,16 @@ addCommandHandler('tops',
 	end
 )
 
-
 -------------
 -- utility --
 -------------
+function isAdminAuthorized(player)
+	local accountName = getAccountName( getPlayerAccount(player) )
+	if not isGuestAccount( getPlayerAccount(player) ) and isObjectInACLGroup( "user."..accountName, aclGetGroup("mapmanager") ) or isObjectInACLGroup( "user."..accountName, aclGetGroup("ServerManager") ) then
+		return true
+ end
+	return false
+end
 
 function FormatDate(timestamp, full)
 	local t =  getRealTime(timestamp)
