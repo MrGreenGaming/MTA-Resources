@@ -212,6 +212,9 @@ addEventHandler("onIRCConnect",root,
 
 setTimer(function ()
         for i,server in ipairs (ircGetServers()) do
+                if not servers[server] or not servers[server][11] then return end
+                -- This causes error spamming
+                -- Why is the IRC resource even in use anymore?
                 if (getTickCount() - servers[server][11]) > 180000 then
                         servers[server][11] = getTickCount()
                         ircReconnect(server,"Connection timed out")
