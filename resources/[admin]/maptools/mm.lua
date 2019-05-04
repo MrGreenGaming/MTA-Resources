@@ -1,4 +1,4 @@
-local maxuploaded_maps = 3
+local maxuploaded_maps = 5
 
 -------------
 -- newMap --
@@ -6,21 +6,29 @@ local maxuploaded_maps = 3
 
 local uploadedfolder = "[maps]\\[uploadedmaps]"
 
-function newMap(map, forumid, mta_name)
+function informNewMap()
+	-- Server gets informed about a new map, so we can refresh.
+	-- Web server will await, to give time for MTA server to refresh
+	-- This all to avoid "loading failed", because refreshing takes some time
+	return refreshResources()
+end
+
+function newMap(map, forumid, mta_name, mapComment)
 	local mapname = tostring(map) .. '_newupload'
 	outputDebugString('newMap ' .. mapname)
-	refreshResources()
-	setTimer(refreshResources, 2000, 1)
+
+	-- setTimer(refreshResources, 2000, 1)
+
 	local mapres = getResourceFromName(map)
 	if mapres then
 		if getResourceInfo(mapres, "forumid") then
 			if getResourceInfo(mapres, "forumid") ~= tostring(forumid) then
-				return 'This mapname is already in use on the server, only ' .. getResourceInfo(mapres, "mta_name") .. ' can update ' .. map, ''
+				return 'This mapname is already in use on the server, only ' .. tostring(getResourceInfo(mapres, "mta_name")) .. ' can update ' .. map
 			end
-		-- else
-			-- outputDebugString('new map already exists ' .. map)
-			-- outputConsole('new map already exists ' .. map)
-			-- return 'This map is already on the server (' .. map .. '), contact a mapmanager if you want to update it', ''
+		else
+			outputDebugString('new map already exists ' .. map)
+			outputConsole('new map already exists ' .. map)
+			return 'This map is already on the server (' .. map .. '), contact a mapmanager if you want to update it', ''
 		end
 	else
 		local mapsInQ = 0
@@ -30,14 +38,14 @@ function newMap(map, forumid, mta_name)
 			end
 		end
 		if mapsInQ >= maxuploaded_maps then
-			return 'You already have the max amount of maps (' .. maxuploaded_maps .. ') uploaded, wait untill a mapmanager tests your maps before uploading another one', ''
+			return 'You already have the max amount of maps (' .. maxuploaded_maps .. ') uploaded, wait untill a mapmanager tests your maps before uploading another one'
 		end
 	end
 	local res = getResourceFromName(mapname)
 	if not res then
 		outputDebugString('loading failed ' .. mapname)
 		outputConsole('loading failed ' .. mapname)
-		return 'Could not load ' .. tostring(map), ''
+		return 'MTA: Could not load ' .. tostring(map)
 	end
 	
 	local s = getResourceLoadFailureReason(res)
@@ -45,16 +53,28 @@ function newMap(map, forumid, mta_name)
     setResourceInfo(res, "forumid", tostring(forumid))
     setResourceInfo(res, "mta_name", mta_name)
     setResourceInfo(res, "uploadtick", tostring(getRealTime().timestamp))
-	if s ~= '' then
+    if mapComment then
+    	setResourceInfo(res, "uploadercomment", tostring(mapComment))
+	end
+
+	if s ~= '' or not s then
 		if getResourceState(res) == "running" then
 			stopResource(res)
 		end
 		deleteResource(mapname)
 		outputDebugString(s..': deleting ' .. mapname)
 		outputConsole(s..': deleting ' .. mapname)
+		return 'MTA: Loading ' .. tostring(map) .. ' failed. ('..tostring(s)..')'
 	end
-	return tostring(s), mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "Update" or "New"
+	-- if true then
+	-- 	return 'I forcefully returned'
+	-- end
+	notifyMapManagers(mta_name, map, mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "updated a map" or "uploaded a new map")
+	return {true, mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "Update" or "New"}
+	-- return tostring(s), mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "Update" or "New"
 end
+
+
 
 function handlemap(p, c, resname, ...)
 	if not handlerConnect or not resname then return false end
@@ -97,6 +117,40 @@ function checkDeleteMap()
 end
 addEventHandler('onMapStarting', root, checkDeleteMap)
 
+-- Output map uploader's comment when a map get's tested.
+function outputUploaderComment(mapInfo)
+	if getResourceInfo(exports.mapmanager:getRunningGamemodeMap(), 'newupload') == "true" then
+		-- Map is being tested
+		local theRes = getResourceFromName( mapInfo.resname )
+		if not theRes then return end
+
+		local theName = getResourceInfo(theRes,'mta_name')
+		local theComment = getResourceInfo(theRes,'uploadercomment')
+
+		if theName then
+			outputChatBox(' ')
+			outputChatBox('Map uploaded by: #FFFFFF'..tostring(theName),root,0,255,100, true)
+		end
+
+		if theComment and tostring(theComment) ~= 'false' then
+			outputChatBox('Map Uploader Comment: #FFFFFF'..tostring(theComment),root,0,255,100, true)
+			outputChatBox(' ')
+		end
+
+		
+	end
+end
+addEventHandler('onMapStarting', root, outputUploaderComment)
+
+function notifyMapManagers(name, mapName, action)
+	action = action or 'uploaded a map'
+	for i, player in ipairs(getElementsByType('player')) do
+		if hasObjectPermissionTo( player, 'command.declinemap', false ) then
+			-- Is MM or higher
+			outputChatBox('[Map Manager]: '..tostring(name)..' has '..action..' "'..tostring(mapName)..'".',player,0,255,100)
+		end
+	end
+end
 
 --facilitating map deletion--
 
@@ -530,3 +584,183 @@ function editFileFromGUI(map,src) -- Admin editing file via the gui
     end
 end
 addEventHandler("editfile",root,editFileFromGUI)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function var_dump(...)
+	-- default options
+	local verbose = false
+	local firstLevel = true
+	local outputDirectly = true
+	local noNames = false
+	local indentation = "\t\t\t\t\t\t"
+	local depth = nil
+
+	local name = nil
+	local output = {}
+	for k,v in ipairs(arg) do
+		-- check for modifiers
+		if type(v) == "string" and k < #arg and v:sub(1,1) == "-" then
+			local modifiers = v:sub(2)
+			if modifiers:find("v") ~= nil then
+				verbose = true
+			end
+			if modifiers:find("s") ~= nil then
+				outputDirectly = false
+			end
+			if modifiers:find("n") ~= nil then
+				verbose = false
+			end
+			if modifiers:find("u") ~= nil then
+				noNames = true
+			end
+			local s,e = modifiers:find("d%d+")
+			if s ~= nil then
+				depth = tonumber(string.sub(modifiers,s+1,e))
+			end
+		-- set name if appropriate
+		elseif type(v) == "string" and k < #arg and name == nil and not noNames then
+			name = v
+		else
+			if name ~= nil then
+				name = ""..name..": "
+			else
+				name = ""
+			end
+
+			local o = ""
+			if type(v) == "string" then
+				table.insert(output,name..type(v).."("..v:len()..") \""..v.."\"")
+			elseif type(v) == "userdata" then
+				local elementType = "no valid MTA element"
+				if isElement(v) then
+					elementType = getElementType(v)
+				end
+				table.insert(output,name..type(v).."("..elementType..") \""..tostring(v).."\"")
+			elseif type(v) == "table" then
+				local count = 0
+				for key,value in pairs(v) do
+					count = count + 1
+				end
+				table.insert(output,name..type(v).."("..count..") \""..tostring(v).."\"")
+				if verbose and count > 0 and (depth == nil or depth > 0) then
+					table.insert(output,"\t{")
+					for key,value in pairs(v) do
+						-- calls itself, so be careful when you change anything
+						local newModifiers = "-s"
+						if depth == nil then
+							newModifiers = "-sv"
+						elseif  depth > 1 then
+							local newDepth = depth - 1
+							newModifiers = "-svd"..newDepth
+						end
+						local keyString, keyTable = var_dump(newModifiers,key)
+						local valueString, valueTable = var_dump(newModifiers,value)
+						
+						if #keyTable == 1 and #valueTable == 1 then
+							table.insert(output,indentation.."["..keyString.."]\t=>\t"..valueString)
+						elseif #keyTable == 1 then
+							table.insert(output,indentation.."["..keyString.."]\t=>")
+							for k,v in ipairs(valueTable) do
+								table.insert(output,indentation..v)
+							end
+						elseif #valueTable == 1 then
+							for k,v in ipairs(keyTable) do
+								if k == 1 then
+									table.insert(output,indentation.."["..v)
+								elseif k == #keyTable then
+									table.insert(output,indentation..v.."]")
+								else
+									table.insert(output,indentation..v)
+								end
+							end
+							table.insert(output,indentation.."\t=>\t"..valueString)
+						else
+							for k,v in ipairs(keyTable) do
+								if k == 1 then
+									table.insert(output,indentation.."["..v)
+								elseif k == #keyTable then
+									table.insert(output,indentation..v.."]")
+								else
+									table.insert(output,indentation..v)
+								end
+							end
+							for k,v in ipairs(valueTable) do
+								if k == 1 then
+									table.insert(output,indentation.." => "..v)
+								else
+									table.insert(output,indentation..v)
+								end
+							end
+						end
+					end
+					table.insert(output,"\t}")
+				end
+			else
+				table.insert(output,name..type(v).." \""..tostring(v).."\"")
+			end
+			name = nil
+		end
+	end
+	local string = ""
+	for k,v in ipairs(output) do
+		if outputDirectly then
+			outputConsole(v)
+		end
+		string = string..v
+	end
+	return string, output
+end

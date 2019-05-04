@@ -6,6 +6,7 @@
 	<script src="mapmodefix.lua" type="server"/>
 	
 	<export function="newMap" http="true" />
+	<export function="informNewMap" http="true" />
 
 	
 
