@@ -1,6 +1,6 @@
 <meta>
 	<info author="KaliBwoy" version="1" type="script" name="Map Tools" description="Map tools for map managers"/>
-
+	<min_mta_version server="1.5.4-9.11342" />
 	<script src="mm_c.lua" type="client"/>
 	<script src="mm.lua" type="server"/>
 	<script src="mapmodefix.lua" type="server"/>

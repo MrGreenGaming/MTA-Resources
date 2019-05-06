@@ -93,6 +93,11 @@ function handlemap(p, c, resname, ...)
 	local comment = table.concat({...}, ' ')
 	local manager = tostring(getAccountName(getPlayerAccount(p)))
 	local status = (c == "acceptmap" and "Accepted" or "Declined")
+
+	if res and getResourceInfo(res, 'forumid') then
+		notifyMapAction(getResourceInfo(res, "name"), '', manager, resname, string.lower(status), getResourceInfo(res, 'forumid'))
+	end
+
 	if c == "acceptmap" then
 		if getResourceFromName(resname) then
 			deleteResource(getResourceFromName(resname))
@@ -103,6 +108,7 @@ function handlemap(p, c, resname, ...)
 	deleteResource(mapname)
 	local query = "INSERT INTO uploaded_maps (resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?)"
 	local theExec = dbExec ( handlerConnect, query, resname, mta_name, comment, manager, status)
+	
 	outputChatBox(c..': done ' .. resname, p)
 	fetchMaps(p)
 end
@@ -193,6 +199,7 @@ function onNewMapStart()
     setResourceInfo(map,"deleteReason",g_Reason)
     setResourceInfo(map,"deletedBy",g_AccName)
     setResourceInfo(map,"deleteTimeStamp",tostring(getRealTime().timestamp))
+    local authorForumId = getResourceInfo( theRes, 'forumid' )
 
     -- Check if copied deleted resource exists, if so then delete first.
     if getResourceFromName( resname.."_deleted" ) then
@@ -215,7 +222,7 @@ function onNewMapStart()
     if isElement(g_P) then
         outputChatBox("Map deleted: "..name, g_P)
     end
-    addMapDeletionRecord(name,authr,g_Reason,g_AccName,resname)
+    addMapDeletionRecord(name,authr,g_Reason,g_AccName,resname,authorForumId)
 
     refreshResources()
     canUseCommand = true
@@ -260,7 +267,7 @@ function(p,_,...)
 end
 )
 
-function addMapDeletionRecord(mapname,author,reason,adminName,resname)
+function addMapDeletionRecord(mapname,author,reason,adminName,resname,authorForumId)
 	connectToDB() -- Retry db connection
 	if handlerConnect then -- if there is db connection, else save in local db file
 		moveMapDeletionCache()
@@ -284,11 +291,50 @@ function addMapDeletionRecord(mapname,author,reason,adminName,resname)
 
 		xmlSaveFile(theXML)
 		xmlUnloadFile(theXML)
+	end
 
-
+	-- Notify API for personal message sending
+	if authorForumId and tonumber(authorForumId) then
+		notifyMapAction(mapname, reason, adminName, resname, 'deleted', authorForumId)
 
 	end
 end
+
+function notifyMapAction(mapname, reason, adminName, resname, status, authorForumId)
+	if not status or not authorForumId then return end
+	outputDebugString('Status: '..tostring(status))
+	local fetchOptions = {
+        queueName = "mapToolsNotify",
+        connectionAttempts = 3,
+        connectTimeout = 5000,
+        method = "POST",
+        postData = toJSON({
+            forumid = tonumber(authorForumId),
+            admin = tostring(adminName),
+            mapname = tostring(mapname),
+            resname = tostring(resname),
+            reason = tostring(reason),
+            mapstatus = tostring(status),
+            appId = get("appId"),
+            appSecret = get("appSecretPass")
+        }, true),
+        headers = {
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
+        }
+    }
+
+	fetchRemote("https://mrgreengaming.com/api/mapupload/notifymapaction", fetchOptions, function(res, info)
+        if not info.success or not res then
+            if not res then
+                res = "EMPTY"
+            end
+            outputDebugString("NotifyMapAction: invalid response (status " .. info.statusCode .. "). Res: " .. res, 1)
+            return
+        end
+    end)
+end
+
 
 function moveMapDeletionCache() -- Moves from cache xml to mysql db
 	if not handlerConnect then return false end
@@ -487,6 +533,11 @@ function restoreMap(map)
 			local query = "INSERT INTO uploaded_maps (mapname, uploadername, manager, resname, status) VALUES (?,?,?,?,'Restored')"
 			dbExec ( handlerConnect, query,getResourceInfo(theCopy, "name") or properName,getResourceInfo(theCopy,"author") or "N/A",tostring(getAccountName(getPlayerAccount(client))),properName)
 		end
+
+		if getResourceInfo(theCopy, 'forumid') then
+			notifyMapAction(getResourceInfo(theCopy, "name"), '', getAccountName(getPlayerAccount(client)), map.resname, 'restored', getResourceInfo(theCopy, 'forumid'))
+		end
+
         outputChatBox("Map '".. getResourceName(theCopy) .."' restored!",client)
         refreshResources()
         fetchMaps(client)
@@ -518,6 +569,7 @@ function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
         setResourceInfo(theRes,"deleteReason",reason)
         setResourceInfo(theRes,"deletedBy",adminAccName)
         setResourceInfo(theRes,"deleteTimeStamp",tostring(getRealTime().timestamp))
+        local authorForumId = getResourceInfo( theRes, 'forumid' )
 
 		-- Check if copied deleted resource exists, if so then delete first.
 		if getResourceFromName( map.resname.."_deleted" ) then
@@ -534,7 +586,7 @@ function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
         if isElement(client) then
             outputChatBox("Map deleted: "..tostring(map.name),client)
         end
-        addMapDeletionRecord(map.name,map.author,reason,adminAccName,map.resname)
+        addMapDeletionRecord(map.name,map.author,reason,adminAccName,map.resname,authorForumId)
 
 
         
@@ -584,60 +636,6 @@ function editFileFromGUI(map,src) -- Admin editing file via the gui
     end
 end
 addEventHandler("editfile",root,editFileFromGUI)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function var_dump(...)
