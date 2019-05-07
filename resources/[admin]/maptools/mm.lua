@@ -66,12 +66,17 @@ function newMap(map, forumid, mta_name, mapComment)
 		outputConsole(s..': deleting ' .. mapname)
 		return 'MTA: Loading ' .. tostring(map) .. ' failed. ('..tostring(s)..')'
 	end
-	-- if true then
-	-- 	return 'I forcefully returned'
-	-- end
+
 	notifyMapManagers(mta_name, map, mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "updated a map" or "uploaded a new map")
-	return {true, mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "Update" or "New"}
-	-- return tostring(s), mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "Update" or "New"
+	local theStatus = mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "Update" or "New"
+
+	-- Insert upload into DB
+	if handlerConnect then
+		local query = "INSERT INTO uploaded_maps (forumid, resname, uploadername, comment, status) VALUES (?,?,?,?,?)"
+		local theExec = dbExec ( handlerConnect, query, forumid, map, mta_name, mapComment or '', theStatus)
+	end
+
+	return {true, theStatus}
 end
 
 
@@ -315,8 +320,8 @@ function notifyMapAction(mapname, reason, adminName, resname, status, authorForu
             resname = tostring(resname),
             reason = tostring(reason),
             mapstatus = tostring(status),
-            appId = get("appId"),
-            appSecret = get("appSecretPass")
+            appId = get("gc.appId"),
+            appSecret = get("gc.appSecretPass")
         }, true),
         headers = {
             ["Content-Type"] = "application/json",
