@@ -10,14 +10,17 @@ function informNewMap()
 	-- Server gets informed about a new map, so we can refresh.
 	-- Web server will await, to give time for MTA server to refresh
 	-- This all to avoid "loading failed", because refreshing takes some time
-	return refreshResources()
+	outputDebugString('Web requested a resource refresh')
+	refreshResources()
+	return true
 end
 
 function newMap(map, forumid, mta_name, mapComment)
 	local mapname = tostring(map) .. '_newupload'
 	outputDebugString('newMap ' .. mapname)
-
-	-- setTimer(refreshResources, 2000, 1)
+	if mapComment and tostring(mapComment) == 'false' then
+		mapComment = false
+	end
 
 	local mapres = getResourceFromName(map)
 	if mapres then
@@ -279,6 +282,14 @@ function addMapDeletionRecord(mapname,author,reason,adminName,resname,authorForu
 
 		local query = "INSERT INTO uploaded_maps (mapname, uploadername, comment, manager, resname, status) VALUES (?,?,?,?,?,'Deleted')"
 		dbExec ( handlerConnect, query,tostring(mapname),tostring(author),tostring(reason),tostring(adminName),tostring(resname)  )
+
+		-- Move tops to toptimes_deleted
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.mapname = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, 'Map Deletion', adminName or '', resname)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ? ', resname)
+
 	else -- save to local db
 		local theXML = xmlLoadFile("mapdeletioncache.xml")
 		if not theXML then
@@ -359,7 +370,13 @@ function moveMapDeletionCache() -- Moves from cache xml to mysql db
 
 		local query = "INSERT INTO uploaded_maps (mapname, uploadername, comment, manager, resname, status) VALUES (?,?,?,?,?,'Deleted')"
 		local theExec = dbExec ( handlerConnect, query,tostring(mapname),tostring(author),tostring(reason),tostring(adminName),tostring(resname)  )
-
+		-- Move tops to toptimes_deleted
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.mapname = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, 'Map Deletion', adminName or '', resname)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ? ', resname)
+		
 		if theExec then
 			xmlDestroyNode(child)
 		end
