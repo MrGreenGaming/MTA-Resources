@@ -233,7 +233,7 @@ function carHideState ( state )
 	if not allowedModes[exports.race:getRaceMode()] then 
 		-- Reset
 		carHideAllowed = false
-		triggerClientEvent("onCarHideStatusChange",root,false)
+		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
 		return 
 	end
 	
@@ -244,7 +244,7 @@ function carHideState ( state )
 			unbindKey(p,"x","down",carhideKeyHandler)
 			bindKey(p,"x","down",carhideKeyHandler)
 		end
-		triggerClientEvent("onCarHideStatusChange",root,true)
+		triggerClientEvent("onCarHideStatusChange",root,true,exports.race:getRaceMode())
 
 	elseif state == "PostFinish" then
 		carHideAllowed = false
@@ -253,7 +253,7 @@ function carHideState ( state )
 			unbindKey(p,"x","down",carhideKeyHandler)
 		end
 		
-		triggerClientEvent("onCarHideStatusChange",root,false)
+		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
 
 	elseif state == "NoMap" then
 		carHideAllowed = false
@@ -262,7 +262,7 @@ function carHideState ( state )
 			removeElementData(p,'carhide')
 			unbindKey(p,"x","down",carhideKeyHandler)
 		end
-		triggerClientEvent("onCarHideStatusChange",root,false)
+		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
 	end
 end
 addEventHandler('onRaceStateChanging', root, carHideState)
@@ -282,7 +282,7 @@ end
 function watchGhostMode(key, old, new)
 	-- Watch for ghostmode, and disable carhide when a player loses ghostmode
 	if (key == 'overrideCollide.uniqueblah' or key == 'overrideAlpha.uniqueblah') and getElementType(source) == 'player' and carHideAllowed and not isGhostModeEnabled(source) then
-		triggerClientEvent(source, "onCarHideStatusChange",root,false)	
+		triggerClientEvent(source, "onCarHideStatusChange",root,false, exports.race:getRaceMode())	
 		removeElementData(source,'carhide')
 	end
 end
