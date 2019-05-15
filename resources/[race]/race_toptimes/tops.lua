@@ -415,14 +415,15 @@ function gcLogin ( forumid, amount )
 	local player = source
 	-- Check if player has unrewarded most monthly tops in the past months
 	local q = [[
-	SELECT forumid, month, c FROM (
-		SELECT ANY_VALUE(forumid) forumid, month, ANY_VALUE(c) c FROM (
-			SELECT forumid, month, COUNT(*) c FROM (
-				SELECT * FROM `toptimes_month` ORDER BY date
-			) AS dated WHERE rewarded = 0 GROUP BY forumid, month ORDER BY `month` ASC, `c`  DESC
-		) AS counted GROUP BY month
-	) AS maxs WHERE forumid = ? AND month != ?
+		SELECT forumid, month, c FROM (
+			SELECT forumid, month, c FROM (
+				SELECT forumid, month, COUNT(*) c FROM (
+					SELECT * FROM `toptimes_month` ORDER BY date
+				) AS dated WHERE rewarded = 0 GROUP BY forumid, month ORDER BY `month` ASC, `c`  DESC
+			) AS counted GROUP BY month
+		) AS maxs WHERE forumid = ? AND month != ?
 	]]
+
 	setTimer(function()
 		if isElement(player) then
 		dbQuery( mostMonthTops, {forumid, getPlayerSerial(player), getRealTime().month+1}, handlerConnect, q, forumid, getRealTime().month+1)
