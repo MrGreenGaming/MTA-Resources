@@ -31,6 +31,20 @@ function createLeaderboardsBrowser(bool)
     end
 end
 
+addEvent("sb_showLeaderboards")
+addEventHandler("sb_showLeaderboards", root, function()
+    if (guiGetVisible (browserWindow) == true) then 
+        createLeaderboardsBrowser(false)
+        guiSetVisible (browserWindow, false)
+        showCursor(false)
+    else
+        createLeaderboardsBrowser(true)
+        guiSetVisible (browserWindow, true)
+        showCursor(true)
+    end 
+end
+)
+
 addCommandHandler("leaderboards", function()
     if (guiGetVisible (browserWindow) == true) then 
         createLeaderboardsBrowser(false)
