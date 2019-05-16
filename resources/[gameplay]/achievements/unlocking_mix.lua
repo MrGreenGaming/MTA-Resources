@@ -20,7 +20,7 @@ achievementListMix = {
 	{ s = "DD: UNSTOPPABLE!! - Accumulate 10 kills in 3 rounds", 		id = 6, 	reward = 300 },
 	{ s = "DD: Win 5 rounds", 											id = 13,	reward = 75,	max = 5  },
 	{ s = "DD: Win 20 rounds", 											id = 14,	reward = 200, max = 20 },
-	{ s = "DD: Win 100 rounds", 										id = 39,	reward = 5000,	max = 100 },
+	{ s = "DD: Win 100 rounds", 										id = 39,	reward = 500,	max = 100 },
 	{ s = "DD: Win 500 rounds", 										id = 40,	reward = 1000,	max = 500 },
 	{ s = "DD: Win 1000 rounds", 										id = 41,	reward = 5000,	max = 1000 },
 	{ s = "DD: Make 20 kills", 											id = 15,	reward = 100,	max = 20 },
