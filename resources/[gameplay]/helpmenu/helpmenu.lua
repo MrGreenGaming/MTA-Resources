@@ -140,13 +140,22 @@ function buildGUI()
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
 ]]-- 
+	-- BR / NITRO
 
+	RulesFaqsTab = guiCreateTab("Português BR", TabPanel)
+
+	RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         __ Regras __\n\n\n  1. Não tente enganar, hackear ou abusar de bugs para obter benefícios.\n\n  2. Não insultar ou provocar os Administradores e/ou Jogadores.\n\n 3. Não bloqueie outros jogadores (NTS) e não campere (DD e SH).\n\n  4. Sem flood ou spam no bate-papo principal.\n\n 5. Não anuncie outros servidores/IPs.\n\n 6. Não mate companheiros de equipe no CTF.\n\n  7. Não bloqueie nomes de outros jogadores\n\n Quebrar qualquer uma dessas regras pode resultar em uma punição ou Banimento.\n\n", false, RulesFaqsTab)
+	FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          __ Perguntas Frequentes __\n\n\n  Q: O que são os Greencoins?\n \n A: Os Greencoins são a moeda da Comunidade MrGreen, você pode fazer uso deslas em todos os nossos servidores.\n\n  Q: Como posso obter Greencoins?\n\n A: Fácil, você pode obtê-los jogando em nossos servidores. Você também pode fazer doações em dinheiro e receber Greencoins em troca.\n\n  Q: O que posso comprar neste servidor com Greencoins?\n\n A: Você pode comprar Perks, Mapas, Assobios personalizados (Horns) e Skins, e também poderá personalizar seus carros em nossa loja GC (F6)\n\n Duvidas?, Você pode pedir auxilio a qualquer membro da equipe (Staff).", false, RulesFaqsTab)
+	guiMemoSetReadOnly(RulesMemo, true)
+	guiMemoSetReadOnly(FaqsMemo, true)
+	
+	
 	-- Arabic / Haxardous
 
-		RulesFaqsTab = guiCreateTab("العربية", TabPanel)
+	RulesFaqsTab = guiCreateTab("العربية", TabPanel)
 
-    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ القوانين _____\n\n\n  1. لا تغش او تستخدم اي اداة تمنحك الافضلية عن الاخرين\n\n  2. يمنع السب او الشتم او التعرض للاعبين او الاداريين\n\n  3. لا تعيق طريق اللاعبين او تعيق اللاعبين وقت اللعب\n\n  4. يمنع منعا باتا السبام واعاقة الشات العام\n\n  5. يمنع النشر او الترويج للسيرفرات الاخرى\n\n  6. لا تقوم باعاقة اعضاء فريقك في كابتشر ذا فلاج\n\n  7. لا تحاول استخدام اسماء الاخرين وتغلقها لصالحك\n\n  كسر اياً من القوانين قد يعرضك للحظر.\n\n", false, RulesFaqsTab)
-    FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ الاسئلة الشاعة _____\n\n\n  س: ماهو الجرين كوين؟?\n  \n  ج: الجرين كوين هي العملة التي تستخدم هنا, تستعمل في جميع سيرفراتنا.\n\n  س: كيف اربع الجرين كوينز؟\n\n  ج: تستطيع ان تربع الجرين كوينز فقط عن طريق اللعب داخل سيرفراتنا بكل سهولة.\n\n  س: ماذا استطيع ان اشتري بأستخادم الجرين كوينز؟\n\n  ج: تستطيع ان تشتري بعض الخواص, المابات, الابواق, الشخصيات و ايضاً تستطيع ان تضيف تعديلات على سياراتك من خلال  متجر الجرين كوين.\n\n اذ هناك اي اسئلة اخرى يرجى التواصل مع الفريق الاداري.", false, RulesFaqsTab)
+	RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ القوانين _____\n\n\n  1. لا تغش او تستخدم اي اداة تمنحك الافضلية عن الاخرين\n\n  2. يمنع السب او الشتم او التعرض للاعبين او الاداريين\n\n  3. لا تعيق طريق اللاعبين او تعيق اللاعبين وقت اللعب\n\n  4. يمنع منعا باتا السبام واعاقة الشات العام\n\n  5. يمنع النشر او الترويج للسيرفرات الاخرى\n\n  6. لا تقوم باعاقة اعضاء فريقك في كابتشر ذا فلاج\n\n  7. لا تحاول استخدام اسماء الاخرين وتغلقها لصالحك\n\n  كسر اياً من القوانين قد يعرضك للحظر.\n\n", false, RulesFaqsTab)
+  	FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ الاسئلة الشاعة _____\n\n\n  س: ماهو الجرين كوين؟?\n  \n  ج: الجرين كوين هي العملة التي تستخدم هنا, تستعمل في جميع سيرفراتنا.\n\n  س: كيف اربع الجرين كوينز؟\n\n  ج: تستطيع ان تربع الجرين كوينز فقط عن طريق اللعب داخل سيرفراتنا بكل سهولة.\n\n  س: ماذا استطيع ان اشتري بأستخادم الجرين كوينز؟\n\n  ج: تستطيع ان تشتري بعض الخواص, المابات, الابواق, الشخصيات و ايضاً تستطيع ان تضيف تعديلات على سياراتك من خلال  متجر الجرين كوين.\n\n اذ هناك اي اسئلة اخرى يرجى التواصل مع الفريق الاداري.", false, RulesFaqsTab)
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
 	
