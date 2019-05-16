@@ -30,6 +30,8 @@ achievementListMix = {
 	{ s = "SH: Win 20 rounds", 											id = 18,	reward = 200,	max = 20 },
 	{ s = "SH: Make 20 kills", 											id = 19,	reward = 100,	max = 20 },
 	{ s = "SH: Make 200 kills", 										id = 20,	reward = 300,	max = 200 },
+	{ s = "SH: Make 500 kills", 										id = 35,	reward = 500,	max = 500 },
+	{ s = "SH: Make 1000 kills", 										id = 36,	reward = 1000,	max = 1000 },
 	
 	{ s = "NTS: Finish the map NTS-Marathon", 							id = 21,	reward = 75 },
 	{ s = "NTS: Win the map NTS-Marathon", 								id = 22,	reward = 200 },
@@ -203,6 +205,8 @@ addEventHandler('onPlayerWinShooter', root, function() playerFinishShooter(sourc
 function onShooterPlayerKill(target)
 	addAchievementProgressMix ( source, 19, 1 )
 	addAchievementProgressMix ( source, 20, 1 )
+	addAchievementProgressMix ( source, 35, 1 )
+	addAchievementProgressMix ( source, 36, 1 )
 	if isFirstKill then
 		isFirstKill = false
 		addPlayerAchievementMix ( target, 28 )
