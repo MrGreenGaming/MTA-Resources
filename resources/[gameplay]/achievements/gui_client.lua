@@ -1,31 +1,13 @@
-bGuiOpen = false
-addEvent("sb_showAchievements")
-function toggleAchievementGUI(key, keyState)
-	if keyState ~= "down" then if keyState then return end end
-	if bGuiOpen == false then
-		bGuiOpen = true
-		triggerServerEvent("onAchievementsBoxLoad", resourceRoot)
-	elseif isElement(window) then
-		destroyElement(window)
-		bGuiOpen = false
-		showCursor(false)
-	end	
-end
-bindKey("f4", "down", toggleAchievementGUI)
-addEventHandler("sb_showAchievements", root, toggleAchievementGUI)
+bGuiOpen = false;
 
 function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achievementListRace, playerAchievementsRace )
-	guiSetInputMode("no_binds_when_editing")
-	showCursor(true)
-	
-	window = guiCreateWindow(0.2775, 0.3, 0.445, 0.3, "Achievements (F4 to close)", true)
-	guiWindowSetSizable(window, false)
-	
-	--Tabs
-	local tabPanel = guiCreateTabPanel(0, 0.1, 1, 1, true, window)
-	local raceStats = guiCreateTab("Race Achievements", tabPanel)
-	local mixStats = guiCreateTab("Mix Achievements", tabPanel)
-	
+	if(not isElement(tabPanel)) then		
+		guiSetInputMode("no_binds_when_editing")
+		tabPanel = guiCreateTabPanel(537, 331, 840, 307, false)
+		raceStats = guiCreateTab("Race Achievements", tabPanel)
+		mixStats = guiCreateTab("Mix Achievements", tabPanel)
+	end
+
 	--Gridlist MIX
 	local achGrid = guiCreateGridList(0,0, 1, 1, true, mixStats)
 	guiGridListSetSortingEnabled(achGrid, false)
@@ -94,6 +76,32 @@ function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achiev
 	end
 	guiSetText(raceStats, "Race Achievements: "..unlocked.."/"..tostring(#achievementListRace))
 end
+
 addEvent ( 'showAchievementsGUI', true )
 addEventHandler ( 'showAchievementsGUI', resourceRoot, showAchievementsGUI )
 
+function showAchievementsDX()
+	showCursor(true)
+	dxDrawRectangle(531, 323, 856, 325, tocolor(1, 0, 0, 228), false)
+	dxDrawRectangle(531, 313, 856, 10, tocolor(12, 180, 24, 255), false)
+	dxDrawRectangle(531, 303, 856, 10, tocolor(78, 200, 87, 255), false)
+	dxDrawText("Achievements", 899 + 1, 303 + 1, 1020 + 1, 322 + 1, tocolor(0, 0, 0, 255), 1.40, "default-bold", "left", "top", false, false, false, false, false)
+	dxDrawText("Achievements", 899, 303, 1020, 322, tocolor(255, 255, 255, 255), 1.40, "default-bold", "left", "top", false, false, false, false, false)
+end
+
+function toggleGui()
+	local bVisibility = not guiGetVisible(tabPanel)
+	
+	guiSetVisible(tabPanel, bVisibility)
+	showCursor(bVisibility)
+
+	if(bVisibility) then		
+    	addEventHandler("onClientRender", root, showAchievementsDX)
+		triggerServerEvent("onAchievementsBoxLoad", resourceRoot)
+	else
+    	removeEventHandler("onClientRender", getRootElement(), showAchievementsDX)
+    end
+end
+
+bindKey("F4", "down", toggleGui)
+addEventHandler("sb_showAchievements", root, toggleGui)
