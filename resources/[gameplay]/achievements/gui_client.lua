@@ -1,12 +1,48 @@
-bGuiOpen = false;
+GUIEditor = {
+    window = {},
+    staticimage = {},
+    label = {}
+}
+
+bGuiOpen = false
+
+addEvent("sb_showAchievements")
+function toggleAchievementGUI(key, keyState)
+	if keyState ~= "down" then if keyState then return end end
+	if bGuiOpen == false then
+		bGuiOpen = true
+		triggerServerEvent("onAchievementsBoxLoad", resourceRoot)
+	elseif isElement(window) then
+		destroyElement(window)
+		bGuiOpen = false
+		showCursor(false)
+	end	
+end
+bindKey("f4", "down", toggleAchievementGUI)
+addEventHandler("sb_showAchievements", root, toggleAchievementGUI)
 
 function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achievementListRace, playerAchievementsRace )
-	if(not isElement(tabPanel)) then		
-		guiSetInputMode("no_binds_when_editing")
-		tabPanel = guiCreateTabPanel(537, 331, 840, 307, false)
-		raceStats = guiCreateTab("Race Achievements", tabPanel)
-		mixStats = guiCreateTab("Mix Achievements", tabPanel)
-	end
+	guiSetInputMode("no_binds_when_editing")
+	showCursor(true)
+
+	local screenWidth, screenHeight = guiGetScreenSize()
+	window = guiCreateStaticImage((screenWidth - 854) / 2, (screenHeight  - 324) / 2, 854, 324, ":guieditor/images/dot_white.png", false)
+	guiSetProperty(window, "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
+	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, ":guieditor/images/dot_white.png", false, window)
+	guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, ":guieditor/images/dot_white.png", false, window)
+	guiSetProperty(GUIEditor.staticimage[3], "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+	GUIEditor.label[1] = guiCreateLabel(364, 1, 128, 16, "Achievements", false, window)
+	guiSetFont(GUIEditor.label[1], "default-bold-small")
+	guiSetProperty(GUIEditor.label[1], "AlwaysOnTop", "true")
+	guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
+	guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
+	guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
+
+	--Tabs
+	local tabPanel = guiCreateTabPanel(0, 0.1, 1, 0.88, true, window)
+	local raceStats = guiCreateTab("Race Achievements", tabPanel)
+	local mixStats = guiCreateTab("Mix Achievements", tabPanel)
 
 	--Gridlist MIX
 	local achGrid = guiCreateGridList(0,0, 1, 1, true, mixStats)
@@ -41,7 +77,7 @@ function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achiev
 		end
 	end
 	guiSetText(mixStats, "Mix Achievements: "..unlocked.."/"..tostring(#achievementListMix))
-	
+
 	--Gridlist RACE
 	local achGridRace = guiCreateGridList(0,0, 1, 1, true, raceStats)
 	guiGridListSetSortingEnabled(achGridRace, false)
@@ -77,31 +113,13 @@ function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achiev
 	guiSetText(raceStats, "Race Achievements: "..unlocked.."/"..tostring(#achievementListRace))
 end
 
+-- stop player from clicking  GUIEditor.staticimage[2] or GUIEditor.staticimage[3]
+
+--	addEventHandler("onClientGUIClick", resourceRoot, function()
+--		if (source == GUIEditor.staticimage[2]) and (source == GUIEditor.staticimage[3]) then
+--			cancelEvent()
+--		end
+--	end)
+
 addEvent ( 'showAchievementsGUI', true )
 addEventHandler ( 'showAchievementsGUI', resourceRoot, showAchievementsGUI )
-
-function showAchievementsDX()
-	showCursor(true)
-	dxDrawRectangle(531, 323, 856, 325, tocolor(1, 0, 0, 228), false)
-	dxDrawRectangle(531, 313, 856, 10, tocolor(12, 180, 24, 255), false)
-	dxDrawRectangle(531, 303, 856, 10, tocolor(78, 200, 87, 255), false)
-	dxDrawText("Achievements", 899 + 1, 303 + 1, 1020 + 1, 322 + 1, tocolor(0, 0, 0, 255), 1.40, "default-bold", "left", "top", false, false, false, false, false)
-	dxDrawText("Achievements", 899, 303, 1020, 322, tocolor(255, 255, 255, 255), 1.40, "default-bold", "left", "top", false, false, false, false, false)
-end
-
-function toggleGui()
-	local bVisibility = not guiGetVisible(tabPanel)
-	
-	guiSetVisible(tabPanel, bVisibility)
-	showCursor(bVisibility)
-
-	if(bVisibility) then		
-    	addEventHandler("onClientRender", root, showAchievementsDX)
-		triggerServerEvent("onAchievementsBoxLoad", resourceRoot)
-	else
-    	removeEventHandler("onClientRender", getRootElement(), showAchievementsDX)
-    end
-end
-
-bindKey("F4", "down", toggleGui)
-addEventHandler("sb_showAchievements", root, toggleGui)
