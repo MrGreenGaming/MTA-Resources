@@ -56,24 +56,50 @@
     <file src="img/dot.jpg"></file>
     
     <!-- Vip Skin Files -->
-    <file src="items/vipskin/skins/Fapman.dff"></file>
-    <file src="items/vipskin/skins/Fapman.txd"></file>
-    <file src="items/vipskin/skins/Ironman.dff"></file>
-    <file src="items/vipskin/skins/Ironman.txd"></file>
-    <file src="items/vipskin/skins/Stig.dff"></file>
-    <file src="items/vipskin/skins/Stig.txd"></file>
-    <file src="items/vipskin/skins/MarieRose.dff"></file>
-    <file src="items/vipskin/skins/MarieRose.txd"></file>
-    <file src="items/vipskin/skins/Goku.dff"></file>
-    <file src="items/vipskin/skins/Goku.txd"></file>
-    <file src="items/vipskin/skins/Spiderman.dff"></file>
-    <file src="items/vipskin/skins/Spiderman.txd"></file>
-    <file src="items/vipskin/skins/hitman.dff"></file>
-    <file src="items/vipskin/skins/hitman.txd"></file>
-    <file src="items/vipskin/skins/skadi.dff"></file>
-    <file src="items/vipskin/skins/skadi.txd"></file>
-    <file src="items/vipskin/skins/waifu.dff"></file>
-    <file src="items/vipskin/skins/waifu.txd"></file>
+    <file src="items/vipskin/skins/Fapman.dff" download="false" />
+    <file src="items/vipskin/skins/Fapman.txd" download="false" />
+    <file src="items/vipskin/skins/Ironman.dff" download="false" />
+    <file src="items/vipskin/skins/Ironman.txd" download="false" />
+    <file src="items/vipskin/skins/Stig.dff" download="false" />
+    <file src="items/vipskin/skins/Stig.txd" download="false" />
+    <file src="items/vipskin/skins/MarieRose.dff" download="false" />
+    <file src="items/vipskin/skins/MarieRose.txd" download="false" />
+    <file src="items/vipskin/skins/Goku.dff" download="false" />
+    <file src="items/vipskin/skins/Goku.txd" download="false" />
+    <file src="items/vipskin/skins/Spiderman.dff" download="false" />
+    <file src="items/vipskin/skins/Spiderman.txd" download="false" />
+    <file src="items/vipskin/skins/hitman.dff" download="false" />
+    <file src="items/vipskin/skins/hitman.txd" download="false" />
+    <file src="items/vipskin/skins/skadi.dff" download="false" />
+    <file src="items/vipskin/skins/skadi.txd" download="false" />
+    <file src="items/vipskin/skins/waifu.dff" download="false" />
+    <file src="items/vipskin/skins/waifu.txd" download="false" />
+    <file src="items/vipskin/skins/minicj.dff" download="false" />
+    <file src="items/vipskin/skins/minicj.txd" download="false" />
+    <file src="items/vipskin/skins/randomguy.dff" download="false" />
+    <file src="items/vipskin/skins/randomguy.txd" download="false" />
+    <file src="items/vipskin/skins/Annahome.dff" download="false" />
+    <file src="items/vipskin/skins/Annahome.txd" download="false" />
+    <file src="items/vipskin/skins/NEO.dff" download="false" />
+    <file src="items/vipskin/skins/NEO.txd" download="false" />
+    <file src="items/vipskin/skins/daffyduck.dff" download="false" />
+    <file src="items/vipskin/skins/daffyduck.txd" download="false" />
+    <file src="items/vipskin/skins/AiKizuna.dff" download="false" />
+    <file src="items/vipskin/skins/AiKizuna.txd" download="false" />
+    <file src="items/vipskin/skins/luigi.dff" download="false" />
+    <file src="items/vipskin/skins/luigi.txd" download="false" />
+    <file src="items/vipskin/skins/mario.dff" download="false" />
+    <file src="items/vipskin/skins/mario.txd" download="false" />
+    <file src="items/vipskin/skins/specopsmarshmello.dff" download="false" />
+    <file src="items/vipskin/skins/specopsmarshmello.txd" download="false" />
+    <file src="items/vipskin/skins/bugsbunny.dff" download="false" />
+    <file src="items/vipskin/skins/bugsbunny.txd" download="false" />
+    <file src="items/vipskin/skins/femalelifeguard.dff" download="false" />
+    <file src="items/vipskin/skins/femalelifeguard.txd" download="false" />
+    <file src="items/vipskin/skins/crysis.dff" download="false" />
+    <file src="items/vipskin/skins/crysis.txd" download="false" />
+
+
 
     <!-- Dynamic Vehicle Overlay Files -->
     <!-- Dynamic overlay by: ~ Shadow ~ -->

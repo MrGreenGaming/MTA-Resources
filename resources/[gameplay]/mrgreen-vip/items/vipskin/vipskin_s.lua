@@ -14,7 +14,27 @@ local skinIds = {
 	[7] = 254,
 	[8] = 16,
 	[9] = 235,
-	[10] = 186
+	[10] = 186,
+	[11] = 210,
+	[12] = 12,
+	[13] = 11,
+	[14] = 171,
+	[15] = 172,
+	[16] = 153,
+	[17] = 260,
+	[18] = 206,
+	[19] = 253,
+	[20] = 229,
+	[21] = 234,
+	[22] = 250,
+	[23] = 184,
+	[24] = 101,
+	[25] = 88,
+	[26] = 60,
+	[27] = 58,
+	[28] = 56,
+	[29] = 15,
+	[30] = 44
 }
 function setVipSkin(player, id)
 
@@ -32,8 +52,9 @@ function setVipSkin(player, id)
 		if not playerSkins[player] or playerSkins[player] ~= skinIds[id] then
 			playerSkins[player] = skinIds[id]
 		end
-		setElementData( player, 'vip.skin', skinIds[id] )
+		setElementData( player, 'vip.skin', id )
 		setElementModel(player, skinIds[id])
+		triggerClientEvent(player, 'onVipSelectedSkin', player)
 	end 
 end
 
@@ -76,13 +97,19 @@ addEventHandler('onClientUseVipSkin', root,
 		local saved = saveVipSetting(source, 5, 'skin', tonumber(id))
 		 if saved then
 		 	setVipSkin(source,id)
-		 	vip_outputChatBox("Your VIP skin has successfully been changed!",source,0,255,100)
+			vip_outputChatBox("Your VIP skin has successfully been changed! Other players will see this when the next map starts.",source,0,255,100)
+			 
 		 else
 		 	vip_outputChatBox("There was an error changing your VIP skin!",source,255,0,0)
 		 end
 	end
 )
 
+-- Send client the id's table
+addEvent('onClientRequestsVipSkinsTable', true)
+addEventHandler('onClientRequestsVipSkinsTable', resourceRoot, function()
+	triggerClientEvent( client, 'onServerSendVipSkinsTable', client, skinIds)
+end)
 
 
 
