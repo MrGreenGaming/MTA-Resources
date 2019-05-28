@@ -24,7 +24,7 @@ addEventHandler("sb_showAchievements", root, toggleAchievementGUI)
 function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achievementListRace, playerAchievementsRace )
 	guiSetInputMode("no_binds_when_editing")
 	showCursor(true)
-
+--
 	local screenWidth, screenHeight = guiGetScreenSize()
 	window = guiCreateStaticImage((screenWidth - 854) / 2, (screenHeight  - 324) / 2, 854, 324, ":stats/images/dot.png", false)
 	guiSetProperty(window, "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
