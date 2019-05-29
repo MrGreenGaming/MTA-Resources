@@ -26,13 +26,19 @@ function showhideGUI()
 		triggerServerEvent('requestAdmins', resourceRoot)
 		guiSetVisible(MainWindow, true)
 		showCursor(true)
+		MainWindowBlur = exports.blur_box:createBlurBox( 0, 0,  screenW, screenH, 255, 255, 255, 255, true )
+		MainWindowBlurIntensity = exports.blur_box:setBlurIntensity(2.5)
 	else
 		guiSetVisible(MainWindow, false)
 		showCursor(false)
+		exports.blur_box:destroyBlurBox(MainWindowBlur)
 	end
 end
 bindKey("F9", "up", showhideGUI)
 
+addEventHandler("onClientResourceStop", resourceRoot, function()
+	exports.blur_box:destroyBlurBox(MainWindowBlur)
+end)
 
 function buildGUI()
 	local screenWidth, screenHeight = guiGetScreenSize()
@@ -47,7 +53,7 @@ function buildGUI()
 	guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
 	guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
 	guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
-	
+
 	TabPanel = guiCreateTabPanel( 0.5*(windowW-tabpanelW), 0.08*windowH, tabpanelW, tabpanelH, false, MainWindow)
 	
 	AboutTab = guiCreateTab("About", TabPanel)
@@ -300,7 +306,7 @@ function ( changelog, changelogLastUpdate, output )
 	if isNewChangelog(changelogLastUpdate) then
 		guiSetVisible(ChangeLogUpdates, true)
 		if output then
-			outputChatBox("[UPDATE] #FFFFFFSomething updated, press F9 -> #00ff00\"Changelog\" #FFFFFFto see what's new #00ff00!", 0, 255, 0, true)
+			outputChatBox("[UPDATE] #FFFFFFSomething updated, press F9 -> #00ff00\"Changelog\" #FFFFFFto see what's new#00ff00!", 0, 255, 0, true)
 		end
 	end
 end
