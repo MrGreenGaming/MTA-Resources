@@ -1,3 +1,9 @@
+GUIEditor = {
+    window = {},
+    staticimage = {},
+    label = {}
+}
+
 --Settings
 local screenW, screenH = guiGetScreenSize()
 local windowW, windowH = 840, 570
@@ -12,8 +18,8 @@ local adminColumnN2posX = adminColumnN1posX+0.5*(tabpanelW-(motdIndent*4+motdW))
 local adminColumnW, adminColumnH = adminColumnN2posX-adminColumnN1posX, 20
 local offlineColor = { r = 100, g = 100, b = 100 }
 local onlineColor = { r = 0, g = 255, b = 0 }
-	
-	
+
+
 function showhideGUI()
 	if not guiGetVisible(MainWindow) then
 		triggerServerEvent('requestChangelog', resourceRoot)
@@ -27,9 +33,20 @@ function showhideGUI()
 end
 bindKey("F9", "up", showhideGUI)
 
-function buildGUI()	
-	MainWindow = guiCreateWindow(left, top, windowW, windowH, "Welcome!", false)
-	guiWindowSetSizable(MainWindow, false)
+
+function buildGUI()
+	local screenWidth, screenHeight = guiGetScreenSize()
+	MainWindow = guiCreateStaticImage(left, top, windowW, windowH, ":stats/images/dot.png", false)
+	guiSetProperty(MainWindow, "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
+	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, windowW, 10, ":stats/images/dot.png", false, MainWindow)
+	guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, windowW, 10, ":stats/images/dot.png", false, MainWindow)
+	guiSetProperty(GUIEditor.staticimage[3], "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+	GUIEditor.label[1] = guiCreateLabel(364, 1, 128, 16, "Welcome!", false, MainWindow)
+	guiSetFont(GUIEditor.label[1], "default-bold-small")
+	guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
+	guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
+	guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
 	
 	TabPanel = guiCreateTabPanel( 0.5*(windowW-tabpanelW), 0.08*windowH, tabpanelW, tabpanelH, false, MainWindow)
 	
@@ -158,19 +175,101 @@ function buildGUI()
   	FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ الاسئلة الشاعة _____\n\n\n  س: ماهو الجرين كوين؟?\n  \n  ج: الجرين كوين هي العملة التي تستخدم هنا, تستعمل في جميع سيرفراتنا.\n\n  س: كيف اربع الجرين كوينز؟\n\n  ج: تستطيع ان تربع الجرين كوينز فقط عن طريق اللعب داخل سيرفراتنا بكل سهولة.\n\n  س: ماذا استطيع ان اشتري بأستخادم الجرين كوينز؟\n\n  ج: تستطيع ان تشتري بعض الخواص, المابات, الابواق, الشخصيات و ايضاً تستطيع ان تضيف تعديلات على سياراتك من خلال  متجر الجرين كوين.\n\n اذ هناك اي اسئلة اخرى يرجى التواصل مع الفريق الاداري.", false, RulesFaqsTab)
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
+
+
+	-- close button 
+
+	CloseButton = guiCreateStaticImage(650, 505, 131, 21.5, ":stats/images/dot.png", false, MainWindow)
+	CloseButtonTwo = guiCreateStaticImage(650, 505, 131, 41, ":stats/images/dot.png", false, MainWindow)
+	guiSetProperty(CloseButton, "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+	guiSetProperty(CloseButtonTwo, "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+	guiSetProperty(CloseButton, "AlwaysOnTop", "true")
+
+	CloseLabel = guiCreateLabel(650, 505, 131, 41, "Close", false, MainWindow)
+	guiSetFont(CloseLabel, "default-bold-small")
+	guiLabelSetHorizontalAlign(CloseLabel, "center", false)
+	guiLabelSetVerticalAlign(CloseLabel, "center")
+	guiSetProperty(CloseLabel, "AlwaysOnTop", "true")
 	
-	CloseButton = guiCreateButton(640, 505, 131, 41, "Close", false, MainWindow)
+	addEventHandler("onClientMouseEnter", resourceRoot, function()
+	if (source == CloseLabel) then
+		guiSetAlpha(CloseButton, 0.5)
+		guiSetAlpha(CloseButtonTwo, 0.5)
+		end
+	end)
+
+	addEventHandler("onClientMouseLeave", resourceRoot, function()
+	if (source == CloseLabel) then
+		guiSetAlpha(CloseButton, 255)
+		guiSetAlpha(CloseButtonTwo, 255)
+		end
+	end)
+
 	if on_pushButton_clicked then
-		addEventHandler("onClientGUIClick", CloseButton, on_pushButton_clicked, false)
+		addEventHandler("onClientGUIClick", CloseLabel, on_pushButton_clicked, false)
 	end
 	
-	SwitchButton = guiCreateButton(300, 505, 131, 41, "Switch server", false, MainWindow)
+	-- switch button
+
+	SwitchButtonOne = guiCreateStaticImage(350, 505, 131, 21.5, ":stats/images/dot.png", false, MainWindow)
+	SwitchButtonTwo = guiCreateStaticImage(350, 505, 131, 41, ":stats/images/dot.png", false, MainWindow)
+	guiSetProperty(SwitchButtonOne, "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+	guiSetProperty(SwitchButtonTwo, "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+	guiSetProperty(SwitchButtonOne, "AlwaysOnTop", "true")
+
+	SwitchButton = guiCreateLabel(350, 505, 131, 41, "Switch Server", false, MainWindow)
+	guiSetFont(SwitchButton, "default-bold-small")
+	guiLabelSetHorizontalAlign(SwitchButton, "center", false)
+	guiLabelSetVerticalAlign(SwitchButton, "center")
+	guiSetProperty(SwitchButton, "AlwaysOnTop", "true")
+	
+	addEventHandler("onClientMouseEnter", resourceRoot, function()
+	if (source == SwitchButton) then
+		guiSetAlpha(SwitchButtonOne, 0.5)
+		guiSetAlpha(SwitchButtonTwo, 0.5)
+		end
+	end)
+
+	addEventHandler("onClientMouseLeave", resourceRoot, function()
+	if (source == SwitchButton) then
+		guiSetAlpha(SwitchButtonOne, 255)
+		guiSetAlpha(SwitchButtonTwo, 255)
+		end
+	end)
 	addEventHandler("onClientGUIClick", SwitchButton, function() triggerServerEvent('onRequestRedirect', localPlayer) end, false)
 	
-	SettingsButton = guiCreateButton(40, 505, 131, 41, "Settings", false, MainWindow)
+	-- settingsbutton
+
+	SettingsButtonOne = guiCreateStaticImage(50, 505, 131, 21.5, ":stats/images/dot.png", false, MainWindow)
+	SettingsButtonTwo = guiCreateStaticImage(50, 505, 131, 41, ":stats/images/dot.png", false, MainWindow)
+	guiSetProperty(SettingsButtonOne, "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+	guiSetProperty(SettingsButtonTwo, "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+	guiSetProperty(SettingsButtonOne, "AlwaysOnTop", "true")
+
+	SettingsButton = guiCreateLabel(50, 505, 131, 41, "Settings", false, MainWindow)
+	guiSetFont(SettingsButton, "default-bold-small")
+	guiLabelSetHorizontalAlign(SettingsButton, "center", false)
+	guiLabelSetVerticalAlign(SettingsButton, "center")
+	guiSetProperty(SettingsButton, "AlwaysOnTop", "true")
+	
+	addEventHandler("onClientMouseEnter", resourceRoot, function()
+	if (source == SettingsButton) then
+		guiSetAlpha(SettingsButtonOne, 0.5)
+		guiSetAlpha(SettingsButtonTwo, 0.5)
+		end
+	end)
+
+	addEventHandler("onClientMouseLeave", resourceRoot, function()
+	if (source == SettingsButton) then
+		guiSetAlpha(SettingsButtonOne, 255)
+		guiSetAlpha(SettingsButtonTwo, 255)
+		end
+	end)
+
 	if on_pushButton_2_clicked then
 		addEventHandler("onClientGUIClick", SettingsButton, on_pushButton_2_clicked, false)
 	end
+	
 	
 	guiSetVisible(MainWindow, false)
 	triggerServerEvent('requestMOTD', resourceRoot)
@@ -191,6 +290,7 @@ function ( onlineAdmins )
 end
 )
 
+
 addEvent('receiveChangelog', true)
 addEventHandler('receiveChangelog', resourceRoot, 
 function ( changelog, changelogLastUpdate, output )
@@ -200,11 +300,12 @@ function ( changelog, changelogLastUpdate, output )
 	if isNewChangelog(changelogLastUpdate) then
 		guiSetVisible(ChangeLogUpdates, true)
 		if output then
-			outputChatBox("Something updated, press F9 -> \"Changelog\" to see what's new", 0, 255, 0)
+			outputChatBox("[UPDATE] #FFFFFFSomething updated, press F9 -> #00ff00\"Changelog\" #FFFFFFto see what's new #00ff00!", 0, 255, 0, true)
 		end
 	end
 end
 )
+
 
 local changelogFile = 'changelog.xml'
 function isNewChangelog(changelogLastUpdate)
@@ -220,7 +321,6 @@ function isNewChangelog(changelogLastUpdate)
 end
 
 
-
 addEvent('receiveMotd', true)
 addEventHandler('receiveMotd', resourceRoot, 
 function ( motdText, motdVersion )
@@ -231,6 +331,7 @@ function ( motdText, motdVersion )
 	end
 end
 )
+
 
 local settingsFile = '@settings.xml'
 function isNewMotd(motdVersion)
@@ -245,10 +346,12 @@ function isNewMotd(motdVersion)
 	return new
 end
 
+
 function editmotd()
 	guiMemoSetReadOnly(MotdMemo,false)
 end
 addCommandHandler('editmotd', editmotd)
+
 
 function savemotd()
 	guiMemoSetReadOnly(MotdMemo,true)
@@ -256,15 +359,18 @@ function savemotd()
 end
 addCommandHandler('savemotd', savemotd)
 
+
 function on_pushButton_clicked(button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") then return end
 	showhideGUI()
 end
 
+
 function on_pushButton_2_clicked(button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") then return end
 	executeCommandHandler("settings")	
 end
+
 
 addEvent("sb_showHelp")
 addEventHandler("sb_showHelp",root,function()
@@ -278,7 +384,8 @@ addEventHandler("sb_showHelp",root,function()
 	end
 
 	
-	end)
+end)
+
 
 addEvent("sb_showServerInfo")
 addEventHandler("sb_showServerInfo",root,function()
