@@ -52,7 +52,8 @@ function buildGUI()
 	guiSetFont(GUIEditor.label[1], "default-bold-small")
 	guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
 	guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
-	guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
+	guiLabelSetVerticalAlign(GUIEditor.label[1], "center")
+	guiSetProperty(GUIEditor.label[1], "AlwaysOnTop", "true")
 
 	TabPanel = guiCreateTabPanel( 0.5*(windowW-tabpanelW), 0.08*windowH, tabpanelW, tabpanelH, false, MainWindow)
 	
@@ -399,9 +400,12 @@ addEventHandler("sb_showServerInfo",root,function()
 		guiSetVisible(MainWindow, true)
 		showCursor(true)
 		guiSetSelectedTab(TabPanel,AboutTab)
+		MainWindowBlur = exports.blur_box:createBlurBox( 0, 0,  screenW, screenH, 255, 255, 255, 255, true )
+		MainWindowBlurIntensity = exports.blur_box:setBlurIntensity(2.5)
 	else
 		guiSetVisible(MainWindow, false)
 		showCursor(false)
+		exports.blur_box:destroyBlurBox(MainWindowBlur)
 	end
 end
 )
