@@ -1,0 +1,17 @@
+<meta>
+	<info name="blur_box" author="Ren712" version="1.0.2" type="script" />
+	<min_mta_version client="1.3.4" server="1.3.4" />
+	<script src="c_main.lua" type="client" />
+	<script src="c_helper_functions.lua" type="client" />
+	<script src="c_exported_functions.lua" type="client" />
+	<file src="shaders/fxBlurH.fx" type="client" />
+	<file src="shaders/fxBlurV.fx" type="client" />
+	<export function="createBlurBox" type="client" />
+	<export function="setBlurBoxEnabled" type="client" />
+	<export function="destroyBlurBox" type="client" />
+	<export function="setBlurBoxPosition" type="client" />
+	<export function="setBlurBoxColor" type="client" />
+	<export function="setBlurBoxSize" type="client" />
+	<export function="setBlurIntensity" type="client" />
+	<export function="setScreenResolutionMultiplier" type="client" />
+</meta>
