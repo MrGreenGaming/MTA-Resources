@@ -252,8 +252,9 @@ end)
 
 addEventHandler("onMapGather", getRootElement(),
     function(mapName,likes,dislikes,timesPlayed, author, description, lastTimePlayed, playerTime, nextmap)
+        local nextmap = nextmap or '-not set-'
         if isTrayNotificationEnabled() then
-        createTrayNotification("[MrGreenGaming] ".. mapName .." just started. (".. nextmap ..").", "default" )
+            createTrayNotification("[MrGreenGaming] ".. mapName .." just started. (".. nextmap  or '-not set-' ..").", "default" )
         end
     end
 )
