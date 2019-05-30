@@ -8,11 +8,15 @@ bGuiOpen = false
 
 addEvent("sb_showAchievements")
 function toggleAchievementGUI(key, keyState)
+	local screenW, screenH = guiGetScreenSize()
 	if keyState ~= "down" then if keyState then return end end
 	if bGuiOpen == false then
 		bGuiOpen = true
 		triggerServerEvent("onAchievementsBoxLoad", resourceRoot)
+		achievements = exports.blur_box:createBlurBox( 0, 0, screenW, screenH, 255, 255, 255, 255, true )
+        achievementsIntensity = exports.blur_box:setBlurIntensity(2.5)
 	elseif isElement(window) then
+		exports.blur_box:destroyBlurBox(achievements)
 		destroyElement(window)
 		bGuiOpen = false
 		showCursor(false)
@@ -24,7 +28,7 @@ addEventHandler("sb_showAchievements", root, toggleAchievementGUI)
 function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achievementListRace, playerAchievementsRace )
 	guiSetInputMode("no_binds_when_editing")
 	showCursor(true)
---
+
 	local screenWidth, screenHeight = guiGetScreenSize()
 	window = guiCreateStaticImage((screenWidth - 854) / 2, (screenHeight  - 324) / 2, 854, 324, ":stats/images/dot.png", false)
 	guiSetProperty(window, "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
