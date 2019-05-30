@@ -247,3 +247,11 @@ addEventHandler("onClientMapLaunched", root, function()
 		setSoundPaused( u, false )
 	end
 end)
+
+-- tray notification on map started
+
+addEventHandler("onClientResourceStart", getRootElement(),
+    function(res)
+        createTrayNotification("[MrGreenGaming] Map (" .. getResourceName(res) .. ") just started.", "default" )
+    end
+)
