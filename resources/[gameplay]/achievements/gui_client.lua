@@ -117,6 +117,36 @@ function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achiev
 	guiSetText(raceStats, "Race Achievements: "..unlocked.."/"..tostring(#achievementListRace))
 end
 
+-- moving the window
+
+local isWindowClicked = false
+local windowOffsetPos = false
+addEventHandler( "onClientGUIMouseDown", getRootElement( ),
+    function ( btn, x, y )
+        if btn == "left" and (source == GUIEditor.staticimage[2] or source == GUIEditor.staticimage[3]) then
+            isWindowClicked = true
+            local elementPos = { guiGetPosition( window, false ) }
+            windowOffsetPos = { x - elementPos[ 1 ], y - elementPos[ 2 ] }; -- get the offset position
+        end
+    end
+)
+
+addEventHandler( "onClientGUIMouseUp", getRootElement( ),
+    function ( btn, x, y )
+        if btn == "left" then
+            isWindowClicked = false
+        end
+    end
+)
+
+addEventHandler( "onClientCursorMove", getRootElement( ),
+    function ( _, _, x, y )
+        if isWindowClicked and windowOffsetPos then
+            guiSetPosition( window, x - windowOffsetPos[ 1 ], y - windowOffsetPos[ 2 ], false )
+        end
+    end
+)
+
 -- stop player from clicking  GUIEditor.staticimage[2] or GUIEditor.staticimage[3]
 
 --	addEventHandler("onClientGUIClick", resourceRoot, function()
