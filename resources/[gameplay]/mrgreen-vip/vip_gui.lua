@@ -26,7 +26,6 @@ function build_mainVipWindow()
 	guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
 	guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
 	guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
-
 	guiSetVisible( gui["_root"], false )
 	
 	gui["vipTabs"] = guiCreateTabPanel(10, 70, 730, 521, false, gui["_root"])
@@ -326,6 +325,38 @@ function build_mainVipWindow()
 
 	return gui, windowWidth, windowHeight
 end
+
+-- moving the window
+
+local isWindowClicked = false
+local windowOffsetPos = false
+addEventHandler( "onClientGUIMouseDown", getRootElement( ),
+    function ( btn, x, y )
+        if btn == "left" and (source == GUIEditor.staticimage[2] or source == GUIEditor.staticimage[3]) then
+            isWindowClicked = true
+            local elementPos = { guiGetPosition( gui["_root"], false ) }
+            windowOffsetPos = { x - elementPos[ 1 ], y - elementPos[ 2 ] }; -- get the offset position
+        end
+    end
+)
+
+addEventHandler( "onClientGUIMouseUp", getRootElement( ),
+    function ( btn, x, y )
+        if btn == "left" then
+            isWindowClicked = false
+        end
+    end
+)
+
+addEventHandler( "onClientCursorMove", getRootElement( ),
+    function ( _, _, x, y )
+        if isWindowClicked and windowOffsetPos then
+            guiSetPosition( gui["_root"], x - windowOffsetPos[ 1 ], y - windowOffsetPos[ 2 ], false )
+        end
+    end
+)
+
+---
 
 function onVipRainbowToggle (button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") then
