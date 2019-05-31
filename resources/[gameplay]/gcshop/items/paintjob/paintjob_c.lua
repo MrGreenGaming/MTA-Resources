@@ -352,11 +352,23 @@ function applyPJtoVehicle(shader,veh)
 	return apply
 end
 
+
+local paintjobShader_raw_data = [[
+	texture gTexture;
+ 
+	technique TexReplace
+	{
+		pass P0
+		{
+			Texture[0] = gTexture;
+		}
+	}
+]]
 function createPJShader(val)
 	if not val then return false end
 
 	local texture = dxCreateTexture ( client_path .. val .. '.bmp' )
-	local shader, tec = dxCreateShader( client_path .. "paintjob.fx" )
+	local shader, tec = dxCreateShader( paintjobShader_raw_data, 1, 220, true, 'vehicle' )
    
 	--bit of sanity checking
 	if not shader then
