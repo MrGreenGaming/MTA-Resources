@@ -14,11 +14,11 @@ function build_mainVipWindow()
 	local left = screenWidth/2 - windowWidth/2
 	local top = screenHeight/2 - windowHeight/2
 
-	gui["_root"] = guiCreateStaticImage(left, top, windowWidth, windowHeight, ":stats/images/dot.png", false)
+	gui["_root"] = guiCreateStaticImage(left, top, windowWidth, windowHeight, "img/dot.jpg", false)
 	guiSetProperty(gui["_root"], "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
-	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, ":stats/images/dot.png", false, gui["_root"])
+	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, "img/dot.jpg", false, gui["_root"])
 	guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
-	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, ":stats/images/dot.png", false, gui["_root"])
+	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, "img/dot.jpg", false, gui["_root"])
 	guiSetProperty(GUIEditor.staticimage[3], "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
 	GUIEditor.label[1] = guiCreateLabel(310, 1, 128, 16, "Mr. Green VIP Panel", false, gui["_root"])
 	guiSetFont(GUIEditor.label[1], "default-bold-small")
