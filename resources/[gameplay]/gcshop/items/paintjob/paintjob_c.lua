@@ -368,7 +368,7 @@ function createPJShader(val)
 	if not val then return false end
 
 	local texture = dxCreateTexture ( client_path .. val .. '.bmp' )
-	local shader, tec = dxCreateShader( paintjobShader_raw_data, 1, 220, true, 'vehicle' )
+	local shader, tec = dxCreateShader( paintjobShader_raw_data, 1, 220, false, 'vehicle' )
    
 	--bit of sanity checking
 	if not shader then
