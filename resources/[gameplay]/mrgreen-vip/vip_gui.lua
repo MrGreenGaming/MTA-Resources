@@ -641,20 +641,6 @@ function showvip ()
 end
 bindKey("F7","down",showvip)
 
-function showBlurredBackground()
-	local screenW, screenH = guiGetScreenSize()
-	if (guiGetVisible(gui["_root"]) == true) then
-	vipBlur = exports.blur_box:createBlurBox( 0, 0,  screenW, screenH, 255, 255, 255, 255, true )
-	vipBlurIntensity = exports.blur_box:setBlurIntensity(2.5)
-	else
-	exports.blur_box:destroyBlurBox(vipBlur)
-	end
-end
-bindKey("F7","down", showBlurredBackground)
-
-addEventHandler("onClientResourceStop", resourceRoot, function()
-	exports.blur_box:destroyBlurBox(vipBlur)
-end)
 
 
 
