@@ -6,6 +6,7 @@
 	<script src="admins.lua" type="shared" />	
 	
 	<file src="img/logo.png" />
+	<file src="img/dot.jpg" />
 	<file src="commands.txt"/>
 	
 	<include resource="mrgreen-settings" />
