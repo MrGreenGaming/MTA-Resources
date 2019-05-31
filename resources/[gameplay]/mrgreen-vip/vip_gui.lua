@@ -1,3 +1,9 @@
+GUIEditor = {
+    window = {},
+    staticimage = {},
+    label = {}
+}
+
 function build_mainVipWindow()
 	
 	gui = {}
@@ -7,8 +13,19 @@ function build_mainVipWindow()
 	local windowWidth, windowHeight = 750, 616
 	local left = screenWidth/2 - windowWidth/2
 	local top = screenHeight/2 - windowHeight/2
-	gui["_root"] = guiCreateWindow(left, top, windowWidth, windowHeight, "Mr. Green VIP Panel (F7 to close)", false)
-	guiWindowSetSizable(gui["_root"], false)
+
+	gui["_root"] = guiCreateStaticImage(left, top, windowWidth, windowHeight, "img/dot.jpg", false)
+	guiSetProperty(gui["_root"], "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
+	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, "img/dot.jpg", false, gui["_root"])
+	guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, "img/dot.jpg", false, gui["_root"])
+	guiSetProperty(GUIEditor.staticimage[3], "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+	GUIEditor.label[1] = guiCreateLabel(310, 1, 128, 16, "Mr. Green VIP Panel", false, gui["_root"])
+	guiSetFont(GUIEditor.label[1], "default-bold-small")
+	guiSetProperty(GUIEditor.label[1], "AlwaysOnTop", "true")
+	guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
+	guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
+	guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
 	guiSetVisible( gui["_root"], false )
 	
 	gui["vipTabs"] = guiCreateTabPanel(10, 70, 730, 521, false, gui["_root"])
@@ -295,7 +312,7 @@ function build_mainVipWindow()
 	guiLabelSetColor(gui["vipLeftLabel"],255,0,0)
 	guiLabelSetHorizontalAlign(gui["vipLeftLabel"], "right", false)
 	guiLabelSetVerticalAlign(gui["vipLeftLabel"], "center")
-
+	guiSetFont(gui["vipLeftLabel"], "default-bold-small")
 	
 	
 	gui["label"] = guiCreateLabel(480, 585, 271, 31, "Go to https://mrgreengaming.com/donate to get VIP!", false, gui["_root"])
@@ -308,6 +325,38 @@ function build_mainVipWindow()
 
 	return gui, windowWidth, windowHeight
 end
+
+-- moving the window
+
+local isWindowClicked = false
+local windowOffsetPos = false
+addEventHandler( "onClientGUIMouseDown", getRootElement( ),
+    function ( btn, x, y )
+        if btn == "left" and (source == GUIEditor.staticimage[2] or source == GUIEditor.staticimage[3]) then
+            isWindowClicked = true
+            local elementPos = { guiGetPosition( gui["_root"], false ) }
+            windowOffsetPos = { x - elementPos[ 1 ], y - elementPos[ 2 ] }; -- get the offset position
+        end
+    end
+)
+
+addEventHandler( "onClientGUIMouseUp", getRootElement( ),
+    function ( btn, x, y )
+        if btn == "left" then
+            isWindowClicked = false
+        end
+    end
+)
+
+addEventHandler( "onClientCursorMove", getRootElement( ),
+    function ( _, _, x, y )
+        if isWindowClicked and windowOffsetPos then
+            guiSetPosition( gui["_root"], x - windowOffsetPos[ 1 ], y - windowOffsetPos[ 2 ], false )
+        end
+    end
+)
+
+---
 
 function onVipRainbowToggle (button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") then
@@ -612,19 +661,16 @@ end
 
 addEventHandler("onClientResourceStart",resourceRoot,
 	function() 
-		
 		build_mainVipWindow() 
 	end
 )
 
 
-function showMainWindow ()
+function showvip ()
 	guiSetVisible( gui["_root"], not guiGetVisible( gui["_root"] ) )
 	showCursor( guiGetVisible( gui["_root"] ) or false )
 end
-bindKey("F7","down",showMainWindow)
-
-
+bindKey("F7","down",showvip)
 
 
 
