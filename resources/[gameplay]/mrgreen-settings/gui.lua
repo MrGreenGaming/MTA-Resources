@@ -14,10 +14,21 @@ GUIEditor = {
 addEventHandler("onClientResourceStart", resourceRoot,
     function()
 local screenW, screenH = guiGetScreenSize()
-        GUIEditor.window[1] = guiCreateWindow((screenW - 586) / 2, (screenH - 500) / 2, 586, 500, "Settings", false)
-        guiWindowSetSizable(GUIEditor.window[1], false)
-
-        GUIEditor.tabpanel[1] = guiCreateTabPanel(9, 19, 567, 450, false, GUIEditor.window[1])
+        GUIEditor.window[1] = guiCreateStaticImage((screenW - 586) / 2, (screenH - 500) / 2, 586, 510, ":stats/images/dot.png", false)
+        guiSetProperty(GUIEditor.window[1], "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
+        GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, ":stats/images/dot.png", false, GUIEditor.window[1])
+        guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+        GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, ":stats/images/dot.png", false, GUIEditor.window[1])
+        guiSetProperty(GUIEditor.staticimage[3], "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+        GUIEditor.label[1] = guiCreateLabel(235, 1, 128, 16, "Settings", false, GUIEditor.window[1])
+        guiSetFont(GUIEditor.label[1], "default-bold-small")
+        guiSetProperty(GUIEditor.label[1], "AlwaysOnTop", "true")
+        guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
+        guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
+        guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
+        
+       
+        GUIEditor.tabpanel[1] = guiCreateTabPanel(9, 23, 567, 450, false, GUIEditor.window[1])
 
         GUIEditor.tab[1] = guiCreateTab("Visual Settings", GUIEditor.tabpanel[1])
 
@@ -374,10 +385,20 @@ end)
 addEventHandler("onClientResourceStart", resourceRoot,
     function()
 local screenW, screenH = guiGetScreenSize()
-        ignorePlayerWindow = guiCreateWindow((screenW - 277) / 2, (screenH - 392) / 2, 277, 392, "Ignored Players", false)
-        guiWindowSetSizable(ignorePlayerWindow, false)
+        ignorePlayerWindow = guiCreateStaticImage((screenW - 277) / 2, (screenH - 392) / 2, 277, 392, ":stats/images/dot.png", false)
+        guiSetProperty(ignorePlayerWindow, "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
+        GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, ":stats/images/dot.png", false, ignorePlayerWindow)
+        guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+        GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, ":stats/images/dot.png", false, ignorePlayerWindow)
+        guiSetProperty(GUIEditor.staticimage[3], "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+        GUIEditor.label[1] = guiCreateLabel(70, 1, 128, 16, "Settings", false, ignorePlayerWindow)
+        guiSetFont(GUIEditor.label[1], "default-bold-small")
+        guiSetProperty(GUIEditor.label[1], "AlwaysOnTop", "true")
+        guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
+        guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
+        guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
         guiSetAlpha( ignorePlayerWindow, 255 )
-
+        
         ignorePlayerGridlist = guiCreateGridList(29, 84, 212, 240, false, ignorePlayerWindow)
         ignoredplayerColumn = guiGridListAddColumn(ignorePlayerGridlist, "Player Name", 0.9)
         ignoreLabelExpl = guiCreateLabel(10, 25, 249, 53, "You can manage your ignored playerlist, ignore players with the command \n/ignore [playername]", false, ignorePlayerWindow)
