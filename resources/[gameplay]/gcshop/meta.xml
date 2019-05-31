@@ -36,7 +36,7 @@
     
     <script src="items\paintjob\paintjob_s.lua" type="server" />
     <script src="items\paintjob\paintjob_c.lua" type="client" />
-    <file src="items\paintjob\paintjob.fx" type="client" />
+
     <file src="readme_paintjob.txt" type="client" />
     <file src="sultan.bmp" type="client" />
     <file src="infernushow.png" type="client" />
