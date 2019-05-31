@@ -99,7 +99,11 @@
     <file src="items/vipskin/skins/crysis.dff" download="false" />
     <file src="items/vipskin/skins/crysis.txd" download="false" />
 
-
+    <!-- Vip Voice files -->
+    <file src="items/vipskin/skins/voice/waifu1.mp3" />
+    <file src="items/vipskin/skins/voice/waifu2.mp3" />
+    <file src="items/vipskin/skins/voice/woman1.mp3" />
+    <file src="items/vipskin/skins/voice/woman2.mp3" />
 
     <!-- Dynamic Vehicle Overlay Files -->
     <!-- Dynamic overlay by: ~ Shadow ~ -->

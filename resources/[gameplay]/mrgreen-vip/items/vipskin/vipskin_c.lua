@@ -1,30 +1,31 @@
 -- If you add new models, plase make the TXD file smaller with Magic.TXD
 -- Tutorial: https://wiki.multitheftauto.com/wiki/Optimize_Custom_TXD
 local vipSkinPath = "items/vipskin/skins/"
+local vipSkinVoicePath = "items/vipskin/skins/voice/"
 local vipSkins = {
 	-- !IMPORTANT! 
 	-- dff and txd files should have the same name
-	[1] = {name = "Ironman", file = "Ironman", isFemale = false},
-	[2] = {name = "Fapman", file = "Fapman", isFemale = false},
-	[3] = {name = "The Stig", file = "Stig", isFemale = false},
-	[4] = {name = "Marie Rose (DoA)", file = "MarieRose", isFemale = true},
-	[5] = {name = "Goku", file = "Goku", isFemale = false},
-	[6] = {name = "Spiderman", file = "Spiderman", isFemale = false},
-	[7] = {name = "Hitman", file = "hitman", isFemale = false},
-	[8] = {name = "Skadi (Smite)", file = "skadi", isFemale = true},
-	[9] = {name = "Anthony's Waifu", file = "waifu", isFemale = true},
-	[10] = {name = "Mini CJ", file = "minicj", isFemale = false},
-	[11] = {name = "Random Guy", file = "randomguy", isFemale = false},
-	[12] = {name = "Anna Home", file = "Annahome", isFemale = true},
-	[13] = {name = "Neo (matrix)", file = "NEO", isFemale = false},
-	[14] = {name = "Daffy Duck", file = "daffyduck", isFemale = false},
-	[15] = {name = "Ai Kizuna", file = "AiKizuna", isFemale = true},
-	[16] = {name = "Luigi", file = "luigi", isFemale = false},
-	[17] = {name = "Mario", file = "mario", isFemale = false},
-	[18] = {name = "Marshmello Spec Ops", file = "specopsmarshmello", isFemale = false},
-	[19] = {name = "Bugs Bunny", file = "bugsbunny", isFemale = false},
-	[20] = {name = "Lifeguard Female", file = "femalelifeguard", isFemale = true},
-	[21] = {name = "Crysis", file = "crysis", isFemale = false},
+	[1] = {name = "Ironman", file = "Ironman", customVoice = false},
+	[2] = {name = "Fapman", file = "Fapman", customVoice = false},
+	[3] = {name = "The Stig", file = "Stig", customVoice = false},
+	[4] = {name = "Marie Rose (DoA)", file = "MarieRose", customVoice = {'woman1.mp3', 'woman2.mp3'}},
+	[5] = {name = "Goku", file = "Goku", customVoice = false},
+	[6] = {name = "Spiderman", file = "Spiderman", customVoice = false},
+	[7] = {name = "Hitman", file = "hitman", customVoice = false},
+	[8] = {name = "Skadi (Smite)", file = "skadi", customVoice = {'woman1.mp3', 'woman2.mp3'}},
+	[9] = {name = "Anthony's Waifu", file = "waifu", customVoice = {'waifu1.mp3', 'waifu2.mp3'}},
+	[10] = {name = "Mini CJ", file = "minicj", customVoice = false},
+	[11] = {name = "Random Guy", file = "randomguy", customVoice = false},
+	[12] = {name = "Anna Home", file = "Annahome", customVoice = {'woman1.mp3', 'woman2.mp3'}},
+	[13] = {name = "Neo (matrix)", file = "NEO", customVoice = false},
+	[14] = {name = "Daffy Duck", file = "daffyduck", customVoice = false},
+	[15] = {name = "Ai Kizuna", file = "AiKizuna", customVoice = {'woman1.mp3', 'woman2.mp3'}},
+	[16] = {name = "Luigi", file = "luigi", customVoice = false},
+	[17] = {name = "Mario", file = "mario", customVoice = false},
+	[18] = {name = "Marshmello Spec Ops", file = "specopsmarshmello", customVoice = false},
+	[19] = {name = "Bugs Bunny", file = "bugsbunny", customVoice = false},
+	[20] = {name = "Lifeguard Female", file = "femalelifeguard", customVoice = {'woman1.mp3', 'woman2.mp3'}},
+	[21] = {name = "Crysis", file = "crysis", customVoice = false},
 }
 
 -- Reserved skin ID's for VIP skin. If more are needed, please check unbought GC shop skins via database and remove them from there
@@ -89,10 +90,9 @@ function handleVipSkins()
 				table.insert(usedSkins, theId)
 			end
 			-- Set female voice for female peds
-			if vipSkins[tonumber(theId)] and vipSkins[tonumber(theId)].isFemale then
-				setPedVoice( p, 'PED_TYPE_GFD', 'VOICE_GFD_MILLIE' )
-			else
-				setPedVoice( p, 'PED_TYPE_GEN', 'VOICE_GEN_MALE01' )
+			if vipSkins[tonumber(theId)] and vipSkins[tonumber(theId)].customVoice then
+				-- There doesnt seem to be any female 'death' noises, so disable the voice for female peds
+				setPedVoice( p, "PED_TYPE_DISABLED", nil )				
 			end
 		end
 	end
@@ -214,6 +214,25 @@ function isVipSkinLoaded(id, type)
 	return loadedSkins['skin_'..id] and loadedSkins['skin_'..id][type] or false
 end
 
+-- Custom voices on death --
+function playCustomSkinVoice ()
+	if isElement(source) and getElementType(source) == 'player' and getElementDimension(source) == getElementDimension( localPlayer ) and getElementData(source, 'vip.skin') and vipSkins[getElementData(source, 'vip.skin')] then
+		local theCustomVoice = vipSkins[getElementData(source, 'vip.skin')].customVoice
+		if theCustomVoice then
+			local chosenVoice = theCustomVoice[math.random(1,#theCustomVoice)]
+			if source == localPlayer then
+				playSound( vipSkinVoicePath..chosenVoice )
+			else
+				local x, y, z = getElementPosition( source )
+				local x1, y1, z1 = getElementPosition(localPlayer)
+				if getDistanceBetweenPoints3D( x, y, z, x1, y1, z1 ) < 20 then
+					playSound3D( vipSkinVoicePath..chosenVoice, x, y, z)
+				end
+			end
+		end
+	end
+end
+addEventHandler ( "onClientPlayerWasted", root, playCustomSkinVoice )
 -- Utils --
 function tableIncludes(table, value)
 	for i, v in pairs(table) do
