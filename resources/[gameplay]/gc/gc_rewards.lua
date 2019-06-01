@@ -142,11 +142,12 @@ end)
 local rewarded_Players = {}
 local maxRewardedFinishes = 5
 local minimumRewardTimeR = 2 * 60 * 1000
-local maximumRewardTimeR = 7 * 60 * 1000
+local maximumRewardTimeR = 8 * 60 * 1000
 local defaultRewardTime = 2 * 60 * 1000
-local defaultRewardGC = 10
-local minRaceReward = 18
+local defaultRewardGC = 12 -- Base for calculation
 local maxRaceReward = 45
+local minRaceReward = {18, 14, 10, 6, 3}
+
 
 function finish(rank)
 	if modename ~= "Sprint" and modename ~= "Never the same" then
@@ -176,6 +177,7 @@ function finish(rank)
 			rewarded_Players[player] = {}
 		end
 		rewarded_Players[player].finishReward = calcFinishReward(player, rank)
+		-- outputDebugString( 'CalcFinishReward = '..tostring(rewarded_Players[player].finishReward) )
 		rewarded_Players[player].finishReward = vipRewardMult(player,rewarded_Players[player].finishReward)
 		rewarded_Players[player].finishReward = getRewardAmount(rewarded_Players[player].finishReward)		
 		rewarded_Players[player].rank = rank
@@ -196,15 +198,21 @@ end
 addEventHandler("onPlayerFinish", root, finish)
 
 function calcFinishReward(player, rank)
+	--if not tonumber(topTime) then return 0 end
+	-- outputDebugString('toptime:'..tostring(topTime))
 	topTime = tonumber(topTime) or defaultRewardTime
 	local topTime = math.max(math.min(topTime, maximumRewardTimeR), minimumRewardTimeR)
 	local mapratio = math.floor ( topTime/defaultRewardTime * 2 ) / 2
 	local reward = mapratio * defaultRewardGC * (1 - (rank - 1) / maxRewardedFinishes)
 	-- outputDebugString("mapratio " .. mapratio .. " * defaultRewardGC " .. defaultRewardGC ..  " * (1 - (rank " .. rank .. " - 1) / maxRewardedFinishes" .. maxRewardedFinishes)
-	local calculatedReward = math.max(math.ceil(minRaceReward/rank),math.floor(math.round(math.max(reward,0))))
-	return math.min(maxRaceReward,calculatedReward)
+	local calculatedReward = math.floor(math.round(math.max(reward,0)))
+	if minRaceReward[rank] > calculatedReward then
+		return minRaceReward[rank]
+	elseif calculatedReward > (maxRaceReward + rank) then
+		return maxRaceReward + rank
+	end
+	return calculatedReward
 end
-
 
 local minPlayers = 5
 function areRewardsActivated()
@@ -274,9 +282,6 @@ function CTFFlagDelivered()
 	if modename ~= "Capture the flag" then return end
 	local player = source
 	local team = getPlayerTeam(player)
-
-
-
 	local reward = getRewardAmount(rewardCTFFlagDeliver)
 	local rewar2 = getRewardAmount(rewardCTFFlagDeliverTeam)
 	if isHoliday() then
