@@ -21,9 +21,10 @@ function resetMap(mapInfo, mapOptions, gameOptions)
 		topTime = getTopTime ( compareToTopPos )
 		-- If tops are fetching, set a timer to get it a bit later
 		if not topTime then
+			if isTimer(fetchToptimesTimer) then killTimer(fetchToptimesTimer)
 			fetchToptimesTimer = setTimer( function()
 				topTime = getTopTime(compareToTopPos)
-				if topTime then
+				if topTime and isTimer(fetchToptimesTimer) then
 					killTimer( fetchToptimesTimer )
 				end
 			end, 5000, fetchToptimeRetries)
