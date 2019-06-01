@@ -1041,6 +1041,10 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 -------------------------
 --- Exported function ---
 -------------------------
+function getCurrentMapTopTimes()
+	return times or false
+end
+
 function getPlayerToptimes(forumID)
 	if type(forumID) ~= "number" then return false end
 	if not toptimesCache[forumID] then return false end
