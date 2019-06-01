@@ -142,9 +142,11 @@ end)
 local rewarded_Players = {}
 local maxRewardedFinishes = 5
 local minimumRewardTimeR = 2 * 60 * 1000
-local maximumRewardTimeR = 8 * 60 * 1000
+local maximumRewardTimeR = 7 * 60 * 1000
 local defaultRewardTime = 2 * 60 * 1000
-local defaultRewardGC = 18
+local defaultRewardGC = 10
+local minRaceReward = 18
+local maxRaceReward = 45
 
 function finish(rank)
 	if modename ~= "Sprint" and modename ~= "Never the same" then
@@ -199,7 +201,8 @@ function calcFinishReward(player, rank)
 	local mapratio = math.floor ( topTime/defaultRewardTime * 2 ) / 2
 	local reward = mapratio * defaultRewardGC * (1 - (rank - 1) / maxRewardedFinishes)
 	-- outputDebugString("mapratio " .. mapratio .. " * defaultRewardGC " .. defaultRewardGC ..  " * (1 - (rank " .. rank .. " - 1) / maxRewardedFinishes" .. maxRewardedFinishes)
-	return math.floor(math.round(math.max(reward,0)))
+	local calculatedReward = math.max(math.ceil(minRaceReward/rank),math.floor(math.round(math.max(reward,0))))
+	return math.min(maxRaceReward,calculatedReward)
 end
 
 
