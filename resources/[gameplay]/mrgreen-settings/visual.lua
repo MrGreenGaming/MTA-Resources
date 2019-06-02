@@ -45,6 +45,7 @@ visual = { -- Standard Settings, 0 = off --
 	["NOSMode"] = 1, -- 0 = "Old", 1 = "Hybrid", 2= "NFS"
 	["nitrocolor"] = "0078FF",
 	["lodrange"] = 0,
+	["customHornIcons"] = 1
 }
 
 	
@@ -250,7 +251,17 @@ function visualCheckBoxHandler()
 			visual["nitro"] = 0
 		end
 
-
+	
+	elseif source == GUIEditor.checkbox["customHornIcons"] then
+		if guiCheckBoxGetSelected( GUIEditor.checkbox["customHornIcons"] ) then
+			setCustomHornsIconsEnabled(true)
+			v_setSaveTimer()
+			visual["customHornIcons"] = 1
+		else
+			setCustomHornsIconsEnabled(false)
+			v_setSaveTimer()
+			visual["customHornIcons"] = 0
+		end
 	end
 end
 addEventHandler("onClientGUIClick", resourceRoot, visualCheckBoxHandler)
@@ -690,8 +701,14 @@ function setVisualGUI()
 			local t = getNOSModeName(u)
 			
 			setTimer(function() triggerEvent("setNitroType", root, t) end,10000,1 )
-			
-			
+		
+		elseif f == "customHornIcons" then
+			if u == 1 then
+				setCustomHornsIconsEnabled(true)
+				guiCheckBoxSetSelected( GUIEditor.checkbox["customHornIcons"], true )
+			else
+				setCustomHornsIconsEnabled(false)
+			end
 		end
 	end
 end
@@ -724,6 +741,16 @@ function resetVisualonStop()
 	resetSkyBox()
 end
 addEventHandler("onClientResourceStop", resourceRoot, resetVisualonStop)
+
+-- Custom horn icon state
+local customHornsIconsEnabled = true
+function isCustomHornIconEnabled()
+	return customHornsIconsEnabled
+end
+
+function setCustomHornsIconsEnabled(bool)
+	customHornsIconsEnabled = bool
+end
 --util--
 
 function setIMGcolor(hex)
@@ -737,3 +764,4 @@ function gus_c_fpslimit(nr)
 end
 addEvent("gus_c_fpslimit",true)
 addEventHandler("gus_c_fpslimit", root, gus_c_fpslimit)
+

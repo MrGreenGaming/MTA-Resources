@@ -806,8 +806,8 @@ killOtherTimer = {}
 local screenSizex, screenSizey = guiGetScreenSize()
 local guix = screenSizex * 0.1
 local guiy = screenSizex * 0.1
-local globalscale = 1.35
-local globalalpha = 1
+local globalscale = 0.85
+local globalalpha = 0.7
 icon = {}
 
 function createSoundForCar(car, horn)
@@ -827,36 +827,38 @@ function createSoundForCar(car, horn)
     length = length * 1000
 
     -- update horn icon position/alpha
-    soundTimer[car] = setTimer(function(sound, car)
-        if not isElement(sound) or not isElement(car) then return end
-        local rx, ry, rz = getElementPosition(car)
-        setElementPosition(sound, rx, ry, rz)
-        setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
+    if getResourceState(getResourceFromName( 'mrgreen-settings' )) == 'running' and exports['mrgreen-settings']:isCustomHornIconEnabled() then
+        soundTimer[car] = setTimer(function(sound, car)
+            if not isElement(sound) or not isElement(car) then return end
+            local rx, ry, rz = getElementPosition(car)
+            setElementPosition(sound, rx, ry, rz)
+            setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
 
-        local target = getCameraTarget()
-        local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
-        if target then
-            playerx, playery, playerz = getElementPosition(target)
-        end
-        cp_x, cp_y, cp_z = getElementPosition(car)
-        local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
-        if dist and dist < 40 and (isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false)) then
-            local screenX, screenY = getScreenFromWorldPosition(cp_x, cp_y, cp_z)
-            local scaled = screenSizex * (1 / (2 * (dist + 5))) * .85
-            local relx, rely = scaled * globalscale, scaled * globalscale
+            local target = getCameraTarget()
+            local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
+            if target then
+                playerx, playery, playerz = getElementPosition(target)
+            end
+            cp_x, cp_y, cp_z = getElementPosition(car)
+            local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
+            if dist and dist < 40 and (isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false)) then
+                local screenX, screenY = getScreenFromWorldPosition(cp_x, cp_y, cp_z)
+                local scaled = screenSizex * (1 / (2 * (dist + 5))) * .85
+                local relx, rely = scaled * globalscale, scaled * globalscale
 
-            guiSetAlpha(icon[car], globalalpha)
-            guiSetSize(icon[car], relx, rely, false)
-            if (screenX and screenY) then
-                guiSetPosition(icon[car], screenX - relx / 2, screenY - rely / 1.3, false)
-                guiSetVisible(icon[car], true)
+                guiSetAlpha(icon[car], globalalpha)
+                guiSetSize(icon[car], relx, rely, false)
+                if (screenX and screenY) then
+                    guiSetPosition(icon[car], screenX - relx / 2, screenY - rely / 1.3, false)
+                    guiSetVisible(icon[car], true)
+                else
+                    guiSetVisible(icon[car], false)
+                end
             else
                 guiSetVisible(icon[car], false)
             end
-        else
-            guiSetVisible(icon[car], false)
-        end
-    end, 50, 0, sound, car)
+        end, 50, 0, sound, car)
+    end
 
     killOtherTimer[car] = setTimer(function(theTimer, car) if isTimer(theTimer) then killTimer(theTimer) if isElement(icon[car]) then destroyElement(icon[car]) end end end, length, 50, soundTimer[car], car)
 end

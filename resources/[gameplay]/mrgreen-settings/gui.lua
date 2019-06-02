@@ -138,7 +138,9 @@ local screenW, screenH = guiGetScreenSize()
         NitroColorImage = guiCreateStaticImage(469, 223, 26, 17, "img/dot_white.png", false, GUIEditor.tab[1])
         guiSetProperty(NitroColorImage, "ImageColours", "tl:FF0078FF tr:FF0078FF bl:FF0078FF br:FF0078FF")
 
-
+        GUIEditor.checkbox["customHornIcons"] = guiCreateCheckBox(292, 378, 15, 15, "", false, false, GUIEditor.tab[1]) -- 75
+        GUIEditor.label["customHornIcons"] = guiCreateLabel(324, 378, 209, 14, "Enable custom horn icons", false, GUIEditor.tab[1])
+        setTooltip(GUIEditor.label["customHornIcons"],"Toggle custom horn icons")
 
 
         GUIEditor.tab[2] = guiCreateTab("Sound Settings", GUIEditor.tabpanel[1])
