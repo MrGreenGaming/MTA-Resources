@@ -625,34 +625,10 @@ function comma_value(amount)
   return formatted
 end
 
--- VIP: This function will be replaced.
 function vipRewardMult(player, theReward)
 	if not player then return theReward end
 	if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then
-		local theId = getPlayerForumID(player)
-		local multiplier = 1.5
-		if useOldMult(tostring(theId)) then
-			multiplier = 2
-		end
-
-		return math.ceil(theReward * multiplier)
+		return math.ceil(theReward * 1.5)
 	end
 	return theReward
-end
-
--- Rewards have recently changed, use old rewards for these players
-local oldRewards = {
-	-- id = timestamp
-	["10262"] = 1561514211,
-	["14817"] = 1558999358,
-	["24343"] = 1556840507,
-	["14043"] = 1558395771,
-	["14672"] = 1557963888,
-	["23575"] = 1554940091
-}
-function useOldMult(id) 
-	if not oldRewards[id] or getRealTime().timestamp > oldRewards[id] then 
-		return false 
-	end
-	return true
 end
