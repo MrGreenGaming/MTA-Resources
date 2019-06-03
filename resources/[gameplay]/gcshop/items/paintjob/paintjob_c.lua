@@ -265,45 +265,35 @@ addEventHandler("onClientResourceStart",resourceRoot,buildRemoveTable)
 
 
 
-
-local shaders = {}
-function addShaders(player, val, newUpload)
+-- Textures are now preloaded to prevent the lag spikes when loading a new PJ
+local shaders = {
+	-- [player] = {
+	-- 	[shader] = shader,
+	-- 	[textures] = {
+	-- 		[pj_val_name] = texture
+	-- 	}
+	-- }
+}
+function addShaders(player, val)
 	local veh = getPedOccupiedVehicle(player) or nil
 	if not veh or not val or not fileExists(client_path .. val .. '.bmp') then return end
 
-	if shaders[player] then
-		if shaders[player][3] ~= val or newUpload then -- Different PJ then before
-			-- outputDebugString("Using Different PJ")
-			remShaders ( player )
-
-			local texture, shader = createPJShader(val)
-			
-			-- outputConsole('adding shader for ' .. getPlayerName(player))
-			shaders[player] = {texture, shader,val}
-
-			applyPJtoVehicle(shader,veh)
-
-			return 
-		elseif shaders[player][3] == val then -- Same PJ as before
-			-- outputDebugString("Using Same PJ")
-			local texture = shaders[player][1]
-			local shader = shaders[player][2]
-
-			applyPJtoVehicle(shader,veh)
-			return
-		end
-	else -- New PJ
-		-- outputDebugString("Using New PJ")
-		remShaders ( player )
-
-		local texture, shader = createPJShader(val)
+	-- Textures are now preloaded to prevent the lag spikes when loading a new PJ
+	-- Textures (dxCreateTexture) are loaded at map load
+	if not shaders[player] then
+		shaders[player] = {}
 		
-		-- outputConsole('adding shader for ' .. getPlayerName(player))
-		shaders[player] = {texture, shader,val}
-
-
-		applyPJtoVehicle(shader,veh)
-		return
+	end
+	if not shaders[player].shader then
+		shaders[player].shader = createPJShader()
+	end
+	
+	if shaders[player]['textures'] then
+		local texture = shaders[player]['textures'][val]
+		if texture then
+			dxSetShaderValue ( shaders[player].shader, "gTexture", texture )
+			applyPJtoVehicle(shaders[player].shader,veh)
+		end
 	end
 end
 
@@ -311,8 +301,8 @@ end
 function removeWorldTexture(player)
 
 	if not shaders[player] then return end
-	if not shaders[player][2] then return end
-	local shader = shaders[player][2]
+	if not shaders[player].shader then return end
+	local shader = shaders[player].shader
 	if not shader then return end
 
 	local veh = getPedOccupiedVehicle(player)
@@ -321,8 +311,6 @@ function removeWorldTexture(player)
 	for _,texture in pairs(removeTable) do
 		engineRemoveShaderFromWorldTexture(shader,texture,veh)
 	end
-
-	
 end
 
 
@@ -364,48 +352,79 @@ local paintjobShader_raw_data = [[
 		}
 	}
 ]]
-function createPJShader(val)
-	if not val then return false end
 
-	local texture = dxCreateTexture ( client_path .. val .. '.bmp' )
+-- This function does not create textures, they should be made at map start/when joining
+function createPJShader()
 	local shader, tec = dxCreateShader( paintjobShader_raw_data, 1, 220, false, 'vehicle' )
    
 	--bit of sanity checking
 	if not shader then
 		outputConsole( "Could not create shader. Please use debugscript 3" )
-		destroyElement( texture )
-		return false
-	elseif not texture then
-		outputConsole( "loading texture failed" )
-		destroyElement ( shader )
-		tec = nil
 		return false
 	end
-	dxSetShaderValue ( shader, "gTexture", texture )
-	return texture,shader,tec
+
+	return shader
 end
 
-function remShaders ( player )
-	if shaders[player] and isElement(shaders[player][2]) then
-		destroyElement(shaders[player][1])
-		destroyElement(shaders[player][2])
-		shaders[player]=nil
-		-- outputConsole('removed shader for ' .. getPlayerName(player))
+-- When a player joins, all textures should be made
+-- When another player joins, the texture should be made at map loading
+-- When a player uploads a new texture, should appear for other players at map loading, for that player directly
+function buildTextures(textureTable, overwrite)
+	for player, textures in pairs(textureTable) do
+		if not shaders[player] then
+			shaders[player] = {}
+		end
+		if not shaders[player]['textures'] then
+			shaders[player]['textures'] = {}
+		end
 
+		for i, texName in ipairs(textures) do
+			if shaders[player]['textures'][texName] and not overwrite then
+				-- Texture is already made
+			else
+				if shaders[player]['textures'][texName] and isElement(shaders[player]['textures'][texName]) then
+					destroyElement(shaders[player]['textures'][texName])
+				end
+	
+				local theTexture = dxCreateTexture(client_path .. texName .. '.bmp')
+				if theTexture then
+					shaders[player]['textures'][texName] = theTexture
+					-- outputDebugString('loaded texture '..texName)
+				else
+					outputDebugString('Could not create texture: '..texName)
+				end
+			end
+		end
+	end
+end
+addEvent('onServerSendsCustomPaintjobTextureTable', true)
+addEventHandler('onServerSendsCustomPaintjobTextureTable', resourceRoot, buildTextures)
+
+function remShaders ( player )
+	if shaders[player] then
+		if shaders[player].shader and isElement(shaders[player].shader) then
+			destroyElement(shaders[player].shader)
+		end
+
+		if shaders[player].textures then
+			for i, tex in pairs(shaders[player].textures) do
+				if isElement(tex) then
+					destroyElement(tex)
+				end
+			end
+		end
+		shaders[player] = nil
 	end
 end
 
 function refreshShaders()
-	
-	for _,player in pairs(shaders) do
+	-- for _,player in pairs(shaders) do
 		
-		if isElement(player[1]) then destroyElement(player[1]) end
-		if isElement(player[2]) then destroyElement(player[2]) end
+	-- 	if isElement(player.shader) then destroyElement(player[1]) end
+	-- 	if isElement(player[2]) then destroyElement(player[2]) end
 		
-	end
-	shaders = {}
-	
-
+	-- end
+	-- shaders = {}
 end
 addEvent("clientRefreshShaderTable",true)
 addEventHandler("clientRefreshShaderTable",root,refreshShaders)
@@ -502,19 +521,32 @@ end
 ---   Downloading custom paintjobs   ---
 ---          from server             ---
 ----------------------------------------
-
-function serverPaintjobsMD5 ( md5list )
+local idToPlayerList = false
+function serverPaintjobsMD5 ( md5list, idList )
+	idToPlayerList = idList
 	local requests = {}
+	local buildTexturesTable = {}
 	for forumID, playermd5list in pairs(md5list) do
 		for pid, imageMD5 in pairs(playermd5list) do
 			local filename = tostring(forumID) .. '-' .. pid .. '.bmp'
 			if not fileExists(client_path .. filename) or imageMD5 ~= getMD5(client_path .. filename) then
 				table.insert(requests, filename)
 				--outputDebugString('c: Requesting paintjob ' .. tostring(filename) .. ' ' .. tostring(fileExists(filename) and getMD5(filename)) .. ' ' .. tostring(imageMD5) .. ' ' .. getPlayerName(localPlayer))
+			else
+				-- If file and player exists, add to buildTexturesTable
+				local thePlayer = idToPlayerList[forumID]
+				if thePlayer then
+					if not buildTexturesTable[thePlayer] then
+						buildTexturesTable[thePlayer] = {}
+					end
+					table.insert(buildTexturesTable[thePlayer], tostring(forumID) .. '-' .. pid)
+					
+				end
 			end
 		end
 	end
 	
+	buildTextures(buildTexturesTable)
 	if #requests > 0 then
 		triggerServerEvent( 'clientRequestsPaintjobs', localPlayer, requests)
 	end
@@ -523,8 +555,6 @@ function serverPaintjobsMD5 ( md5list )
 		local val = getElementData(player, 'gcshop.custompaintjob')
 		if val ~= nil then
 			addShaders(player, val)
-		else
-			remShaders(player)
 		end
 	end
 end
@@ -532,20 +562,34 @@ addEvent('serverPaintjobsMD5', true)
 addEventHandler('serverPaintjobsMD5', resourceRoot, serverPaintjobsMD5)
 
 function serverSendsPaintjobs ( files )
+	local buildTexturesTable = {}
 	for filename, image in pairs(files) do
+		-- Get forum id's out of filenames
 		local file = fileCreate(client_path .. filename)
 		fileWrite(file, image)
 		fileClose(file)
 		--outputDebugString('c: Received paintjob ' .. tostring(filename) .. ' ' .. getPlayerName(localPlayer))
+		-- Get forum ids out of file names
+		local forumId = split(filename,'-')[1]
+		local value = split(filename,'.')[1]
+		local thePlayer = idToPlayerList[tonumber(forumId)]
+		if forumId and tonumber(forumId) and idToPlayerList and thePlayer and value then
+			 
+			if not buildTexturesTable[thePlayer] then
+				buildTexturesTable[thePlayer] = {}
+			end
+			table.insert(buildTexturesTable[thePlayer], value)
+		end
 	end
+
+	buildTextures(buildTexturesTable, true)
 	if previewPJ then previewPJ() end
-	
+	-- Get forum id out of textures
+	-- Make texture table so new files can be applied
 	for k, player in ipairs(getElementsByType'player') do
 		local val = getElementData(player, 'gcshop.custompaintjob')
 		if val ~= nil then
 			addShaders(player, val)
-		else
-			remShaders(player)
 		end
 	end
 end
@@ -562,3 +606,5 @@ function getMD5 ( filename )
 	fileClose(file)
 	return md5(image)
 end
+
+addEventHandler('onClientPlayerQuit', root, function() remShaders(source) end)
