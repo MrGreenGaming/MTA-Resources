@@ -1,5 +1,5 @@
--- local vipHornURL = 'https://mrgreengaming.com/api/viphorn/?id='
-local vipHornURL = 'http://localhost:3000/api/viphorn/?id='
+local vipHornURL = 'https://mrgreengaming.com/api/viphorn/?id='
+
 local hornTable = {}
 local hornIcons = {}
 local hornSounds = {}
