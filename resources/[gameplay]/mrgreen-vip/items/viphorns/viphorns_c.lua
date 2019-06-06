@@ -35,6 +35,10 @@ function playVipHorn(player, hornid)
 
         local x, y, z = getElementPosition( vehicle )
         hornSounds[player] = playSound3D( vipHornURL..hornid, x, y, z )
+        if not hornSounds[player] or not isElement(hornSounds[player]) or isSoundPaused(hornSounds[player]) then
+            hornSounds[player] = nil
+            return
+        end 
         setSoundMaxDistance(hornSounds[player], 50)
         setSoundSpeed(hornSounds[player], getGameSpeed() or 1) -- change horn pitch as gamespeed changes
 
@@ -92,8 +96,8 @@ function playVipHorn(player, hornid)
         end,50,0,hornSounds[player],vehicle, player)
     end
 end
-addEvent('onVipUseHorn', true)
-addEventHandler( 'onVipUseHorn', resourceRoot, playVipHorn)
+addEvent('onClientVipUseHorn', true)
+addEventHandler( 'onClientVipUseHorn', resourceRoot, playVipHorn)
 
 function previewVipHorn()
     local selected = guiGridListGetSelectedItem(gui['vipHornGridList'])

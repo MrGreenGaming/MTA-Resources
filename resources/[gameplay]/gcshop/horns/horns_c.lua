@@ -899,8 +899,8 @@ function stopGcHorn(player)
         destroyElement(icon[vehicle]) 
     end
 end
-addEvent("onVipUseHorn")
-addEventHandler("onVipUseHorn", root, stopGcHorn)
+addEvent("onClientVipUseHorn", true)
+addEventHandler("onClientVipUseHorn", root, stopGcHorn)
 
 
 function getHornSource(path, preview)

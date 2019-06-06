@@ -7,7 +7,8 @@ local vipHornsCooldown = {
     -- [player] = timestamp
 }
 
-local vipHornCooldown = 13 -- Seconds
+local vipHornCooldown = 20 -- Seconds
+local canUseHorns = false
 
 function initVipHorns(player)
     getVipHorns(player)
@@ -48,7 +49,7 @@ function bindVipHorns(player, unbind)
 end
 
 function useVipHorn (player, key, state, hornid)
-    if vipHornsCooldown[player] and vipHornsCooldown[player] >  getTickCount() then
+    if vipHornsCooldown[player] and vipHornsCooldown[player] >  getTickCount() or not canUseHorns then
         -- Still on cooldown
         return
     end
@@ -58,7 +59,7 @@ function useVipHorn (player, key, state, hornid)
 
     --  Trigger VIP horn
     triggerEvent( 'onVipUseHorn', root, player, theID..'-'..hornid)
-    triggerClientEvent( 'onVipUseHorn', root, player, theID..'-'..hornid)
+    triggerClientEvent( 'onClientVipUseHorn', root, player, theID..'-'..hornid)
     vipHornsCooldown[player] = getTickCount() + (vipHornCooldown * 1000)
 end
 
@@ -89,6 +90,18 @@ function handleClientVipBind(key, hornid)
 end
 addEvent('onClientVipHornBindsChanged', true)
 addEventHandler('onClientVipHornBindsChanged', resourceRoot, handleClientVipBind)
+
+-- canUseHorns state managing
+local canUseStates = {
+    ['GridCountdown'] = true,
+    ['Running'] = true,
+}
+function setHornState(state)
+    canUseHorns = canUseStates[state] or false
+end
+addEvent('onRaceStateChanging')
+addEventHandler('onRaceStateChanging', root, setHornState)
+
 
 addEventHandler('onPlayerVip', resourceRoot,
 	function(player, loggedIn)
