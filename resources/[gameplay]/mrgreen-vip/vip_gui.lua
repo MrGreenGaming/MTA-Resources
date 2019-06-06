@@ -259,7 +259,7 @@ function build_mainVipWindow()
 	-- gui._placeHolders["line_8"] = {left = 2, top = 302, width = 661, height = 20, parent = gui["scrollAreaHome_4"]}
 	gui["line9"] = guiCreateStaticImage( 0, 317, 650, 1, "img/dot.jpg", false,  gui["scrollAreaHome_4"])
 	
-	gui["label_9"] = guiCreateLabel(22, 322, 621, 21, "VIP Personal Horn (Coming Soon!)", false, gui["scrollAreaHome_4"])
+	gui["label_9"] = guiCreateLabel(22, 322, 621, 21, "VIP Personal Horn", false, gui["scrollAreaHome_4"])
 	guiLabelSetHorizontalAlign(gui["label_9"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_9"], "center")
 	guiSetFont( gui["label_9"], "default-bold-small")
@@ -286,23 +286,27 @@ function build_mainVipWindow()
 		addEventHandler("onClientGUIClick", gui["vipJoinMessageButton"], on_vipJoinMessageButton_clicked, false)
 	end
 	
-	gui["label_10"] = guiCreateLabel(22, 342, 601, 21, "To upload your VIP horn, browse to https://mrgreengaming.com/vip/horn and follow the instructions.", false, gui["scrollAreaHome_4"])
+	gui["label_10"] = guiCreateLabel(22, 342, 601, 21, "To upload/delete your VIP horn(s), browse to https://mrgreengaming.com/viphorns and follow the instructions.", false, gui["scrollAreaHome_4"])
 	guiLabelSetHorizontalAlign(gui["label_10"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_10"], "center")
 	
-	gui["label_11"] = guiCreateLabel(22, 382, 471, 31, "No VIP horn uploaded.", false, gui["scrollAreaHome_4"])
-	guiLabelSetHorizontalAlign(gui["label_11"], "left", false)
-	guiLabelSetVerticalAlign(gui["label_11"], "center")
+	gui['vipHornDoubleClickLabel'] = guiCreateLabel(22, 368, 600, 20, 'Double click to preview the horn', false, gui["scrollAreaHome_4"])
+	guiSetFont( gui['vipHornDoubleClickLabel'], 'default-small' )
 	
-	gui["vip_horn_bind"] = guiCreateButton(182, 442, 151, 41, "Bound To KEY", false, gui["scrollAreaHome_4"])
-	guiSetEnabled( gui["vip_horn_bind"], false )
+	gui['vipHornGridList'] = guiCreateGridList( 22, 385, 300, 200,false ,gui["scrollAreaHome_4"] )
+	guiGridListAddColumn( gui['vipHornGridList'], 'Horn', 0.75 )
+	guiGridListAddColumn( gui['vipHornGridList'], 'Key', 0.16 )
+	guiGridListSetSortingEnabled ( gui['vipHornGridList'], false )
+	addEventHandler( "onClientGUIDoubleClick", gui['vipHornGridList'], previewVipHorn, false )
+
+	
+	gui["vip_horn_bind"] = guiCreateButton(355, 384, 175, 60, "Bind selected horn to key", false, gui["scrollAreaHome_4"])
 	if on_vip_horn_bind_clicked then
 		addEventHandler("onClientGUIClick", gui["vip_horn_bind"], on_vip_horn_bind_clicked, false)
 	end
-	
-	gui["label_14"] = guiCreateLabel(22, 452, 151, 16, "Bind horn to key:", false, gui["scrollAreaHome_4"])
-	guiLabelSetHorizontalAlign(gui["label_14"], "left", false)
-	guiLabelSetVerticalAlign(gui["label_14"], "center")
+
+
+	gui["line11"] = guiCreateStaticImage( 0, 800, 650, 1, "img/dot.jpg", false,  gui["scrollAreaHome_4"])
 	
 	gui["vipBanner"] = guiCreateLabel(10, 25, 521, 41, "", false, gui["_root"])
 	guiLabelSetHorizontalAlign(gui["vipBanner"], "center", false)
@@ -496,9 +500,7 @@ function on_superNickButton_clicked(button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") then
 		return
 	end
-	supernick_showGUI(true)
-	--TODO: Implement your button click handler here
-	
+	supernick_showGUI(true)	
 end
 
 function on_vipJoinMessageButton_clicked(button, state, absoluteX, absoluteY)
@@ -512,9 +514,13 @@ function on_vip_horn_bind_clicked(button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") then
 		return
 	end
+	local selected = guiGridListGetSelectedItem( gui['vipHornGridList'] )
+	if not selected or selected == -1 then
+		outputChatBox('Select a custom horn first!',255,0,0)
+		return
+	end
 	
-	--TODO: Implement your button click handler here
-	
+	bindVipHorn(selected)
 end
 
 function enableVipTabs(bool)

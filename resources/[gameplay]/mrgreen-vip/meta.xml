@@ -33,6 +33,10 @@
     <!-- Join Messages -->
     <script src="items/joinmessage/joinmessage_c.lua" type="client" />
     <script src="items/joinmessage/joinmessage_s.lua" type="server" />
+
+    <!-- Join Messages -->
+    <script src="items/viphorns/viphorns_c.lua" type="client" />
+    <script src="items/viphorns/viphorns_s.lua" type="server" />
     
     <!-- Dynamic Overlay -->
     <script src="items/dynamicoverlay/files/dvoid_controller_c.lua" type="client" />
@@ -54,6 +58,7 @@
     <file src="img/vip_main.png"></file>
     <file src="img/vip_cosmetics.png"></file>
     <file src="img/dot.jpg"></file>
+    <file src="img/vip_horn_icon.png"></file>
     
     <!-- Vip Skin Files -->
     <file src="items/vipskin/skins/Fapman.dff" download="false" />

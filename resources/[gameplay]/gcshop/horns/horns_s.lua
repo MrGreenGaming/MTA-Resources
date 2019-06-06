@@ -102,7 +102,7 @@ function useHorn(player, arg1, arg2, hornID)
 					if not useHorn then outputChatBox("Please buy the horn (".. tostring(hornID or arg2) ..") first before using it",player,255,0,0) return end
 
 					local car = getPedOccupiedVehicle(player)
-					coolOffTimer[player] = setTimer(function(player) coolOff[player] = true end, 10000, 1, player)
+					coolOffTimer[player] = setTimer(function(player) coolOff[player] = true end, 15000, 1, player)
 					triggerClientEvent("onPlayerUsingHorn", player, hornID or arg2, car)
 					triggerEvent("onPlayerUsingHorn_s", player, hornID or arg2, car)
 					coolOff[player] = false
