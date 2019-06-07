@@ -141,7 +141,15 @@ function(pName, amount)
 		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You cannot send GCs to yourself!")
 		return
 	end
-	
+
+	-- Minimum playtime
+	local minPlayTime = 100 -- hours
+	local playTime = exports.stats:getPlayerStat(source, 'id5')
+	if not playTime or not tonumber(playTime) or (playTime/1000)/3600 < minPlayTime then
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You must have a minimum of "..minPlayTime.." to transfer greencoins!")
+		return
+	end
+
 	-- Player to transfer logged in
 	
 	local playerMoney = exports.gc:getPlayerGreencoins(source)
