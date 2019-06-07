@@ -395,6 +395,9 @@ function()
 		times[currentMap] = 0
 		if lastPlayed then times[lastPlayed] = nil end
 		lastPlayed = currentMap
+	elseif times[currentMap] and times[currentMap] > maxPlayAgain then
+		-- Map is playing again (with /redo or via mapcenter)
+		times[currentMap] = 0
 	end
 	_nextMap = calculateNextmap()
 	times[currentMap] = times[currentMap] + 1
