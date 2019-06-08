@@ -4,6 +4,13 @@
 -- Date:  15/07/2012 - 19:28:59 --
 -------------------------------------
 
+GUIEditor = {
+    window = {},
+    staticimage = {},
+    label = {}
+}
+
+
 function build_mainGCShopWindow()
 	
 	local gui = {}
@@ -13,8 +20,19 @@ function build_mainGCShopWindow()
 	local windowWidth, windowHeight = 750, 540
 	local left = screenWidth/2 - windowWidth/2
 	local top = screenHeight/2 - windowHeight/2
-	gui["_root"] = guiCreateWindow(left, top, windowWidth, windowHeight, "GreenCoins Shop (F6 to close)", false)
-	guiWindowSetSizable(gui["_root"], false)
+
+	gui["_root"] = guiCreateStaticImage(left, top, windowWidth, windowHeight, "utilites/img/dot.jpg", false)
+	guiSetProperty(gui["_root"], "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
+	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, "utilites/img/dot.jpg", false, gui["_root"])
+	guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, "utilites/img/dot.jpg", false, gui["_root"])
+	guiSetProperty(GUIEditor.staticimage[3], "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+	GUIEditor.label[1] = guiCreateLabel(310, 1, 128, 16, "GreenCoins Shop", false, gui["_root"])
+	guiSetFont(GUIEditor.label[1], "default-bold-small")
+	guiSetProperty(GUIEditor.label[1], "AlwaysOnTop", "true")
+	guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
+	guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
+	guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
 	
 	gui["shopTabs"] = guiCreateTabPanel(10, 70, 730, 460, false, gui["_root"])
 	
@@ -35,7 +53,7 @@ function build_mainGCShopWindow()
 	guiLabelSetHorizontalAlign(gui["labelDonate"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelDonate"], "top")
 	guiLabelSetColor(gui["labelDonate"], 120, 120, 120)
-	
+
 	gui["tabWin"] = guiCreateTabPanel(301, 271, 291, 251, false, gui["scrollAreaHome"])
 	
 	gui["tab_Win"] = guiCreateTab("Win", gui["tabWin"])
@@ -55,7 +73,8 @@ function build_mainGCShopWindow()
 	gui["label_step2"] = guiCreateLabel(180, 40, 351, 131, '1. Register an account on our Forums ( https://mrgreengaming.com/forums )\n\n\n2. Log in using your Forums account:', false, gui["tab_login"])
 	guiLabelSetHorizontalAlign(gui["label_step2"], "left", true)
 	guiLabelSetVerticalAlign(gui["label_step2"], "top")
-	
+
+
 	gui["labelLoginInfo"] = guiCreateLabel(200, 280, 361, 101, "", false, gui["tab_login"])
 	guiLabelSetHorizontalAlign(gui["labelLoginInfo"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelLoginInfo"], "center")
@@ -85,13 +104,15 @@ function build_mainGCShopWindow()
 	guiLabelSetHorizontalAlign(gui["label_Web"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_Web"], "center")
 	
-	gui["labelGreencoinsShadow1"] = guiCreateLabel(550.5, 24.5, 191, 41, "", false, gui["_root"])
-	guiLabelSetHorizontalAlign(gui["labelGreencoinsShadow1"], "right", false)
+	gui["labelGreencoinsShadow1"] = guiCreateLabel(10.5, 24.5, 191, 41, "", false, gui["_root"])
+	guiLabelSetHorizontalAlign(gui["labelGreencoinsShadow1"], "left", false)
 	guiLabelSetVerticalAlign(gui["labelGreencoinsShadow1"], "center")
-	
-	gui["labelGreencoins"] = guiCreateLabel(550, 25, 191, 41, "", false, gui["_root"])
-	guiLabelSetHorizontalAlign(gui["labelGreencoins"], "right", false)
+	guiSetFont(gui["labelGreencoinsShadow1"], "default-bold-small")
+
+	gui["labelGreencoins"] = guiCreateLabel(10, 25, 191, 41, "", false, gui["_root"])
+	guiLabelSetHorizontalAlign(gui["labelGreencoins"], "left", false)
 	guiLabelSetVerticalAlign(gui["labelGreencoins"], "center")
+	guiSetFont(gui["labelGreencoins"], "default-bold-small")
 	
 	return gui, windowWidth, windowHeight
 end
