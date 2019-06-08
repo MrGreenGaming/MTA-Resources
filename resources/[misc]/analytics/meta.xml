@@ -1,0 +1,13 @@
+<meta>
+	<info author="Afu Sensi" type="script" name="Gameserver Analytics" version="1.0" description="Tracks gameserver analytics via gameanalytics.com's REST API. API documentation: restapidocs.gameanalytics.com" />
+	<script src="c_analytics.lua" type="client" />
+	<script src="s_analytics.lua" type="server" />
+
+	<script src="hmac/sha2.lua" type="server" />
+	<min_mta_version server="1.5.4-9.11342"/>
+
+	<settings>
+		<setting name="*analytics_API_KEY" value="" friendlyname="API KEY"  />
+		<setting name="*analytics_API_SECRET" value="" friendlyname="API SECRET"  />
+	</settings>
+</meta>
