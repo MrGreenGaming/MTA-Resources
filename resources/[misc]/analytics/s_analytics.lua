@@ -1,8 +1,10 @@
-local isSandBox = false -- Set true for sandbox, dont forget to change keys to sandbox too (TODO, make it an option)
+local currentServer = get('*analytics_current_server') == 'race' and 'race' or 'mix'
+local isSandBox = get('*analytics_sandbox') == 'true' and true or false -- Set sandbox mode in settings
 local canSendEvents = false -- If the init POST doesnt fail, set this to true
 local API_KEY = isSandBox and '5c6bcb5402204249437fb5a7a80a4959' or get('*analytics_API_KEY')
 local API_SECRET = isSandBox and '16813a12f718bc5c620f56944e1abc3ea13ccbac' or get('*analytics_API_SECRET')
 local API_ENDPOINT = isSandBox and 'sandbox-api.gameanalytics.com/v2/' .. tostring(API_KEY) .. '/' or 'api.gameanalytics.com/v2/' .. tostring(API_KEY) .. '/'
+local eventsQueue = {}
 local sessionNum = 0
 local pInfo = {}
 
@@ -69,33 +71,35 @@ function getAuthorization(body)
 end
 
 function sendEvent(data, endpoint)
+	if not canSendEvents then return false end
 	local now = getRealTime().timestamp
-    local options = {
-        queueName = 'serverAnalytics',
-        connectionAttempts = 3,
-        connectionTimeout = 5000,
-        method = 'POST',
+	local options = {
+		queueName = 'serverAnalytics',
+		connectionAttempts = 3,
+		connectionTimeout = 5000,
+		method = 'POST',
 		postData = {
-			 -- Default annotations
-			    ['v'] = 2,
-                ['user_id'] = 'default user id',
-                ['client_ts'] = now,
-                ['sdk_version'] = 'rest api v2',
-                ['os_version'] = 'windows 10',
-                ['manufacturer'] = 'n/a',
-                ['platform'] = 'windows',
-                ['session_id'] = 'default session id',
-                ['session_num'] = 0,
-                ['device'] = 'unknown'	
+			-- Default annotations
+				['v'] = 2,
+				['user_id'] = 'default user id',
+				['client_ts'] = now,
+				['sdk_version'] = 'rest api v2',
+				['os_version'] = 'windows 10',
+				['manufacturer'] = 'n/a',
+				['platform'] = 'windows',
+				['session_id'] = 'default session id',
+				['session_num'] = 0,
+				['device'] = 'unknown',
+				['custom_01'] = 'server: '..currentServer
 				-- Event data
 			
-        },
-        headers = {
-            ['Content-Type'] = 'application/json',
-            ['Authorization'] = false,
-            
-        }
-    }
+		},
+		headers = {
+			['Content-Type'] = 'application/json',
+			['Authorization'] = false,
+			
+		}
+	}
 	
 	-- Set data to postData
 	for key, val in pairs(data) do -- Overwrite default annotations and set event data
@@ -107,7 +111,7 @@ function sendEvent(data, endpoint)
 	end
 
 	-- JSONify and set authorization	
-    options.postData = toJSON(options.postData,true)
+	options.postData = toJSON(options.postData,true)
 	options.headers.Authorization = getAuthorization(options.postData)
 
 	
@@ -126,14 +130,14 @@ function sendEvent(data, endpoint)
 	end
 	-- Do sendy stuff
 	fetchRemote(API_ENDPOINT .. endpoint, options, function(res, info)
-        if res then res = fromJSON(res) end
-        if not info.success or not res then
-            var_dump_admins('-v',info)
+		if res then res = fromJSON(res) end
+		if not info.success or not res then
+			var_dump_admins('-v',info)
 			var_dump_admins('-v',res)
-            outputDebugString('Analytics: Something went wrong with posting the data, please check f8.')
-            return
-        end
-    end)
+			outputDebugString('Analytics: Something went wrong with posting the data, please check f8.')
+			return
+		end
+	end)
 end
 
 
@@ -155,6 +159,26 @@ function getUuid()
         return string.format('%x', v)
     end)
 end
+
+function addToQueue(data)
+	if type(eventsQueue) ~= 'table' then
+		eventsQueue = {}
+	end
+	table.insert(eventsQueue, data)
+end
+
+function sendQueue()
+	-- Send queued events at map start
+	if type(eventsQueue) == 'table' and #eventsQueue > 0 then
+		for _,data in ipairs(eventsQueue) do
+			sendEvent(data, 'events')
+		end
+		eventsQueue = {}
+	end
+end
+addEvent('onMapStarting')
+addEventHandler('onMapStarting', root, sendQueue)
+
 --------------------------------------
 -----------------Events---------------
 --------------------------------------
@@ -172,7 +196,7 @@ function sessionStart(p)
 		['user_id'] = getPlayerSerial(p),
         ['session_id'] = getSessionId(),
 		['session_num'] = getNewSessionNum(),
-		['userIP'] = getPlayerIP(p),
+		['userIP'] = getPlayerIP(p) or nil,
 		['joinStamp'] = getRealTime().timestamp
 	}
     pInfo[p] = userInfo
@@ -195,44 +219,67 @@ function sessionEnd(p)
 	if not p or not isElement(p) and getElementType(source) == 'player' then
 		p = source
 	end
-	
-	if pInfo[p] and getElementData(p, 'analytics.joinStamp') then
+	if pInfo[p] then
+		local theInfo = pInfo[p]
+		pInfo[p] = nil
 		-- Calculate session time
-		local playTime = getRealTime().timestamp - getElementData(p, 'analytics.joinStamp')
+		local playTime = getRealTime().timestamp - theInfo['joinStamp']
 		local data = {
 			['category'] = 'session_end',
 			['length'] = playTime,
-			['user_id'] = pInfo[p]['user_id'],
-        	['session_id'] = pInfo[p]['session_id'],
-			['session_num'] = pInfo[p]['session_num'],
-			['userIP'] = pInfo[p].userIP or nil
+			['user_id'] = theInfo['user_id'],
+        	['session_id'] = theInfo['session_id'],
+			['session_num'] = theInfo['session_num'],
+			['userIP'] = theInfo.userIP or nil
 		}
 		sendEvent(data, 'events')
-		pInfo[p] = nil
 	end
 end
 addEventHandler('onPlayerQuit', root, sessionEnd)
 
+
+-- Greencoins
+function playerGreenCoins(amount)
+	if not amount or type(amount) ~= 'number' or amount == 0 or not pInfo[source] then return end
+	-- Determine if source or sink
+	local eventType = amount >= 1 and 'Source' or 'Sink'
+	local playerInfo = pInfo[source]
+	if not playerInfo then return end
+
+	local data = {
+		['category'] = 'resource',
+		['amount'] = amount,
+		['event_id'] = eventType..':'..'GreenCoins'..':'..'0'..':'..'0',
+		['user_id'] = playerInfo['user_id'],
+        ['session_id'] = playerInfo['session_id'],
+		['session_num'] = playerInfo['session_num'],
+		['userIP'] = playerInfo['userIP']
+	}
+	addToQueue(data)
+end
+addEvent('onGCChange')
+addEventHandler('onGCChange', root, playerGreenCoins)
 
 function checkOutstandingSessionEndings()
 	local outstanding = executeSQLQuery("SELECT * FROM analytics_sessions")
 	if #outstanding == 0 then return end
 	for i, row in ipairs(outstanding) do
 		local lastEvent = fromJSON(row.eventObject)
-		if lastEvent and lastEvent[1] then
+		if lastEvent then
 			local playLenght = 1
-			if lastEvent[1].client_ts and row.session_start_ts then
-				playLenght = lastEvent[1].client_ts - row.session_start_ts
+			if lastEvent.client_ts and row.session_start_ts then
+				playLenght = lastEvent.client_ts - row.session_start_ts
 			end
 
 			local data = {
 				['category'] = 'session_end',
 				['length'] = playLenght,
-				['user_id'] = lastEvent[1].user_id,
-				['session_id'] = lastEvent[1].seession_id,
-				['session_num'] = lastEvent[1].session_num,
+				['user_id'] = lastEvent.user_id,
+				['session_id'] = lastEvent.session_id,
+				['session_num'] = lastEvent.session_num,
 				['userIP'] = row.userIP or 0
 			}
+			outputDebugString('Send for '..data.session_id)
 			sendEvent(data, 'events')
 		end
 	end

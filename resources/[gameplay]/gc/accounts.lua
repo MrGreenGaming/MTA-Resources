@@ -258,5 +258,6 @@ function SAccount:addGreencoins(amount)
     self.gcRecord[3] = self.gcRecord[3] + amount
     self.gcRecord[4] = self.gcRecord[4] + amount
     triggerClientEvent(self.player, "onGCChange", root, self.gcRecord[3])
+    triggerEvent('onGCChange', self.player, amount)
 end
 

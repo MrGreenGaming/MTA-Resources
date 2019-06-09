@@ -221,6 +221,7 @@ function addSerialGreencoins(player, amount)
         executeSQLQuery("UPDATE ? SET greencoins = ? WHERE serial = ?", serialGreencoinsTable, amount + greencoins, serial)
         triggerClientEvent(player, "onGCChange", root, amount + greencoins, true)
     end
+    triggerEvent('onGCChange', player, amount)
 end
 
 function getSerialGreencoins(player)
