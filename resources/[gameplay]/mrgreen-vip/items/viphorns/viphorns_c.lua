@@ -32,8 +32,11 @@ function playVipHorn(player, hornid)
     if isElement(player) and getElementType(player) == 'player' and getElementDimension( localPlayer ) == getElementDimension(player) and hornid then
         local vehicle = getPedOccupiedVehicle( player )
         if not vehicle then return end
-
         local x, y, z = getElementPosition( vehicle )
+        local x2, y2, z2 = getElementPosition(getCameraTarget() or localPlayer)
+        if getDistanceBetweenPoints3D(x2, y2, z2, x,y,z) > 260 then return end
+        
+        
         hornSounds[player] = playSound3D( vipHornURL..hornid, x, y, z )
         if not hornSounds[player] or not isElement(hornSounds[player]) or isSoundPaused(hornSounds[player]) then
             hornSounds[player] = nil
@@ -42,58 +45,66 @@ function playVipHorn(player, hornid)
         setSoundMaxDistance(hornSounds[player], 50)
         setSoundSpeed(hornSounds[player], getGameSpeed() or 1) -- change horn pitch as gamespeed changes
 
-        
-        
-        hornIcons[vehicle] = guiCreateStaticImage(0, 0, 1, 1, "img/vip_horn_icon.png", false)
-        guiSetVisible(hornIcons[vehicle], false)
+        local function handleVipHorn(suc, length, streamN, err)
+            removeEventHandler('onClientSoundStream', hornSounds[player], handleVipHorn)
+            if not suc or not length or length == 0 then outputDebugString('VIP horns: failed to stream '..tostring(streamN)..' - error:'..tostring(err)) return end
+            hornIcons[vehicle] = guiCreateStaticImage(0, 0, 1, 1, "img/vip_horn_icon.png", false)
+            guiSetVisible(hornIcons[vehicle], false)
 
-        -- update horn icon position/alpha
-        
-        hornSoundTimer[player] = setTimer(function(sound,car, player)
-            if not isElement(sound) or not isElement(car) or isSoundPaused(sound) then
-                -- Kill this timer
-                if isTimer(hornSoundTimer[player]) then
-                    killTimer(hornSoundTimer[player])
-                    hornSoundTimer[player] = nil
+            -- update horn icon position/alpha
+            hornSoundTimer[player] = setTimer(function(sound,car, player)
+                if not isElement(sound) or not isElement(car) or isSoundPaused(sound) then
+                    --[[ -- Kill this timer
+                    if isTimer(hornSoundTimer[player]) then
+                        killTimer(hornSoundTimer[player])
+                        hornSoundTimer[player] = nil
+                    end
+                    if isElement(sound) then
+                        destroyElement(sound)
+                    end
+                    if isElement(hornIcons[car]) then
+                        destroyElement(hornIcons[car])
+                        hornIcons[car] = nil
+                    end
+                    return  ]]
                 end
-                if isElement(sound) then
-                    destroyElement(sound)
-                end
-                if isElement(hornIcons[car]) then
-                    destroyElement(hornIcons[car])
-                    hornIcons[car] = nil
-                end
-                return 
-            end
-            local rx, ry, rz = getElementPosition(car)
-            setElementPosition(sound, rx, ry, rz)
-            setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
-            if getResourceState(getResourceFromName( 'mrgreen-settings' )) == 'running' and exports['mrgreen-settings']:isCustomHornIconEnabled() then
-                local target = getCameraTarget()
-                local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
-                if target then
-                    playerx, playery, playerz = getElementPosition(target)
-                end
-                local cp_x, cp_y, cp_z = getElementPosition(car)
-                local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
-                if dist and dist < 40 and (isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false)) then
-                    local screenX, screenY = getScreenFromWorldPosition(cp_x, cp_y, cp_z)
-                    local scaled = screenSizex * (1 / (2 * (dist + 5))) * .85
-                    local relx, rely = scaled * globalHornScale, scaled * globalHornScale
+                local rx, ry, rz = getElementPosition(car)
+                setElementPosition(sound, rx, ry, rz)
+                setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
+                if getResourceState(getResourceFromName( 'mrgreen-settings' )) == 'running' and exports['mrgreen-settings']:isCustomHornIconEnabled() then
+                    local target = getCameraTarget()
+                    local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
+                    if target then
+                        playerx, playery, playerz = getElementPosition(target)
+                    end
+                    local cp_x, cp_y, cp_z = getElementPosition(car)
+                    local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
+                    if dist and dist < 40 and (isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false)) then
+                        local screenX, screenY = getScreenFromWorldPosition(cp_x, cp_y, cp_z)
+                        local scaled = screenSizex * (1 / (2 * (dist + 5))) * .85
+                        local relx, rely = scaled * globalHornScale, scaled * globalHornScale
 
-                    guiSetAlpha(hornIcons[car], globalHornAlpha)
-                    guiSetSize(hornIcons[car], relx, rely, false)
-                    if (screenX and screenY) then
-                        guiSetPosition(hornIcons[car], screenX - relx / 2, screenY - rely / 1.3, false)
-                        guiSetVisible(hornIcons[car], true)
+                        guiSetAlpha(hornIcons[car], globalHornAlpha)
+                        guiSetSize(hornIcons[car], relx, rely, false)
+                        if (screenX and screenY) then
+                            guiSetPosition(hornIcons[car], screenX - relx / 2, screenY - rely / 1.3, false)
+                            guiSetVisible(hornIcons[car], true)
+                        else
+                            guiSetVisible(hornIcons[car], false)
+                        end
                     else
                         guiSetVisible(hornIcons[car], false)
                     end
-                else
-                    guiSetVisible(hornIcons[car], false)
                 end
-            end
-        end,50,0,hornSounds[player],vehicle, player)
+            end,50,0,hornSounds[player],vehicle, player)
+            -- Cleanup
+            setTimer(function()
+                if isTimer(hornSoundTimer[player]) then killTimer(hornSoundTimer[player]) end
+                if isElement(hornSounds[player]) then destroyElement(hornSounds[player]) hornSounds[player] = nil end
+                if isElement(hornIcons[vehicle]) then destroyElement(hornIcons[vehicle]) hornIcons[vehicle] = nil end
+            end,length*1000,1)
+        end
+        addEventHandler('onClientSoundStream',hornSounds[player],handleVipHorn)
     end
 end
 addEvent('onClientVipUseHorn', true)
