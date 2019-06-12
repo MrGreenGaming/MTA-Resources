@@ -406,3 +406,21 @@ function(state)
 		end
 	end
 end)
+
+--------------------------------
+-- Fix for flickering objects when going through a removed world object.
+--------------------------------
+function handleOcclusions(mapInfo)
+	local resName = mapInfo.resname
+	local mapRes = getResourceFromName( resName )
+	local mapResourceRoot = getResourceRootElement(mapRes )
+	if not resName or not mapRes or not mapResourceRoot then return end
+
+	if #getElementsByType ( "removeWorldObject", mapResourceRoot ) > 0 then
+		setOcclusionsEnabled( false )
+	else
+		setOcclusionsEnabled( true )
+	end
+end
+addEvent('onMapStarting')
+addEventHandler('onMapStarting', root, handleOcclusions)
