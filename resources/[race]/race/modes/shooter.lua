@@ -287,7 +287,7 @@ function Shooter:onPlayerJoin(player, spawnpoint)
 
 		local tick = getTickCount() + 5000
 
-		
+
 		bindKey(player, "vehicle_fire", "down", self.shoot)
 		bindKey(player, "vehicle_secondary_fire", "down", self.jump)
 		bindKey(player, "mouse2", "down", self.jump)
@@ -566,19 +566,23 @@ function Shooter:launch()
 	else
 		--if math.random(2) == 1 then clientCall(g_Root, 'showOnlyHealthBar', true) end -- Use this to hide names 50% of the time
 		clientCall(g_Root, 'showOnlyHealthBar', true) -- Use this to hide names 100% of the time
+		clientCall(g_Root, 'sh_initTimeBars')
 		-- Add binds for rockets/jumps and cooldown at start
 		self.cooldowns = {}
 		local tick = getTickCount() + 5000
 		for k, player in ipairs(getActivePlayers()) do
 
-			-- bindKey(player, "vehicle_fire", "down", function(p,k,s) self:shoot(p,k,s) end)
-			bindKey(player, "vehicle_fire", "down", self.shoot)
-			bindKey(player, "vehicle_secondary_fire", "down", self.jump)
-			bindKey(player, "mouse2", "down", self.jump)
+			-- bindKey(player, "vehicle_fire", "down", self.shoot)
+			-- bindKey(player, "vehicle_secondary_fire", "down", self.jump)
+			-- bindKey(player, "mouse2", "down", self.jump)
 			self.cooldowns[player] = {shoot = tick, jump = tick}
 		end
-		setTimer(showMessage, 4500, 1, "Press fire to shoot rockets and alt-fire/rmb to jump!", 0, 0, 255, root)
-		setTimer(function() clientCall(g_Root, 'sh_initTimeBars') end,4500,1)
+
+		if isTimer(launchTimer) then killTimer(launchTimer) end
+		launchTimer = setTimer(function()
+			showMessage("Press fire to shoot rockets and alt-fire/rmb to jump!", 0, 0, 255, root)
+			clientCall(g_Root, 'initShooterClient', true) 
+		end,4500,1)
 	end
 end
 
@@ -857,7 +861,9 @@ function Shooter:cleanup()
 		end
 
 	else
+		if isTimer(launchTimer) then killTimer(launchTimer) end
 		clientCall(g_Root, 'sh_stopTimeBars')
+		clientCall(root, 'initShooterClient', false)
 		-- Remove binds
 		for k, v in ipairs(getElementsByType'player') do
 			if isKeyBound(v, 'vehicle_fire', 'down', self.shoot) then
