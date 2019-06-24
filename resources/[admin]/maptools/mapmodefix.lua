@@ -34,9 +34,8 @@ function checkNoGamemodeMaps()
         updateMapToNewFormat(map.resource)
     end
 end
-
-setTimer(function() setTimer(checkNoGamemodeMaps, 2000, 0) end, 5000, 1)
-addCommandHandler('checkNoGamemodeMaps', checkNoGamemodeMaps)
+addEvent('onMapStarting')
+addEventHandler('onMapStarting', root, checkNoGamemodeMaps)
 
 function getMapsCompatibleWithNoGamemode()
     local incompatibleMaps = {}
@@ -86,9 +85,7 @@ function updateMapToNewFormat(resource)
     end
     xmlUnloadFile(meta)
 
-    if mode == "shooter" then
-        setResourceInfo(resource, "mrgreen", '2')
-    elseif mode == "rtf" then
+    if mode == "rtf" then
         for _, file in ipairs(mapfiles) do
             -- outputDebugString(file)
             local map = xmlLoadFile(':' .. name .. '/' .. file)
@@ -160,7 +157,7 @@ function updateMapToNewFormat(resource)
             xmlUnloadFile(map)
         end
         setResourceInfo(resource, "mrgreen", '2')
-    elseif mode == "deadline" then
+    else
         setResourceInfo(resource, "mrgreen", '2')
     end
 end
