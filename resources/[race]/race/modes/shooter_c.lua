@@ -32,7 +32,7 @@ end
 
 
 function createRocket()
-	if not canShoot or isTimer(sh_shootCDTimer) then return end
+	if isPedDead(localPlayer) or not canShoot or isTimer(sh_shootCDTimer) then return end
 	sh_cd_handler("shoot")
 	local occupiedVehicle = getPedOccupiedVehicle(localPlayer)
 	local x,y,z = getElementPosition(occupiedVehicle)
@@ -58,7 +58,7 @@ end
 
 
 function shooterJump()
-	if not canShoot or isTimer(sh_jumpCDTimer) then return end
+	if isPedDead(localPlayer) or not canShoot or isTimer(sh_jumpCDTimer) then return end
 	local veh = getPedOccupiedVehicle(localPlayer)
 	local vehID = getElementModel( veh )
 	if vehID == 444 or vehID == 556 or vehID == 557 then -- If veh is a monster --
