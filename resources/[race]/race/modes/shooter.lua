@@ -228,6 +228,7 @@ function Shooter:onPlayerWasted(player)
 		self.setPlayerIsFinished(player)
 		showBlipsAttachedTo(player, false)
 		clientCall(player, 'showOnlyHealthBar', false)
+		clientCall(player, 'initShooterClient', false)
 	end
 end
 
