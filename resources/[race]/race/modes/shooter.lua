@@ -519,7 +519,6 @@ function Shooter:launch()
 	RaceMode.launch(self)
 	-- Read jump height from map
 	local jumpHeightSetting = (getNumber(g_MapInfo.resname..".shooter_jumpheight",0.25))
-	outputChatBox(jumpHeightSetting)
 	if jumpHeightSetting ~= 0.25 then
 		-- Map has different setting for jump height
 		-- Check if its within range
