@@ -1,4 +1,4 @@
- Shooter = setmetatable({}, RaceMode)
+Shooter = setmetatable({}, RaceMode)
 Shooter.__index = Shooter
 
 Shooter:register('Shooter')
@@ -518,7 +518,8 @@ addEvent('onPlayerWinShooter')
 function Shooter:launch()
 	RaceMode.launch(self)
 	-- Read jump height from map
-	local jumpHeightSetting = (getNumber(g_MapInfo.resname..".shooter_jumpheight",25)/10)
+	local jumpHeightSetting = (getNumber(g_MapInfo.resname..".shooter_jumpheight",0.25))
+	outputChatBox(jumpHeightSetting)
 	if jumpHeightSetting ~= 0.25 then
 		-- Map has different setting for jump height
 		-- Check if its within range
@@ -567,7 +568,6 @@ function Shooter:launch()
 	else
 		--if math.random(2) == 1 then clientCall(g_Root, 'showOnlyHealthBar', true) end -- Use this to hide names 50% of the time
 		clientCall(g_Root, 'showOnlyHealthBar', true) -- Use this to hide names 100% of the time
-		clientCall(g_Root, 'sh_initTimeBars')
 		-- Add binds for rockets/jumps and cooldown at start
 		self.cooldowns = {}
 		local tick = getTickCount() + 5000
@@ -583,6 +583,7 @@ function Shooter:launch()
 		launchTimer = setTimer(function()
 			showMessage("Press fire to shoot rockets and alt-fire/rmb to jump!", 0, 0, 255, root)
 			clientCall(g_Root, 'initShooterClient', true) 
+			clientCall(g_Root, 'sh_initTimeBars')
 		end,4500,1)
 	end
 end
@@ -865,18 +866,6 @@ function Shooter:cleanup()
 		if isTimer(launchTimer) then killTimer(launchTimer) end
 		clientCall(g_Root, 'sh_stopTimeBars')
 		clientCall(root, 'initShooterClient', false)
-		-- Remove binds
-		for k, v in ipairs(getElementsByType'player') do
-			if isKeyBound(v, 'vehicle_fire', 'down', self.shoot) then
-				unbindKey(v, 'vehicle_fire', 'both', self.shoot)
-			end
-			if isKeyBound(v, 'vehicle_secondary_fire', 'down', self.jump) then
-				unbindKey(v, 'vehicle_secondary_fire', 'both', self.jump)
-			end
-			if isKeyBound(v, 'mouse2', 'down', self.jump) then
-				unbindKey(v, 'mouse2', 'both', self.jump)
-			end
-		end
 	end
 	if isTimer(shooterAutoRepairTimer) then
 		killTimer(shooterAutoRepairTimer)
@@ -930,6 +919,7 @@ function Shooter:destroy()
 		self.rankingBoard:destroy()
 		self.rankingBoard = nil
 	end
+	clientCall(g_Root, 'initShooterClient', false)
 	self:cleanup()
 	RaceMode.destroy(self)
 end

@@ -3,21 +3,11 @@ local canShoot = false
 local sh_jumpCDTimer = false
 local sh_shootCDTimer = false
 
--- TEST: Client sided shooting/jumping to prevent lag
 function initShooterClient(st)
 	local state = st and true or false
 	if isTimer(sh_jumpCDTimer) then killTimer(sh_jumpCDTimer) end
 	if isTimer(sh_shootCDTimer) then killTimer(sh_shootCDTimer) end
 	canShoot = state
-	if state then
-		bindKey("vehicle_fire", "down", createRocket)
-		bindKey("vehicle_secondary_fire", "down", shooterJump)
-		bindKey("mouse2", "down", shooterJump)
-	else
-		unbindKey("vehicle_fire", "down", createRocket)
-		unbindKey("vehicle_secondary_fire", "down", shooterJump)
-		unbindKey("mouse2", "down", shooterJump)
-	end
 end
 
 function clientReceiveShooterSettings(jumpHeight,autoRepair)
@@ -32,7 +22,7 @@ end
 
 
 function createRocket()
-	if isPedDead(localPlayer) or not canShoot or isTimer(sh_shootCDTimer) then return end
+	if not canShoot or isPedDead(localPlayer) or isTimer(sh_shootCDTimer) then return end
 	sh_cd_handler("shoot")
 	local occupiedVehicle = getPedOccupiedVehicle(localPlayer)
 	local x,y,z = getElementPosition(occupiedVehicle)
@@ -41,24 +31,12 @@ function createRocket()
 	local y = y+4*math.sin(math.rad(rZ+90))
 	createProjectile(occupiedVehicle, 19, x, y, z, 1.0, nil)
 end
-
-function shooterAutoRepair(attacker, weapon, loss)
-	if source ~= getPedOccupiedVehicle(localPlayer) then return end
-	
-	if weapon == 51 then
-		-- Do stuff when hit by rocket
-	elseif getElementHealth(source) > 249 then
-		for i=0, 6 do
-			setVehiclePanelState(source,i,0)
-			setVehicleDoorState(source,i,0)
-		end
-		cancelEvent()
-	end
-end
+-- Keep bind on function, clientsided unbindKey may cause issues with NOS, further investigation needed
+bindKey("vehicle_fire", "down", createRocket)
 
 
 function shooterJump()
-	if isPedDead(localPlayer) or not canShoot or isTimer(sh_jumpCDTimer) then return end
+	if not canShoot or isPedDead(localPlayer) or isTimer(sh_jumpCDTimer) then return end
 	local veh = getPedOccupiedVehicle(localPlayer)
 	local vehID = getElementModel( veh )
 	if vehID == 444 or vehID == 556 or vehID == 557 then -- If veh is a monster --
@@ -75,7 +53,23 @@ function shooterJump()
 		setElementVelocity ( veh ,vx, vy, vz + shooterJumpHeight )
 	end
 end
+-- Keep bind on function, clientsided unbindKey may cause issues with NOS, further investigation needed
+bindKey("vehicle_secondary_fire", "down", shooterJump)
+bindKey("mouse2", "down", shooterJump)
 
+function shooterAutoRepair(attacker, weapon, loss)
+	if source ~= getPedOccupiedVehicle(localPlayer) then return end
+	
+	if weapon == 51 then
+		-- Do stuff when hit by rocket
+	elseif getElementHealth(source) > 249 then
+		for i=0, 6 do
+			setVehiclePanelState(source,i,0)
+			setVehicleDoorState(source,i,0)
+		end
+		cancelEvent()
+	end
+end
 
 -- TIME BARS
 local sh_shootCD = 3000
