@@ -522,6 +522,9 @@ function Shooter:launch()
 	if jumpHeightSetting ~= 0.25 then
 		-- Map has different setting for jump height
 		-- Check if its within range
+		if jumpHeightSetting then
+			jumpHeightSetting = jumpHeightSetting / 10
+		end
 		local minJumpHeight = 0.2
 		local maxJumpHeight = 1.1
 		if not jumpHeightSetting then
@@ -937,6 +940,56 @@ Shooter.modeOptions = {
 	ghostmode_map_can_override = false,
 }
 
+-- Map manager jumpheight command
+function Shooter.setNewJumpHeight(p, cmd, amount)
+	local acc = getAccountName(getPlayerAccount( p ))
+	if acc ~= 'guest' and isObjectInACLGroup( 'user.'..acc, aclGetGroup('mapmanager') ) then
+		local minJumpHeight = 2
+		local maxJumpHeight = 11
+		if amount and tonumber(amount) then
+			amount = tonumber(amount)
+		end
+		if amount > maxJumpHeight then 
+			outputChatBox('Jumpheight '..tostring(amount)..' is higher than the maximum: '..tostring(maxJumpHeight), p)
+			return
+		elseif amount < minJumpHeight then
+			outputChatBox('Jumpheight '..tostring(amount)..' is lower than the minimum: '..tostring(minJumpHeight), p)
+			return
+		elseif not g_MapInfo or g_MapInfo.metamode ~= 'shooter' then
+			outputChatBox('This command only works with shooter maps!', p)
+			return
+		else
 
-
-
+			local file = xmlLoadFile( ':'..g_MapInfo.resname..'/meta.xml' )
+			if not file then
+				outputChatBox('Could not open '..tostring(g_MapInfo.resname)..'/meta.xml', p)
+				return
+			end
+			local settings = xmlFindChild( file, 'settings', 0 )
+			if not settings then
+				settings = xmlCreateChild( file, 'settings' )
+			end
+			local children = xmlNodeGetChildren( settings )
+			local jumpHeightNode = false
+			for i, node in ipairs(children) do
+				if xmlNodeGetAttribute( node, 'name' ) == '#shooter_jumpheight' then
+					jumpHeightNode = node
+					break
+				end
+			end
+			if not jumpHeightNode then
+				jumpHeightNode = xmlCreateChild(settings, 'setting')
+				xmlNodeSetAttribute( jumpHeightNode, 'name', '#shooter_jumpheight' )
+				xmlNodeSetAttribute( jumpHeightNode, 'value', amount )
+			else
+				xmlNodeSetAttribute(jumpHeightNode, 'value', amount)
+			end
+			xmlSaveFile( file )
+			xmlUnloadFile( file )
+			outputDebugString(getPlayerName(p)..' set '..g_MapInfo.resname..' jumpheight to '..amount)
+			outputChatBox('Succesfully set '..g_MapInfo.resname..' jump height to '..amount, p)
+			clientCall(root, 'clientReceiveShooterSettings', amount/10, getBool(g_MapInfo.resname..".shooter_autorepair",false))
+		end
+	end
+end
+addCommandHandler('setjumpheight', Shooter.setNewJumpHeight)
