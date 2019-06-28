@@ -146,7 +146,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 		end
 	end
 	if t.status == 1 then
-		guiSetText(teamGUI.btnBuyTeam, "Renew team\n2500 GC / 20 days")
+		guiSetText(teamGUI.btnBuyTeam, "Renew team\n2750 GC / 20 days")
 		if tonumber(t.age) == 60 then
 			guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "True")
 		else
@@ -167,7 +167,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 		guiSetVisible(teamGUI.btnInvite, t.forumid == t.owner)
 		guiSetVisible(teamGUI.btnKick, t.forumid == t.owner)
 	else
-		guiSetText(teamGUI.btnBuyTeam, "Buy team\n2500 GC / 20 days")
+		guiSetText(teamGUI.btnBuyTeam, "Buy team\n2750 GC / 20 days")
 		
 		guiSetEnabled(teamGUI.teamname, true)
 		guiSetEnabled(teamGUI.teamtag, true)
