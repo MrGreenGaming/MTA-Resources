@@ -165,7 +165,7 @@ function playerFinishDD (player, rank)
 		addAchievementProgressMix ( player, 40, 1 )
 		addAchievementProgressMix ( player, 41, 1 )
 		if isElement(getPedOccupiedVehicle ( player )) and math.ceil( getElementHealth (  getPedOccupiedVehicle ( player ) ) /10 ) <= 25 then
-			addPlayerAchievementMix ( target, 34 )
+			addPlayerAchievementMix ( player, 34 )
 		end
 	elseif rank == 4 then
 		addAchievementProgressMix ( player, 33, 1 )
