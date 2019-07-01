@@ -473,7 +473,7 @@ function callSpawn ( player )
 		elementID, distance, index = changeSpawn(player)
 	end
 	if elementID then
-		return outputChatBox("[GC] Changed to spawnpoint "..index..". Distance: "..distance.."m", player, 0,255,0) -- less info
+		return outputConsole("Changed to spawnpoint "..index..". Distance: "..distance.."m", player) -- less info
 		-- return outputChatBox('[GC] Changed to spawnpoint \"' .. tostring(elementID) .. '\" .. ('..index..'/'..distance..'m)', player, 0,255,0)
 	end
 end
