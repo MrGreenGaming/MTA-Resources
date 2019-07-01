@@ -1,4 +1,12 @@
 -- UTILS
+function getMD5 ( filename )
+	if not fileExists( filename ) then return false end
+	local file = fileOpen(filename, true)
+	local image = fileRead(file, fileGetSize(file))
+	fileClose(file)
+	return md5(image)
+end
+
 function RGBToHex(red, green, blue, alpha)
 	
 	-- Make sure RGB values passed to this function are correct

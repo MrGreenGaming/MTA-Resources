@@ -1,6 +1,12 @@
+local hornPath = 'items/viphorns/horns/'
 -- When a vip uses their vip horn, the gc horn should terminate and be set on cooldown
 local vipHorns = {
     -- [player] = {hornsTable}
+}
+local checksums = {
+    -- [player] = {
+        -- [hornid] = checksum,
+    -- }
 }
 
 local vipHornsCooldown = {
@@ -12,10 +18,6 @@ local canUseHorns = false
 
 function initVipHorns(player)
     getVipHorns(player)
-    bindVipHorns(player, false)
-    if vipHorns[player] then
-        sendClientVipHornsTable(player)
-    end
 end
 -- Send horn table to client
 function sendClientVipHornsTable(player)
@@ -25,15 +27,76 @@ end
 function getVipHorns(player)
     local theID = exports.gc:getPlayerForumID(player)
 	if not theID then return false end
-    local query = dbQuery(handlerConnect, "SELECT * FROM vip_horns WHERE forumid=?", theID)
-    local result = dbPoll(query,-1)
-    if result then
-        vipHorns[player] = result
-        return result
+    local query = dbQuery(
+        function(qh)
+            local result = dbPoll(qh, 0)
+            if result then
+                vipHorns[player] = result
+            end
+            -- Iterate results , download/checksum
+            for i, result in ipairs(result) do
+                if fileExists(hornPath..result.forumid..'-'..result.hornid..'.mp3') then
+                    -- Compare md5 checksum
+                    local localChecksum = getMD5(hornPath..result.forumid..'-'..result.hornid..'.mp3')
+                    if not localChecksum then
+                        downloadVipHorn(result.forumid..'-'..result.hornid, player)
+                    else
+                        fetchRemote('https://mrgreengaming.com/api/viphornchecksum/?id='..result.forumid..'-'..result.hornid, 
+                        function(res, err)
+                            if err ~= 0 or res ~= localChecksum then
+                                downloadVipHorn(result.forumid..'-'..result.hornid, player) 
+                            else
+                                if not checksums[player] then checksums[player] = {} end
+                                checksums[player][result.forumid..'-'..result.hornid] = localChecksum
+                            end
+                        end)    
+                    end
+                else
+                    -- Download file
+                    downloadVipHorn(result.forumid..'-'..result.hornid, player)
+                end
+            end
+            sendClientVipHornsTable(player)
+            bindVipHorns(player, false)
+        end, 
+    handlerConnect, "SELECT * FROM vip_horns WHERE forumid=?", theID)    
+end
+
+function downloadVipHorn(id, player)
+    fetchRemote('https://mrgreengaming.com/api/viphorn/?id='..id,
+    function(res, err)
+        if err ~= 0 then 
+            outputDebugString('VIP horns: Could not download '..id)
+            return 
+        end
+        local file = fileCreate(hornPath..id..'.mp3')
+        fileWrite(file, res)
+        fileClose(file)
+        if not player then return end
+        local fileChecksum = getMD5(hornPath..id..'.mp3')
+        if not fileChecksum then return end
+        if not checksums[player] then checksums[player] = {} end
+        -- Save checksum
+        checksums[player][id] = fileChecksum
+        triggerEvent('onVIPHornFinishedDownloading', resourceRoot, id)
+    end)
+end
+
+function sendClientVipHorn(id, sendTo)
+    if not string.find(id, '.mp3') then
+        id = id .. '.mp3'
+    end
+    if fileExists(hornPath..id) then
+        local file = fileOpen(hornPath..id)
+        local data = fileRead( file, fileGetSize(file) )
+        fileClose(file)
+        triggerLatentClientEvent( sendTo, 'onServerSendsClientVipHorn', 50000, false,resourceRoot, data, id)
     else
-        return false
+        downloadVipHorn(id)
     end
 end
+addEvent('onClientRequestsVipHorn', true)
+addEventHandler('onClientRequestsVipHorn', root, function(id) sendClientVipHorn(id, client) end)
 
 function bindVipHorns(player, unbind)
     if not vipHorns[player] then return end
@@ -95,6 +158,8 @@ addEventHandler('onClientVipHornBindsChanged', resourceRoot, handleClientVipBind
 local canUseStates = {
     ['GridCountdown'] = true,
     ['Running'] = true,
+    ['PreGridCountdown'] = true,
+    ['TimesUp'] = true
 }
 function setHornState(state)
     canUseHorns = canUseStates[state] or false
@@ -112,7 +177,21 @@ addEventHandler('onPlayerVip', resourceRoot,
                 -- Handle logout
                 bindVipHorns(player, true)
                 if vipHorns[player] then vipHorns[player] = nil end
+                if checksums[player] then checksums[player] = nil end
 			end
 		end
 	end
 )
+
+function sendClientsChecksums(state)
+    if state == 'NoMap' then
+        local sendTable = {}
+        for player, values in pairs(checksums) do
+            for id, sum in pairs(values) do
+                sendTable[id] = sum
+            end
+        end
+        triggerClientEvent( 'onServerSendVipHornChecksum', resourceRoot, sendTable )
+    end
+end
+addEventHandler('onRaceStateChanging', root, sendClientsChecksums)

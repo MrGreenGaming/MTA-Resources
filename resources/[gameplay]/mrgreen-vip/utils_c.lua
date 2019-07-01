@@ -1,4 +1,12 @@
 -- UTILS
+function getMD5 ( filename )
+	if not fileExists( filename ) then return false end
+	local file = fileOpen(filename, true)
+	local image = fileRead(file, fileGetSize(file))
+	fileClose(file)
+	return md5(image)
+end
+
 function vip_outputChatBox(msg,r,g,b) 
 	local colorCode = RGBToHex(r or 255, g or 255, b or 255)
 	local prefix = "#FFFF00[VIP] "..colorCode
