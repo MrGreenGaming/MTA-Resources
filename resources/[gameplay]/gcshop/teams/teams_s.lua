@@ -12,22 +12,25 @@ addEventHandler('onShopInit', root, function()
 end)
 
 addEventHandler("onGCShopLogin", root, function()
-	local fid = exports.gc:getPlayerForumID(source)
-	local qh = dbQuery(handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], fid)
-	
-	local result = dbPoll(qh, -1)
-	local pName = getPlayerName(source)
-	if #result == 0 then
-		dbExec(handlerConnect, [[INSERT INTO gc_nickcache(forumid, name) VALUES (?,?)]], fid, pName)
-	else
-		local row = result[1]
-		if row.name ~= pName then
-			dbExec(handlerConnect, [[UPDATE gc_nickcache SET name=? WHERE forumid=?]], pName, fid)
-		end
-	end
-	
-	triggerClientEvent(source, "teamLogin", resourceRoot)
-	checkPlayerTeam(source, true)
+    local fid = exports.gc:getPlayerForumID(source)
+    local player = source
+	dbQuery(
+        function(qh) 
+            local result = dbPoll(qh, 0)
+            local pName = getPlayerName(player)
+            if #result == 0 then
+                dbExec(handlerConnect, [[INSERT INTO gc_nickcache(forumid, name) VALUES (?,?)]], fid, pName)
+            else
+                local row = result[1]
+                if row.name ~= pName then
+                    dbExec(handlerConnect, [[UPDATE gc_nickcache SET name=? WHERE forumid=?]], pName, fid)
+                end
+            end
+            
+            triggerClientEvent(player, "teamLogin", resourceRoot)
+            checkPlayerTeam(player, true)
+        end, 
+    handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], fid)            
 end)
 
 addEventHandler("onGCShopLogout", root, function()
@@ -200,7 +203,7 @@ function(resp, res, r, player)
 end)
 
 function checkPlayerTeam2(qh, player, bLogin)
-    local result = dbPoll(qh, -1)
+    local result = dbPoll(qh, 0)
 
     -- Check result and if player is still logged in
     if not (isElement(player) and exports.gc:getPlayerForumID(player) and result) or #result < 1 then
@@ -229,45 +232,47 @@ function checkPlayerTeam2(qh, player, bLogin)
         outputConsole('[TEAMS] Team days left: ' .. r.age, player)
     end
 	
-	local q = dbQuery(handlerConnect, [[SELECT * FROM gc_nickcache]])
-	local nicks = dbPoll(q, -1)
-	
-	sendClientData(nicks, result, player, r)
-    --triggerClientEvent('teamsData', resourceRoot, result, player, r)
+	dbQuery(
+        function(qh)
+            local nicks = dbPoll(qh, 0)
+            sendClientData(nicks, result, player, r)
+            --triggerClientEvent('teamsData', resourceRoot, result, player, r)
 
-    -- Check if player is in a team
-    if not r then
-        playerteams[player] = nil
-        return leaveTeam(player)
-    elseif r.status ~= 1 then
-        return leaveTeam(player)
-    end
+            -- Check if player is in a team
+            if not r then
+                playerteams[player] = nil
+                return leaveTeam(player)
+            elseif r.status ~= 1 then
+                return leaveTeam(player)
+            end
 
-    -- Check team age
-    local age = (r.renew_timestamp - getRealTime().timestamp)
-    outputConsole('[TEAMS] Team days left: ' .. r.age, player)
-    if age < 0 then
-        if bLogin then
-            outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
-        end
-        return
-    end
+            -- Check team age
+            local age = (r.renew_timestamp - getRealTime().timestamp)
+            outputConsole('[TEAMS] Team days left: ' .. r.age, player)
+            if age < 0 then
+                if bLogin then
+                    outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
+                end
+                return
+            end
 
-    -- Create team element if it doesn't exist yet
-    local tr, tg, tb = getColorFromString(r.colour)
-    if not teams[r.teamid] then
-        teams[r.teamid] = createTeam(r.tag .. ' ' .. r.name, tr, tg, tb)
-        setElementData(teams[r.teamid], 'gcshop.teamid', r.teamid)
-        setElementData(teams[r.teamid], 'gcshop.owner', r.owner)
-    end
-    -- Don't use team elements in CTF
-    if exports.race:getRaceMode() ~= "Capture the flag" then
-        setPlayerTeam(player, teams[r.teamid])
-    end
-    -- Show personal team message
-    if r.message and bLogin then
-        outputChatBox('#00FF00[TEAMS] ' .. r.message, player, tr, tg, tb, true)
-    end
+            -- Create team element if it doesn't exist yet
+            local tr, tg, tb = getColorFromString(r.colour)
+            if not teams[r.teamid] then
+                teams[r.teamid] = createTeam(r.tag .. ' ' .. r.name, tr, tg, tb)
+                setElementData(teams[r.teamid], 'gcshop.teamid', r.teamid)
+                setElementData(teams[r.teamid], 'gcshop.owner', r.owner)
+            end
+            -- Don't use team elements in CTF
+            if exports.race:getRaceMode() ~= "Capture the flag" then
+                setPlayerTeam(player, teams[r.teamid])
+            end
+            -- Show personal team message
+            if r.message and bLogin then
+                outputChatBox('#00FF00[TEAMS] ' .. r.message, player, tr, tg, tb, true)
+            end
+        end    
+    ,handlerConnect, [[SELECT * FROM gc_nickcache]])
 end
 
 -- Makes sure a player is not in a team, and if he was his team will be destroyed if it will be empty
