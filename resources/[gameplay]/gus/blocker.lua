@@ -161,25 +161,28 @@ function checkBlockerJoin(thePlayer)
 	local serial = getPlayerSerial(player)
 
 	if isElement(dbHandler) then
-		local query = dbQuery(dbHandler, "SELECT * FROM blockers WHERE serial = ?", serial)
-		local sql = dbPoll(query,-1)
+		dbQuery(
+			function(query) 
+				local sql = dbPoll(query,0)
 
-		if sql and #sql > 0 then
-			local currentTime = getRealTime().timestamp
-			local expire = sql[1].expireTimestamp - currentTime
-			if expire > 1 then
-				local expireReadable = secondsToTimeDesc(expire)
+				if sql and #sql > 0 then
+					local currentTime = getRealTime().timestamp
+					local expire = sql[1].expireTimestamp - currentTime
+					if expire > 1 then
+						local expireReadable = secondsToTimeDesc(expire)
 
-				local t = sql[1]
-				setElementData(player,"markedblocker",t)
+						local t = sql[1]
+						setElementData(player,"markedblocker",t)
 
 
 
-				outputChatBox("You have been marked as a blocker by "..t.byAdmin..", you will be unmarked in "..expireReadable,player,255,0,0)
-			else
-				removeBlockerFromDB(getPlayerSerial(player))
-			end
-		end
+						outputChatBox("You have been marked as a blocker by "..t.byAdmin..", you will be unmarked in "..expireReadable,player,255,0,0)
+					else
+						removeBlockerFromDB(getPlayerSerial(player))
+					end
+				end
+			end, 
+		dbHandler, "SELECT * FROM blockers WHERE serial = ?", serial)
 	end
 end
 addEventHandler('onPlayerJoin', root, checkBlockerJoin)
