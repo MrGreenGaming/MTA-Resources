@@ -64,27 +64,31 @@ end
 function getAchievements ( forumids )
 	if not handlerConnect then return end
 	forumids = table.concat(forumids, ',')
-	local qhMix = dbQuery ( handlerConnect, "SELECT * FROM `??` WHERE forumID IN (??)", achsTableMix, forumids)
-	local resultsMix = dbPoll ( qhMix, -1 )
-	if resultsMix and #resultsMix > 0 then
-		for _, row in ipairs(resultsMix) do
-			local ach = getAchievementMix ( row.achievementID )
-			-- outputDebugString(string.format('%d %s %d %d / %d %s' , row.forumID, ach.s, row.unlocked, row.progress or 0, ach.max or 0, row.unlockedDate ) )
-			if not allAchievementsMix[row.forumID] then allAchievementsMix[row.forumID] = {} end
-			allAchievementsMix[row.forumID][row.achievementID] = row
-		end
-	end
+	local qhMix = dbQuery ( 
+		function(qh) 
+			local resultsMix = dbPoll ( qh, 0 )
+			if resultsMix and #resultsMix > 0 then
+				for _, row in ipairs(resultsMix) do
+					local ach = getAchievementMix ( row.achievementID )
+					-- outputDebugString(string.format('%d %s %d %d / %d %s' , row.forumID, ach.s, row.unlocked, row.progress or 0, ach.max or 0, row.unlockedDate ) )
+					if not allAchievementsMix[row.forumID] then allAchievementsMix[row.forumID] = {} end
+					allAchievementsMix[row.forumID][row.achievementID] = row
+				end
+			end
+		end, handlerConnect, "SELECT * FROM `??` WHERE forumID IN (??)", achsTableMix, forumids)
 	
-	local qhRace = dbQuery ( handlerConnect, "SELECT * FROM `??` WHERE forumID IN (??)", achsTableRace, forumids)
-	local resultsRace = dbPoll ( qhRace, -1 )
-	if resultsRace and #resultsRace > 0 then
-		for _, row in ipairs(resultsRace) do
-			local ach = getAchievementRace ( row.achievementID )
-			-- outputDebugString(string.format('%d %s %d %d / %d %s' , row.forumID, ach.s, row.unlocked, row.progress or 0, ach.max or 0, row.unlockedDate ) )
-			if not allAchievementsRace[row.forumID] then allAchievementsRace[row.forumID] = {} end
-			allAchievementsRace[row.forumID][row.achievementID] = row
-		end
-	end
+	local qhRace = dbQuery ( 
+		function(qh) 
+			local resultsRace = dbPoll ( qh, 0 )
+			if resultsRace and #resultsRace > 0 then
+				for _, row in ipairs(resultsRace) do
+					local ach = getAchievementRace ( row.achievementID )
+					-- outputDebugString(string.format('%d %s %d %d / %d %s' , row.forumID, ach.s, row.unlocked, row.progress or 0, ach.max or 0, row.unlockedDate ) )
+					if not allAchievementsRace[row.forumID] then allAchievementsRace[row.forumID] = {} end
+					allAchievementsRace[row.forumID][row.achievementID] = row
+				end
+			end
+		end, handlerConnect, "SELECT * FROM `??` WHERE forumID IN (??)", achsTableRace, forumids)	
 end
 
 
