@@ -5,34 +5,38 @@ function getLockedNicks(forumID)
 	local theID = exports.gc:getPlayerGreencoinsID(source)
 
 	if not theID then return end
-
+	local player = source
 	-- Get all locked nicks
-	local nameQuery = dbQuery(handlerConnect,"SELECT pNick FROM gc_nickprotection WHERE forumID=?",theID)
-	local nameResult = dbPoll(nameQuery,-1) 
+	local nameQuery = dbQuery(
+		function(nameQuery) 
+			local nameResult = dbPoll(nameQuery,0) 
 
-	local theNames = {}
-	if #nameResult > 0 then
-		for _,t in ipairs(nameResult) do
-			table.insert(theNames,t.pNick)
-		end
-	end
+			local theNames = {}
+			if #nameResult > 0 then
+				for _,t in ipairs(nameResult) do
+					table.insert(theNames,t.pNick)
+				end
+			end
 
-	-- Get amount of locknick slots
-	local amountQuery = dbQuery(handlerConnect,"SELECT amount FROM gc_nickprotection_amount WHERE forumID=?",forumID)
-	local amountResult = dbPoll(amountQuery,-1)
+			-- Get amount of locknick slots
+			dbQuery(
+				function(amountQuery) 
+					local amountResult = dbPoll(amountQuery,0)
 
-	local locknickAmount = 3
-	if #amountResult == 0 then
-		-- Insert player into amount table db
+					local locknickAmount = 3
+					if #amountResult == 0 then
+						-- Insert player into amount table db
 
-		dbExec(handlerConnect, "INSERT INTO gc_nickprotection_amount (forumID) VALUES (?)", tostring(forumID))
-	elseif #amountResult > 0 then
-		locknickAmount = tonumber(amountResult[1].amount)
-	end
+						dbExec(handlerConnect, "INSERT INTO gc_nickprotection_amount (forumID) VALUES (?)", tostring(forumID))
+					elseif #amountResult > 0 then
+						locknickAmount = tonumber(amountResult[1].amount)
+					end
 
-	triggerClientEvent(source,"serverSendLockedNickInfo",source,theNames,locknickAmount)
-
-
+					triggerClientEvent(player,"serverSendLockedNickInfo",player,theNames,locknickAmount)
+				end, 
+			handlerConnect,"SELECT amount FROM gc_nickprotection_amount WHERE forumID=?",forumID)
+		end,
+	handlerConnect,"SELECT pNick FROM gc_nickprotection WHERE forumID=?",theID)
 end
 addEventHandler("onGCShopLogin",root,getLockedNicks)
 addEvent("clientRefreshNicks",true)
