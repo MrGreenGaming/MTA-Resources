@@ -167,21 +167,28 @@ function addShopUpgrade ( player, forumID, vehicleID, upgradeID)
 	elseif upgradeID == 1008 or upgradeID == 1009 or upgradeID == 1010 or upgradeID == 1087 then
 		outputChatBox ( 'Nitro or hydraulics are not allowed', player, 255, 0, 0 )
 	elseif vehicleID == '*' then
-		local vehTable = getModsFromDB(forumID,true)
-		for i = 1, #vehTable do
-			if vehTable[i].vehicle then
-				if not isUpgradeCompatible ( vehTable[i].vehicle, upgradeID ) then
-				elseif isUpgInDatabase ( forumID, vehTable[i].vehicle, upgradeID ) then
-				else
-					local added = addUpgToDatabase (forumID, vehTable[i].vehicle, upgradeID )
-					local veh = getPedOccupiedVehicle(player)
+		getModsFromDB(forumID,true, 
+			function(vehTable)
+				for i = 1, #vehTable do
+					if vehTable[i].vehicle then
+						if not isUpgradeCompatible ( vehTable[i].vehicle, upgradeID ) then
+						elseif isUpgInDatabase ( forumID, vehTable[i].vehicle, upgradeID ) then
+						else
+							local added = addUpgToDatabase (forumID, vehTable[i].vehicle, upgradeID )
+							local veh = getPedOccupiedVehicle(player)
+							if veh and vehTable[i].vehicle == getElementModel(veh) then 
 					if veh and vehTable[i].vehicle == getElementModel(veh) then 
-						addVehicleUpgrade(veh, upgradeID)
-					end
-				end
+							if veh and vehTable[i].vehicle == getElementModel(veh) then 
+								addVehicleUpgrade(veh, upgradeID)
+							end
+						end
+					end	
 			end	
-		end
-		outputChatBox ('Upgrade added to all your compatible vehicles' , player, 0, 255, 0 )
+					end	
+				end
+				outputChatBox ('Upgrade added to all your compatible vehicles' , player, 0, 255, 0 )
+			end
+		)
 	elseif not isUpgradeCompatible ( vehicleID, upgradeID ) then
 		outputChatBox ( 'Upgrade ' .. tostring(upgradeID) .. ' isn\'t compatible with a(n) ' .. tostring(getVehicleNameFromModel(vehicleID)), player, 255, 0, 0 )
 	elseif isUpgInDatabase ( forumID, vehicleID, upgradeID ) then
@@ -196,24 +203,32 @@ function addShopUpgrade ( player, forumID, vehicleID, upgradeID)
 	end
 end
 
+
 function remShopUpgrade ( player, forumID, vehicleID, upgradeID)
 	upgradeID = upgradeSlotID(tonumber(upgradeID)) and tonumber(upgradeID)
 	if (not upgradeID) then
 		outputChatBox ( 'Not a valid upgrade ID (use numbers)', player, 255, 0, 0 )
 	elseif vehicleID == '*' then
-		local vehTable = getModsFromDB(forumID,true)
-		for i = 1, #vehTable do
-			if vehTable[i].vehicle then
-				if isUpgInDatabase ( forumID, vehTable[i].vehicle, upgradeID ) then
-					local removed = remUpgFromDatabase (forumID, vehTable[i].vehicle, upgradeID )
-					local veh = getPedOccupiedVehicle(player)
+		getModsFromDB(forumID,true, 
+			function(vehTable) 
+				for i = 1, #vehTable do
+					if vehTable[i].vehicle then
+						if isUpgInDatabase ( forumID, vehTable[i].vehicle, upgradeID ) then
+							local removed = remUpgFromDatabase (forumID, vehTable[i].vehicle, upgradeID )
+							local veh = getPedOccupiedVehicle(player)
+							if veh and vehicleID == getElementModel(veh) then 
 					if veh and vehicleID == getElementModel(veh) then 
-						removeVehicleUpgrade(veh, upgradeID)
-					end
-				end
+							if veh and vehicleID == getElementModel(veh) then 
+								removeVehicleUpgrade(veh, upgradeID)
+							end
+						end
+					end	
 			end	
-		end
-		outputChatBox ('Removed upgrade of all your vehicles' , player, 0, 255, 0 )
+					end	
+				end
+				outputChatBox ('Removed upgrade of all your vehicles' , player, 0, 255, 0 )
+			end
+		)
 	elseif not isUpgInDatabase ( forumID, vehicleID, upgradeID ) then
 		outputChatBox ( 'This upgrade is not added: '.. tostring(getVehicleNameFromModel(vehicleID)) .. ' + ' .. tostring(upgradeID), player, 255, 165, 0 )
 	else
@@ -466,22 +481,20 @@ end
 addEventHandler ( "onMapStarting", root, mapRestart )
 
 function shopLogIn(forumID, amount)
-	local playerMods = getModsFromDB(forumID, true)
-	-- if gcMods[forumID] then
-		local veh = getPedOccupiedVehicle(source)
-		if veh then
-			prev_vehid[source] = getElementModel(veh)
+	local player = source
+	getModsFromDB(forumID, true, 
+		function(playerMods) 
+			local veh = getPedOccupiedVehicle(player)
+			if veh then
+				prev_vehid[player] = getElementModel(veh)
+			end
+			addUpgradeHandlers(player)
+			setTimer(vehicleChecker2, 2000, 1, player)
+			local accName = getAccountName ( getPlayerAccount ( player ) ) -- get his account name
+			-- setTimer(triggerClientEvent,5000,1, player, 'modshopLogin', player, vehicle_price, gcMods[forumID] or false )
+			triggerClientEvent( player, 'modshopLogin', player, vehicle_price, playerMods or false )
 		end
-		addUpgradeHandlers(source)
-	-- end
-
-	
-	setTimer(vehicleChecker2, 2000, 1, source)
-    local accName = getAccountName ( getPlayerAccount ( source ) ) -- get his account name
-    
-    -- setTimer(triggerClientEvent,5000,1, source, 'modshopLogin', source, vehicle_price, gcMods[forumID] or false )
-    
-	triggerClientEvent( source, 'modshopLogin', source, vehicle_price, playerMods or false )
+	)
 end
 addEventHandler("onGCShopLogin", root, shopLogIn)
 
@@ -1094,37 +1107,46 @@ end
 
 
 
-function getModsFromDB(forumID,raw)
+function getModsFromDB(forumID, raw, callback, ...)
 	if not forumID then return end
 	if not type(forumID) == "number" then return end
+	local args = {...}
+	dbQuery(
+		function(query) 
+			local theMods = dbPoll(query,0) -- Takes 14MS on local wamp server for fully bought and modded gc account --
 
-	local getMods = dbQuery(handlerConnect,"SELECT * FROM gcshop_mod_upgrades WHERE forumID=?",forumID)
-	local theMods = dbPoll(getMods,-1) -- Takes 14MS on local wamp server for fully bought and modded gc account --
+			gcMods[forumID] = {}
+			if #theMods > 0 then
+				gcMods[forumID] = theMods -- For some reason, this is necessary or else it will not insert sorted by vehID, strange bug or i'm retarded
 
-	gcMods[forumID] = {}
-	if #theMods > 0 then
-		gcMods[forumID] = theMods -- For some reason, this is necessary or else it will not insert sorted by vehID, strange bug or i'm retarded
+				for i = 1, #theMods do
+					if theMods[i].vehicle then
+						local vehID = tostring("ID-"..theMods[i].vehicle)
 
-		for i = 1, #theMods do
-			if theMods[i].vehicle then
-				local vehID = tostring("ID-"..theMods[i].vehicle)
+						-- gcMods[forumID][i] = nil
 
-				-- gcMods[forumID][i] = nil
+						gcMods[forumID][vehID] = theMods[i]	
+						gcMods[forumID][vehID] = theMods[i]	
+						gcMods[forumID][vehID] = theMods[i]	
+					end	
+				end	
 
-				gcMods[forumID][vehID] = theMods[i]	
-			end	
-		end
-
-		for i,v in pairs(gcMods[forumID]) do -- Resort
-			if tonumber(i) then
-				v = nil
+				for i,v in pairs(gcMods[forumID]) do -- Resort
+					if tonumber(i) then
+						v = nil
+					end
+				end
+			
+				if not callback or type(callback) ~= 'function' then return end
+				if raw then
+					 callback(theMods, unpack(args)) 
+				else
+					callback(vehTable, unpack(args))
+				end
 			end
-		end
-	
-
-		if raw then return theMods end
-		return vehTable end
-	end
+		end, 
+	handlerConnect,"SELECT * FROM gcshop_mod_upgrades WHERE forumID=?",forumID)
+end
 
 
 function isVehColorAllowed()
