@@ -539,7 +539,7 @@ function setPerkSetting(player, ID, key, value, text, callback)
 				options[key] = value
 				options = toJSON(options)
 				if type(options) ~= 'string' then return outputDebugString('GC Perks: error adding option [' .. forumID, 1) and false end
-				local result = dbQuery(handlerConnect, "UPDATE gc_items SET options=? WHERE forumID=? AND itembought=?", options, forumID, ID)
+				local result = dbExec(handlerConnect, "UPDATE gc_items SET options=? WHERE forumID=? AND itembought=?", options, forumID, ID)
 				
 				if type(text) == 'string' then
 					outputChatBox(tostring(text), player, 0, 255, 0)
