@@ -3,10 +3,10 @@ local price = 1500
 
 function handleBuying(player, id)
 	-- exports.gc:addPlayerGreencoins(player, (-1*price))
-	local ok = gcshopBuyItem ( source, price, 'Skin:' .. id)
+	local ok = gcshopBuyItem ( player, price, 'Skin:' .. id)
 	if ok then
 		setTimer(setPlayerGcSkin, 1000, 1, player, tonumber(id))
-		triggerClientEvent(source, "onServerSkinData", source, true)
+		triggerClientEvent(player, "onServerSkinData", player, true)
 	end
 	return ok
 end
@@ -28,6 +28,7 @@ addEvent('onPlayerChooseSkin', true)
 addEventHandler('onPlayerChooseSkin', root,
 function(skinID)
 	if not handlerConnect then return end
+	
 	local isLogged = exports.gc:isPlayerLoggedInGC(source)
 	if not isLogged then 
 		triggerClientEvent(source, "onServerSkinData", source, false)
@@ -38,8 +39,7 @@ function(skinID)
 		triggerClientEvent(source, "onServerSkinData",source, false)
 		return
 	end
-	local ok = handleBuying(source, skinID)
-	if not ok then return end
+
 	local forumid = exports.gc:getPlayerForumID(source)
 	forumid = tostring(forumid)
 	local player = source
@@ -49,8 +49,14 @@ function(skinID)
 			local sql = dbPoll(query, 0)
 			local result
 			if #sql == 0 then
-				cmd = "INSERT INTO custom_skins VALUES(?, ?, ?)"
-				result = dbExec(handlerConnect, cmd, forumid, tostring(skinID), tostring(skinID))
+				if handleBuying(player, skinID) then
+					cmd = "INSERT INTO custom_skins VALUES(?, ?, ?)"
+					result = dbExec(handlerConnect, cmd, forumid, tostring(skinID), tostring(skinID))
+					addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumid) .. ') bought skin=' .. tostring(skinID) ..  ' ' .. tostring(result))
+					triggerClientEvent(player, "onServerSkinData",player, true)
+				else
+					triggerClientEvent(player, "onServerSkinData",player, false)
+				end
 			else
 				local playerSkins = split(sql[1].skin, string.byte(','))
 				for i,j in ipairs(playerSkins) do 
@@ -59,13 +65,18 @@ function(skinID)
 						return
 					end
 				end
-				local newSkins = sql[1].skin..","..tostring(skinID)
-				cmd = "UPDATE custom_skins SET skin = ? WHERE forumid = ?"
-				result = dbExec(handlerConnect, cmd, newSkins, forumid)
-				cmd = "UPDATE custom_skins SET setting = ? WHERE forumid = ?"
-				dbExec(handlerConnect, cmd, tostring(skinID), forumid)
+				if handleBuying(player, skinID) then
+					local newSkins = sql[1].skin..","..tostring(skinID)
+					cmd = "UPDATE custom_skins SET skin = ? WHERE forumid = ?"
+					result = dbExec(handlerConnect, cmd, newSkins, forumid)
+					cmd = "UPDATE custom_skins SET setting = ? WHERE forumid = ?"
+					dbExec(handlerConnect, cmd, tostring(skinID), forumid)
+					addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumid) .. ') bought skin=' .. tostring(skinID) ..  ' ' .. tostring(result))
+					triggerClientEvent(player, "onServerSkinData",player, true)
+				else
+					triggerClientEvent(player, "onServerSkinData",player, false)
+				end
 			end
-			addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumid) .. ') bought skin=' .. tostring(skinID) ..  ' ' .. tostring(result))
 		end
 	, handlerConnect, cmd, forumid)	
 end

@@ -31,7 +31,6 @@ function getLockedNicks(forumID)
 					elseif #amountResult > 0 then
 						locknickAmount = tonumber(amountResult[1].amount)
 					end
-
 					triggerClientEvent(player,"serverSendLockedNickInfo",player,theNames,locknickAmount)
 				end, 
 			handlerConnect,"SELECT amount FROM gc_nickprotection_amount WHERE forumID=?",forumID)

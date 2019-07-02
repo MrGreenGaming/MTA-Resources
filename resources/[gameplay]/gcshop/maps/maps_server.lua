@@ -101,13 +101,32 @@ function sortCompareFunction(s1, s2)
     end
 end
 
+local function isPlayerStaff(player)
+    local freeForAcl = {
+        'ServerManager',
+        'mapmanager',
+        'Developer'
+    }
+
+    local accountName = getAccountName( getPlayerAccount(player) )
+    if accountName ~= "guest" then
+        local isInAcl = false
+        for _, name in ipairs(freeForAcl) do
+            if isObjectInACLGroup( "user."..accountName, aclGetGroup(name) ) then
+                isInAcl = true
+                break
+            end
+        end
+        return isInAcl
+    end
+    return false
+end
+
 addEvent('sendPlayerNextmapChoice', true)
 addEventHandler('sendPlayerNextmapChoice', root,
 function(choice)
-    if not hasObjectPermissionTo(source, "command.deletemap", false) then -- Check for map bought amount if not admin
-        if isDailyLimitReached(tostring(choice[2])) then return end
-    end
-	
+    local isFreeMap = isPlayerStaff(source)
+    if not isFreeMap and isDailyLimitReached(tostring(choice[2])) then return end -- Check for map bought amount if not admin
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
 
     if isPlayerEligibleToBuy(source, choice) then
@@ -123,7 +142,7 @@ function(choice)
             if vipIsRunning and exports['mrgreen-vip']:canBuyVipMap(source) then
                 mapprice = 0
             end
-            outputChatBox("[Maps-Center] You do not have enough GCs to buy a nextmap. Current price: "..tostring(mapprice), source, 255, 0, 0)--here
+            outputChatBox("[Maps-Center] You do not have enough GCs to buy a nextmap. Current price: "..tostring(mapprice), source, 255, 0, 0)
         end
     else
         outputChatBox("[Maps-Center] Error. You can only queue one map, you're not logged in or map was deleted", source, 255, 0, 0)
@@ -203,7 +222,9 @@ function queue(choice, player)
 	choice.forumID = exports.gc:getPlayerForumID(player)
     table.insert(myQueue, choice)
     outputChatBox("[Maps-Center] "..getPlayerName(player):gsub( '#%x%x%x%x%x%x', '' ).." has queued a next-map!", root, 0, 255, 0)
-	exports.irc:outputIRC("12*** Map queued by " .. getPlayerName(source):gsub( '#%x%x%x%x%x%x', '' ) .. ": 1" .. choice[1] )
+    if getResourceState( getResourceFromName('irc') ) == 'running' then
+        exports.irc:outputIRC("12*** Map queued by " .. getPlayerName(source):gsub( '#%x%x%x%x%x%x', '' ) .. ": 1" .. choice[1] )
+    end
     outputChatBox("[Maps-Center] Your next map current queue number: "..#myQueue, player, 0, 255, 0)
     triggerClientEvent('onTellClientPlayerBoughtMap', player, choice[1], #myQueue)
     triggerEvent('onNextmapSettingChange', root, getResourceFromName(myQueue[1][2]))
@@ -253,7 +274,7 @@ function isPlayerEligibleToBuy(player, choice)
 end
 
 function playerHasBoughtMap(player, choice)
-    if (hasObjectPermissionTo(player, "command.deletemap", false)) then  --if admin then dont take GC
+    if (isPlayerStaff(player)) then  -- Free for acl objects specified in isPlayerStaff
 		return true
 	end
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
@@ -270,7 +291,7 @@ function playerHasBoughtMap(player, choice)
 
 	local money = exports.gc:getPlayerGreencoins(player)
     if not isVipBuy and money < mapprice then return false end
-    -- exports.gc:addPlayerGreencoins(player, PRICE*(-1))
+
 	local ok = gcshopBuyItem ( player, mapprice, 'Map: ' .. choice[1])
     if isVipBuy and ok then
         exports['mrgreen-vip']:playerUsedFreeVipMap(source)

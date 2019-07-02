@@ -62,44 +62,46 @@ local server_path = 'items/paintjob/'
 function sendPaintjobs ( from, to, pid )
 	-- outputChatBox('Sending to')
 	-- outputChatBox(tostring(getElementType(to)))
-	local md5list = {}
-	for _, player in pairs(from) do
-		local player_md5_list = {}
-		local paintjobs = getPerkSettings(player, ID)
-		local forumID = exports.gc:getPlayerForumID ( player )
-		if not tonumber(pid) then
-			for pid=1,paintjobs.amount do
-				if fileExists(server_path .. tostring(forumID) .. '-' .. pid .. '.bmp') then
-					player_md5_list[pid] = getMD5 ( server_path .. tostring(forumID) .. '-' .. pid .. '.bmp' )
-				--else
-					--player_md5_list[pid] = false
+	getPerkSettings(from, ID, 
+	function(res)
+		local md5list = {}
+		if type(res) == 'table' then
+			for player, opt in pairs(res) do
+				local player_md5_list = {}
+				local paintjobs = fromJSON(opt)
+				local forumID = exports.gc:getPlayerForumID ( player )
+				if not tonumber(pid) then
+					for pid=1,paintjobs.amount do
+						if fileExists(server_path .. tostring(forumID) .. '-' .. pid .. '.bmp') then
+							player_md5_list[pid] = getMD5 ( server_path .. tostring(forumID) .. '-' .. pid .. '.bmp' )
+						end
+					end
+				else
+					if fileExists(server_path .. tostring(forumID) .. '-' .. pid .. '.bmp') then
+						player_md5_list[pid] = getMD5 ( server_path .. tostring(forumID) .. '-' .. pid .. '.bmp' )
+					end
 				end
-			end
-		else
-			if fileExists(server_path .. tostring(forumID) .. '-' .. pid .. '.bmp') then
-				player_md5_list[pid] = getMD5 ( server_path .. tostring(forumID) .. '-' .. pid .. '.bmp' )
-			--else
-				--player_md5_list[pid] = false
+				md5list[forumID] = player_md5_list
 			end
 		end
-		md5list[forumID] = player_md5_list
-	end
-	
-	-- Send a list that links players do forum id's to client
-	local idToPlayerList = getIdToPlayerList()
 
-	if to == root then
-		triggerClientEvent('serverPaintjobsMD5', resourceRoot, md5list, idToPlayerList)
-	elseif type(to) == 'table' then
-		for _, player in pairs(to) do
-			triggerClientEvent(player, 'serverPaintjobsMD5', resourceRoot, md5list, idToPlayerList)
+		-- Send a list that links players do forum id's to client
+		local idToPlayerList = getIdToPlayerList()
+
+		if to == root then
+			triggerClientEvent('serverPaintjobsMD5', resourceRoot, md5list, idToPlayerList)
+		elseif type(to) == 'table' then
+			for _, player in pairs(to) do
+				triggerClientEvent(player, 'serverPaintjobsMD5', resourceRoot, md5list, idToPlayerList)
+			end
+		elseif isElement(to) then
+			triggerClientEvent(to, 'serverPaintjobsMD5', resourceRoot, md5list, idToPlayerList)
 		end
-	elseif isElement(to) then
-		triggerClientEvent(to, 'serverPaintjobsMD5', resourceRoot, md5list, idToPlayerList)
-	end
+	end)
 end
 
 function clientSendPaintjobs()
+	if #g_CustomPlayers == 0 then return end
 	sendPaintjobs(g_CustomPlayers, client)
 end
 addEvent('clientSendPaintjobs', true)

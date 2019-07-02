@@ -14,10 +14,14 @@ function loadDoubleSided ( player, bool, settings )
 end
 
 function setDoubleSided ( player, cmd, on )
+	setPerkSetting(player, ID, 'disabled', on == '1' and nil or true)
 	if on == '1' then
 		setPerkSetting(player, ID, 'disabled', nil, 'GC Double Sided: Enabled')	-- nil so the value isn't added to the json string
 	else
 		setPerkSetting(player, ID, 'disabled', true, 'GC Double Sided: Disabled')
 	end
-	triggerClientEvent(player, 'settingDoubleSided', player, getPerkSettings(player, ID))
+	getPerkSettings(player, ID, 
+	function(perkSetting) 
+		triggerClientEvent(player, 'settingDoubleSided', player, perkSetting)
+	end)
 end

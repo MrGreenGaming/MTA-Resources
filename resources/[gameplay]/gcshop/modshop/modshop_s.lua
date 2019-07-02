@@ -71,7 +71,11 @@ function buyVehicle ( player, cmd, vehicleID )
 		local added = addVehToDatabase( forumID, vehicleID )
 		addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought vehicle=' .. tostring(vehicleID) .. ' ' .. tostring(added))
 		outputChatBox ('Vehicle \"' .. getVehicleNameFromModel(vehicleID)  .. '\" (' .. tostring(vehicleID) .. ') bought.', player, 0, 255, 0)
-		triggerClientEvent( player, 'modshopLogin', player, vehicle_price, getUpgInDatabase(forumID) or false )
+		-- getModsFromDB(forumID, )
+		getModsFromDB(forumID, true, 
+		function(data) 
+			triggerClientEvent( player, 'modshopLogin', player, vehicle_price, data or false )
+		end)
 		return
 	end
 	if error then
@@ -103,7 +107,10 @@ function buyExtras ( player, cmd )
         local addedSlot = addUpgToSlotDatabase (forumID, vehID, 'slot0', 1 )
 		addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought extra mods= ' .. tostring(addedVeh) ..' '.. tostring(addedSlot))
 		outputChatBox ('Modshop: enable extra mods bought.', player, 0, 255, 0)
-		triggerClientEvent( player, 'modshopLogin', player, vehicle_price, getUpgInDatabase(forumID) or false )
+		getModsFromDB(forumID, true, 
+		function(data) 
+			triggerClientEvent( player, 'modshopLogin', player, vehicle_price, data or false )
+		end)
 		return
 	end
 	if error then
@@ -153,7 +160,10 @@ function setMod ( player, cmd, vehicleID, upgradeType, ... )
 	end
 	
 	upgradeType ( player, forumID, vehicleID, ... )
-	triggerClientEvent( player, 'modshopLogin', player, vehicle_price, getUpgInDatabase(forumID) or false )
+	getModsFromDB(forumID, true, 
+	function(data) 
+		triggerClientEvent( player, 'modshopLogin', player, vehicle_price, data or false )
+	end)
 	return 
 end
 addCommandHandler('gcsetmod', setMod, false, false )
@@ -242,51 +252,58 @@ function remShopUpgrade ( player, forumID, vehicleID, upgradeID)
 end
 
 function addShopPaintJob ( player, forumID, vehicleID, paintjob)
-	if checkPerk ( forumID, 4 ) and not math.range(paintjob, 0, 3 + (getPerkSettings(player, 4).amount or 0)) then
-		outputChatBox ( 'Wrong input, need a paintjob between 1 and 3 (0 = no paintjob) or ' .. 3 + getPerkSettings(player, 4).amount .. 'for custom paintjobs!', player, 255, 0, 0 )
-	elseif not checkPerk ( forumID, 4 ) and not math.range(paintjob, 0, 3)  then
-		outputChatBox ( 'Wrong input, need a paintjob between 1 and 3 (0 = no paintjob)', player, 255, 0, 0 )
-	else
-		paintjob = math.range(paintjob, 0, 3 + (getPerkSettings(player, 4) and getPerkSettings(player, 4).amount or 0))
-		local realPJ = (paintjob ~= 0 and paintjob - 1) or 3
-		if vehicleID ~= '*' then
-			if paintjob > 3  then
-				addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob )
-				outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": new custom paintjob #' .. paintjob, player, 0, 255, 0 )
-			elseif paintjob ~= 0 then
-				addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob - 1 )
-				outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": new paintjob #' .. paintjob, player, 0, 255, 0 )
+	checkPerk(forumID, 4, 
+	function(bool)
+		getPerkSettings(player, 4, 
+		function(perkSetting)
+			if bool and not math.range(paintjob, 0, 3 + (perkSetting.amount or 0)) then
+				outputChatBox ( 'Wrong input, need a paintjob between 1 and 3 (0 = no paintjob) or ' .. 3 + perkSetting.amount .. 'for custom paintjobs!', player, 255, 0, 0 )
+			elseif not bool and not math.range(paintjob, 0, 3)  then
+				outputChatBox ( 'Wrong input, need a paintjob between 1 and 3 (0 = no paintjob)', player, 255, 0, 0 )
 			else
-				remUpgFromSlotDatabase (forumID, vehicleID, 'slot17' )
-				outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": paintjob removed' , player, 0, 255, 0 )
+				paintjob = math.range(paintjob, 0, 3 + (perkSetting and perkSetting.amount or 0))
+				local realPJ = (paintjob ~= 0 and paintjob - 1) or 3
+				if vehicleID ~= '*' then
+					if paintjob > 3  then
+						addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob )
+						outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": new custom paintjob #' .. paintjob, player, 0, 255, 0 )
+					elseif paintjob ~= 0 then
+						addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob - 1 )
+						outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": new paintjob #' .. paintjob, player, 0, 255, 0 )
+					else
+						remUpgFromSlotDatabase (forumID, vehicleID, 'slot17' )
+						outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": paintjob removed' , player, 0, 255, 0 )
+					end
+				else
+					if paintjob > 3  then
+						addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob )
+						outputChatBox ('All your vehicles have a new custom paintjob #' .. paintjob, player, 0, 255, 0 )
+					elseif paintjob ~= 0 then
+						addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob - 1 )
+						outputChatBox ('All your vehicles have a new paintjob #' .. paintjob, player, 0, 255, 0 )
+					else
+						remUpgFromSlotDatabase (forumID, vehicleID, 'slot17' )
+						outputChatBox ('Paintjob removed from all your vehicles' , player, 0, 255, 0 )
+					end
+				end
+				local veh = getPedOccupiedVehicle(player)
+				if veh and vehicleID == getElementModel(veh) then 
+					local col1, col2, col3, col4 = getVehicleColor ( veh )
+					if paintjob < 4 then
+						setVehiclePaintjob(veh, realPJ)
+						removeCustomPaintJob (player)
+					else
+						setVehiclePaintjob(veh, 3)
+						applyCustomPaintJob( player, paintjob - 3 )
+					end
+					if isVehColorAllowed() then
+						setVehicleColor(veh, col1, col2, col3, col4)
+					end
+				end
 			end
-		else
-			if paintjob > 3  then
-				addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob )
-				outputChatBox ('All your vehicles have a new custom paintjob #' .. paintjob, player, 0, 255, 0 )
-			elseif paintjob ~= 0 then
-				addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob - 1 )
-				outputChatBox ('All your vehicles have a new paintjob #' .. paintjob, player, 0, 255, 0 )
-			else
-				remUpgFromSlotDatabase (forumID, vehicleID, 'slot17' )
-				outputChatBox ('Paintjob removed from all your vehicles' , player, 0, 255, 0 )
-			end
-		end
-		local veh = getPedOccupiedVehicle(player)
-		if veh and vehicleID == getElementModel(veh) then 
-			local col1, col2, col3, col4 = getVehicleColor ( veh )
-			if paintjob < 4 then
-				setVehiclePaintjob(veh, realPJ)
-				removeCustomPaintJob (player)
-			else
-				setVehiclePaintjob(veh, 3)
-				applyCustomPaintJob( player, paintjob - 3 )
-			end
-			if isVehColorAllowed() then
-				setVehicleColor(veh, col1, col2, col3, col4)
-			end
-		end
-	end
+		end)
+	end)
+		
 end
 
 function addShopVColor ( player, forumID, vehicleID, arg1, arg2, arg3, arg4 )
