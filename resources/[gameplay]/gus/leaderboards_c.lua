@@ -12,8 +12,8 @@ local neededDomains = {
 local  closeButtonPos = { 
     x = 1353, 
     y = 231, 
-    width = 1385, 
-    height = 247 
+    width = 30, 
+    height = 15 
 }
 
 function toggleLeaderboardsDxContent()   
