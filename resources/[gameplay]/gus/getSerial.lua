@@ -22,21 +22,24 @@ function addToList(player)
 	local sql	
 	if handlerConnect then
 			cmd = "SELECT serial, playername, ip FROM serialsDB WHERE playername = ? LIMIT 1"
-			query = dbQuery(handlerConnect, cmd, playername)
-			sql = dbPoll(query, -1)
-			if #sql > 0 then
-				if sql[1].serial ~= serial then
-					cmd = "UPDATE serialsDB SET serial = ? WHERE playername = ?"
-					dbExec(handlerConnect, cmd, serial, playername)
-				end
-				if sql[1].ip ~= ip then
-					cmd = "UPDATE serialsDB SET ip = ? WHERE playername = ?"
-					dbExec(handlerConnect, cmd, ip, playername)
-				end
-			else
-				cmd = "INSERT INTO serialsDB (playername, serial, date, ip) VALUES(?, ?, ?, ?)"
-				dbExec(handlerConnect, cmd, playername, serial, date, ip)
-			end
+			dbQuery(
+				function(query) 
+					sql = dbPoll(query, 0)
+					if #sql > 0 then
+						if sql[1].serial ~= serial then
+							cmd = "UPDATE serialsDB SET serial = ? WHERE playername = ?"
+							dbExec(handlerConnect, cmd, serial, playername)
+						end
+						if sql[1].ip ~= ip then
+							cmd = "UPDATE serialsDB SET ip = ? WHERE playername = ?"
+							dbExec(handlerConnect, cmd, ip, playername)
+						end
+					else
+						cmd = "INSERT INTO serialsDB (playername, serial, date, ip) VALUES(?, ?, ?, ?)"
+						dbExec(handlerConnect, cmd, playername, serial, date, ip)
+					end
+				end, 
+			handlerConnect, cmd, playername)
 		end
 	end	
 end
@@ -125,18 +128,22 @@ function(player,cmd,par)
 	local sql
 	if handlerConnect then
 		cmd = "SELECT date, playername FROM serialsDB WHERE playername = ? LIMIT 1"
-		query = dbQuery(handlerConnect, cmd, par)
-		sql = dbPoll(query, -1)
-		if #sql > 0 then
-			local name = sql[1].playername
-			local date = sql[1].date
-			if date == nil then 
-				outputChatBox("No database entry available yet for "..name, player,0, 255, 0)
-			else
-				outputChatBox(name.." was last seen on: "..date.." (GMT Time)",player,0, 255, 0)
-			end
-		else outputChatBox(par.." was never seen online.", player,0, 255, 0)
-		end
+		dbQuery(
+			function(query) 
+				sql = dbPoll(query, 0)
+				if #sql > 0 then
+					local name = sql[1].playername
+					local date = sql[1].date
+					if date == nil then 
+						outputChatBox("No database entry available yet for "..name, player,0, 255, 0)
+					else
+						outputChatBox(name.." was last seen on: "..date.." (GMT Time)",player,0, 255, 0)
+					end
+				else 
+					outputChatBox(par.." was never seen online.", player,0, 255, 0)
+				end
+			end, 
+		handlerConnect, cmd, par)
 	end	
 end
 )
@@ -149,24 +156,29 @@ function (p,c,serial)
 	if handlerConnect then
 		local stringOfPlayers = ""
 		cmd = "SELECT serial, playername FROM serialsDB WHERE serial LIKE ?"
-		query = dbQuery(handlerConnect, cmd, "%" .. serial .. "%")
-		sql = dbPoll(query, -1)
-		if #sql > 0 then
-			outputChatBox('There are ' .. #sql .. ' matches for \'' .. serial .. '\':',p)
-			for i = 1, #sql do 			
-					if #stringOfPlayers == 0 then
-						stringOfPlayers = sql[i].playername
-					elseif i % 5 == 0 then
-						outputChatBox(stringOfPlayers .. ' ,',p)
-						stringOfPlayers = sql[i].playername
-					else
-						stringOfPlayers = stringOfPlayers.." , "..sql[i].playername
-					end			
-			end		
-			return outputChatBox(stringOfPlayers,p) 
-		else return outputChatBox('There are 0 matches for \'' .. serial .. '\':',p)
-		end
-	else return false	
+		dbQuery(
+			function(query) 
+				sql = dbPoll(query, 0)
+				if #sql > 0 then
+					outputChatBox('There are ' .. #sql .. ' matches for \'' .. serial .. '\':',p)
+					for i = 1, #sql do 			
+						if #stringOfPlayers == 0 then
+							stringOfPlayers = sql[i].playername
+						elseif i % 5 == 0 then
+							outputChatBox(stringOfPlayers .. ' ,',p)
+							stringOfPlayers = sql[i].playername
+						else
+							stringOfPlayers = stringOfPlayers.." , "..sql[i].playername
+						end			
+					end		
+					return outputChatBox(stringOfPlayers,p) 
+				else 
+					return outputChatBox('There are 0 matches for \'' .. serial .. '\':',p)
+				end
+			end, 
+		handlerConnect, cmd, "%" .. serial .. "%")
+	else 
+		return false	
 	end
 end
 ,true)

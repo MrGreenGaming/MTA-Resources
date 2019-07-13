@@ -69,24 +69,36 @@ function startPoll(pollData)
 		for k,player in ipairs(pollData.visibleTo) do
 			if isElement(player) and getElementType(player) == "player" then
 				allowedPlayers[player] = true
-				if getElementData(player, 'player state') ~= 'away' then
-					playerAmount = playerAmount + 1
+				local addPlayerAmount = 1
+				if getElementData(player, 'player state') == 'away' then
+					addPlayerAmount = 0
+				elseif getResourceState( getResourceFromName('gc') ) == 'running' and not exports.gc:isPlayerLoggedInGC(player) then
+					addPlayerAmount = 0
 				end
+				playerAmount = playerAmount + addPlayerAmount
 			end
 		end
 	elseif isElement(pollData.visibleTo) and getElementType(pollData.visibleTo) == "team"  then
 		for k,player in ipairs(getPlayersInTeam(pollData.visibleTo)) do
 			allowedPlayers[player] = true
-			if getElementData(player, 'player state') ~= 'away' then
-				playerAmount = playerAmount + 1
+			local addPlayerAmount = 1
+			if getElementData(player, 'player state') == 'away' then
+				addPlayerAmount = 0
+			elseif getResourceState( getResourceFromName('gc') ) == 'running' and not exports.gc:isPlayerLoggedInGC(player) then
+				addPlayerAmount = 0
 			end
+			playerAmount = playerAmount + addPlayerAmount
 		end
 	elseif isElement(pollData.visibleTo) or pollData.visibleTo == nil then
 		for k,player in ipairs(getElementsByType("player",pollData.visibleTo or rootElement)) do
 			allowedPlayers[player] = true
-			if getElementData(player, 'player state') ~= 'away' then
-				playerAmount = playerAmount + 1
+			local addPlayerAmount = 1
+			if getElementData(player, 'player state') == 'away' then
+				addPlayerAmount = 0
+			elseif getResourceState( getResourceFromName('gc') ) == 'running' and not exports.gc:isPlayerLoggedInGC(player) then
+				addPlayerAmount = 0
 			end
+			playerAmount = playerAmount + addPlayerAmount
 		end
 	else
 		return false, errorCode.invalidVisibleTo
@@ -350,6 +362,12 @@ addEventHandler("onClientSendVote", rootElement,
 		if not activePoll.allowedPlayers[client] then
 			return false
 		end
+		-- Check if player is logged in to GC account
+		if getResourceState(getResourceFromName('gc')) == 'running' and not exports.gc:isPlayerLoggedInGC(client) then
+			outputVoteManager("Please log in to GC (f6) to vote.",client)
+			return false
+		end
+
 		--check the vote option is valid
 		if not (activePoll[voteID] or voteID == -1) then
 			return false

@@ -156,12 +156,24 @@ function TravelScreen.init()
 	else
 		g_GUI['travelImage']   = guiCreateStaticImage(screenWidth/2-256, screenHeight/2-60, 512, 256, 'img/travelling.png', false, nil)
 	end
-	g_dxGUI['travelText1'] = dxText:create('Travelling to', screenWidth/2, screenHeight/2-130, false, 'bankgothic', 0.60, 'center' )
+	-- Edit, changing the fonts to a neater look.
+--[[	g_dxGUI['travelText1'] = dxText:create('Travelling to', screenWidth/2, screenHeight/2-130, false, 'bankgothic', 0.60, 'center' )
 	g_dxGUI['travelText2'] = dxText:create('', screenWidth/2, screenHeight/2-100, false, 'bankgothic', 0.70, 'center' )
-	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-70, false, 'bankgothic', 0.70, 'center' )
+	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-70, false, 'bankgothic', 0.70, 'center' ) 
 	-- Edit #4, server ad
 	g_dxGUI['travelText4'] = dxText:create('', screenWidth/2, screenHeight/2-40, false, 'bankgothic', 0.45, 'center' )
-    g_dxGUI['travelText1']:color(240,240,240)
+    g_dxGUI['travelText1']:color(240,240,240) ]]
+	g_dxGUI['travelText1'] = dxText:create('Travelling to', screenWidth/2, screenHeight/2-130, false, 'default-bold', 1.60, 'center' )
+	g_dxGUI['travelText2'] = dxText:create('', screenWidth/2, screenHeight/2-100, false, 'default-bold', 1.70, 'center' )
+	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-70, false, 'default-bold', 1.70, 'center' )
+	g_dxGUI['travelText4'] = dxText:create('', screenWidth/2, screenHeight/2-40, false, 'default-bold', 1.45, 'center' )
+	-- colors 
+	g_dxGUI['travelText1']:color(104, 232, 44)
+	g_dxGUI['travelText2']:color(244, 244, 244)
+	g_dxGUI['travelText3']:color(104, 232, 44)
+	g_dxGUI['travelText4']:color(104, 232, 44)
+	
+
     hideGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3')
 	guiMoveToBack(g_GUI['travelImage'])
 end
@@ -171,7 +183,7 @@ function TravelScreen.show( mapName, authorName )
     g_dxGUI['travelText2']:text(mapName) 
 	g_dxGUI['travelText3']:text(authorName and "Author: " .. authorName or "")
 	-- Edit #4, server ad
-	g_dxGUI['travelText4']:text('Want to try something else? Join our Race server! Press F2')
+	g_dxGUI['travelText4']:text('Want to try something else? Join our second server! Press F2')
 	-- Edit #4, server ad
     showGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3', 'travelText4')
 end

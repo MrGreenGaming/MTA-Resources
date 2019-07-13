@@ -1,0 +1,5 @@
+<meta>
+	<info author="Mihoje" name="Resource starter" description="A script that starts resources instead of the config so we can change what starts and what doesn't with the server over GitHub." type="script" />
+	
+	<script src="server.lua" type="server"/>
+</meta>

@@ -18,6 +18,8 @@
     <file src="images/close.png" />
     <file src="images/close_pressed.png" />
     <file src="images/sprite.png" />
+
+    <export function="getPlayerStat" type="server"/>
     
     <settings>
         

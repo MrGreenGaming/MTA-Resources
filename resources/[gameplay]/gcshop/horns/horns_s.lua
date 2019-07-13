@@ -42,13 +42,17 @@ end
 addEvent("onGCShopLogin", true)
 addEventHandler("onGCShopLogin", root,
 function(forumid)
-	local query = dbQuery(handlerConnect, "SELECT unlimited FROM gc_horns WHERE forumid = ?", forumid)
-	local sql = dbPoll(query,-1)
-	local unlimited = false
-	if #sql >= 1 then
-		if sql[1].unlimited == 1 then unlimited = true else unlimited = false end	
-	end
-	triggerClientEvent(source, "hornsLogin", source, unlimited, forumid)
+	local player = source
+	local query = dbQuery(
+		function(qh) 
+			local sql = dbPoll(qh, 0)
+			local unlimited = false
+			if #sql >= 1 then
+				if sql[1].unlimited == 1 then unlimited = true else unlimited = false end	
+			end
+			triggerClientEvent(player, "hornsLogin", player, unlimited, forumid)
+		end, 
+	handlerConnect, "SELECT unlimited FROM gc_horns WHERE forumid = ?", forumid)
 end
 )
 
@@ -86,32 +90,35 @@ function useHorn(player, arg1, arg2, hornID)
 			local forumid = exports.gc:getPlayerForumID(player)
 			forumid = tostring(forumid)
 			if tonumber(hornID or arg2) then
-				local query = dbQuery(handlerConnect, "SELECT horns, unlimited FROM gc_horns WHERE forumid = ?", forumid)
-				local sql = dbPoll(query,-1)
-				if #sql > 0 then
-					local allHorns = split(sql[1].horns, string.byte(','))
-					
-					local useHorn = false
-					for i,j in ipairs(allHorns) do
-						if tonumber(j) == tonumber(hornID or arg2) then
-							useHorn = true
-							break
-						end
-					end
+				local query = dbQuery(
+					function(qh) 
+						local sql = dbPoll(qh,0)
+						if #sql > 0 then
+							local allHorns = split(sql[1].horns, string.byte(','))
+							
+							local useHorn = false
+							for i,j in ipairs(allHorns) do
+								if tonumber(j) == tonumber(hornID or arg2) then
+									useHorn = true
+									break
+								end
+							end
 
-					if not useHorn then outputChatBox("Please buy the horn (".. tostring(hornID or arg2) ..") first before using it",player,255,0,0) return end
+							if not useHorn then outputChatBox("Please buy the horn (".. tostring(hornID or arg2) ..") first before using it",player,255,0,0) return end
 
-					local car = getPedOccupiedVehicle(player)
-					coolOffTimer[player] = setTimer(function(player) coolOff[player] = true end, 10000, 1, player)
-					triggerClientEvent("onPlayerUsingHorn", player, hornID or arg2, car)
-					triggerEvent("onPlayerUsingHorn_s", player, hornID or arg2, car)
-					coolOff[player] = false
-					howManyTimes[player] = howManyTimes[player] + 1
-					if sql[1].unlimited == 1 then howManyTimes[player] = 0 end
-					if howManyTimes[player] == 3 then
-						canHornBeUsed[player] = false
-					end
-				end	
+							local car = getPedOccupiedVehicle(player)
+							coolOffTimer[player] = setTimer(function(player) coolOff[player] = true end, 20000, 1, player)
+							triggerClientEvent("onPlayerUsingHorn", player, hornID or arg2, car)
+							triggerEvent("onPlayerUsingHorn_s", player, hornID or arg2, car)
+							coolOff[player] = false
+							howManyTimes[player] = howManyTimes[player] + 1
+							if sql[1].unlimited == 1 then howManyTimes[player] = 0 end
+							if howManyTimes[player] == 3 then
+								canHornBeUsed[player] = false
+							end
+						end	
+					end, 
+				handlerConnect, "SELECT horns, unlimited FROM gc_horns WHERE forumid = ?", forumid)
 			else
 				outputChatBox("Something went wrong",player,255,0,0)
 			end
@@ -149,29 +156,33 @@ function()
 	if logged then
 		local forumid = exports.gc:getPlayerForumID(source)
 		forumid = tostring(forumid)
-		local query = dbQuery(handlerConnect, "SELECT unlimited FROM gc_horns WHERE forumid = ?", forumid)
-		local sql = dbPoll(query,-1)
-		if #sql > 0 then
-			if sql[1].unlimited == 1 then
-				outputChatBox("You already have unlimited horn usage.", source)
-				return
-			else
-				local money = exports.gc:getPlayerGreencoins(source)
-				if money >= unlimitedUses then
-					local ok = gcshopBuyItem ( source, unlimitedUses, 'Unlimited horns' )
-					if ok then
-						local result = dbExec(handlerConnect, "UPDATE gc_horns SET unlimited=? WHERE forumid=?", 1, forumid)
-						outputChatBox("You have bought unlimited horn usage for 5000 GC.", source)
-						triggerClientEvent(source, 'onClientSuccessBuyUnlimitedUsage', source, true)
-						addToLog ( '"' .. getPlayerName(source) .. '" (' .. tostring(forumid) .. ') bought Unlimited horns ' .. tostring(result))
+		local player = source
+		local query = dbQuery(
+			function(qh) 
+				local sql = dbPoll(qh,0)
+				if #sql > 0 then
+					if sql[1].unlimited == 1 then
+						outputChatBox("You already have unlimited horn usage.", player)
+						return
+					else
+						local money = exports.gc:getPlayerGreencoins(player)
+						if money >= unlimitedUses then
+							local ok = gcshopBuyItem ( player, unlimitedUses, 'Unlimited horns' )
+							if ok then
+								local result = dbExec(handlerConnect, "UPDATE gc_horns SET unlimited=? WHERE forumid=?", 1, forumid)
+								outputChatBox("You have bought unlimited horn usage for 5000 GC.", player)
+								triggerClientEvent(source, 'onClientSuccessBuyUnlimitedUsage', player, true)
+								addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumid) .. ') bought Unlimited horns ' .. tostring(result))
+							end
+						else
+							outputChatBox("You do not have enough GreenCoins", player)
+						end	
 					end
 				else
-					outputChatBox("You do not have enough GreenCoins", source)
+					outputChatBox("You have no horns bought.", player)
 				end	
-			end
-		else
-			outputChatBox("You have no horns bought.", source)
-		end	
+			end, 
+		handlerConnect, "SELECT unlimited FROM gc_horns WHERE forumid = ?", forumid)
 	else
 		outputChatBox("You are not logged in GreenCoins", source)
 	end
@@ -190,32 +201,35 @@ function(horn)
 	--player is logged in
 	local forumid = exports.gc:getPlayerForumID(source)
 	forumid = tostring(forumid)
-	
-	local query = dbQuery(handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)
-	local sql = dbPoll(query,-1)
-	if #sql == 0 then 
-		triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) 
-		return
-	end
-	
-	--There is a row
-	local hornString = ""
-	local hasTheHorn = false
-	local allHorns = split(sql[1].horns, string.byte(','))
-	for i,j in ipairs(allHorns) do
-		if j == tostring(horn) then
-			hasTheHorn = true
-		else 
-			hornString = hornString .. "," .. j
-		end
-	end
-	
-	if not hasTheHorn or hasTheHorn == false then triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) end
-	
-	--Player has the selected horn
-	result = dbExec(handlerConnect, "UPDATE gc_horns SET horns=? WHERE forumid=?", hornString, forumid)
-	exports.gc:addPlayerGreencoins(source, price / 2)
-	triggerClientEvent(source, 'onClientSuccessSellHorn', source, true)
+	local player = source
+	local query = dbQuery(
+		function(qh) 
+			local sql = dbPoll(qh,0)
+			if #sql == 0 then 
+				triggerClientEvent(player, 'onClientSuccessSellHorn', player, false) 
+				return
+			end
+			
+			--There is a row
+			local hornString = ""
+			local hasTheHorn = false
+			local allHorns = split(sql[1].horns, string.byte(','))
+			for i,j in ipairs(allHorns) do
+				if j == tostring(horn) then
+					hasTheHorn = true
+				else 
+					hornString = hornString .. "," .. j
+				end
+			end
+			
+			if not hasTheHorn or hasTheHorn == false then triggerClientEvent(player, 'onClientSuccessSellHorn', player, false) end
+			
+			--Player has the selected horn
+			result = dbExec(handlerConnect, "UPDATE gc_horns SET horns=? WHERE forumid=?", hornString, forumid)
+			exports.gc:addPlayerGreencoins(player, price / 2)
+			triggerClientEvent(player, 'onClientSuccessSellHorn', player, true)
+		end, 
+	handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)	
 end)
 
 
@@ -226,34 +240,38 @@ function(horn)
 	if logged then
 		local forumid = exports.gc:getPlayerForumID(source)
 		forumid = tostring(forumid)
-		local query = dbQuery(handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)
-		local sql = dbPoll(query,-1)
-		if #sql > 0 then
-			local allHorns = split(sql[1].horns, string.byte(','))
-			for i,j in ipairs(allHorns) do 
-				if j == tostring(horn) then
-					triggerClientEvent(source, 'onClientSuccessBuyHorn', source, false)
-					return
-				end
-			end
-		end	
-		local money = exports.gc:getPlayerGreencoins(source)
-		if money >= price then
-			local ok = gcshopBuyItem ( source, price, 'Horn:' .. horn)
-			if ok then
-				local result
-				if #sql == 0 then
-					result = dbExec(handlerConnect, "INSERT INTO gc_horns (forumid,horns) VALUES (?,?)", forumid, tostring(horn))
+		local player = source
+		local query = dbQuery(
+			function(qh)
+				local sql = dbPoll(qh,0)
+				if #sql > 0 then
+					local allHorns = split(sql[1].horns, string.byte(','))
+					for i,j in ipairs(allHorns) do 
+						if j == tostring(horn) then
+							triggerClientEvent(player, 'onClientSuccessBuyHorn', player, false)
+							return
+						end
+					end
+				end	
+				local money = exports.gc:getPlayerGreencoins(player)
+				if money >= price then
+					local ok = gcshopBuyItem ( player, price, 'Horn:' .. horn)
+					if ok then
+						local result
+						if #sql == 0 then
+							result = dbExec(handlerConnect, "INSERT INTO gc_horns (forumid,horns) VALUES (?,?)", forumid, tostring(horn))
+						else
+							local hornString = sql[1].horns..","..tostring(horn)
+							result = dbExec(handlerConnect, "UPDATE gc_horns SET horns=? WHERE forumid=?", hornString, forumid)
+						end
+						triggerClientEvent(player, 'onClientSuccessBuyHorn', player, true, horn)
+						addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumid) .. ') bought horn=' .. tostring(horn) ..  ' ' .. tostring(result))
+					end
 				else
-					local hornString = sql[1].horns..","..tostring(horn)
-					result = dbExec(handlerConnect, "UPDATE gc_horns SET horns=? WHERE forumid=?", hornString, forumid)
+					triggerClientEvent(player, 'onClientSuccessBuyHorn', player, false, nil)
 				end
-				triggerClientEvent(source, 'onClientSuccessBuyHorn', source, true, horn)
-				addToLog ( '"' .. getPlayerName(source) .. '" (' .. tostring(forumid) .. ') bought horn=' .. tostring(horn) ..  ' ' .. tostring(result))
-			end
-		else
-			triggerClientEvent(source, 'onClientSuccessBuyHorn', source, false, nil)
-		end
+			end, 
+		handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)
 	else
 		triggerClientEvent(source, 'onClientSuccessBuyHorn', source, false)
 	end
@@ -268,12 +286,16 @@ function()
 	if logged then
 		local forumid = exports.gc:getPlayerForumID(source)
 		forumid = tostring(forumid)
-		local query = dbQuery(handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)
-		local sql = dbPoll(query,-1)
-		if #sql > 0 then
-			local allHorns = split(sql[1].horns, string.byte(','))
-			triggerClientEvent(source, 'sendHornsData', source, allHorns)
-		end
+		local player = source
+		local query = dbQuery(
+			function(qh)
+				local sql = dbPoll(qh,0)
+				if #sql > 0 then
+					local allHorns = split(sql[1].horns, string.byte(','))
+					triggerClientEvent(player, 'sendHornsData', player, allHorns)
+				end
+			end, 
+		handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)	
 	end	
 end
 )

@@ -35,9 +35,9 @@ function(map,likes,dislikes,timesPlayed, author, description, lastTimePlayed, pl
 	mapName = string.sub(mapName, 1, 35)
 	mapAuthor = string.sub(mapAuthor, 1, 48)
 	mapDescription = string.sub(mapDescription, 1, 106)
-	tWidth = dxGetTextWidth(mapName, 0.75, "bankgothic")
-	lWidth = dxGetTextWidth("Likes: "..mapLikes,1.3, "arial")
-	dWidth = dxGetTextWidth("Dislikes: "..mapDislikes,1.3, "arial")
+	tWidth = dxGetTextWidth(mapName, 1.75, "default-bold")
+	lWidth = dxGetTextWidth("Likes: "..mapLikes,1.3, "default-bold")
+	dWidth = dxGetTextWidth("Dislikes: "..mapDislikes,1.3, "default-bold")
 	--info = true 
 end
 )
@@ -48,66 +48,68 @@ screenX, screenY = guiGetScreenSize()
 x,y,width,height = (screenX-500)/2, screenY*3/4, 500, 220
 function show()
 	if info then
+		dxDrawRectangle(x,y,width,height-235, tocolor(78, 200, 87, 255))
+		dxDrawRectangle(x,y,width,height-225, tocolor(12, 180, 24, 255))
 		dxDrawRectangle(x,y,width,height, tocolor(0, 0 , 0, backgroundAlpha))
 		if info.mapName then
-			dxDrawText(mapName, x+26, y+14, x+width-24, y+34, tocolor(0, 0, 0, alpha), 0.75, "bankgothic", "center", "center", true, false, false)
-			dxDrawText(mapName, x+28, y+10, x+width-24, y+34, tocolor(0, 0, 0, alpha), 0.75, "bankgothic", "center", "center", true, false, false)
-			dxDrawText(mapName, x+24, y+6, x+width-24, y+34, tocolor(0, 0, 0, alpha), 0.75, "bankgothic", "center", "center", true, false, false)
-			dxDrawText(mapName, x+20, y+10, x+width-24, y+34, tocolor(0, 0, 0, alpha), 0.75, "bankgothic", "center", "center", true, false, false)
-			dxDrawText(mapName, x+24, y+10, x+width-24, y+34, tocolor(255, 255, 255,alpha), 0.75, "bankgothic", "center", "center", true, false, false)
+			dxDrawText(mapName, x+26, y+14, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
+			dxDrawText(mapName, x+28, y+10, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
+			dxDrawText(mapName, x+24, y+6, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
+			dxDrawText(mapName, x+20, y+10, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
+			dxDrawText(mapName, x+24, y+10, x+width-24, y+34, tocolor(255, 255, 255,alpha), 1.75, "default-bold", "center", "center", true, false, false)
 		end	
 		if info.mapLikes then
-			dxDrawText("Likes: "..mapLikes, x+26, y+65, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Likes: "..mapLikes, x+26, y+63, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Likes: "..mapLikes, x+25, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Likes: "..mapLikes, x+27, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Likes: "..mapLikes, x+26, y+64, x+width-28, y+80, tocolor(144, 238, 144,alpha), 1.3, "arial", "left", "center", true, false, false)
+			dxDrawText("Likes: "..mapLikes, x+26, y+65, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText("Likes: "..mapLikes, x+26, y+63, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText("Likes: "..mapLikes, x+25, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText("Likes: "..mapLikes, x+27, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText("Likes: "..mapLikes, x+26, y+64, x+width-28, y+80, tocolor(144, 238, 144,alpha), 1.3, "default-bold", "left", "center", true, false, false)
 		end
 		if info.mapDislikes then	
-			dxDrawText("Dislikes: "..mapDislikes, x+26, y+83, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+26, y+85, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+25, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+27, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "arial", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+26, y+84, x+width-28, y+100, tocolor(255, 160, 122, alpha), 1.3, "arial", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+26, y+83, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+26, y+85, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+25, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+27, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText("Dislikes: "..mapDislikes, x+26, y+84, x+width-28, y+100, tocolor(255, 160, 122, alpha), 1.3, "default-bold", "left", "center", true, false, false)
 		end	
 		if info.mapAuthor then	
-			dxDrawText("Author: "..mapAuthor, x+20, y+40, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "arial", "center", "center", true, false, false)
-			dxDrawText("Author: "..mapAuthor, x+20, y+44, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "arial", "center", "center", true, false, false)
-			dxDrawText("Author: "..mapAuthor, x+22, y+42, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "arial", "center", "center", true, false, false)
-			dxDrawText("Author: "..mapAuthor, x+18, y+42, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "arial", "center", "center", true, false, false)
-			dxDrawText("Author: "..mapAuthor, x+20, y+42, x+width-20, y+55, tocolor(255, 255, 255, alpha), 1.3, "arial", "center", "center", true, false, false)
+			dxDrawText("Author: "..mapAuthor, x+20, y+40, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
+			dxDrawText("Author: "..mapAuthor, x+20, y+44, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
+			dxDrawText("Author: "..mapAuthor, x+22, y+42, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
+			dxDrawText("Author: "..mapAuthor, x+18, y+42, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
+			dxDrawText("Author: "..mapAuthor, x+20, y+42, x+width-20, y+55, tocolor(255, 255, 255, alpha), 1.3, "default-bold", "center", "center", true, false, false)
 		end	
 		if info.mapTimesPlayed then	
-			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+63, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
-			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+65, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
-			dxDrawText("Times played: "..mapTimesPlayed, x+8+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
-			dxDrawText("Times played: "..mapTimesPlayed, x+12+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "arial", "right", "center", true, false, false)
-			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+64, x+width-23, y+80, tocolor(255, 255, 255, alpha), 1.3, "arial", "right", "center", true, false, false)
+			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+63, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
+			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+65, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
+			dxDrawText("Times played: "..mapTimesPlayed, x+8+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
+			dxDrawText("Times played: "..mapTimesPlayed, x+12+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
+			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+64, x+width-23, y+80, tocolor(255, 255, 255, alpha), 1.3, "default-bold", "right", "center", true, false, false)
 		end	
 			
 		if info.mapLastTimePlayed then	
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-19, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-21, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+9, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+11, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-20, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "arial", "left", "center", true, false, false)
+			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-19, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
+			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-21, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
+			dxDrawText("Last time played: "..mapLastTimePlayed, x+9, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
+			dxDrawText("Last time played: "..mapLastTimePlayed, x+11, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
+			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-20, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "default-bold", "center", "center", true, false, false)
 		end	
 		-- if info.mapDescription then	
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+110, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+112, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+25, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+27, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "arial", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+111, x+width-23, y+height, tocolor(255, 255, 255, alpha), 1.3, "arial", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+110, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+112, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+25, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+27, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
+			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+111, x+width-23, y+height, tocolor(255, 255, 255, alpha), 1.3, "default-bold", "left", "top", true, true, false)
 		-- end
 		-- if info.mapPlayerTime then	
-			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-21-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-19-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			-- dxDrawText("Personal best time: "..mapPlayerTime, x+9, y+height-20-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			-- dxDrawText("Personal best time: "..mapPlayerTime, x+11, y+height-20-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "arial", "left", "center", true, false, false)
-			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-20-23, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "arial", "left", "center", true, false, false)
+			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-21-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "left", "center", true, false, false)
+			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-19-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "left", "center", true, false, false)
+			-- dxDrawText("Personal best time: "..mapPlayerTime, x+9, y+height-20-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "left", "center", true, false, false)
+			-- dxDrawText("Personal best time: "..mapPlayerTime, x+11, y+height-20-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "left", "center", true, false, false)
+			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-20-23, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "default-bold", "left", "center", true, false, false)
 		-- end	
 		if info.mapName then
-			dxDrawLine(x+((width-tWidth)/2), y+34, ((x+(width-tWidth)/2)+tWidth), y+34, tocolor(255, 255, 255, 70), 3)
+			dxDrawLine(x+((width-tWidth)/2), y+34, ((x+(width-tWidth)/2)+tWidth), y+34, tocolor(104, 232, 44, 70), 3)
 		end	
 	end	
 end

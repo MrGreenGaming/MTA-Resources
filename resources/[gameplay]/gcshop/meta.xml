@@ -36,7 +36,7 @@
     
     <script src="items\paintjob\paintjob_s.lua" type="server" />
     <script src="items\paintjob\paintjob_c.lua" type="client" />
-    <file src="items\paintjob\paintjob.fx" type="client" />
+
     <file src="readme_paintjob.txt" type="client" />
     <file src="sultan.bmp" type="client" />
     <file src="infernushow.png" type="client" />
@@ -567,7 +567,22 @@
 	<file src="horns\files\449.mp3" download="false"/>
 	<file src="horns\files\450.mp3" download="false"/>
 	<file src="horns\files\451.mp3" download="false"/>
-	
+	<file src="horns\files\452.mp3" download="false"/>
+	<file src="horns\files\453.mp3" download="false"/>
+	<file src="horns\files\454.mp3" download="false"/>
+	<file src="horns\files\455.mp3" download="false"/>
+	<file src="horns\files\456.mp3" download="false"/>
+	<file src="horns\files\457.mp3" download="false"/>
+	<file src="horns\files\458.mp3" download="false"/>
+	<file src="horns\files\459.mp3" download="false"/>
+	<file src="horns\files\460.mp3" download="false"/>
+	<file src="horns\files\461.mp3" download="false"/>
+	<file src="horns\files\462.mp3" download="false"/>
+	<file src="horns\files\463.mp3" download="false"/>
+	<file src="horns\files\464.mp3" download="false"/>
+	<file src="horns\files\465.mp3" download="false"/>
+	<file src="horns\files\466.mp3" download="false"/>
+	<file src="horns\files\467.mp3" download="false"/>
 	
 	<file src="horns\icon.png" />
 	

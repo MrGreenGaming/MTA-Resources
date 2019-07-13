@@ -7,12 +7,12 @@ deadlineBindsActive = false
 deadlineDrawLines = false -- Bool for late joiners, draw lines or not
 deadlineActivationTimer = {}
 
-
 ------------------------
 -- Gameplay Variables Standards --
 DeadlineOptions = {}
 DeadlineOptions.size = 40 -- Size of line
 DeadlineOptions.minimumSpeed = 70 -- Minimum speed (in km/h)
+DeadlineOptions.mapMinimumSpeed = false -- Map set minimum speed (between 40-120kmh)
 DeadlineOptions.boostSpeed = 100 -- Boost Speed (added to current speed)
 DeadlineOptions.boost_cooldown = 35000 -- boost cooldown in ms
 DeadlineOptions.jumpHeight = 0.25 -- Jump Height
@@ -22,7 +22,7 @@ DeadlineOptions.godmode = true -- set bool if vehicles should be immume to colli
 DeadlineOptions.lineAliveTime = 2500 -- Set how long a line should be alive (in ms) -- 1350
 -- Dead Wall
 DeadlineOptions.deadWallRadiusMin = 100
-DeadlineOptions.deadWallRadiusMax = 2000 -- Affects timing, timer is set to 100ms/-1 radius.
+DeadlineOptions.deadWallRadiusMax = 1800 -- Affects timing, timer is set to 100ms/-1 radius.
 DeadlineOptions.deadWallRadius = DeadlineOptions.deadWallRadiusMax
 DeadlineOptions.deadWallX = false --Set to random spawn point
 DeadlineOptions.deadWallY = false --Set to random spawn point
@@ -50,7 +50,10 @@ DeadlineOptionsDefaults = DeadlineOptions
 ------------------------
 
 
-
+function changeMinimumSpeed(value)
+    DeadlineOptions.minimumSpeed = tonumber(value)
+	clientCall(root, 'Deadline.receiveNewSettings', DeadlineOptions)
+end
 
 
 function Deadline:isApplicable()
@@ -218,11 +221,10 @@ function Deadline:launch()
 end
 
 
-
 function Deadline:start()
 	self:cleanup()
 	local options = {
-		duration = 5 * 60 * 1000,
+		duration = 4 * 60 * 1000,
 		respawn = 'none',
 		autopimp = false,
 		autopimp_map_can_override = false,
@@ -236,8 +238,20 @@ function Deadline:start()
 	for key,value in pairs(options) do
 		Deadline.setMapOption(key,value)
 	end
-	
 
+	-- Get custom map speed
+	local minimumMapSetSpeed = 40
+	local maximumMapSetSpeed = 120
+
+	local mapMinSpeed = getNumber(g_MapInfo.resname..".deadline_minimumspeed",DeadlineOptions.minimumSpeed)
+	if mapMinSpeed and mapMinSpeed ~= DeadlineOptions.minimumSpeed then
+		if mapMinSpeed >= minimumMapSetSpeed and mapMinSpeed <= maximumMapSetSpeed  then
+			outputDebugString('Deadline: Custom map min speed detected. Min speed set to: '..mapMinSpeed)
+			DeadlineOptions.mapMinimumSpeed = mapMinSpeed
+		else
+			outputDebugString("Deadline: Custom speed setting detected, but are outside of min/max range. (Setting: "..mapMinSpeed..", min: 40, max: 120)")
+		end
+	end
 end
 
 function Deadline.boost(player, key, keyState) 
@@ -320,6 +334,7 @@ addEvent('onPlayerWinDeadline')
 
 
 function Deadline:cleanup()
+	DeadlineOptions.mapMinimumSpeed = false
 	clientCall(g_Root, 'Deadline.unload')
 	deadlineBindsActive = false
 	deadlineDrawLines = false
@@ -407,6 +422,20 @@ function deadlineClientPlayerKillDetection(killer)
 
 end
 addEventHandler( 'onPlayerDeadlineWasted',getRootElement(),deadlineClientPlayerKillDetection )
+
+addEvent("dl_warnPlayerNotMoving",true)
+addEventHandler( 'dl_warnPlayerNotMoving', resourceRoot, 
+	function (action)
+		if client and getElementType(client) == "player" then
+			destroyMessage(client)
+			if action == "warn" then
+				showMessage("WARNING: you will be killed if you don't move forward!",255,0,0,client)
+			elseif action == "kill" then
+				showMessage("You have been killed for not moving forward!",255,0,0,client)
+			end
+		end
+	end
+)
 
 function Deadline.admincommands (playerSource, commandName, option, value)
 	-- Deadline.receiveNewSettings

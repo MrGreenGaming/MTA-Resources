@@ -96,8 +96,8 @@ addEvent'shopStarted'
 function onStart()
 	if isTimer(adTimer) then killTimer(adTimer) end
 	adTimer = setTimer(function() 
-	exports.messages:outputGameMessage("Enjoy playing in the server?", root, 3, 255, 255, 255, true)
-	setTimer(function() exports.messages:outputGameMessage("Support us with a small donation at MrGreenGaming.com", root, 2.4, 50, 205, 50, true) end, 1000, 1)
+	exports.messages:outputGameMessage("Want some more GreenCoins?", root, 3, 255, 255, 255, true)
+	setTimer(function() exports.messages:outputGameMessage("Then visit: https://mrgreengaming.com/greencoins/donate", root, 2.4, 50, 205, 50, true) end, 1000, 1)
 	end, 2700000, 0)
 	
 	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))

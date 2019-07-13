@@ -220,7 +220,7 @@ function addTime(player,checkpoint,time)
 		for k,v in ipairs(getElementsByType("player")) do
 			local prevTime = getTime(v,checkpoint)
 			--var_dump("prevTime",prevTime)
-			if prevTime then
+			if prevTime and g_delay then
 				local diff = time - prevTime
 				g_delay[v] = {diff,getTickCount()}
 			end
@@ -228,7 +228,7 @@ function addTime(player,checkpoint,time)
 	else
 		-- For players who hit a checkpoint you already passed
 		local prevTime = getTime(getLocalPlayer(),checkpoint)
-		if prevTime then
+		if prevTime and g_delay then
 			local diff = -(time - prevTime)
 			g_delay[player] = {diff,getTickCount()}
 			--outputDebugString("1 " .. type(g_delay[player]) .. " 2 " .. type(player) .. " 3 " .. type(diff), 0)

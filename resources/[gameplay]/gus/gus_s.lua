@@ -136,7 +136,8 @@ addCommandHandler('admins',
 )
 
 local adminapplicants = {}
-addEventHandler('onResourceStart' , root, function()	-- root for updating w/e
+-- Update applicants on an interval instead of 'onResourceStart'
+function getAdminApplicants()
 	adminapplicants = {}
 	local xml = xmlLoadFile("adminapplicants.xml")
 	if not xml then return end
@@ -144,7 +145,9 @@ addEventHandler('onResourceStart' , root, function()	-- root for updating w/e
 		adminapplicants[tonumber(xmlNodeGetAttribute(a, 'forumid'))] = xmlNodeGetAttribute(a, 'nick')
 	end
 	xmlUnloadFile(xml)
-end)
+end
+setTimer(getAdminApplicants, 30 * 60000, 0)
+addEventHandler('onResourceStart', resourceRoot, getAdminApplicants)
 
 function gcLogin ( forumID, amount )
 	if adminapplicants[forumID] then
@@ -174,26 +177,26 @@ end
 
 addCommandHandler('mapupload',
 	function(player)
-		outputChatBox("Upload your maps at our forums: www.mrgreengaming.com", player, 0, 255, 0)
+		outputChatBox("Upload your maps at our forums: www.mrgreengaming.com/mta/mapupload", player, 0, 255, 0)
 	end
 )
 
 addCommandHandler('upload',
 	function(player)
-		outputChatBox("Upload your maps at our forums: www.mrgreengaming.com", player, 0, 255, 0)
+		outputChatBox("Upload your maps at our forums: www.mrgreengaming.com/mta/mapupload", player, 0, 255, 0)
 	end
 )
 
 addCommandHandler('uploadmap',
 	function(player)
-		outputChatBox("Upload your maps at our forums: www.mrgreengaming.com", player, 0, 255, 0)
+		outputChatBox("Upload your maps at our forums: www.mrgreengaming.com/mta/mapupload", player, 0, 255, 0)
 	end
 )
 
-addCommandHandler('irc',
+addCommandHandler('discord',
 	function(player)
-		outputChatBox("Join our IRC Channel! If you need admin support, join the channel and ask for an admin", player, 0, 255, 0)
-		outputChatBox("IRC Server: maple.nl.eu.gtanet.com IRC Channel: #mrgreen", player, 0, 255, 0)
+		outputChatBox("Join our Discord! If you need admin support, join the server and ask for an admin", player, 0, 255, 0)
+		outputChatBox("Discord invite: https://discord.gg/SjbzC9Z", player, 0, 255, 0)
 	end
 )
 
@@ -220,7 +223,13 @@ addCommandHandler("lol",
 			if not who then outputChatBox("No player found", player)
 			else
 				local whoName = getElementData(who, "vip.colorNick") or getPlayerName(who)
-				outputChatBox(nick.."#FFD700 is laughing out loud at "..whoName, root, 255, 215, 0, true)
+				local lolString = nick.."#FFD700 is laughing out loud at "..whoName
+				if string.len(lolString) > 256 then
+					outputChatBox(nick.."#FFD700 is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ), root, 255, 215, 0, true)
+				else
+					outputChatBox(lolString, root, 255, 215, 0, true)
+				end
+				
 				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
 				g_lolPlayers[player] = getTickCount()
 			end
@@ -251,16 +260,6 @@ function gclogin( message, messageType )
 		end
 	end	
 end
--- addEventHandler("onPlayerChat", getRootElement(), gclogin)	
-
--- addEventHandler('onPlayerChat', getRootElement(),
--- function(message)
-	-- if string.find(string.lower(message) , "cheat") or string.find(string.lower(message) , "hack") then
-		-- outputChatBox("If somebody is cheating, please use /report", source, 255, 0, 0)
-		-- outputChatBox("It will PM online admins both in-game and in IRC (if any).", source, 255, 0, 0)
-	-- end	
--- end
--- )
 
 --DD Ghost car testing
 local movedVehs = {}
@@ -289,7 +288,6 @@ function cleanGhostCar()
 end
 
 
-
 addEvent("onRaceStateChanging")
 addEventHandler("onRaceStateChanging", root,
 	function(state)
@@ -311,9 +309,6 @@ addEventHandler("onRaceStateChanging", root,
 
 
 -- /round command
-
-
-
 local roundCount
 addCommandHandler("round",
 	function(player,command)
@@ -321,8 +316,6 @@ addCommandHandler("round",
 
 		outputChatBox(roundCount,player,255,255,255,true)
 	end	)
-
-
 
 addEvent("onGamemodeMapStart")
 
@@ -359,11 +352,11 @@ addEventHandler ( "onPlayerChat", root, function ( _, tp )
 end )
 
 -- Wierd corrupted char prevention
-theTable = {"̍", "̎", "̄", "̅", "̑", "̆", "̐", "͒", "͗", "͑", "̇", "̈", "͂", "̓", "̈́", "͋", "͌", "̂", "̌", "͐", "̋", "̏", "̒", "̓", "̔", "̽", "ͣ", "ͤ", "ͦ", "ͧ", "ͨ", "ͪ", "ͫ", "ͬ", "ͭ", "ͮ", "ͯ", "̾", "͛", "͆", "̚", "̖", "̗", "̘", "̙", "̜", "̝", "̞", "̟", "̠", "̤", "̥", "̦", "̩", "̪", "̫", "̬", "̭", "̮", "̯", "̰", "̱", "̲", "̳", "̹", "̺", "̻", "̼", "ͅ", "͇", "͈", "͉", "͍", "͎", "͓", "͔", "͕", "͖", "͙", "͚"}
+local corruptedChars = {"̍", "̎", "̄", "̅", "̑", "̆", "̐", "͒", "͗", "͑", "̇", "̈", "͂", "̓", "̈́", "͋", "͌", "̂", "̌", "͐", "̋", "̏", "̒", "̓", "̔", "̽", "ͣ", "ͤ", "ͦ", "ͧ", "ͨ", "ͪ", "ͫ", "ͬ", "ͭ", "ͮ", "ͯ", "̾", "͛", "͆", "̚", "̖", "̗", "̘", "̙", "̜", "̝", "̞", "̟", "̠", "̤", "̥", "̦", "̩", "̪", "̫", "̬", "̭", "̮", "̯", "̰", "̱", "̲", "̳", "̹", "̺", "̻", "̼", "ͅ", "͇", "͈", "͉", "͍", "͎", "͓", "͔", "͕", "͖", "͙", "͚"}
 
 addEventHandler("onPlayerChat",root,
 	function(message) 
-		for _,char in ipairs(theTable) do 
+		for _,char in ipairs(corruptedChars) do 
 			if string.find(message,char) then 
 				cancelEvent() 
 				outputChatBox("You used a corrupted character (      "..char..char..char..char..char..char..char..char..char..char..char..char..char..char..char..char..char..char.."      ) , please stop!",source,255,0,0) -- Multiplied to show character
@@ -380,3 +373,54 @@ function correctWeather()
 		setWeather(1)
 	end
 end
+
+--------------------------------
+-- Dice / Haxardous
+--------------------------------
+
+addCommandHandler('dice',
+    function()
+    	-- Needs a cooldown handler
+		-- local g_rn = math.random(1,6)
+		-- outputChatBox ("#00EC0B[#FFFFFFDice#00EC0B] A random number between 1 & 6 / Result: #FFFFFF".. g_rn .."#00EC0B.", source, 255, 255, 255, true)
+	end
+)
+
+--------------------------------
+-- Ghostmode at finish
+--------------------------------
+addEvent('onPlayerFinish')
+addEventHandler( 'onPlayerFinish', root, 
+function() 
+	if getElementType(source) == 'player' then
+		setElementData(source, 'overrideCollide.finishghostmode', 0, false)
+	end
+end)
+
+addEvent('onRaceStateChanging')
+addEventHandler( 'onRaceStateChanging', root, 
+function(state)
+	if state == 'LoadingMap' or state == 'TimesUp' then
+		for i, p in ipairs(getElementsByType('player')) do
+			removeElementData(p, 'overrideCollide.finishghostmode')
+		end
+	end
+end)
+
+--------------------------------
+-- Fix for flickering objects when going through a removed world object.
+--------------------------------
+function handleOcclusions(mapInfo)
+	local resName = mapInfo.resname
+	local mapRes = getResourceFromName( resName )
+	local mapResourceRoot = getResourceRootElement(mapRes )
+	if not resName or not mapRes or not mapResourceRoot then return end
+
+	if #getElementsByType ( "removeWorldObject", mapResourceRoot ) > 0 then
+		setOcclusionsEnabled( false )
+	else
+		setOcclusionsEnabled( true )
+	end
+end
+addEvent('onMapStarting')
+addEventHandler('onMapStarting', root, handleOcclusions)

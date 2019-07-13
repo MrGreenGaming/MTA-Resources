@@ -44,6 +44,8 @@ visual = { -- Standard Settings, 0 = off --
 	["bestghost"] = 1, -- 1 = "best ghost on"
 	["NOSMode"] = 1, -- 0 = "Old", 1 = "Hybrid", 2= "NFS"
 	["nitrocolor"] = "0078FF",
+	["lodrange"] = 0,
+	["customHornIcons"] = 1
 }
 
 	
@@ -249,7 +251,17 @@ function visualCheckBoxHandler()
 			visual["nitro"] = 0
 		end
 
-
+	
+	elseif source == GUIEditor.checkbox["customHornIcons"] then
+		if guiCheckBoxGetSelected( GUIEditor.checkbox["customHornIcons"] ) then
+			setCustomHornsIconsEnabled(true)
+			v_setSaveTimer()
+			visual["customHornIcons"] = 1
+		else
+			setCustomHornsIconsEnabled(false)
+			v_setSaveTimer()
+			visual["customHornIcons"] = 0
+		end
 	end
 end
 addEventHandler("onClientGUIClick", resourceRoot, visualCheckBoxHandler)
@@ -259,22 +271,38 @@ function visual_ButtonHandler()
 	if source == GUIEditor.button["nitro"] then
 		openPicker(100,"#"..visual["nitrocolor"],"Nitro Color")
 
-		-- draw distance --
+		-- LOD range --
+	elseif source == GUIEditor.button["lodrange"] then
+		local nr = tonumber(guiGetText( GUIEditor.edit["lodrange"] ))
+
+		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
+		if nr > 300 or nr < 0 then outputChatBox("[SETTINGS] LOD range must be inbetween 1 and 300. Set to 0 to disable.",255) return end
+		if nr == 0 then
+			outputChatBox("[SETTINGS] LOD range disabled",0,255)
+		else
+			outputChatBox("[SETTINGS] LOD range set to "..nr,0,255)
+		end
+		
+		setLODRange(nr)
+		v_setSaveTimer()
+		
+	-- Draw Distance --
 	elseif source == GUIEditor.button["drawdistance"] then
+
 		local nr = tonumber(guiGetText( GUIEditor.edit["drawdistance"] ))
 
-		if not nr then outputChatBox("Please insert a number before clicking ok.") return end
-		if nr > 10000 or nr < 100 then outputChatBox("Draw Distance must be inbetween 100 and 10000.") return end
+		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
+		if nr > 10000 or nr < 100 then outputChatBox("[SETTINGS] Draw Distance must be inbetween 100 and 10000.",0,255) return end
 
 		setDrawDistance(nr)
 		v_setSaveTimer()
+		outputChatBox("[SETTINGS] Draw Distance set to "..nr,0,255)
 		
-
 	elseif source == GUIEditor.button["fpslimit"] then
 		local nr = tonumber(guiGetText( GUIEditor.edit["fpslimit"] ))
 
-		if not nr then outputChatBox("Please insert a number before clicking ok.") return end
-		if nr > 100 or nr < 25 then outputChatBox("FPS limit must be inbetween 25 and 100.") return end
+		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
+		if nr > 100 or nr < 25 then outputChatBox("[SETTINGS] FPS limit must be inbetween 25 and 100.",255) return end
 
 		setFPSLimit(nr)
 		visual["fpslimit"] = nr
@@ -283,8 +311,8 @@ function visual_ButtonHandler()
 	elseif source == GUIEditor.button["fpslimitboats"] then
 		local nr = tonumber(guiGetText( GUIEditor.edit["fpslimitboats"] ))
 		
-		if not nr then outputChatBox("Please insert a number before clicking ok.") return end
-		if nr > 100 or nr < 25 then outputChatBox("FPS limit must be inbetween 25 and 100.") return end
+		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
+		if nr > 100 or nr < 25 then outputChatBox("[SETTINGS] FPS limit must be inbetween 25 and 100.",255) return end
 		
 		setElementData(localPlayer, "fpslimitboats", nr)
 		visual["fpslimitboats"] = nr
@@ -391,7 +419,7 @@ end
 
 function NitroColorHandler(id, color, alpha)
 	if id == 100 then -- if it's the nitro colorpicker
-		outputChatBox( "Nitro color is now: "..color.."COLOR", 255, 255, 255, true )
+		outputChatBox( "[SETTINGS] Nitro color is now: "..color.."COLOR", 255, 255, 255, true )
 		guiSetProperty(NitroColorImage, "ImageColours", setIMGcolor(color))
 		color = color:gsub("#","")
 		visual["nitrocolor"] = color
@@ -415,10 +443,29 @@ function setDrawDistance(nr)
 		drawdistanceTimer = setTimer(setDrawDistance,30000,1)
 	end
 end
-
 function getDrawDistance()
-return visual["drawdistance"]
+	return visual["drawdistance"]
 end
+
+
+function setLODRange(nr)
+	if not nr then nr = getLODRange() end
+	if nr >=1 and nr <= 300 then
+		for k,v in ipairs(getElementsByType'object') do 
+			engineSetModelLODDistance(getElementModel(v), tonumber(nr)) 
+		end
+		visual["lodrange"] = nr
+	end
+end
+addEvent('onClientMapStarting',true)
+addEventHandler('onClientMapStarting',root,function() setLODRange() end)
+
+
+function getLODRange()
+	return visual["lodrange"]
+end
+
+
 
 -- save and load --
 function visual_LoadSettings()
@@ -475,7 +522,7 @@ function visual_SaveSettings()
 		end
 		xmlSaveFile( v_saveXML )
 		xmlUnloadFile( v_saveXML )
-		outputChatBox("Settings Saved.")
+		outputChatBox("[SETTINGS] Settings Saved.",0,255)
 	end
 end
 
@@ -599,6 +646,12 @@ function setVisualGUI()
 				end
 			end
 
+		elseif f == "lodrange" then
+			if u >= 1 and u <= 300 then
+				guiSetText( GUIEditor.edit["lodrange"], u )
+				setLODRange(u)
+			end
+
 		elseif f == "fpslimit" then
 			if u >= 25 and u <= 100 then
 				guiSetText( GUIEditor.edit["fpslimit"], u )
@@ -648,8 +701,14 @@ function setVisualGUI()
 			local t = getNOSModeName(u)
 			
 			setTimer(function() triggerEvent("setNitroType", root, t) end,10000,1 )
-			
-			
+		
+		elseif f == "customHornIcons" then
+			if u == 1 then
+				setCustomHornsIconsEnabled(true)
+				guiCheckBoxSetSelected( GUIEditor.checkbox["customHornIcons"], true )
+			else
+				setCustomHornsIconsEnabled(false)
+			end
 		end
 	end
 end
@@ -682,6 +741,16 @@ function resetVisualonStop()
 	resetSkyBox()
 end
 addEventHandler("onClientResourceStop", resourceRoot, resetVisualonStop)
+
+-- Custom horn icon state
+local customHornsIconsEnabled = true
+function isCustomHornIconEnabled()
+	return customHornsIconsEnabled
+end
+
+function setCustomHornsIconsEnabled(bool)
+	customHornsIconsEnabled = bool
+end
 --util--
 
 function setIMGcolor(hex)
@@ -695,3 +764,4 @@ function gus_c_fpslimit(nr)
 end
 addEvent("gus_c_fpslimit",true)
 addEventHandler("gus_c_fpslimit", root, gus_c_fpslimit)
+

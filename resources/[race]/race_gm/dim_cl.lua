@@ -1,5 +1,5 @@
 local dimensionsEnabled = false
-local rtfCarHideEnabled = false
+local carHideEnabled = false
 -- Reset timers at the start of a new map
 function onServerMapStarting(dimensionsEnabled_)
 	if isTimer(dimTimer) then killTimer(dimTimer) end
@@ -150,10 +150,22 @@ function theTool()
 				end
 			end
 		end
-		return
-	end
 
-	if dimensionsEnabled then
+	elseif carHideEnabled and getElementData(localPlayer, 'carhide') then
+		
+		if getElementDimension(localPlayer) ~= 0 and getPedOccupiedVehicle(localPlayer) then
+			setElementDimension(getPedOccupiedVehicle(localPlayer), 0)
+			setElementDimension(localPlayer, 0)
+		end
+
+		for i,j in ipairs(getElementsByType('player')) do
+			if j ~= localPlayer and getPedOccupiedVehicle(j) then
+				setElementDimension(getPedOccupiedVehicle(j), 188)
+				setElementDimension(j, 188)
+			end
+		end
+
+	elseif dimensionsEnabled then
 		for i,j in ipairs(getElementsByType('player')) do
 			if j ~= localPlayer and getPedOccupiedVehicle(j) and not getElementData(j,'gcmodshop.testing') then
 				if getElementData(j,"player state") == "away" then
@@ -174,37 +186,6 @@ function theTool()
 				end
 			end
 		end
-	
-	elseif rtfCarHideEnabled then
-		if getElementData(localPlayer,"rtf_carhide") == "true" then
-			if getElementDimension(localPlayer) ~= 0 and getPedOccupiedVehicle(localPlayer) then
-				setElementDimension(getPedOccupiedVehicle(localPlayer), 0)
-				setElementDimension(localPlayer, 0)
-			end
-
-
-			for i,j in ipairs(getElementsByType('player')) do
-				if j ~= localPlayer and getPedOccupiedVehicle(j) then
-					setElementDimension(getPedOccupiedVehicle(j), 188)
-					setElementDimension(j, 188)
-				end
-			end
-		else
-			for i,j in ipairs(getElementsByType('player')) do
-				if j ~= localPlayer and getPedOccupiedVehicle(j) and not getElementData(j,'gcmodshop.testing') then
-					if getElementData(j,"player state") == "away" then
-						setElementDimension(getPedOccupiedVehicle(j), 196)
-						setElementDimension(j, 196)
-					else
-						if getElementDimension(j) ~= 0 or getElementDimension(getPedOccupiedVehicle(j)) ~= 0 then
-							setElementDimension(getPedOccupiedVehicle(j), 0)
-							setElementDimension(j, 0)
-						end
-						
-					end
-				end
-			end
-		end
 	else
 		for i,j in ipairs(getElementsByType('player')) do
 			if j ~= localPlayer and getPedOccupiedVehicle(j) and not getElementData(j,'gcmodshop.testing') then
@@ -218,17 +199,59 @@ function theTool()
 			end
 		end
 	end
-
-
-
 end
 addEventHandler('onClientRender', root, theTool)
 
--- RTF --
-function rtf_dimensionsBool(bool)
-	rtfCarHideEnabled = bool
-end
-addEvent("rtf_setDimensionEnabled",true)
-addEventHandler("rtf_setDimensionEnabled",root,rtf_dimensionsBool)
+-- Interpolate vars / Car Hide
+local currentRaceMode = false
+local screenW, screenH = guiGetScreenSize()
+local carHide_duration = 15000
+local carHide_startTick = 0
+local carHide_currentTick = 0
+local carHide_progress = 0
+local carHide_alpha = 255
+function showCarHideNotification()
+	carHide_currentTick = getTickCount()
+	progress = (carHide_currentTick-carHide_startTick)/carHide_duration
+	carHide_alpha = interpolateBetween( 255,0,0,0,0,0,progress,'InBack')
+	if carHide_alpha > 255 then carHide_alpha = 255 end
+	if not carHideEnabled then carHide_alpha = 0 end
 
+	local theString = "Press X to enable Carhide"
+	if currentRaceMode ~= 'Reach the flag' then
+		theString = "Press X to enable Carhide (while in ghostmode)"
+	end
+	dxDrawText(theString, screenW - 594 - 10, (screenH - 28) / 2, (screenW - 594 - 10) + 594, ( (screenH - 28) / 2) + 28, tocolor(78, 254, 0, carHide_alpha), 1.00, "default-bold", "right", "center", false, false, false, false, false)
+	if carHide_alpha == 0 then
+		removeEventHandler('onClientRender',root,showCarHideNotification)
+	end
+end
+
+function carHideEnabler(bool, racemode)
+	-- Output Message
+	if bool == false and carHideEnabled == true and getElementData(localPlayer,'carhide') then
+		outputChatBox("[CarHide] #FFFFFFCarhide disabled",0,255,0,true)
+	end
+	-- Server notified carhide status
+	carHideEnabled = bool
+	if bool then
+		-- If enabled, show message
+		carHide_startTick = getTickCount()
+		addEventHandler('onClientRender',root,showCarHideNotification)
+	end
+
+	-- Set current racemode
+	if type(racemode) == "string" then
+		currentRaceMode = racemode
+	end
+end
+addEvent("onCarHideStatusChange",true)
+addEventHandler("onCarHideStatusChange",root,carHideEnabler)
+
+function isCarHideAllowed()
+	if carHideEnabled and getElementData( localPlayer, "overrideCollide.uniqueblah" ) and getElementData( localPlayer, "overrideAlpha.uniqueblah" ) and getElementData(localPlayer,"carhide") then
+		return true
+	end
+	return false
+end
 

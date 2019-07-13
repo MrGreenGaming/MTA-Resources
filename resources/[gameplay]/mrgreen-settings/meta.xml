@@ -261,7 +261,7 @@
 
     <!-- Exports -->
     <export function="isPlayerIgnoredPM" type="client" />
-
+    <export function="isCustomHornIconEnabled" type="client" />
 
 
 

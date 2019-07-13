@@ -81,90 +81,6 @@ end
 
 addCommandHandler('deletenick', deleteNick, true)
 
--- function protectNick(id, name)
--- 	if isNickProtected(name) then
--- 		return false
--- 	end
--- 	--local sql = executeSQLQuery("SELECT pNick, accountID FROM gcProtectedNames WHERE accountID = '"..id.."'")
--- 	local cmd = ''
--- 	local query 
--- 	if handlerConnect then
--- 		cmd = "SELECT pNick, accountID FROM gc_nickprotection WHERE accountID = ?"
--- 		query = dbQuery(handlerConnect, cmd, id)
--- 		if not query then return false end
--- 		local sql = dbPoll(query, -1)
--- 		if not sql then return false end
--- 		if #sql < 3 then
--- 			cmd = "INSERT INTO gc_nickprotection VALUES(?,?)"
--- 			dbExec(handlerConnect, cmd, name, id)
--- 			return true	
--- 		else return false
--- 		end
--- 	end	
--- end
-
--- addCommandHandler('locknick',
--- function(player)
--- 	if not canScriptWork then return end
--- 	--outputChatBox('test')
--- 	if not getResourceFromName('gc') or getResourceState(getResourceFromName('gc')) ~= "running" then 
--- 		outputChatBox('You can\'t lock your nick because GC resource isn\'t running now. Try again later.', player, 255, 0, 0)
--- 		return 
--- 	end
--- 	local logged = exports.gc:isPlayerLoggedInGC(player)
--- 	if logged then
--- 		local id = exports.gc:getPlayerGreencoinsID(player)
--- 		id = tostring(id)
--- 		local name = safeString(getPlayerName(player))
--- 		if protectNick(id, name) then
--- 			outputChatBox('Nick has been protected and attached to your current account.', player, 255, 0, 0)
--- 		else
--- 			outputChatBox('Nick is already attached to another account, or max protected nicks(3) has been reached for this account.', player, 255, 0, 0)
--- 		end
--- 	else
--- 		outputChatBox('You can\'t lock your nick unless you\'re logged in GCs.', player, 255, 0, 0)
--- 	end	
--- end
--- )
-
--- addCommandHandler('unlocknick',
--- function(player)
--- 	if not canScriptWork then return end
--- 	if not getResourceFromName('gc') or getResourceState(getResourceFromName('gc')) ~= "running" then 
--- 		outputChatBox('You can\'t unlock your nick because GC resource isn\'t running now. Try again later.', player, 255, 0, 0)
--- 		return 
--- 	end
--- 	id = exports.gc:getPlayerGreencoinsID(player)
--- 	local isLogged = exports.gc:isPlayerLoggedInGC(player)
--- 	id = tostring(id)
--- 	if isLogged then
--- 		if doesPlayerMatchNick(safeString(getPlayerName(player)), id) then
--- 			--local sql = executeSQLQuery("SELECT pNick, accountID FROM gcProtectedNames WHERE pNick = '"..safeString(getPlayerName(player)).."'")
--- 			local cmd = ''
--- 			local query 
--- 			if handlerConnect then
--- 				cmd = "SELECT pNick, accountID FROM gc_nickprotection WHERE pNick = ?"
--- 				query = dbQuery(handlerConnect, cmd, safeString(getPlayerName(player)))
--- 				if not query then outputChatBox('Nickname not locked.', player, 255, 0, 0) return false end
--- 				local sql = dbPoll(query, -1)
--- 				if not sql then outputChatBox('Nickname not locked.', player, 255, 0, 0) return false end
--- 				if #sql > 0 then
--- 					cmd = "DELETE FROM gc_nickprotection WHERE pNick = ?"
--- 					dbExec(handlerConnect, cmd, safeString(getPlayerName(player)))
--- 					outputChatBox('Your nick has been unlocked, it is now free to use by anyone.', player, 255, 0, 0)
--- 				else 
--- 					outputChatBox('Nickname not locked.', player, 255, 0, 0)
--- 				end			
--- 			end
--- 		else
--- 			outputChatBox("Nickname not locked, or it doesn't belong to you.", player, 255, 0, 0)
--- 		end
--- 	else
--- 		outputChatBox("Please login to use this command.", player, 255, 0, 0)
--- 	end
--- end
--- )
-
 function warnPlayer(player, oldNick)
     if oldNick then
         setPlayerName(player, oldNick)
@@ -172,8 +88,9 @@ function warnPlayer(player, oldNick)
         local time = getRealTime()
         setPlayerName(player, "Guest" .. tostring(time.timestamp))
     end
-
-    outputChatBox('This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
+    -- Remove VIP supernick when name is locked
+    removeElementData(player, "vip.colorNick")
+    outputChatBox('[NICK] Your nickname has been changed because your previous nickname has been locked.', player, 255, 0, 0)
 end
 
 g_JoinHandler = {}
@@ -211,9 +128,12 @@ addEventHandler('nickProtectionLoaded', getRootElement(),
 
 g_NickHandler = {}
 addEventHandler('onPlayerChangeNick', getRootElement(),
-    function(oldNick, newNick)
+    function(oldNick, newNick, byUser)
         if not canScriptWork then return end
-        nickChangeSpamProtection(source)
+        if byUser then
+            nickChangeSpamProtection(source)
+        end
+        
         if not getResourceFromName('gc') or getResourceState(getResourceFromName('gc')) ~= "running" then
             return
         end
@@ -230,20 +150,28 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
         if not isCurrentNickProtected then
             return
         end
-
+        
         local isLogged = exports.gc:isPlayerLoggedInGC(player)
         if not isLogged then
             cancelEvent()
-            outputChatBox('This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-            setTimer(function() if getPlayerName(player) == nick then warnPlayer(player, oldNick) end end, 10000, 1)
+            outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
+            setTimer(function(oldNick, newNick) 
+                if getPlayerName(player) == newNick then 
+                    warnPlayer(player, oldNick) 
+                end 
+            end, 10000, 1, oldNick, newNick)
             return
         end
 
         local id = exports.gc:getPlayerGreencoinsID(player)
         if not doesPlayerMatchNick(safeString(nick), id) then
             cancelEvent()
-            outputChatBox('This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-            setTimer(function() if getPlayerName(player) == nick then warnPlayer(player, oldNick) end end, 500, 1)
+            outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
+            setTimer(function(oldNick, newNick) 
+                if getPlayerName(player) == newNick then 
+                    warnPlayer(player, oldNick) 
+                end
+            end, 500, 1, oldNick, newNick)
         end
     end)
 

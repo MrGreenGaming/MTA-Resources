@@ -19,12 +19,15 @@ end
 ------------------
 
 function setTrials ( player, cmd, on )
-	if on == '1' then
-		setPerkSetting(player, ID, 'dont_flip', nil, 'GC Trials: Enabled flipping!')	-- nil so the value isn't added to the json string
-	else
-		setPerkSetting(player, ID, 'dont_flip', true, 'GC Trials: Disabled flipping')
-	end
-	triggerClientEvent(player, 'settingGCTrials', player, getPerkSettings(player, ID))
+	local value = true
+	if on == '1' then value = nil end
+	setPerkSetting(player, ID, 'dont_flip', value, value and 'GC Trials: Disabled flipping' or 'GC Trials: Enabled flipping!', 
+	function() 
+		getPerkSettings(player, ID, 
+		function(settings) 
+			triggerClientEvent(player, 'settingGCTrials', player, settings)
+		end)	
+	end)
 end
 
 function doTrickAnimation ( block, name, loop, timeMs )

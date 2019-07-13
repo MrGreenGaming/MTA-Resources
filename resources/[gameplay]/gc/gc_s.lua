@@ -221,6 +221,7 @@ function addSerialGreencoins(player, amount)
         executeSQLQuery("UPDATE ? SET greencoins = ? WHERE serial = ?", serialGreencoinsTable, amount + greencoins, serial)
         triggerClientEvent(player, "onGCChange", root, amount + greencoins, true)
     end
+    triggerEvent('onGCChange', player, amount)
 end
 
 function getSerialGreencoins(player)
@@ -302,6 +303,14 @@ function getPlayerGreencoins(player)
         end
     end
     return getSerialGreencoins(player) or 0
+end
+
+function getPlayerVip(player)
+    if accounts[player] then
+        return accounts[player]:getVipTimestamp()
+    else 
+        return false
+    end
 end
 
 local holidays = {

@@ -109,7 +109,7 @@ local perks = {
 	[7] = { ID = 7, price =  3000, description = 'Extra long burnup time', func = 'loadGCBurnExtra', requires = {6}, exp = 30},
 	[8] = { ID = 8, price =  3000, description = 'Health transfer', func = 'loadGCBurnTransfer', requires = {6}, exp = 30, disabled = true},
 	[9] = { ID = 9, price =  3000, description = 'Double sided objects', func = 'loadDoubleSided'},
-	[10] = { ID = 10, price =  2000, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
+	[10] = { ID = 10, price =  1000, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
 	[11] = { ID = 11, price =  1000, description = 'NTS/DD Vehicle reroll for 30 days', func = 'loadVehicleReroll', exp = 30},
 	[12] = { ID = 12, price =  1000, description = 'Deadline color change', func = 'loadDeadlineColorChange', exp = 30},
 
@@ -134,22 +134,40 @@ local perks = {
 --addCommandHandler("perkdiscount", perkdiscount, true, true)
 
 function onGCShopLogin (forumID)
-	for _, perk in pairs(getPerks(forumID)) do
-		if tonumber(perk.exp) and (not getPerkExpire ( forumID, perk.ID ) or getPerkExpire ( forumID, perk.ID ) < getTimestamp()) then
-			outputChatBox ( 'GC: ' .. perk.description .. ' has expired!', source, 255, 0, 0)
-			removePerkFromDatabase(forumID, perk.ID)
-		else
-			loadPerk(source, perk.ID)
+	local theSource = source
+	getPerks(forumID, 
+	function(prks)
+		local perkIdTable = {}
+		for _, p in pairs(prks) do
+			table.insert(perkIdTable, p.ID)
 		end
-	end
-	triggerClientEvent( source, 'itemLogin', source, perks, getPerks(forumID) )
+		getPerkExpire(forumID, perkIdTable, 
+		function(expired)
+			for _, perk in pairs(prks) do
+				if tonumber(perk.exp) and (not expired[perk.ID] or expired[perk.ID] < getTimestamp()) then
+					outputChatBox ( 'GC: ' .. perk.description .. ' has expired!', theSource, 255, 0, 0)
+					removePerkFromDatabase(forumID, perk.ID)
+				else
+					loadPerk(theSource, perk.ID)
+				end
+			end
+			getPerks(forumID, 
+			function(newPerks) 
+				triggerClientEvent( theSource, 'itemLogin', theSource, perks, newPerks )
+			end)
+		end)
+	end)
 end
 addEventHandler("onGCShopLogin", root, onGCShopLogin)
 
 function onGCShopLogout (forumID)
-	for _, perk in pairs(getPerks(forumID)) do
-		unloadPerk(source, perk.ID)
-	end
+	local src = source
+	getPerks(forumID, 
+	function(perks) 
+		for _, perk in pairs(perks) do
+			unloadPerk(src, perk.ID)
+		end
+	end)
 end
 addEventHandler("onGCShopLogout", root, onGCShopLogout)
 
@@ -158,6 +176,7 @@ function buyPerk ( player, cmd, ID )
 	
 	ID = tonumber(ID)
 	local i = perks[ID]
+	
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
 	
 	if (not forumID) then
@@ -169,37 +188,50 @@ function buyPerk ( player, cmd, ID )
 	elseif i.disabled then
 		outputChatBox('Perk purchase has been disabled', player, 255, 0, 0 )
 		return
-	elseif checkPerk ( forumID, ID ) then
-		outputChatBox('You already bought this perk: '..i.description, player, 255, 165, 0 )
-		return
-	elseif i.requires then
-		for _, perk in ipairs(i.requires) do
-			if not checkPerk ( forumID, perk ) then
-				outputChatBox('This perk requires another perk: '..perks[perk].description, player, 255, 0, 0 )
-				return			
-			end
+	end
+	
+	-- Check if perk is already bought, and check for required perks
+	local idsToCheck = {ID}
+	if i.requires then
+		for i, perk in ipairs(i.requires) do
+			table.insert(idsToCheck, perk)
 		end
 	end
 
-	local result, error = gcshopBuyItem ( player, i.price, 'Perk: ' .. i.description )
-	
-	if result == true then
-		local added = addPerkToDatabase( forumID, ID, i.exp )
-		if type(i.defaultAmount) == 'number' then
-			setPerkSetting(player, ID, 'amount', i.defaultAmount)
+	checkPerk(forumID, idsToCheck, 
+	function(res)
+		if res and res[ID] then
+			outputChatBox('You already bought this perk: '..i.description, player, 255, 165, 0 )
+			return
+		elseif i.requires and res then
+			for _, perk in ipairs(i.requires) do
+				if not res[perk] then
+					outputChatBox('This perk requires another perk: '..perks[perk].description, player, 255, 0, 0 )
+					return			
+				end
+			end
 		end
-		addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought perk=' .. tostring(ID) .. ' ' .. tostring(i.description) ..  ' ' .. tostring(i.defaultAmount) ..  ' ' .. tostring(added))
-		outputChatBox ('Perk \"' .. i.description  .. '\" bought.', player, 0, 255, 0)
-		loadPerk( player, ID )
-		--if not(i.defaultAmount) then
-			triggerClientEvent( source, 'itemLogin', source, perks, getPerks(forumID) )
-		--end
-		return
-	end
-	if error then
-		outputChatBox( 'An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0 )
-		addToLog ( 'Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought perk=' .. tostring(ID) .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
-	end
+
+		local result, error = gcshopBuyItem ( player, i.price, 'Perk: ' .. i.description )
+		if result == true then
+			local added = addPerkToDatabase( forumID, ID, i.exp )
+			if type(i.defaultAmount) == 'number' then
+				setPerkSetting(player, ID, 'amount', i.defaultAmount, nil, function() end)
+			end
+			addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought perk=' .. tostring(ID) .. ' ' .. tostring(i.description) ..  ' ' .. tostring(i.defaultAmount) ..  ' ' .. tostring(added))
+			outputChatBox ('Perk \"' .. i.description  .. '\" bought.', player, 0, 255, 0)
+			loadPerk( player, ID )
+			getPerks(forumID, 
+			function(thePerks)
+				triggerClientEvent( player, 'itemLogin', player, perks, thePerks ) 
+			end)
+			return
+		end
+		if error then
+			outputChatBox( 'An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0 )
+			addToLog ( 'Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought perk=' .. tostring(ID) .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
+		end
+	end)
 end
 addCommandHandler('gcbuyperk', buyPerk)
 addEvent('gcbuyperk', true)
@@ -230,11 +262,21 @@ function buyPerkExtra ( player, cmd, ID, total )
 	local result, error = gcshopBuyItem ( player, i.price * total, 'Perk extra: ' .. i.description .. ' x' .. total )
 	
 	if result == true then
-		local added = setPerkSetting(player, ID, 'amount', getPerkSettings(player, ID).amount + total)
-		addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought extra perk=' .. tostring(ID) .. ' ' .. tostring(i.description) ..  ' ' .. tostring(i.defaultAmount) ..  ' ' .. tostring(total) ..  ' ' .. tostring(added))
-		outputChatBox ('Extra \"' .. i.description  .. '\" bought.', player, 0, 255, 0)
-		--loadPerk( player, ID )
-		triggerClientEvent( source, 'itemLogin', source, perks, getPerks(forumID) )
+		local theSource = source
+		getPerkSettings(player, ID, 
+		function(perkSetting)
+			setPerkSetting(player, ID, 'amount', perkSetting.amount + total, false, 
+			function(added) 
+				addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought extra perk=' .. tostring(ID) .. ' ' .. tostring(i.description) ..  ' ' .. tostring(i.defaultAmount) ..  ' ' .. tostring(total) ..  ' ' .. tostring(added))
+				outputChatBox ('Extra \"' .. i.description  .. '\" bought.', player, 0, 255, 0)
+				--loadPerk( player, ID )
+				
+				getPerks(forumID, 
+				function(res) 
+					triggerClientEvent( theSource, 'itemLogin', theSource, perks, res )
+				end)
+			end)
+		end)
 		return
 	end
 	if error then
@@ -247,7 +289,7 @@ addEvent('gcbuyperkextra', true)
 addEventHandler('gcbuyperkextra', root, buyPerkExtra)
 
 function addPerkToDatabase( forumID, ID, duration )
-	if checkPerk ( forumID, ID ) or not perks[ID] or not handlerConnect then return false end
+	if not perks[ID] or not handlerConnect then return false end
 	if not duration then
 		return dbExec(handlerConnect, "INSERT INTO gc_items (forumid,itembought) VALUES (?,?)", forumID, ID)
 	else
@@ -275,37 +317,119 @@ function isPerkAllowedInMode(perkID, mode)
 	return false
 end
 
-function getPerks(forumID)
-	local query = dbQuery(handlerConnect, "SELECT * FROM gc_items WHERE forumid=?", forumID)
-	local result = dbPoll(query,-1)
-	local return_perks = {}
-	for _, row in ipairs(result) do
-		if perks[row.itembought] then
-			--table.insert(return_perks, perks[row.itembought])
-			return_perks[ tonumber(row.itembought) ] = perks[row.itembought]
-			return_perks[ tonumber(row.itembought) ].expires = getPerkExpire ( forumID, row.itembought)
-			return_perks[ tonumber(row.itembought) ].options = fromJSON(row.options)
-		end
+function getPerks(forumID, callback)
+	if type(callback) ~= 'function' then
+		outputDebugString( 'getPerks: No callback specified at argument #2', 1 )
+		return
 	end
-	return return_perks
+
+	dbQuery(
+		function(query) 
+			local result = dbPoll(query,0)
+			local perkIdTable = {}
+			for _, prk in ipairs(result) do
+				table.insert(perkIdTable, prk.itembought)
+			end
+			getPerkExpire(forumID, perkIdTable, 
+			function(expired)
+				local return_perks = {}
+				for _, row in ipairs(result) do
+					if perks[row.itembought] then
+						--table.insert(return_perks, perks[row.itembought])
+						return_perks[ tonumber(row.itembought) ] = perks[tonumber(row.itembought)]
+						return_perks[ tonumber(row.itembought) ].expires = expired[row.itembought] or nil
+						return_perks[ tonumber(row.itembought) ].options = fromJSON(row.options)
+					end
+				end
+				callback(return_perks)
+			end)
+		end, 
+	handlerConnect, "SELECT * FROM gc_items WHERE forumid=?", forumID)
 end
 
-function checkPerk ( forumID, ID )
-	local query = dbQuery(handlerConnect, "SELECT * FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
-	local result = dbPoll(query,-1)
-	return result and #result >= 1
+function checkPerk ( forumID, ID, callback )
+	-- ID can be a table too
+	if type(callback) ~= 'function' then
+		outputDebugString( 'checkPerk: No callback specified at argument #3', 1 )
+		return
+	end
+	if type(id) == 'table' then
+		-- Check for multiple ID's
+		local idsToCheck = {}
+		for i, theID in ipairs(ID) do
+			idsToCheck[tostring(theID)] = true
+		end
+
+		dbQuery(
+			function(query) 
+				local result = dbPoll(query,0)
+				if #result == 0 then
+					callback({})
+					return
+				end
+				local returnVal = {}
+				for i, row in ipairs(result) do
+					if idsToCheck[tostring(row.itembought)] then
+						returnVal[tonumber(row.itembought)] = true
+					end
+				end
+				callback(returnVal)
+			end, 
+		handlerConnect, "SELECT * FROM gc_items WHERE forumid=?", forumID)
+	else
+		dbQuery(
+			function(query) 
+				local result = dbPoll(query,0)
+				callback(result and #result >= 1)
+			end, 
+		handlerConnect, "SELECT * FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
+	end
 end
 
-function getPerkExpire ( forumID, ID )
-	local query = dbQuery(handlerConnect, "SELECT * FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
-	local result = dbPoll(query,-1)
-	return result and result[1].expires or nil
+function getPerkExpire ( forumID, ID, callback )
+	-- ID can be a table too
+	if type(callback) ~= 'function' then
+		outputDebugString( 'getPerkExpire: No callback specified at argument #3', 1 )
+		return
+	end
+	if type(ID) == 'table' then
+		local queryString = dbPrepareString(handlerConnect, 'SELECT * FROM gc_items WHERE forumid=? AND (', forumID)
+		for ind, prk in ipairs(ID) do
+			queryString = queryString .. dbPrepareString(handlerConnect, 'itembought=? ', prk)
+			if ID[ind+1] then
+				queryString = queryString .. ' OR '
+			else
+				queryString = queryString .. ')'
+			end
+		end
+		-- outputDebugString(queryString)
+		dbQuery(
+			function(query) 
+				local result = dbPoll(query,0)
+				local returnVal = {}
+				for _, row in ipairs(result) do
+					returnVal[row.itembought] = row.expires or nil
+				end
+				callback(returnVal)
+			end,
+		handlerConnect, queryString)
+	else
+		dbQuery(
+			function(query) 
+				local result = dbPoll(query,0)
+				callback(result and result[1].expires or nil)
+			end,
+		handlerConnect, "SELECT * FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
+	end
 end
 
 function loadPerk(player, ID)
 	if not isElement(player) or not perks[ID] then return end
-	_G[perks[ID].func](player, true, getPerkSettings(player, ID))
-	outputDebugString('Perk loaded: ' .. getPlayerName(player) .. ' ' .. ID .. ' ' .. perks[ID].description .. (tonumber(getPerkSettings(player, ID).amount) and ' (' .. getPerkSettings(player, ID).amount .. ')' or ''))
+	getPerkSettings(player, ID,
+	function(perkSettings)
+		_G[perks[ID].func](player, true, perkSettings)
+		outputDebugString('Perk loaded: ' .. getPlayerName(player) .. ' ' .. ID .. ' ' .. perks[ID].description .. (tonumber(perkSettings.amount) and ' (' .. perkSettings.amount .. ')' or ''))		
+	end)
 end
 
 function unloadPerk(player, ID)
@@ -314,48 +438,117 @@ function unloadPerk(player, ID)
 	_G[perks[ID].func](player, false)
 end
 
-function getPerkSettings(player, ID)
+function getPerkSettings(player, ID, callback)
+	
 	ID = tonumber(ID)
 	local i = perks[ID]
-	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
-
-	if (not forumID) or (not ID or type(i) ~= 'table') or (not checkPerk ( forumID, ID )) then
-		return false
+	if type(callback) ~= 'function' then
+		outputDebugString( 'getPerkSettings: No callback specified at argument #3', 1 )
+		return
 	end
-	
-	local query = dbQuery(handlerConnect, "SELECT options FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
-	local result = dbPoll(query,-1)
-	local options = fromJSON(result[1].options)
-	if type(options) ~= 'table' then return outputDebugString('GC Perks: wrong options format [' .. forumID, 1) and false end
-	
-	return options
+
+	if type(player) == 'table' then
+		if #player < 1 then
+			-- outputConsole( debug.traceback() )
+			outputDebugString( 'getPerkSettings: No entries in player table', 1 )
+			callback(false)
+			return
+		end
+		local playerToForumId = {}
+		local queryString = dbPrepareString(handlerConnect, 'SELECT forumid, options FROM gc_items WHERE itembought=? AND (', ID)
+		for ind, p in ipairs(player) do
+			local forumID = tonumber(exports.gc:getPlayerForumID ( p )) or 0
+			playerToForumId[forumID] = p
+			-- table.insert(queryTable, 'SELECT options FROM gc_items WHERE forumid='..forumID..' AND itembought='..ID..';')
+			queryString = queryString .. dbPrepareString(handlerConnect, '(forumid=?) ', forumID)
+			if player[ind+1] then
+				queryString = queryString .. 'OR '
+			else
+				queryString = queryString .. ')'
+			end
+		end
+		-- outputDebugString(queryString)
+		dbQuery(
+			function(qh)
+				local result = dbPoll(qh, 0)
+				local returnVal = {}
+				for i, row in ipairs(result) do
+					local option = fromJSON(row.options)
+					if type(option) ~= 'table' then
+						outputDebugString('GC Perks: wrong options format [' .. tostring(row.forumid))
+					elseif not row.forumid or not tonumber(row.forumid) or not playerToForumId[tonumber(row.forumid)] then
+						outputDebugString('GC Perks: wrong options format [' .. tostring(row.forumid))
+					else
+						returnVal[playerToForumId[tonumber(row.forumid)]] = row.options
+					end
+				end
+				callback(returnVal)
+			end, handlerConnect, queryString)
+	else
+		local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
+		if (not forumID) or (not ID or type(i) ~= 'table') then
+			callback(false)
+			return
+		end
+		dbQuery(
+			function(query) 
+				local result = dbPoll(query,0)
+				local options = {}
+				if result[1] and result[1].options then
+					options = fromJSON(result[1].options)
+				end
+				if type(options) ~= 'table' then 
+					outputDebugString('GC Perks: wrong options format [' .. forumID, 1)
+					callback(false)
+					return  
+				end
+				callback(options)
+			end, 
+		handlerConnect, "SELECT options FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
+		
+	end
 end
 
-function setPerkSetting(player, ID, key, value, text)
+function setPerkSetting(player, ID, key, value, text, callback)
+	if type(callback) ~= 'function' then
+		outputDebugString( 'setPerkSetting: No callback specified at argument #6', 1 )
+		return
+	end
+
 	ID = tonumber(ID)
 	local i = perks[ID]
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
+	checkPerk ( forumID, ID, 
+	function(bool)
+		if not bool then
+			callback(false)
+			return
+		end
 
-
-	if (not forumID) or (not ID or type(i) ~= 'table') or (not checkPerk ( forumID, ID )) then
-		return false
-	end
-	
-	local query = dbQuery(handlerConnect, "SELECT options FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
-	local result = dbPoll(query,-1)
-	local options = fromJSON(result[1].options)
-	if type(options) ~= 'table' then return outputDebugString('GC Perks: wrong options format [' .. forumID, 1) and false end
-	
-	options[key] = value
-	options = toJSON(options)
-	if type(options) ~= 'string' then return outputDebugString('GC Perks: error adding option [' .. forumID, 1) and false end
-	local result = dbQuery(handlerConnect, "UPDATE gc_items SET options=? WHERE forumID=? AND itembought=?", options, forumID, ID)
-	
-	if type(text) == 'string' then
-		outputChatBox(tostring(text), player, 0, 255, 0)
-	end
-	
-	return result
+		if (not forumID) or (not ID or type(i) ~= 'table') then
+			callback(false)
+			return
+		end
+		
+		dbQuery(
+			function(query) 
+				local result = dbPoll(query,0)
+				local options = fromJSON(result[1].options)
+				if type(options) ~= 'table' then return outputDebugString('GC Perks: wrong options format [' .. forumID, 1) and false end
+				
+				options[key] = value
+				options = toJSON(options)
+				if type(options) ~= 'string' then return outputDebugString('GC Perks: error adding option [' .. forumID, 1) and false end
+				local result = dbExec(handlerConnect, "UPDATE gc_items SET options=? WHERE forumID=? AND itembought=?", options, forumID, ID)
+				
+				if type(text) == 'string' then
+					outputChatBox(tostring(text), player, 0, 255, 0)
+				end
+				
+				callback(result)
+			end, 
+		handlerConnect, "SELECT options FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
+	end)
 end
 
 
@@ -473,7 +666,7 @@ function callSpawn ( player )
 		elementID, distance, index = changeSpawn(player)
 	end
 	if elementID then
-		return outputChatBox("[GC] Changed to spawnpoint "..index..". Distance: "..distance.."m", player, 0,255,0) -- less info
+		return outputConsole("Changed to spawnpoint "..index..". Distance: "..distance.."m", player) -- less info
 		-- return outputChatBox('[GC] Changed to spawnpoint \"' .. tostring(elementID) .. '\" .. ('..index..'/'..distance..'m)', player, 0,255,0)
 	end
 end
@@ -602,18 +795,29 @@ function rockerColorChange(hex)
 end
 addEventHandler("serverRocketColorChange",root,rockerColorChange)
 
-function getPlayerRocketColor(player)
-	local forumID = exports.gc:getPlayerForumID ( player )
-	if not forumID then return false end
-
-	local query = dbQuery(handlerConnect, "SELECT color FROM gc_rocketcolor WHERE forumid=?", forumID)
-	local result = dbPoll(query,-1)
-
-	if result[1] and result[1]["color"] then
-		return result[1]["color"]
+function getPlayerRocketColor(player, callback)
+	if type(callback) ~= 'function' then
+		outputDebugString( 'getPlayerRocketColor: No callback specified at argument #2', 1 )
+		return
 	end
 
-	return false
+	local forumID = exports.gc:getPlayerForumID ( player )
+	if not forumID then 
+		callback(false)
+		return
+	end
+
+	dbQuery(
+		function(query) 
+			local result = dbPoll(query,0)
+
+			if result[1] and result[1]["color"] then
+				callback(result[1]["color"])
+				return
+			end
+			callback(false)
+		end, 
+	handlerConnect, "SELECT color FROM gc_rocketcolor WHERE forumid=?", forumID)
 end
 
 function insertPlayerRocketColorToDB(player)
@@ -629,14 +833,15 @@ end
 --------------------------
 function loadDeadlineColorChange ( player, bool )
 	if bool then
-		local color = getPlayerDeadLineColor(player)
-		if not color then
-			outputDebugString("Could not find Color for "..getPlayerName(player))
-			insertDeadLineColorToDB(player)
-			color = "00FF00"
-		end
-		
-		setElementData(player,"gcshop_deadlinecolor","#"..color:gsub("#","")) 
+		getPlayerDeadLineColor(player, 
+		function(color) 
+			if not color then
+				outputDebugString("Could not find Color for "..getPlayerName(player))
+				insertDeadLineColorToDB(player)
+				color = "00FF00"
+			end
+			setElementData(player,"gcshop_deadlinecolor","#"..color:gsub("#","")) 
+		end)
 	else
 		removeElementData( player, 'gcshop_deadlinecolor' )
 	end
@@ -667,18 +872,30 @@ function setPlayerDeadLineColor(player,color)
 
 end
 
-function getPlayerDeadLineColor(player)
-	local forumID = exports.gc:getPlayerForumID ( player )
-	if not forumID then return false end
-
-	local query = dbQuery(handlerConnect, "SELECT color FROM gc_deadlinecolor WHERE forumid=?", forumID)
-	local result = dbPoll(query,-1)
-
-	if result[1] and result[1]["color"] then
-		return result[1]["color"]
+function getPlayerDeadLineColor(player, callback)
+	if type(callback) ~= 'function' then
+		outputDebugString( 'getPlayerDeadLineColor: No callback specified at argument #2', 1 )
+		return
 	end
 
-	return false
+	local forumID = exports.gc:getPlayerForumID ( player )
+	if not forumID then 
+		callback(false)
+		return false 
+	end
+
+	dbQuery(
+		function(query) 
+			local result = dbPoll(query,0)
+
+			if result[1] and result[1]["color"] then
+				callback(result[1]["color"])
+				return 
+			end
+
+			callback(false)
+		end, 
+	handlerConnect, "SELECT color FROM gc_deadlinecolor WHERE forumid=?", forumID)
 end
 
 function insertDeadLineColorToDB(player)

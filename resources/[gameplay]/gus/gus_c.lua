@@ -247,3 +247,14 @@ addEventHandler("onClientMapLaunched", root, function()
 		setSoundPaused( u, false )
 	end
 end)
+
+-- notification tray on map started
+
+addEventHandler("onMapGather", getRootElement(),
+    function(mapName,likes,dislikes,timesPlayed, author, description, lastTimePlayed, playerTime, nextmap)
+        local nextmap = nextmap or '-not set-'
+        if isTrayNotificationEnabled() then
+            createTrayNotification("[MrGreenGaming] ".. mapName .." just started. (".. nextmap  or '-not set-' ..").", "default" )
+        end
+    end
+)

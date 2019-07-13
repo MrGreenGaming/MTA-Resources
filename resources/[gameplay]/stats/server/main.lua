@@ -159,3 +159,9 @@ addEventHandler("onPlayerJoin", root,
 		bindKey(source, "F10", "down", showGUI)
 	end
 )
+
+function getPlayerStat(player, stat)
+	local forumid = exports.gc:getPlayerForumID(player)
+	if not forumid or not stat then return false end
+	return playerStatsCache[forumid][stat] or false
+end

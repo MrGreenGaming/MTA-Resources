@@ -22,6 +22,7 @@
     <export function="getPlayerGreencoinsLogin" type="server"/>
     <export function="getPlayerGreencoinsEmail" type="server"/>
     <export function="getPlayerGreencoins" type="server"/>
+    <export function="getPlayerVip" type="server"/>
     <export function="addPlayerGreencoins" type="server"/>
     <export function="toggleGCInfo" type="client"/>
     <export function="GCTextPopUp" type="shared"/>

@@ -9,7 +9,7 @@ local g_CustomPlayers = {}
 function loadGCCustomPaintjob ( player, bool, settings )
 	if bool then
 		g_CustomPlayers[player] = player
-		sendPaintjobs ( {player}, root )
+		sendPaintjobs ( {player}, player )
 	else
 		g_CustomPlayers[player] = nil
 	end
@@ -60,41 +60,48 @@ addEventHandler('onResourceStart', resourceRoot, onResourceStart)
 
 local server_path = 'items/paintjob/'
 function sendPaintjobs ( from, to, pid )
-	local md5list = {}
-	for _, player in pairs(from) do
-		local player_md5_list = {}
-		local paintjobs = getPerkSettings(player, ID)
-		local forumID = exports.gc:getPlayerForumID ( player )
-		if not tonumber(pid) then
-			for pid=1,paintjobs.amount do
-				if fileExists(server_path .. tostring(forumID) .. '-' .. pid .. '.bmp') then
-					player_md5_list[pid] = getMD5 ( server_path .. tostring(forumID) .. '-' .. pid .. '.bmp' )
-				--else
-					--player_md5_list[pid] = false
+	-- outputChatBox('Sending to')
+	-- outputChatBox(tostring(getElementType(to)))
+	getPerkSettings(from, ID, 
+	function(res)
+		local md5list = {}
+		if type(res) == 'table' then
+			for player, opt in pairs(res) do
+				local player_md5_list = {}
+				local paintjobs = fromJSON(opt)
+				local forumID = exports.gc:getPlayerForumID ( player )
+				if not tonumber(pid) then
+					for pid=1,paintjobs.amount do
+						if fileExists(server_path .. tostring(forumID) .. '-' .. pid .. '.bmp') then
+							player_md5_list[pid] = getMD5 ( server_path .. tostring(forumID) .. '-' .. pid .. '.bmp' )
+						end
+					end
+				else
+					if fileExists(server_path .. tostring(forumID) .. '-' .. pid .. '.bmp') then
+						player_md5_list[pid] = getMD5 ( server_path .. tostring(forumID) .. '-' .. pid .. '.bmp' )
+					end
 				end
-			end
-		else
-			if fileExists(server_path .. tostring(forumID) .. '-' .. pid .. '.bmp') then
-				player_md5_list[pid] = getMD5 ( server_path .. tostring(forumID) .. '-' .. pid .. '.bmp' )
-			--else
-				--player_md5_list[pid] = false
+				md5list[forumID] = player_md5_list
 			end
 		end
-		md5list[forumID] = player_md5_list
-	end
-	
-	if to == root then
-		triggerClientEvent('serverPaintjobsMD5', resourceRoot, md5list)
-	elseif type(to) == 'table' then
-		for _, player in pairs(to) do
-			triggerClientEvent(player, 'serverPaintjobsMD5', resourceRoot, md5list)
+
+		-- Send a list that links players do forum id's to client
+		local idToPlayerList = getIdToPlayerList()
+
+		if to == root then
+			triggerClientEvent('serverPaintjobsMD5', resourceRoot, md5list, idToPlayerList)
+		elseif type(to) == 'table' then
+			for _, player in pairs(to) do
+				triggerClientEvent(player, 'serverPaintjobsMD5', resourceRoot, md5list, idToPlayerList)
+			end
+		elseif isElement(to) then
+			triggerClientEvent(to, 'serverPaintjobsMD5', resourceRoot, md5list, idToPlayerList)
 		end
-	elseif isElement(to) then
-		triggerClientEvent(to, 'serverPaintjobsMD5', resourceRoot, md5list)
-	end
+	end)
 end
 
 function clientSendPaintjobs()
+	if #g_CustomPlayers == 0 then return end
 	sendPaintjobs(g_CustomPlayers, client)
 end
 addEvent('clientSendPaintjobs', true)
@@ -118,7 +125,6 @@ addEventHandler('onPlayerQuit', root, function()
 
 	
 end)
-
 
 ----------------------------------------
 ---   Downloading custom paintjobs   ---
@@ -148,7 +154,7 @@ function receiveImage ( image, pid )
 	if image == false then
 		-- sendOldPaintjob to clients
 		--outputDebugString('s: No new paintjob uploaded, keeping old one')
-		sendPaintjobs ( {player}, root, pid )
+		sendPaintjobs ( {player}, player, pid )
 	else
 		-- send new paintjob to clients
 		--outputDebugString('s: New paintjob arrived, saving')
@@ -160,7 +166,7 @@ function receiveImage ( image, pid )
 			outputChatBox("Custom paintjob image too big, please use a smaller image. (Max: "..tostring(maxFileSize).."MB)",player,255,0,0)
 			fileClose(dummy)
 			fileDelete(server_path .. forumID .. '-' .. pid .. 'dummy.bmp')
-			sendPaintjobs ( {player}, root, pid )
+			sendPaintjobs ( {player}, player, pid )
 		else -- If file is under the size limit
 			fileClose(dummy)
 			fileDelete(server_path .. forumID .. '-' .. pid .. 'dummy.bmp')
@@ -168,7 +174,7 @@ function receiveImage ( image, pid )
 			local file = fileCreate(server_path .. forumID .. '-' .. pid .. '.bmp')
 			fileWrite(file, image)
 			fileClose(file)
-			sendPaintjobs ( {player}, root, pid )
+			sendPaintjobs ( {player}, player, pid )
 			outputChatBox("Custom Paintjob Uploaded!",player,255,255,255)
 		end
 
@@ -221,14 +227,24 @@ end
 -- addEventHandler("onElementDataChange",root,PjInfoToClient)
 
 
--- Remove custom Paintjob Table in clients (to refresh shaders)
+-- Send info to clients for (re)making textures
 addEvent('onRaceStateChanging', true)
-
 function serverRefreshClientPJTable(state)
 	if state == "NoMap" then
-		triggerClientEvent("clientRefreshShaderTable",resourceRoot,root)
+		sendPaintjobs(g_CustomPlayers, root)
+		-- triggerClientEvent("clientRefreshShaderTable",resourceRoot,root)
 	end
 end
-
 addEventHandler("onRaceStateChanging", root, serverRefreshClientPJTable)
 
+-- util
+function getIdToPlayerList()
+	local l = {}
+	for i, p in ipairs(getElementsByType('player')) do
+		local theId = exports.gc:getPlayerForumID(p)
+		if theId then
+			l[theId] = p
+		end
+	end
+	return l
+end

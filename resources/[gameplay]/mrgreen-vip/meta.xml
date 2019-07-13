@@ -1,15 +1,147 @@
 <meta>
     <info author="Mihoje & KaliBwoy" version="1.5" type="script" />
 
-    <script src="vip_c.lua" type="client" />
+    <include resource="gc"/>
+    <include resource="gcshop"/>
+    <include resource="cpicker"/>
+
+    <!-- Main -->
     <script src="vip.lua" type="server" />
-    <script src="colornick/colornick_s.lua" type="server" />
-    <script src="colornick/colornick_c.lua" type="client" />
+    <script src="vip_c.lua" type="client" />
+    <script src="vip_gui.lua" type="client" />
     
 
+	
+	<!-- Color Nick -->
+    <script src="items/colornick/colornick_s.lua" type="server" />
+    <script src="items/colornick/colornick_c.lua" type="client" />
+
+    <!-- VIP Badge -->
+    <script src="items/vipbadge/vipbadge.lua" type="server" />
 
     <!-- Rainbow Colors -->
     <script src="items/rainbowcolors/rainbowcolors_c.lua" type="client" />
 	<script src="items/rainbowcolors/rainbowcolors_s.lua" type="server" />
+    
+    <!-- Lights blink -->
+    <script src="items/lightblink/lightblink_s.lua" type="server" />
 
+    <!-- Vip Skins -->
+    <script src="items/vipskin/vipskin_s.lua" type="server" />
+    <script src="items/vipskin/vipskin_c.lua" type="client" />
+    
+    <!-- Join Messages -->
+    <script src="items/joinmessage/joinmessage_c.lua" type="client" />
+    <script src="items/joinmessage/joinmessage_s.lua" type="server" />
+
+    <!-- Join Messages -->
+    <script src="items/viphorns/viphorns_c.lua" type="client" />
+    <script src="items/viphorns/viphorns_s.lua" type="server" />
+    
+    <!-- Dynamic Overlay -->
+    <script src="items/dynamicoverlay/files/dvoid_controller_c.lua" type="client" />
+    <script src="items/dynamicoverlay/dynamicOverlay_s.lua" type="server" />
+
+    <!-- Free VIP map -->
+    <script src="items/freeVipMap/freeVipMap.lua" type="server" />
+
+    <!-- Utilities -->
+    <script src="utils_c.lua" type="client" />
+    <script src="utils_s.lua" type="server" />
+
+	<!-- Exports -->
+	<export function="isPlayerVIP" type="server"/>
+    <export function="canBuyVipMap" type="server"/>
+    <export function="playerUsedFreeVipMap" type="server"/>
+    <!-- Other Files -->
+    <file src="img/vip_utils.png"></file>
+    <file src="img/vip_main.png"></file>
+    <file src="img/vip_cosmetics.png"></file>
+    <file src="img/dot.jpg"></file>
+    <file src="img/vip_horn_icon.png"></file>
+    
+    <!-- Vip Skin Files -->
+    <file src="items/vipskin/skins/Fapman.dff" download="false" />
+    <file src="items/vipskin/skins/Fapman.txd" download="false" />
+    <file src="items/vipskin/skins/Ironman.dff" download="false" />
+    <file src="items/vipskin/skins/Ironman.txd" download="false" />
+    <file src="items/vipskin/skins/Stig.dff" download="false" />
+    <file src="items/vipskin/skins/Stig.txd" download="false" />
+    <file src="items/vipskin/skins/MarieRose.dff" download="false" />
+    <file src="items/vipskin/skins/MarieRose.txd" download="false" />
+    <file src="items/vipskin/skins/Goku.dff" download="false" />
+    <file src="items/vipskin/skins/Goku.txd" download="false" />
+    <file src="items/vipskin/skins/Spiderman.dff" download="false" />
+    <file src="items/vipskin/skins/Spiderman.txd" download="false" />
+    <file src="items/vipskin/skins/hitman.dff" download="false" />
+    <file src="items/vipskin/skins/hitman.txd" download="false" />
+    <file src="items/vipskin/skins/skadi.dff" download="false" />
+    <file src="items/vipskin/skins/skadi.txd" download="false" />
+    <file src="items/vipskin/skins/waifu.dff" download="false" />
+    <file src="items/vipskin/skins/waifu.txd" download="false" />
+    <file src="items/vipskin/skins/minicj.dff" download="false" />
+    <file src="items/vipskin/skins/minicj.txd" download="false" />
+    <file src="items/vipskin/skins/randomguy.dff" download="false" />
+    <file src="items/vipskin/skins/randomguy.txd" download="false" />
+    <file src="items/vipskin/skins/Annahome.dff" download="false" />
+    <file src="items/vipskin/skins/Annahome.txd" download="false" />
+    <file src="items/vipskin/skins/NEO.dff" download="false" />
+    <file src="items/vipskin/skins/NEO.txd" download="false" />
+    <file src="items/vipskin/skins/daffyduck.dff" download="false" />
+    <file src="items/vipskin/skins/daffyduck.txd" download="false" />
+    <file src="items/vipskin/skins/AiKizuna.dff" download="false" />
+    <file src="items/vipskin/skins/AiKizuna.txd" download="false" />
+    <file src="items/vipskin/skins/luigi.dff" download="false" />
+    <file src="items/vipskin/skins/luigi.txd" download="false" />
+    <file src="items/vipskin/skins/mario.dff" download="false" />
+    <file src="items/vipskin/skins/mario.txd" download="false" />
+    <file src="items/vipskin/skins/specopsmarshmello.dff" download="false" />
+    <file src="items/vipskin/skins/specopsmarshmello.txd" download="false" />
+    <file src="items/vipskin/skins/bugsbunny.dff" download="false" />
+    <file src="items/vipskin/skins/bugsbunny.txd" download="false" />
+    <file src="items/vipskin/skins/femalelifeguard.dff" download="false" />
+    <file src="items/vipskin/skins/femalelifeguard.txd" download="false" />
+    <file src="items/vipskin/skins/crysis.dff" download="false" />
+    <file src="items/vipskin/skins/crysis.txd" download="false" />
+
+    <!-- Vip Voice files -->
+    <file src="items/vipskin/skins/voice/waifu1.mp3" />
+    <file src="items/vipskin/skins/voice/waifu2.mp3" />
+    <file src="items/vipskin/skins/voice/woman1.mp3" />
+    <file src="items/vipskin/skins/voice/woman2.mp3" />
+
+    <!-- Dynamic Vehicle Overlay Files -->
+    <!-- Dynamic overlay by: ~ Shadow ~ -->
+    <file src="items/dynamicoverlay/files/shaders/mta-helper.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type1.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type2.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type3.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type4.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type5.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type6.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type7.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type8.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type9.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type10.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type11.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type12.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type13.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type14.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type15.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type16.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type17.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type18.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type19.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type20.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type21.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type22.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type23.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type24.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type25.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type26.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type27.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type28.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type29.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type30.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type31.fx" />    
 </meta>

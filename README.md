@@ -18,15 +18,16 @@ A non-dramatic 'The MIT License' applies. See `LICENSE` file for details.
 
 # Credits
 ## Project team
-* Jarno Veuger (Ywa) - Founder, merger, issue management
-* EsDeKa (SDK) - Merger, issue management
-* Hans Swart (Bierbuikje) - Merger, issue management
+* Cena1 (Cena) - Owner, merger, issue management
+* AfuSensi (KaliBwoy) - Merger, issue management
+* Mihail (Mihoje) - Merger, issue management
 
 ## Implementation
 * EsDeKa (SDK)
 * AfuSensi (KaliBwoy)
 * Alexey Yakubovskii (AleksCore)
 * Hans Swart (Bierbuikje)
+* Jarno Veuger (Ywa)
 
 ## Additional implementation
 * Stijn Lindeman (Puma) - Pickup icons

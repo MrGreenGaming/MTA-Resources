@@ -46,6 +46,7 @@ function aAdminMenu ()
 		--aTab1.Spectate		= guiCreateButton ( 0.71, 0.215, 0.13, 0.04, "Spectate", true, aTab1.Tab, "spectate" )
 		aTab1.CopySerial	= guiCreateButton ( 0.71, 0.218, 0.13, 0.04, "Copy Serial", true, aTab1.Tab )
 		aTab1.GetSerialNicks= guiCreateButton ( 0.71, 0.263, 0.27, 0.04, "Get Serial Nicks", true, aTab1.Tab )
+		aTab1.ForceReconnect= guiCreateButton ( 0.71, 0.308, 0.27, 0.04, "Force Reconnect", true, aTab1.Tab )
 		aTab1.Slap			= guiCreateButton ( 0.85, 0.218, 0.13, 0.04, "Slap! "..aCurrentSlap.." _", true, aTab1.Tab, "slap" )
 		aTab1.SlapDropDown	= guiCreateStaticImage ( 0.95, 0.218, 0.03, 0.04, "client\\images\\dropdown.png", true, aTab1.Tab )
 		aTab1.SlapOptions		= guiCreateGridList ( 0.85, 0.218, 0.13, 0.40, true, aTab1.Tab )
@@ -928,6 +929,8 @@ function aClientClick ( button )
 						setClipboard(aPlayers[player]["serial"])
 					elseif ( source == aTab1.GetSerialNicks ) then
 						triggerServerEvent("getSerialNicks", resourceRoot, aPlayers[player]["serial"])
+					elseif ( source == aTab1.ForceReconnect ) then
+						triggerServerEvent("forceReconnect", resourceRoot, aPlayers[player]["name"])
 					end
 				end
 			elseif ( source == aTab1.VehicleDropDown ) then

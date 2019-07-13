@@ -6,7 +6,9 @@
 local modename, mapname, topTime
 local prefix = '[GC] '
 local compareToTopPos = 5
--- local anti = exports.anti -- anti:isPlayerAFK(plyr)
+
+local fetchToptimesTimer = false
+local fetchToptimeRetries = 5
 
 function resetMap(mapInfo, mapOptions, gameOptions)
 	rewarded_Players = {}
@@ -17,6 +19,16 @@ function resetMap(mapInfo, mapOptions, gameOptions)
 		modename = raceInfo.mapInfo.modename
 		mapname = raceInfo.mapInfo.name
 		topTime = getTopTime ( compareToTopPos )
+		-- If tops are fetching, set a timer to get it a bit later
+		if not topTime then
+			if isTimer(fetchToptimesTimer) then killTimer(fetchToptimesTimer) end
+			fetchToptimesTimer = setTimer( function()
+				topTime = getTopTime(compareToTopPos)
+				if topTime and isTimer(fetchToptimesTimer) then
+					killTimer( fetchToptimesTimer )
+				end
+			end, 5000, fetchToptimeRetries)
+		end
 	end
 end
 addEvent('onMapStarting')
@@ -25,11 +37,10 @@ addEventHandler("onResourceStart",resourceRoot,resetMap)
 
 function getTopTime ( intTopTime )
 	if type(intTopTime) ~='number' and 1 > intToptime then return false end
-	local toptable = 'race maptimes ' .. modename ..' '.. mapname
-	if not doesTableExist ( toptable ) then return false end
-	select = executeSQLQuery('SELECT * FROM ?', toptable )
-	if select and select[intTopTime] then
-		return select[intTopTime]['timeMs'] or getTopTime ( intTopTime - 1 )
+	if not getResourceFromName('race_toptimes') or getResourceState(getResourceFromName('race_toptimes')) ~= 'running' then return false end
+	local mapTimes = exports['race_toptimes']:getCurrentMapTopTimes()
+	if mapTimes and mapTimes[intTopTime] then
+		return mapTimes[intTopTime]['value'] or getTopTime ( intTopTime - 1 )
 	end
 	return false
 end
@@ -125,44 +136,21 @@ addEventHandler("onPlayerReplaceTime", root, function(serial, tick, hoursPlayed)
 end)
 
 
--------------------------
----   Race (Sprint)   ---
--------------------------
+---------------------------------
+---   Race (Sprint) and NTS   ---
+---------------------------------
 local rewarded_Players = {}
-local maxRewardedToptimes = 3
 local maxRewardedFinishes = 5
 local minimumRewardTimeR = 2 * 60 * 1000
 local maximumRewardTimeR = 8 * 60 * 1000
 local defaultRewardTime = 2 * 60 * 1000
-local defaultRewardGC = 10
+local defaultRewardGC = 12 -- Base for calculation
+local maxRaceReward = 45
+local minRaceReward = {18, 14, 10, 6, 3}
 
-
---[[
-function ontoptime( newPos, newTime, oldPos, oldTime, player )
-	local player = source or player
-	if modename == "Sprint" and compareToTopPos and (not oldPos or newPos < oldPos) and newPos <= maxRewardedToptimes then
-		if not rewarded_Players[player] then rewarded_Players[player] = {} end
-		if rewarded_Players[player].finishReward and rewarded_Players[player].finishReward > 1 then
-			local rank = tonumber(rewarded_Players[player].rank)
-			if not rank then
-				rewarded_Players[player].top = {newPos, newTime, oldPos, oldTime}
-				return
-			end
-			-- outputDebugString(tostring(rank) .. '.' .. newPos .. " "  .. getPlayerName(player) )
-
-			local topReward = math.floor(rewarded_Players[player].finishReward*(1.7 - 2 * (newPos - rank + 1)/10))
-			
-			addPlayerGreencoins ( player, getRewardAmount(topReward - rewarded_Players[player].finishReward))
-			-- outputDebugString ( prefix .. getPlayerName(player) .. "#00FF00 earned " .. rewarded_Players[player].finishReward .. '/' .. topReward .. " Green-Coins for the new top" .. newPos .. " (" .. ")",2)
-			outputChatBox ( prefix .. getPlayerName(player) .. "#00FF00 earned " .. getRewardAmount(topReward - rewarded_Players[player].finishReward) .. " Green-Coins for the new top" .. newPos .. " (" .. getPlayerGreencoins ( player ) .. ")", root, 0, 255, 0, true)
-		end
-	end
-end
-addEventHandler("onPlayerToptimeImprovement", root, ontoptime)
---]]
 
 function finish(rank)
-	if modename ~= "Sprint" then
+	if modename ~= "Sprint" and modename ~= "Never the same" then
 		return
 	end
 	local player = source
@@ -189,15 +177,21 @@ function finish(rank)
 			rewarded_Players[player] = {}
 		end
 		rewarded_Players[player].finishReward = calcFinishReward(player, rank)
+		-- outputDebugString( 'CalcFinishReward = '..tostring(rewarded_Players[player].finishReward) )
+		rewarded_Players[player].finishReward = vipRewardMult(player,rewarded_Players[player].finishReward)
+		rewarded_Players[player].finishReward = getRewardAmount(rewarded_Players[player].finishReward)		
 		rewarded_Players[player].rank = rank
 		if isHoliday() then rewarded_Players[player].finishReward = rewarded_Players[player].finishReward * 2 end
 		
 		if rewarded_Players[player].finishReward > 1 then
 			addPlayerGreencoins(player, rewarded_Players[player].finishReward)
-			
-			exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0, false, false, true)
-			outputChatBox(prefix .."You earned ".. rewarded_Players[player].finishReward .." GC for finishing ".. tostring(rank) .. suffix ..". You now have ".. comma_value(getPlayerGreencoins(player)) .." GC.", player, 0, 255, 0, true)				
-			
+			if modename == 'Sprint' then
+				exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0, false, false, true)
+				outputChatBox(prefix .."You earned ".. rewarded_Players[player].finishReward .." GC for finishing ".. tostring(rank) .. suffix ..". You now have ".. comma_value(getPlayerGreencoins(player)) .." GC.", player, 0, 255, 0, true)
+			else
+				exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0, false, false, true)
+				outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. rewarded_Players[player].finishReward .. ' GC for finishing ' .. tostring(rank) .. suffix, root, 0, 255, 0, true)
+			end
 			return
 		end
 	end
@@ -208,17 +202,20 @@ addEventHandler("onPlayerFinish", root, finish)
 
 function calcFinishReward(player, rank)
 	--if not tonumber(topTime) then return 0 end
+	-- outputDebugString('toptime:'..tostring(topTime))
 	topTime = tonumber(topTime) or defaultRewardTime
 	local topTime = math.max(math.min(topTime, maximumRewardTimeR), minimumRewardTimeR)
 	local mapratio = math.floor ( topTime/defaultRewardTime * 2 ) / 2
 	local reward = mapratio * defaultRewardGC * (1 - (rank - 1) / maxRewardedFinishes)
 	-- outputDebugString("mapratio " .. mapratio .. " * defaultRewardGC " .. defaultRewardGC ..  " * (1 - (rank " .. rank .. " - 1) / maxRewardedFinishes" .. maxRewardedFinishes)
-	return math.floor(math.round(math.max(reward,0)))
+	local calculatedReward = math.floor(math.round(math.max(reward,0)))
+	if minRaceReward[rank] > calculatedReward then
+		return minRaceReward[rank]
+	elseif calculatedReward > (maxRaceReward + rank) then
+		return maxRaceReward + rank
+	end
+	return calculatedReward
 end
-
----------------
----   Mix   ---
----------------
 
 local minPlayers = 5
 function areRewardsActivated()
@@ -226,6 +223,19 @@ function areRewardsActivated()
 	return getPlayerCount() >= minPlayers
 end
 
+function getActivePlayerCount()
+	if not getResourceFromName('anti') or getResourceState(getResourceFromName('anti')) ~= 'running' then
+		return getPlayerCount()
+	end
+
+	local count = 0
+	for _,p in ipairs(getElementsByType('player')) do
+		if not exports.anti:isPlayerAFK(p) then
+			count = count + 1
+		end
+	end
+	return count
+end
 ---------------
 ---   CTF   ---
 ---------------
@@ -275,29 +285,24 @@ function CTFFlagDelivered()
 	if modename ~= "Capture the flag" then return end
 	local player = source
 	local team = getPlayerTeam(player)
-
-	if not areRewardsActivated() then
-		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 scored 1 point but ' .. minPlayers .. ' or more players required to get GCs', root, 0, 255, 0, true)
-		return
-	else
-	-- elseif isPlayerLoggedInGC(player) then
-		local reward = getRewardAmount(rewardCTFFlagDeliver)
-		local rewar2 = getRewardAmount(rewardCTFFlagDeliverTeam)
-		if isHoliday() then
-			reward = reward * 2
-			rewar2 = rewar2 * 2
-		end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 scored 1 point and earned '..reward.. ' GC for himself and '.. rewar2 ..' GC for the ' .. getTeamName(team), root, 0, 255, 0, true)
-	-- else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 scored 1 point and wasn\t logged in but earned '.. rewardCTFFlagDeliverTeam ..' GC for the ' .. getTeamName(team), root, 0, 255, 0, true)
+	local reward = getRewardAmount(rewardCTFFlagDeliver)
+	local rewar2 = getRewardAmount(rewardCTFFlagDeliverTeam)
+	if isHoliday() then
+		reward = reward * 2
+		rewar2 = rewar2 * 2
 	end
+
+	addPlayerGreencoins(player, reward)
+	outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 scored 1 point and earned '..reward.. ' GC for himself and '.. rewar2 ..' GC for the ' .. getTeamName(team), root, 0, 255, 0, true)
+
+
 	for _, pl in ipairs(getPlayersInTeam(team)) do 
 		if pl ~= player then
-		-- if pl ~= player and isPlayerLoggedInGC(pl) then
 			if not exports.anti:isPlayerAFK(pl) then
-				local reward = getRewardAmount(rewardCTFFlagDeliverTeam)
+				local reward = rewardCTFFlagDeliverTeam
+				reward = vipRewardMult(player,reward)
 				if isHoliday() then reward = reward * 2 end
+				getRewardAmount(reward)
 				addPlayerGreencoins(player, reward)
 			end
 		end
@@ -309,20 +314,16 @@ addEventHandler('onCTFFlagDelivered', root, CTFFlagDelivered)
 function CTFTeamWon()
 	if modename ~= "Capture the flag" then return end
 	local team = source
-	if not areRewardsActivated() then
-		outputChatBox( prefix .. minPlayers .. ' or more players required to get GCs', root, getTeamColor(team))
-	else
-		for _, player in ipairs(getPlayersInTeam(team)) do 
-			-- if isPlayerLoggedInGC(player) then
-			if not exports.anti:isPlayerAFK(pl) then
-				local reward = getRewardAmount(rewardCTFTeamWin)
-				if isHoliday() then reward = reward * 2 end
-				addPlayerGreencoins(player, reward)
-			end
-			-- end
+	local reward = rewardCTFTeamWin
+	if isHoliday() then reward = reward * 2 end
+	reward = getRewardAmount(reward)
+	for _, player in ipairs(getPlayersInTeam(team)) do 
+		if not exports.anti:isPlayerAFK(pl) then
+			addPlayerGreencoins(player, reward)
 		end
-		outputChatBox(prefix .. getTeamName(team) .. ' has been rewarded ' .. getRewardAmount(rewardCTFTeamWin) .. ' GC for outscoring the opponent!', root, getTeamColor(team))
 	end
+	outputChatBox(prefix .. getTeamName(team) .. ' has been rewarded ' .. reward .. ' GC for outscoring the opponent!', root, getTeamColor(team))
+	
 end
 addEventHandler('onCTFTeamWon', root, CTFTeamWon)
 
@@ -334,22 +335,21 @@ rewardDeadline = {16, 12, 8}
 rewardKillDeadline = 1
 
 function deadlineFinish(rank)
-
 	if string.lower(modename) ~= "deadline" or not rewardDeadline[rank] then return end
 	local player = source
-
 	local str = rankSuffix(rank)
-	if not areRewardsActivated() then
-		outputChatBox(prefix .. getPlayerName(player) ..'#00FF00 finished ' .. rank .. str .. ' but ' .. minPlayers .. ' or more players required to get GCs', root, 0, 255, 0, true)
-	else
-	-- elseif isPlayerLoggedInGC(player) then
-		local reward = getRewardAmount(rewardDeadline[rank])
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
-	-- else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
-	end		
+	-- Check for active players in 'no respawn' gamemodes
+	if getActivePlayerCount() < 3 then
+		outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 finished ' .. rank .. str .. ' but 3 or more active players are required to get GC', root, 0, 255, 0, true)
+		return
+	end
+
+	local reward = rewardDeadline[rank]
+	reward = vipRewardMult(player,reward)
+	if isHoliday() then reward = reward * 2 end
+	reward = getRewardAmount(reward)
+	addPlayerGreencoins(player, reward)
+	outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 end
 addEvent('onPlayerFinishDeadline')
 addEventHandler('onPlayerFinishDeadline', root, deadlineFinish)
@@ -364,14 +364,10 @@ function onDeadlinePlayerKill()
 
 	if string.lower(modename) ~= "deadline" or not rewardKillDeadline then return end
 	local player = source
-	if areRewardsActivated() then
-		local reward = rewardKillDeadline
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
-	else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
-	end		
+	local reward = rewardKillDeadline
+	if isHoliday() then reward = reward * 2 end
+	addPlayerGreencoins(player, reward)
+	outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)	
 end
 addEvent('onDeadlinePlayerKill')
 addEventHandler('onDeadlinePlayerKill', root, onDeadlinePlayerKill)
@@ -386,20 +382,19 @@ rewardKill = 1
 
 function shooterFinish(rank)
 	if modename ~= "Shooter" or not rewardShooter[rank] then return end
-	local player = source
-
+	if exports.anti:isPlayerAFK(source) then return end
 	local str = rankSuffix(rank)
-	if not areRewardsActivated() then
-		outputChatBox(prefix .. getPlayerName(player) ..'#00FF00 finished ' .. rank .. str .. ' but ' .. minPlayers .. ' or more players required to get GCs', root, 0, 255, 0, true)
-	else
-	-- elseif isPlayerLoggedInGC(player) then
-		local reward = getRewardAmount(rewardShooter[rank])
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
-	-- else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
-	end		
+	-- Check for active players in 'no respawn' gamemodes
+	if getActivePlayerCount() < 3 then
+		outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 finished ' .. rank .. str .. ' but 3 or more active players are required to get GC', root, 0, 255, 0, true)
+		return
+	end
+	local reward = rewardShooter[rank]
+	reward = vipRewardMult(source,reward)
+	if isHoliday() then reward = reward * 2 end
+	reward = getRewardAmount(reward)
+	addPlayerGreencoins(source, reward)
+	outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 end
 addEvent('onPlayerFinishShooter')
 addEventHandler('onPlayerFinishShooter', root, shooterFinish)
@@ -413,14 +408,10 @@ addEventHandler('onPlayerWinShooter', root, shooterWin)
 function onShooterPlayerKill()
 	if modename ~= "Shooter" or not rewardKill then return end
 	local player = source
-	if areRewardsActivated() then
-		local reward = rewardKill
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
-	else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
-	end		
+	local reward = rewardKill
+	if isHoliday() then reward = reward * 2 end
+	addPlayerGreencoins(player, reward)
+	outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
 end
 addEvent('onShooterPlayerKill')
 addEventHandler('onShooterPlayerKill', root, onShooterPlayerKill)
@@ -450,6 +441,7 @@ function winCargame(t)
 					local str = rankSuffix(rank)
 					if areRewardsActivated() then
 						local reward = rewardCarGame[rank]
+						reward = vipRewardMult(player,reward)
 						if isHoliday() then reward = reward * 2 end
 						addPlayerGreencoins(player, reward)
 						outputChatBox(prefix .. t[rank].name .. '#00FF00 has earned ' .. reward .. ' GC for finishing '.. rank .. str, root, 0, 255, 0, true)
@@ -474,20 +466,19 @@ rewardKill = 1
 
 function ddFinish(rank)
 	if modename ~= "Destruction derby" or not rewardDD[rank] then return end
-	local player = source
-
+	if exports.anti:isPlayerAFK(source) then return end
 	local str = rankSuffix(rank)
-	if not areRewardsActivated() then
-		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but ' .. minPlayers .. ' or more players required to get GCs', root, 0, 255, 0, true)
-	else
-	-- elseif isPlayerLoggedInGC(player) then
-		local reward = getRewardAmount(rewardDD[rank])
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
-	-- else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
-	end		
+	-- Check for active players in 'no respawn' gamemodes
+	if getActivePlayerCount() < 3 then
+		outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 finished ' .. rank .. str .. ' but 3 or more active players are required to get GC', root, 0, 255, 0, true)
+		return
+	end
+	local reward = rewardDD[rank]
+	reward = vipRewardMult(source,reward)
+	if isHoliday() then reward = reward * 2 end
+	reward = getRewardAmount(reward)
+	addPlayerGreencoins(source, reward)
+	outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 end
 addEvent('onPlayerFinishDD')
 addEventHandler('onPlayerFinishDD', root, ddFinish)
@@ -501,14 +492,11 @@ addEventHandler('onPlayerWinDD', root, ddWin)
 function onDDPlayerKill()
 	if modename ~= "Destruction derby" or not rewardKill then return end
 	local player = source
-	if areRewardsActivated() then
-		local reward = rewardKill
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
-	else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
-	end		
+	local reward = rewardKill
+	if isHoliday() then reward = reward * 2 end
+	addPlayerGreencoins(player, reward)
+	outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
+	
 end
 addEvent('onDDPlayerKill')
 addEventHandler('onDDPlayerKill', root, onDDPlayerKill)
@@ -522,45 +510,35 @@ local rewardRTFwinner = 20	-- greencoins
 function RTFfinish( rank, time )
 	if modename ~= "Reach the flag" then return end
 	local player = source
-
-	if not areRewardsActivated() then
-		outputChatBox( prefix .. getPlayerName(player) .. '#00FF00 has reached the flag first but ' .. minPlayers.. ' or more players are required to get GCs', root, 0, 255, 0, true)
-	else
-	-- elseif isPlayerLoggedInGC(player) then
-		local reward = getRewardAmount(rewardRTFwinner)
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix..getPlayerName(player)..'#00FF00 has earned '.. reward .. ' GC for reaching the flag first! ', root, 0, 255, 0, true)
-	-- else
-		-- outputChatBox(prefix..getPlayerName(player)..'#00FF00 reached the flag first but wasn\'t logged in!', root, 0, 255, 0, true)
-	end
+	local reward = rewardRTFwinner
+	reward = vipRewardMult(player,reward)
+	if isHoliday() then reward = reward * 2 end
+	reward = getRewardAmount(reward)
+	addPlayerGreencoins(player, reward)
+	outputChatBox(prefix..getPlayerName(player)..'#00FF00 has earned '.. reward .. ' GC for reaching the flag first! ', root, 0, 255, 0, true)
 end
 addEventHandler("onPlayerFinish", root, RTFfinish)
 
 
----------------
----   NTS   ---
----------------
+-- ---------------
+-- ---   NTS   ---
+-- ---------------
 
-rewardNTS = {16, 12, 8, 5, 3}
-function NTSfinish( rank, time )
-	if modename ~= "Never the same" or not rewardNTS[rank] then return end
-	local player = source
+-- rewardNTS = {16, 12, 8, 5, 3}
+-- function NTSfinish( rank, time )
+-- 	if modename ~= "Never the same" or not rewardNTS[rank] then return end
+-- 	local player = source
 
-	local str = rankSuffix(rank)
-	if not areRewardsActivated() then
-		outputChatBox(prefix .. getPlayerName(player) ..'#00FF00 finished ' .. rank .. str .. ' but ' .. minPlayers .. ' or more players required to get GCs', root, 0, 255, 0, true)
-	else
-	-- elseif isPlayerLoggedInGC(player) then
-		local reward = getRewardAmount(rewardNTS[rank])
-		if isHoliday() then reward = reward * 2 end
-		addPlayerGreencoins(player, reward)
-		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
-	-- else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
-	end		
-end
-addEventHandler("onPlayerFinish", root, NTSfinish)
+-- 	local str = rankSuffix(rank)
+-- 	local reward = getRewardAmount(rewardNTS[rank])
+-- 	reward = vipRewardMult(player,reward)
+-- 	if isHoliday() then reward = reward * 2 end
+-- 	reward = lowPopModifier(reward)
+-- 	addPlayerGreencoins(player, reward)
+-- 	outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
+	
+-- end
+-- addEventHandler("onPlayerFinish", root, NTSfinish)
 
 
 -------------------
@@ -581,13 +559,11 @@ function manhuntFinish (player, rank)
 	if not areRewardsActivated() then
 		outputChatBox(prefix .. getPlayerName(player) ..'#00FF00 finished ' .. rank .. str .. ' but ' .. minPlayers .. ' or more players required to get GCs', root, 0, 255, 0, true)
 	else
-	-- elseif isPlayerLoggedInGC(player) then
 		local reward = getRewardAmount(rewardManhunt[rank])
+		reward = vipRewardMult(player,reward)
 		if isHoliday() then reward = reward * 2 end
 		addPlayerGreencoins(player, reward)
 		outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
-	-- else
-		-- outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 finished ' .. rank .. str .. ' but wasn\'t logged in', root, 0, 255, 0, true)
 	end
 end
 addEventHandler("onManhuntRoundEnded", root, onManhuntRoundEnded)
@@ -600,12 +576,12 @@ addEventHandler("onManhuntRoundEnded", root, onManhuntRoundEnded)
 function getRewardAmount(amount)
 	local lowPopMultiplier = 0
 	local pCnt = getPlayerCount()
-	if pCnt >= 3 and pCnt < 8 then 
+	if pCnt < 5 then 
 		lowPopMultiplier = 0.5 
-	elseif pCnt >= 8 then
+	else
 		lowPopMultiplier = 1
 	end
-	local endReward = math.floor(amount * lowPopMultiplier)
+	local endReward = math.ceil(amount * lowPopMultiplier)
 
 	if endReward < 1 then endReward = 1 end -- prevent from giving 0 gc
 
@@ -617,25 +593,6 @@ function math.round(number, decimals, method)
     local factor = 10 ^ decimals
     if (method == "ceil" or method == "floor") then return math[method](number * factor) / factor
     else return tonumber(("%."..decimals.."f"):format(number)) end
-end
-
-function doesTableExist ( name )
-	if type(name) ~= "string" then
-		outputDebugString("doesTableExist: #1 not a string", 1)
-		return false
-	end
-	name = safeString (name)
-	local cmd = "SELECT tbl_name FROM sqlite_master WHERE tbl_name = ?"
-	local results = executeSQLQuery( cmd, name )
-	return results and (#results > 0)
-end
-
-function safeString(s)
-    s = string.gsub(s, '&', '&amp;')
-    s = string.gsub(s, '"', '&quot;')
-    s = string.gsub(s, '<', '&lt;')
-    s = string.gsub(s, '>', '&gt;')
-    return s
 end
 
 function rankSuffix(rank)
@@ -666,4 +623,12 @@ function comma_value(amount)
     end
   end
   return formatted
+end
+
+function vipRewardMult(player, theReward)
+	if not player then return theReward end
+	if getResourceFromName('mrgreen-vip') and getResourceState(getResourceFromName('mrgreen-vip')) == "running" and exports['mrgreen-vip']:isPlayerVIP(player) then
+		return math.ceil(theReward * 1.5)
+	end
+	return theReward
 end

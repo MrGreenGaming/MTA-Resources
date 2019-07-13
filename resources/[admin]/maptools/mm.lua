@@ -1,4 +1,4 @@
-local maxuploaded_maps = 3
+local maxuploaded_maps = 5
 
 -------------
 -- newMap --
@@ -6,21 +6,32 @@ local maxuploaded_maps = 3
 
 local uploadedfolder = "[maps]\\[uploadedmaps]"
 
-function newMap(map, forumid, mta_name)
+function informNewMap()
+	-- Server gets informed about a new map, so we can refresh.
+	-- Web server will await, to give time for MTA server to refresh
+	-- This all to avoid "loading failed", because refreshing takes some time
+	outputDebugString('Web requested a resource refresh')
+	refreshResources()
+	return true
+end
+
+function newMap(map, forumid, mta_name, mapComment)
 	local mapname = tostring(map) .. '_newupload'
 	outputDebugString('newMap ' .. mapname)
-	refreshResources()
-	setTimer(refreshResources, 2000, 1)
+	if mapComment and tostring(mapComment) == 'false' then
+		mapComment = false
+	end
+
 	local mapres = getResourceFromName(map)
 	if mapres then
 		if getResourceInfo(mapres, "forumid") then
 			if getResourceInfo(mapres, "forumid") ~= tostring(forumid) then
-				return 'This mapname is already in use on the server, only ' .. getResourceInfo(mapres, "mta_name") .. ' can update ' .. map, ''
+				return 'This mapname is already in use on the server, only ' .. tostring(getResourceInfo(mapres, "mta_name")) .. ' can update ' .. map
 			end
-		-- else
-			-- outputDebugString('new map already exists ' .. map)
-			-- outputConsole('new map already exists ' .. map)
-			-- return 'This map is already on the server (' .. map .. '), contact a mapmanager if you want to update it', ''
+		else
+			outputDebugString('new map already exists ' .. map)
+			outputConsole('new map already exists ' .. map)
+			return 'This map is already on the server (' .. map .. '), contact a mapmanager if you want to update it', ''
 		end
 	else
 		local mapsInQ = 0
@@ -30,14 +41,14 @@ function newMap(map, forumid, mta_name)
 			end
 		end
 		if mapsInQ >= maxuploaded_maps then
-			return 'You already have the max amount of maps (' .. maxuploaded_maps .. ') uploaded, wait untill a mapmanager tests your maps before uploading another one', ''
+			return 'You already have the max amount of maps (' .. maxuploaded_maps .. ') uploaded, wait untill a mapmanager tests your maps before uploading another one'
 		end
 	end
 	local res = getResourceFromName(mapname)
 	if not res then
 		outputDebugString('loading failed ' .. mapname)
 		outputConsole('loading failed ' .. mapname)
-		return 'Could not load ' .. tostring(map), ''
+		return 'MTA: Could not load ' .. tostring(map)
 	end
 	
 	local s = getResourceLoadFailureReason(res)
@@ -45,16 +56,33 @@ function newMap(map, forumid, mta_name)
     setResourceInfo(res, "forumid", tostring(forumid))
     setResourceInfo(res, "mta_name", mta_name)
     setResourceInfo(res, "uploadtick", tostring(getRealTime().timestamp))
-	if s ~= '' then
+    if mapComment then
+    	setResourceInfo(res, "uploadercomment", tostring(mapComment))
+	end
+
+	if s ~= '' or not s then
 		if getResourceState(res) == "running" then
 			stopResource(res)
 		end
 		deleteResource(mapname)
 		outputDebugString(s..': deleting ' .. mapname)
 		outputConsole(s..': deleting ' .. mapname)
+		return 'MTA: Loading ' .. tostring(map) .. ' failed. ('..tostring(s)..')'
 	end
-	return tostring(s), mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "Update" or "New"
+
+	notifyMapManagers(mta_name, map, mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "updated a map" or "uploaded a new map")
+	local theStatus = mapres and getResourceInfo(mapres, "forumid") == tostring(forumid) and "Update" or "New"
+
+	-- Insert upload into DB
+	if handlerConnect then
+		local query = "INSERT INTO uploaded_maps (forumid, resname, uploadername, comment, status) VALUES (?,?,?,?,?)"
+		local theExec = dbExec ( handlerConnect, query, forumid, map, mta_name, mapComment or '', theStatus)
+	end
+
+	return {true, theStatus}
 end
+
+
 
 function handlemap(p, c, resname, ...)
 	if not handlerConnect or not resname then return false end
@@ -73,6 +101,11 @@ function handlemap(p, c, resname, ...)
 	local comment = table.concat({...}, ' ')
 	local manager = tostring(getAccountName(getPlayerAccount(p)))
 	local status = (c == "acceptmap" and "Accepted" or "Declined")
+
+	if res and getResourceInfo(res, 'forumid') then
+		notifyMapAction(getResourceInfo(res, "name"), '', manager, resname, string.lower(status), getResourceInfo(res, 'forumid'))
+	end
+
 	if c == "acceptmap" then
 		if getResourceFromName(resname) then
 			deleteResource(getResourceFromName(resname))
@@ -83,6 +116,7 @@ function handlemap(p, c, resname, ...)
 	deleteResource(mapname)
 	local query = "INSERT INTO uploaded_maps (resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?)"
 	local theExec = dbExec ( handlerConnect, query, resname, mta_name, comment, manager, status)
+	
 	outputChatBox(c..': done ' .. resname, p)
 	fetchMaps(p)
 end
@@ -97,6 +131,40 @@ function checkDeleteMap()
 end
 addEventHandler('onMapStarting', root, checkDeleteMap)
 
+-- Output map uploader's comment when a map get's tested.
+function outputUploaderComment(mapInfo)
+	if getResourceInfo(exports.mapmanager:getRunningGamemodeMap(), 'newupload') == "true" then
+		-- Map is being tested
+		local theRes = getResourceFromName( mapInfo.resname )
+		if not theRes then return end
+
+		local theName = getResourceInfo(theRes,'mta_name')
+		local theComment = getResourceInfo(theRes,'uploadercomment')
+
+		if theName then
+			outputChatBox(' ')
+			outputChatBox('Map uploaded by: #FFFFFF'..tostring(theName),root,0,255,100, true)
+		end
+
+		if theComment and tostring(theComment) ~= 'false' then
+			outputChatBox('Map Uploader Comment: #FFFFFF'..tostring(theComment),root,0,255,100, true)
+			outputChatBox(' ')
+		end
+
+		
+	end
+end
+addEventHandler('onMapStarting', root, outputUploaderComment)
+
+function notifyMapManagers(name, mapName, action)
+	action = action or 'uploaded a map'
+	for i, player in ipairs(getElementsByType('player')) do
+		if hasObjectPermissionTo( player, 'command.declinemap', false ) then
+			-- Is MM or higher
+			outputChatBox('[Map Manager]: '..tostring(name)..' has '..action..' "'..tostring(mapName)..'".',player,0,255,100)
+		end
+	end
+end
 
 --facilitating map deletion--
 
@@ -139,6 +207,7 @@ function onNewMapStart()
     setResourceInfo(map,"deleteReason",g_Reason)
     setResourceInfo(map,"deletedBy",g_AccName)
     setResourceInfo(map,"deleteTimeStamp",tostring(getRealTime().timestamp))
+    local authorForumId = getResourceInfo( theRes, 'forumid' )
 
     -- Check if copied deleted resource exists, if so then delete first.
     if getResourceFromName( resname.."_deleted" ) then
@@ -161,7 +230,7 @@ function onNewMapStart()
     if isElement(g_P) then
         outputChatBox("Map deleted: "..name, g_P)
     end
-    addMapDeletionRecord(name,authr,g_Reason,g_AccName,resname)
+    addMapDeletionRecord(name,authr,g_Reason,g_AccName,resname,authorForumId)
 
     refreshResources()
     canUseCommand = true
@@ -206,13 +275,21 @@ function(p,_,...)
 end
 )
 
-function addMapDeletionRecord(mapname,author,reason,adminName,resname)
+function addMapDeletionRecord(mapname,author,reason,adminName,resname,authorForumId)
 	connectToDB() -- Retry db connection
 	if handlerConnect then -- if there is db connection, else save in local db file
 		moveMapDeletionCache()
 
 		local query = "INSERT INTO uploaded_maps (mapname, uploadername, comment, manager, resname, status) VALUES (?,?,?,?,?,'Deleted')"
 		dbExec ( handlerConnect, query,tostring(mapname),tostring(author),tostring(reason),tostring(adminName),tostring(resname)  )
+
+		-- Move tops to toptimes_deleted
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.mapname = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, 'Map Deletion', adminName or '', resname)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ? ', resname)
+
 	else -- save to local db
 		local theXML = xmlLoadFile("mapdeletioncache.xml")
 		if not theXML then
@@ -230,11 +307,50 @@ function addMapDeletionRecord(mapname,author,reason,adminName,resname)
 
 		xmlSaveFile(theXML)
 		xmlUnloadFile(theXML)
+	end
 
-
+	-- Notify API for personal message sending
+	if authorForumId and tonumber(authorForumId) then
+		notifyMapAction(mapname, reason, adminName, resname, 'deleted', authorForumId)
 
 	end
 end
+
+function notifyMapAction(mapname, reason, adminName, resname, status, authorForumId)
+	if not status or not authorForumId then return end
+	outputDebugString('Status: '..tostring(status))
+	local fetchOptions = {
+        queueName = "mapToolsNotify",
+        connectionAttempts = 3,
+        connectTimeout = 5000,
+        method = "POST",
+        postData = toJSON({
+            forumid = tonumber(authorForumId),
+            admin = tostring(adminName),
+            mapname = tostring(mapname),
+            resname = tostring(resname),
+            reason = tostring(reason),
+            mapstatus = tostring(status),
+            appId = get("gc.appId"),
+            appSecret = get("gc.appSecretPass")
+        }, true),
+        headers = {
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
+        }
+    }
+
+	fetchRemote("https://mrgreengaming.com/api/mapupload/notifymapaction", fetchOptions, function(res, info)
+        if not info.success or not res then
+            if not res then
+                res = "EMPTY"
+            end
+            outputDebugString("NotifyMapAction: invalid response (status " .. info.statusCode .. "). Res: " .. res, 1)
+            return
+        end
+    end)
+end
+
 
 function moveMapDeletionCache() -- Moves from cache xml to mysql db
 	if not handlerConnect then return false end
@@ -254,7 +370,13 @@ function moveMapDeletionCache() -- Moves from cache xml to mysql db
 
 		local query = "INSERT INTO uploaded_maps (mapname, uploadername, comment, manager, resname, status) VALUES (?,?,?,?,?,'Deleted')"
 		local theExec = dbExec ( handlerConnect, query,tostring(mapname),tostring(author),tostring(reason),tostring(adminName),tostring(resname)  )
-
+		-- Move tops to toptimes_deleted
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.mapname = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, 'Map Deletion', adminName or '', resname)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ? ', resname)
+		
 		if theExec then
 			xmlDestroyNode(child)
 		end
@@ -433,6 +555,11 @@ function restoreMap(map)
 			local query = "INSERT INTO uploaded_maps (mapname, uploadername, manager, resname, status) VALUES (?,?,?,?,'Restored')"
 			dbExec ( handlerConnect, query,getResourceInfo(theCopy, "name") or properName,getResourceInfo(theCopy,"author") or "N/A",tostring(getAccountName(getPlayerAccount(client))),properName)
 		end
+
+		if getResourceInfo(theCopy, 'forumid') then
+			notifyMapAction(getResourceInfo(theCopy, "name"), '', getAccountName(getPlayerAccount(client)), map.resname, 'restored', getResourceInfo(theCopy, 'forumid'))
+		end
+
         outputChatBox("Map '".. getResourceName(theCopy) .."' restored!",client)
         refreshResources()
         fetchMaps(client)
@@ -464,6 +591,7 @@ function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
         setResourceInfo(theRes,"deleteReason",reason)
         setResourceInfo(theRes,"deletedBy",adminAccName)
         setResourceInfo(theRes,"deleteTimeStamp",tostring(getRealTime().timestamp))
+        local authorForumId = getResourceInfo( theRes, 'forumid' )
 
 		-- Check if copied deleted resource exists, if so then delete first.
 		if getResourceFromName( map.resname.."_deleted" ) then
@@ -480,7 +608,7 @@ function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
         if isElement(client) then
             outputChatBox("Map deleted: "..tostring(map.name),client)
         end
-        addMapDeletionRecord(map.name,map.author,reason,adminAccName,map.resname)
+        addMapDeletionRecord(map.name,map.author,reason,adminAccName,map.resname,authorForumId)
 
 
         
@@ -530,3 +658,129 @@ function editFileFromGUI(map,src) -- Admin editing file via the gui
     end
 end
 addEventHandler("editfile",root,editFileFromGUI)
+
+
+function var_dump(...)
+	-- default options
+	local verbose = false
+	local firstLevel = true
+	local outputDirectly = true
+	local noNames = false
+	local indentation = "\t\t\t\t\t\t"
+	local depth = nil
+
+	local name = nil
+	local output = {}
+	for k,v in ipairs(arg) do
+		-- check for modifiers
+		if type(v) == "string" and k < #arg and v:sub(1,1) == "-" then
+			local modifiers = v:sub(2)
+			if modifiers:find("v") ~= nil then
+				verbose = true
+			end
+			if modifiers:find("s") ~= nil then
+				outputDirectly = false
+			end
+			if modifiers:find("n") ~= nil then
+				verbose = false
+			end
+			if modifiers:find("u") ~= nil then
+				noNames = true
+			end
+			local s,e = modifiers:find("d%d+")
+			if s ~= nil then
+				depth = tonumber(string.sub(modifiers,s+1,e))
+			end
+		-- set name if appropriate
+		elseif type(v) == "string" and k < #arg and name == nil and not noNames then
+			name = v
+		else
+			if name ~= nil then
+				name = ""..name..": "
+			else
+				name = ""
+			end
+
+			local o = ""
+			if type(v) == "string" then
+				table.insert(output,name..type(v).."("..v:len()..") \""..v.."\"")
+			elseif type(v) == "userdata" then
+				local elementType = "no valid MTA element"
+				if isElement(v) then
+					elementType = getElementType(v)
+				end
+				table.insert(output,name..type(v).."("..elementType..") \""..tostring(v).."\"")
+			elseif type(v) == "table" then
+				local count = 0
+				for key,value in pairs(v) do
+					count = count + 1
+				end
+				table.insert(output,name..type(v).."("..count..") \""..tostring(v).."\"")
+				if verbose and count > 0 and (depth == nil or depth > 0) then
+					table.insert(output,"\t{")
+					for key,value in pairs(v) do
+						-- calls itself, so be careful when you change anything
+						local newModifiers = "-s"
+						if depth == nil then
+							newModifiers = "-sv"
+						elseif  depth > 1 then
+							local newDepth = depth - 1
+							newModifiers = "-svd"..newDepth
+						end
+						local keyString, keyTable = var_dump(newModifiers,key)
+						local valueString, valueTable = var_dump(newModifiers,value)
+						
+						if #keyTable == 1 and #valueTable == 1 then
+							table.insert(output,indentation.."["..keyString.."]\t=>\t"..valueString)
+						elseif #keyTable == 1 then
+							table.insert(output,indentation.."["..keyString.."]\t=>")
+							for k,v in ipairs(valueTable) do
+								table.insert(output,indentation..v)
+							end
+						elseif #valueTable == 1 then
+							for k,v in ipairs(keyTable) do
+								if k == 1 then
+									table.insert(output,indentation.."["..v)
+								elseif k == #keyTable then
+									table.insert(output,indentation..v.."]")
+								else
+									table.insert(output,indentation..v)
+								end
+							end
+							table.insert(output,indentation.."\t=>\t"..valueString)
+						else
+							for k,v in ipairs(keyTable) do
+								if k == 1 then
+									table.insert(output,indentation.."["..v)
+								elseif k == #keyTable then
+									table.insert(output,indentation..v.."]")
+								else
+									table.insert(output,indentation..v)
+								end
+							end
+							for k,v in ipairs(valueTable) do
+								if k == 1 then
+									table.insert(output,indentation.." => "..v)
+								else
+									table.insert(output,indentation..v)
+								end
+							end
+						end
+					end
+					table.insert(output,"\t}")
+				end
+			else
+				table.insert(output,name..type(v).." \""..tostring(v).."\"")
+			end
+			name = nil
+		end
+	end
+	local string = ""
+	for k,v in ipairs(output) do
+		if outputDirectly then
+			outputConsole(v)
+		end
+		string = string..v
+	end
+	return string, output
+end

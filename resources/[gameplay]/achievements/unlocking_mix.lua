@@ -8,6 +8,8 @@ achievementListMix = {
 	{ s = "CTF: Capture the winning flag when the score is tied",		id = 30,	reward = 75 },
 	{ s = "CTF: Capture the flag 20 times", 							id = 31, 	reward = 100,	max = 20 },
 	{ s = "CTF: Capture the flag 100 times", 							id = 32, 	reward = 300,	max = 100 },
+	{ s = "CTF: Capture the flag 500 times", 							id = 37, 	reward = 500,	max = 500 },
+	{ s = "CTF: Capture the flag 1000 times", 							id = 38, 	reward = 1000,	max = 1000 },
 	{ s = "CTF: Capture the winning flag 10 times", 					id = 3, 	reward = 200,	max = 10 },
 	-- { s = "CTF: Win 5 rounds", 										id = 10, 	reward = 75,	max = 5  },
 	-- { s = "CTF: Win 20 rounds", 										id = 11, 	reward = 200,	max = 20 },
@@ -17,9 +19,14 @@ achievementListMix = {
 	{ s = "DD: Monster Kill - Accumulate 8 kills in 2 rounds", 			id = 5, 	reward = 200 },
 	{ s = "DD: UNSTOPPABLE!! - Accumulate 10 kills in 3 rounds", 		id = 6, 	reward = 300 },
 	{ s = "DD: Win 5 rounds", 											id = 13,	reward = 75,	max = 5  },
-	{ s = "DD: Win 20 rounds", 											id = 14,	reward = 200,	max = 20 },
+	{ s = "DD: Win 20 rounds", 											id = 14,	reward = 200, max = 20 },
+	{ s = "DD: Win 100 rounds", 										id = 39,	reward = 500,	max = 100 },
+	{ s = "DD: Win 500 rounds", 										id = 40,	reward = 1000,	max = 500 },
+	{ s = "DD: Win 1000 rounds", 										id = 41,	reward = 5000,	max = 1000 },
 	{ s = "DD: Make 20 kills", 											id = 15,	reward = 100,	max = 20 },
 	{ s = "DD: Make 200 kills", 										id = 16,	reward = 300,	max = 200 },
+	{ s = "DD: Make 500 kills", 										id = 42,	reward = 500,	max = 500 },
+	{ s = "DD: Make 1000 kills", 										id = 43,	reward = 1000,	max = 1000 },
 	{ s = "DD: Win a round on fire", 										id = 34,	reward = 300},
 	
 	{ s = "SH: Spectator - Be the first to get killed", 				id = 28, 	reward = 15 },
@@ -28,16 +35,26 @@ achievementListMix = {
 	{ s = "SH: Terminator - Accumulate 10 kills in 3 rounds",			id = 9, 	reward = 300 },
 	{ s = "SH: Win 5 rounds", 											id = 17,	reward = 75,	max = 5  },
 	{ s = "SH: Win 20 rounds", 											id = 18,	reward = 200,	max = 20 },
+	{ s = "SH: Win 50 rounds", 											id = 44,	reward = 500,	max = 50 },
+	{ s = "SH: Win 500 rounds", 										id = 45,	reward = 1000,	max = 500 },
+	{ s = "SH: Win 1000 rounds", 										id = 46,	reward = 5000,	max = 1000 },
 	{ s = "SH: Make 20 kills", 											id = 19,	reward = 100,	max = 20 },
 	{ s = "SH: Make 200 kills", 										id = 20,	reward = 300,	max = 200 },
+	{ s = "SH: Make 500 kills", 										id = 35,	reward = 500,	max = 500 },
+	{ s = "SH: Make 1000 kills", 										id = 36,	reward = 1000,	max = 1000 },
 	
 	{ s = "NTS: Finish the map NTS-Marathon", 							id = 21,	reward = 75 },
 	{ s = "NTS: Win the map NTS-Marathon", 								id = 22,	reward = 200 },
 	{ s = "NTS: Finish the map NTS-Sunday on a sunday", 				id = 23,	reward = 100 },
 	{ s = "NTS: Finish 20 times", 										id = 24,	reward = 100,	max = 20 },
 	{ s = "NTS: Finish 200 times", 										id = 25,	reward = 300,	max = 200 },
+	{ s = "NTS: Finish 500 times", 										id = 47,	reward = 500,	max = 500 },
+	{ s = "NTS: Finish 1000 times", 									id = 48,	reward = 1000,	max = 1000 },
 	{ s = "NTS: Win 5 times", 											id = 26,	reward = 75,	max = 5 },
 	{ s = "NTS: Win 20 times", 											id = 27,	reward = 200,	max = 20 },
+	{ s = "NTS: Win 50 times", 											id = 49,	reward = 500,	max = 50 },
+	{ s = "NTS: Win 100 times", 										id = 50,	reward = 1000,	max = 100 },
+	{ s = "NTS: Win 500 times", 										id = 51,	reward = 5000,	max = 500 },
 	
 	{ s = "MIX: Besweeet award", 										id = 33,	reward = 44,	max = 4 },
 }
@@ -94,6 +111,8 @@ function CTFFlagDelivered()
 	end
 	addAchievementProgressMix ( player, 31, 1 )
 	addAchievementProgressMix ( player, 32, 1 )
+	addAchievementProgressMix ( player, 37, 1 )
+	addAchievementProgressMix ( player, 38, 1 )
 end
 addEventHandler('onCTFFlagDelivered', root, CTFFlagDelivered)
 
@@ -142,9 +161,12 @@ function playerFinishDD (player, rank)
 	if rank == 1 then
 		addAchievementProgressMix ( player, 13, 1 )
 		addAchievementProgressMix ( player, 14, 1 )
-		if math.ceil( getElementHealth (  getPedOccupiedVehicle ( localPlayer ) ) /10 ) <= 25 then
-			addPlayerAchievementMix ( target, 34 )
-			end
+		addAchievementProgressMix ( player, 39, 1 )
+		addAchievementProgressMix ( player, 40, 1 )
+		addAchievementProgressMix ( player, 41, 1 )
+		if isElement(getPedOccupiedVehicle ( player )) and math.ceil( getElementHealth (  getPedOccupiedVehicle ( player ) ) /10 ) <= 25 then
+			addPlayerAchievementMix ( player, 34 )
+		end
 	elseif rank == 4 then
 		addAchievementProgressMix ( player, 33, 1 )
 	end
@@ -158,6 +180,8 @@ addEventHandler('onPlayerWinDD', root, function() playerFinishDD(source, 1) end)
 function onDDPlayerKill(target)
 	addAchievementProgressMix ( source, 15, 1 )
 	addAchievementProgressMix ( source, 16, 1 )
+	addAchievementProgressMix ( source, 42, 1 )
+	addAchievementProgressMix ( source, 43, 1 )
 	if isFirstKill then
 		isFirstKill = false
 		addPlayerAchievementMix ( target, 29 )
@@ -190,6 +214,9 @@ function playerFinishShooter (player, rank)
 	if rank == 1 then
 		addAchievementProgressMix ( player, 17, 1 )
 		addAchievementProgressMix ( player, 18, 1 )
+		addAchievementProgressMix ( player, 44, 1 )
+		addAchievementProgressMix ( player, 45, 1 )
+		addAchievementProgressMix ( player, 46, 1 )
 	elseif rank == 4 then
 		addAchievementProgressMix ( player, 33, 1 )
 	end
@@ -203,6 +230,8 @@ addEventHandler('onPlayerWinShooter', root, function() playerFinishShooter(sourc
 function onShooterPlayerKill(target)
 	addAchievementProgressMix ( source, 19, 1 )
 	addAchievementProgressMix ( source, 20, 1 )
+	addAchievementProgressMix ( source, 35, 1 )
+	addAchievementProgressMix ( source, 36, 1 )
 	if isFirstKill then
 		isFirstKill = false
 		addPlayerAchievementMix ( target, 28 )
@@ -236,9 +265,14 @@ function NTSfinish( rank, time )
 	end
 	addAchievementProgressMix ( source, 24, 1 )
 	addAchievementProgressMix ( source, 25, 1 )
+	addAchievementProgressMix ( source, 47, 1 )
+	addAchievementProgressMix ( source, 48, 1 )
 	if rank == 1 then
 		addAchievementProgressMix ( source, 26, 1 )
 		addAchievementProgressMix ( source, 27, 1 )
+		addAchievementProgressMix ( source, 49, 1 )
+		addAchievementProgressMix ( source, 50, 1 )
+		addAchievementProgressMix ( source, 51, 1 )
 	elseif rank == 4 then
 		addAchievementProgressMix ( player, 33, 1 )
 	end

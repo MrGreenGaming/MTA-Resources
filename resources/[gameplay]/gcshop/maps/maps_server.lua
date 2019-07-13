@@ -101,13 +101,32 @@ function sortCompareFunction(s1, s2)
     end
 end
 
+local function isPlayerStaff(player)
+    local freeForAcl = {
+        'ServerManager',
+        'mapmanager',
+        'Developer'
+    }
+
+    local accountName = getAccountName( getPlayerAccount(player) )
+    if accountName ~= "guest" then
+        local isInAcl = false
+        for _, name in ipairs(freeForAcl) do
+            if isObjectInACLGroup( "user."..accountName, aclGetGroup(name) ) then
+                isInAcl = true
+                break
+            end
+        end
+        return isInAcl
+    end
+    return false
+end
+
 addEvent('sendPlayerNextmapChoice', true)
 addEventHandler('sendPlayerNextmapChoice', root,
 function(choice)
-    if not hasObjectPermissionTo(source, "command.deletemap", false) then -- Check for map bought amount if not admin
-        if isDailyLimitReached(tostring(choice[2])) then return end
-    end
-	
+    local isFreeMap = isPlayerStaff(source)
+    if not isFreeMap and isDailyLimitReached(tostring(choice[2])) then return end -- Check for map bought amount if not admin
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
 
     if isPlayerEligibleToBuy(source, choice) then
@@ -115,7 +134,15 @@ function(choice)
             queue(choice, source)
         else
 			local mapprice = source == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode)
-            outputChatBox("[Maps-Center] You do not have enough GCs to buy a nextmap. Current price: "..tostring(mapprice), source, 255, 0, 0)--here
+            local vipIsRunning = getResourceState( getResourceFromName( "mrgreen-vip" ) ) == "running"
+			if vipIsRunning and exports['mrgreen-vip']:isPlayerVIP(source) then
+				mapprice = (mapprice / 100) * 90
+			end
+
+            if vipIsRunning and exports['mrgreen-vip']:canBuyVipMap(source) then
+                mapprice = 0
+            end
+            outputChatBox("[Maps-Center] You do not have enough GCs to buy a nextmap. Current price: "..tostring(mapprice), source, 255, 0, 0)
         end
     else
         outputChatBox("[Maps-Center] Error. You can only queue one map, you're not logged in or map was deleted", source, 255, 0, 0)
@@ -195,7 +222,9 @@ function queue(choice, player)
 	choice.forumID = exports.gc:getPlayerForumID(player)
     table.insert(myQueue, choice)
     outputChatBox("[Maps-Center] "..getPlayerName(player):gsub( '#%x%x%x%x%x%x', '' ).." has queued a next-map!", root, 0, 255, 0)
-	exports.irc:outputIRC("12*** Map queued by " .. getPlayerName(source):gsub( '#%x%x%x%x%x%x', '' ) .. ": 1" .. choice[1] )
+    if getResourceState( getResourceFromName('irc') ) == 'running' then
+        exports.irc:outputIRC("12*** Map queued by " .. getPlayerName(source):gsub( '#%x%x%x%x%x%x', '' ) .. ": 1" .. choice[1] )
+    end
     outputChatBox("[Maps-Center] Your next map current queue number: "..#myQueue, player, 0, 255, 0)
     triggerClientEvent('onTellClientPlayerBoughtMap', player, choice[1], #myQueue)
     triggerEvent('onNextmapSettingChange', root, getResourceFromName(myQueue[1][2]))
@@ -245,15 +274,28 @@ function isPlayerEligibleToBuy(player, choice)
 end
 
 function playerHasBoughtMap(player, choice)
-    if (hasObjectPermissionTo(player, "command.deletemap", false)) then  --if admin then dont take GC
+    if (isPlayerStaff(player)) then  -- Free for acl objects specified in isPlayerStaff
 		return true
 	end
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
 	local mapprice = player == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode) --if the player is the last winner it gives them the price discounted by 'lastWinnerDiscount' percent, if not it takes the regular price
+	local vipIsRunning = getResourceState( getResourceFromName( "mrgreen-vip" ) ) == "running"
+    if exports["mrgreen-vip"]:isPlayerVIP(player) then
+		mapprice = (mapprice / 100) * 90 -- 10% off if he is vip
+	end
+    local isVipBuy = false
+    if vipIsRunning and exports['mrgreen-vip']:canBuyVipMap(source) then
+        isVipBuy = true
+        mapprice = 0
+    end
+
 	local money = exports.gc:getPlayerGreencoins(player)
-    if money < mapprice then return false end
-    -- exports.gc:addPlayerGreencoins(player, PRICE*(-1))
+    if not isVipBuy and money < mapprice then return false end
+
 	local ok = gcshopBuyItem ( player, mapprice, 'Map: ' .. choice[1])
+    if isVipBuy and ok then
+        exports['mrgreen-vip']:playerUsedFreeVipMap(source)
+    end
     return ok
 end
 

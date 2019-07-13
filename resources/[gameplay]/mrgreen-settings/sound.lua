@@ -4,6 +4,7 @@ soundsoff = false
 local theResourcesName = {--Change names of the resources here if they are changed.
     ["announcer"] = "race_voicepack",
     ["horn"] = "gcshop",
+    ["viphorn"] = "mrgreen-vip",
     ["musicplayer"] = "sc-musicplayer",
 }
 
@@ -121,7 +122,9 @@ function soundHandling(reason)
     elseif theResource == theResources["horn"] then
         setElementData( theSound, "soundSource", "horn", false ) -- Mark sound for source
     	setVol("horn", source)
-
+    elseif theResource == theResources["viphorn"] then
+        setElementData( theSound, "soundSource", "horn", false ) -- Mark sound for source
+    	setVol("horn", source)
     elseif theResource == theResources["musicplayer"] then
         setElementData( theSound, "soundSource", "musicplayer", false ) -- Mark sound for source
     	setVol("musicplayer", source)

@@ -1,7 +1,12 @@
- Shooter = setmetatable({}, RaceMode)
+Shooter = setmetatable({}, RaceMode)
 Shooter.__index = Shooter
 
 Shooter:register('Shooter')
+
+-- Options
+local shooterJumpHeight = 0.25 -- Standard shooter jump height
+local shooterAutoRepairTimer = false
+
 
 local shooterMode = "shooter"
 function getShooterMode()
@@ -223,6 +228,7 @@ function Shooter:onPlayerWasted(player)
 		self.setPlayerIsFinished(player)
 		showBlipsAttachedTo(player, false)
 		clientCall(player, 'showOnlyHealthBar', false)
+		clientCall(player, 'initShooterClient', false)
 	end
 end
 
@@ -282,7 +288,7 @@ function Shooter:onPlayerJoin(player, spawnpoint)
 
 		local tick = getTickCount() + 5000
 
-		
+
 		bindKey(player, "vehicle_fire", "down", self.shoot)
 		bindKey(player, "vehicle_secondary_fire", "down", self.jump)
 		bindKey(player, "mouse2", "down", self.jump)
@@ -511,6 +517,40 @@ addEvent('onPlayerWinShooter')
 
 function Shooter:launch()
 	RaceMode.launch(self)
+	-- Read jump height from map
+	local jumpHeightSetting = (getNumber(g_MapInfo.resname..".shooter_jumpheight",0.25))
+	if jumpHeightSetting ~= 0.25 then
+		-- Map has different setting for jump height
+		-- Check if its within range
+		if jumpHeightSetting then
+			jumpHeightSetting = jumpHeightSetting / 10
+		end
+		local minJumpHeight = 0.2
+		local maxJumpHeight = 1.1
+		if not jumpHeightSetting then
+			jumpHeightSetting = shooterJumpHeight
+		elseif jumpHeightSetting < minJumpHeight or jumpHeightSetting > maxJumpHeight then
+			outputDebugString('Shooter: Map has a custom jump height, but is is outside of accepted range (Map setting: '..(jumpHeightSetting*10)..', min: - '..(minJumpHeight*10)..', max: '..(maxJumpHeight*10)..')')
+			jumpHeightSetting = shooterJumpHeight
+		else
+			outputDebugString('Shooter: Map has set custom jump height to: '..(jumpHeightSetting*10))
+		end
+	end
+	
+	-- Check and init auto repair
+	local autoRepairSetting = getBool(g_MapInfo.resname..".shooter_autorepair",false)
+	if autoRepairSetting then
+		if isTimer(shooterAutoRepairTimer) then
+			killTimer(shooterAutoRepairTimer)
+		end
+		-- Set auto repair timer
+		outputDebugString('Shooter: Auto repair initiated')
+		shooterAutoRepairTimer = setTimer( Shooter.autoRepair, 500, 0)
+	end
+	
+	-- Send jump height and autorepair to clients
+	clientCall(root, 'clientReceiveShooterSettings', jumpHeightSetting or false, autoRepairSetting)
+
 	if shooterMode == "cargame" then
 		Shooter.hasLaunched = true
 		clientCall(root, 'showLevelDX', true)
@@ -535,14 +575,18 @@ function Shooter:launch()
 		local tick = getTickCount() + 5000
 		for k, player in ipairs(getActivePlayers()) do
 
-			-- bindKey(player, "vehicle_fire", "down", function(p,k,s) self:shoot(p,k,s) end)
-			bindKey(player, "vehicle_fire", "down", self.shoot)
-			bindKey(player, "vehicle_secondary_fire", "down", self.jump)
-			bindKey(player, "mouse2", "down", self.jump)
+			-- bindKey(player, "vehicle_fire", "down", self.shoot)
+			-- bindKey(player, "vehicle_secondary_fire", "down", self.jump)
+			-- bindKey(player, "mouse2", "down", self.jump)
 			self.cooldowns[player] = {shoot = tick, jump = tick}
 		end
-		setTimer(showMessage, 4500, 1, "Press fire to shoot rockets and alt-fire/rmb to jump!", 0, 0, 255, root)
-		setTimer(function() clientCall(g_Root, 'sh_initTimeBars') end,4500,1)
+
+		if isTimer(launchTimer) then killTimer(launchTimer) end
+		launchTimer = setTimer(function()
+			showMessage("Press fire to shoot rockets and alt-fire/rmb to jump!", 0, 0, 255, root)
+			clientCall(g_Root, 'initShooterClient', true) 
+			clientCall(g_Root, 'sh_initTimeBars')
+		end,4500,1)
 	end
 end
 
@@ -653,6 +697,17 @@ function Shooter:onGamemodeMapStart()
 	end
 end
 
+function Shooter.autoRepair()
+	for i,player in ipairs(g_Players) do
+		local theVeh = getPedOccupiedVehicle(player)
+		if getElementType(player) == "player" and theVeh and getElementHealth(theVeh) > 249 and not isPlayerFinished(player) then
+			for i=0, 6 do
+				setVehiclePanelState(theVeh,i,0)
+				setVehicleDoorState(theVeh,i,0)
+			end
+		end
+	end
+end
 
 function Shooter.shoot(player, key, keyState)
 	if shooterMode == "cargame" then
@@ -782,6 +837,8 @@ end
 
 
 function Shooter:cleanup()
+	-- Reset Map custom jump/autorepair
+	clientCall(root, 'clientReceiveShooterSettings', false, false)
 	if shooterMode == "cargame" then
 
 		-- Remove binds and element data
@@ -808,19 +865,12 @@ function Shooter:cleanup()
 		end
 
 	else
+		if isTimer(launchTimer) then killTimer(launchTimer) end
 		clientCall(g_Root, 'sh_stopTimeBars')
-		-- Remove binds
-		for k, v in ipairs(getElementsByType'player') do
-			if isKeyBound(v, 'vehicle_fire', 'down', self.shoot) then
-				unbindKey(v, 'vehicle_fire', 'both', self.shoot)
-			end
-			if isKeyBound(v, 'vehicle_secondary_fire', 'down', self.jump) then
-				unbindKey(v, 'vehicle_secondary_fire', 'both', self.jump)
-			end
-			if isKeyBound(v, 'mouse2', 'down', self.jump) then
-				unbindKey(v, 'mouse2', 'both', self.jump)
-			end
-		end
+		clientCall(root, 'initShooterClient', false)
+	end
+	if isTimer(shooterAutoRepairTimer) then
+		killTimer(shooterAutoRepairTimer)
 	end
 end
 
@@ -871,6 +921,7 @@ function Shooter:destroy()
 		self.rankingBoard:destroy()
 		self.rankingBoard = nil
 	end
+	clientCall(g_Root, 'initShooterClient', false)
 	self:cleanup()
 	RaceMode.destroy(self)
 end
@@ -889,6 +940,56 @@ Shooter.modeOptions = {
 	ghostmode_map_can_override = false,
 }
 
+-- Map manager jumpheight command
+function Shooter.setNewJumpHeight(p, cmd, amount)
+	local acc = getAccountName(getPlayerAccount( p ))
+	if acc ~= 'guest' and isObjectInACLGroup( 'user.'..acc, aclGetGroup('mapmanager') ) then
+		local minJumpHeight = 2
+		local maxJumpHeight = 11
+		if amount and tonumber(amount) then
+			amount = tonumber(amount)
+		end
+		if amount > maxJumpHeight then 
+			outputChatBox('Jumpheight '..tostring(amount)..' is higher than the maximum: '..tostring(maxJumpHeight), p)
+			return
+		elseif amount < minJumpHeight then
+			outputChatBox('Jumpheight '..tostring(amount)..' is lower than the minimum: '..tostring(minJumpHeight), p)
+			return
+		elseif not g_MapInfo or g_MapInfo.metamode ~= 'shooter' then
+			outputChatBox('This command only works with shooter maps!', p)
+			return
+		else
 
-
-
+			local file = xmlLoadFile( ':'..g_MapInfo.resname..'/meta.xml' )
+			if not file then
+				outputChatBox('Could not open '..tostring(g_MapInfo.resname)..'/meta.xml', p)
+				return
+			end
+			local settings = xmlFindChild( file, 'settings', 0 )
+			if not settings then
+				settings = xmlCreateChild( file, 'settings' )
+			end
+			local children = xmlNodeGetChildren( settings )
+			local jumpHeightNode = false
+			for i, node in ipairs(children) do
+				if xmlNodeGetAttribute( node, 'name' ) == '#shooter_jumpheight' then
+					jumpHeightNode = node
+					break
+				end
+			end
+			if not jumpHeightNode then
+				jumpHeightNode = xmlCreateChild(settings, 'setting')
+				xmlNodeSetAttribute( jumpHeightNode, 'name', '#shooter_jumpheight' )
+				xmlNodeSetAttribute( jumpHeightNode, 'value', amount )
+			else
+				xmlNodeSetAttribute(jumpHeightNode, 'value', amount)
+			end
+			xmlSaveFile( file )
+			xmlUnloadFile( file )
+			outputDebugString(getPlayerName(p)..' set '..g_MapInfo.resname..' jumpheight to '..amount)
+			outputChatBox('Succesfully set '..g_MapInfo.resname..' jump height to '..amount, p)
+			clientCall(root, 'clientReceiveShooterSettings', amount/10, getBool(g_MapInfo.resname..".shooter_autorepair",false))
+		end
+	end
+end
+addCommandHandler('setjumpheight', Shooter.setNewJumpHeight)

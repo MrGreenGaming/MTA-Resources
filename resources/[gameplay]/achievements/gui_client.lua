@@ -1,11 +1,22 @@
+GUIEditor = {
+    window = {},
+    staticimage = {},
+    label = {}
+}
+
 bGuiOpen = false
+
 addEvent("sb_showAchievements")
 function toggleAchievementGUI(key, keyState)
+	local screenW, screenH = guiGetScreenSize()
 	if keyState ~= "down" then if keyState then return end end
 	if bGuiOpen == false then
 		bGuiOpen = true
 		triggerServerEvent("onAchievementsBoxLoad", resourceRoot)
+		achievements = exports.blur_box:createBlurBox( 0, 0, screenW, screenH, 255, 255, 255, 255, true )
+        achievementsIntensity = exports.blur_box:setBlurIntensity(2.5)
 	elseif isElement(window) then
+		exports.blur_box:destroyBlurBox(achievements)
 		destroyElement(window)
 		bGuiOpen = false
 		showCursor(false)
@@ -17,15 +28,26 @@ addEventHandler("sb_showAchievements", root, toggleAchievementGUI)
 function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achievementListRace, playerAchievementsRace )
 	guiSetInputMode("no_binds_when_editing")
 	showCursor(true)
-	
-	window = guiCreateWindow(0.2775, 0.3, 0.445, 0.3, "Achievements (F4 to close)", true)
-	guiWindowSetSizable(window, false)
-	
+
+	local screenWidth, screenHeight = guiGetScreenSize()
+	window = guiCreateStaticImage((screenWidth - 854) / 2, (screenHeight  - 324) / 2, 854, 324, ":stats/images/dot.png", false)
+	guiSetProperty(window, "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
+	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, ":stats/images/dot.png", false, window)
+	guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
+	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, ":stats/images/dot.png", false, window)
+	guiSetProperty(GUIEditor.staticimage[3], "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
+	GUIEditor.label[1] = guiCreateLabel(364, 1, 128, 16, "Achievements", false, window)
+	guiSetFont(GUIEditor.label[1], "default-bold-small")
+	guiSetProperty(GUIEditor.label[1], "AlwaysOnTop", "true")
+	guiLabelSetColor(GUIEditor.label[1], 255, 255, 255)
+	guiLabelSetHorizontalAlign(GUIEditor.label[1], "center", false)
+	guiLabelSetVerticalAlign(GUIEditor.label[1], "center") 
+
 	--Tabs
-	local tabPanel = guiCreateTabPanel(0, 0.1, 1, 1, true, window)
+	local tabPanel = guiCreateTabPanel(0, 0.1, 1, 0.88, true, window)
 	local raceStats = guiCreateTab("Race Achievements", tabPanel)
 	local mixStats = guiCreateTab("Mix Achievements", tabPanel)
-	
+
 	--Gridlist MIX
 	local achGrid = guiCreateGridList(0,0, 1, 1, true, mixStats)
 	guiGridListSetSortingEnabled(achGrid, false)
@@ -59,7 +81,7 @@ function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achiev
 		end
 	end
 	guiSetText(mixStats, "Mix Achievements: "..unlocked.."/"..tostring(#achievementListMix))
-	
+
 	--Gridlist RACE
 	local achGridRace = guiCreateGridList(0,0, 1, 1, true, raceStats)
 	guiGridListSetSortingEnabled(achGridRace, false)
@@ -94,6 +116,44 @@ function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achiev
 	end
 	guiSetText(raceStats, "Race Achievements: "..unlocked.."/"..tostring(#achievementListRace))
 end
+
+-- moving the window
+
+local isWindowClicked = false
+local windowOffsetPos = false
+addEventHandler( "onClientGUIMouseDown", getRootElement( ),
+    function ( btn, x, y )
+        if btn == "left" and (source == GUIEditor.staticimage[2] or source == GUIEditor.staticimage[3]) then
+            isWindowClicked = true
+            local elementPos = { guiGetPosition( window, false ) }
+            windowOffsetPos = { x - elementPos[ 1 ], y - elementPos[ 2 ] }; -- get the offset position
+        end
+    end
+)
+
+addEventHandler( "onClientGUIMouseUp", getRootElement( ),
+    function ( btn, x, y )
+        if btn == "left" then
+            isWindowClicked = false
+        end
+    end
+)
+
+addEventHandler( "onClientCursorMove", getRootElement( ),
+    function ( _, _, x, y )
+        if isWindowClicked and windowOffsetPos then
+            guiSetPosition( window, x - windowOffsetPos[ 1 ], y - windowOffsetPos[ 2 ], false )
+        end
+    end
+)
+
+-- stop player from clicking  GUIEditor.staticimage[2] or GUIEditor.staticimage[3]
+
+--	addEventHandler("onClientGUIClick", resourceRoot, function()
+--		if (source == GUIEditor.staticimage[2]) and (source == GUIEditor.staticimage[3]) then
+--			cancelEvent()
+--		end
+--	end)
+
 addEvent ( 'showAchievementsGUI', true )
 addEventHandler ( 'showAchievementsGUI', resourceRoot, showAchievementsGUI )
-

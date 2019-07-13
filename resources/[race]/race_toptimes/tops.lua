@@ -1,7 +1,7 @@
 local mostMonthlyReward = 20		-- GC for having the most monthly tops in a month
 local monthlyReward = 5				-- GC for having a monthly top
 local baseTop1Reward = 5			-- Base top1 reward, multiplied with amount of months on server
-local displayTopCount = 8
+local displayTopCount = 10
 
 local times = {}					-- [top] = {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), new=true}
 local monthtimes = {}
@@ -69,10 +69,10 @@ function queryMapTimes (mapInfo, bStart)
 	mapnameFull = mapInfo.name
 	racemode = racemodes[ exports.race:getRaceMode() ] or "(NULL)"
 	info = mapInfo
-	local q = "SELECT forumid, mapname, pos, value, date, g.mta_name, h.country FROM toptimes, mrgreengaming_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY pos"
+	local q = "SELECT t.forumid, t.mapname, t.pos, t.value, t.date, n.name, g.mta_name, v.options as supernick, h.country FROM toptimes t LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN mrgreengaming_gc.green_coins g ON t.forumid = g.forum_id LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 WHERE t.mapname = ? ORDER BY t.pos"
 	dbQuery(maptimes, {mapInfo, bStart}, handlerConnect, q, mapname)
 	if not score[exports.race:getRaceMode()] then
-		local q = "SELECT forumid, mapname, value, date, month, g.mta_name, h.country FROM toptimes_month, mrgreengaming_gc.green_coins g, country h WHERE forumid = g.forum_id and forumid = h.forum_id and mapname = ? ORDER BY date DESC"
+		local q = "SELECT t.forumid, t.mapname, t.value, t.date, t.month,v.options as supernick, n.name, g.mta_name, h.country FROM toptimes_month t LEFT JOIN mrgreengaming_gc.green_coins g ON t.forumid = g.forum_id LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 WHERE t.mapname = ? ORDER BY date DESC"
 		dbQuery(monthlytime, {mapInfo, bStart}, handlerConnect, q, mapname, getRealTime().month+1)
 	else
 		sendMonthTime()	-- send empty month time
@@ -94,6 +94,7 @@ function maptimes(qh, mapInfo, bStart)
 	else
 		-- outputDebugString('new map ' .. mapInfo.resname)
 	end
+
 	times.resname = mapInfo.resname
 	times.mapname = mapInfo.name
 	times.modename = mapInfo.modename
@@ -104,7 +105,7 @@ function maptimes(qh, mapInfo, bStart)
 			for _, t in ipairs(times) do
 				if forumid == t.forumid then
 					t.player = player
-					t.mta_name = getPlayerName(player)
+					t.name = getElementData(player, "vip.colorNick") or getPlayerName(player)
 					break
 				end
 			end
@@ -142,7 +143,7 @@ function monthlytime(qh, mapInfo, bStart)
 					local forumid = exports.gc:getPlayerForumID(player)
 					if forumid and monthtTopTime.forumid == forumid then
 						monthtTopTime.player = player
-						monthtTopTime.mta_name = getPlayerName(player)
+						monthtTopTime.name = getElementData(player, "vip.colorNick") or getPlayerName(player)
 						break
 					end
 				end
@@ -255,12 +256,12 @@ function updatePlayerTop(player, rank, value)
 		newTime = value
 		if not toptime then
 			q = [[	
-					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname` ) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE date=VALUES(date), value=VALUES(value);
+					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname`, `racemode` ) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE date=VALUES(date), value=VALUES(value);
 					INSERT INTO `maps`( `resname`,`mapname`, `racemode` ) VALUES (?,?,?) ON DUPLICATE KEY UPDATE resname=resname;
 				]]
 			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), country = exports.geoloc:getPlayerCountry(player), new=true})
 			-- outputDebugString('new top for ' .. getPlayerName(player))
-			dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, mapname, mapnameFull, racemode)
+			dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, racemode, mapname, mapnameFull, racemode)
 		elseif (not times.kills and value < toptime.value) or (times.kills and value > toptime.value) then
 			oldPos, oldTime = toptime.pos, toptime.value
 			q = [[
@@ -328,7 +329,7 @@ addEventHandler('onPlayerFinish', root,
 		if forumid then
 			updatePlayerTop(source, rank, time)
 		else
-			return outputChatBox("You need to login to your Green-Coins account in order to do toptimes!", source)
+			return outputChatBox("You need to login to your Green-Coins account in order to do toptimes!", source, 255, 0, 0, true)
 		end
 	end
 , true, 'low')
@@ -414,14 +415,15 @@ function gcLogin ( forumid, amount )
 	local player = source
 	-- Check if player has unrewarded most monthly tops in the past months
 	local q = [[
-	SELECT forumid, month, c FROM (
-		SELECT ANY_VALUE(forumid) forumid, month, ANY_VALUE(c) c FROM (
-			SELECT forumid, month, COUNT(*) c FROM (
-				SELECT * FROM `toptimes_month` ORDER BY date
-			) AS dated WHERE rewarded = 0 GROUP BY forumid, month ORDER BY `month` ASC, `c`  DESC
-		) AS counted GROUP BY month
-	) AS maxs WHERE forumid = ? AND month != ?
+		SELECT forumid, month, c FROM (
+			SELECT forumid, month, c FROM (
+				SELECT forumid, month, COUNT(*) c FROM (
+					SELECT * FROM `toptimes_month` ORDER BY date
+				) AS dated WHERE rewarded = 0 GROUP BY forumid, month ORDER BY `month` ASC, `c`  DESC
+			) AS counted GROUP BY month
+		) AS maxs WHERE forumid = ? AND month != ?
 	]]
+
 	setTimer(function()
 		if isElement(player) then
 		dbQuery( mostMonthTops, {forumid, getPlayerSerial(player), getRealTime().month+1}, handlerConnect, q, forumid, getRealTime().month+1)
@@ -488,44 +490,109 @@ function giveTop1Reward ( player )
 end
 
 
---------------------
--- Removing times --
---------------------
-
-function deletetop(p, c, pos, ...)
-	pos = tonumber(pos)
-	local reason = table.concat({...},' ')
-	if not (pos and times[pos]) then
-		return outputChatBox('Top not found ' .. tostring(pos), p)
-	elseif not reason or #reason < 2 then
-		return outputChatBox('Syntax: /deletetop <top> <reason>', p)
+--------------------------------------
+-- Removing times / admin functions --
+--------------------------------------
+function adminOpenedToptimesManager(p,c)
+	if not isAdminAuthorized(p) then return end
+	if c == "deletetop" or c == 'deletealltops' then
+		outputChatBox('/'..c..' is not in use anymore and may be removed in the future. Please use /managetops')
 	end
-	local top = table.remove(times, pos)
-	dbExec(handlerConnect, 'DELETE FROM toptimes WHERE forumid = ? and mapname = ?', top.forumid, top.mapname)
-	sendClientTimes()
-	outputChatBox('Top #' .. pos .. ' ' .. timeMsToTimeText(top.value) .. ' ' .. top.mta_name .. ' was deleted by ' .. _getPlayerName(p))
-	deletelog(("Top #%d (%s %s) on map \"%s\" was deleted by %s (%s): %s"):format(pos, timeMsToTimeText(top.value), top.mta_name, top.mapname, _getPlayerName(p), getAccountName(getPlayerAccount(p)), reason))
+	sendToptimesToAdmin(p)
 end
-addCommandHandler('deletetop', deletetop, true)
+addCommandHandler('managetops', adminOpenedToptimesManager )
+addCommandHandler('deletetop', adminOpenedToptimesManager )
+addCommandHandler('deletealltops', adminOpenedToptimesManager )
 
-function deletealltops(p, c, ...)
-	local reason = table.concat({...},' ')
-	if not reason or #reason < 2 then
-		return outputChatBox('Syntax: /deletealltops <reason>', p)
+addEvent('adminRequestedUpdatedTops',true)
+addEventHandler('adminRequestedUpdatedTops',resourceRoot,function()
+	sendToptimesToAdmin(client)
+end)
+
+function sendToptimesToAdmin(admin)
+	local amountToClient = 20
+	local topsToClient = {}
+	for i, v in ipairs(times) do
+		if i > amountToClient then
+			break
+		end 
+		table.insert(topsToClient,v)
 	end
-	local top = table.remove(times, pos)
-	if not top then return end
-	for i,v in ipairs(times) do
-		times[i] = nil
-	end
-	dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ?', times.resname)
-	sendClientTimes()
-	outputChatBox('All tops deleted for ' .. top.mapname .. ' by ' .. _getPlayerName(p))
-	deletelog(("All tops on map \"%s\" deleted by %s (%s): %s"):format(top.mapname, _getPlayerName(p), getAccountName(getPlayerAccount(p)), reason))
+	triggerClientEvent(admin, 'onAdminRequestOpenTopManager', admin, mapname, topsToClient)
 end
-addCommandHandler('deletealltops', deletealltops, true)
+
+
+function adminConfirmedAction(theAction)
+	if not isAdminAuthorized(client) then 
+		outputChatBox('You are not authorized to remove toptimes',client,255,0,0)
+		return 
+	end
+
+	-- Handle all top deletions here
+	if theAction.action == "deletePlayerTop" then
+		-- Delete Top action
+		if theAction.mapname == mapname then
+			-- Still the same map, search for the deleted top and remove it, then send to client
+			for i, row in ipairs(times) do
+				if row.forumid == theAction.forumid then
+					table.remove(times,i)
+					sendClientTimes()
+					break
+				end
+			end
+		end
+		
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.forumid = ? AND a.mapname = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, theAction.reason, getAccountName(getPlayerAccount(client)) or _getPlayerName(client), theAction.forumid, theAction.mapname)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE forumid = ? and mapname = ?', theAction.forumid, theAction.mapname)
+		
+		outputChatBox('[TOPS] Top #' .. theAction.position .. ' by ' .. theAction.playername .. ' on map "'..theAction.mapname..'" was deleted by ' .. _getPlayerName(client), root, 255,50,50)
+
+		deletelog(("Top #%d (%s %s) on map \"%s\" was deleted by %s (%s): %s"):format(theAction.position, timeMsToTimeText(theAction.value), theAction.playername, theAction.mapname, _getPlayerName(client), getAccountName(getPlayerAccount(client)), theAction.reason))
+	
+	elseif theAction.action == "deleteAllPlayerTops" then
+		-- Delete All Player Tops
+		for i, row in ipairs(times) do
+			if row.forumid == theAction.forumid then
+				table.remove(times,i)
+				sendClientTimes()
+				break
+			end
+		end
+		
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.forumid = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, theAction.reason, getAccountName(getPlayerAccount(client)) or _getPlayerName(client), theAction.forumid)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE forumid = ? ', theAction.forumid)
+		
+		outputChatBox('[TOPS] All tops from player ' .. theAction.playername .. ' have been removed by ' .. _getPlayerName(client), root, 255,50,50)
+
+		deletelog(("ALL tops by %s (forumid: %s) have been deleted by %s (%s): %s"):format(theAction.playername, theAction.forumid, _getPlayerName(client), getAccountName(getPlayerAccount(client)), theAction.reason))
+	
+	elseif theAction.action == "deleteAllMapTops" then
+		-- Remove all tops, then send to client
+		times = {}
+		sendClientTimes()
+
+		-- Insert into toptimes_deleted
+		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.mapname = ?"
+		dbExec( handlerConnect, toptimesDeletedQuery, theAction.reason, getAccountName(getPlayerAccount(client)) or _getPlayerName(client), theAction.mapname)
+		-- Delete from toptimes
+		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ? ', theAction.mapname)
+
+		outputChatBox('[TOPS] All tops from map  "' .. theAction.mapname .. '" have been removed by ' .. _getPlayerName(client), root, 255,50,50)
+		deletelog(("ALL tops in map '%s' have been deleted by %s (%s): %s"):format(theAction.mapname, _getPlayerName(client), getAccountName(getPlayerAccount(client)), theAction.reason))
+
+	end
+end
+addEvent('onAdminConfirmedToptimesDeletionAction', true)
+addEventHandler( 'onAdminConfirmedToptimesDeletionAction', resourceRoot, adminConfirmedAction )
 
 function deletemonthtop(p, c)
+	if not isAdminAuthorized(p) then return end
 	if not monthtTopTime then
 		return outputChatBox('Month top not found', p)
 	end
@@ -621,16 +688,16 @@ addCommandHandler('tops',
 		ex = ex and ex < 11 and ex or 3 
 		local forumid = exports.gc:getPlayerForumID(p)
 		if not forumid then
-			return outputChatBox("You are not logged in to Greencoins!", p)
+			return outputChatBox("You are not logged in to Greencoins!", p, 255, 0, 0, true)
 		end
 		dbQuery(function(qh)
 			local result = dbPoll(qh, 0)
 			if not result then
 				return outputDebugString('/tops failed ' .. forumid, 2)
 			elseif #result == 0 then
-				outputChatBox("You have no tops!", p)
+				outputChatBox("You have no tops!", p, 255, 0, 0, true)
 			else
-				outputChatBox('Your toptimes: ' , p)
+				outputChatBox('Your toptimes: ' , p, 0, 255, 0, true)
 				for pos = 1,ex do
 					local r = nil
 					for _,row in ipairs(result) do
@@ -640,9 +707,9 @@ addCommandHandler('tops',
 						end
 					end
 					if not r then
-						outputChatBox('* Top' .. pos .. '\'s = ' .. 0 , p)
+						outputChatBox('* Top' .. pos .. '\'s = #FFFFFF' .. 0 , p, 0, 255, 0, true)
 					else
-						outputChatBox('* Top' .. pos .. '\'s = ' .. r.count , p)
+						outputChatBox('* Top' .. pos .. '\'s = #FFFFFF' .. r.count , p, 0, 255, 0, true)
 						outputConsole(r.mapnames)
 					end
 				end
@@ -651,10 +718,16 @@ addCommandHandler('tops',
 	end
 )
 
-
 -------------
 -- utility --
 -------------
+function isAdminAuthorized(player)
+	local accountName = getAccountName( getPlayerAccount(player) )
+	if not isGuestAccount( getPlayerAccount(player) ) and isObjectInACLGroup( "user."..accountName, aclGetGroup("mapmanager") ) or isObjectInACLGroup( "user."..accountName, aclGetGroup("ServerManager") ) then
+		return true
+ end
+	return false
+end
 
 function FormatDate(timestamp, full)
 	local t =  getRealTime(timestamp)
@@ -968,6 +1041,10 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 -------------------------
 --- Exported function ---
 -------------------------
+function getCurrentMapTopTimes()
+	return times or false
+end
+
 function getPlayerToptimes(forumID)
 	if type(forumID) ~= "number" then return false end
 	if not toptimesCache[forumID] then return false end

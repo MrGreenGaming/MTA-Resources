@@ -198,102 +198,95 @@ end
 addEvent('adminDimensionChange', true)
 addEventHandler('adminDimensionChange', root, adminDimensionChange)
 
---RTF DIMENSIONS--
+--Car Hide--
 --Give players their own dimension to improve FPS on potato pc's--local rtfDimensions = {}
-function rtf_setPrivateDimension(player,key,keystate)
+local carHideAllowed = false
+local allowedModes = {
+	['Reach the flag'] = true,
+	['Never the same'] = true,
+	['Sprint'] = true
+	
+}
+
+function carhideKeyHandler(player,key,keystate)
 	if keystate ~= "down" then return end
-	if not rtf_allowed then return end
-	if exports.race:getRaceMode() ~= "Reach the flag" then return end
+	if not carHideAllowed then return end
 	if not player then return end
 	local playerVeh = getPedOccupiedVehicle(player)
 	if not playerVeh then return end
 
-	
+	-- Check for gamemode/spectate
+	if exports.race:getRaceMode() ~= 'Reach the flag' and not isGhostModeEnabled(player) or isPlayerSpectating(player) then return end 
 
-	if getElementData(player,"rtf_carhide") == "true" then -- If player is in a dimension
+	if getElementData(player,"carhide") then -- If player is in a dimension
 
-		setElementData(player,"rtf_carhide","false")
-
-		outputChatBox("[RTF] #FFFFFFVehicles visible",player,0,255,0,true)
+		removeElementData(player,'carhide')
+		outputChatBox("[CarHide] #FFFFFFVehicles visible",player,0,255,0,true)
 
 	else -- if player is in normal dimension
-
-
-		setElementData(player,"rtf_carhide","true")
-
-		outputChatBox("[RTF] #FFFFFFVehicles hidden",player,0,255,0,true)
-
-
+		setElementData(player,"carhide","true")
+		outputChatBox("[CarHide] #FFFFFFVehicles hidden",player,0,255,0,true)
 	end
 end
 
-function rtfState ( state )
-	if exports.race:getRaceMode() ~= "Reach the flag" then return end
-
-
-	if state == "GridCountdown" then
-		local setting = get ( getResourceName( exports.mapmanager:getRunningGamemodeMap())..".nocarhide" )
-		if setting then return end
-
-		
-		rtf_allowed = true
+function carHideState ( state )
+	if not allowedModes[exports.race:getRaceMode()] then 
+		-- Reset
+		carHideAllowed = false
+		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
+		return 
+	end
+	
+	if state == "GridCountdown" then	
+		carHideAllowed = true
 		for _,p in ipairs(getElementsByType("player")) do
-			setElementData(p,"rtf_carhide","false")
-			unbindKey(p,"c","down",rtf_setPrivateDimension)
-			bindKey(p,"c","down",rtf_setPrivateDimension)
+			removeElementData(p,'carhide')
+			unbindKey(p,"x","down",carhideKeyHandler)
+			bindKey(p,"x","down",carhideKeyHandler)
 		end
+		triggerClientEvent("onCarHideStatusChange",root,true,exports.race:getRaceMode())
 
-		outputChatBox("[RTF] #FFFFFFPress C to hide/show vehicles.",root,0,255,0,true)
-
-		triggerClientEvent("rtf_setDimensionEnabled",root,true)
 	elseif state == "PostFinish" then
-
-
-
-		rtf_allowed = false
+		carHideAllowed = false
 		for _,p in ipairs(getElementsByType("player")) do
-			setElementData(p,"rtf_carhide","false")
-			unbindKey(p,"c","down",rtf_setPrivateDimension)
-		end
-
-
-		for _,p in pairs(getElementsByType("player")) do -- Reset dimensions when someone won
-			if not isElement(player) then return end
-			setElementData(p, "dim", 0)
-
+			removeElementData(p,'carhide')
+			unbindKey(p,"x","down",carhideKeyHandler)
 		end
 		
-		triggerClientEvent("rtf_setDimensionEnabled",root,false)
+		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
 
 	elseif state == "NoMap" then
-		rtf_allowed = false
+		carHideAllowed = false
 		
 		for _,p in ipairs(getElementsByType("player")) do
-			setElementData(p,"rtf_carhide","false")
-			unbindKey(p,"c","down",rtf_setPrivateDimension)
+			removeElementData(p,'carhide')
+			unbindKey(p,"x","down",carhideKeyHandler)
 		end
-		triggerClientEvent("rtf_setDimensionEnabled",root,false)
+		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
 	end
 end
+addEventHandler('onRaceStateChanging', root, carHideState)
 
-addEventHandler('onRaceStateChanging', root, rtfState)
 
-function getFreeRTFDim()
-	local occupied = {}
-	for _,p in ipairs(getElementsByType("player")) do
-		local dim = getElementData(p,"dim")
-		if dim then
-			occupied[dim] = true
-		end
+function isGhostModeEnabled(player)
+	if getElementData( player, "overrideCollide.uniqueblah" ) and getElementData( player, "overrideAlpha.uniqueblah" ) then
+		return true
 	end
-
-	for f=1, #getElementsByType("player") do
-		if not occupied[f] then
-			return f
-		end
-	end
+	return false
 end
 
+function isPlayerSpectating(player)
+	return (getElementData(player, "kKey") == "spectating") or (getElementData(player, "state") ~= "alive")
+end
+
+function watchGhostMode(key, old, new)
+	-- Watch for ghostmode, and disable carhide when a player loses ghostmode
+	if (key == 'overrideCollide.uniqueblah' or key == 'overrideAlpha.uniqueblah') and getElementType(source) == 'player' and carHideAllowed and not isGhostModeEnabled(source) then
+		triggerClientEvent(source, "onCarHideStatusChange",root,false, exports.race:getRaceMode())	
+		removeElementData(source,'carhide')
+	end
+end
+addEventHandler('onElementDataChange', root, watchGhostMode)
 
 -- SHOOTER DIMENSION EXPLOSION BUG FIX --
 addEventHandler('onRaceStateChanging', root, function(state)

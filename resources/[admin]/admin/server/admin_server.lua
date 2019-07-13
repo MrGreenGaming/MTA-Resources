@@ -531,6 +531,7 @@ function aAdminMenu ( player, command )
 end
 addCommandHandler ( "admin", aAdminMenu )
 
+
 function aAction ( type, action, admin, player, data, more )
 	if ( aLogMessages[type] ) then
 		function aStripString ( string )
@@ -1529,8 +1530,8 @@ function checkClient(checkAccess,player,...)
 	return false
 end
 
-function checkNickOnChange(old, new)
-	if aNickChangeTime[source] and aNickChangeTime[source] + tonumber(get("*nickChangeDelay")) > getTickCount() then
+function checkNickOnChange(old, new, byUser)
+	if aNickChangeTime[source] and aNickChangeTime[source] + tonumber(get("*nickChangeDelay")) > getTickCount() and byUser then
 		cancelEvent()
 		outputChatBox("You can only change your name once every "..(tonumber(get("*nickChangeDelay"))/1000).." seconds", source, 255, 0, 0)
 		return false
@@ -1540,6 +1541,13 @@ function checkNickOnChange(old, new)
 end
 addEventHandler("onPlayerChangeNick", root, checkNickOnChange)
 
+
+addEvent("forceReconnect", true)
+addEventHandler("forceReconnect", root, 
+function (name)
+executeCommandHandler("freconnect", client, name)
+end
+)
 
 addEvent("getSerialNicks", true)
 addEventHandler("getSerialNicks", root, 
@@ -1698,3 +1706,63 @@ function serialunmute(pAdmin, _, serial)
 	outputServerLog("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x",""))
 end
 addCommandHandler('serialunmute', serialunmute)
+
+function forceReconnect( player, command, target )
+	if ( hasObjectPermissionTo ( player, "command.kick" ) ) then
+		if not target then outputChatBox("Usage: /"..command.." [Target player partial name]", player, 255, 0, 0) return end
+		local targetPlayer = getPlayerFromPartialName(target)
+		if not targetPlayer then outputChatBox("Target player could not be found!", player, 255, 0, 0) return end
+		redirectPlayer(targetPlayer, "", 0, "")
+	end
+end
+addCommandHandler("freconnect", forceReconnect)
+addCommandHandler("freconn", forceReconnect)
+
+function muteList( player, command )
+	if ( hasObjectPermissionTo ( player, "command.mute" ) ) then
+		local outputString = 'Players that are muted online: '
+		local count = 0
+		for i, p in ipairs(getElementsByType('player')) do
+			local serial = getPlayerSerial(p)
+			if aUnmuteTimerList[serial] and isTimer(aUnmuteTimerList[serial]) then
+				local timeLeft = getTimerDetails(aUnmuteTimerList[serial])
+				local timeString = ''
+				timeLeft = math.ceil(timeLeft / 1000)
+				
+				if timeLeft < 60 then
+					timeString = timeLeft..' s'
+				elseif timeLeft < 3600 then
+					timeString = math.floor(timeLeft / 60)..' m and '..math.floor(timeLeft - (math.floor(timeLeft / 60) * 60))..' s'
+				else
+					timeString = math.floor(timeLeft / 60 / 60)..' h and '..math.floor((timeLeft - (math.floor(timeLeft / 60 / 60) * 60 * 60)) / 60)..' m'
+				end
+				
+				outputString = outputString .. string.gsub(getPlayerName(p),"#%x%x%x%x%x%x","") .. " (" .. timeString .. "), "
+				count = count + 1
+			elseif isPlayerMuted(p) then
+				outputString = outputString .. string.gsub(getPlayerName(p),"#%x%x%x%x%x%x","") .. " (permanently), "
+				count = count + 1
+			end
+		end
+		if count == 0 then
+			outputChatBox("There are not muted players online!", player, 255, 0, 0)
+			return
+		end
+		outputString = string.sub(outputString, 0, string.len(outputString) - 2)
+		outputChatBox(outputString, player, 255, 0, 0)
+	end
+end
+addCommandHandler("muted", muteList)
+addCommandHandler("mutedlist", muteList)
+
+function getPlayerFromPartialName(name)
+    local name = name and name:gsub("#%x%x%x%x%x%x", ""):lower() or nil
+    if name then
+        for _, player in ipairs(getElementsByType("player")) do
+            local name_ = getPlayerName(player):gsub("#%x%x%x%x%x%x", ""):lower()
+            if name_:find(name, 1, true) then
+                return player
+            end
+        end
+    end
+end

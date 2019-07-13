@@ -451,8 +451,23 @@ hornsTable = {
     [448] = "AAAAhheh",
     [449] = "Careless Whisper",
     [450] = "Zamknij Morde",
-    [451] = "In The Air Tonight",	
-
+    [451] = "In The Air Tonight",
+    [452] = "Can't Kill Me Motherfuckers",
+    [453] = "Dale Boludo",
+    [454] = "Pinche Putitta",
+    [455] = "La Puta",
+    [456] = "Broom Bom",
+    [457] = "Tuk Tuk Intro",
+    [458] = "Fell it man",
+    [459] = "The Okay nigga",
+    [460] = "Hello?",
+    [461] = "FIGHT",
+    [462] = "JeeeeeeEF",
+    [463] = "Thats How Mafia Works",
+    [464] = "EZ4ENCE",
+    [465] = "Serdar Mortal Kombat",
+    [466] = "Speak",
+    [467] = "Fuck Ballas",
     
     
  
@@ -785,14 +800,14 @@ function getKeyBoundToHorn(horn)
     end
 end
 
-
+soundElements = {}
 soundTimer = {}
 killOtherTimer = {}
 local screenSizex, screenSizey = guiGetScreenSize()
 local guix = screenSizex * 0.1
 local guiy = screenSizex * 0.1
-local globalscale = 1.35
-local globalalpha = 1
+local globalscale = 0.85
+local globalalpha = 0.6
 icon = {}
 
 function createSoundForCar(car, horn)
@@ -805,43 +820,45 @@ function createSoundForCar(car, horn)
     guiSetVisible(icon[car], false)
     local x, y, z = getElementPosition(car)
 
-    local sound = playSound3D(horn, x, y, z, false) -- Horn argument is passed as path
-    setSoundMaxDistance(sound, 50)
-    setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch as gamespeed changes
-    local length = getSoundLength(sound)
+    soundElements[car] = playSound3D(horn, x, y, z, false) -- Horn argument is passed as path
+    setSoundMaxDistance(soundElements[car], 50)
+    setSoundSpeed(soundElements[car], getGameSpeed() or 1) -- change horn pitch as gamespeed changes
+    local length = getSoundLength(soundElements[car])
     length = length * 1000
 
     -- update horn icon position/alpha
-    soundTimer[car] = setTimer(function(sound, car)
-        if not isElement(sound) or not isElement(car) then return end
-        local rx, ry, rz = getElementPosition(car)
-        setElementPosition(sound, rx, ry, rz)
-        setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
+    if getResourceState(getResourceFromName( 'mrgreen-settings' )) == 'running' and exports['mrgreen-settings']:isCustomHornIconEnabled() then
+        soundTimer[car] = setTimer(function(sound, car)
+            if not isElement(sound) or not isElement(car) then return end
+            local rx, ry, rz = getElementPosition(car)
+            setElementPosition(sound, rx, ry, rz)
+            setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
 
-        local target = getCameraTarget()
-        local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
-        if target then
-            playerx, playery, playerz = getElementPosition(target)
-        end
-        cp_x, cp_y, cp_z = getElementPosition(car)
-        local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
-        if dist and dist < 40 and (isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false)) then
-            local screenX, screenY = getScreenFromWorldPosition(cp_x, cp_y, cp_z)
-            local scaled = screenSizex * (1 / (2 * (dist + 5))) * .85
-            local relx, rely = scaled * globalscale, scaled * globalscale
+            local target = getCameraTarget()
+            local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
+            if target then
+                playerx, playery, playerz = getElementPosition(target)
+            end
+            cp_x, cp_y, cp_z = getElementPosition(car)
+            local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
+            if dist and dist < 40 and (isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false)) then
+                local screenX, screenY = getScreenFromWorldPosition(cp_x, cp_y, cp_z)
+                local scaled = screenSizex * (1 / (2 * (dist + 5))) * .85
+                local relx, rely = scaled * globalscale, scaled * globalscale
 
-            guiSetAlpha(icon[car], globalalpha)
-            guiSetSize(icon[car], relx, rely, false)
-            if (screenX and screenY) then
-                guiSetPosition(icon[car], screenX - relx / 2, screenY - rely / 1.3, false)
-                guiSetVisible(icon[car], true)
+                guiSetAlpha(icon[car], globalalpha)
+                guiSetSize(icon[car], relx, rely, false)
+                if (screenX and screenY) then
+                    guiSetPosition(icon[car], screenX - relx / 2, screenY - rely / 1.3, false)
+                    guiSetVisible(icon[car], true)
+                else
+                    guiSetVisible(icon[car], false)
+                end
             else
                 guiSetVisible(icon[car], false)
             end
-        else
-            guiSetVisible(icon[car], false)
-        end
-    end, 50, 0, sound, car)
+        end, 50, 0, soundElements[car], car)
+    end
 
     killOtherTimer[car] = setTimer(function(theTimer, car) if isTimer(theTimer) then killTimer(theTimer) if isElement(icon[car]) then destroyElement(icon[car]) end end end, length, 50, soundTimer[car], car)
 end
@@ -868,7 +885,22 @@ end
 
 addEventHandler("onPlayerUsingHorn", root, playerUsingHorn)
 
+-- Stop gc horn when player uses a VIP horn
+function stopGcHorn(player)
+    local vehicle = getPedOccupiedVehicle( player )
+    if not vehicle then return end
 
+    if soundElements[vehicle] and isElement(soundElements[vehicle]) then 
+        destroyElement(soundElements[vehicle]) 
+        soundElements[vehicle] = nil
+    end
+
+    if icon[vehicle] and isElement(icon[vehicle]) then 
+        destroyElement(icon[vehicle]) 
+    end
+end
+addEvent("onClientVipUseHorn", true)
+addEventHandler("onClientVipUseHorn", root, stopGcHorn)
 
 
 function getHornSource(path, preview)
