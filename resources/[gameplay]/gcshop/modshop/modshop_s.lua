@@ -1178,7 +1178,7 @@ function doesPlayerOwnVehicle(player, vehicleid)
 	
 	if not forumid then return false end
 	
-	local query = dbQuery(handlerConnect, "SELECT vehicle FROM ?? WHERE forumID=? AND vehicle=?", forumid, vehicleid)
+	local query = dbQuery(handlerConnect, "SELECT vehicle FROM ?? WHERE forumID=? AND vehicle=?", tableName, forumid, vehicleid)
 	
 	local result = dbPoll(query, -1)
 	
@@ -1189,16 +1189,18 @@ end
 function getPlayerSavedWheelsForVehicle(player, vehicleid)
 	if not player or getElementType(player) ~= 'player' then return false end
 	
-	local forumid = exports.gc:getPleyerForumID(player)
+	local forumid = exports.gc:getPlayerForumID(player)
 	
 	if not forumid then return false end
 	
-	local query = dbQuery(handlerConnect, "SELECT slot12 FROM ?? WHERE forumid=? AND vehicle=? AND slot12<>'' AND slot12 IS NOT NULL", forumid, vehicleid)
+	local query = dbQuery(handlerConnect, "SELECT slot12 FROM ?? WHERE forumid=? AND vehicle=? AND slot12<>'' AND slot12 IS NOT NULL", tableName, forumid, vehicleid)
 	
 	local result = dbPoll(query, -1)
 	
 	if #result == 0 then return false end
 	
-	return result[0]['slot12']	
+	for i,r in ipairs(result) do
+		return r[0] or r['slot12']
+	end
 end
 
