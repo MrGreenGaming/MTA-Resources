@@ -221,15 +221,25 @@ function build_mainVipWindow()
 	-- gui._placeHolders["line_6"] = {left = 2, top = 1052, width = 661, height = 20, parent = gui["scrollAreaCosmetics"]}
 	gui["line6"] = guiCreateStaticImage( 0, 1052, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
 	
-	gui["label_vip_skin_2"] = guiCreateLabel(22, 1072, 361, 21, "Police Siren Lights (Coming Soon!)", false, gui["scrollAreaCosmetics"])
+	gui["wheelchange_label"] = guiCreateLabel(22, 1072, 361, 21, "Wheel changing", false, gui["scrollAreaCosmetics"])
+	guiLabelSetHorizontalAlign(gui["wheelchange_label"], "left", false)
+	guiLabelSetVerticalAlign(gui["wheelchange_label"], "center")
+	guiSetFont( gui["wheelchange_label"], "default-bold-small")
+	
+	gui["wheelchange_toggle"] = guiCreateCheckBox(22, 1102, 631, 17, "Toggle wheel changing (Works only with vehicles that you own!)", false, false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["wheelchange_toggle"], onWheelChangingToggle, false)
+	
+	gui["line7"] = guiCreateStaticImage( 0, 1152, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
+	
+	gui["label_vip_skin_2"] = guiCreateLabel(22, 1172, 361, 21, "Police Siren Lights (Coming Soon!)", false, gui["scrollAreaCosmetics"])
 	guiLabelSetHorizontalAlign(gui["label_vip_skin_2"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_vip_skin_2"], "center")
 	guiSetFont( gui["label_vip_skin_2"], "default-bold-small")
 	
-	gui["police_lights_toggle"] = guiCreateCheckBox(22, 1102, 631, 17, "Toggle Police Siren Lights", false, false, gui["scrollAreaCosmetics"])
+	gui["police_lights_toggle"] = guiCreateCheckBox(22, 1202, 631, 17, "Toggle Police Siren Lights", false, false, gui["scrollAreaCosmetics"])
 	guiSetEnabled( gui["police_lights_toggle"], false )
 	
-	gui["PoliceSirenLightsComboBox"] = guiCreateComboBox(192, 1102, 171, 180,"", false, gui["scrollAreaCosmetics"])
+	gui["PoliceSirenLightsComboBox"] = guiCreateComboBox(192, 1202, 171, 180,"", false, gui["scrollAreaCosmetics"])
 	
 	
 	-- gui._placeHolders["line_10"] = {left = 2, top = 1142, width = 661, height = 20, parent = gui["scrollAreaCosmetics"]}
@@ -263,6 +273,7 @@ function build_mainVipWindow()
 	guiLabelSetHorizontalAlign(gui["label_9"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_9"], "center")
 	guiSetFont( gui["label_9"], "default-bold-small")
+	
 
 	
 	-- gui._placeHolders["line_9"] = {left = 2, top = 552, width = 661, height = 20, parent = gui["scrollAreaHome_4"]}
@@ -420,6 +431,13 @@ function onVipBadgeToggle (button, state, absoluteX, absoluteY)
 	end
 	local isSelected = guiCheckBoxGetSelected( gui["vip_badge_toggle"] )
 	triggerServerEvent('onClientChangeVipBadge', localPlayer, isSelected)
+end
+
+function onWheelChangingToggle(button, state)
+	if button ~= "left" or state ~= "up" then return end
+
+	local selected = guiCheckBoxGetSelected(gui["wheelchange_toggle"])
+	triggerServerEvent('onClientToggleWheelChange', localPlayer, selected)
 end
 
 
@@ -641,7 +659,8 @@ function populateGuiOptions(options)
 			setVipJoinMessage()
 		elseif optionId == 9 then
 			-- Personal horn
-
+		elseif optionId == 11 then
+			guiCheckBoxSetSelected( gui["wheelchange_toggle"], value.enabled or false )
 		end
 	end 
 end

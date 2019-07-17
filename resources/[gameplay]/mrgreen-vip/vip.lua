@@ -20,6 +20,7 @@ vipItems = {
 	[8] = { ID = 8, description = 'VIP Join Message'},
 	[9] = { ID = 9, description = 'Personal Horn'},
 	[10] = { ID = 10, description = 'Free VIP Map'},
+	[11] = { ID = 11, description = 'Wheel change'},
 }
 
 -- Standard options
@@ -34,6 +35,7 @@ vipStandardOptions = {
 	[8] = {message = ""},
 	[9] = {key = "J"},
 	[10] = {used = false}
+	[11] = {enabled = false}
 }
 
 -- Resource init
