@@ -1169,3 +1169,38 @@ end
 function isVehColorAllowed()
 	return exports.race:getRaceMode() ~= "Capture the flag"
 end
+
+-- idk if this already exists but im gonna make it anyways, lemme know if it already exists ~ Mihoje
+function doesPlayerOwnVehicle(player, vehicleid)
+	if not player or getElementType(player) ~= 'player' then return false end
+	
+	local forumid = exports.gc:getPlayerForumID(player)
+	
+	if not forumid then return false end
+	
+	local query = dbQuery(handlerConnect, "SELECT vehicle FROM ?? WHERE forumID=? AND vehicle=?", tableName, forumid, vehicleid)
+	
+	local result = dbPoll(query, -1)
+	
+	if #result > 0 then return true else return false end
+end
+
+--same comment as the function above ~ Mihoje
+function getPlayerSavedWheelsForVehicle(player, vehicleid)
+	if not player or getElementType(player) ~= 'player' then return false end
+	
+	local forumid = exports.gc:getPlayerForumID(player)
+	
+	if not forumid then return false end
+	
+	local query = dbQuery(handlerConnect, "SELECT slot12 FROM ?? WHERE forumid=? AND vehicle=? AND slot12<>'' AND slot12 IS NOT NULL", tableName, forumid, vehicleid)
+	
+	local result = dbPoll(query, -1)
+	
+	if #result == 0 then return false end
+	
+	for i,r in ipairs(result) do
+		return r[0] or r['slot12']
+	end
+end
+

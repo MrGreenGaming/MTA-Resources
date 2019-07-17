@@ -84,6 +84,8 @@
     <file src="modshop\drug_red.dff" />
     <file src="modshop\drug_aqua.dff" />
     <file src="modshop\drug_yellow.dff" />
+	<export function="doesPlayerOwnVehicle" type="server"/>
+	<export function="getPlayerSavedWheelsForVehicle" type="server"/>
     
     
     <!-- Locknick by Kali -->

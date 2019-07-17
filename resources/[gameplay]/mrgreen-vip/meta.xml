@@ -44,6 +44,9 @@
 
     <!-- Free VIP map -->
     <script src="items/freeVipMap/freeVipMap.lua" type="server" />
+	
+	<!-- Wheel Change -->
+	<script src="items/wheelchange/wheelchange_s.lua" type="server" />
 
     <!-- Utilities -->
     <script src="utils_c.lua" type="client" />
