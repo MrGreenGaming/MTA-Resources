@@ -152,8 +152,11 @@ function onGCShopLogin (forumID)
 				end
 			end
 			getPerks(forumID, 
-			function(newPerks) 
+			function(newPerks)
 				triggerClientEvent( theSource, 'itemLogin', theSource, perks, newPerks )
+				-- Trigger the event once more with a delay
+				setTimer(triggerClientEvent, 5000, 1, theSource, 'itemLogin', theSource, perks, newPerks)
+				
 			end)
 		end)
 	end)
@@ -393,16 +396,24 @@ function getPerkExpire ( forumID, ID, callback )
 		return
 	end
 	if type(ID) == 'table' then
-		local queryString = dbPrepareString(handlerConnect, 'SELECT * FROM gc_items WHERE forumid=? AND (', forumID)
+		local queryString = dbPrepareString(handlerConnect, 'SELECT * FROM gc_items WHERE forumid = ? AND (', forumID)
 		for ind, prk in ipairs(ID) do
-			queryString = queryString .. dbPrepareString(handlerConnect, 'itembought=? ', prk)
-			if ID[ind+1] then
-				queryString = queryString .. ' OR '
-			else
-				queryString = queryString .. ')'
+			if prk and tonumber(prk) then
+				if ID[ind+1] then
+					local addedQuery = dbPrepareString(handlerConnect, 'itembought = ? OR ', prk)
+					if addedQuery then
+						queryString = queryString .. addedQuery
+					end
+				else
+					local addedQuery = dbPrepareString(handlerConnect, 'itembought = ? ) ', prk)
+					if addedQuery then
+						queryString = queryString .. addedQuery
+					else
+						queryString = queryString .. ')'
+					end
+				end
 			end
 		end
-		-- outputDebugString(queryString)
 		dbQuery(
 			function(query) 
 				local result = dbPoll(query,0)
