@@ -231,7 +231,7 @@ function checkVipHornsChecksum(receivedChecksums)
     for id, checksum in pairs(receivedChecksums) do
         if not hornChecksums[id] or hornChecksums[id] ~= checksum then
             -- file either does not exist, or changed. Download from server
-            triggerServerEvent('onClientRequestsVipHorn', resourceRoot, hornid)
+            triggerServerEvent('onClientRequestsVipHorn', resourceRoot, id)
         end
     end
 end

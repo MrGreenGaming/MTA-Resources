@@ -96,7 +96,12 @@ function sendClientVipHorn(id, sendTo)
     end
 end
 addEvent('onClientRequestsVipHorn', true)
-addEventHandler('onClientRequestsVipHorn', root, function(id) sendClientVipHorn(id, client) end)
+addEventHandler('onClientRequestsVipHorn', root, 
+function(id) 
+    if type(id) == 'string' then
+        sendClientVipHorn(id, client)
+    end
+end)
 
 function bindVipHorns(player, unbind)
     if not vipHorns[player] then return end
