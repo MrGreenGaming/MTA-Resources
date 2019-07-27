@@ -7,6 +7,7 @@ local ID = 4
 local g_CustomPlayers = {}
 
 function loadGCCustomPaintjob ( player, bool, settings )
+	-- outputDebugString('loadGCCustomPaintjob :'..tostring(bool)..' - type: '..type(bool)..' - '..tostring(getPlayerName(player)))
 	if bool then
 		g_CustomPlayers[player] = player
 		sendPaintjobs ( {player}, player )
@@ -101,8 +102,7 @@ function sendPaintjobs ( from, to, pid )
 end
 
 function clientSendPaintjobs()
-	if #g_CustomPlayers == 0 then return end
-	sendPaintjobs(g_CustomPlayers, client)
+	sendPaintjobs(getCustomPlayersArray(), client)
 end
 addEvent('clientSendPaintjobs', true)
 addEventHandler('clientSendPaintjobs', root, clientSendPaintjobs)
@@ -231,7 +231,7 @@ end
 addEvent('onRaceStateChanging', true)
 function serverRefreshClientPJTable(state)
 	if state == "NoMap" then
-		sendPaintjobs(g_CustomPlayers, root)
+		sendPaintjobs(getCustomPlayersArray(), root)
 		-- triggerClientEvent("clientRefreshShaderTable",resourceRoot,root)
 	end
 end
@@ -247,4 +247,12 @@ function getIdToPlayerList()
 		end
 	end
 	return l
+end
+
+function getCustomPlayersArray()
+	local g_CustomPlayersArray = {}
+	for p, _ in pairs(g_CustomPlayers) do
+		table.insert(g_CustomPlayersArray, p)
+	end
+	return g_CustomPlayersArray
 end

@@ -417,11 +417,15 @@ function getPerkExpire ( forumID, ID, callback )
 		dbQuery(
 			function(query) 
 				local result = dbPoll(query,0)
-				local returnVal = {}
-				for _, row in ipairs(result) do
-					returnVal[row.itembought] = row.expires or nil
+				if type(result) == 'table' then
+					local returnVal = {}
+					for _, row in ipairs(result) do
+						returnVal[row.itembought] = row.expires or nil
+					end
+					callback(returnVal)
+				else
+					callback(false)
 				end
-				callback(returnVal)
 			end,
 		handlerConnect, queryString)
 	else
@@ -460,8 +464,9 @@ function getPerkSettings(player, ID, callback)
 
 	if type(player) == 'table' then
 		if #player < 1 then
+			-- outputDebugString( 'getPerkSettings: No entries in player table', 1 )
+			-- outputDebugString( debug.traceback() )
 			-- outputConsole( debug.traceback() )
-			outputDebugString( 'getPerkSettings: No entries in player table', 1 )
 			callback(false)
 			return
 		end
