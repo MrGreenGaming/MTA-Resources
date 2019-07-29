@@ -394,18 +394,10 @@ addEventHandler( 'onPlayerFinish', root,
 function() 
 	if getElementType(source) == 'player' then
 		setElementData(source, 'overrideCollide.finishghostmode', 0, false)
+		-- Element data will automatically be removed
 	end
 end)
 
-addEvent('onRaceStateChanging')
-addEventHandler( 'onRaceStateChanging', root, 
-function(state)
-	if state == 'LoadingMap' or state == 'TimesUp' then
-		for i, p in ipairs(getElementsByType('player')) do
-			removeElementData(p, 'overrideCollide.finishghostmode')
-		end
-	end
-end)
 
 --------------------------------
 -- Fix for flickering objects when going through a removed world object.
