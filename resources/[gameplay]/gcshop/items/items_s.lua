@@ -394,29 +394,38 @@ function getPerkExpire ( forumID, ID, callback )
 	if type(callback) ~= 'function' then
 		outputDebugString( 'getPerkExpire: No callback specified at argument #3', 1 )
 		return
+	elseif not forumID then 
+		callback(false)
+		-- outputDebugString('getPerkExpire: No forumID argument', 1)
+		return
 	end
+
 	if type(ID) == 'table' then
-		local queryString = dbPrepareString(handlerConnect, 'SELECT * FROM gc_items WHERE forumid = ? AND (', forumID)
+		local queryString = dbPrepareString(handlerConnect, 'SELECT * FROM gc_items WHERE forumid = ?', forumID)
 		for ind, prk in ipairs(ID) do
+			if ind == 1 then
+				queryString = queryString .. ' AND ('
+			end
+			
 			if prk and tonumber(prk) then
+				local addedQuery = dbPrepareString(handlerConnect, 'itembought = ?', prk)
+				if addedQuery then
+					queryString = queryString .. addedQuery
+				end
+
 				if ID[ind+1] then
-					local addedQuery = dbPrepareString(handlerConnect, 'itembought = ? OR ', prk)
-					if addedQuery then
-						queryString = queryString .. addedQuery
-					end
+					queryString = queryString .. ' OR '
 				else
-					local addedQuery = dbPrepareString(handlerConnect, 'itembought = ? ) ', prk)
-					if addedQuery then
-						queryString = queryString .. addedQuery
-					else
-						queryString = queryString .. ')'
-					end
+					queryString = queryString .. ')'
 				end
 			end
 		end
 		dbQuery(
 			function(query) 
 				local result = dbPoll(query,0)
+				if result == false then
+					outputDebugString('Invalid query: '..queryString)
+				end
 				if type(result) == 'table' then
 					local returnVal = {}
 					for _, row in ipairs(result) do
