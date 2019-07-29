@@ -185,6 +185,7 @@ function saveAndUpdateAvatar(filepath, newData, forumid, player)
 end
 
 function updateAvatar(forumid, player)
+	if not player then return end
 	if not forumid then
 		setElementData(player, "forumAvatar", { type = "image", src = ":stats/images/avatar.png", width = 20, height = 20 }, false)
 	else
