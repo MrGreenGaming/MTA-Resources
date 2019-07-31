@@ -30,7 +30,7 @@ vipStandardOptions = {
 	[3] = {lights = false, paintjob = false, wheels = false},
 	[4] = {pattern = 1, speed = 4, enabled = false},
 	[5] = {skin = 1},
-	[6] = {enabled = false, style = 1},
+	[6] = {enabled = false},
 	[7] = {style = false, color = "FFFFFF"},
 	[8] = {message = ""},
 	[9] = {key = "J"},

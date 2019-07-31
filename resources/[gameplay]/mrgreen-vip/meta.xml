@@ -1,5 +1,6 @@
 <meta>
     <info author="Mihoje & KaliBwoy" version="1.5" type="script" />
+	<min_mta_version client="1.3.4" server="1.3.4" />
 
     <include resource="gc"/>
     <include resource="gcshop"/>
@@ -48,14 +49,28 @@
 	<!-- Wheel Change -->
 	<script src="items/wheelchange/wheelchange_s.lua" type="server" />
 
+	<!-- Sirens -->
+	<script src="items/sirens/sirens_c.lua" type="client" />
+	
+	<!-- Custom corronas by Ren712 needed for the sirens https://community.multitheftauto.com/index.php?p=resources&s=details&id=9558 -->
+	<script src="items/sirens/custom_coronas/c_main.lua" type="client" />
+	<script src="items/sirens/custom_coronas/c_helper_functions.lua" type="client" />
+	<script src="items/sirens/custom_coronas/c_exported_functions.lua" type="client" />
+	<file src="items/sirens/custom_coronas/shaders/custom_corona0.fx" type="client" />
+	<file src="items/sirens/custom_coronas/shaders/custom_corona1.fx" type="client" />
+	<file src="items/sirens/custom_coronas/textures/coronastar.png" type="client" />
+
     <!-- Utilities -->
     <script src="utils_c.lua" type="client" />
     <script src="utils_s.lua" type="server" />
+	
+	
 
 	<!-- Exports -->
 	<export function="isPlayerVIP" type="server"/>
     <export function="canBuyVipMap" type="server"/>
     <export function="playerUsedFreeVipMap" type="server"/>
+	
     <!-- Other Files -->
     <file src="img/vip_utils.png"></file>
     <file src="img/vip_main.png"></file>

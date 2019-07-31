@@ -237,10 +237,7 @@ function build_mainVipWindow()
 	guiSetFont( gui["label_vip_skin_2"], "default-bold-small")
 	
 	gui["police_lights_toggle"] = guiCreateCheckBox(22, 1202, 631, 17, "Toggle Police Siren Lights", false, false, gui["scrollAreaCosmetics"])
-	guiSetEnabled( gui["police_lights_toggle"], false )
-	
-	gui["PoliceSirenLightsComboBox"] = guiCreateComboBox(192, 1202, 171, 180,"", false, gui["scrollAreaCosmetics"])
-	
+	addEventHandler("onClientGUIClick", gui["police_lights_toggle"], onPoliceSirenToggle, false)
 	
 	-- gui._placeHolders["line_10"] = {left = 2, top = 1142, width = 661, height = 20, parent = gui["scrollAreaCosmetics"]}
 	-- gui["line7"] = guiCreateStaticImage( 0, 1142, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
@@ -440,6 +437,13 @@ function onWheelChangingToggle(button, state)
 	triggerServerEvent('onClientToggleWheelChange', localPlayer, selected)
 end
 
+function onPoliceSirenToggle(button, state)
+	if button ~= "left" or state ~= "up" then return end
+
+	local selected = guiCheckBoxGetSelected(gui["police_lights_toggle"])
+	triggerServerEvent('onClientTogglePoliceSiren', localPlayer, selected)
+end
+
 
 
 
@@ -627,8 +631,7 @@ function populateGuiOptions(options)
 
 		elseif optionId == 6 then
 			-- Police Sirens
-			-- Coming Soon
-
+			guiCheckBoxSetSelected( gui["police_lights_toggle"], value.enabled or false )
 		elseif optionId == 7 then
 			-- Dynamic Vehicle Overlay
 			
