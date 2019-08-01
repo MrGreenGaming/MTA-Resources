@@ -71,7 +71,7 @@ function (player, status)
 	else
 		local temp = playerSirens[player]
 		
-		if temp.active then
+		if temp ~= true and temp.active then
 			local sirens = playerSirens[player].active
 			local dummies = playerSirens[player].dummies
 			
@@ -217,13 +217,15 @@ end)
 addEventHandler('onClientResourceStop', resourceRoot,
 function()
 	for i, p in ipairs(getElementsByType('player')) do
-		if playerSirens[p] and playerSirens[p]["active"] then
-			for c, s in ipairs(playerSirens[p].active) do
-				if s then
-					destroyCorona(s)
+		pcall(function(p)
+			if playerSirens[p] and playerSirens[p]["active"] then
+				for c, s in ipairs(playerSirens[p].active) do
+					if s then
+						destroyCorona(s)
+					end
 				end
 			end
-		end
+		end, p)
 	end
 end)
 
