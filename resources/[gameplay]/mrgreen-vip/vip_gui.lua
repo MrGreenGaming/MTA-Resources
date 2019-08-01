@@ -35,7 +35,7 @@ function build_mainVipWindow()
 	gui["scrollAreaHome"] = guiCreateScrollPane(20, 0, 681, 491, false, gui["tab_home"])
 
 	
-	gui["labelHome"] = guiCreateLabel(12, 112, 641, 350, "What is VIP?\n--------------------\nVIP is a special status that grants exclusive features and discounts to players.\n\nWhat is included in VIP?\n-------------------------------\n- Forum, ingame and discord VIP tags.\n- Car paintjob and wheels rainbow (Continuously changing colors)\n- +50% GreenCoins for finishing or winning a map.\n- Custom join message (A global chat message when you join the server)\n- 10% off all GC shop items\n- Super Nickname (Your nickname can have 22 characters and unlimited colors)\n- Blinking lights (Have blinking vehicle lights in a pattern)\n- Exclusive VIP character models\n- Exclusive VIP horn (upload your own private horn)\n- Police Sirens - Coming Soon!\n- Dynamic Vehicle Overlay (Fancy vehicle overlay that reacts to sound) - Coming Soon!\n- More features coming soon!\n\n", false, gui["scrollAreaHome"])
+	gui["labelHome"] = guiCreateLabel(12, 112, 641, 350, "What is VIP?\n--------------------\nVIP is a special status that grants exclusive features and discounts to players.\n\nWhat is included in VIP?\n-------------------------------\n- Forum, ingame and discord VIP tags.\n- Car paintjob and wheels rainbow (Continuously changing colors)\n- +50% GreenCoins for finishing or winning a map.\n- Custom join message (A global chat message when you join the server)\n- 10% off all GC shop items\n- Super Nickname (Your nickname can have 22 characters and unlimited colors)\n- Blinking lights (Have blinking vehicle lights in a pattern)\n- Exclusive VIP character models\n- Exclusive VIP horn (upload your own private horn)\n- Police Sirens\n- Dynamic Vehicle Overlay (Fancy vehicle overlay that reacts to sound) - Coming Soon!\n- More features coming soon!\n\n", false, gui["scrollAreaHome"])
 	guiLabelSetHorizontalAlign(gui["labelHome"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelHome"], "top")
 	
@@ -231,15 +231,15 @@ function build_mainVipWindow()
 	
 	gui["line7"] = guiCreateStaticImage( 0, 1152, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
 	
-	gui["label_vip_skin_2"] = guiCreateLabel(22, 1172, 361, 21, "Police Siren Lights (Coming Soon!)", false, gui["scrollAreaCosmetics"])
+	gui["label_vip_skin_2"] = guiCreateLabel(22, 1172, 361, 21, "Police Siren Lights", false, gui["scrollAreaCosmetics"])
 	guiLabelSetHorizontalAlign(gui["label_vip_skin_2"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_vip_skin_2"], "center")
 	guiSetFont( gui["label_vip_skin_2"], "default-bold-small")
 	
 	gui["police_lights_toggle"] = guiCreateCheckBox(22, 1202, 631, 17, "Toggle Police Siren Lights", false, false, gui["scrollAreaCosmetics"])
-	guiSetEnabled( gui["police_lights_toggle"], false )
+	addEventHandler("onClientGUIClick", gui["police_lights_toggle"], onPoliceSirenToggle, false)
 	
-	gui["PoliceSirenLightsComboBox"] = guiCreateComboBox(192, 1202, 171, 180,"", false, gui["scrollAreaCosmetics"])
+	guiCreateStaticImage( 0, 1350, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"]) -- Line used for margin
 	
 	
 	-- gui._placeHolders["line_10"] = {left = 2, top = 1142, width = 661, height = 20, parent = gui["scrollAreaCosmetics"]}
@@ -440,6 +440,13 @@ function onWheelChangingToggle(button, state)
 	triggerServerEvent('onClientToggleWheelChange', localPlayer, selected)
 end
 
+function onPoliceSirenToggle(button, state)
+	if button ~= "left" or state ~= "up" then return end
+
+	local selected = guiCheckBoxGetSelected(gui["police_lights_toggle"])
+	triggerServerEvent('onClientTogglePoliceSiren', localPlayer, selected)
+end
+
 
 
 
@@ -627,8 +634,7 @@ function populateGuiOptions(options)
 
 		elseif optionId == 6 then
 			-- Police Sirens
-			-- Coming Soon
-
+			guiCheckBoxSetSelected( gui["police_lights_toggle"], value.enabled or false )
 		elseif optionId == 7 then
 			-- Dynamic Vehicle Overlay
 			
