@@ -51,6 +51,7 @@
 
 	<!-- Sirens -->
 	<script src="items/sirens/sirens_c.lua" type="client" />
+	<script src="items/sirens/sirens_s.lua" type="server" />
 	
 	<!-- Custom corronas by Ren712 needed for the sirens https://community.multitheftauto.com/index.php?p=resources&s=details&id=9558 -->
 	<script src="items/sirens/custom_coronas/c_main.lua" type="client" />

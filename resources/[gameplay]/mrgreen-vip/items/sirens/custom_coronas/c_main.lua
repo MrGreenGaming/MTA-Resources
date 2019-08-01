@@ -8,7 +8,7 @@ coronaTable = { inputCoronas = {} , outputCoronas = {} , thisCorona = 0 , isInNr
 				numberType = {0, 0, 0}, shaderType = {nil, nil}, isInValChanged = false, isStarted = false, 
 				maxCoronas = 300, depthBias = true, sorted = 0, tempFade = 0 }
 funcTable = {}
-local img = dxCreateTexture( "textures/coronastar.png", "dxt5" )
+local img = dxCreateTexture( "items/sirens/custom_coronas/textures/coronastar.png", "dxt5" )
 
 ---------------------------------------------------------------------------------------------------
 -- editable variables
@@ -197,7 +197,7 @@ end
 -- add or remove shader settings 
 ---------------------------------------------------------------------------------------------------
 function funcTable.createShader(cType,nrType)
-	local pathString = "shaders/custom_corona"..(cType-1)..".fx"	
+	local pathString = "items/sirens/custom_coronas/shaders/custom_corona"..(cType-1)..".fx"	
 	local theShader = nil
 	if nrType then
 		if (nrType == 1) then 

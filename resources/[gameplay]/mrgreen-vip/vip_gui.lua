@@ -231,13 +231,16 @@ function build_mainVipWindow()
 	
 	gui["line7"] = guiCreateStaticImage( 0, 1152, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
 	
-	gui["label_vip_skin_2"] = guiCreateLabel(22, 1172, 361, 21, "Police Siren Lights (Coming Soon!)", false, gui["scrollAreaCosmetics"])
+	gui["label_vip_skin_2"] = guiCreateLabel(22, 1172, 361, 21, "Police Siren Lights", false, gui["scrollAreaCosmetics"])
 	guiLabelSetHorizontalAlign(gui["label_vip_skin_2"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_vip_skin_2"], "center")
 	guiSetFont( gui["label_vip_skin_2"], "default-bold-small")
 	
 	gui["police_lights_toggle"] = guiCreateCheckBox(22, 1202, 631, 17, "Toggle Police Siren Lights", false, false, gui["scrollAreaCosmetics"])
 	addEventHandler("onClientGUIClick", gui["police_lights_toggle"], onPoliceSirenToggle, false)
+	
+	guiCreateStaticImage( 0, 1350, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"]) -- Line used for margin
+	
 	
 	-- gui._placeHolders["line_10"] = {left = 2, top = 1142, width = 661, height = 20, parent = gui["scrollAreaCosmetics"]}
 	-- gui["line7"] = guiCreateStaticImage( 0, 1142, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])

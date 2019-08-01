@@ -6,11 +6,11 @@ function(state)
 end)
 
 addEventHandler('onPlayerVip', resourceRoot,
-	function(player, loggedIn)
-		if player and isElement(player) and getElementType(player) == "player" then
-			if loggedIn and getVipSetting(player,6,'enabled') then
-				triggerClientEvent(root, 'vip_startSirenForPlayer', source, source, true)		
-			end
+function(player, loggedIn)
+	if player and isElement(player) and getElementType(player) == "player" then
+		if loggedIn and getVipSetting(player,6,'enabled') then
+			triggerClientEvent(root, 'vip_startSirenForPlayer', player, player, true)		
 		end
 	end
+end
 )
