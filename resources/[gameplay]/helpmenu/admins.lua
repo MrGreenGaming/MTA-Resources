@@ -7,7 +7,7 @@ admins = {
 	{ name = "Dubby", title = "Map Manager", accountName = "michael" },
 	{ name = "Jack123", title = "Mother Russia", accountName = "Jack123" },
 	{ name = "Stig", title = "Old Admin", accountName = "Stig" },
-	{ name = "AbueloEbrio", title = "Alcoholic Admin", accountName = "Santiii733" },
+	{ name = "AbueloEbrio", title = "Alcoholic Admin", accountName = "santiii733" },
 	{ name = "Abrahax", title = "Kadabrahax", accountName = "abrahax" },
 	{ name = "LeTearDuGemeaux", title = "Web Admin", accountName = "AnthonyVz" },
 	{ name = "BlueYoshi", title = "Admin", accountName = "BlueYoshi97" },
