@@ -36,6 +36,7 @@ achievementListRace = {
 	{ s = "Win a map yet dying once",    					    		id = 20,		reward = 100 },
 	{ s = "Win the map *Sprinten* against 30+ players",		    		id = 31,		reward = 50 },
 	{ s = "Finish the map *Pirates Of Andreas*",               	   		id = 32,		reward = 100 },
+	{ s = "Finish the map *Epic Sandking*",               	   		id = 33,		reward = 100 },
 
 }
 
@@ -102,6 +103,9 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	end
 	if (getMapName() == "[SRI]Pirates Of Andreas") then
 		addPlayerAchievementRace(source, 32)
+	end
+	if (getMapName() == "Epic Sandking") then
+		addPlayerAchievementRace(source, 33)
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
