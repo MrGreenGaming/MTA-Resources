@@ -5,12 +5,15 @@
 
 local ID = 4
 local g_CustomPlayers = {}
+local PJ_API_URL = "https://mrgreengaming.com/api/custompaintjobs/"
+
 
 function loadGCCustomPaintjob ( player, bool, settings )
 	-- outputDebugString('loadGCCustomPaintjob :'..tostring(bool)..' - type: '..type(bool)..' - '..tostring(getPlayerName(player)))
 	if bool then
 		g_CustomPlayers[player] = player
 		sendPaintjobs ( {player}, player )
+		checkAPIOutdatedPaintjobs(player)
 	else
 		g_CustomPlayers[player] = nil
 	end
@@ -161,7 +164,7 @@ function receiveImage ( image, pid )
 		local dummy = fileCreate(server_path .. forumID .. '-' .. pid .. 'dummy.bmp')
 		fileWrite(dummy, image)
 
-		local maxFileSize = 1.5 -- In MB
+		local maxFileSize = 0.5 -- In MB
 		if fileGetSize(dummy) > (maxFileSize*1048576) then -- If file is bigger then x MB
 			outputChatBox("Custom paintjob image too big, please use a smaller image. (Max: "..tostring(maxFileSize).."MB)",player,255,0,0)
 			fileClose(dummy)
@@ -170,12 +173,11 @@ function receiveImage ( image, pid )
 		else -- If file is under the size limit
 			fileClose(dummy)
 			fileDelete(server_path .. forumID .. '-' .. pid .. 'dummy.bmp')
-
 			local file = fileCreate(server_path .. forumID .. '-' .. pid .. '.bmp')
 			fileWrite(file, image)
 			fileClose(file)
 			sendPaintjobs ( {player}, player, pid )
-			outputChatBox("Custom Paintjob Uploaded!",player,255,255,255)
+			sendAPICustomPaintjob(player, forumID .. '-' .. pid, base64Encode(image))
 		end
 
 		
@@ -191,9 +193,152 @@ function getMD5 ( filename )
 	fileClose(file)
 	return md5(image)
 end
-
 ----------------------------------------
----         Hosting PJ upload         ---
+---    Send/Save custom paintjob     ---
+---             with API             ---
+----------------------------------------
+function checkAPIOutdatedPaintjobs(player)
+	local forumID = exports.gc:getPlayerForumID(player)
+	if not isElement(player) or getElementType(player) ~= 'player' or not forumID then return end
+	getPerkSettings(player, ID,
+	function(res)
+		if type(res) == 'table' and type(res.amount) == 'number' then
+			local userPjs = {}
+			for i = 1, res.amount do
+				table.insert(userPjs, forumID..'-'..i)
+			end
+			getAPICustomPaintjobMD5(userPjs)
+		end
+	end)
+end
+
+function getAPICustomPaintjobMD5(paintjobID)
+	local ids = {}
+	if type(paintjobID) == 'table' then
+		ids = paintjobID
+	elseif type(paintjobID) == 'string' then
+		ids = {paintjobID}
+	else
+		outputDebugString('getAPICustomPaintjobMD5: Empty paintjobID', 1)
+		return
+	end
+
+	local fetchOptions = {
+        queueName = "API-Paintjob",
+        connectionAttempts = 3,
+        connectTimeout = 4000,
+        method = "POST",
+        postData = toJSON({
+            paintjobs = ids,
+            appId = get("gc.appId"),
+            appSecret = get("gc.appSecretPass")
+		}, true),
+		headers = {
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
+        }
+	}
+	fetchRemote(PJ_API_URL .. "getmd5", fetchOptions, receiveAPICustomPaintjobMD5)
+end
+
+function receiveAPICustomPaintjobMD5(res, info)
+	if not info.success or not res then
+		if not res then
+			res = "EMPTY"
+		end
+		outputDebugString("receiveAPICustomPaintjobMD5: invalid response (status " .. info.statusCode .. "). Res: " .. res, 1)
+		return
+	end
+
+	local result = fromJSON(res)
+	if not result or result.error then
+		return
+	end
+	
+	-- Check for changes
+	for name, hash in pairs(result) do
+		if type(hash) == 'string' and type(name) == 'string' then
+			local serverMD5 = string.upper(hash)
+			local filePath = server_path .. name .. '.bmp'
+			local exists = fileExists(filePath)
+			if exists then
+				local imageMD5 = getMD5(filePath)
+				if imageMD5 ~= serverMD5 then
+					-- Server has a different bmp image, so download the correct one
+					getAPICustomPaintjob(name)
+				end
+			else
+				getAPICustomPaintjob(name)
+			end
+		end
+	end
+end
+
+function getAPICustomPaintjob(paintjobID)
+	if type(paintjobID) ~= 'string' then return end
+	outputDebugString('gcshop: Downloading paintjob from API: '..paintjobID)
+	local fetchOptions = {
+        queueName = "API-Paintjob",
+        connectionAttempts = 3,
+        connectTimeout = 4000,
+        method = "POST",
+        postData = toJSON({
+            id = paintjobID,
+            appId = get("gc.appId"),
+            appSecret = get("gc.appSecretPass")
+		}, true),
+		headers = {
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
+        }
+	}
+	fetchRemote(PJ_API_URL .. "getpaintjob", fetchOptions, receiveAPICustomPaintjob, {paintjobID})
+end
+
+function receiveAPICustomPaintjob(res, info, id)
+	if type(info) == 'table' and info.success and type(id) == 'string' then
+		-- Save new custom PJ
+		local file = fileCreate("items/paintjob/" .. id ..'.bmp')
+		fileWrite( file, res )
+		fileClose( file )
+		outputDebugString('gcshop: Saved new paintjob '..id)
+	end
+end
+
+function sendAPICustomPaintjob(player, paintjobID, imageData)
+	if not player or type(paintjobID) ~= 'string' or type(imageData) ~= 'string' then return end
+	local fetchOptions = {
+        queueName = "API-Paintjob",
+        connectionAttempts = 3,
+        connectTimeout = 4000,
+        method = "POST",
+        postData = toJSON({
+			id = paintjobID,
+            data = splitPaintjobImageString(imageData),
+            appId = get("gc.appId"),
+            appSecret = get("gc.appSecretPass")
+		}, true),
+		headers = {
+			["Content-Type"] = "application/json",
+			["Accept"] = "application/json"
+        }
+	}
+	fetchRemote(PJ_API_URL .. "savepaintjob", fetchOptions, function(res, status)
+		if type(status) == 'table' and status.success then
+			outputChatBox('GCShop: Successfully uploaded new paintjob!', player, 0, 255, 0)
+		else
+			if not status.success or not res then
+				if not res then
+					res = "EMPTY"
+				end
+				outputDebugString("sendAPICustomPaintjob: invalid response (status " .. status.statusCode .. "). Res: " .. res, 1)
+			end
+			outputChatBox('GCShop: Could not upload paintjob, please try again', player, 255, 0 , 0)
+		end
+	end)
+end
+----------------------------------------
+---         Hosting PJ upload        ---
 ----------------------------------------
 function receiveHostingURL(url,id)
 	local player = source
@@ -210,22 +355,6 @@ function receiveHostingFetch(responseData,errno,player,id)
 		outputChatBox("Downloading paintjob failed, please check the URL or contact an admin (ERROR CODE: "..tostring(errno).." )",player,255,0,0)
 	end
 end
-
--- Send custom PJ info to client on vehicle switch
--- function PjInfoToClient(name,old)
--- 	if name == "gcshop.custompaintjob" then
--- 		local newPJ = getElementData(source,name)
-
--- 		outputChatBox("NEW: "..tostring(getElementData(source,name)).." OLD: "..tostring(old))
--- 		if not old and not newPJ then
--- 			-- REMOVE PJ
--- 		elseif newPJ then
--- 			-- NEW PJ
--- 		end
--- 	end
--- end
--- addEventHandler("onElementDataChange",root,PjInfoToClient)
-
 
 -- Send info to clients for (re)making textures
 addEvent('onRaceStateChanging', true)
@@ -255,4 +384,12 @@ function getCustomPlayersArray()
 		table.insert(g_CustomPlayersArray, p)
 	end
 	return g_CustomPlayersArray
+end
+
+function splitPaintjobImageString(imageString)
+    local s = {}
+    for i=1, #imageString, 60000 do
+        s[#s+1] = imageString:sub(i,i+60000 - 1)
+    end
+    return s
 end
