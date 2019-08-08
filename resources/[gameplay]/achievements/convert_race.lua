@@ -33,7 +33,11 @@ local achievementList = {
 	["Win a map on fire (100 GC)"] = 25,
 	["Win a map without using Nitro (100 GC)"] = 23,
 	["Win a map yet dieing once (100 GC)"] = 20,
-	["Win the map *Sprinten* against 30+ players (50 GC)"] = 31,	
+	["Win the map *Sprinten* against 30+ players (50 GC)"] = 31,
+	["Finish the map *Pirates Of Andreas* (100 GC)"] = 32,
+	["Finish the map *Epic Sandking* (100 GC)"] = 33,
+        ["Finish the map *San Andreas Run Puma* (100 GC)"] = 34,
+        ["Finish the map *Tour de San Andreas* (100 GC)"] = 35,
 }
 
 
