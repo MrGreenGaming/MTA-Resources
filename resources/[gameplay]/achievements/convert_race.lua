@@ -38,6 +38,10 @@ local achievementList = {
 	["Finish the map *Epic Sandking* (100 GC)"] = 33,
         ["Finish the map *San Andreas Run Puma* (100 GC)"] = 34,
         ["Finish the map *Tour de San Andreas* (100 GC)"] = 35,
+	["Win the map *I Wanna Find My Destiny* (300 GC)] = 36,
+	["Finish the map *I Wanna Find My Destiny* (100 GC)] = 37,
+	["Win the map *I Wanna Find My Destiny 2* (300 GC)] = 38,
+	["Finish the map *I Wanna Find My Destiny 2* (100 GC)] = 39,
 }
 
 
