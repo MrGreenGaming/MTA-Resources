@@ -23,12 +23,17 @@ achievementListRace = {
 	{ s = "Get 2 first toptimes consecutively",    		  				id = 24,		reward = 100 },
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
 	{ s = "No death in 5 maps",    						    			id = 7,			reward = 100 },
+	{ s = "No death in 10 maps",    						    			id = 46,			reward = 200 },
+	{ s = "No death in 20 maps",    						    			id = 47,			reward = 300 },
 	{ s = "Play for 4 hours with no disconnecting",						id = 29,		reward = 100 },
 	{ s = "The only noob to die in a map",     							id = 5,			reward = 100 },
 	{ s = "The only person to finish a map",    						id = 21,		reward = 100 },
+	{ s = "Finish the map *Hydratastic!*",               	   	                id = 42,		reward = 100 },
+	{ s = "Win the map *Hydratastic!*",               	   	                id = 43,		reward = 300 },
 	{ s = "The only person who hasn't died in a map",   	    		id = 8,			reward = 100 },
 	{ s = "Win 3 times in a row",       					   			id = 3,			reward = 100 },
-	{ s = "Win 5 times in a row",     									id = 4,			reward = 100 },
+	{ s = "Win 5 times in a row",     									id = 4,			reward = 300 },
+	{ s = "Win 10 times in a row",     									id = 45,			reward = 500 },
 	{ s = "Win a map as a late joiner",     							id = 14,		reward = 100 },
 	{ s = "Win a map in less than 20 seconds",    			    		id = 16,		reward = 100 },
 	{ s = "Win a map on fire",     						   		 		id = 25,		reward = 100 },
@@ -43,6 +48,9 @@ achievementListRace = {
 	{ s = "Finish the map *I Wanna Find My Destiny*",               	   	id = 37,		reward = 100 },
 	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	        id = 38,		reward = 300 },
 	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	   	id = 39,		reward = 100 },
+	{ s = "Finish the map *DOOZYJude - Are You Infernus Pro?* in less than 10 minutes",                     id = 40,		reward = 300 },
+        { s = "Win the map *Never The Same*",               	   	                id = 41,		reward = 100 },
+	{ s = "Win the map *Chase The Checkpoints* against 30+ players",		    		id = 44,		reward = 200 },
 
 }
 
@@ -131,6 +139,22 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	if (getMapName() == "I wanna find my destiny 2") then
 		addPlayerAchievementRace(source, 39)
 	end
+	if (getMapName() == "!!- DOOZYJude - IUISO[ARE-YOU-INFERNUS-PRO?(EASY)]") then
+		if time <= 600000 then	
+		        addPlayerAchievementRace(source, 40)
+	end
+        if (getMapName() == "Never The Same") and (rank == 1) then
+		addPlayerAchievementRace(source, 41)
+	end
+	if (getMapName() == "Hydratastic!") then
+		addPlayerAchievementRace(source, 42)
+	end
+	if (getMapName() == "Hydratastic!") and (rank == 1) then
+		addPlayerAchievementRace(source, 43)
+	end
+	if (getMapName() == "Chase the Checkpoints") and (rank == 1) and (getPlayerCount() > 29) then
+		addPlayerAchievementRace(source, 44)
+	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
 		g_Players[source].won = true
@@ -140,6 +164,8 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			addPlayerAchievementRace(source, 3)
 		elseif g_Players[source].wins == 5 then
 			addPlayerAchievementRace(source, 4)
+		elseif g_Players[source].wins == 10 then
+			addPlayerAchievementRace(source, 45)
 		end
 	else 
 		g_Players[source].wins = 0
@@ -359,6 +385,10 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			addPlayerAchievementRace(j, 6)
 		elseif 	g_Players[j].countMapsWithNoDeaths == 5 then
 			addPlayerAchievementRace(j, 7)
+		elseif 	g_Players[j].countMapsWithNoDeaths == 10 then
+			addPlayerAchievementRace(j, 46)
+		elseif 	g_Players[j].countMapsWithNoDeaths == 20 then
+			addPlayerAchievementRace(j, 47)
 		end	
 	end
 	removeEventHandler('onPlayerWasted', root, dieFunc)
