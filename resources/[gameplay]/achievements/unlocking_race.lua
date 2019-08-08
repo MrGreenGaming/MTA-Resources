@@ -39,6 +39,10 @@ achievementListRace = {
 	{ s = "Finish the map *Epic Sandking*",               	   		        id = 33,		reward = 100 },
         { s = "Finish the map *San Andreas Run Puma*",               	   		id = 34,		reward = 100 },
         { s = "Finish the map *Tour de San Andreas*",               	   		id = 35,		reward = 100 },
+	{ s = "Win the map *I Wanna Find My Destiny*",               	   		id = 36,		reward = 300 },
+	{ s = "Finish the map *I Wanna Find My Destiny*",               	   	id = 37,		reward = 100 },
+	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	        id = 38,		reward = 300 },
+	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	   	id = 39,		reward = 100 },
 
 }
 
@@ -114,6 +118,18 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	end
 	if (getMapName() == "[Race] Tour de San Andreas") then
 		addPlayerAchievementRace(source, 35)
+	end
+	if (getMapName() == "I wanna find my destiny") and (rank == 1) then
+		addPlayerAchievementRace(source, 36)
+	end
+	if (getMapName() == "I wanna find my destiny") then
+		addPlayerAchievementRace(source, 37)
+	end
+	if (getMapName() == "I wanna find my destiny 2") and (rank == 1) then
+		addPlayerAchievementRace(source, 38)
+	end
+	if (getMapName() == "I wanna find my destiny 2") then
+		addPlayerAchievementRace(source, 39)
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
