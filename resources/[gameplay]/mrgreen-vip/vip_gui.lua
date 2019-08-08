@@ -180,7 +180,7 @@ function build_mainVipWindow()
 	addEventHandler("onClientGUIClick", gui["vip_badge_toggle"], onVipBadgeToggle, false)
 
 
-	gui["dvoid_gridlist"] = guiCreateGridList(22, 882, 111, 151, false, gui["scrollAreaCosmetics"])
+	gui["dvoid_gridlist"] = guiCreateGridList(22, 882, 111, 185, false, gui["scrollAreaCosmetics"])
 	guiGridListSetSortingEnabled(gui["dvoid_gridlist"], false)
 	gui["dvoid_gridlist_col0"] = guiGridListAddColumn(gui["dvoid_gridlist"], "ID", 0.900901)
 	
@@ -196,11 +196,38 @@ function build_mainVipWindow()
 	guiLabelSetHorizontalAlign(gui["dvoid_using_label"], "left", false)
 	guiLabelSetVerticalAlign(gui["dvoid_using_label"], "center")
 	
-	gui["dvoid_stop_using"] = guiCreateButton(142, 972, 151, 61, "Stop Using Overlay", false, gui["scrollAreaCosmetics"])
+	gui["dvoid_stop_using"] = guiCreateButton(142, 1006, 151, 61, "Stop Using Overlay", false, gui["scrollAreaCosmetics"])
 	-- guiSetEnabled( gui["dvoid_stop_using"], false )
 	if on_dvoid_stop_using_clicked then
 		addEventHandler("onClientGUIClick", gui["dvoid_stop_using"], on_dvoid_stop_using_clicked, false)
 	end
+
+	gui["dvoid_intensity_low"] = guiCreateButton(302, 972, 80, 30, "Low\n Intensity", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_intensity_low"], on_dvoid_intensity, false)
+	gui["dvoid_intensity_medium"] = guiCreateButton(392, 972, 80, 30, "Medium\n Intensity", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_intensity_medium"], on_dvoid_intensity, false)
+	gui["dvoid_intensity_high"] = guiCreateButton(482, 972, 80, 30, "High\n Intensity", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_intensity_high"], on_dvoid_intensity, false)
+	gui["dvoid_intensity_max"] = guiCreateButton(572, 972, 80, 30, "Max\n Intensity", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_intensity_max"], on_dvoid_intensity, false)
+
+	gui["dvoid_opacity_low"] = guiCreateButton(302, 1005, 80, 30, "Low\n Opacity", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_opacity_low"], on_dvoid_opacity, false)
+	gui["dvoid_opacity_medium"] = guiCreateButton(392, 1005, 80, 30, "Medium\n Opacity", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_opacity_medium"], on_dvoid_opacity, false)
+	gui["dvoid_opacity_high"] = guiCreateButton(482, 1005, 80, 30, "High\n Opacity", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_opacity_high"], on_dvoid_opacity, false)
+	gui["dvoid_opacity_max"] = guiCreateButton(572, 1005, 80, 30, "Max\n Opacity", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_opacity_max"], on_dvoid_opacity, false)
+	
+	gui["dvoid_speed_low"] = guiCreateButton(302, 1038, 80, 30, "Low\n Speed", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_speed_low"], on_dvoid_speed, false)
+	gui["dvoid_speed_medium"] = guiCreateButton(392, 1038, 80, 30, "Medium\n Speed", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_speed_medium"], on_dvoid_speed, false)
+	gui["dvoid_speed_high"] = guiCreateButton(482, 1038, 80, 30, "High\n Speed", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_speed_high"], on_dvoid_speed, false)
+	gui["dvoid_speed_max"] = guiCreateButton(572, 1038, 80, 30, "Max\n Speed", false, gui["scrollAreaCosmetics"])
+	addEventHandler("onClientGUIClick", gui["dvoid_speed_max"], on_dvoid_speed, false)
 	
 	gui["label_7"] = guiCreateLabel(352, 852, 111, 16, "Current overlay color:", false, gui["scrollAreaCosmetics"])
 	guiLabelSetHorizontalAlign(gui["label_7"], "left", false)
@@ -219,24 +246,24 @@ function build_mainVipWindow()
 	end
 	
 	-- gui._placeHolders["line_6"] = {left = 2, top = 1052, width = 661, height = 20, parent = gui["scrollAreaCosmetics"]}
-	gui["line6"] = guiCreateStaticImage( 0, 1052, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
+	gui["line6"] = guiCreateStaticImage( 0, 1086, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
 	
-	gui["wheelchange_label"] = guiCreateLabel(22, 1072, 361, 21, "Wheel changing", false, gui["scrollAreaCosmetics"])
+	gui["wheelchange_label"] = guiCreateLabel(22, 1106, 361, 21, "Wheel changing", false, gui["scrollAreaCosmetics"])
 	guiLabelSetHorizontalAlign(gui["wheelchange_label"], "left", false)
 	guiLabelSetVerticalAlign(gui["wheelchange_label"], "center")
 	guiSetFont( gui["wheelchange_label"], "default-bold-small")
 	
-	gui["wheelchange_toggle"] = guiCreateCheckBox(22, 1102, 631, 17, "Toggle wheel changing (Works only with vehicles that you own!)", false, false, gui["scrollAreaCosmetics"])
+	gui["wheelchange_toggle"] = guiCreateCheckBox(22, 1136, 631, 17, "Toggle wheel changing (Works only with vehicles that you own!)", false, false, gui["scrollAreaCosmetics"])
 	addEventHandler("onClientGUIClick", gui["wheelchange_toggle"], onWheelChangingToggle, false)
 	
-	gui["line7"] = guiCreateStaticImage( 0, 1152, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
+	gui["line7"] = guiCreateStaticImage( 0, 1186, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
 	
-	gui["label_vip_skin_2"] = guiCreateLabel(22, 1172, 361, 21, "Police Siren Lights", false, gui["scrollAreaCosmetics"])
+	gui["label_vip_skin_2"] = guiCreateLabel(22, 1206, 361, 21, "Police Siren Lights", false, gui["scrollAreaCosmetics"])
 	guiLabelSetHorizontalAlign(gui["label_vip_skin_2"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_vip_skin_2"], "center")
 	guiSetFont( gui["label_vip_skin_2"], "default-bold-small")
 	
-	gui["police_lights_toggle"] = guiCreateCheckBox(22, 1202, 631, 17, "Toggle Police Siren Lights", false, false, gui["scrollAreaCosmetics"])
+	gui["police_lights_toggle"] = guiCreateCheckBox(22, 1236, 631, 17, "Toggle Police Siren Lights", false, false, gui["scrollAreaCosmetics"])
 	addEventHandler("onClientGUIClick", gui["police_lights_toggle"], onPoliceSirenToggle, false)
 	
 	guiCreateStaticImage( 0, 1350, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"]) -- Line used for margin
@@ -500,6 +527,69 @@ function on_dvoid_stop_using_clicked(button, state, absoluteX, absoluteY)
 	
 end
 
+function on_dvoid_intensity(btn, state)
+	if btn~="left" or state~="up" then return end	
+	guiSetProperty(gui["dvoid_intensity_low"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(gui["dvoid_intensity_medium"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(gui["dvoid_intensity_high"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(gui["dvoid_intensity_max"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(source, "NormalTextColour", "FF00FF00")
+	local chosen = false
+	if source == gui["dvoid_intensity_low"] then
+		chosen = 1
+	elseif source == gui["dvoid_intensity_medium"] then
+		chosen = 2
+	elseif source == gui["dvoid_intensity_high"] then
+		chosen = 3
+	elseif source == gui["dvoid_intensity_max"] then
+		chosen = 4
+	end
+	-- Do event for saving intensity
+	triggerServerEvent('onClientSetVipOverlayIntensity', localPlayer, chosen)
+end
+
+function on_dvoid_opacity(btn, state)
+	if btn~="left" or state~="up" then return end	
+	guiSetProperty(gui["dvoid_opacity_low"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(gui["dvoid_opacity_medium"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(gui["dvoid_opacity_high"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(gui["dvoid_opacity_max"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(source, "NormalTextColour", "FF00FF00")
+	local chosen = false
+	if source == gui["dvoid_opacity_low"] then
+		chosen = 1
+	elseif source == gui["dvoid_opacity_medium"] then
+		chosen = 2
+	elseif source == gui["dvoid_opacity_high"] then
+		chosen = 3
+	elseif source == gui["dvoid_opacity_max"] then
+		chosen = 4
+	end
+	-- Do event for saving intensity
+	triggerServerEvent('onClientSetVipOverlayOpacity', localPlayer, chosen)
+end
+
+function on_dvoid_speed(btn, state)
+	if btn~="left" or state~="up" then return end	
+	guiSetProperty(gui["dvoid_speed_low"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(gui["dvoid_speed_medium"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(gui["dvoid_speed_high"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(gui["dvoid_speed_max"], "NormalTextColour", "FFAAAAAA")
+	guiSetProperty(source, "NormalTextColour", "FF00FF00")
+	local chosen = false
+	if source == gui["dvoid_speed_low"] then
+		chosen = 1
+	elseif source == gui["dvoid_speed_medium"] then
+		chosen = 2
+	elseif source == gui["dvoid_speed_high"] then
+		chosen = 3
+	elseif source == gui["dvoid_speed_max"] then
+		chosen = 4
+	end
+	-- Do event for saving intensity
+	triggerServerEvent('onClientSetVipOverlaySpeed', localPlayer, chosen)
+end
+
 
 
 function on_dvoidChangeColor_clicked(button, state, absoluteX, absoluteY)
@@ -659,6 +749,62 @@ function populateGuiOptions(options)
 			local hex = "FF"..playerOptions.options[7].color
 			local isSet = guiSetProperty (gui["dvoid_color"], "ImageColours", "tl:"..hex.." tr:"..hex.." bl:"..hex.." br:"..hex )
 
+			-- Intensity
+			
+			guiSetProperty(gui["dvoid_intensity_low"], "NormalTextColour", "FFAAAAAA")
+			guiSetProperty(gui["dvoid_intensity_medium"], "NormalTextColour", "FFAAAAAA")
+			guiSetProperty(gui["dvoid_intensity_high"], "NormalTextColour", "FFAAAAAA")
+			guiSetProperty(gui["dvoid_intensity_max"], "NormalTextColour", "FFAAAAAA")
+			local intensity = playerOptions.options[7].intensity
+			if not intensity then intensity = 2 end
+			
+			if intensity == 1 then
+				guiSetProperty(gui["dvoid_intensity_low"], "NormalTextColour", "FF00FF00")
+			elseif intensity == 2 then
+				guiSetProperty(gui["dvoid_intensity_medium"], "NormalTextColour", "FF00FF00")
+			elseif intensity == 3 then
+				guiSetProperty(gui["dvoid_intensity_high"], "NormalTextColour", "FF00FF00")
+			elseif intensity == 4 then
+				guiSetProperty(gui["dvoid_intensity_max"], "NormalTextColour", "FF00FF00")
+			end
+
+			-- Opacity
+			
+			guiSetProperty(gui["dvoid_opacity_low"], "NormalTextColour", "FFAAAAAA")
+			guiSetProperty(gui["dvoid_opacity_medium"], "NormalTextColour", "FFAAAAAA")
+			guiSetProperty(gui["dvoid_opacity_high"], "NormalTextColour", "FFAAAAAA")
+			guiSetProperty(gui["dvoid_opacity_max"], "NormalTextColour", "FFAAAAAA")
+			local opacity = playerOptions.options[7].opacity
+			if not opacity then opacity = 2 end
+			
+			if opacity == 1 then
+				guiSetProperty(gui["dvoid_opacity_low"], "NormalTextColour", "FF00FF00")
+			elseif opacity == 2 then
+				guiSetProperty(gui["dvoid_opacity_medium"], "NormalTextColour", "FF00FF00")
+			elseif opacity == 3 then
+				guiSetProperty(gui["dvoid_opacity_high"], "NormalTextColour", "FF00FF00")
+			elseif opacity == 4 then
+				guiSetProperty(gui["dvoid_opacity_max"], "NormalTextColour", "FF00FF00")
+			end
+
+			-- Speed
+			
+			guiSetProperty(gui["dvoid_speed_low"], "NormalTextColour", "FFAAAAAA")
+			guiSetProperty(gui["dvoid_speed_medium"], "NormalTextColour", "FFAAAAAA")
+			guiSetProperty(gui["dvoid_speed_high"], "NormalTextColour", "FFAAAAAA")
+			guiSetProperty(gui["dvoid_speed_max"], "NormalTextColour", "FFAAAAAA")
+			local speed = playerOptions.options[7].speed
+			if not speed then speed = 2 end
+			
+			if speed == 1 then
+				guiSetProperty(gui["dvoid_speed_low"], "NormalTextColour", "FF00FF00")
+			elseif speed == 2 then
+				guiSetProperty(gui["dvoid_speed_medium"], "NormalTextColour", "FF00FF00")
+			elseif speed == 3 then
+				guiSetProperty(gui["dvoid_speed_high"], "NormalTextColour", "FF00FF00")
+			elseif speed == 4 then
+				guiSetProperty(gui["dvoid_speed_max"], "NormalTextColour", "FF00FF00")
+			end
 
 		elseif optionId == 8 then
 			-- Vip Join Message
