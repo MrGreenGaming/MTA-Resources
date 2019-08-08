@@ -639,7 +639,7 @@ function populateGuiOptions(options)
 			-- Dynamic Vehicle Overlay
 			
 			-- Currently 32 types of dvoid
-			for i=1, 32 do
+			for i=1, 51 do
 				if not overlayGridListBuild then
 					guiGridListAddRow( gui["dvoid_gridlist"], i )
 				else
