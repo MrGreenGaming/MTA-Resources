@@ -273,3 +273,21 @@ function checkGear()
 end
 
 addEventHandler("onClientMapStarting", root, checkGear)
+
+-- Vehicle ID change
+local lastVehID
+function checkVehicleID()
+    local currentVehID = false
+    local veh = getPedOccupiedVehicle(localPlayer)
+    if not veh then
+        currentVehID = false
+    else
+        currentVehID = getElementModel(veh)
+    end
+
+    if lastVehID ~= currentVehID then
+        setElementData(localPlayer, 'playerVehicleID', currentVehID)
+    end
+    lastVehID = currentVehID
+end
+setTimer(checkVehicleID, 50, 0)
