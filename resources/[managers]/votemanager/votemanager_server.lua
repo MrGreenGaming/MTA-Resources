@@ -481,8 +481,6 @@ end
 
 -- Check for guest votes
 function canGuestVote(player)
-	outputDebugString( get('*guestvotes') )
-	outputChatBox(type(get('*guestvotes')))
 	if get('*guestvotes') == true or getResourceState(getResourceFromName('gc')) ~= 'running' then return true end
 	return exports.gc:isPlayerLoggedInGC(player)
 end
