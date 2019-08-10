@@ -24,9 +24,9 @@ achievementListRace = {
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
 	{ s = "No death in 5 maps",    						    			id = 7,			reward = 100 },
 	{ s = "Play for 4 hours with no disconnecting",						id = 29,		reward = 100 },
-	{ s = "The only noob to die in a map",     							id = 5,			reward = 100 },
+	{ s = "The only noob to die in a map (Min 5 players)",				id = 5,			reward = 100 },
 	{ s = "The only person to finish a map",    						id = 21,		reward = 100 },
-	{ s = "The only person who hasn't died in a map",   	    		id = 8,			reward = 100 },
+	{ s = "The only person who hasn't died in a map (Min 5 players)",	id = 8,			reward = 100 },
 	{ s = "Win 3 times in a row",       					   			id = 3,			reward = 100 },
 	{ s = "Win 5 times in a row",     									id = 4,			reward = 100 },
 	{ s = "Win a map as a late joiner",     							id = 14,		reward = 100 },
@@ -36,13 +36,13 @@ achievementListRace = {
 	{ s = "Win a map yet dying once",    					    		id = 20,		reward = 100 },
 	{ s = "Win the map *Sprinten* against 30+ players",		    		id = 31,		reward = 50 },
 	{ s = "Finish the map *Pirates Of Andreas*",               	   		id = 32,		reward = 100 },
-	{ s = "Finish the map *Epic Sandking*",               	   		        id = 33,		reward = 100 },
-        { s = "Finish the map *San Andreas Run Puma*",               	   		id = 34,		reward = 100 },
-        { s = "Finish the map *Tour de San Andreas*",               	   		id = 35,		reward = 100 },
-	{ s = "Win the map *I Wanna Find My Destiny*",               	   		id = 36,		reward = 300 },
-	{ s = "Finish the map *I Wanna Find My Destiny*",               	   	id = 37,		reward = 100 },
-	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	        id = 38,		reward = 300 },
-	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	   	id = 39,		reward = 100 },
+	{ s = "Finish the map *Epic Sandking*",               	   		    id = 33,		reward = 100 },
+    { s = "Finish the map *San Andreas Run Puma*",               	   	id = 34,		reward = 100 },
+    { s = "Finish the map *Tour de San Andreas*",               	   	id = 35,		reward = 100 },
+	{ s = "Win the map *I Wanna Find My Destiny*",               	   	id = 36,		reward = 300 },
+	{ s = "Finish the map *I Wanna Find My Destiny*",               	id = 37,		reward = 100 },
+	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	id = 38,		reward = 300 },
+	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	id = 39,		reward = 100 },
 
 }
 
@@ -221,8 +221,8 @@ addEventHandler('onPostFinish', root,
 function()
 if exports.race:getRaceMode() ~= "Sprint" then return end
 
---this is for "Be the only noob to die in a map"
---this is for "be the only person who hasn't died in a map"
+	--"Be the only noob to die in a map"
+
 	for i,j in ipairs(getElementsByType('player')) do 
 		local isFinished = getElementData(j, "race.finished")
 		if (g_Players[j].wins ~= 0) and (g_Players[j].win ~= false) and (isFinished == false) then
@@ -232,27 +232,26 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	end	
 	local count = 0
 	local onlyPlayer
-	for i,j in pairs(g_Players) do 
-		for k, m in pairs(j) do 
-			if (k == "died") and (m == true) then
-				count = count + 1
-				onlyPlayer = i
-			end	
+	for i,j in pairs(g_Players) do
+		if type(j.died) == 'boolean' and j.died == true then
+			count = count + 1
+			onlyPlayer = i
 		end
 	end
-	if count == 1 then	
+
+	if count == 1 and getPlayerCount() >= 5 then	
 		addPlayerAchievementRace(onlyPlayer, 5)
 	end
+
+	--"be the only person who hasn't died in a map"
 	count = 0
 	for i,j in pairs(g_Players) do 
-		for k,m in pairs(j) do 
-			if (k == "died") and ( m == false ) then
-				count = count + 1
-				onlyPlayer = i
-			end
+		if type(j.died) == 'boolean' and j.died == false and not wasPlayerAfk(i) then
+			count = count + 1
+			onlyPlayer = i
 		end
 	end
-	if count == 1 then	
+	if count == 1 and getPlayerCount() >= 5 then	
 		 addPlayerAchievementRace(onlyPlayer, 8)
 	end
 	removeEventHandler('onPlayerWasted', root, wastedFunc)
@@ -402,3 +401,19 @@ addEventHandler("onPlayerToptimeImprovement",root,
 		end	
     end
 )
+
+-- AFK check to use in achievements
+local playerAfkCache = {}
+function wasPlayerAfk(player)
+	return playerAfkCache[player] or false
+end
+
+addEvent('onPlayerAway')
+addEventHandler('onPlayerAway', root, 
+function(bool) 
+	if bool and isElement(source) and getElementType(source) == 'player' then
+		playerAfkCache[source] = true
+	end
+end)
+addEventHandler('onPlayerQuit', root, function() if playerAfkCache[source] then playerAfkCache[player] = nil end end)
+addEventHandler('onMapStarting', root, function() playerAfkCache = {} end)

@@ -176,7 +176,7 @@ function setPlayerAFK(p,bln)
 			if currentGamemode == "Destruction derby" or currentGamemode == "Shooter" or currentGamemode == "Deadline" then
 				
 				setElementData(p,"player state","away")
-				
+				triggerEvent('onPlayerAway', p, bln)
 
 				if isElement(getPedOccupiedVehicle(p)) and MapState == "Running" and not isPedDead(p) then
 					killPed( p )
@@ -195,6 +195,7 @@ function setPlayerAFK(p,bln)
 				-- outputDebugString("AFK Spectate"..getPlayerName(p).." ::Individual Else GM")
 				triggerClientEvent(p,"triggerPlayerSpectate",resourceRoot,true)
 				setElementData(p,"player state","away")
+				triggerEvent('onPlayerAway', p, bln)
 				
 			end
 		elseif bln == false then
@@ -202,11 +203,7 @@ function setPlayerAFK(p,bln)
 			removeNotify(p)
 			local theRealData = getElementData( p, "state" )
 			setElementData( p, "player state", theRealData )
-			-- if currentGamemode == "Destruction derby" or currentGamemode == "Shooter" then
-				
-			-- else
-			-- 	triggerClientEvent(p,"triggerPlayerSpectate",resourceRoot,false)
-			-- end
+			triggerEvent('onPlayerAway', p, bln)
 		end
 	end
 end
