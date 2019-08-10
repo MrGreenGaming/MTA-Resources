@@ -16,7 +16,7 @@ achievementListRace = {
 	{ s = "Finish a map yet having chatted for 30 seconds",    			id = 22,		reward = 50 },
 	{ s = "Finish a non-ghostmode map with GM on",    		   			id = 11,		reward = 50 },
 	{ s = "Finish a race at the very last moment",    		    		id = 28,		reward = 50 },
-	{ s = "Finish the map *Drift Project 2*",   			   			id = 2,			reward = 100 },
+	{ s = "Finish the map *This Time in the Dark*",   			   			id = 2,			reward = 100 },
 	{ s = "Finish the map *Hell Choose Me*",     						id = 1,			reward = 100 },
 	{ s = "Finish the map *promap*",									id = 30,		reward = 100 },
 	{ s = "First noob to die in a map",     							id = 12,		reward = 50 },
@@ -98,7 +98,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	if (getMapName() == "Hell Choose Me") then
 		addPlayerAchievementRace(source, 1)
 	end
-	if (getMapName() == "Drift Project 2") then
+	if (getMapName() == "This Time in the Dark") then
 		addPlayerAchievementRace(source, 2)
 	end
 	if (getMapName() == "promap") then
