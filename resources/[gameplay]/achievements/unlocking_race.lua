@@ -28,9 +28,9 @@ achievementListRace = {
 	{ s = "The only noob to die in a map (Min 5 players)",				id = 5,			reward = 100 },
 	{ s = "The only person to finish a map",    						id = 21,		reward = 100 },
 	{ s = "The only person who hasn't died in a map (Min 5 players)",	id = 8,			reward = 100 },
-	{ s = "Win 3 times in a row (Min 3 players)",       					   			id = 3,			reward = 100 },
-	{ s = "Win 5 times in a row (Min 3 players)",     									id = 4,			reward = 200 },
-	{ s = "Win 10 times in a row (Min 3 players)",     									id = 54,			reward = 300 },
+	{ s = "Win 3 times in a row (Min 5 players)",       					   			id = 3,			reward = 100 },
+	{ s = "Win 5 times in a row (Min 5 players)",     									id = 4,			reward = 200 },
+	{ s = "Win 10 times in a row (Min 5 players)",     									id = 54,			reward = 300 },
 	{ s = "Win a map as a late joiner",     							id = 14,		reward = 100 },
 	{ s = "Win a map in less than 20 seconds",    			    		id = 16,		reward = 100 },
 	{ s = "Win a map on fire",     						   		 		id = 25,		reward = 100 },
@@ -139,13 +139,13 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	elseif (g_Players[source].won) and (rank == 1) then
 		g_Players[source].wins = g_Players[source].wins + 1
 		if g_Players[source].wins == 3 then
-			if count == 1 and getPlayerCount() >= 3 then
+			if count == 1 and getPlayerCount() >= 5 then
 			addPlayerAchievementRace(source, 3)
 		elseif g_Players[source].wins == 5 then
-			if count == 1 and getPlayerCount() >= 3 then
+			if count == 1 and getPlayerCount() >= 5 then
 			addPlayerAchievementRace(source, 4)
 		elseif g_Players[source].wins == 10 then
-			if count == 1 and getPlayerCount() >= 3 then
+			if count == 1 and getPlayerCount() >= 5 then
 			addPlayerAchievementRace(source, 54)
 		end
 	else 
