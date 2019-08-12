@@ -21,6 +21,16 @@ achievementListRace = {
 	{ s = "Finish the map *promap*",									id = 30,		reward = 100 },
 	{ s = "First noob to die in a map",     							id = 12,		reward = 50 },
 	{ s = "Get 2 first toptimes consecutively",    		  				id = 24,		reward = 100 },
+	{ s = "Finish 5 Times",     									id = 42,			reward = 50, max = 5 },
+        { s = "Finish 20 times",     									id = 43,			reward = 100, max = 20 },
+        { s = "Finish 200 times",     									id = 44,			reward = 300, max = 200 },
+        { s = "Finish 500 times",     									id = 45,			reward = 500, max = 500 },
+        { s = "Finish 1000 times",     									id = 46,			reward = 1000, max = 1000 },
+        { s = "Win 5 Times",     									id = 47,			reward = 100, max = 5 },
+        { s = "Win 20 times",     									id = 48,			reward = 200, max = 20 },
+        { s = "Win 200 times",     									id = 49,			reward = 500, max = 200 },
+        { s = "Win 500 times",     									id = 50,			reward = 1000, max = 500 },
+        { s = "Win 1000 times",     									id = 51,			reward = 5000, max = 1000 },
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
 	{ s = "No death in 5 maps",    						    			id = 7,			reward = 100 },
 	{ s = "Play for 4 hours with no disconnecting",						id = 29,		reward = 100 },
@@ -43,6 +53,7 @@ achievementListRace = {
 	{ s = "Finish the map *I Wanna Find My Destiny*",               	id = 37,		reward = 100 },
 	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	id = 38,		reward = 300 },
 	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	id = 39,		reward = 100 },
+	{ s = "Besweeet award",     									id = 52,			reward = 44, max = 4 },
 
 }
 
@@ -86,6 +97,20 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 		if g_Players[source].mapsWon == 10 then
 			addPlayerAchievementRace(source, 27)
 		end	
+	           addAchievementProgressRace ( source, 42, 1 )
+	           addAchievementProgressRace ( source, 43, 1 )
+	           addAchievementProgressRace ( source, 44, 1 )
+	           addAchievementProgressRace ( source, 45, 1 )
+		   addAchievementProgressRace ( source, 46, 1 )
+	if rank == 1 then
+		addAchievementProgressRace ( source, 47, 1 )
+		addAchievementProgressRace ( source, 48, 1 )
+		addAchievementProgressRace ( source, 49, 1 )
+		addAchievementProgressRace ( source, 50, 1 )
+		addAchievementProgressRace ( source, 51, 1 )
+	elseif rank == 4 then
+		addAchievementProgressRace ( player, 52, 1 )
+	end
 	end	
 	tableOfWinners[rank] = source
 	if not mapGM then
