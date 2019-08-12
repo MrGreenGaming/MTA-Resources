@@ -30,7 +30,7 @@ achievementListRace = {
         { s = "Win 20 times",     									id = 48,			reward = 200, max = 20 },
         { s = "Win 200 times",     									id = 49,			reward = 500, max = 200 },
         { s = "Win 500 times",     									id = 50,			reward = 1000, max = 500 },
-        { s = "Win 1000 times",     									id = 51,			reward = 5000, max = 1000 },
+        { s = "Win 1000 times",     									id = 51,			reward = 2500, max = 1000 },
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
 	{ s = "No death in 5 maps",    						    			id = 7,			reward = 100 },
 	{ s = "Play for 4 hours with no disconnecting",						id = 29,		reward = 100 },
