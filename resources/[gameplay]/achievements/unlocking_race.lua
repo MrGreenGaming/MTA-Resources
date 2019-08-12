@@ -23,12 +23,14 @@ achievementListRace = {
 	{ s = "Get 2 first toptimes consecutively",    		  				id = 24,		reward = 100 },
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
 	{ s = "No death in 5 maps",    						    			id = 7,			reward = 100 },
+	{ s = "No death in 10 maps",    						    			id = 54,			reward = 150 },
 	{ s = "Play for 4 hours with no disconnecting",						id = 29,		reward = 100 },
 	{ s = "The only noob to die in a map (Min 5 players)",				id = 5,			reward = 100 },
 	{ s = "The only person to finish a map",    						id = 21,		reward = 100 },
 	{ s = "The only person who hasn't died in a map (Min 5 players)",	id = 8,			reward = 100 },
 	{ s = "Win 3 times in a row",       					   			id = 3,			reward = 100 },
-	{ s = "Win 5 times in a row",     									id = 4,			reward = 100 },
+	{ s = "Win 5 times in a row",     									id = 4,			reward = 200 },
+	{ s = "Win 10 times in a row",     									id = 53,			reward = 3000 },
 	{ s = "Win a map as a late joiner",     							id = 14,		reward = 100 },
 	{ s = "Win a map in less than 20 seconds",    			    		id = 16,		reward = 100 },
 	{ s = "Win a map on fire",     						   		 		id = 25,		reward = 100 },
@@ -140,6 +142,8 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			addPlayerAchievementRace(source, 3)
 		elseif g_Players[source].wins == 5 then
 			addPlayerAchievementRace(source, 4)
+		elseif g_Players[source].wins == 10 then
+			addPlayerAchievementRace(source, 53)		
 		end
 	else 
 		g_Players[source].wins = 0
@@ -358,6 +362,8 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			addPlayerAchievementRace(j, 6)
 		elseif 	g_Players[j].countMapsWithNoDeaths == 5 then
 			addPlayerAchievementRace(j, 7)
+		elseif 	g_Players[j].countMapsWithNoDeaths == 10 then
+			addPlayerAchievementRace(j, 54)
 		end	
 	end
 	removeEventHandler('onPlayerWasted', root, dieFunc)
