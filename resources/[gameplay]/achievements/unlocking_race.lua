@@ -19,7 +19,7 @@ achievementListRace = {
 	{ s = "Finish the map *This Time in the Dark*",   			   			id = 2,			reward = 100 },
 	{ s = "Finish the map *Hell Choose Me*",     						id = 1,			reward = 100 },
 	{ s = "Finish the map *promap*",									id = 30,		reward = 100 },
-	{ s = "Finish the map *DOOZYJude - Are You Infernus Pro?* in less than 10 minutes",                     id = 41,		reward = 300 },
+	{ s = "Finish the map *DOOZYJude - Are You Infernus Pro?* in less than 10 minutes",                     id = 41,		reward = 200 },
 	{ s = "First noob to die in a map",     							id = 12,		reward = 50 },
 	{ s = "Get 2 first toptimes consecutively",    		  				id = 24,		reward = 100 },
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
