@@ -110,7 +110,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 		addAchievementProgressRace ( source, 51, 1 )
 	elseif rank == 4 then
 		addAchievementProgressRace ( player, 52, 1 )
-	end
+	        end
 	end	
 	tableOfWinners[rank] = source
 	if not mapGM then
