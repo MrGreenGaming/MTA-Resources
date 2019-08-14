@@ -393,12 +393,13 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			g_Players[j].countMapsWithNoDeaths = 0
 			g_Players[j].dead = false
 			g_Players[j].deathCount = 0
-		end	
-		if g_Players[j].countMapsWithNoDeaths == 3 then
+		end
+		local afkCheck = wasPlayerAfk(j)
+		if not afkCheck and g_Players[j].countMapsWithNoDeaths == 3 then
 			addPlayerAchievementRace(j, 6)
-		elseif 	g_Players[j].countMapsWithNoDeaths == 5 then
+		elseif not afkCheck and g_Players[j].countMapsWithNoDeaths == 5 then
 			addPlayerAchievementRace(j, 7)
-		elseif 	g_Players[j].countMapsWithNoDeaths == 10 then
+		elseif not afkCheck and g_Players[j].countMapsWithNoDeaths == 10 then
 			addPlayerAchievementRace(j, 54)
 		end	
 	end
