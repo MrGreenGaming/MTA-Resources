@@ -92,26 +92,24 @@ addEvent('onPlayerFinish', true)
 addEventHandler('onPlayerFinish', root,
 function(rank, time)
 if exports.race:getRaceMode() ~= "Sprint" then return end
-	if rank == 1 then
-		g_Players[source].mapsWon = g_Players[source].mapsWon + 1
-		if g_Players[source].mapsWon == 10 then
-			addPlayerAchievementRace(source, 27)
-		end	
-	           addAchievementProgressRace ( source, 42, 1 )
-	           addAchievementProgressRace ( source, 43, 1 )
-	           addAchievementProgressRace ( source, 44, 1 )
-	           addAchievementProgressRace ( source, 45, 1 )
-		   addAchievementProgressRace ( source, 46, 1 )
-	if rank == 1 then
-		addAchievementProgressRace ( source, 47, 1 )
-		addAchievementProgressRace ( source, 48, 1 )
-		addAchievementProgressRace ( source, 49, 1 )
-		addAchievementProgressRace ( source, 50, 1 )
-		addAchievementProgressRace ( source, 51, 1 )
-	elseif rank == 4 then
-		addAchievementProgressRace ( player, 52, 1 )
-	        end
-	end	
+  if rank == 1 then
+    g_Players[source].mapsWon = g_Players[source].mapsWon + 1
+    if g_Players[source].mapsWon == 10 then
+        addPlayerAchievementRace(source, 27)
+    end    
+    addAchievementProgressRace ( source, 42, 1 )
+    addAchievementProgressRace ( source, 43, 1 )
+    addAchievementProgressRace ( source, 44, 1 )
+    addAchievementProgressRace ( source, 45, 1 )
+    addAchievementProgressRace ( source, 46, 1 )
+    addAchievementProgressRace ( source, 47, 1 )
+    addAchievementProgressRace ( source, 48, 1 )
+    addAchievementProgressRace ( source, 49, 1 )
+    addAchievementProgressRace ( source, 50, 1 )
+    addAchievementProgressRace ( source, 51, 1 )
+elseif rank == 4 then
+    addAchievementProgressRace ( source, 52, 1 )
+end
 	tableOfWinners[rank] = source
 	if not mapGM then
 		local collidable = getElementData(source, "overrideCollide.uniqueblah")
