@@ -367,7 +367,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 		else	
 		j.countMapsWithNoDamage = j.countMapsWithNoDamage + 1
 		end
-		if j.dead then
+		if j.dead or wasPlayerAfk(j) then
 			j.countMapsWithNoDeaths = 0
 			j.dead = false
 			j.countMapsWithNoDeaths = j.countMapsWithNoDeaths + 1
@@ -389,17 +389,17 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	end
 	tableOfWinners = {}	
 	for i,j in ipairs(getElementsByType('player')) do
-		if g_Players[j].dead then
+		if g_Players[j].dead or wasPlayerAfk(j) then
 			g_Players[j].countMapsWithNoDeaths = 0
 			g_Players[j].dead = false
 			g_Players[j].deathCount = 0
 		end
-		local afkCheck = wasPlayerAfk(j)
-		if not afkCheck and g_Players[j].countMapsWithNoDeaths == 3 then
+
+		if g_Players[j].countMapsWithNoDeaths == 3 then
 			addPlayerAchievementRace(j, 6)
-		elseif not afkCheck and g_Players[j].countMapsWithNoDeaths == 5 then
+		elseif g_Players[j].countMapsWithNoDeaths == 5 then
 			addPlayerAchievementRace(j, 7)
-		elseif not afkCheck and g_Players[j].countMapsWithNoDeaths == 10 then
+		elseif g_Players[j].countMapsWithNoDeaths == 10 then
 			addPlayerAchievementRace(j, 54)
 		end	
 	end
@@ -459,4 +459,11 @@ function(bool)
 	end
 end)
 addEventHandler('onPlayerQuit', root, function() if playerAfkCache[source] then playerAfkCache[player] = nil end end)
-addEventHandler('onMapStarting', root, function() playerAfkCache = {} end)
+addEventHandler('onMapStarting', root, function() 
+	playerAfkCache = {} 
+	for _, p in ipairs(getElementsByType('player')) do
+		if getElementData(p, 'player state') == 'away' then
+			playerAfkCache[p] = true
+		end
+	end
+end)
