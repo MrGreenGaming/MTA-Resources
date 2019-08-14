@@ -36,12 +36,12 @@ achievementListRace = {
 	{ s = "No death in 5 maps",    						    			id = 7,			reward = 100 },
 	{ s = "No death in 10 maps",    						    			id = 54,			reward = 150 },
 	{ s = "Play for 4 hours with no disconnecting",						id = 29,		reward = 100 },
-	{ s = "The only noob to die in a map (Min 5 players)",				id = 5,			reward = 100 },
+	{ s = "The only noob to die in a map (Min 5 active players)",				id = 5,			reward = 100 },
 	{ s = "The only person to finish a map",    						id = 21,		reward = 100 },
-	{ s = "The only person who hasn't died in a map (Min 5 players)",	id = 8,			reward = 100 },
-	{ s = "Win 3 times in a row (Min 5 players)",       					   			id = 3,			reward = 100 },
-	{ s = "Win 5 times in a row (Min 5 players)",     									id = 4,			reward = 200 },
-	{ s = "Win 10 times in a row (Min 5 players)",     									id = 53,			reward = 300 },
+	{ s = "The only person who hasn't died in a map (Min 5 active players)",	id = 8,			reward = 100 },
+	{ s = "Win 3 times in a row (Min 5 active players)",       					   			id = 3,			reward = 100 },
+	{ s = "Win 5 times in a row (Min 5 active players)",     									id = 4,			reward = 200 },
+	{ s = "Win 10 times in a row (Min 5 active players)",     									id = 53,			reward = 300 },
 	{ s = "Win a map as a late joiner",     							id = 14,		reward = 100 },
 	{ s = "Win a map in less than 20 seconds",    			    		id = 16,		reward = 100 },
 	{ s = "Win a map on fire",     						   		 		id = 25,		reward = 100 },
@@ -263,7 +263,7 @@ addEvent('onPostFinish', true)
 addEventHandler('onPostFinish', root,
 function()
 if exports.race:getRaceMode() ~= "Sprint" then return end
-
+	local activePlayers = getActivePlayerCount()
 	--"Be the only noob to die in a map"
 
 	for i,j in ipairs(getElementsByType('player')) do 
@@ -282,7 +282,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 		end
 	end
 
-	if count == 1 and getPlayerCount() >= 5 then	
+	if count == 1 and activePlayers >= 5 then	
 		addPlayerAchievementRace(onlyPlayer, 5)
 	end
 
@@ -294,7 +294,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			onlyPlayer = i
 		end
 	end
-	if count == 1 and getPlayerCount() >= 5 then	
+	if count == 1 and activePlayers >= 5 then	
 		 addPlayerAchievementRace(onlyPlayer, 8)
 	end
 	removeEventHandler('onPlayerWasted', root, wastedFunc)
