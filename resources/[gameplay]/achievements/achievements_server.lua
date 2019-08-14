@@ -140,8 +140,6 @@ end
 
 function addPlayerAchievementRace ( player, achID )
 	if isMapTesting() or not checkPlayerRace (player, achID) then return end
-	local count = getPlayerCount()
-	if count < 5 then return end
 
 	local ach = getAchievementRace ( achID )
 	local forumID = exports.gc:getPlayerForumID ( player )
