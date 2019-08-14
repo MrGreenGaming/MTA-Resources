@@ -192,6 +192,45 @@ function addAchievementProgressMix ( players, achID, progress )		-- expects chec
 	end
 end
 
+function addAchievementProgressRace ( players, achID, progress )
+	if type(players) ~= 'table' then players = {players} end
+	if isMapTesting() or #players < 1 then return end
+	local progressForumidsRace, unlockedForumidsRace, forumids = {}, {}, {}
+	local ach = getAchievementRace ( achID )
+	local maxProgress = ach.max
+	for _, player in ipairs(players) do
+		if checkPlayerRace (player, achID) then
+			local forumID = exports.gc:getPlayerForumID(player)
+			table.insert ( forumids, forumID )
+			local playerAch = allAchievementsRace[forumID] and allAchievementsRace[forumID][achID] or false
+			if (playerAch and playerAch.progress + progress >= maxProgress) or (progress >= maxProgress) then
+				table.insert ( unlockedForumidsRace, string.format('(%d,%d,1,%d)', forumID, achID, maxProgress) )
+				outputChatBox( getPlayerName(player):gsub("#%x%x%x%x%x%x", "") .. " has unlocked the achievement: " .. ach.s, root, 255, 0, 0)
+				exports.gc:addPlayerGreencoins(player, ach.reward)
+			else
+				table.insert ( progressForumidsRace, string.format('(%d,%d,0,%d)', forumID, achID, progress) )
+			end
+		end
+	end
+	if (#progressForumidsRace > 0) then
+		progressForumidsRace = table.concat ( progressForumidsRace, ',' )
+		-- outputDebugString ( 'PROGRESS ' .. progressForumidsRace )
+		local progressQuery = "INSERT INTO `??` (forumID, achievementID, unlocked, progress) VALUES ?? ON DUPLICATE KEY UPDATE progress = progress + ?"
+		-- outputDebugString ( 'PROGRESS ' .. progressQuery )
+		dbExec ( handlerConnect, progressQuery, achsTableRace, progressForumidsRace, progress )
+	end
+	if (#unlockedForumidsRace > 0) then
+		unlockedForumidsRace = table.concat ( unlockedForumidsRace, ',' )
+		-- outputDebugString ( 'PROGRESS ' .. unlockedForumidsRace )
+		local unlockedQuery = "INSERT INTO `??` (forumID, achievementID, unlocked, progress) VALUES ?? ON DUPLICATE KEY UPDATE unlocked = 1, progress = ?"
+		-- outputDebugString ( 'UNLOCK ' .. unlockedQuery )
+		dbExec ( handlerConnect, unlockedQuery, achsTableRace, unlockedForumidsRace, maxProgress )
+	end
+	if #forumids > 0 then
+		getAchievements ( forumids )
+	end
+end
+
 local achsMix = {}
 function getAchievementMix ( achID )
 	if achsMix[achID] then return achsMix[achID] end
