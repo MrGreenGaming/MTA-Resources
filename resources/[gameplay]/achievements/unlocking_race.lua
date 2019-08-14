@@ -23,15 +23,15 @@ achievementListRace = {
 	{ s = "First noob to die in a map",     							id = 12,		reward = 50 },
 	{ s = "Get 2 first toptimes consecutively",    		  				id = 24,		reward = 100 },
 	{ s = "Finish 5 Times",     									id = 42,			reward = 50, max = 5 },
-        { s = "Finish 20 times",     									id = 43,			reward = 100, max = 20 },
-        { s = "Finish 200 times",     									id = 44,			reward = 300, max = 200 },
-        { s = "Finish 500 times",     									id = 45,			reward = 500, max = 500 },
-        { s = "Finish 1000 times",     									id = 46,			reward = 1000, max = 1000 },
-        { s = "Win 5 Times",     									id = 47,			reward = 100, max = 5 },
-        { s = "Win 20 times",     									id = 48,			reward = 200, max = 20 },
-        { s = "Win 200 times",     									id = 49,			reward = 500, max = 200 },
-        { s = "Win 500 times",     									id = 50,			reward = 1000, max = 500 },
-        { s = "Win 1000 times",     									id = 51,			reward = 2500, max = 1000 },
+	{ s = "Finish 20 times",     									id = 43,			reward = 100, max = 20 },
+	{ s = "Finish 200 times",     									id = 44,			reward = 300, max = 200 },
+	{ s = "Finish 500 times",     									id = 45,			reward = 500, max = 500 },
+	{ s = "Finish 1000 times",     									id = 46,			reward = 1000, max = 1000 },
+	{ s = "Win 5 Times",     									id = 47,			reward = 100, max = 5 },
+	{ s = "Win 20 times",     									id = 48,			reward = 200, max = 20 },
+	{ s = "Win 200 times",     									id = 49,			reward = 500, max = 200 },
+	{ s = "Win 500 times",     									id = 50,			reward = 1000, max = 500 },
+	{ s = "Win 1000 times",     									id = 51,			reward = 2500, max = 1000 },
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
 	{ s = "No death in 5 maps",    						    			id = 7,			reward = 100 },
 	{ s = "No death in 10 maps",    						    			id = 54,			reward = 150 },
@@ -95,25 +95,26 @@ end
 addEvent('onPlayerFinish', true)
 addEventHandler('onPlayerFinish', root,
 function(rank, time)
-if exports.race:getRaceMode() ~= "Sprint" then return end
+	if exports.race:getRaceMode() ~= "Sprint" then return end
+	addAchievementProgressRace ( source, 42, 1 )
+	addAchievementProgressRace ( source, 43, 1 )
+	addAchievementProgressRace ( source, 44, 1 )
+	addAchievementProgressRace ( source, 45, 1 )
+	addAchievementProgressRace ( source, 46, 1 )
 	if rank == 1 then
     	g_Players[source].mapsWon = g_Players[source].mapsWon + 1
-    		if g_Players[source].mapsWon == 10 then
+    	if g_Players[source].mapsWon == 10 then
         	addPlayerAchievementRace(source, 27)
     	end    
-    	addAchievementProgressRace ( source, 42, 1 )
-    	addAchievementProgressRace ( source, 43, 1 )
-    	addAchievementProgressRace ( source, 44, 1 )
-    	addAchievementProgressRace ( source, 45, 1 )
-    	addAchievementProgressRace ( source, 46, 1 )
     	addAchievementProgressRace ( source, 47, 1 )
     	addAchievementProgressRace ( source, 48, 1 )
     	addAchievementProgressRace ( source, 49, 1 )
     	addAchievementProgressRace ( source, 50, 1 )
     	addAchievementProgressRace ( source, 51, 1 )
 	elseif rank == 4 then
-    		addAchievementProgressRace ( source, 52, 1 )
-end
+    	addAchievementProgressRace ( source, 52, 1 )
+	end
+
 	tableOfWinners[rank] = source
 	if not mapGM then
 		local collidable = getElementData(source, "overrideCollide.uniqueblah")
@@ -121,50 +122,49 @@ end
 		if (collidable == 0) and (cps > 5) then
 			addPlayerAchievementRace(source, 11)
 		end	
-	end	
-	if (getMapName() == "Hell Choose Me") then
+	end
+	local mapName = getMapName()
+	if (mapName == "Hell Choose Me") then
 		addPlayerAchievementRace(source, 1)
 	end
-	if (getMapName() == "This Time in the Dark") then
+	if (mapName == "This Time in the Dark") then
 		addPlayerAchievementRace(source, 2)
 	end
-	if (getMapName() == "promap") then
+	if (mapName == "promap") then
 		addPlayerAchievementRace(source, 30)
 	end
-	if (getMapName() == "Sprinten") and (rank == 1) and (getPlayerCount() > 29) then
+	if (mapName == "Sprinten") and (rank == 1) and (getPlayerCount() > 29) then
 		addPlayerAchievementRace(source, 31)
 	end
-	if (getMapName() == "[SRI]Pirates Of Andreas") then
+	if (mapName == "[SRI]Pirates Of Andreas") then
 		addPlayerAchievementRace(source, 32)
 	end
-	if (getMapName() == "Epic Sandking") then
+	if (mapName == "Epic Sandking") then
 		addPlayerAchievementRace(source, 33)
 	end
-	if (getMapName() == "San Andreas Run_Puma") then
+	if (mapName == "San Andreas Run_Puma") then
 		addPlayerAchievementRace(source, 34)
 	end
-	if (getMapName() == "[Race] Tour de San Andreas") then
+	if (mapName == "[Race] Tour de San Andreas") then
 		addPlayerAchievementRace(source, 35)
 	end
-	if (getMapName() == "I wanna find my destiny") and (rank == 1) then
+	if (mapName == "I wanna find my destiny") and (rank == 1) then
 		addPlayerAchievementRace(source, 36)
 	end
-	if (getMapName() == "I wanna find my destiny") then
+	if (mapName == "I wanna find my destiny") then
 		addPlayerAchievementRace(source, 37)
 	end
-	if (getMapName() == "I wanna find my destiny 2") and (rank == 1) then
+	if (mapName == "I wanna find my destiny 2") and (rank == 1) then
 		addPlayerAchievementRace(source, 38)
 	end
-	if (getMapName() == "I wanna find my destiny 2") then
+	if (mapName == "I wanna find my destiny 2") then
 		addPlayerAchievementRace(source, 39)
 	end
-	if (getMapName() == "Chase the Checkpoints") and (rank == 1) and (getPlayerCount() > 29) then
+	if (mapName == "Chase the Checkpoints") and (rank == 1) and (getPlayerCount() > 29) then
 		addPlayerAchievementRace(source, 40)
 	end
-	if (getMapName() == "!!- DOOZYJude - IUISO[ARE-YOU-INFERNUS-PRO?(EASY)]") then
-		if time <= 600000 then	
-		        addPlayerAchievementRace(source, 41)
-		end
+	if mapName == "!!- DOOZYJude - IUISO[ARE-YOU-INFERNUS-PRO?(EASY)]" and time <= 600000 then
+		addPlayerAchievementRace(source, 41)
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
@@ -205,10 +205,8 @@ end
 	if time <= 20000 then
 		addPlayerAchievementRace(source, 15)
 	end
-	if (rank == 1)	then
-		if time <= 20000 then
-			addPlayerAchievementRace(source, 16)
-		end
+	if rank == 1 and time <= 20000 then
+		addPlayerAchievementRace(source, 16)
 	end	
 	if (not g_Players[source].damaged) then
 		addPlayerAchievementRace(source, 17)
