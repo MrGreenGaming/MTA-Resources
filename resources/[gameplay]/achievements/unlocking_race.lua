@@ -19,6 +19,7 @@ achievementListRace = {
 	{ s = "Finish the map *This Time in the Dark*",   			   			id = 2,			reward = 100 },
 	{ s = "Finish the map *Hell Choose Me*",     						id = 1,			reward = 100 },
 	{ s = "Finish the map *promap*",									id = 30,		reward = 100 },
+	{ s = "Finish the map *DOOZYJude - Are You Infernus Pro?* in less than 10 minutes",                     id = 41,		reward = 200 },
 	{ s = "First noob to die in a map",     							id = 12,		reward = 50 },
 	{ s = "Get 2 first toptimes consecutively",    		  				id = 24,		reward = 100 },
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
@@ -34,7 +35,8 @@ achievementListRace = {
 	{ s = "Win a map on fire",     						   		 		id = 25,		reward = 100 },
 	{ s = "Win a map without using Nitro",    				   			id = 23,		reward = 100 },
 	{ s = "Win a map yet dying once",    					    		id = 20,		reward = 100 },
-	{ s = "Win the map *Sprinten* against 30+ players",		    		id = 31,		reward = 50 },
+	{ s = "Win the map *Chase The Checkpoints* against 30+ players",		    		id = 40,		reward = 200 },
+	{ s = "Win the map *Sprinten* against 30+ players",		    		id = 31,		reward = 100 },
 	{ s = "Finish the map *Pirates Of Andreas*",               	   		id = 32,		reward = 100 },
 	{ s = "Finish the map *Epic Sandking*",               	   		    id = 33,		reward = 100 },
     { s = "Finish the map *San Andreas Run Puma*",               	   	id = 34,		reward = 100 },
@@ -130,6 +132,14 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	end
 	if (getMapName() == "I wanna find my destiny 2") then
 		addPlayerAchievementRace(source, 39)
+	end
+	if (getMapName() == "Chase the Checkpoints") and (rank == 1) and (getPlayerCount() > 29) then
+		addPlayerAchievementRace(source, 40)
+	end
+	if (getMapName() == "!!- DOOZYJude - IUISO[ARE-YOU-INFERNUS-PRO?(EASY)]") then
+		if time <= 600000 then	
+		        addPlayerAchievementRace(source, 41)
+		end
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
