@@ -34,6 +34,7 @@ achievementListRace = {
         { s = "Win 1000 times",     									id = 51,			reward = 2500, max = 1000 },
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
 	{ s = "No death in 5 maps",    						    			id = 7,			reward = 100 },
+	{ s = "No death in 10 maps",    						    			id = 54,			reward = 150 },
 	{ s = "Play for 4 hours with no disconnecting",						id = 29,		reward = 100 },
 	{ s = "The only noob to die in a map (Min 5 players)",				id = 5,			reward = 100 },
 	{ s = "The only person to finish a map",    						id = 21,		reward = 100 },
@@ -394,6 +395,8 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			addPlayerAchievementRace(j, 6)
 		elseif 	g_Players[j].countMapsWithNoDeaths == 5 then
 			addPlayerAchievementRace(j, 7)
+		elseif 	g_Players[j].countMapsWithNoDeaths == 10 then
+			addPlayerAchievementRace(j, 54)
 		end	
 	end
 	removeEventHandler('onPlayerWasted', root, dieFunc)
