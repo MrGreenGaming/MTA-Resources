@@ -123,47 +123,52 @@ function(rank, time)
 			addPlayerAchievementRace(source, 11)
 		end	
 	end
-	local mapName = getMapName()
-	if (mapName == "Hell Choose Me") then
+	local mapResName = false
+	if getResourceState( 'mapmanager' ) == 'running' then
+		local mapRes = exports.mapmanager:getRunningGamemodeMap()
+		mapResName = getResourceName(mapRes) or false
+	end
+
+	if (mapResName == "race-hellbykataklysm") then
 		addPlayerAchievementRace(source, 1)
 	end
-	if (mapName == "This Time in the Dark") then
+	if (mapResName == "race-thistimeinthedark") then
 		addPlayerAchievementRace(source, 2)
 	end
-	if (mapName == "promap") then
+	if (mapResName == "race-promap") then
 		addPlayerAchievementRace(source, 30)
 	end
-	if (mapName == "Sprinten") and (rank == 1) and (getPlayerCount() > 29) then
+	if (mapResName == "race-sprinten") and (rank == 1) and (getPlayerCount() > 29) then
 		addPlayerAchievementRace(source, 31)
 	end
-	if (mapName == "[SRI]Pirates Of Andreas") then
+	if (mapResName == "race-PiratesPro") then
 		addPlayerAchievementRace(source, 32)
 	end
-	if (mapName == "Epic Sandking") then
+	if (mapResName == "race-Epic-Sandking") then
 		addPlayerAchievementRace(source, 33)
 	end
-	if (mapName == "San Andreas Run_Puma") then
+	if (mapResName == "race-sanandreasrun_puma") then
 		addPlayerAchievementRace(source, 34)
 	end
-	if (mapName == "[Race] Tour de San Andreas") then
+	if (mapResName == "race-andreas") then
 		addPlayerAchievementRace(source, 35)
 	end
-	if (mapName == "I wanna find my destiny") and (rank == 1) then
+	if (mapResName == "race-IWFMD") and (rank == 1) then
 		addPlayerAchievementRace(source, 36)
 	end
-	if (mapName == "I wanna find my destiny") then
+	if (mapResName == "race-IWFMD") then
 		addPlayerAchievementRace(source, 37)
 	end
-	if (mapName == "I wanna find my destiny 2") and (rank == 1) then
+	if (mapResName == "race-iwfmd2") and (rank == 1) then
 		addPlayerAchievementRace(source, 38)
 	end
-	if (mapName == "I wanna find my destiny 2") then
+	if (mapResName == "race-iwfmd2") then
 		addPlayerAchievementRace(source, 39)
 	end
-	if (mapName == "Chase the Checkpoints") and (rank == 1) and (getPlayerCount() > 29) then
+	if (mapResName == "race-chasethecheckpoints") and (rank == 1) and (getPlayerCount() > 29) then
 		addPlayerAchievementRace(source, 40)
 	end
-	if mapName == "!!- DOOZYJude - IUISO[ARE-YOU-INFERNUS-PRO?(EASY)]" and time <= 600000 then
+	if mapResName == "race-Judes-map" and time <= 600000 then
 		addPlayerAchievementRace(source, 41)
 	end
 	if (rank == 1) and not g_Players[source].won then
