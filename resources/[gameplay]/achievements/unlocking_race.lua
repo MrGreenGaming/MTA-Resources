@@ -163,7 +163,7 @@ function(rank, time)
 	if (mapName == "Chase the Checkpoints") and (rank == 1) and (getPlayerCount() > 29) then
 		addPlayerAchievementRace(source, 40)
 	end
-	if mapName == "!!- DOOZYJude - IUISO[ARE-YOU-INFERNUS-PRO?(EASY)]" and time <= 600000 then
+	if (mapName == "!!- DOOZYJude - IUISO[ARE-YOU-INFERNUS-PRO?(EASY)]") and time <= 600000 then
 		addPlayerAchievementRace(source, 41)
 	end
 	if (rank == 1) and not g_Players[source].won then
