@@ -139,6 +139,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	if (getMapName() == "!!- DOOZYJude - IUISO[ARE-YOU-INFERNUS-PRO?(EASY)]") then
 		if time <= 600000 then	
 		        addPlayerAchievementRace(source, 41)
+		end
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
