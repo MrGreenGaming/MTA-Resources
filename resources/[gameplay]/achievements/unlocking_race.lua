@@ -124,7 +124,7 @@ function(rank, time)
 		end	
 	end
 	local mapResName = false
-	if getResourceState( 'mapmanager' ) == 'running' then
+	if getResourceState( getResourceFromName('mapmanager') ) == 'running' then
 		local mapRes = exports.mapmanager:getRunningGamemodeMap()
 		mapResName = getResourceName(mapRes) or false
 	end
