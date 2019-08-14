@@ -96,6 +96,14 @@ addEvent('onPlayerFinish', true)
 addEventHandler('onPlayerFinish', root,
 function(rank, time)
 	if exports.race:getRaceMode() ~= "Sprint" then return end
+	local activePlayerCount = getActivePlayerCount()
+	local playerCount = getPlayerCount()
+	local mapResName = false
+	if getResourceState( getResourceFromName('mapmanager') ) == 'running' then
+		local mapRes = exports.mapmanager:getRunningGamemodeMap()
+		mapResName = getResourceName(mapRes) or false
+	end
+
 	addAchievementProgressRace ( source, 42, 1 )
 	addAchievementProgressRace ( source, 43, 1 )
 	addAchievementProgressRace ( source, 44, 1 )
@@ -123,12 +131,7 @@ function(rank, time)
 			addPlayerAchievementRace(source, 11)
 		end	
 	end
-	local mapResName = false
-	if getResourceState( getResourceFromName('mapmanager') ) == 'running' then
-		local mapRes = exports.mapmanager:getRunningGamemodeMap()
-		mapResName = getResourceName(mapRes) or false
-	end
-
+	
 	if (mapResName == "race-hellbykataklysm") then
 		addPlayerAchievementRace(source, 1)
 	end
@@ -138,7 +141,7 @@ function(rank, time)
 	if (mapResName == "race-promap") then
 		addPlayerAchievementRace(source, 30)
 	end
-	if (mapResName == "race-sprinten") and (rank == 1) and (getPlayerCount() > 29) then
+	if (mapResName == "race-sprinten") and (rank == 1) and (playerCount > 29) then
 		addPlayerAchievementRace(source, 31)
 	end
 	if (mapResName == "race-PiratesPro") then
@@ -165,7 +168,7 @@ function(rank, time)
 	if (mapResName == "race-iwfmd2") then
 		addPlayerAchievementRace(source, 39)
 	end
-	if (mapResName == "race-chasethecheckpoints") and (rank == 1) and (getPlayerCount() > 29) then
+	if (mapResName == "race-chasethecheckpoints") and (rank == 1) and (playerCount > 29) then
 		addPlayerAchievementRace(source, 40)
 	end
 	if mapResName == "race-Judes-map" and time <= 600000 then
@@ -176,11 +179,11 @@ function(rank, time)
 		g_Players[source].won = true
 	elseif (g_Players[source].won) and (rank == 1) then
 		g_Players[source].wins = g_Players[source].wins + 1
-		if g_Players[source].wins == 3 and getPlayerCount() >= 5 then
+		if g_Players[source].wins == 3 and activePlayerCount >= 5 then
 			addPlayerAchievementRace(source, 3)
-		elseif g_Players[source].wins == 5 and getPlayerCount() >= 5 then
+		elseif g_Players[source].wins == 5 and activePlayerCount >= 5 then
 			addPlayerAchievementRace(source, 4)
-		elseif g_Players[source].wins == 10 and getPlayerCount() >= 5 then
+		elseif g_Players[source].wins == 10 and activePlayerCount >= 5 then
 			addPlayerAchievementRace(source, 53)
 		end
 	else 
@@ -467,3 +470,13 @@ addEventHandler('onMapStarting', root, function()
 		end
 	end
 end)
+
+function getActivePlayerCount()
+	local count = 0
+	for _, p in ipairs(getElementsByType('player')) do
+		if getElementData(p, 'player state') ~= 'away' then
+			count = count + 1
+		end
+	end
+	return count
+end
