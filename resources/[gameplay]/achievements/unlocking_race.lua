@@ -153,7 +153,7 @@ function(rank, time)
 	if (mapResName == "race-sanandreasrun_puma") then
 		addPlayerAchievementRace(source, 34)
 	end
-	if (mapResName == "race-andreas") then
+	if (mapResName == "race-andreas-fix") then
 		addPlayerAchievementRace(source, 35)
 	end
 	if (mapResName == "race-IWFMD") and (rank == 1) then
