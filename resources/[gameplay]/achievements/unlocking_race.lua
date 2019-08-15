@@ -180,7 +180,7 @@ function(rank, time)
 		addPlayerAchievementRace(source, 41)
 	end
 	if mapResName == "race-ichbinxprt" and time <= 540000 then
-	addPlayerAchievementRace(source, 55)
+		addPlayerAchievementRace(source, 55)
 	end
 	if mapResName == "race-chrmleasy" then
 	addPlayerAchievementRace(source, 56)
