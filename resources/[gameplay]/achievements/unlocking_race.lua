@@ -191,7 +191,7 @@ function(rank, time)
 	if mapResName == "race-hydratastic" then
 		addPlayerAchievementRace(source, 58)
 	end
-	if mapResName == "race-cryoshydchallengevol1" then
+	if mapResName == "race-CRYOSHYDCHALLENGEVOL1" then
 		addPlayerAchievementRace(source, 59)
 	end
 	if (rank == 1) and not g_Players[source].won then
