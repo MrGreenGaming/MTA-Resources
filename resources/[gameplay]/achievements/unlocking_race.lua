@@ -58,10 +58,10 @@ achievementListRace = {
 	{ s = "Finish the map *I Wanna Find My Destiny*",               	id = 37,		reward = 100 },
 	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	id = 38,		reward = 300 },
 	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	id = 39,		reward = 100 },
-	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 200 },
-	{ s = "Finish the map *ChrML Hard*",               	id = 57,		reward = 200 },
-	{ s = "Finish the map *Hydratastic!*",               	id = 58,		reward = 200 },
-	{ s = "Finish the map *Cryo's Hydra challenge VOL 1*",               	id = 59,		reward = 200 },
+	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 100 },
+	{ s = "Finish the map *ChrML Hard*",               	id = 57,		reward = 100 },
+	{ s = "Finish the map *Hydratastic!*",               	id = 58,		reward = 100 },
+	{ s = "Finish the map *Cryo's Hydra challenge VOL 1*",               	id = 59,		reward = 100 },
 	{ s = "Besweeet award",     									id = 52,			reward = 44, max = 4 },
 
 }
