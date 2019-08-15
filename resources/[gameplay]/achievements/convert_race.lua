@@ -19,6 +19,7 @@ local achievementList = {
 	["Finish the map *Hell Choose Me* - (100 GC)"] = 1,
 	["Finish the map *promap* - (100 GC)"] = 30,
 	["Finish the map *DOOZYJude - Are You Infernus Pro?* in less than 10 minutes - (200 GC)"] = 41,
+	["Finish the map *Ich bin expert* in less than 9 minutes - (100 GC)"] = 55,
 	["First noob to die in a map - (50 GC)"] = 12,	
 	["Get 2 first toptimes consecutively - (100 GC)"] = 24,
 	["Finish 5 Times - (50 GC)"] = 42,
@@ -56,6 +57,10 @@ local achievementList = {
 	["Finish the map *I Wanna Find My Destiny* - (100 GC)"] = 37,
 	["Win the map *I Wanna Find My Destiny 2* - (300 GC)"] = 38,
 	["Finish the map *I Wanna Find My Destiny 2* - (100 GC)"] = 39,
+	["Finish the map *ChrML Easy* - (200 GC)"] = 56,
+	["Finish the map *ChrML Hard* - (200 GC)"] = 57,
+	["Finish the map *Hydratastic!* - (200 GC)"] = 58,
+	["Finish the map *Cryo's Hydra challenge VOL 1* - (200 GC)"] = 59,
 	["Besweet award - (44 GC)"] = 52,
 }
 
