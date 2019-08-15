@@ -25,7 +25,7 @@ settings = {
 ['freezeChat'] = {
     ['enabled'] = true,
     ['command'] = 'freezechat', -- Command to use when activating frozen chat.
-    ['allowedGroups'] = 'ServerManager', -- Groups which have access to this command.
+    ['allowedGroups'] = 'Admin,ServerManager,Developer', -- Groups which have access to this command.
     ['resetTime'] = 5 -- Time in minutes before it automatically resets.
 },
 ['clearChat'] = {
