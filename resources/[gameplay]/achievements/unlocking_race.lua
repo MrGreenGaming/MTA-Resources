@@ -192,7 +192,7 @@ function(rank, time)
 		addPlayerAchievementRace(source, 58)
 	end
 	if mapResName == "race-cryoshydchallengevol1" then
-	addPlayerAchievementRace(source, 59)
+		addPlayerAchievementRace(source, 59)
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
