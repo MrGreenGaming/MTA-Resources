@@ -20,6 +20,7 @@ achievementListRace = {
 	{ s = "Finish the map *Hell Choose Me*",     						id = 1,			reward = 100 },
 	{ s = "Finish the map *promap*",									id = 30,		reward = 100 },
 	{ s = "Finish the map *DOOZYJude - Are You Infernus Pro?* in less than 10 minutes",                     id = 41,		reward = 200 },
+	{ s = "Finish the map *Ich bin expert* in less than 9 minutes",                     id = 55,		reward = 100 },
 	{ s = "First noob to die in a map",     							id = 12,		reward = 50 },
 	{ s = "Get 2 first toptimes consecutively",    		  				id = 24,		reward = 100 },
 	{ s = "Finish 5 Times",     									id = 42,			reward = 50, max = 5 },
@@ -57,6 +58,10 @@ achievementListRace = {
 	{ s = "Finish the map *I Wanna Find My Destiny*",               	id = 37,		reward = 100 },
 	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	id = 38,		reward = 300 },
 	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	id = 39,		reward = 100 },
+	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 200 },
+	{ s = "Finish the map *ChrML Hard*",               	id = 57,		reward = 200 },
+	{ s = "Finish the map *Hydratastic!*",               	id = 58,		reward = 200 },
+	{ s = "Finish the map *Cryo's Hydra challenge VOL 1*",               	id = 59,		reward = 200 },
 	{ s = "Besweeet award",     									id = 52,			reward = 44, max = 4 },
 
 }
@@ -173,6 +178,21 @@ function(rank, time)
 	end
 	if mapResName == "race-Judes-map" and time <= 600000 then
 		addPlayerAchievementRace(source, 41)
+	end
+	if mapResName == "race-ichbinxprt" and time <= 540000 then
+	addPlayerAchievementRace(source, 55)
+	end
+	if mapResName == "race-chrmleasy" then
+	addPlayerAchievementRace(source, 56)
+	end
+	if mapResName == "race-chrmlhard" then
+	addPlayerAchievementRace(source, 57)
+	end
+	if mapResName == "race-hydratastic" then
+	addPlayerAchievementRace(source, 58)
+	end
+	if mapResName == "race-cryoshydchallengevol1" then
+	addPlayerAchievementRace(source, 59)
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
