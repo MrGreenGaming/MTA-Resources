@@ -186,7 +186,7 @@ function(rank, time)
 		addPlayerAchievementRace(source, 56)
 	end
 	if mapResName == "race-chrmlhard" then
-	addPlayerAchievementRace(source, 57)
+		addPlayerAchievementRace(source, 57)
 	end
 	if mapResName == "race-hydratastic" then
 	addPlayerAchievementRace(source, 58)
