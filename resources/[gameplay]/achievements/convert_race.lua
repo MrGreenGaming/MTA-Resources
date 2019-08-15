@@ -57,10 +57,10 @@ local achievementList = {
 	["Finish the map *I Wanna Find My Destiny* - (100 GC)"] = 37,
 	["Win the map *I Wanna Find My Destiny 2* - (300 GC)"] = 38,
 	["Finish the map *I Wanna Find My Destiny 2* - (100 GC)"] = 39,
-	["Finish the map *ChrML Easy* - (200 GC)"] = 56,
-	["Finish the map *ChrML Hard* - (200 GC)"] = 57,
-	["Finish the map *Hydratastic!* - (200 GC)"] = 58,
-	["Finish the map *Cryo's Hydra challenge VOL 1* - (200 GC)"] = 59,
+	["Finish the map *ChrML Easy* - (100 GC)"] = 56,
+	["Finish the map *ChrML Hard* - (100 GC)"] = 57,
+	["Finish the map *Hydratastic!* - (100 GC)"] = 58,
+	["Finish the map *Cryo's Hydra challenge VOL 1* - (100 GC)"] = 59,
 	["Besweet award - (44 GC)"] = 52,
 }
 
