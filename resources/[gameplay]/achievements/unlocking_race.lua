@@ -63,7 +63,9 @@ achievementListRace = {
 	{ s = "Finish the map *Hydratastic!*",               	id = 58,		reward = 100 },
 	{ s = "Finish the map *Cryo's Hydra challenge VOL 1*",               	id = 59,		reward = 100 },
 	{ s = "Besweeet award",     									id = 52,			reward = 44, max = 4 },
-
+        { s = "Finish the map *be4TH!! SpeedWay in 4th*",               	id = 60,		reward = 44},
+	{ s = "Finish the map *Racing_Countryside*",               	id = 61,		reward = 100 },
+	{ s = "Finish the map *Long Way Round*",               	id = 62,		reward = 100 },
 }
 
 
@@ -193,6 +195,15 @@ function(rank, time)
 	end
 	if mapResName == "race-CRYOSHYDCHALLENGEVOL1" then
 		addPlayerAchievementRace(source, 59)
+	end
+	if mapResName == "race-be4Th-SpeedWay" and (rank == 4) then
+		addPlayerAchievementRace(source, 60)
+	end
+	if mapResName == "race-racingcountry" then
+		addPlayerAchievementRace(source, 61)
+	end
+	if mapResName == "race-longwayround" then
+		addPlayerAchievementRace(source, 62)
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
