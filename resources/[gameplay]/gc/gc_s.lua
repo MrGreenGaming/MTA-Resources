@@ -481,3 +481,22 @@ function addToLog(text)
     fileClose(logFile)
     return true
 end
+
+-- Utils
+function secondsToTimeDesc( seconds )
+	if seconds then
+		local results = {}
+		local sec = ( seconds %60 )
+		local min = math.floor ( ( seconds % 3600 ) /60 )
+		local hou = math.floor ( ( seconds % 86400 ) /3600 )
+		local day = math.floor ( seconds /86400 )
+		
+		if day > 0 then table.insert( results, day .. ( day == 1 and " day" or " days" ) ) end
+		if hou > 0 then table.insert( results, hou .. ( hou == 1 and " hour" or " hours" ) ) end
+		if min > 0 then table.insert( results, min .. ( min == 1 and " minute" or " minutes" ) ) end
+		if sec > 0 then table.insert( results, sec .. ( sec == 1 and " second" or " seconds" ) ) end
+		
+		return string.reverse ( table.concat ( results, ", " ):reverse():gsub(" ,", " dna ", 1 ) )
+	end
+	return ""
+end

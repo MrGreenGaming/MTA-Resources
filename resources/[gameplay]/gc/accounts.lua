@@ -59,8 +59,17 @@ function SAccount:login(username, pw, player, callback)
     end
 
     getPlayerLoginInfo(username, pw, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount, vipTimestamp, isBanned)
-        if isBanned == true then
-            outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
+        if isBanned ~= false then
+            local now = getRealTime().timestamp
+            if isBanned == true then
+                -- Perm ban
+                outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
+            elseif type(isBanned) == 'number' and now < isBanned then
+                -- Temp ban
+                outputChatBox('[GC] This account has been banned. This ban will expire in '..secondsToTimeDesc(isBanned - now), player, 255, 0, 0)
+            else
+                outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
+            end
             callback(false, player)
             return
         end
@@ -116,8 +125,17 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
     end
 
     getForumAccountDetails(givenForumID, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount, vipTimestamp, isBanned)
-        if isBanned == true then
-            outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
+        if isBanned ~= false then
+            local now = getRealTime().timestamp
+            if isBanned == true then
+                -- Perm ban
+                outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
+            elseif type(isBanned) == 'number' and now < isBanned then
+                -- Temp ban
+                outputChatBox('[GC] This account has been banned. This ban will expire in '..secondsToTimeDesc(isBanned - now), player, 255, 0, 0)
+            else
+                outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
+            end
             callback(false, player)
             return
         end
