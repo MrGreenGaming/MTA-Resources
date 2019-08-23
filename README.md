@@ -1,5 +1,5 @@
-# Mr.Green-MTA-Resources
-All resources used on the MrGreenGaming.com Multi Theft Auto: San Andreas (MTASA) servers (Race &amp; Race Mix).
+# Mr.Green-MTA-Resources EVENT
+All resources used on the MrGreenGaming.com Multi Theft Auto: San Andreas (MTASA) event server
 
 # Local server setup
 - Checkout the resources into your local MTASA server folder.
