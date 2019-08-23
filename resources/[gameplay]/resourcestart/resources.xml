@@ -1,5 +1,4 @@
 <resources>
-	<resource priority="1">analytics</resource>
 	<resource priority="1">gc</resource>
 	<resource priority="1">mrgreen-vip</resource>
 	<resource priority="1">scoreboard</resource>
@@ -22,7 +21,6 @@
 	<resource priority="0">voice</resource>
 	<resource priority="1">webadmin</resource>
 	<resource priority="1">webpanel</resource>
-	<resource priority="0">interchat</resource>
 	<resource priority="0">speed-o-meter</resource>
 	<resource priority="0">chatbox_ads</resource>
 	<resource priority="0">PrivateMessaging</resource>
@@ -32,9 +30,7 @@
 	<resource priority="0">helpmenu</resource>
 	<resource priority="1">mrgreen-sidebar</resource>
 	<resource priority="1">mrgreen-settings</resource>
-	<resource priority="0">irc</resource>
 	<resource priority="0">achievements</resource>
-	<resource priority="0">discord</resource>
 	<resource priority="1">chattags</resource>
 	<resource priority="0">playerrecord</resource>
 	<resource priority="0">hdwheels</resource>
