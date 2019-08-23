@@ -1,1 +1,0 @@
-These files are from the origial 'runcode' resource written by 'jbeta' all credits go to him.
