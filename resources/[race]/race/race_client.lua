@@ -1625,3 +1625,7 @@ end
 function e_getPickups()
 	return g_Pickups
 end
+
+-- Event for race_league
+addEvent('onSpectateRequest', true)
+addEventHandler('onSpectateRequest',getRootElement(), function() Spectate.start('auto') end)
