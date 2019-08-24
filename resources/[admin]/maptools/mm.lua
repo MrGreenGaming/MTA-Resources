@@ -172,13 +172,13 @@ deletedMapsPath = "[maps]\\[deletedmaps]"
 
 addEvent('onMapStarting', true)
 function connectToDB()
-	if handlerConnect then return true end
+--[[ 	if handlerConnect then return true end
 	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 
 	if not handlerConnect then
 		return outputDebugString('maptools: could not connect to the mysql db')
 	end
-	moveMapDeletionCache() -- Map deletion entries are stored locally if the mysql database does not work, if it works again move them to mysql
+	moveMapDeletionCache() -- Map deletion entries are stored locally if the mysql database does not work, if it works again move them to mysql ]]
 	
 end
 addEventHandler('onResourceStart', resourceRoot, connectToDB)
@@ -317,7 +317,7 @@ function addMapDeletionRecord(mapname,author,reason,adminName,resname,authorForu
 end
 
 function notifyMapAction(mapname, reason, adminName, resname, status, authorForumId)
-	if not status or not authorForumId then return end
+--[[ 	if not status or not authorForumId then return end
 	outputDebugString('Status: '..tostring(status))
 	local fetchOptions = {
         queueName = "mapToolsNotify",
@@ -348,7 +348,7 @@ function notifyMapAction(mapname, reason, adminName, resname, status, authorForu
             outputDebugString("NotifyMapAction: invalid response (status " .. info.statusCode .. "). Res: " .. res, 1)
             return
         end
-    end)
+    end) ]]
 end
 
 
