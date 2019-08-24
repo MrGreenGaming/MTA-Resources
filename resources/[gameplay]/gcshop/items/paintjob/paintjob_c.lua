@@ -386,7 +386,7 @@ function buildTextures(textureTable, overwrite)
 					destroyElement(shaders[player]['textures'][texName])
 				end
 	
-				local theTexture = dxCreateTexture(client_path .. texName .. '.bmp')
+				local theTexture = dxCreateTexture(client_path .. texName .. '.bmp', 'dxt5')
 				if theTexture then
 					shaders[player]['textures'][texName] = theTexture
 					-- outputDebugString('loaded texture '..texName)
