@@ -208,16 +208,22 @@ local allowedModes = {
 	
 }
 
+local carHideCooldowns = {}
+local carHideCooldownAmount = 7000
 function carhideKeyHandler(player,key,keystate)
 	if keystate ~= "down" then return end
 	if not carHideAllowed then return end
 	if not player then return end
+	if carHideCooldowns[player] then
+		outputChatBox("[CarHide] #FFFFFFPlease wait "..(carHideCooldownAmount/1000).." seconds before changing carhide again!",player,0,255,0,true)
+		return
+	end
 	local playerVeh = getPedOccupiedVehicle(player)
 	if not playerVeh then return end
 
 	-- Check for gamemode/spectate
 	if exports.race:getRaceMode() ~= 'Reach the flag' and not isGhostModeEnabled(player) or isPlayerSpectating(player) then return end 
-
+	carHideCooldowns[player] = setTimer(function() carHideCooldowns[player] = nil end, carHideCooldownAmount, 1)
 	if getElementData(player,"carhide") then -- If player is in a dimension
 
 		removeElementData(player,'carhide')
