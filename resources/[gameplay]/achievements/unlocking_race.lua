@@ -60,6 +60,8 @@ achievementListRace = {
 	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	id = 39,		reward = 100 },
 	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 100 },
 	{ s = "Finish the map *ChrML Hard*",               	id = 57,		reward = 100 },
+	{ s = "Finish the map *Long Venturas Trip, Jumps and Fun*",               	id = 63,		reward = 100 },
+	{ s = "Finish the map *Whirlwind Journey in less than 8:30 minutes*",               	id = 64,		reward = 100 },
 	{ s = "Finish the map *Hydratastic!*",               	id = 58,		reward = 100 },
 	{ s = "Finish the map *Cryo's Hydra challenge VOL 1*",               	id = 59,		reward = 100 },
 	{ s = "Besweeet award",     									id = 52,			reward = 44, max = 4 },
@@ -204,6 +206,12 @@ function(rank, time)
 	end
 	if mapResName == "race-longwayround" then
 		addPlayerAchievementRace(source, 62)
+	end
+	if mapResName == "race-VenturasTwistsAndTurns" then
+		addPlayerAchievementRace(source, 63)
+	end
+	if mapResName == "race-whirlwindjourney" and time <= 498000 then
+		addPlayerAchievementRace(source, 64)
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
