@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <!-- Confetti by Hemn Chawroka -->
+  <!-- https://codepen.io/iprodev/pen/azpWBr -->
+  <!-- Color letters by Aymen -->
+  <!-- https://codepen.io/aymenjoe/pen/kzEes -->
+  <meta charset="UTF-8">
+  <title>RaveBreak!</title>
+  <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #confetti{
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+      }
+    
+      /* RAVEBREAK TEXT */
+      @font-face {
+        font-family: 'Superstar X';
+        src: url(data:application/font-woff2;charset=utf-8;base64,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) format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
+    
+      #glow {
+        font-family: 'Superstar X';
+        position: absolute;
+        top: 0; 
+        bottom: 0;
+        width: 100%;
+        height: 1em;
+        margin: auto;
+        display: block;
+        margin-top: 10px;
+        height: 0px; 
+        font-size: 6vw;
+        color: #FFF;
+        line-height: 1px; 
+        text-align: center;
+      }
+    
+      #glow p,
+      #glow span{
+        display: inline-block;
+        color: #346e44;
+        text-shadow: 0 0 15px;
+      }
+      #glow p:nth-child(odd) {
+        -webkit-animation: bglow .3s ease infinite;
+        animation: bglow .3s ease infinite;
+      }
+      #glow p:nth-child(even) {
+        -webkit-animation: rglow .3s ease infinite;
+        animation: rglow .3s ease infinite;
+      }
+      @keyframes bglow {
+        0% {
+          color: rgb(255, 255, 0);
+          text-shadow: 0 0 15px;
+        }
+      }
+      @-webkit-keyframes bglow {
+        0% {
+          color: rgb(255, 255, 0);
+          text-shadow: 0 0 15px;
+        }
+      }
+    
+      @keyframes rglow {
+        100% {
+          color: rgb(160, 204, 84);
+          text-shadow: 0 0 15px;
+        }
+      }
+      @-webkit-keyframes rglow {
+        100% {
+          color: rgb(160, 204, 84);
+          text-shadow: 0 0 15px;
+        }
+      }
+      
+      html body {
+        overflow: hidden;
+        margin: 0; 
+        height: 100%;
+      }
+      .imageRow {
+        height: 100%;
+        display: flex;
+        position: absolute;
+        left:0;
+        animation: move 30s infinite alternate;
+      }
+      .imageRow > img:nth-child(even) {
+        align-self: flex-end;
+        max-height: 30vh;
+        height: 100%;
+        animation: evenMove 0.5s infinite alternate;
+      }
+      .imageRow > img:nth-child(odd) {
+        align-self: flex-end;
+        max-height: 30vh;
+        height: 100%;
+        animation: evenMove 0.5s infinite alternate-reverse;
+      }
+    
+      @keyframes evenMove {
+        0% {
+          margin-bottom: 0;
+        }
+        100% {
+          margin-bottom: 1%;
+        }
+      }
+      @keyframes unevenMove {
+        0% {
+          margin-bottom: 0.5%;
+        }
+        100% {
+          margin-bottom: 0;
+        }
+      }
+      @keyframes move {
+          0% {
+              left:0%;
+          }
+          100% {
+              left: -50%;
+          }
+      }
+      
+      .mrgreen img {
+        display: inline-block;
+        width: 1.5vw;
+        height: 1.5vw;
+        /* margin: -280px 40px 54px -34px; */
+        margin: -100% 10% 70px -30px;
+        animation: fallingMrGreens 10s infinite linear;
+        opacity: 0;
+      }
+      .mrgreen img:nth-child(5n+5) {
+        animation-delay: 1s;
+      }
+      .mrgreen img:nth-child(3n+2) {
+        animation-delay: 4s;
+      }
+    
+      .mrgreen img:nth-child(2n+5) {
+        animation-delay: 2s;
+      }
+      @keyframes fallingMrGreens {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0px) rotateZ(0deg);
+        }
+        75% {
+          opacity: 1;
+          transform: translate(100px, 600px) rotateZ(270deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(150px, 800px) rotateZ(360deg);
+        }
+      }
+    </style>
+
+
+</head>
+<body>
+  <div class="mrgreen">
+    <img src="./images/mrgreen.png" alt="">  <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt=""> <img src="./images/mrgreen.png" alt="">
+  </div>
+  <canvas height='1' id='confetti' width='1'></canvas>
+  <div id="glow">
+    <div class="disco">
+      <p>R</p><p>A</p><p>V</p><p>E</p>
+    </div>
+    <div class="forever">
+      <p>B</p><p>R</p><p>E</p><p>A</p><p>K</p>
+    </div>
+  </div>
+  <div class="imageRow">
+      <img src="./images/banana.webp" alt="">
+      <img src="./images/bob.webp" alt="">
+      <img src="./images/carlton.webp" alt="">
+      <img src="./images/dog.webp" alt="">
+      <img src="./images/ned.webp" alt="">
+      <img src="./images/parrot.webp" alt="">
+      <img src="./images/snoop.webp" alt="">
+      <img src="./images/spiderman.webp" alt="">
+      <img src="./images/squid.webp" alt="">
+      <img src="./images/rick.webp" alt="">
+      <img src="./images/woman.webp" alt="">
+      <img src="./images/mrpoopybutthole.webp" alt="">
+      <img src="./images/banana.webp" alt="">
+      <img src="./images/bob.webp" alt="">
+      <img src="./images/carlton.webp" alt="">
+      <img src="./images/dog.webp" alt="">
+      <img src="./images/ned.webp" alt="">
+      <img src="./images/parrot.webp" alt="">
+      <img src="./images/woman.webp" alt="">
+      <img src="./images/snoop.webp" alt="">
+      <img src="./images/spiderman.webp" alt="">
+      <img src="./images/squid.webp" alt="">
+      <img src="./images/rick.webp" alt="">
+      <img src="./images/woman.webp" alt="">
+      <img src="./images/mrpoopybutthole.webp" alt="">
+	</div>
+  
+
+
+<script>
+var retina = window.devicePixelRatio,
+
+// Math shorthands
+PI = Math.PI,
+sqrt = Math.sqrt,
+round = Math.round,
+random = Math.random,
+cos = Math.cos,
+sin = Math.sin,
+
+// Local WindowAnimationTiming interface
+rAF = window.requestAnimationFrame,
+cAF = window.cancelAnimationFrame || window.cancelRequestAnimationFrame,
+_now = Date.now || function () {return new Date().getTime();};
+
+// Local WindowAnimationTiming interface polyfill
+(function (w) {
+/**
+    * Fallback implementation.
+    */
+var prev = _now();
+function fallback(fn) {
+var curr = _now();
+var ms = Math.max(0, 16 - (curr - prev));
+var req = setTimeout(fn, ms);
+prev = curr;
+return req;
+}
+
+/**
+    * Cancel.
+    */
+var cancel = w.cancelAnimationFrame
+|| w.webkitCancelAnimationFrame
+|| w.clearTimeout;
+
+rAF = w.requestAnimationFrame
+|| w.webkitRequestAnimationFrame
+|| fallback;
+
+cAF = function(id){
+cancel.call(w, id);
+};
+}(window));
+
+document.addEventListener("DOMContentLoaded", function() {
+var speed = 50,
+  duration = (1.0 / speed),
+  confettiRibbonCount = 11,
+  ribbonPaperCount = 30,
+  ribbonPaperDist = 8.0,
+  ribbonPaperThick = 8.0,
+  confettiPaperCount = 95,
+  DEG_TO_RAD = PI / 180,
+  RAD_TO_DEG = 180 / PI,
+  colors = [
+    ["#df0049", "#660671"],
+    ["#00e857", "#005291"],
+    ["#2bebbc", "#05798a"],
+    ["#ffd200", "#b06c00"]
+  ];
+
+function Vector2(_x, _y) {
+this.x = _x, this.y = _y;
+this.Length = function() {
+  return sqrt(this.SqrLength());
+}
+this.SqrLength = function() {
+  return this.x * this.x + this.y * this.y;
+}
+this.Add = function(_vec) {
+  this.x += _vec.x;
+  this.y += _vec.y;
+}
+this.Sub = function(_vec) {
+  this.x -= _vec.x;
+  this.y -= _vec.y;
+}
+this.Div = function(_f) {
+  this.x /= _f;
+  this.y /= _f;
+}
+this.Mul = function(_f) {
+  this.x *= _f;
+  this.y *= _f;
+}
+this.Normalize = function() {
+  var sqrLen = this.SqrLength();
+  if (sqrLen != 0) {
+    var factor = 1.0 / sqrt(sqrLen);
+    this.x *= factor;
+    this.y *= factor;
+  }
+}
+this.Normalized = function() {
+  var sqrLen = this.SqrLength();
+  if (sqrLen != 0) {
+    var factor = 1.0 / sqrt(sqrLen);
+    return new Vector2(this.x * factor, this.y * factor);
+  }
+  return new Vector2(0, 0);
+}
+}
+Vector2.Lerp = function(_vec0, _vec1, _t) {
+return new Vector2((_vec1.x - _vec0.x) * _t + _vec0.x, (_vec1.y - _vec0.y) * _t + _vec0.y);
+}
+Vector2.Distance = function(_vec0, _vec1) {
+return sqrt(Vector2.SqrDistance(_vec0, _vec1));
+}
+Vector2.SqrDistance = function(_vec0, _vec1) {
+var x = _vec0.x - _vec1.x;
+var y = _vec0.y - _vec1.y;
+return (x * x + y * y + z * z);
+}
+Vector2.Scale = function(_vec0, _vec1) {
+return new Vector2(_vec0.x * _vec1.x, _vec0.y * _vec1.y);
+}
+Vector2.Min = function(_vec0, _vec1) {
+return new Vector2(Math.min(_vec0.x, _vec1.x), Math.min(_vec0.y, _vec1.y));
+}
+Vector2.Max = function(_vec0, _vec1) {
+return new Vector2(Math.max(_vec0.x, _vec1.x), Math.max(_vec0.y, _vec1.y));
+}
+Vector2.ClampMagnitude = function(_vec0, _len) {
+var vecNorm = _vec0.Normalized;
+return new Vector2(vecNorm.x * _len, vecNorm.y * _len);
+}
+Vector2.Sub = function(_vec0, _vec1) {
+return new Vector2(_vec0.x - _vec1.x, _vec0.y - _vec1.y, _vec0.z - _vec1.z);
+}
+
+function EulerMass(_x, _y, _mass, _drag) {
+this.position = new Vector2(_x, _y);
+this.mass = _mass;
+this.drag = _drag;
+this.force = new Vector2(0, 0);
+this.velocity = new Vector2(0, 0);
+this.AddForce = function(_f) {
+  this.force.Add(_f);
+}
+this.Integrate = function(_dt) {
+  var acc = this.CurrentForce(this.position);
+  acc.Div(this.mass);
+  var posDelta = new Vector2(this.velocity.x, this.velocity.y);
+  posDelta.Mul(_dt);
+  this.position.Add(posDelta);
+  acc.Mul(_dt);
+  this.velocity.Add(acc);
+  this.force = new Vector2(0, 0);
+}
+this.CurrentForce = function(_pos, _vel) {
+  var totalForce = new Vector2(this.force.x, this.force.y);
+  var speed = this.velocity.Length();
+  var dragVel = new Vector2(this.velocity.x, this.velocity.y);
+  dragVel.Mul(this.drag * this.mass * speed);
+  totalForce.Sub(dragVel);
+  return totalForce;
+}
+}
+
+function ConfettiPaper(_x, _y) {
+this.pos = new Vector2(_x, _y);
+this.rotationSpeed = (random() * 600 + 800);
+this.angle = DEG_TO_RAD * random() * 360;
+this.rotation = DEG_TO_RAD * random() * 360;
+this.cosA = 1.0;
+this.size = 5.0;
+this.oscillationSpeed = (random() * 1.5 + 0.5);
+this.xSpeed = 40.0;
+this.ySpeed = (random() * 60 + 50.0);
+this.corners = new Array();
+this.time = random();
+var ci = round(random() * (colors.length - 1));
+this.frontColor = colors[ci][0];
+this.backColor = colors[ci][1];
+for (var i = 0; i < 4; i++) {
+  var dx = cos(this.angle + DEG_TO_RAD * (i * 90 + 45));
+  var dy = sin(this.angle + DEG_TO_RAD * (i * 90 + 45));
+  this.corners[i] = new Vector2(dx, dy);
+}
+this.Update = function(_dt) {
+  this.time += _dt;
+  this.rotation += this.rotationSpeed * _dt;
+  this.cosA = cos(DEG_TO_RAD * this.rotation);
+  this.pos.x += cos(this.time * this.oscillationSpeed) * this.xSpeed * _dt
+  this.pos.y += this.ySpeed * _dt;
+  if (this.pos.y > ConfettiPaper.bounds.y) {
+    this.pos.x = random() * ConfettiPaper.bounds.x;
+    this.pos.y = 0;
+  }
+}
+this.Draw = function(_g) {
+  if (this.cosA > 0) {
+    _g.fillStyle = this.frontColor;
+  } else {
+    _g.fillStyle = this.backColor;
+  }
+  _g.beginPath();
+  _g.moveTo((this.pos.x + this.corners[0].x * this.size) * retina, (this.pos.y + this.corners[0].y * this.size * this.cosA) * retina);
+  for (var i = 1; i < 4; i++) {
+    _g.lineTo((this.pos.x + this.corners[i].x * this.size) * retina, (this.pos.y + this.corners[i].y * this.size * this.cosA) * retina);
+  }
+  _g.closePath();
+  _g.fill();
+}
+}
+ConfettiPaper.bounds = new Vector2(0, 0);
+
+function ConfettiRibbon(_x, _y, _count, _dist, _thickness, _angle, _mass, _drag) {
+this.particleDist = _dist;
+this.particleCount = _count;
+this.particleMass = _mass;
+this.particleDrag = _drag;
+this.particles = new Array();
+var ci = round(random() * (colors.length - 1));
+this.frontColor = colors[ci][0];
+this.backColor = colors[ci][1];
+this.xOff = (cos(DEG_TO_RAD * _angle) * _thickness);
+this.yOff = (sin(DEG_TO_RAD * _angle) * _thickness);
+this.position = new Vector2(_x, _y);
+this.prevPosition = new Vector2(_x, _y);
+this.velocityInherit = (random() * 2 + 4);
+this.time = random() * 100;
+this.oscillationSpeed = (random() * 2 + 2);
+this.oscillationDistance = (random() * 40 + 40);
+this.ySpeed = (random() * 40 + 80);
+for (var i = 0; i < this.particleCount; i++) {
+  this.particles[i] = new EulerMass(_x, _y - i * this.particleDist, this.particleMass, this.particleDrag);
+}
+this.Update = function(_dt) {
+  var i = 0;
+  this.time += _dt * this.oscillationSpeed;
+  this.position.y += this.ySpeed * _dt;
+  this.position.x += cos(this.time) * this.oscillationDistance * _dt;
+  this.particles[0].position = this.position;
+  var dX = this.prevPosition.x - this.position.x;
+  var dY = this.prevPosition.y - this.position.y;
+  var delta = sqrt(dX * dX + dY * dY);
+  this.prevPosition = new Vector2(this.position.x, this.position.y);
+  for (i = 1; i < this.particleCount; i++) {
+    var dirP = Vector2.Sub(this.particles[i - 1].position, this.particles[i].position);
+    dirP.Normalize();
+    dirP.Mul((delta / _dt) * this.velocityInherit);
+    this.particles[i].AddForce(dirP);
+  }
+  for (i = 1; i < this.particleCount; i++) {
+    this.particles[i].Integrate(_dt);
+  }
+  for (i = 1; i < this.particleCount; i++) {
+    var rp2 = new Vector2(this.particles[i].position.x, this.particles[i].position.y);
+    rp2.Sub(this.particles[i - 1].position);
+    rp2.Normalize();
+    rp2.Mul(this.particleDist);
+    rp2.Add(this.particles[i - 1].position);
+    this.particles[i].position = rp2;
+  }
+  if (this.position.y > ConfettiRibbon.bounds.y + this.particleDist * this.particleCount) {
+    this.Reset();
+  }
+}
+this.Reset = function() {
+  this.position.y = -random() * ConfettiRibbon.bounds.y;
+  this.position.x = random() * ConfettiRibbon.bounds.x;
+  this.prevPosition = new Vector2(this.position.x, this.position.y);
+  this.velocityInherit = random() * 2 + 4;
+  this.time = random() * 100;
+  this.oscillationSpeed = random() * 2.0 + 1.5;
+  this.oscillationDistance = (random() * 40 + 40);
+  this.ySpeed = random() * 40 + 80;
+  var ci = round(random() * (colors.length - 1));
+  this.frontColor = colors[ci][0];
+  this.backColor = colors[ci][1];
+  this.particles = new Array();
+  for (var i = 0; i < this.particleCount; i++) {
+    this.particles[i] = new EulerMass(this.position.x, this.position.y - i * this.particleDist, this.particleMass, this.particleDrag);
+  }
+}
+this.Draw = function(_g) {
+  for (var i = 0; i < this.particleCount - 1; i++) {
+    var p0 = new Vector2(this.particles[i].position.x + this.xOff, this.particles[i].position.y + this.yOff);
+    var p1 = new Vector2(this.particles[i + 1].position.x + this.xOff, this.particles[i + 1].position.y + this.yOff);
+    if (this.Side(this.particles[i].position.x, this.particles[i].position.y, this.particles[i + 1].position.x, this.particles[i + 1].position.y, p1.x, p1.y) < 0) {
+      _g.fillStyle = this.frontColor;
+      _g.strokeStyle = this.frontColor;
+    } else {
+      _g.fillStyle = this.backColor;
+      _g.strokeStyle = this.backColor;
+    }
+    if (i == 0) {
+      _g.beginPath();
+      _g.moveTo(this.particles[i].position.x * retina, this.particles[i].position.y * retina);
+      _g.lineTo(this.particles[i + 1].position.x * retina, this.particles[i + 1].position.y * retina);
+      _g.lineTo(((this.particles[i + 1].position.x + p1.x) * 0.5) * retina, ((this.particles[i + 1].position.y + p1.y) * 0.5) * retina);
+      _g.closePath();
+      _g.stroke();
+      _g.fill();
+      _g.beginPath();
+      _g.moveTo(p1.x * retina, p1.y * retina);
+      _g.lineTo(p0.x * retina, p0.y * retina);
+      _g.lineTo(((this.particles[i + 1].position.x + p1.x) * 0.5) * retina, ((this.particles[i + 1].position.y + p1.y) * 0.5) * retina);
+      _g.closePath();
+      _g.stroke();
+      _g.fill();
+    } else if (i == this.particleCount - 2) {
+      _g.beginPath();
+      _g.moveTo(this.particles[i].position.x * retina, this.particles[i].position.y * retina);
+      _g.lineTo(this.particles[i + 1].position.x * retina, this.particles[i + 1].position.y * retina);
+      _g.lineTo(((this.particles[i].position.x + p0.x) * 0.5) * retina, ((this.particles[i].position.y + p0.y) * 0.5) * retina);
+      _g.closePath();
+      _g.stroke();
+      _g.fill();
+      _g.beginPath();
+      _g.moveTo(p1.x * retina, p1.y * retina);
+      _g.lineTo(p0.x * retina, p0.y * retina);
+      _g.lineTo(((this.particles[i].position.x + p0.x) * 0.5) * retina, ((this.particles[i].position.y + p0.y) * 0.5) * retina);
+      _g.closePath();
+      _g.stroke();
+      _g.fill();
+    } else {
+      _g.beginPath();
+      _g.moveTo(this.particles[i].position.x * retina, this.particles[i].position.y * retina);
+      _g.lineTo(this.particles[i + 1].position.x * retina, this.particles[i + 1].position.y * retina);
+      _g.lineTo(p1.x * retina, p1.y * retina);
+      _g.lineTo(p0.x * retina, p0.y * retina);
+      _g.closePath();
+      _g.stroke();
+      _g.fill();
+    }
+  }
+}
+this.Side = function(x1, y1, x2, y2, x3, y3) {
+  return ((x1 - x2) * (y3 - y2) - (y1 - y2) * (x3 - x2));
+}
+}
+ConfettiRibbon.bounds = new Vector2(0, 0);
+confetti = {};
+confetti.Context = function(id) {
+var i = 0;
+var canvas = document.getElementById(id);
+var canvasParent = canvas.parentNode;
+var canvasWidth = canvasParent.offsetWidth;
+var canvasHeight = canvasParent.offsetHeight;
+canvas.width = canvasWidth * retina;
+canvas.height = canvasHeight * retina;
+var context = canvas.getContext('2d');
+var interval = null;
+var confettiRibbons = new Array();
+ConfettiRibbon.bounds = new Vector2(canvasWidth, canvasHeight);
+for (i = 0; i < confettiRibbonCount; i++) {
+  confettiRibbons[i] = new ConfettiRibbon(random() * canvasWidth, -random() * canvasHeight * 2, ribbonPaperCount, ribbonPaperDist, ribbonPaperThick, 45, 1, 0.05);
+}
+var confettiPapers = new Array();
+ConfettiPaper.bounds = new Vector2(canvasWidth, canvasHeight);
+for (i = 0; i < confettiPaperCount; i++) {
+  confettiPapers[i] = new ConfettiPaper(random() * canvasWidth, random() * canvasHeight);
+}
+this.resize = function() {
+  canvasWidth = canvasParent.offsetWidth;
+  canvasHeight = canvasParent.offsetHeight;
+  canvas.width = canvasWidth * retina;
+  canvas.height = canvasHeight * retina;
+  ConfettiPaper.bounds = new Vector2(canvasWidth, canvasHeight);
+  ConfettiRibbon.bounds = new Vector2(canvasWidth, canvasHeight);
+}
+this.start = function() {
+  this.stop()
+  var context = this;
+  this.update();
+}
+this.stop = function() {
+  cAF(this.interval);
+}
+this.update = function() {
+  var i = 0;
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  for (i = 0; i < confettiPaperCount; i++) {
+    confettiPapers[i].Update(duration);
+    confettiPapers[i].Draw(context);
+  }
+  for (i = 0; i < confettiRibbonCount; i++) {
+    confettiRibbons[i].Update(duration);
+    confettiRibbons[i].Draw(context);
+  }
+  this.interval = rAF(function() {
+    confetti.update();
+  });
+}
+}
+var confetti = new confetti.Context('confetti');
+confetti.start();
+window.addEventListener('resize', function(event){
+confetti.resize();
+});
+});
+</script>
+
+</body>
+</html>

@@ -218,7 +218,7 @@ addEventHandler("onClientBrowserCreated", root,
 	function()
 
 		if source ~= raveBreakBrowser then return end
-		loadBrowserURL(raveBreakBrowser, "http://mta/local/ravebreak.html")
+		loadBrowserURL(raveBreakBrowser, "http://mta/local/ravebreak/ravebreak.html")
 		
 		
 		addEventHandler("onClientRender", root, renderRaveBreak)
