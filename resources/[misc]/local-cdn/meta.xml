@@ -1,0 +1,29 @@
+<meta>
+	<info author="AfuSensi" type="script" name="local-cdn" description="Local CDN (content distribution network) for local CEF browsers" />
+	<!-- CSS -->
+	<file src="css/vuetify.css"/> <!--v2.0.10-->
+	<file src="css/flat-flags/flat-flags.css"/>
+	<file src="css/flat-flags/flags-16.png"/>
+	<file src="css/flat-flags/flags-47.png"/>
+	<!-- JS -->
+	<file src="js/vue.js"/> <!-- Vue.js v2.6.10 -->
+	<file src="js/vue-router.js"/> <!-- vue-router v3.1.2 -->
+	<file src="js/vuetify.js"/> <!-- Vuetify v2.0.10 -->
+	<file src="js/jquery.js"/> <!-- jQuery v3.4.1 -->
+	<file src="js/lodash.js"/> <!--Underscore.js 1.8.3 --> 
+	<file src="js/moment.js"/> <!--moment.js 2.20.1 --> 
+	<file src="js/vuex.js"/> <!--vuex v3.1.1 -->
+	<!-- FONTS -->
+	<file src="fonts/mainFont.css"/>
+	<file src="fonts/roboto/Roboto-Black.woff2"/>
+	<file src="fonts/roboto/Roboto-Bold.woff2"/>
+	<file src="fonts/roboto/Roboto-Light.woff2"/>
+	<file src="fonts/roboto/Roboto-Medium.woff2"/>
+	<file src="fonts/roboto/Roboto-Regular.woff2"/>
+	<file src="fonts/roboto/Roboto-Thin.woff2"/>
+		<!-- Material Icons -->
+	<file src="fonts/material-icons/materialdesignicons.css"></file>
+	<file src="fonts/material-icons/MaterialIcons-Regular.woff2"></file>
+		<!-- /Material Icons -->
+	
+</meta>
