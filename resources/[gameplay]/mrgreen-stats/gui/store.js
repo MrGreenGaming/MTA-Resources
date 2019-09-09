@@ -65,6 +65,12 @@ const vuexStore = {
                 }
             } else {
                 state.playerStats = []
+                state.country = false
+                state.vip = false
+                state.gc = false
+                state.name = false
+                state.avatar = false
+
             }
             
         },
