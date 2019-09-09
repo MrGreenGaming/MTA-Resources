@@ -247,8 +247,8 @@ function carHideState ( state )
 		carHideAllowed = true
 		for _,p in ipairs(getElementsByType("player")) do
 			removeElementData(p,'carhide')
-			unbindKey(p,"x","down",carhideKeyHandler)
-			bindKey(p,"x","down",carhideKeyHandler)
+			unbindKey(p,"c","down",carhideKeyHandler)
+			bindKey(p,"c","down",carhideKeyHandler)
 		end
 		triggerClientEvent("onCarHideStatusChange",root,true,exports.race:getRaceMode())
 
@@ -256,7 +256,7 @@ function carHideState ( state )
 		carHideAllowed = false
 		for _,p in ipairs(getElementsByType("player")) do
 			removeElementData(p,'carhide')
-			unbindKey(p,"x","down",carhideKeyHandler)
+			unbindKey(p,"c","down",carhideKeyHandler)
 		end
 		
 		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
@@ -266,7 +266,7 @@ function carHideState ( state )
 		
 		for _,p in ipairs(getElementsByType("player")) do
 			removeElementData(p,'carhide')
-			unbindKey(p,"x","down",carhideKeyHandler)
+			unbindKey(p,"c","down",carhideKeyHandler)
 		end
 		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
 	end
