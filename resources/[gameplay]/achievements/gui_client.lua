@@ -13,13 +13,15 @@ function toggleAchievementGUI(key, keyState)
 	if bGuiOpen == false then
 		bGuiOpen = true
 		triggerServerEvent("onAchievementsBoxLoad", resourceRoot)
+		if getResourceState(getResourceFromName( 'blur_box' )) ~= 'running' then return end
 		achievements = exports.blur_box:createBlurBox( 0, 0, screenW, screenH, 255, 255, 255, 255, true )
         achievementsIntensity = exports.blur_box:setBlurIntensity(2.5)
 	elseif isElement(window) then
-		exports.blur_box:destroyBlurBox(achievements)
 		destroyElement(window)
 		bGuiOpen = false
 		showCursor(false)
+		if getResourceState(getResourceFromName( 'blur_box' )) ~= 'running' then return end
+		exports.blur_box:destroyBlurBox(achievements)
 	end	
 end
 bindKey("f4", "down", toggleAchievementGUI)
@@ -30,11 +32,11 @@ function showAchievementsGUI ( achievementListMix, playerAchievementsMix, achiev
 	showCursor(true)
 
 	local screenWidth, screenHeight = guiGetScreenSize()
-	window = guiCreateStaticImage((screenWidth - 854) / 2, (screenHeight  - 324) / 2, 854, 324, ":stats/images/dot.png", false)
+	window = guiCreateStaticImage((screenWidth - 854) / 2, (screenHeight  - 324) / 2, 854, 324, "dot.jpg", false)
 	guiSetProperty(window, "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
-	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, ":stats/images/dot.png", false, window)
+	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, 854, 10, "dot.jpg", false, window)
 	guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
-	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, ":stats/images/dot.png", false, window)
+	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, 854, 10, "dot.jpg", false, window)
 	guiSetProperty(GUIEditor.staticimage[3], "ImageColours", "tl:FF0CB418 tr:FF0CB418 bl:FF0CB418 br:FF0CB418")
 	GUIEditor.label[1] = guiCreateLabel(364, 1, 128, 16, "Achievements", false, window)
 	guiSetFont(GUIEditor.label[1], "default-bold-small")
