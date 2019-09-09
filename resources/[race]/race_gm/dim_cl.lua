@@ -217,9 +217,9 @@ function showCarHideNotification()
 	if carHide_alpha > 255 then carHide_alpha = 255 end
 	if not carHideEnabled then carHide_alpha = 0 end
 
-	local theString = "Press X to enable Carhide"
+	local theString = "Press C to enable Carhide"
 	if currentRaceMode ~= 'Reach the flag' then
-		theString = "Press X to enable Carhide (while in ghostmode)"
+		theString = "Press C to enable Carhide (while in ghostmode)"
 	end
 	dxDrawText(theString, screenW - 594 - 10, (screenH - 28) / 2, (screenW - 594 - 10) + 594, ( (screenH - 28) / 2) + 28, tocolor(78, 254, 0, carHide_alpha), 1.00, "default-bold", "right", "center", false, false, false, false, false)
 	if carHide_alpha == 0 then
