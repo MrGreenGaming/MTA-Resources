@@ -1,0 +1,470 @@
+------------------------------------------------------------------------------------------
+--  When a statistic is not present in the database, it will default to these values.   --
+--  The new stats database has the structure [forumid] [category] [name] [value]        --
+--  So new stats can be added without changing the database.                            --
+--  If you want to add stats, you should add them to this table and make it save.       --
+------------------------------------------------------------------------------------------
+local defaultValues = {
+    {
+        ['name'] = 'General',
+        ['items'] = {
+            {name = 'Join Date', value = false},
+            {name = 'Playtime', value = 0},
+            {name = 'Total Checkpoints', value = 0},
+            {name = 'Total Deaths', value = 0},
+            {name = 'Total Wins', value = 0},
+        }
+    },
+    {
+        ['name'] = 'Race',
+        ['items'] = {
+            {name = 'Starts', value = 0},
+            {name = 'Finishes', value = 0},
+            {name = 'Wins', value = 0},
+            {name = 'Top 1\'s', value = 0},
+            {name = 'Total Rank', value = false},
+        }
+    },
+    {
+        ['name'] = 'Never The Same',
+        ['items'] = {
+            {name = 'Starts', value = 0},
+            {name = 'Finishes', value = 0},
+            {name = 'Wins', value = 0},
+            {name = 'Top 1\'s', value = 0},
+            {name = 'Total Rank', value = false},
+        }
+    },
+    {
+        ['name'] = 'Destruction Derby',
+        ['items'] = {
+            {name = 'Wins', value = 0},
+            {name = 'Kills', value = 0},
+            {name = 'Deaths', value = 0},
+            {name = 'K/D Ratio', value = 0},
+            {name = 'Top 1\'s', value = 0},
+            {name = 'Total Rank', value = false},
+        }
+    },
+    {
+        ['name'] = 'Shooter',
+        ['items'] = {
+            {name = 'Wins', value = 0},
+            {name = 'Kills', value = 0},
+            {name = 'Deaths', value = 0},
+            {name = 'K/D Ratio', value = 0},
+            {name = 'Top 1\'s', value = 0},
+            {name = 'Total Rank', value = false},
+        }
+    },
+    {
+        ['name'] = 'DeadLine',
+        ['items'] = {
+            {name = 'Wins', value = 0},
+            {name = 'Kills', value = 0},
+            {name = 'Deaths', value = 0},
+            {name = 'K/D Ratio', value = 0},
+            {name = 'Top 1\'s', value = 0},
+            {name = 'Total Rank', value = false},
+        }
+    },
+    {
+        ['name'] = 'Reach The Flag',
+        ['items'] = {
+            {name = 'Starts', value = 0},
+            {name = 'Wins', value = 0},
+            {name = 'Top 1\'s', value = 0},
+            {name = 'Total Rank', value = false},
+        }
+    },
+    {
+        ['name'] = 'Capture The Flag',
+        ['items'] = {
+            {name = 'Flags Delivered', value = 0},
+        }
+    }
+}
+
+-- Mapping index to avoid excessive looping to find/set a value
+categoryMap = {
+    -- Structure
+    -- ['catName'] = index
+}
+statsMap = {
+    -- Structure
+    -- ['catName'] {
+        -- ['statName'] = index
+    -- },
+}
+function setStatMaps()
+    for i, row in ipairs(defaultValues) do
+        categoryMap[row.name] = i
+        statsMap[row.name] = {}
+        for i, stat in ipairs(row.items) do
+            statsMap[row.name][stat.name] = i
+        end
+    end
+end
+setStatMaps()
+
+-------------------
+-- Database Init --
+-------------------
+function initStatsDB()
+	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
+
+	if not handlerConnect then
+		outputDebugString('Stats Database error: could not connect to the mysql db')
+		return
+	end
+end
+addEventHandler( 'onResourceStart', resourceRoot, initStatsDB)
+
+---------------------
+-- Loading/Saving  --
+---------------------
+
+local playerStats = {
+    -- TABLE STRUCTURE
+    -- [forumid] = defaultValues
+}
+local forumidPlayerMap = {
+    -- TABLE STRUCTURE
+    -- [forumid] = playerElement
+}
+
+function buildPlayerStats()
+    for _, p in ipairs(getElementsByType( 'player' )) do
+        if canExport('gc') and exports.gc:isPlayerLoggedInGC(p) then
+            local id = getPlayerID(p)
+            loadPlayerStats(id)
+            forumidPlayerMap[id] = p
+        end
+    end
+end
+addEventHandler( 'onResourceStart', resourceRoot, buildPlayerStats)
+
+function loadPlayerStats(forumid)
+    if not forumid or type(forumid) ~= 'number' then return end
+    playerStats[forumid] = table.copy(defaultValues)
+    local queryString = "SELECT * FROM player_stats WHERE forumid = ?"
+    dbQuery( 
+        function(qh) 
+            local res = dbPoll(qh, 0)
+            if not playerStats[forumid] or #res < 1 then return end
+            for i, row in ipairs(res) do
+                -- var_dump('-v', res)
+                if not categoryMap[tostring(row.category)] then
+                    outputDebugString('Stats: Could not find category '..tostring(row.category)..'. Make sure its added to defaultValues', 1)
+                elseif not statsMap[tostring(row.category)][tostring(row.statName)] then
+                    outputDebugString('Stats: Could not find statName '..tostring(row.statName)..' in category '..tostring(row.category)..'. Make sure its added to defaultValues', 1)
+                else
+                    local catIndex = categoryMap[tostring(row.category)]
+                    local statIndex = statsMap[tostring(row.category)][tostring(row.statName)]
+                    if tonumber(row.statVal) then row.statVal = tonumber(row.statVal) end
+                    playerStats[forumid][catIndex].items[statIndex].value = row.statVal
+                end
+            end
+            triggerEvent('onPlayerStatsLoaded', resourceRoot, forumid)
+        end, 
+    handlerConnect, queryString, forumid)
+end
+addEvent('onGCLogin')
+addEventHandler('onGCLogin', root, function(id) 
+    loadPlayerStats(id)
+    forumidPlayerMap[id] = source
+end)
+addEvent('onGCLogout')
+addEventHandler('onGCLogout', root, function(id) 
+    if playerStats[id] then 
+        playerStats[id] = nil
+    end
+    if forumidPlayerMap[id] then
+        forumidPlayerMap[id] = nil 
+    end
+end)
+
+
+-- Saved stats are saved in the queryCache, which will execute when race reaches 'NoMap' state
+local queryCache = {}
+local function saveStatsInDB()
+    if not handlerConnect then return end
+    for i, queryString in ipairs(queryCache) do
+        dbExec( handlerConnect, queryString )
+        queryCache[i] = nil
+    end
+end
+addEvent('onRaceStateChanging')
+addEventHandler('onRaceStateChanging', root, function(state) if state == 'NoMap' then saveStatsInDB() end end)
+addEventHandler('onResourceStop', resourceRoot, saveStatsInDB)
+
+function saveStat(forumid, category, name, value, increment)
+    if not canExport('gc') or not handlerConnect or type(forumid) ~= 'number' then return false end
+    -- Sanity checking
+    if type(category) ~= 'string' or not categoryMap[category] then
+        outputDebugString('Stats: Could not find category '..tostring(category)..'. Make sure its added to defaultValues', 1)
+        return false
+    elseif type(name) ~= 'string' or not statsMap[category][name] then
+        outputDebugString('Stats: Could not find statName '..tostring(name)..' in category '..tostring(category)..'. Make sure its added to defaultValues', 1)
+        return false
+    elseif not playerStats[forumid] then
+        outputDebugString('Stats: '..tostring(forumid)..' is not present in playerStats table', 1)
+        return
+    elseif value == nil then
+        outputDebugString('Stats: saveStat() #3 argument is nil', 1)
+        return false
+    end
+    local catIndex = categoryMap[category]
+    local statIndex = statsMap[category][name]
+    if increment then
+        playerStats[forumid][catIndex].items[statIndex].value = playerStats[forumid][catIndex].items[statIndex].value + value
+        local queryString = dbPrepareString(handlerConnect, [[
+            INSERT INTO `player_stats` (forumid, category, statName, statVal) VALUES(?, ?, ?, ?) 
+            ON DUPLICATE KEY UPDATE statVal = statVal + ?
+        ]], forumid, category, name, value, value)
+        table.insert(queryCache, queryString)
+    else
+        playerStats[forumid][catIndex].items[statIndex].value = value
+        local queryString = dbPrepareString(handlerConnect, [[
+            INSERT INTO `player_stats` (forumid, category, statName, statVal) VALUES(?, ?, ?, ?) 
+            ON DUPLICATE KEY UPDATE statVal = ?
+        ]], forumid, category, name, value, value)
+        table.insert(queryCache, queryString)
+    end
+    triggerEvent('onPlayerStatsUpdated', root, forumid, category, name)
+end
+
+function getStat(forumid, category, name)
+    local catIndex = categoryMap[tostring(category)]
+    local statIndex = statsMap[tostring(category)][tostring(name)]
+    if not catIndex or not statIndex then 
+        outputDebugString('getStat() invalid category or stat name',1)
+        return false 
+    end
+    return playerStats[forumid] and playerStats[forumid][catIndex] and playerStats[forumid][catIndex].items[statIndex].value or false
+end
+-----------------------
+-- Server <-> Server --
+-----------------------
+local currentServer = get("*currentServer") or 'Race'
+
+
+local otherServerPlayerStats = {
+    -- TABLE STRUCTURE
+    -- [forumid] = {
+    --     ['name'] = playerName,
+    --     ['gc'] = playerGC,
+    --     ['vip'] = playerVIP,
+    --     ['stats'] = playerStats,
+    --     ['server'] = serverName,
+    -- }
+}
+function requestOtherServerStats()
+    -- Request it
+    local fetchServerIP = get("*fetchServerIP")
+    if not fetchServerIP then return false end
+    callRemote ( fetchServerIP, getResourceName(getThisResource()), "sendServerPlayerStats", receiveOtherServerStats )
+end
+setTimer( requestOtherServerStats, 60000, 0)
+addEventHandler('onResourceStart', resourceRoot, requestOtherServerStats)
+
+function receiveOtherServerStats(responseData, errno)
+    if responseData == "ERROR" then
+        outputDebugString( "callRemote: ERROR #" .. errno )
+    elseif type(responseData) == 'table' then
+        otherServerPlayerStats = responseData
+    end
+end
+
+function sendServerPlayerStats()
+    local obj = {}
+    for id, stats in pairs(playerStats) do
+        if forumidPlayerMap[id] and isElement(forumidPlayerMap[id]) and canExport('gc') then
+            obj[id] = {}
+            obj[id].name = getPlayerName(forumidPlayerMap[id]):gsub("#%x%x%x%x%x%x","")
+            obj[id].gc = exports.gc:getPlayerGreencoins(forumidPlayerMap[id]) or 0
+            obj[id].vip = getVipDays(exports.gc:getPlayerVip(forumidPlayerMap[id])) or false
+            obj[id].stats = stats
+            obj[id].server = currentServer
+        end
+    end
+    return obj
+end
+-----------------------
+-- Client <-> Server --
+-----------------------
+local playerListCache = false
+local playerListCacheTTL = 10000 -- Time to live
+local function getPlayerList()
+    if playerListCache then return playerListCache end
+    local list = {}
+    -- Current Server
+    for id, player in pairs(forumidPlayerMap) do
+        if isElement(player) then
+            local playerInf = {}
+            playerInf.name = getPlayerName(player):gsub("#%x%x%x%x%x%x","")
+            playerInf.id = id
+            playerInf.server = currentServer
+            table.insert(list, playerInf)
+        end
+    end
+    -- Other Server
+    for id, obj in pairs(otherServerPlayerStats) do
+        local playerInf = {}
+        playerInf.name = obj.name:gsub("#%x%x%x%x%x%x","")
+        playerInf.id = id
+        playerInf.server = obj.server
+        table.insert(list, playerInf)
+    end
+    -- var_dump('-v', list)
+    playerListCache = list
+    setTimer(function() playerListCache = false end, playerListCacheTTL, 1)
+    return playerListCache
+end
+
+addEvent('onClientRequestsStatsPlayerList', true)
+addEventHandler('onClientRequestsStatsPlayerList', root, 
+function() 
+    if client then
+        -- Send playerlist back to client
+        triggerClientEvent(client, 'onServerSendsStatsPlayerList', client, getPlayerList())
+    end
+end)
+
+-- Build table for client
+local function sendStatsToClient(forumid)
+    if not canExport('gc') or not client then
+        if client then
+            triggerClientEvent(client, 'onServerSendsStats', client, false)
+        end
+        outputDebugString('Could not access exports for GC',1)
+        return false 
+    end
+    if isElement(forumid) and getElementType(forumid) == 'player' then
+        -- forumid arg is player
+        forumid = getPlayerID(forumid)
+        if not forumid then
+            triggerClientEvent(client, 'onServerSendsStats', client, false)
+        end
+    elseif not forumid then
+        triggerClientEvent(client, 'onServerSendsStats', client, false)
+        return false
+    end
+    -- First check if player is in this server, then look for other server
+    if playerStats[forumid] and forumidPlayerMap[forumid] then
+        -- Is in current server
+        local player = forumidPlayerMap[forumid]
+        local sendObj = {}
+        sendObj.name = getPlayerName(player):gsub("#%x%x%x%x%x%x","")
+        sendObj.gc = exports.gc:getPlayerGreencoins(player) or 0
+        sendObj.vip = getVipDays(exports.gc:getPlayerVip(player)) or false
+        sendObj.stats = specialFormat(table.copy(playerStats[forumid]))
+        triggerClientEvent(client, 'onServerSendsStats', client, sendObj, player)
+    elseif otherServerPlayerStats[tostring(forumid)] then
+        -- Is player in other server
+        local sendObj = {}
+        sendObj.name = otherServerPlayerStats[tostring(forumid)].name
+        sendObj.gc = otherServerPlayerStats[tostring(forumid)].gc
+        sendObj.vip = otherServerPlayerStats[tostring(forumid)].vip
+        sendObj.stats = specialFormat(table.copy(otherServerPlayerStats[tostring(forumid)].stats))
+        triggerClientEvent(client, 'onServerSendsStats', client, sendObj)
+    else
+        -- No player found with requested ID
+        triggerClientEvent(client, 'onServerSendsStats', client, false)
+    end
+
+end
+addEvent('onClientRequestsStats', true)
+addEventHandler('onClientRequestsStats', resourceRoot, sendStatsToClient)
+
+-----------
+-- Other --
+-----------
+function setJoinDate(id)
+    if not getStat(id, 'General', 'Join Date') and forumidPlayerMap[id] then
+        saveStat(id, 'General', 'Join Date', exports.gc:getPlayerForumJoinTimestamp(forumidPlayerMap[id]))
+    end
+end
+addEvent('onPlayerStatsLoaded')
+addEventHandler('onPlayerStatsLoaded', resourceRoot, setJoinDate)
+
+local rankFetch = {
+    ['race'] = 'Race',
+    ['nts'] = 'Never The Same',
+    ['dl'] = 'DeadLine',
+    ['sh'] = 'Shooter',
+    ['rtf'] = 'Reach The Flag',
+    ['dd'] = 'Destruction Derby'
+}
+
+local rankQueryString = [[
+    SELECT FIND_IN_SET( ??, (    
+    SELECT GROUP_CONCAT( ??
+    ORDER BY ?? DESC, forumid ASC ) 
+    FROM leaderboards )
+    ) AS rank
+    FROM leaderboards
+    WHERE forumid =  ?
+]]
+
+function setTotalRanking(id)
+    if not handlerConnect then return end
+    for abbr, full in pairs(rankFetch) do
+        dbQuery( 
+            function(qh)
+                local res = dbPoll( qh, 0 )
+                if not res or #res ~= 1 or not res[1] or type(res[1].rank) ~= 'number' then return end
+                saveStat(id, full, 'Total Rank', res[1].rank)
+            end, 
+        handlerConnect, rankQueryString, abbr, abbr, abbr, id)
+    end
+end
+addEventHandler('onPlayerStatsLoaded', resourceRoot, setTotalRanking)
+
+local topOnesQueryString = [[
+    SELECT COUNT(*) as amount FROM `toptimes` WHERE forumid = ? AND racemode = ? AND pos = 1
+]]
+function setTopOnes(id)
+    if not handlerConnect then return end
+    for abbr, full in pairs(rankFetch) do
+        dbQuery( 
+            function(qh) 
+                local res = dbPoll( qh, 0 )
+                if not res or #res ~= 1 or not res[1] or type(res[1].amount) ~= 'number' then return end
+                saveStat(id, full, "Top 1's", res[1].amount)
+            end, 
+        handlerConnect, topOnesQueryString, id, abbr)
+    end
+end
+addEventHandler('onPlayerStatsLoaded', resourceRoot, setTopOnes)
+
+-- Set timer to refetch top 1's and ranking
+local topRankingRefetchTime = 600000
+setTimer(
+    function()
+        if not handlerConnect then return end
+        for id, _ in pairs(playerStats) do
+            setTopOnes(id)
+            setTotalRanking(id)
+        end
+    end, 
+topRankingRefetchTime, 0)
+
+----------------------------
+-- GC Logged in/out state --
+----------------------------
+addEvent('onClientRequestsStatsLoggedInState', true)
+addEvent('onGCLogin')
+addEvent('onGCLogout')
+function sendClientLoggedInState(player, bool)
+    if type(bool) == 'boolean' then
+        triggerClientEvent(player, 'onServerSendStatsLogedInState', player, bool)
+    elseif canExport('gc') then
+        triggerClientEvent(player, 'onServerSendStatsLogedInState', player, exports.gc:isPlayerLoggedInGC(player))
+    else
+        triggerClientEvent(player, 'onServerSendStatsLogedInState', player, false)
+    end
+end
+addEventHandler('onClientRequestsStatsLoggedInState', resourceRoot, function() if client then sendClientLoggedInState(client) end end)
+addEventHandler("onGCLogin" , root, function() if getElementType(source) == 'player' then sendClientLoggedInState(source) end end)
+addEventHandler("onGCLogout" , root, function() if getElementType(source) == 'player' then sendClientLoggedInState(source) end end)

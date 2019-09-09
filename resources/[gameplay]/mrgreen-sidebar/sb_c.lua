@@ -303,11 +303,7 @@ function sidebarEaseClose()
 end
 --
 function clickHandler(button,state,x,y)
-	if not sidebarShowing then return end
-	if not button == "left" then return end
-	if state == "down" then
-
-
+	if sidebarShowing and button == "left" and state == "down" then
 		local cursorx,cursory = getCursorPosition()
 		local cursorx = cursorx*screenW
 		local cursory = cursory*screenH
@@ -315,12 +311,8 @@ function clickHandler(button,state,x,y)
 		for i,item in ipairs(MenuItems) do
 			-- outputChatBox(tostring(item.x).." "..tostring(item.w).." "..tostring(item.y).." "..tostring(item.h))
 			if cursorx>item.x and cursorx < item.x+item.w and cursory>item.y and cursory<item.y+item.h then
-				-- Do stuff here
-				if item.event ~= "sb_showStats" then
+				if item.event then
 					triggerEvent(item.event,root)
-					showSidebar()
-				elseif item.event == "sb_showStats" then
-					triggerServerEvent(item.event,root)
 					showSidebar()
 				end
 				break
