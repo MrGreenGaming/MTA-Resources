@@ -1,7 +1,7 @@
 <meta>
     <info name="Stats" author="AleksCore" version="0.1" description="Statistics" type="script" addon="race" />
     
-    <script src="client/gui.lua" type="client"></script>
+    <!-- <script src="client/gui.lua" type="client"></script>
     <script src="client/settings.lua" type="client"></script>
     <script src="client/tooltips.lua" type="client"></script>
     <script src="client/util.lua" type="client"></script>
@@ -17,9 +17,9 @@
     <file src="images/header.png" />
     <file src="images/close.png" />
     <file src="images/close_pressed.png" />
-    <file src="images/sprite.png" />
+    <file src="images/sprite.png" /> -->
 
-    <export function="getPlayerStat" type="server"/>
+    <!-- <export function="getPlayerStat" type="server"/> -->
     
     <settings>
         
