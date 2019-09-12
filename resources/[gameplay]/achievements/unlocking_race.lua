@@ -21,6 +21,7 @@ achievementListRace = {
 	{ s = "Finish the map *promap*",									id = 30,		reward = 100 },
 	{ s = "Finish the map *DOOZYJude - Are You Infernus Pro?* in less than 10 minutes",                     id = 41,		reward = 200 },
 	{ s = "Finish the map *Ich bin expert* in less than 9 minutes",                     id = 55,		reward = 100 },
+	{ s = "Finish the map *Pachanga The Short Map* in less than 1:12:500 minutes",                     id = 66,		reward = 50 },
 	{ s = "First noob to die in a map",     							id = 12,		reward = 50 },
 	{ s = "Get 2 first toptimes consecutively",    		  				id = 24,		reward = 100 },
 	{ s = "Finish 5 Times",     									id = 42,			reward = 50, max = 5 },
@@ -68,6 +69,7 @@ achievementListRace = {
         { s = "Finish the map *be4TH!! SpeedWay in 4th*",               	id = 60,		reward = 44},
 	{ s = "Finish the map *Racing_Countryside*",               	id = 61,		reward = 100 },
 	{ s = "Finish the map *Long Way Round*",               	id = 62,		reward = 100 },
+	{ s = "Finish the map *TryHarder*",                     id = 65,		reward = 70 },
 }
 
 
@@ -212,6 +214,12 @@ function(rank, time)
 	end
 	if mapResName == "race-whirlwindjourney" and time <= 498000 then
 		addPlayerAchievementRace(source, 64)
+	end
+	if mapResName == "race-tryharder" then
+		addPlayerAchievementRace(source, 65)
+	end
+	if mapResName == "race-Pachanga_TheShortMap" and time <= 72500 then
+		addPlayerAchievementRace(source, 66)
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
