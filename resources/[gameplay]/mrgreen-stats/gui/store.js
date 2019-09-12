@@ -1,8 +1,9 @@
 Vue.use(Vuex)
 const vuexStore = {
     state: {
-        hideWindow: false,
         isLoggedIn: true,
+        monthlyTopsAmount: 500,
+        playerTops: [],
         playerStats: [],
         vip: false,
         name: false,
@@ -14,6 +15,12 @@ const vuexStore = {
     },
 
     getters: {
+        monthlyTopsAmount: state => {
+            return state.monthlyTopsAmount
+        },
+        playerTops: state => {
+            return state.playerTops
+        },
         country: state => {
             return state.country
         },
@@ -40,9 +47,6 @@ const vuexStore = {
         },
         avatar: state => {
             return state.avatar
-        },
-        hideWindow: state => {
-            return state.hideWindow
         }
        
     },
@@ -106,6 +110,21 @@ const vuexStore = {
             } else {
                 state.avatar = false
             }
+        },
+        setPlayerTops(state, string) {
+            if (typeof string !== 'string') {
+                state.playerTops = []
+                return
+            }
+            const tops = JSON.parse(string)
+            if (!tops || typeof tops !== 'object' || !tops[0] ) {
+                state.playerTops = []
+                return
+            }
+            state.playerTops = tops[0]
+        },
+        setMonthlyTopAmount(state, amount) {
+            state.monthlyTopsAmount = typeof amount === 'number' && amount || 0
         },
         setLoggedIn(state, bool) {
             state.isLoggedIn = bool

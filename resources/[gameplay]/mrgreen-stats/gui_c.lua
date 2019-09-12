@@ -35,13 +35,15 @@ end
 
 
 local guiScale, guiWidth, guiHeight = getBrowserDimensions(screenWidth)
-local browserGUI = guiCreateBrowser((screenWidth/2) - (guiWidth/2), (screenHeight/2) - (guiHeight/2), guiWidth, guiHeight, true, true, false)
+local browserX, browserY = (screenWidth/2) - (guiWidth/2), (screenHeight/2) - (guiHeight/2)
+local browserGUI = guiCreateBrowser(browserX, browserY, guiWidth, guiHeight, true, true, false)
 local browserElement = guiGetBrowser(browserGUI)
 guiSetVisible( browserGUI, false )
 guiSetAlpha(browserGUI, 0)
-local guiIsReady = false
 
-addEventHandler( "onClientBrowserCreated", browserElement, 
+
+
+addEventHandler( "onClientBrowserCreated", resourceRoot, 
 	function( )
         loadBrowserURL(source, "http://mta/local/gui/index.html")
         if DEBUG then
@@ -58,7 +60,6 @@ addEventHandler('onMapInfoBrowserMounted', resourceRoot, function()
     -- Set zoom (scale)
     executeBrowserJavascript( source, "document.documentElement.style.zoom = "..guiScale)
     requestPlayerList()
-    guiIsReady = true
 end)
 
 function showStatsWindow(bool, dontRequestOwnStats)
@@ -90,7 +91,7 @@ addEvent('setStatsWindowVisible', true)
 addEventHandler('setStatsWindowVisible', root, showStatsWindow)
 addEvent('browserCloseStatsWindow')
 addEventHandler('browserCloseStatsWindow', resourceRoot, function() showStatsWindow(false) end)
-
+bindKey('F10', 'down', function() showStatsWindow() end)
 -------------------------
 -- Ease opacity (fade) --
 -------------------------
@@ -135,8 +136,11 @@ local mousex, mousey, mousez = false, false, false
 local offsetPos = {}
 
 addEventHandler('onClientCursorMove', root, function(_, _, x, y) 
-	if shouldSetPosition then
-		guiSetPosition( browserGUI, x - offsetPos[ 1 ], y - offsetPos[ 2 ], false );
+    if shouldSetPosition then
+        browserX, browserY = x - offsetPos[ 1 ], y - offsetPos[ 2 ]
+        guiSetPosition( browserGUI, browserX, browserY, false )
+        
+        
 	end
 end)
 
@@ -211,9 +215,20 @@ function receiveStats(stats, player)
         if statsString then
             executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerStats', `"..statsString.."`)")
         end
+        -- Send Tops to browser
+        
+        if stats.tops then
+            local topsString = toJSON(stats.tops)
+            executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerTops', `"..topsString.."`)")
+        else
+            executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerTops', false)")
+        end
+        stats.monthlyTops = tonumber(stats.monthlyTops) and stats.monthlyTops or 0
+        executeBrowserJavascript(browserElement, "window.VuexStore.commit('setMonthlyTopAmount', "..stats.monthlyTops..")")
         return
     end
     executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerStats', false)")
+    executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerTops', false)")
 end
 addEvent('onServerSendsStats', true)
 addEventHandler('onServerSendsStats', localPlayer, receiveStats)

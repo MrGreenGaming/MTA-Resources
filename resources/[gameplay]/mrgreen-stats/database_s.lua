@@ -112,7 +112,6 @@ setStatMaps()
 -------------------
 function initStatsDB()
 	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
-
 	if not handlerConnect then
 		outputDebugString('Stats Database error: could not connect to the mysql db')
 		return
@@ -132,7 +131,19 @@ local forumidPlayerMap = {
     -- TABLE STRUCTURE
     -- [forumid] = playerElement
 }
-
+local playerTopTimes = {
+    -- TABLE STRUCTURE
+    -- [forumid] = {
+    --     {name = 'Name', items = {
+    --         name = 'Item Name',
+    --         value = 'Item Value'
+    --     }}
+    -- }
+}
+local playerMonthlyTopTimes = {
+    -- TABLE STRUCTURE
+    -- [forumid] = 0,
+}
 function buildPlayerStats()
     for _, p in ipairs(getElementsByType( 'player' )) do
         if canExport('gc') and exports.gc:isPlayerLoggedInGC(p) then
@@ -166,11 +177,15 @@ function loadPlayerStats(forumid)
                 end
             end
             triggerEvent('onPlayerStatsLoaded', resourceRoot, forumid)
+            fetchTopTimes(forumid)
+            fetchMonthlyTops(forumid)
         end, 
     handlerConnect, queryString, forumid)
 end
 addEvent('onGCLogin')
-addEventHandler('onGCLogin', root, function(id) 
+addEventHandler('onGCLogin', root, function(id)
+    playerTopTimes[id] = {}
+    playerMonthlyTopTimes[id] = 0
     loadPlayerStats(id)
     forumidPlayerMap[id] = source
 end)
@@ -181,6 +196,12 @@ addEventHandler('onGCLogout', root, function(id)
     end
     if forumidPlayerMap[id] then
         forumidPlayerMap[id] = nil 
+    end
+    if playerTopTimes[id] then
+        playerTopTimes[id] = nil
+    end
+    if playerMonthlyTopTimes[id] then
+        playerMonthlyTopTimes[id] = nil
     end
 end)
 
@@ -257,6 +278,8 @@ local otherServerPlayerStats = {
     --     ['vip'] = playerVIP,
     --     ['stats'] = playerStats,
     --     ['server'] = serverName,
+    --     ['tops'] = tops,
+    --     ['monthlyTops'] = monthlyTops
     -- }
 }
 function requestOtherServerStats()
@@ -286,6 +309,8 @@ function sendServerPlayerStats()
             obj[id].vip = getVipDays(exports.gc:getPlayerVip(forumidPlayerMap[id])) or false
             obj[id].stats = stats
             obj[id].server = currentServer
+            obj[id].tops = playerTopTimes[id] or {}
+            obj[id].monthlyTops = playerMonthlyTopTimes[id] or 0
         end
     end
     return obj
@@ -316,7 +341,6 @@ local function getPlayerList()
         playerInf.server = obj.server
         table.insert(list, playerInf)
     end
-    -- var_dump('-v', list)
     playerListCache = list
     setTimer(function() playerListCache = false end, playerListCacheTTL, 1)
     return playerListCache
@@ -359,6 +383,8 @@ local function sendStatsToClient(forumid)
         sendObj.gc = exports.gc:getPlayerGreencoins(player) or 0
         sendObj.vip = getVipDays(exports.gc:getPlayerVip(player)) or false
         sendObj.stats = specialFormat(table.copy(playerStats[forumid]))
+        sendObj.tops = playerTopTimes[forumid] or {}
+        sendObj.monthlyTops = playerMonthlyTopTimes[forumid] or 0
         triggerClientEvent(client, 'onServerSendsStats', client, sendObj, player)
     elseif otherServerPlayerStats[tostring(forumid)] then
         -- Is player in other server
@@ -367,6 +393,8 @@ local function sendStatsToClient(forumid)
         sendObj.gc = otherServerPlayerStats[tostring(forumid)].gc
         sendObj.vip = otherServerPlayerStats[tostring(forumid)].vip
         sendObj.stats = specialFormat(table.copy(otherServerPlayerStats[tostring(forumid)].stats))
+        sendObj.tops = otherServerPlayerStats[tostring(forumid)].tops
+        sendObj.monthlyTops = otherServerPlayerStats[tostring(forumid)].monthlyTops
         triggerClientEvent(client, 'onServerSendsStats', client, sendObj)
     else
         -- No player found with requested ID
@@ -438,6 +466,109 @@ function setTopOnes(id)
 end
 addEventHandler('onPlayerStatsLoaded', resourceRoot, setTopOnes)
 
+function fetchMonthlyTops(id)
+    if not handlerConnect or not id or not tonumber(id) then return end
+    local currentMonth = getRealTime().month + 1
+    -- To make sure we are not getting last year's monthly top, we should make a minimum timestamp
+    local timeStampMinimum = getRealTime().timestamp - 5184000
+    local fetchMonthTopsString = [[
+        SELECT
+            COUNT(*) amount
+        FROM
+            `toptimes_month`
+        WHERE
+            `forumid` = ? AND `month` = ? AND `date` > ? AND `rewarded` = 0;
+    ]]
+    dbQuery(
+        function(qh)
+            local res = dbPoll( qh, 0 )
+            if type(res) == 'table' and res[1] and res[1].amount then
+                playerMonthlyTopTimes[id] = res[1].amount
+            end
+        end,
+    handlerConnect, fetchMonthTopsString, id, currentMonth, timeStampMinimum)
+end
+
+function fetchTopTimes(id)
+    if not handlerConnect or not id or not tonumber(id) then return end
+    local fetchTopsString = [[
+        SELECT
+            `racemode`,
+            `pos`
+        FROM
+            `toptimes`
+        WHERE
+            `forumid` = ? AND `pos` < 11 AND(
+                `racemode` = 'sh' OR `racemode` = 'dd' OR `racemode` = 'dl' OR `racemode` = 'race' OR `racemode` = 'rtf' OR `racemode` = 'nts'
+            );
+    ]]
+    dbQuery(
+        function (qh)
+            local res = dbPoll( qh, 0 )
+            local resTable = {}
+            resTable["Total"] = {}
+            resTable["Total"]["Total"] = 0
+
+            local fullNames = {
+                ['nts'] = 'Never The Same',
+                ['race'] = 'Race',
+                ['rtf'] = 'Reach The Flag',
+                ['dl'] = 'DeadLine',
+                ['sh'] = 'Shooter',
+                ['dd'] = 'Destruction Derby'
+            }
+            for i, row in ipairs(res) do
+                
+                if type(row.pos) == 'number' and type(row.racemode) == 'string' and fullNames[row.racemode] then
+                    local fullRacemodeName = fullNames[row.racemode]
+                    if type(resTable[fullRacemodeName]) ~= 'table' then
+                        resTable[fullRacemodeName] = {}
+                    end
+                    if type(resTable[fullRacemodeName][row.pos]) ~= 'number' then
+                        resTable[fullRacemodeName][row.pos] = 0
+                    end
+                    if type(resTable[fullRacemodeName]["Total"]) ~= 'number' then
+                        resTable[fullRacemodeName]["Total"] = 0
+                    end
+                    if type(resTable["Total"][row.pos]) ~= 'number' then
+                        resTable["Total"][row.pos] = 0
+                    end
+                    
+                    -- Set values
+                    resTable[fullRacemodeName][row.pos] = resTable[fullRacemodeName][row.pos] + 1
+                    resTable[fullRacemodeName]["Total"] = resTable[fullRacemodeName]["Total"] + 1
+                    resTable["Total"]["Total"] = resTable["Total"]["Total"] + 1
+                    resTable["Total"][row.pos] = resTable["Total"][row.pos] + 1
+                end
+            end
+
+            local topTimesCatsOrder = {'Total', 'Race', 'Never The Same', 'Shooter', 'Destruction Derby', 'DeadLine', 'Reach The Flag'}
+            local formattedTops = {}
+            for i, catName in ipairs(topTimesCatsOrder) do
+                local itemsTable = {}
+                for i = 1, 11 do
+                    local n = 'Top '..(i-1)
+                    if i == 1 then
+                        n = 'Total'
+                    end
+                    local resKey = i > 1 and i-1 or 'Total'
+                    if not resTable[catName] then
+                        resTable[catName] = {}
+                    end
+                    if not resTable[catName][resKey] then
+                        resTable[catName][resKey] = 0
+                    end
+                    local resVal = resTable[catName][resKey] or 0
+                    table.insert(itemsTable, {name = n, value = resVal})
+                end
+                table.insert(formattedTops, {name = catName, items = itemsTable})
+            end
+            playerTopTimes[id] = formattedTops
+        end,
+    handlerConnect, fetchTopsString, id)
+end
+
+
 -- Set timer to refetch top 1's and ranking
 local topRankingRefetchTime = 600000
 setTimer(
@@ -446,6 +577,8 @@ setTimer(
         for id, _ in pairs(playerStats) do
             setTopOnes(id)
             setTotalRanking(id)
+            fetchTopTimes(id)
+            fetchMonthlyTops(id)
         end
     end, 
 topRankingRefetchTime, 0)
