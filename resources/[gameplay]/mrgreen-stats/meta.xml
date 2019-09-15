@@ -14,10 +14,9 @@
 
     <!-- Exports -->
     <export function="sendServerPlayerStats" type="server" http="true" />
-
     <export function="requestStats" type="client"/>
     <export function="showStatsWindow" type="client"/>
-
+    <export function="getPlayerStat" type="server"/>
     <settings>
         <setting name="*currentServer" friendlyname="Current server name (displayed in playerlist)" value="Race" />
         <setting name="*fetchServerIP" friendlyname="Fetch other server IP" value="" />
