@@ -24,7 +24,7 @@ function mph()
 		 x,y = guiGetScreenSize()
 		dxDrawText( speed, x, y, x-73.5, 226.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
 		dxDrawText( speed, x, y, x-72, 225, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 MPH", x, y, x-72, 255, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 MPH", x, y, x-72, 225, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 		end
 	end	
 end
@@ -54,7 +54,7 @@ function kmh()
 		 x,y = guiGetScreenSize()
 		dxDrawText( speed, x, y, x-73.5, 226.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
 		dxDrawText( speed, x, y, x-72, 225, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 KMH", x, y, x-72, 255, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 KMH", x, y, x-72, 225, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 	end	
 	end
 end
