@@ -67,8 +67,6 @@ function SAccount:login(username, pw, player, callback)
             elseif type(isBanned) == 'number' and now < isBanned then
                 -- Temp ban
                 outputChatBox('[GC] This account has been banned. This ban will expire in '..secondsToTimeDesc(isBanned - now), player, 255, 0, 0)
-            else
-                outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
             end
             callback(false, player)
             return
@@ -133,8 +131,6 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
             elseif type(isBanned) == 'number' and now < isBanned then
                 -- Temp ban
                 outputChatBox('[GC] This account has been banned. This ban will expire in '..secondsToTimeDesc(isBanned - now), player, 255, 0, 0)
-            else
-                outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
             end
             callback(false, player)
             return

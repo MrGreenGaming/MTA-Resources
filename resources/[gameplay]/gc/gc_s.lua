@@ -46,8 +46,6 @@ end
 
 
 function onAutoLogin(forumID, player)
-    
-
     if not forumID then
         return
     end
@@ -66,8 +64,6 @@ function onAutoLogin(forumID, player)
         onLoginFailed(player, true)
     end
 end
-
-
 addEvent("onGCLogin") -- broadcast event
 addEvent("onLogin", true)
 addEventHandler("onLogin", root, onLogin)
