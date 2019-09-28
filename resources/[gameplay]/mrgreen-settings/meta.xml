@@ -2,7 +2,6 @@
 	<!-- Include Resources -->
     <include resource="fonts"/>
     <include resource="race"/>
-	<include resource="gc"/>
 	<include resource="fps"/>
 	<include resource="speed-o-meter"/>
 	<include resource="race_sphud"/>
