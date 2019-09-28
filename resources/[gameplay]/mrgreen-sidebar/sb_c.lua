@@ -67,17 +67,7 @@ usernameFont = "bankgothic"
 -- setPlayerHudComponentVisible( "all", false )
 -- Menu Items --
 MenuItems = { -- Name, Icon
-	{name = "Server Info", event = "sb_showServerInfo"},
-	{name = "My Account", event = "sb_showMyAccount"},
-	{name = "GC Shop", event = "sb_showGCShop"},
-	{name = "Transfer GCs", event = "sb_transferGC"},
-	{name = "Achievements", event = "sb_showAchievements"},
-	{name = "Leaderboards", event = "sb_showLeaderboards"},
-	{name = "My Stats", event = "sb_showStats"},
 	{name = "Settings", event = "sb_showSettings"},
-	{name = "PM", event = "sb_showPM"},
-	{name = "Music Player", event = "sb_showMusicPlayer"},
-	{name = "Help", event = "sb_showHelp"}
 	
 }
 
