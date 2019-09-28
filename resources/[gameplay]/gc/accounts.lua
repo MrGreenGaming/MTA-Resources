@@ -58,7 +58,20 @@ function SAccount:login(username, pw, player, callback)
         return
     end
 
-    getPlayerLoginInfo(username, pw, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount, vipTimestamp)
+    getPlayerLoginInfo(username, pw, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount, vipTimestamp, isBanned)
+        if isBanned ~= false then
+            local now = getRealTime().timestamp
+            if isBanned == true then
+                -- Perm ban
+                outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
+            elseif type(isBanned) == 'number' and now < isBanned then
+                -- Temp ban
+                outputChatBox('[GC] This account has been banned. This ban will expire in '..secondsToTimeDesc(isBanned - now), player, 255, 0, 0)
+            end
+            callback(false, player)
+            return
+        end
+
         if self.gcRecord[1] then
             callback(true, player)
             return
@@ -109,7 +122,20 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
         return
     end
 
-    getForumAccountDetails(givenForumID, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount, vipTimestamp)
+    getForumAccountDetails(givenForumID, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount, vipTimestamp, isBanned)
+        if isBanned ~= false then
+            local now = getRealTime().timestamp
+            if isBanned == true then
+                -- Perm ban
+                outputChatBox('[GC] This account has been banned!', player, 255, 0, 0)
+            elseif type(isBanned) == 'number' and now < isBanned then
+                -- Temp ban
+                outputChatBox('[GC] This account has been banned. This ban will expire in '..secondsToTimeDesc(isBanned - now), player, 255, 0, 0)
+            end
+            callback(false, player)
+            return
+        end
+
         if self.gcRecord[1] and getElementData( player, 'gc.autoLoginCache') and tonumber(getElementData( player, 'gc.autoLoginCache')) == tonumber(self.gcRecord[1]) then -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
             callback(true, player)
             return

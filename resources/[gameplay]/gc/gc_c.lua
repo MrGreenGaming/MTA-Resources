@@ -185,6 +185,7 @@ function saveAndUpdateAvatar(filepath, newData, forumid, player)
 end
 
 function updateAvatar(forumid, player)
+	if not player then return end
 	if not forumid then
 		setElementData(player, "forumAvatar", { type = "image", src = ":stats/images/avatar.png", width = 20, height = 20 }, false)
 	else
@@ -219,9 +220,37 @@ addEvent("onLogoutSuccess", true)
 addEventHandler("onLogoutSuccess", root, logoutSuccess)
 
 function clientStart()
-	triggerServerEvent('onClientGreenCoinsStart', getLocalPlayer())
+	local token = getAutologinToken()
+	triggerServerEvent('onClientGreenCoinsStart', getLocalPlayer(), token)
 end
 addEventHandler("onClientResourceStart", resourceRoot, clientStart)
+
+function getAutologinToken()
+	local token = false
+	if fileExists('AUTOLOGIN_TOKEN') then
+		local file = fileOpen( 'AUTOLOGIN_TOKEN')
+		if not file then return false end
+		local data = fileRead(file, fileGetSize( file ))
+		if data and tostring(data) then
+			token = tostring(data)
+		end
+		fileClose( file )
+	end
+	return token
+end
+
+function setAutoLoginToken(token)
+	assert(type(token) == 'string', 'Invalid token.')
+	local file = fileCreate('AUTOLOGIN_TOKEN')
+	if file then
+		fileWrite(file, token)
+		fileClose(file)
+		return true
+	end
+	return false
+end
+addEvent('onNewAutoLoginToken', true)
+addEventHandler('onNewAutoLoginToken', localPlayer, setAutoLoginToken)
 
 -- http://lua-users.org/wiki/FormattingNumbers
 function comma_value(amount)

@@ -61,7 +61,7 @@ function getPlayerLoginInfo(email, pw, callback)
             return
         end
 
-        callback(result.userId, result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance, result.vip)
+        callback(result.userId, result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance, result.vip, result.banned)
     end)
 end
 
@@ -110,7 +110,7 @@ function getForumAccountDetails(forumID, callback)
             return
         end
 
-        callback(result.userId, result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance, result.vip)
+        callback(result.userId, result.name, result.emailAddress, result.profile, result.joinTimestamp, result.coinsBalance, result.vip, result.banned)
     end)
 end
 
@@ -161,7 +161,7 @@ function getMultipleForumAccountDetails(forumids, callback)
 		
 		local output = {}
 		for _, p in ipairs(result.users) do
-		  table.insert(output, { forumid = p.users, name = p.name, joinDate = p.joinDate, joinTimestamp = p.joinTimestamp, coinsBalance = p.coinsBalance, profile = p.profile, vip = p.vip })
+		  table.insert(output, { forumid = p.users, name = p.name, joinDate = p.joinDate, joinTimestamp = p.joinTimestamp, coinsBalance = p.coinsBalance, profile = p.profile, vip = p.vip, banned = p.banned })
 		end
 		
 		callback(output)

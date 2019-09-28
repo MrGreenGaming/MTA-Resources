@@ -37,7 +37,7 @@ function toggleChange(state)
 		if saved then
 			outputChatBox('Wheel changing disabled', player, 255, 0, 0)
 		else
-			outputChatBox('Wheel changing disabled with a DB error!', player, 255, 0, 0)
+			outputChatBox('Wheel changing disabled with a DB error!', player, 255, 119, 0)
 		end
 	end
 end
@@ -61,20 +61,30 @@ function timer()
 	end
 end
 
-function start()
+addEventHandler('onResourceStart', resourceRoot,
+function ()
 	mainTimer = setTimer(timer, 1000, 0)
-end
-addEventHandler('onResourceStart', resourceRoot, start)
+end)
 
-function stop()
+addEventHandler('onResourceStop', resourceRoot,
+function ()
 	killTimer(mainTimer)
-end
-addEventHandler('onResourceStop', resourceRoot, stop)
+end)
 
-function quit()
+addEventHandler('onPlayerQuit', root,
+function ()
 	if stateTable[source] then
 		stateTable[source] = false
 	end
-end
-addEventHandler('onPlayerQuit', root, quit)
+end)
+
+addEventHandler('onPlayerVip', resourceRoot,
+	function(player, loggedIn)
+		if player and isElement(player) and getElementType(player) == "player" then
+			if loggedIn and getVipSetting(player,11,'enabled') then
+				stateTable[player] = 1			
+			end
+		end
+	end
+)
 

@@ -63,8 +63,8 @@ function aCommand ( admin, command, ... )
 			if not errormsg then
 				if ( call.type == "player" ) then 
 					if isObjectInACLGroup( aclGetAccount ( admin ), aclGetGroup ("Killers") ) and not isObjectInACLGroup( aclGetAccount ( admin ), aclGetGroup ("Admin") ) then
-						if tonumber(arg[3]) and tonumber(arg[3]) > 3600 or not arg[3] then
-							arg[3] = 3600
+						if tonumber(arg[3]) and tonumber(arg[3]) > 86400 or not arg[3] then
+							arg[3] = 86400
 						end
 						triggerEvent ( "aPlayer", admin, arg[1], call.action, arg[2], arg[3], arg[4] )
 					else

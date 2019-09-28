@@ -102,6 +102,8 @@
     <file src="items/vipskin/skins/minicj.txd" download="false" />
     <file src="items/vipskin/skins/randomguy.dff" download="false" />
     <file src="items/vipskin/skins/randomguy.txd" download="false" />
+    <file src="items/vipskin/skins/randomguy2.dff" download="false" />
+    <file src="items/vipskin/skins/randomguy2.txd" download="false" />
     <file src="items/vipskin/skins/Annahome.dff" download="false" />
     <file src="items/vipskin/skins/Annahome.txd" download="false" />
     <file src="items/vipskin/skins/NEO.dff" download="false" />
@@ -162,5 +164,26 @@
     <file src="items/dynamicoverlay/files/shaders/type28.fx" />
     <file src="items/dynamicoverlay/files/shaders/type29.fx" />
     <file src="items/dynamicoverlay/files/shaders/type30.fx" />
-    <file src="items/dynamicoverlay/files/shaders/type31.fx" />    
+    <file src="items/dynamicoverlay/files/shaders/type31.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type32.fx" />    
+    <file src="items/dynamicoverlay/files/shaders/type33.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type34.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type35.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type36.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type37.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type38.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type39.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type40.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type41.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type42.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type43.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type43.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type44.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type45.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type46.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type47.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type48.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type49.fx" />   
+    <file src="items/dynamicoverlay/files/shaders/type50.fx" />
+    <file src="items/dynamicoverlay/files/shaders/type51.fx" />         
 </meta>

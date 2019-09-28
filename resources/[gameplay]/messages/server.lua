@@ -11,15 +11,16 @@ function outputGameMessage(text, triggerFor, size, r, g, b, priority, chat, floa
 end
 
 addEventHandler('onMapStarting', getRootElement(),
-function()	
-	checkTimer = setTimer(function() timePassed = whichTimePassed()
-		if timePassed then
-		if timePassed > 25000 then 
-			triggerClientEvent("getTimePassed", getRootElement(), "true")
-			if isTimer(checkTimer) then killTimer(checkTimer) end
+function()
+	if isTimer(checkTimer) then killTimer(checkTimer) end
+	checkTimer = setTimer(
+		function() timePassed = whichTimePassed()
+			if type(timePassed) == 'number' and timePassed > 25000 then
+				triggerClientEvent("getTimePassed", getRootElement(), "true")
+				if isTimer(checkTimer) then killTimer(checkTimer) end
+			end
 		end
-		end
-			end, 2000, 0)
+	, 2000, 0)
 end
 )
 

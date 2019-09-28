@@ -16,27 +16,58 @@ achievementListRace = {
 	{ s = "Finish a map yet having chatted for 30 seconds",    			id = 22,		reward = 50 },
 	{ s = "Finish a non-ghostmode map with GM on",    		   			id = 11,		reward = 50 },
 	{ s = "Finish a race at the very last moment",    		    		id = 28,		reward = 50 },
-	{ s = "Finish the map *Drift Project 2*",   			   			id = 2,			reward = 100 },
+	{ s = "Finish the map *This Time in the Dark*",   			   			id = 2,			reward = 100 },
 	{ s = "Finish the map *Hell Choose Me*",     						id = 1,			reward = 100 },
 	{ s = "Finish the map *promap*",									id = 30,		reward = 100 },
+	{ s = "Finish the map *DOOZYJude - Are You Infernus Pro?* in less than 10 minutes",                     id = 41,		reward = 200 },
+	{ s = "Finish the map *Ich bin expert* in less than 9 minutes",                     id = 55,		reward = 100 },
 	{ s = "First noob to die in a map",     							id = 12,		reward = 50 },
 	{ s = "Get 2 first toptimes consecutively",    		  				id = 24,		reward = 100 },
+	{ s = "Finish 5 Times",     									id = 42,			reward = 50, max = 5 },
+	{ s = "Finish 20 times",     									id = 43,			reward = 100, max = 20 },
+	{ s = "Finish 200 times",     									id = 44,			reward = 300, max = 200 },
+	{ s = "Finish 500 times",     									id = 45,			reward = 500, max = 500 },
+	{ s = "Finish 1000 times",     									id = 46,			reward = 1000, max = 1000 },
+	{ s = "Win 5 Times",     									id = 47,			reward = 100, max = 5 },
+	{ s = "Win 20 times",     									id = 48,			reward = 200, max = 20 },
+	{ s = "Win 200 times",     									id = 49,			reward = 500, max = 200 },
+	{ s = "Win 500 times",     									id = 50,			reward = 1000, max = 500 },
+	{ s = "Win 1000 times",     									id = 51,			reward = 2500, max = 1000 },
 	{ s = "No death in 3 maps",     									id = 6,			reward = 50 },
 	{ s = "No death in 5 maps",    						    			id = 7,			reward = 100 },
+	{ s = "No death in 10 maps",    						    			id = 54,			reward = 150 },
 	{ s = "Play for 4 hours with no disconnecting",						id = 29,		reward = 100 },
-	{ s = "The only noob to die in a map",     							id = 5,			reward = 100 },
+	{ s = "The only noob to die in a map (Min 5 active players)",				id = 5,			reward = 100 },
 	{ s = "The only person to finish a map",    						id = 21,		reward = 100 },
-	{ s = "The only person who hasn't died in a map",   	    		id = 8,			reward = 100 },
-	{ s = "Win 3 times in a row",       					   			id = 3,			reward = 100 },
-	{ s = "Win 5 times in a row",     									id = 4,			reward = 100 },
+	{ s = "The only person who hasn't died in a map (Min 5 active players)",	id = 8,			reward = 100 },
+	{ s = "Win 3 times in a row (Min 5 active players)",       					   			id = 3,			reward = 100 },
+	{ s = "Win 5 times in a row (Min 5 active players)",     									id = 4,			reward = 200 },
+	{ s = "Win 10 times in a row (Min 5 active players)",     									id = 53,			reward = 300 },
 	{ s = "Win a map as a late joiner",     							id = 14,		reward = 100 },
 	{ s = "Win a map in less than 20 seconds",    			    		id = 16,		reward = 100 },
 	{ s = "Win a map on fire",     						   		 		id = 25,		reward = 100 },
 	{ s = "Win a map without using Nitro",    				   			id = 23,		reward = 100 },
 	{ s = "Win a map yet dying once",    					    		id = 20,		reward = 100 },
-	{ s = "Win the map *Sprinten* against 30+ players",		    		id = 31,		reward = 50 },
+	{ s = "Win the map *Chase The Checkpoints* against 30+ players",		    		id = 40,		reward = 200 },
+	{ s = "Win the map *Sprinten* against 30+ players",		    		id = 31,		reward = 100 },
 	{ s = "Finish the map *Pirates Of Andreas*",               	   		id = 32,		reward = 100 },
-
+	{ s = "Finish the map *Epic Sandking*",               	   		    id = 33,		reward = 100 },
+    { s = "Finish the map *San Andreas Run Puma*",               	   	id = 34,		reward = 100 },
+    { s = "Finish the map *Tour de San Andreas*",               	   	id = 35,		reward = 100 },
+	{ s = "Win the map *I Wanna Find My Destiny*",               	   	id = 36,		reward = 300 },
+	{ s = "Finish the map *I Wanna Find My Destiny*",               	id = 37,		reward = 100 },
+	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	id = 38,		reward = 300 },
+	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	id = 39,		reward = 100 },
+	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 100 },
+	{ s = "Finish the map *ChrML Hard*",               	id = 57,		reward = 100 },
+	{ s = "Finish the map *Long Venturas Trip, Jumps and Fun*",               	id = 63,		reward = 100 },
+	{ s = "Finish the map *Whirlwind Journey in less than 8:30 minutes*",               	id = 64,		reward = 100 },
+	{ s = "Finish the map *Hydratastic!*",               	id = 58,		reward = 100 },
+	{ s = "Finish the map *Cryo's Hydra challenge VOL 1*",               	id = 59,		reward = 100 },
+	{ s = "Besweeet award",     									id = 52,			reward = 44, max = 4 },
+        { s = "Finish the map *be4TH!! SpeedWay in 4th*",               	id = 60,		reward = 44},
+	{ s = "Finish the map *Racing_Countryside*",               	id = 61,		reward = 100 },
+	{ s = "Finish the map *Long Way Round*",               	id = 62,		reward = 100 },
 }
 
 
@@ -73,13 +104,34 @@ end
 addEvent('onPlayerFinish', true)
 addEventHandler('onPlayerFinish', root,
 function(rank, time)
-if exports.race:getRaceMode() ~= "Sprint" then return end
+	if exports.race:getRaceMode() ~= "Sprint" then return end
+	local activePlayerCount = getActivePlayerCount()
+	local playerCount = getPlayerCount()
+	local mapResName = false
+	if getResourceState( getResourceFromName('mapmanager') ) == 'running' then
+		local mapRes = exports.mapmanager:getRunningGamemodeMap()
+		mapResName = getResourceName(mapRes) or false
+	end
+
+	addAchievementProgressRace ( source, 42, 1 )
+	addAchievementProgressRace ( source, 43, 1 )
+	addAchievementProgressRace ( source, 44, 1 )
+	addAchievementProgressRace ( source, 45, 1 )
+	addAchievementProgressRace ( source, 46, 1 )
 	if rank == 1 then
-		g_Players[source].mapsWon = g_Players[source].mapsWon + 1
-		if g_Players[source].mapsWon == 10 then
-			addPlayerAchievementRace(source, 27)
-		end	
-	end	
+    	g_Players[source].mapsWon = g_Players[source].mapsWon + 1
+    	if g_Players[source].mapsWon == 10 then
+        	addPlayerAchievementRace(source, 27)
+    	end    
+    	addAchievementProgressRace ( source, 47, 1 )
+    	addAchievementProgressRace ( source, 48, 1 )
+    	addAchievementProgressRace ( source, 49, 1 )
+    	addAchievementProgressRace ( source, 50, 1 )
+    	addAchievementProgressRace ( source, 51, 1 )
+	elseif rank == 4 then
+    	addAchievementProgressRace ( source, 52, 1 )
+	end
+
 	tableOfWinners[rank] = source
 	if not mapGM then
 		local collidable = getElementData(source, "overrideCollide.uniqueblah")
@@ -87,31 +139,91 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 		if (collidable == 0) and (cps > 5) then
 			addPlayerAchievementRace(source, 11)
 		end	
-	end	
-	if (getMapName() == "Hell Choose Me") then
+	end
+	
+	if (mapResName == "race-hellbykataklysm") then
 		addPlayerAchievementRace(source, 1)
 	end
-	if (getMapName() == "Drift Project 2") then
+	if (mapResName == "race-thistimeinthedark") then
 		addPlayerAchievementRace(source, 2)
 	end
-	if (getMapName() == "promap") then
+	if (mapResName == "race-promap") then
 		addPlayerAchievementRace(source, 30)
 	end
-	if (getMapName() == "Sprinten") and (rank == 1) and (getPlayerCount() > 29) then
+	if (mapResName == "race-sprinten") and (rank == 1) and (playerCount > 29) then
 		addPlayerAchievementRace(source, 31)
 	end
-	if (getMapName() == "[SRI]Pirates Of Andreas") then
+	if (mapResName == "race-PiratesPro") then
 		addPlayerAchievementRace(source, 32)
+	end
+	if (mapResName == "race-Epic-Sandking") then
+		addPlayerAchievementRace(source, 33)
+	end
+	if (mapResName == "race-sanandreasrun_puma") then
+		addPlayerAchievementRace(source, 34)
+	end
+	if (mapResName == "race-andreas-fix") then
+		addPlayerAchievementRace(source, 35)
+	end
+	if (mapResName == "race-IWFMD") and (rank == 1) then
+		addPlayerAchievementRace(source, 36)
+	end
+	if (mapResName == "race-IWFMD") then
+		addPlayerAchievementRace(source, 37)
+	end
+	if (mapResName == "race-iwfmd2") and (rank == 1) then
+		addPlayerAchievementRace(source, 38)
+	end
+	if (mapResName == "race-iwfmd2") then
+		addPlayerAchievementRace(source, 39)
+	end
+	if (mapResName == "race-chasethecheckpoints") and (rank == 1) and (playerCount > 29) then
+		addPlayerAchievementRace(source, 40)
+	end
+	if mapResName == "race-Judes-map" and time <= 600000 then
+		addPlayerAchievementRace(source, 41)
+	end
+	if mapResName == "race-ichbinxprt" and time <= 540000 then
+		addPlayerAchievementRace(source, 55)
+	end
+	if mapResName == "race-chrmleasy" then
+		addPlayerAchievementRace(source, 56)
+	end
+	if mapResName == "race-chrmlhard" then
+		addPlayerAchievementRace(source, 57)
+	end
+	if mapResName == "race-hydratastic" then
+		addPlayerAchievementRace(source, 58)
+	end
+	if mapResName == "race-CRYOSHYDCHALLENGEVOL1" then
+		addPlayerAchievementRace(source, 59)
+	end
+	if mapResName == "race-be4Th-SpeedWay" and (rank == 4) then
+		addPlayerAchievementRace(source, 60)
+	end
+	if mapResName == "race-racingcountry" then
+		addPlayerAchievementRace(source, 61)
+	end
+	if mapResName == "race-longwayround" then
+		addPlayerAchievementRace(source, 62)
+	end
+	if mapResName == "race-VenturasTwistsAndTurns" then
+		addPlayerAchievementRace(source, 63)
+	end
+	if mapResName == "race-whirlwindjourney" and time <= 498000 then
+		addPlayerAchievementRace(source, 64)
 	end
 	if (rank == 1) and not g_Players[source].won then
 		g_Players[source].wins = 1
 		g_Players[source].won = true
 	elseif (g_Players[source].won) and (rank == 1) then
 		g_Players[source].wins = g_Players[source].wins + 1
-		if g_Players[source].wins == 3 then
+		if g_Players[source].wins == 3 and activePlayerCount >= 5 then
 			addPlayerAchievementRace(source, 3)
-		elseif g_Players[source].wins == 5 then
+		elseif g_Players[source].wins == 5 and activePlayerCount >= 5 then
 			addPlayerAchievementRace(source, 4)
+		elseif g_Players[source].wins == 10 and activePlayerCount >= 5 then
+			addPlayerAchievementRace(source, 53)
 		end
 	else 
 		g_Players[source].wins = 0
@@ -140,10 +252,8 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	if time <= 20000 then
 		addPlayerAchievementRace(source, 15)
 	end
-	if (rank == 1)	then
-		if time <= 20000 then
-			addPlayerAchievementRace(source, 16)
-		end
+	if rank == 1 and time <= 20000 then
+		addPlayerAchievementRace(source, 16)
 	end	
 	if (not g_Players[source].damaged) then
 		addPlayerAchievementRace(source, 17)
@@ -192,9 +302,9 @@ addEvent('onPostFinish', true)
 addEventHandler('onPostFinish', root,
 function()
 if exports.race:getRaceMode() ~= "Sprint" then return end
+	local activePlayers = getActivePlayerCount()
+	--"Be the only noob to die in a map"
 
---this is for "Be the only noob to die in a map"
---this is for "be the only person who hasn't died in a map"
 	for i,j in ipairs(getElementsByType('player')) do 
 		local isFinished = getElementData(j, "race.finished")
 		if (g_Players[j].wins ~= 0) and (g_Players[j].win ~= false) and (isFinished == false) then
@@ -204,27 +314,26 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	end	
 	local count = 0
 	local onlyPlayer
-	for i,j in pairs(g_Players) do 
-		for k, m in pairs(j) do 
-			if (k == "died") and (m == true) then
-				count = count + 1
-				onlyPlayer = i
-			end	
+	for i,j in pairs(g_Players) do
+		if type(j.died) == 'boolean' and j.died == true then
+			count = count + 1
+			onlyPlayer = i
 		end
 	end
-	if count == 1 then	
+
+	if count == 1 and activePlayers >= 5 then	
 		addPlayerAchievementRace(onlyPlayer, 5)
 	end
+
+	--"be the only person who hasn't died in a map"
 	count = 0
 	for i,j in pairs(g_Players) do 
-		for k,m in pairs(j) do 
-			if (k == "died") and ( m == false ) then
-				count = count + 1
-				onlyPlayer = i
-			end
+		if type(j.died) == 'boolean' and j.died == false and not wasPlayerAfk(i) then
+			count = count + 1
+			onlyPlayer = i
 		end
 	end
-	if count == 1 then	
+	if count == 1 and activePlayers >= 5 then	
 		 addPlayerAchievementRace(onlyPlayer, 8)
 	end
 	removeEventHandler('onPlayerWasted', root, wastedFunc)
@@ -300,7 +409,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 		else	
 		j.countMapsWithNoDamage = j.countMapsWithNoDamage + 1
 		end
-		if j.dead then
+		if j.dead or wasPlayerAfk(j) then
 			j.countMapsWithNoDeaths = 0
 			j.dead = false
 			j.countMapsWithNoDeaths = j.countMapsWithNoDeaths + 1
@@ -322,15 +431,18 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	end
 	tableOfWinners = {}	
 	for i,j in ipairs(getElementsByType('player')) do
-		if g_Players[j].dead then
+		if g_Players[j].dead or wasPlayerAfk(j) then
 			g_Players[j].countMapsWithNoDeaths = 0
 			g_Players[j].dead = false
 			g_Players[j].deathCount = 0
-		end	
+		end
+
 		if g_Players[j].countMapsWithNoDeaths == 3 then
 			addPlayerAchievementRace(j, 6)
-		elseif 	g_Players[j].countMapsWithNoDeaths == 5 then
+		elseif g_Players[j].countMapsWithNoDeaths == 5 then
 			addPlayerAchievementRace(j, 7)
+		elseif g_Players[j].countMapsWithNoDeaths == 10 then
+			addPlayerAchievementRace(j, 54)
 		end	
 	end
 	removeEventHandler('onPlayerWasted', root, dieFunc)
@@ -374,3 +486,36 @@ addEventHandler("onPlayerToptimeImprovement",root,
 		end	
     end
 )
+
+-- AFK check to use in achievements
+local playerAfkCache = {}
+function wasPlayerAfk(player)
+	return playerAfkCache[player] or false
+end
+
+addEvent('onPlayerAway')
+addEventHandler('onPlayerAway', root, 
+function(bool) 
+	if bool and isElement(source) and getElementType(source) == 'player' then
+		playerAfkCache[source] = true
+	end
+end)
+addEventHandler('onPlayerQuit', root, function() if playerAfkCache[source] then playerAfkCache[player] = nil end end)
+addEventHandler('onMapStarting', root, function() 
+	playerAfkCache = {} 
+	for _, p in ipairs(getElementsByType('player')) do
+		if getElementData(p, 'player state') == 'away' then
+			playerAfkCache[p] = true
+		end
+	end
+end)
+
+function getActivePlayerCount()
+	local count = 0
+	for _, p in ipairs(getElementsByType('player')) do
+		if getElementData(p, 'player state') ~= 'away' then
+			count = count + 1
+		end
+	end
+	return count
+end

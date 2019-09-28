@@ -3,6 +3,39 @@
 ---------------------------------------------
 
 disallowedVehs = {
+	["DEADLINE"] = {
+		432, -- Rhino
+		449, -- Tram
+		537, -- Freight
+		538, -- Brown Streak
+		570, -- Brown Streak Carriage
+		569, -- Flat Freight
+		590, -- Box Freight
+		444, -- Monster 1
+		556, -- Monster 2
+		557, -- Monster 3
+		--Air vehicles
+		592, --Andromada	
+		577, --AT-400	
+		511, --Beagle	
+		512, --Cropduster	
+		593, --Dodo	
+		520, --Hydra	
+		553, --Nevada	
+		476, --Rustler	
+		519, --Shamal	
+		460, --Skimmer	
+		513, --Stuntplane	
+		548, --Cargobob	
+		425, --Hunter	
+		417, --Leviathan	
+		487, --Maverick	
+		488, --News Chopper	
+		497, --Police Maverick	
+		563, --Raindance	
+		447, --Seasparrow	
+		469, --Sparrow	
+	},
 	["SHOOTER"] = {
 		--Bikes--
 		581, --BF-400
@@ -75,10 +108,10 @@ currentGameMode = "No Gamemode"
 
 addEvent('onMapStarting')
 addEvent("onRaceStateChanging",true)
-function DetectSH(mapInfo, mapOptions, gameOptions)
+function detectGamemode(mapInfo, mapOptions, gameOptions)
 	currentGameMode = string.upper(mapInfo.modename) -- Get's gamemode info, and converts it to upper case --
 end
-addEventHandler('onMapStarting', resourceRoot, DetectSH)
+addEventHandler('onMapStarting', resourceRoot, detectGamemode)
 
 function sendToClient(newState)
 	if newState == "Running" and disallowedVehs[currentGameMode] then

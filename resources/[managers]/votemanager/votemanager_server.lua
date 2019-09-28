@@ -363,7 +363,7 @@ addEventHandler("onClientSendVote", rootElement,
 			return false
 		end
 		-- Check if player is logged in to GC account
-		if getResourceState(getResourceFromName('gc')) == 'running' and not exports.gc:isPlayerLoggedInGC(client) then
+		if not canGuestVote(client) then
 			outputVoteManager("Please log in to GC (f6) to vote.",client)
 			return false
 		end
@@ -479,3 +479,8 @@ function outputServerLogMaybe(message)
 	end
 end
 
+-- Check for guest votes
+function canGuestVote(player)
+	if get('*guestvotes') == true or getResourceState(getResourceFromName('gc')) ~= 'running' then return true end
+	return exports.gc:isPlayerLoggedInGC(player)
+end

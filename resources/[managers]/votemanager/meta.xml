@@ -75,6 +75,8 @@
 		<setting name="*votekill_percentage" value="[70]"/>
 		<setting name="*votekill_allowchange" value="[true]"/>
 
+		<setting name="*guestvotes" value="[false]"/>
+
 
 	</settings>
 </meta>

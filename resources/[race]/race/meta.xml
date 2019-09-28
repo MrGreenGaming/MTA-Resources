@@ -32,7 +32,7 @@
     <script src="modes/manhunt.lua" type="server" />
     <script src="modes/shooter.lua" type="server" />
     <script src="modes/shooter_c.lua" type="client" />
-    <file src="modes/cargamefiles/cargame.html" />
+    <!-- <file src="modes/cargamefiles/cargame.html" /> -->
     <script src="modes/deadline.lua" type="server" />
     <script src="modes/deadline_c.lua" type="client" />
 

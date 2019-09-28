@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        
+        <!-- MTA links -->
+        <!-- These are blocked when not used via MTA's CEF browser ingame. -->
+        <!-- Be sure to put new dependencies inside local-cdn resource -->
+        <link href='http://mta/local-cdn/fonts/roboto/roboto.css' rel="stylesheet">
+        <link href='http://mta/local-cdn/fonts/material-icons/materialdesignicons.css' rel="stylesheet">
+        <link href="http://mta/local-cdn/css/vuetify.css" rel="stylesheet">
+        <link href='http://mta/local-cdn/css/flat-flags/flat-flags.css' rel="stylesheet">
+        
+        <!-- Dev Links (normal CDN) -->
+        
+        <link href='https://cdn.materialdesignicons.com/4.2.95/css/materialdesignicons.min.css' rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <v-app id="app" v-resize="onResize">
+            <v-content>
+                <v-container fluid id="mainContainer">
+                    <v-toolbar id="titleBar" height="35px" color="primary" @mousedown="clickedTitle()">
+                        <v-icon class="ml-2 mr-2 toolbarTitle">
+                            assessment
+                        </v-icon>
+                        <v-toolbar-title class="toolbarTitle">
+                            Player Stats
+                        </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-btn icon @click="closeWindow">
+                            <v-icon>close</v-icon>
+                        </v-btn>
+                    </v-toolbar>
+                    <v-card class="mainCard elevation-5 px-0" style="border-radius:0; background-color: #424242">
+                        <v-overlay absolute :value="isLoading">
+                            <v-progress-circular indeterminate size="100"></v-progress-circular>
+                        </v-overlay>
+                        <v-container fluid class="my-0 py-0" style="position: relative;">
+                            <v-row justify="center">
+                                <v-col cols="12" sm="3" style="position: relative;justify-content: center;" >
+                                    <div class="topGradient"></div>
+                                    <v-row justify="center">
+                                        <v-avatar style="position: relative;" size="100px" class="d-none d-sm-flex">
+                                                <img :src="'data:image/jpg;base64,' + (avatar || defaultAvatar)" alt="avatar">
+                                        </v-avatar>
+                                    </v-row>
+
+                                    <v-row style="position: relative;" column no-gutters class="text-truncate text-center">
+                                        <v-col v-if="typeof country === 'object'" id="countryName" class="playerName font-weight-bold" cols="12">
+                                            <v-tooltip top>
+                                                <template v-slot:activator="{ on }">
+                                                    <i v-on="on" :class="getCountryFormat(country.code)"></i>
+                                                </template>
+                                                <span>{{country.name}}</span>
+                                            </v-tooltip>
+                                        </v-col>
+                                        <v-col id="playerName" class="playerName font-weight-bold" cols="12">{{name || ''}}</v-col>
+                                        <v-col v-if="vip" class="vip font-weight-medium" cols="12">{{vip}} VIP Days</v-col>
+                                        <v-col class="greenCoins font-weight-medium" cols="12">{{formatGC(gc)}} GC</v-col>
+                                        <v-btn :disabled="!isLoggedIn" @click="requestMyStats()" block small color="primary my-3" class="">My Stats</v-btn>
+                                        
+                                        <v-dialog v-model="dialog" hide-overlay scrollable max-width="80%">
+                                            <template v-slot:activator="{ on }">
+                                                <v-btn block small v-on="on" @click="requestPlayerList()" color="primary mt-1" class="">Other Players</v-btn>
+                                            </template>
+                                            <v-card>
+                                            <v-card-title>Select Player</v-card-title>
+                                            <v-divider></v-divider>
+                                            <v-card-text style="height: 300px;">
+                                                    <v-list>
+                                                        <v-list-item-group v-model="dialog_chosenPlayer">
+                                                            <v-list-item
+                                                            @click="requestStats(item.id)"
+                                                            v-for="(item, i) in playerList"
+                                                            :key="i"
+                                                            >
+                                                                <v-list-item-content>
+                                                                    <v-list-item-title><v-chip small color="primary" class="mr-2">{{item.server}}</v-chip>{{item.name}}</v-list-item-title>
+                                                                </v-list-item-content>
+                                                            </v-list-item>
+                                                        </v-list-item-group>
+                                                    </v-list>
+                                            </v-card-text>
+                                            <v-divider></v-divider>
+                                            <v-card-actions>
+                                                <v-btn color="red darken-1" text @click="dialog = false">Cancel</v-btn>
+                                            </v-card-actions>
+                                            </v-card>
+                                        </v-dialog>
+
+                                    </v-row>
+                                </v-col>
+                                <v-col class="py-0 px-0">
+                                    <v-tabs
+                                    id="topTabs"
+                                    v-model="tabs"
+                                    color="white"
+                                    fixed-tabs
+                                    dark
+                                    >
+                                        <v-tab @click="scrollToTop()">
+                                            <v-icon class="mr-2">assessment</v-icon>
+                                            Stats
+                                        </v-tab>
+
+                                        <v-tab @click="scrollToTop()">
+                                            <v-icon class="mr-2">timer</v-icon>
+                                            Top Times
+                                        </v-tab>
+                                    </v-tabs>
+                                
+                                    <v-container fluid id="statsContent" class="mr-0" > 
+                                            <!-- class="ma-0 pa-0 py-5" -->
+                                        <v-tabs-items vertical v-model="tabs">
+                                            <v-tab-item>
+                                                <!-- Stats -->
+                                                <v-data-iterator
+                                                :items="playerStats"
+                                                hide-default-footer
+                                                >
+                                                    <template slot="no-data">
+                                                        <v-alert v-if="!isLoading" color="error" icon="warning">No stats available. Stats are only available for logged in players (F6)</v-alert>
+                                                    </template>
+                                                    <template v-slot:default="props">
+                                                        <v-row dense>
+                                                            <v-col
+                                                            v-for="item in props.items"
+                                                            :key="item.name"
+                                                            cols="12"
+                                                            sm="6"
+                                                            md="4"
+                                                            lg="3"
+                                                            dense
+                                                            >
+                                                            <v-card tile hover>
+                                                                <v-card flat tile color="primary" class="text-center statsTitle px-3 py-1 font-weight-bold">{{ item.name }}</v-card>
+                                                                <v-list color="grey darken-4" dense>
+                                                                    <v-list-item :link="true" v-for="stat in item.items" :key="stat.name">
+                                                                        <v-list-item-content class="statName">{{stat.name}}</v-list-item-content>
+                                                                        <v-list-item-content class="statValue">{{ stat.value }}</v-list-item-content>
+                                                                    </v-list-item>
+                                                                </v-list>
+                                                            </v-card>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </template>
+                                                </v-data-iterator>
+                                            </v-tab-item>
+                                            <v-tab-item>
+                                                <!-- TopTimes -->
+                                                <v-card color="primary" max-width="200" class="mx-auto mb-5 mt-3 px-3 py-3 text-center" style="font-size: 13px;">
+                                                    Current Monthly Tops: <b>{{monthlyTopsAmount || 0}} </b>
+                                                </v-card>
+                                                <v-data-iterator
+                                                :items="playerTops"
+                                                hide-default-footer
+                                                class=""
+                                                >
+                                                    <template slot="no-data">
+                                                        <v-alert v-if="!isLoading" color="error" icon="warning">No tops available. Stats are only available for logged in players (F6)</v-alert>
+                                                    </template>
+                                                    <template v-slot:default="props">
+                                                        <v-row dense>
+                                                            <v-col
+                                                            v-for="item in props.items"
+                                                            :key="item.name"
+                                                            cols="6"
+                                                            sm="4"
+                                                            md="3"
+                                                            lg="2"
+                                                            dense
+                                                            >
+                                                            <v-card tile hover>
+                                                                <v-card flat tile color="primary" class="text-center statsTitle px-3 py-1 font-weight-bold">{{ item.name }}</v-card>
+                                                                <v-list color="grey darken-4" dense>
+                                                                    <v-list-item :link="true" v-for="stat in item.items" :key="stat.name">
+                                                                        <v-list-item-content class="statName">{{stat.name}}</v-list-item-content>
+                                                                        <v-list-item-content :class="{'topValue': stat.value > 0, 'noTopValue': stat.value === 0}" class="statValue">{{ stat.value }}</v-list-item-content>
+                                                                    </v-list-item>
+                                                                </v-list>
+                                                            </v-card>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </template>
+                                                </v-data-iterator>
+                                            </v-tab-item>
+                                        </v-tabs-items>
+                                    </v-container>
+                                </v-col>
+                            </v-row>  
+                        </v-container>
+                    </v-card>
+                </v-container>
+            </v-content>   
+        </v-app>
+     
+        <!-- MTA imports -->
+        <!-- These are blocked when not used via MTA's CEF browser ingame. -->
+        <!-- Be sure to put new dependencies inside local-cdn resource -->
+        <script src="http://mta/local-cdn/js/vue.js"></script>
+        <script src="http://mta/local-cdn/js/vuetify.js"></script>
+        <script src="http://mta/local-cdn/js/vuex.js"></script>
+        <!-- Dev Imports (normal CDN) -->'
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.0.10/vuetify.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.1.1/vuex.min.js"></script>
+
+
+        <script type="module">
+        import store from './store.js'
+
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                tabs: null,
+                text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+                dialog: false,
+                dialog_chosenPlayer: false,
+                defaultAvatar: 'iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAYAAACAvzbMAAAKjElEQVR4nOzYXahldf3H8d9ae53j6Pj/KzOZM3ImK5wctXIoL2aaQCuK6EGCPAeiIvBGCCLwypsYgjC6iAi66S4QpOZYQXrTRUUiiWVP2IxJDz4gjfkAmmXqzNkr9jCE1E185pzvHrevF+y5/fzOmrXXe+/dN/hvh1tro5fXK15H5n1TcvYREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAREAAiw7wPsABW532AzXb+7guuPP+SC0u2uknNZ5iu71rXdSVbrWtlW1XX74Wnnl955sHjC3evt9bW532AV7Oid9RCG+d9gM122Uevbnuv31+yNWxbKtnpl4bWV8Vq0rV+qNkati2X7Dx290PtZ1+6q2SrmGfgGfATFgARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICACRbt4H2CJj1dB1X7mhZKfruzYsDzVbQ9/6YVKytXTecslOvzS0flLzeambdK0farYmVfdE37V+qeaemCwvlezM3Hbo1qqp9dbaWtVYFd9AAIgICAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICACRrnBrtbV2pGLo3Yevr5g5Zdi2VLLz5AOPt2O331eyVenD37qxZGeyNLR+UvN5qRv61g81W9/92DdKdip96u5byra6onvi0R8/2O7+wvdLtiqf676BABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAZ5n2ArTCOY9nWkw88XrLz0nP/bK+/ek/JVtd1rfVdydbxnz9csrNz3+523uv+r2Tr+ceeaX8//lzJ1sqhvSU7rZvdFzVTj/7k9zVDrbVL33tFyU7lM6nSQgak0rHb7yvZmcXjbZ95V8lWP0xOvSr88LO3lexc87n3tXN3bC/ZevyeP7SHvverkq3VOz9fsjMLSD/U/GDxnQ9+rWRn5g3XXl6yM04XMyB+wgIgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgMrTWDlcMnbtz+1U7Lt9VMdXG6ViyM3Ppe/aV7GzffUHZ3zVOp22cdiVbl33k6pKd7bvqrt/OKy5p+26o+Ww23ZiW7HRda2NXc09c9ckDJTut8Pr9/54d7a2fPliy9bvb7i15ps/M7oiSd9WOt1zc9l6/v2KqTZaXSnZmhm01W92ka/3ypGSrH/rWDzVbk+WhZKdfGlo/qXmoz3Zm17Bkq+ie6Lqu7J7oiv6f2ul7fdF8+wNfLdtavKsHQAkBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIAJGhamgcW5tuTEu27rv1rpIdgP/FyqG97eAtH5r3MTadbyAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARIaypXFs48ZYNlflyJEj8z7Cppv9TXfccUfZFrm1tbWSnQMHDrSbb765ZKtS1fUbp9O28fLJkq1KdQGZWbx+tNXV1XkfYdMdPXq0LCCLeP0W0Z49e/xfnaFxungPQD9hARAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAZqobGcWzjdFo1B3DWGKdjm57cmPcxNl1ZQNrpiAC81syefYsYED9hARAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAZypamrU1PTMvmAM4W48a0nXzxxLyPsel8AwEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgMrTW1iuGXv7HSyvP/vmpgxVbF775ooqZU9bXSy5fW1lZaQcPllw+mKuq99TMxfv3lOycc8G57fj9j5RsVT3T2+mArFUMvfDk31Yf+dGxkifg/puurZg5ZW2t5PK11dVVAeE1oeo9NfP+r3+iZOevv36s/eabPy3ZqnqmNz9hAZASEAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAZ5n2ArTA9cbJsa/9N15bs/OJPR1vXdSVb8J/W19fL7r/rvvzxkp2ZEy+eKNk5eWKjZKeabyAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgEg37wNskbFq6O03HqoZ6rrWD5OSqSfuf6Q98ctHS7Z4ddh55e6274ZrSra6ru6xdM8Xf1A1td5aW6saq+IbCAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICACRYd4H2CLrVUPPPvz0aslQ17W+L+r92NqFb7qoZqvoT+q6rmbo1Ni//9n6qaI/a2n7Oe3pY38p2eqKrt1pVc+Ke4t2SpX+Ty2ocd4H2Gy73nFp2/XON5Zs9Us1Ben6vi4i/WyvZquf1Fy/Zx56ov3xzt+WbBXzDDwDfsICICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBADbN4dba6OX1iteRed+UnH18AwEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARP4VAAD//wRXD9H7uaUBAAAAAElFTkSuQmCC'
+            },
+            computed: {
+                ...Vuex.mapGetters([
+                    'playerStats',
+                    'name',
+                    'gc',
+                    'vip',
+                    'avatar',
+                    'playerList',
+                    'isLoggedIn',
+                    'isLoading',
+                    'playerTops',
+                    'monthlyTopsAmount',
+                    'country'
+
+                ])
+            },
+            methods: {
+                calculateRatio(statObject) {
+                    let kills
+                    let deaths
+                    for (const row of statObject) {
+                        if (row.name === 'Kills' && (typeof row.value === 'number' || parseInt(row.value, 10)) ) {
+                            kills = parseInt(row.value)
+                        } else if (row.name === 'Deaths' && (typeof row.value === 'number' || parseInt(row.value, 10)) ) {
+                            deaths = parseInt(row.value)
+                        }
+                    }
+                    if (!kills || !deaths) return 0
+                    if (deaths === 0) return 'Perfect'
+                    return toFixed(kills/deaths, 2)
+                },
+                requestPlayerList() {
+                    if (window.mta) {
+                        window.mta.triggerEvent('onBrowserOpenedPlayerList')
+                    }
+                },
+                requestMyStats() {
+                    window.VuexStore.commit('setLoading', true)
+                    if (window.mta) {
+                        window.mta.triggerEvent('requestMyStats')
+                    } else {
+                        setTimeout(function() {
+                            window.VuexStore.commit('setLoading', false)
+                        }, 1000)
+                    }
+                },
+                getCountryFormat(country) {
+                    if (!country || typeof country !== 'string') {
+                        return ''
+                    }
+                    return country !== '' && "countryflag flag-sm flag-sm-"+country.toUpperCase() || ''
+                },
+                requestStats(id) {
+                    window.VuexStore.commit('setLoading', true)
+                    this.dialog = false
+                    if (window.mta) {
+                        window.mta.triggerEvent('browserRequestStats', id)
+                    } else {
+                        setTimeout(function() {
+                            window.VuexStore.commit('setLoading', false)
+                        }, 1000)
+                    }
+                },
+                closeWindow () {
+                    if (window.mta) window.mta.triggerEvent('browserCloseStatsWindow')
+                },
+                clickedTitle () {
+                    if (event.target.classList.contains('toolbarTitle') || event.target.classList.contains('v-toolbar__content') || event.target.classList.contains('v-toolbar__title')) {
+                        // Clicked on the draggable area
+                        if (window.mta) window.mta.triggerEvent('startWindowDrag')
+                    }
+                },
+                formatGC(amt) {
+                    if (typeof amt !== 'number') return 0
+                    return amt.toLocaleString('en-UK')
+
+                },
+                scrollToTop() {
+                    document.getElementById('statsContent').scrollTop = 0
+                },
+                fitTextWidth(e, maxSize, minSize) {
+                    e.style.display = 'hidden'
+                    e.style.fontSize = `${maxSize}px`
+                    // Shrink by 1px until min or fit (kinda hacky)
+                    while (e.offsetWidth < e.scrollWidth) {
+                        let currentSize = parseInt(e.style.fontSize.replace('px',''),10)
+                        if (currentSize === minSize) break
+                        e.style.fontSize = `${currentSize-1}px`
+                    }
+                    e.style.display = 'block'
+                },
+                setHeight() {
+                    const el = document.getElementById("statsContent")
+                    const bottomPadding = parseInt(window.getComputedStyle(document.getElementById("mainContainer")).paddingBottom)
+
+                    if (!this.$vuetify.breakpoint.xs) {
+                        // If not in xs (extra small) breakpoint
+                        const tabHeight = document.getElementById("topTabs").offsetHeight
+                        const titleHeight = document.getElementById("titleBar").offsetHeight
+                        el.style.height = `${window.innerHeight-tabHeight-titleHeight-(bottomPadding*2)}px`
+                    } else {
+                        // We are in xs breakpoint
+                        const offset = el.offsetTop
+                        el.style.height = `${window.innerHeight-offset-(bottomPadding*5)}px`
+                    }
+                    
+                },
+                onResize() {
+                    this.setHeight()
+                    this.fitTextWidth(document.getElementById('playerName'), 22, 11)
+                }
+            },
+            mounted() {
+                if (window.mta) window.mta.triggerEvent('onMapInfoBrowserMounted')
+                this.setHeight()
+            },
+            watch: {
+                name() {
+                    setTimeout(this.fitTextWidth,2,document.getElementById('playerName'), 22, 11)
+                },
+                playerStats() {
+                    window.VuexStore.commit('setLoading', false)
+                }
+            },
+            store,
+            vuetify: new Vuetify({
+                theme: {
+                    dark: true,
+                    themes: {
+                        dark: {
+                            primary: '#2e7531',
+                            secondary: '#4caf50',
+                            accent: '#00c853',
+                            error: '#FF5252',
+                            info: '#2196F3',
+                            success: '#4CAF50',
+                            warning: '#FB8C00' 
+                        }
+                    }
+                    
+                }
+            })
+        })
+    </script>
+    </body>
+    <style>
+        .theme--dark.v-application {
+            background: none!important;
+        }
+        .topFade {
+            background: -moz-linear-gradient(top,  rgba(0,0,0,0.29) 0%, rgba(0,0,0,0.29) 1%, rgba(0,0,0,0) 100%);
+            background: -webkit-linear-gradient(top,  rgba(0,0,0,0.29) 0%,rgba(0,0,0,0.29) 1%,rgba(0,0,0,0) 100%);
+            background: linear-gradient(to bottom,  rgba(0,0,0,0.29) 0%,rgba(0,0,0,0.29) 1%,rgba(0,0,0,0) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4a000000', endColorstr='#00000000',GradientType=0 );
+
+        }
+        html{
+            color-adjust: exact!important;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-font-smoothing: antialiased!important;
+            font-smooth: never!important;
+            backface-visibility: hidden;
+        }
+        .hideWindow {
+            opacity: 0;
+            transition: opacity 0.2s ease-in;
+            -webkit-transition: opacity 0.2s ease-in;
+        }
+        .showWindow {
+            opacity: 1;
+            transition: opacity 0.2s ease-in;
+            -webkit-transition: opacity 0.2s ease-in;
+        }
+        .topGradient {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: -webkit-linear-gradient(top,  rgba(0,0,0,0.25) 0%,rgba(0,0,0,0) 100%);
+        }
+        .v-toolbar__content {
+            margin-left: 0;
+            padding-left: 5px;
+        }
+        .playerName {
+            font-size: 22px;
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+        }
+        .greenCoins {
+            font-size: 16px;
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+            color: #3e9c42;
+        }
+        .vip {
+            font-size: 16px;
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+            color: #FFD700;
+        }
+        .statsTitle {
+            font-size: 14px;
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+        }
+        .statName {
+            font-size: 12px;
+        }
+        .statValue {
+            text-align: end!important;
+            font-size: 12px;
+            display: block;
+        }
+        .v-list--dense .v-list-item, .v-list-item--dense {
+            min-height: 10px;
+        }
+
+        .v-list--dense .v-list-item .v-list-item__content, .v-list-item--dense .v-list-item__content {
+            padding: 3px 0;
+            white-space: nowrap;
+            overflow: visible;
+        }
+        #statsContent {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .mainCard {
+            min-height: 300px;
+        }
+        /*Scrollbar Styling*/
+        ::-webkit-scrollbar-track
+        {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #F5F5F5;
+        background-color: rgba(0,0,0,1);
+        }
+
+        ::-webkit-scrollbar
+        {
+        width: 6px;
+        background-color: #F5F5F5;
+        background-color: rgba(0,0,0,0);
+        }
+
+        ::-webkit-scrollbar-thumb
+        {
+        background-color: white;
+        }
+        .topValue {
+            font-size: 12px;
+        }
+        .noTopValue {
+            font-size: 12px;
+            color: #616161;
+        }
+        .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tab:first-child, .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tabs-slider-wrapper+.v-tab {
+            margin-left: 0;
+        }
+    </style>
+</html>

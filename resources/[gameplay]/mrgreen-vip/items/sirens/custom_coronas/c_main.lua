@@ -42,10 +42,10 @@ function funcTable.createCorona(cType,posX,posY,posZ,size,colorR,colorG,colorB,c
 	coronaTable.isInNrChanged = true
 	if not funcTable.applySettings( coronaTable.inputCoronas[w].shader, cType, coronaTable.numberType[cType] ) or
 		not funcTable.applyTexture( coronaTable.inputCoronas[w].shader, img, cType, coronaTable.numberType[cType] ) then
-		outputDebugString('Have Not Created Corona ID: '..w)
+		-- outputDebugString('Have Not Created Corona ID: '..w)
 		return false
 	else
-		outputDebugString('Created Corona ID:'..w..' type: '..cType..' nr: '..coronaTable.numberType[cType])
+		-- outputDebugString('Created Corona ID:'..w..' type: '..cType..' nr: '..coronaTable.numberType[cType])
 		return w
 	end
 end
@@ -67,10 +67,10 @@ function funcTable.createMaterialCorona(texImage,cType,posX,posY,posZ,size,color
 	coronaTable.isInNrChanged = true
 	if not funcTable.applySettings( coronaTable.inputCoronas[w].shader, false, false ) or 
 		not funcTable.applyTexture( coronaTable.inputCoronas[w].shader, texImage, false, false ) then
-		outputDebugString('Have Not Created Tex Corona ID: '..w)
+		-- outputDebugString('Have Not Created Tex Corona ID: '..w)
 		return false
 	else
-		outputDebugString('Created Tex Corona ID:'..w..' type: '..cType)
+		-- outputDebugString('Created Tex Corona ID:'..w..' type: '..cType)
 		return w
 	end
 end
@@ -87,10 +87,10 @@ function funcTable.destroy(w)
 			coronaTable.inputCoronas[w].shader = not funcTable.destroyShader( coronaTable.inputCoronas[w].shader, cType, coronaTable.numberType[cType])
 		end
 		coronaTable.isInNrChanged = true
-		outputDebugString('Destroyed Corona ID: '..w..' nr: '..coronaTable.numberType[cType])
+		-- outputDebugString('Destroyed Corona ID: '..w..' nr: '..coronaTable.numberType[cType])
 		return not coronaTable.inputCoronas[w].shader
 	else
-		outputDebugString('Have Not Destroyed Corona ID: '..w)
+		-- outputDebugString('Have Not Destroyed Corona ID: '..w)
 		return false 
 	end
 end
@@ -98,10 +98,10 @@ end
 function funcTable.setMaterial(w,texImage)
 	if coronaTable.inputCoronas[w].enabled then
 		if coronaTable.inputCoronas[w].material then
-			outputDebugString('Set Corona texture ID: '..w)
+			-- outputDebugString('Set Corona texture ID: '..w)
 			return funcTable.applyTexture( coronaTable.inputCoronas[w].shader, texImage, false, false )
 		else
-			outputDebugString('Warning: Is not material Corona ID: '..w)
+			-- outputDebugString('Warning: Is not material Corona ID: '..w)
 			return false
 		end
 	else
@@ -202,12 +202,12 @@ function funcTable.createShader(cType,nrType)
 	if nrType then
 		if (nrType == 1) then 
 			coronaTable.shaderType[cType], technique = dxCreateShader( pathString ,0,0,false,"all") 
-			outputDebugString('Created base shader for non material coronas type: '..cType..' Technique: '..technique)
+			-- outputDebugString('Created base shader for non material coronas type: '..cType..' Technique: '..technique)
 		end
 		theShader = true
 	else
 		theShader, technique = dxCreateShader( pathString ,0,0,false,"all")
-		outputDebugString('Created shader for material corona technique: '..technique)
+		-- outputDebugString('Created shader for material corona technique: '..technique)
 	end	
 	if theShader then
 		--outputDebugString('Using shader type: '..cType)
@@ -221,12 +221,12 @@ function funcTable.destroyShader(theShader,cType,nrType)
 	if cType then
 		if (nrType == 0) then
 			theShader = destroyElement ( coronaTable.shaderType[cType] )
-			outputDebugString('Destroyed base shader for non material coronas type: '..cType)
+			-- outputDebugString('Destroyed base shader for non material coronas type: '..cType)
 		end
 		theShader = nil
 	else	
 		theShader = destroyElement ( theShader )
-		outputDebugString('Destroyed shader for material corona')
+		-- outputDebugString('Destroyed shader for material corona')
 		theShader = nil
 	end
 	return not theShader
@@ -261,11 +261,11 @@ function funcTable.applyTexture(theShader,tex,cType,nrType)
 	if theShader then
 		if ((nrType == false)) then
 			dxSetShaderValue ( theShader, "gCoronaTexture", tex )
-			outputDebugString ('Applied texture to material corona shader')
+			-- outputDebugString ('Applied texture to material corona shader')
 			return true
 		elseif cType and (nrType == 1) then
 			dxSetShaderValue ( coronaTable.shaderType[cType], "gCoronaTexture", tex )
-			outputDebugString ('Applied texture to type '..cType..' shader')			
+			-- outputDebugString ('Applied texture to type '..cType..' shader')			
 			return true
 		else
 			--outputDebugString('Texture already applied to non material shader')

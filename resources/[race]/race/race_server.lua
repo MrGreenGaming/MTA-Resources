@@ -180,7 +180,8 @@ function cacheMapOptions(map, bDontUseMode)
 			g_MapOptions.ghostmode = mode.ghostmode
 		end
 	end
-	if mode.ghostmode ~= nil and mode.ghostmode_map_can_override == true then
+
+	if mode.ghostmode ~= nil and mode.ghostmode_map_can_override == false then
 		g_MapOptions.ghostmode = mode.ghostmode
 	end
 	if not bDontUseMode and map.ghostmode and g_GameOptions.ghostmode_warning_if_map_override and g_MapOptions.ghostmode ~= (mode.ghostmode ~= nil and mode.ghostmode or g_GameOptions.ghostmode) then

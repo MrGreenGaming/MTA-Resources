@@ -1,6 +1,6 @@
 <meta>
     <info author="SDK" version="1.5" type="script" />
-    <min_mta_version server="1.3.0-9.03772" client="1.3.0-9.03772"></min_mta_version>
+    <min_mta_version server="1.5.4-9.11342" client="1.3.0-9.03772"></min_mta_version>
     
     <script src="gcshop_s.lua" />
     <script src="gcshop_c.lua" type="client" protected="true" />

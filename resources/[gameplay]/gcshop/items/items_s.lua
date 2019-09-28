@@ -152,8 +152,11 @@ function onGCShopLogin (forumID)
 				end
 			end
 			getPerks(forumID, 
-			function(newPerks) 
+			function(newPerks)
 				triggerClientEvent( theSource, 'itemLogin', theSource, perks, newPerks )
+				-- Trigger the event once more with a delay
+				setTimer(triggerClientEvent, 5000, 1, theSource, 'itemLogin', theSource, perks, newPerks)
+				
 			end)
 		end)
 	end)
@@ -391,26 +394,47 @@ function getPerkExpire ( forumID, ID, callback )
 	if type(callback) ~= 'function' then
 		outputDebugString( 'getPerkExpire: No callback specified at argument #3', 1 )
 		return
+	elseif not forumID then 
+		callback(false)
+		-- outputDebugString('getPerkExpire: No forumID argument', 1)
+		return
 	end
+
 	if type(ID) == 'table' then
-		local queryString = dbPrepareString(handlerConnect, 'SELECT * FROM gc_items WHERE forumid=? AND (', forumID)
+		local queryString = dbPrepareString(handlerConnect, 'SELECT * FROM gc_items WHERE forumid = ?', forumID)
 		for ind, prk in ipairs(ID) do
-			queryString = queryString .. dbPrepareString(handlerConnect, 'itembought=? ', prk)
-			if ID[ind+1] then
-				queryString = queryString .. ' OR '
-			else
-				queryString = queryString .. ')'
+			if ind == 1 then
+				queryString = queryString .. ' AND ('
+			end
+			
+			if prk and tonumber(prk) then
+				local addedQuery = dbPrepareString(handlerConnect, 'itembought = ?', prk)
+				if addedQuery then
+					queryString = queryString .. addedQuery
+				end
+
+				if ID[ind+1] then
+					queryString = queryString .. ' OR '
+				else
+					queryString = queryString .. ')'
+				end
 			end
 		end
-		-- outputDebugString(queryString)
 		dbQuery(
 			function(query) 
 				local result = dbPoll(query,0)
-				local returnVal = {}
-				for _, row in ipairs(result) do
-					returnVal[row.itembought] = row.expires or nil
+				if result == false then
+					outputDebugString('Invalid query: '..queryString)
 				end
-				callback(returnVal)
+				if type(result) == 'table' then
+					local returnVal = {}
+					for _, row in ipairs(result) do
+						returnVal[row.itembought] = row.expires or nil
+					end
+					callback(returnVal)
+				else
+					callback(false)
+				end
 			end,
 		handlerConnect, queryString)
 	else
@@ -449,8 +473,9 @@ function getPerkSettings(player, ID, callback)
 
 	if type(player) == 'table' then
 		if #player < 1 then
+			-- outputDebugString( 'getPerkSettings: No entries in player table', 1 )
+			-- outputDebugString( debug.traceback() )
 			-- outputConsole( debug.traceback() )
-			outputDebugString( 'getPerkSettings: No entries in player table', 1 )
 			callback(false)
 			return
 		end

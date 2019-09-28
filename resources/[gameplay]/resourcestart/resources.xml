@@ -13,7 +13,6 @@
 	<resource priority="1">race</resource>
 	<resource priority="1">gcshop</resource>
 	<resource priority="0">maptools</resource>
-	<resource priority="0">stats_system</resource>
 	<resource priority="1">admin</resource>
 	<resource priority="1">nickprotection</resource>
 	<resource priority="1">gus</resource>
@@ -32,6 +31,7 @@
 	<resource priority="0">helpmenu</resource>
 	<resource priority="1">mrgreen-sidebar</resource>
 	<resource priority="1">mrgreen-settings</resource>
+	<resource priority="1">mrgreen-stats</resource>
 	<resource priority="0">irc</resource>
 	<resource priority="0">achievements</resource>
 	<resource priority="0">discord</resource>

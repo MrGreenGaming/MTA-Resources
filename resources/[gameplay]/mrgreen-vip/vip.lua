@@ -31,7 +31,7 @@ vipStandardOptions = {
 	[4] = {pattern = 1, speed = 4, enabled = false},
 	[5] = {skin = 1},
 	[6] = {enabled = false},
-	[7] = {style = false, color = "FFFFFF"},
+	[7] = {style = false, color = "FFFFFF", intensity = 0.5, opacity = 3, speed = 3},
 	[8] = {message = ""},
 	[9] = {key = "J"},
 	[10] = {used = false},

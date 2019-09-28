@@ -258,3 +258,36 @@ addEventHandler("onMapGather", getRootElement(),
         end
     end
 )
+
+function checkGear()
+    local theVehicle = getPedOccupiedVehicle(localPlayer)
+    if ( getElementModel(theVehicle) == 520 and getVehicleLandingGearDown( theVehicle ) == true) then
+      setVehicleLandingGearDown(theVehicle,false) 
+      outputChatBox( "[Hydra] Landing gear is ready!", 0, 255, 0)
+        if ( getAnalogControlState( "special_control_up" ) == 0 ) then
+            setAnalogControlState( "special_control_up", 1 )
+        else
+            setAnalogControlState( "special_control_up", 0 )
+        end
+    end
+end
+
+addEventHandler("onClientMapStarting", root, checkGear)
+
+-- Vehicle ID change
+local lastVehID
+function checkVehicleID()
+    local currentVehID = false
+    local veh = getPedOccupiedVehicle(localPlayer)
+    if not veh then
+        currentVehID = false
+    else
+        currentVehID = getElementModel(veh)
+    end
+
+    if lastVehID ~= currentVehID then
+        setElementData(localPlayer, 'playerVehicleID', currentVehID)
+    end
+    lastVehID = currentVehID
+end
+setTimer(checkVehicleID, 50, 0)

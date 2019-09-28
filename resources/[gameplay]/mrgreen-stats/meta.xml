@@ -1,0 +1,25 @@
+<meta>
+    <info name="Stats" author="AfuSensi" version="1" description="Player Statistics" type="script" />
+    
+    <script src="gui_c.lua" type="client"></script>
+    <script src="utils_c.lua" type="client" />
+    
+    <script src="database_s.lua" type="server" />
+    <script src="main_s.lua" type="server" />
+    <script src="utils_s.lua" type="server" />
+
+    <file src="gui/index.html"/>
+    <file src="gui/store.js"/>
+    <include resource="local-cdn"/>
+
+    <!-- Exports -->
+    <export function="sendServerPlayerStats" type="server" http="true" />
+    <export function="requestStats" type="client"/>
+    <export function="showStatsWindow" type="client"/>
+    <export function="getPlayerStat" type="server"/>
+    <settings>
+        <setting name="*currentServer" friendlyname="Current server name (displayed in playerlist)" value="Race" />
+        <setting name="*fetchServerIP" friendlyname="Fetch other server IP" value="" />
+    </settings>
+    <min_mta_version server="1.5.3-9.11270" />
+</meta>
