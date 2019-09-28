@@ -661,45 +661,13 @@ function s_Forklift(victim)
 end
 addEventHandler("ForkLiftEvent", root, s_Forklift)
 
---AleksCore's Rave Mode
-local raveDisplay = textCreateDisplay ()
-local raveText = textCreateTextItem ( "ravebreak", 0.5, 0.4, 2, 0, 255, 0, 255, 2, "center", "center", 255 )
-textDisplayAddText ( raveDisplay, raveText )
-addEvent( "RavebreakEvent", true )
-
 function s_Ravebreak() 
 	pollDidStart = nil
-
-	outputConsole( "Ravebreak By AleksCore!" )
-	for _,plyr in pairs(getElementsByType("player")) do
-		textDisplayAddObserver ( raveDisplay, plyr )
-	end
-
-
-	
-	
 	local RaveTime = 10000 -- time of the rave in MS
-	local colorInterval = 50 -- How fast will the color change in MS
-	
-	colorTimes = 0
-	local function tcolorChange()
-		colorTimes = colorTimes + 1
-		local r = math.random(0,255)
-		local b = math.random(0,255)
-		local g = math.random(0,255)
-		textItemSetColor ( raveText, r, b, g, 255 )
-
-		if colorTimes == RaveTime/colorInterval then -- If it's the last call
-			for _,plyr in pairs(getElementsByType("player")) do
-				textDisplayRemoveObserver( raveDisplay, plyr )
-			end
-		triggerClientEvent( root, "stopRaveBreak", root )
-		end
-	end
-	setTimer(tcolorChange, colorInterval, RaveTime/colorInterval)
-
+	setTimer(triggerClientEvent, RaveTime, 1, root, 'stopRaveBreak', root)
 	triggerClientEvent(root, "onRavebreakStart", root,RaveTime)
 end
+addEvent( "RavebreakEvent", true )
 addEventHandler("RavebreakEvent", root, s_Ravebreak)
 
 --Nuke

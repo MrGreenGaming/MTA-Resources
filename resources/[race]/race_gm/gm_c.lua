@@ -147,7 +147,7 @@ function()
 						local x,y,z = getElementPosition(car)
 						local cx,cy,cz = getElementPosition(pedCar)
 						local distance = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
-						if distance <= 4 then
+						if distance <= 5 then
 							setElementAlpha(car, 240)
 						
 								setElementAlpha(pedCar, 40)

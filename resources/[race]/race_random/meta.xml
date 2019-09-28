@@ -21,7 +21,19 @@
 	<file src="files/ravebreak2.mp3" />
 	<file src="files/ravebreak3.mp3" />
 	<file src="files/ravebreak4.mp3" />
-	<file src="files/dancething.gif"/>
-    <file src="files/snoop.gif"/>
-	<file src="ravebreak.html" />
+
+	<file src="ravebreak/ravebreak.html" />
+	<file src="ravebreak/images/mrgreen.png" />
+	<file src="ravebreak/images/banana.webp" />
+	<file src="ravebreak/images/bob.webp" />
+	<file src="ravebreak/images/carlton.webp" />
+	<file src="ravebreak/images/dog.webp" />
+	<file src="ravebreak/images/mrpoopybutthole.webp" />
+	<file src="ravebreak/images/ned.webp" />
+	<file src="ravebreak/images/parrot.webp" />
+	<file src="ravebreak/images/rick.webp" />
+	<file src="ravebreak/images/snoop.webp" />
+	<file src="ravebreak/images/spiderman.webp" />
+	<file src="ravebreak/images/squid.webp" />
+	<file src="ravebreak/images/woman.webp" />
 </meta>
