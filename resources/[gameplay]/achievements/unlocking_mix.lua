@@ -88,6 +88,8 @@ function resetPlayer ( player )
 	g_Players[player].DD_previous_previous_kills = 0
 	g_Players[player].SH_previous_kills = 0
 	g_Players[player].SH_previous_previous_kills = 0
+	g_Players[player].DL_previous_kills = 0
+	g_Players[player].DL_previous_previous_kills = 0
 end
 addEventHandler('onPlayerJoin', root, resetPlayer)
 
