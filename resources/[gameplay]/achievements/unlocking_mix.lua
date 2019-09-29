@@ -43,6 +43,20 @@ achievementListMix = {
 	{ s = "SH: Make 500 kills", 										id = 35,	reward = 500,	max = 500 },
 	{ s = "SH: Make 1000 kills", 										id = 36,	reward = 1000,	max = 1000 },
 	
+	{ s = "DL: Noob in lines - Be the first to get killed", 				id = 52, 	reward = 15 },
+	{ s = "DL: 5 Explosive lines- Accumulate 5 kills in 1 round", 				id = 53, 	reward = 100 },
+	{ s = "DL: TRON LEGACY!! - Accumulate 8 kills in 2 rounds", 				id = 54, 	reward = 200 },
+	{ s = "DL: THE REAL TRON!! - Accumulate 10 kills in 3 rounds",			id = 55, 	reward = 300 },
+	{ s = "DL: Win 5 rounds", 											id = 56,	reward = 75,	max = 5  },
+	{ s = "DL: Win 20 rounds", 											id = 57,	reward = 200,	max = 20 },
+	{ s = "DL: Win 50 rounds", 											id = 58,	reward = 500,	max = 50 },
+	{ s = "DL: Win 500 rounds", 										id = 59,	reward = 1000,	max = 500 },
+	{ s = "DL: Win 1000 rounds", 										id = 60,	reward = 5000,	max = 1000 },
+	{ s = "DL: Make 20 kills", 											id = 61,	reward = 100,	max = 20 },
+	{ s = "DL: Make 200 kills", 										id = 62,	reward = 300,	max = 200 },
+	{ s = "DL: Make 500 kills", 										id = 63,	reward = 500,	max = 500 },
+	{ s = "DL: Make 1000 kills", 										id = 64,	reward = 1000,	max = 1000 },
+	
 	{ s = "NTS: Finish the map [NTS] Marathon", 							id = 21,	reward = 75 },
 	{ s = "NTS: Win the map [NTS] Marathon", 								id = 22,	reward = 200 },
 	{ s = "NTS: Finish the map [NTS] Sunday on a sunday", 				id = 23,	reward = 100 },
@@ -74,6 +88,8 @@ function resetPlayer ( player )
 	g_Players[player].DD_previous_previous_kills = 0
 	g_Players[player].SH_previous_kills = 0
 	g_Players[player].SH_previous_previous_kills = 0
+	g_Players[player].DL_previous_kills = 0
+	g_Players[player].DL_previous_previous_kills = 0
 end
 addEventHandler('onPlayerJoin', root, resetPlayer)
 
@@ -239,6 +255,63 @@ function onShooterPlayerKill(target)
 end
 addEvent('onShooterPlayerKill')
 addEventHandler('onShooterPlayerKill', root, onShooterPlayerKill)
+
+
+---------
+-- DL --
+---------
+-- 53 DL: 5 Explosive lines- Accumulate 5 kills in 1 round
+-- 54 DL: TRON LEGACY!! - Accumulate 8 kills in 2 rounds
+-- 55 DL: THE REAL TRON!! - Accumulate 10 kills in 3 rounds
+-- 56 DL: Win 5 rounds
+-- 57 DL: Win 20 rounds
+-- 58 DL: Win 50 rounds
+-- 59 DL: Win 500 rounds
+-- 60 DL: Win 1000 rounds
+function playerFinishDeadline (player, rank)
+	local kills = tonumber(getElementData(player, 'kills')) or 0
+	if kills >= 5 then
+		addPlayerAchievementMix ( player, 53 )
+	end
+	if kills + g_Players[player].DL_previous_kills >= 8 then
+		addPlayerAchievementMix ( player, 54 )
+	end
+	if kills + g_Players[player].DL_previous_kills + g_Players[player].DL_previous_previous_kills >= 10 then
+		addPlayerAchievementMix ( player, 55 )
+	end
+	g_Players[player].DL_previous_previous_kills = g_Players[player].DL_previous_kills
+	g_Players[player].DL_previous_kills = kills
+	
+	if rank == 1 then
+		addAchievementProgressMix ( player, 56, 1 )
+		addAchievementProgressMix ( player, 57, 1 )
+		addAchievementProgressMix ( player, 58, 1 )
+		addAchievementProgressMix ( player, 59, 1 )
+		addAchievementProgressMix ( player, 60, 1 )
+	elseif rank == 4 then
+		addAchievementProgressMix ( player, 33, 1 )
+	end
+end
+addEventHandler('onPlayerFinishDeadline', root, function(r) playerFinishDeadline(source, r) end)
+addEventHandler('onPlayerWinDeadline', root, function() playerFinishDeadline(source, 1) end)
+
+-- 52 DL: Noob in lines - Be the first to get killed
+-- 61 DL: Make 20 kills
+-- 62 DL: Make 200 kills
+-- 63 DL: Make 500 kills
+-- 64 DL: Make 1000 kills
+function onDeadlinePlayerKill(target)
+	addAchievementProgressMix ( source, 61, 1 )
+	addAchievementProgressMix ( source, 62, 1 )
+	addAchievementProgressMix ( source, 63, 1 )
+	addAchievementProgressMix ( source, 64, 1 )
+	if isFirstKill then
+		isFirstKill = false
+		addPlayerAchievementMix ( target, 52 )
+	end
+end
+addEvent('onDeadlinePlayerKill')
+addEventHandler('onDeadlinePlayerKill', root, onDeadlinePlayerKill)
 
 
 ---------
