@@ -1,5 +1,4 @@
-﻿prices = {}
-
+﻿local prices = {}
 prices["race"] = 1000
 prices["rtf"] = 800
 prices["ctf"] = 800
@@ -7,10 +6,15 @@ prices["nts"] = 1000
 prices["shooter"] = 1200
 prices["deadline"] = 900
 
-PRICE = 1000
-
-mp_maxBuyAmount = 3 -- Daily map buy amount
-mp_cooldownTime = 360*60 -- Minutes of cooldown
+local PRICE = 1000
+local mp_maxBuyAmount = 3 -- Daily map buy amount
+local mp_cooldownTime = 360*60 -- Minutes of cooldown
+local mp_staffMapFree = false -- Is map free for staff in ACL below
+local mp_staffACLNames = {
+    'ServerManager',
+    'mapmanager',
+    'Developer'
+}
 ----------------------
 -- Winners discount --
 ----------------------
@@ -102,16 +106,11 @@ function sortCompareFunction(s1, s2)
 end
 
 local function isPlayerStaff(player)
-    local freeForAcl = {
-        'ServerManager',
-        'mapmanager',
-        'Developer'
-    }
-
+    if not mp_staffMapFree then return false end
     local accountName = getAccountName( getPlayerAccount(player) )
     if accountName ~= "guest" then
         local isInAcl = false
-        for _, name in ipairs(freeForAcl) do
+        for _, name in ipairs(mp_staffACLNames) do
             if isObjectInACLGroup( "user."..accountName, aclGetGroup(name) ) then
                 isInAcl = true
                 break
