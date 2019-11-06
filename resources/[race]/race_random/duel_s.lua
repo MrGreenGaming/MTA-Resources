@@ -26,6 +26,8 @@ local function getAlivePlayers()
 end
 
 local maproot, initiator, duelType
+local resetPositionColshapes = {}
+local originalDuelPos = {}
 local duelCountDownTime = 10
 
 function startDuel(p, c, t)
@@ -84,6 +86,7 @@ function startDuel(p, c, t)
 					setElementHealth( veh, 1000 )
 					local s = spawns[k]
 					local x, y, z = getElementPosition(s)
+					originalDuelPos[p] = {x = x, y = y}
 					setElementPosition(veh, x, y, z+1)
 					setElementRotation(veh, 0, 0, getElementData(s, 'rotZ'))
 					setElementFrozen(veh, true)
@@ -92,13 +95,22 @@ function startDuel(p, c, t)
 					toggleControl ( p, "brake_reverse", false )
 					toggleControl ( p, "handbrake", false )
 					setControlState ( p, "accelerate", true )
-					setTimer(function() 
-						toggleControl ( p, "brake_reverse", true )
-						toggleControl ( p, "handbrake", true )	
-					end, 10000, 1)
 					setTimer(setElementFrozen, 100, 1, veh, false)
+					-- Position reset colshape
+					resetPositionColshapes[k] = createColCircle( x, y, 10 )
+					addEventHandler( "onColShapeHit", resetPositionColshapes[k], function(element, matchDim)
+						if not matchDim or getElementType( element ) ~= "player" or element == p or not originalDuelPos[element] then return end
+						local pVeh = getPedOccupiedVehicle( element )
+						if pVeh then
+							local tX, tY, tZ =  getElementPosition(pVeh)
+							local vX, vY, vZ = getElementVelocity(pVeh)
+							setElementPosition( pVeh, originalDuelPos[element].x, originalDuelPos[element].y, tZ )
+							setElementVelocity( pVeh, vX, vY, vZ )
+						end
+					end)
 				end
 				triggerClientEvent('its_time_to_duel.mp3', resourceRoot)
+
 			end
 		end
 	, 1000, duelCountDownTime)
@@ -106,10 +118,17 @@ end
 addCommandHandler('duel', startDuel)
 
 
-function stopDuel() 
+function stopDuel()
+	for _, el in pairs(resetPositionColshapes) do
+		if isElement(el) then destroyElement(el) end
+	end
+	resetPositionColshapes = {}
+	originalDuelPos = {}
+
 	if maproot then
 		destroyElement(maproot)
 	end
+
 	for _, p in ipairs(duelPlayers) do
 		if isElement(p) and getElementType(p) == 'player' then
 			toggleControl ( p, "accelerate", true )
@@ -118,6 +137,7 @@ function stopDuel()
 			setControlState ( p, "accelerate", false )
 		end
 	end
+
 	duelPlayers = {}
 	maproot = nil
 	initiator = nil
