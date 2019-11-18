@@ -29,8 +29,13 @@ local maproot, initiator, duelType
 local resetPositionColshapes = {}
 local originalDuelPos = {}
 local duelCountDownTime = 10
+local initiated = {}
 
 function startDuel(p, c, t)
+	if initiated[p] then
+		outputChatBox("You have already requested a duel", p, 255, 0, 0)
+		return
+	end
 	if maproot then return end
 	local players = getAlivePlayers()
 	if exports.race:getRaceMode() ~= "Destruction derby" then return outputChatBox("Not a DD map", p) end
@@ -45,12 +50,14 @@ function startDuel(p, c, t)
 		end
 		initiator = p
 		duelType = t
+		initiated[p] = true
 		return
 	elseif p == initiator then
 		return
 	end
 	table.insert(duelPlayers, initiator)
 	table.insert(duelPlayers, p)
+	initiated[p] = true
 	outputChatBox("[DUEL] " .. getPlayerName(p) .. " #00FF00accepted a duel!", root, 0,255,0, true)
 	-- Start the countdown, at the last execution start duel
 	setTimer(
@@ -142,6 +149,7 @@ function stopDuel()
 	maproot = nil
 	initiator = nil
 	duelType = nil
+	initiated = {}
 end
 addEvent('stopDuel')
 addEventHandler('onPostFinish', root, stopDuel)
