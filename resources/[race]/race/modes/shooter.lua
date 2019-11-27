@@ -877,6 +877,7 @@ end
 function Shooter:endMap()
 	self:cleanup()
 	RaceMode.endMap(self)
+	setTimer(function() clientCall(g_Root, 'sh_stopTimeBars') end, 7000, 1) -- shooter indicator bugfix (Thanks to the AfuSensi for idea :P)
 end
 
 function Shooter:destroy()
