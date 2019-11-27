@@ -328,12 +328,9 @@ function startNextMapVote()
 	if pollDidStart then
 		gotoState('NextMapVote')
 		addEventHandler("onPollEnd", getRootElement(), chooseRandomMap)
-	elseif getRaceMode() ~= "Shooter" then
+	else
 		startRandomMap()
 		return true
-	elseif getRaceMode() == "Shooter" then
-	    setTimer(function() startRandomMap() end, 7000 , 1) -- When map changes quickly on shooter, shooter mode's indicator gets bugged. 
-	    return true 
 	end
 
 	return pollDidStart
