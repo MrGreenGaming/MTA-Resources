@@ -469,6 +469,8 @@ hornsTable = {
     [466] = "Speak",
     [467] = "Fuck Ballas",
     [468] = "FAP FAP FAP",
+    [469] = "General Kenobi!",
+    [470] = "You are a bold one!"
     
     
  
