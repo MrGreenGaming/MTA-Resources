@@ -315,7 +315,7 @@ local holidays = {
     { day = 25, month = 12 }, -- first christmas day
     { day = 26, month = 12 }, -- second christmas day
     { day = 31, month = 12 }, -- last day of the year
-    { day = 01, month = 01 } -- first day of the year
+    { day = 1, month = 1 } -- first day of the year
 }
 function isHoliday()
     local bool = false
