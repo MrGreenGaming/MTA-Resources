@@ -117,6 +117,7 @@ function bindVipHorns(player, unbind)
 end
 
 function useVipHorn (player, key, state, hornid)
+    if isPlayerMuted( player ) then return end
     if vipHornsCooldown[player] and vipHornsCooldown[player] >  getTickCount() or not canUseHorns then
         -- Still on cooldown
         return

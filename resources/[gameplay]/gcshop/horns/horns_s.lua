@@ -84,6 +84,7 @@ end
 )
 
 function useHorn(player, arg1, arg2, hornID)
+	if isPlayerMuted( player ) then return end
 	if (canHornBeUsed[player]) and (coolOff[player] == true) and (isPedInVehicle(player)) and (not isVehicleBlown(getPedOccupiedVehicle(player))) and (getElementHealth(getPedOccupiedVehicle(player)) > 250) and (getElementData(player, "state") == "alive") then
 		local logged = exports.gc:isPlayerLoggedInGC(player)
 		if logged then
