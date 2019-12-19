@@ -200,7 +200,7 @@ function Deadline:launch()
 	DeadlineOptions.deadWallRadius = DeadlineOptions.deadWallRadiusMax
 
 	deadlineDeadWallElement = createColCircle( DeadlineOptions.deadWallX, DeadlineOptions.deadWallY, DeadlineOptions.deadWallRadius )
-	deadlineDeadWallDecreaseSizeTimer = setTimer( dl_deacreaseDeadWallSize, 100, 0 )
+	deadlineDeadWallDecreaseSizeTimer = setTimer( dl_deacreaseDeadWallSize, 30, 0 )
 	-- dl_deacreaseDeadWallSize()
 
 
