@@ -146,7 +146,7 @@ function(pName, amount)
 	local minPlayTime = 100 -- hours
 	local playTime = exports['mrgreen-stats']:getPlayerStat(source, 'General', 'Playtime')
 	if not playTime or not tonumber(playTime) or playTime/3600 < minPlayTime then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You must have a minimum of "..minPlayTime.." to transfer greencoins!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You must have a minimum of "..minPlayTime.." hours to transfer greencoins!")
 		return
 	end
 
