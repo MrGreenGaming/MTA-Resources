@@ -14,7 +14,9 @@
     <file src="pics/spikes.png"></file>
     <file src="pics/oil.png"></file>
 	<file src="pics/ramp.png"></file>
-	
+	<file src="pics/jump.png"></file>
+	<file src="pics/rock.png"></file>
+	<file src="pics/smoke.png"></file>
 	<file src="pics/magnet.png"></file>
 	
 	<script src="chatbar_c.lua" type="client"></script>
@@ -24,5 +26,6 @@
     <script src="utilites_s.lua" type="server"></script>
 	<script src="utilites_c.lua" type="client"></script>
 
-<info author="AleksCore" name="Core Markers" description="Pickups with random power-ups by AleksCore" version="0.7" type="script" />
+<info author="AleksCore" name="Core Markers" description="Pickups with random power-ups by AleksCore" version="0.8" type="script" />
+	<min_mta_version server="1.5.5-9.14060" />
 </meta>
