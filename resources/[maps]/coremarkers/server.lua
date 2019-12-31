@@ -6,7 +6,7 @@ addEventHandler("onResourceStart", resourceRoot,
 function()
 	outputChatBox( '#ffffff"Core Markers" by #00dd22AleksCore #fffffflaunched.', root, 255, 0, 0, true)
 	showText_Create()
-	showText( 54, 201, 46, "Pick-up power-ups\n @\n Press LMB or LCTRL button", 12000, all)
+	showText( 54, 201, 46, "Pick-up markers (boxes)\n @\nPress LMB or LCTRL button", 12000, all)
 	setTimer(function() textItemSetColor(showText_Text, 54, 201, 46, 255) setTimer(function() textItemSetColor(showText_Text, 255, 255, 255, 255) end, 600, 1) end, 1000, 11)
 	
 	for index, object in ipairs(getElementsByType("object")) do
@@ -90,6 +90,19 @@ function (x, y, z, rz)
 end
 )
 
+addEvent("dropRock", true)
+addEventHandler("dropRock", root, 
+function (x, y, z, rz)
+	createObject(1305, x, y, z+1.5, 0, 0, rz+90)
+end
+)
+
+addEvent("doSmoke", true)
+addEventHandler("doSmoke", root, 
+function (x, y, z, rz, theVehicle)
+	triggerClientEvent(root, "createSmokeEffect", root, x, y, z, rz, theVehicle)
+end
+)
 
 addEvent("dropRamp", true)
 addEventHandler("dropRamp", root, 
@@ -136,7 +149,7 @@ function (model, x, y, z, rz)
 			local x, y, z = getElementPosition(barrel[1])
 			triggerClientEvent(root, "createExplosionEffect", root, x, y, z)
 			local health = getElementHealth(getPedOccupiedVehicle(thePlayer))
-			setElementHealth(getPedOccupiedVehicle(thePlayer), health-math.random(200, 400))
+			setElementHealth(getPedOccupiedVehicle(thePlayer), health-800)
 			destroyElement(source)
 		end
 	end
@@ -157,9 +170,9 @@ function (x, y, z, rz)
 	function(thePlayer)
 		if getElementType(thePlayer) == "player" then
 			if math.random(2) == 1 then
-				setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, 0.055)
+				setElementAngularVelocity(getPedOccupiedVehicle(thePlayer),0, 0, 0.146)
 			else
-				setVehicleTurnVelocity(getPedOccupiedVehicle(thePlayer),0, 0, -0.055)	
+				setElementAngularVelocity(getPedOccupiedVehicle(thePlayer),0, 0, -0.146)	
 			end
 			
 			destroyElement(source)
@@ -173,6 +186,15 @@ end
 addEvent("doMagnet", true)
 addEventHandler("doMagnet", root, 
 function (killer)
+-----------for tests
+	--[[for k, victim in ipairs(getElementsByType("player")) do
+					gotAlivePlayer = true
+					setElementData(victim, "coremarkers_isPlayerSlowedDown", true, true)
+					triggerClientEvent(victim, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
+					attachMarker(getPedOccupiedVehicle(victim), magnetSlowDownTime, 255, 0, 0)
+					sendClientMessage('#FFFFFF'..getPlayerName(killer)..'#00DDFF slows down #FFFFFF'..getPlayerName(victim)..'.', root, 255, 255, 255, "bottom")
+	end]]
+----------------------------------
 	local killer_rank = getElementData(killer, "race rank")
 	if killer_rank >= 2 then
 		local victim_rank = killer_rank-1
@@ -190,7 +212,7 @@ function (killer)
 			end
 		end
 	elseif killer_rank == 1 then
-		sendClientMessage("Magnet won't affect anyone if you're 1st.", killer, 255, 0, 0, "bottom")
+		sendClientMessage("Magnet slows down only 1st player, you can't use it against yourself", killer, 255, 0, 0, "bottom")
 	end
 end
 )
@@ -234,8 +256,16 @@ function(thePlayer, theVehicle, fix)
 end
 )
 
+addEvent("doJump", true)
+addEventHandler("doJump", root, 
+function(theVehicle)
+	local x, y, z = getElementVelocity(theVehicle)
+	setElementVelocity(theVehicle, x, y, z+0.3)
+end
+)
+
 function attachMarker(theVehicle, timer, r, g, b)
-	local marker = createMarker( 0, 0, -200, 'corona', 2, r, g, b)
+	local marker = createMarker( 0, 0, -200, 'corona', 2, r, g, b, 80)
 	attachElements(marker, theVehicle)
 	setTimer ( destroyElement, timer, 1, marker )
 end
