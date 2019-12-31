@@ -188,7 +188,6 @@ addEventHandler("doMagnet", root,
 function (killer)
 -----------for tests
 	--[[for k, victim in ipairs(getElementsByType("player")) do
-					gotAlivePlayer = true
 					setElementData(victim, "coremarkers_isPlayerSlowedDown", true, true)
 					triggerClientEvent(victim, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
 					attachMarker(getPedOccupiedVehicle(victim), magnetSlowDownTime, 255, 0, 0)
@@ -197,13 +196,10 @@ function (killer)
 ----------------------------------
 	local killer_rank = getElementData(killer, "race rank")
 	if killer_rank >= 2 then
-		local victim_rank = killer_rank-1
-		gotAlivePlayer = false
 		for k, victim in ipairs(getElementsByType("player")) do
 			local rank = getElementData(victim, "race rank")
 			if type(rank) == "number" then
-				if rank <= victim_rank and rank >= 1 and getElementData(victim, "state") == "alive" and not gotAlivePlayer and not getElementData(victim, "coremarkers_isPlayerSlowedDown") then
-					gotAlivePlayer = true
+				if rank == 1 and getElementData(victim, "state") == "alive" and not getElementData(victim, "coremarkers_isPlayerSlowedDown") then
 					setElementData(victim, "coremarkers_isPlayerSlowedDown", true, true)
 					triggerClientEvent(victim, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
 					attachMarker(getPedOccupiedVehicle(victim), magnetSlowDownTime, 255, 0, 0)
