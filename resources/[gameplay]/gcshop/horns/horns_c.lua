@@ -471,6 +471,11 @@ hornsTable = {
     [468] = "FAP FAP FAP",
     [469] = "General Kenobi!",
     [470] = "You are a bold one!",
+    [471] = "Chill Boy",
+    [472] = "Low",
+    [473] = "Move bro",
+    [474] = "Move Fat As",
+    [475] = "Why",
     
     
  
