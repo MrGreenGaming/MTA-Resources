@@ -1,6 +1,6 @@
 math.randomseed(getTickCount())
 
-local delay = 500
+local delay = 2000
 local animSpeed = 20
 local speedItemTime = 12000
 
