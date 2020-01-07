@@ -10,7 +10,7 @@
 ------------------------------------------
 
 
-local maxMessages = 5; 		-- The max messages that will show (on each bar)
+local maxMessages = 6; 		-- The max messages that will show (on each bar)
 local DefaultTime = 8; 		-- The max time each message will show if time isn't defined.
 
 ------------------------------------------
