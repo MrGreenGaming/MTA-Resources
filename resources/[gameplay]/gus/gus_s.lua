@@ -304,9 +304,8 @@ addEventHandler("onRaceStateChanging", root,
 		if state == "GridCountdown" then
 			correctWeather()
 		end
-	end)
-
-
+	end
+)
 
 -- /round command
 local roundCount
@@ -416,3 +415,48 @@ function handleOcclusions(mapInfo)
 end
 addEvent('onMapStarting')
 addEventHandler('onMapStarting', root, handleOcclusions)
+
+--------------------------------
+-- Streak
+--------------------------------
+local currentStreakPlayer;
+local currentPlayerStreakCount = 0;
+local requiredPlayersToRecordAStreak = 10;
+addEventHandler('onPlayerFinish', root, 
+	function(rank) 
+		if (getPlayerCount() >= requiredPlayersToRecordAStreak) then
+			if (rank == 1) then
+				if (currentStreakPlayer ~= source) then
+					currentStreakPlayer = source
+					currentPlayerStreakCount = 1;
+				else
+					if (currentStreakPlayer) then
+						currentPlayerStreakCount = currentPlayerStreakCount+1;
+					end
+				end
+				outputChatBox(getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00)", root, 0, 255, 0, true)
+			end
+		else
+			outputChatBox("there's no enough players online to record a streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
+		end
+    end
+)
+
+function triggerStreakForOtherGamemodes()
+	if (getPlayerCount() >= requiredPlayersToRecordAStreak) then
+		if (currentStreakPlayer ~= source) then
+			currentStreakPlayer = source
+			currentPlayerStreakCount = 1;
+		else
+			if (currentStreakPlayer) then
+				currentPlayerStreakCount = currentPlayerStreakCount+1;
+			end
+		end
+		outputChatBox(getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00)", root, 0, 255, 0, true)
+	else
+		outputChatBox("there's no enough players online to record a streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
+	end
+end
+addEventHandler("onPlayerWinDD", root, triggerStreakForOtherGamemodes)
+addEventHandler("onPlayerWinShooter", root, triggerStreakForOtherGamemodes)
+addEventHandler("onPlayerWinDeadline", root, triggerStreakForOtherGamemodes)
