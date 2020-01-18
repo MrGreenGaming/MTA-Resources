@@ -42,69 +42,6 @@ end
 addEvent('freecam', true)
 addEventHandler('freecam', resourceRoot, freecam)
 
---- Rules window ---
-
-GUIEditor = {
-    button = {},
-    window = {},
-    label = {}
-}
-addCommandHandler('rules',
-    function()
-		local screenW, screenH = guiGetScreenSize()
-        GUIEditor.window[1] = guiCreateWindow((screenW - 350) / 2, (screenH - 230) / 2, 350, 230, "Server Rules", false) 
-        guiWindowSetMovable(GUIEditor.window[1], false)
-        guiWindowSetSizable(GUIEditor.window[1], false)
-
-        GUIEditor.label[1] = guiCreateLabel(10, 23, 330, 166, "1. Don't spam, swear, exploit, be a retard.\n2. Our main language here is English.\nIf an admin asks you to use English, use English.\n3. The admins ( /admins ) are always right.\n4. Do not deliberately block to ruin maps.\n5. Do not camp in DD and/or SH maps.\n6. Do not teamkill in CTF maps\n7. Don't escape map boundaries if any.\n\nFailure to comply with the rules can get you kicked or banned!", false, GUIEditor.window[1])
-        guiSetFont(GUIEditor.label[1], "clear-normal")
-        guiLabelSetColor(GUIEditor.label[1], 0, 255, 0)
-        guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
-        GUIEditor.button[1] = guiCreateButton(10, 199, 330, 18, "I have read and agreed to the rules", false, GUIEditor.window[1])    
-		showCursor(true)
-        addEventHandler("onClientGUIClick", GUIEditor.button[1], closeRules, false)
-		
-		-- Centered, size mantains, the only problem with this is that the 1080p players would see it very tiny, this can be changed with comparing resolutions, if its too high, the size is doubled. I also removed all relatives values on the label and button
-    end
-)
-
-function hasPlayerSeenTheRules()
-    local file = xmlLoadFile('rules_.xml')
-    if not file then
-        file = xmlCreateFile('rules_.xml', 'rules')
-    end
-    if not xmlNodeGetValue(file) or xmlNodeGetValue(file) == '' then
-        return false
-    elseif xmlNodeGetValue(file) == 'viewed' then
-        return true
-    end
-    xmlUnloadFile(file)
-end
-
-addEventHandler('onClientResourceStart', resourceRoot,
-function()
-    if not hasPlayerSeenTheRules() then
-        executeCommandHandler('rules')
-    end
-end)
-
-function closeRules(button)
-    if button == "left" then
-        if isElement(GUIEditor.window[1]) then
-            destroyElement(GUIEditor.window[1])
-            showCursor(false)
-            local file = xmlLoadFile('rules_.xml')
-            if not file then
-               file = xmlCreateFile('rules_.xml', 'rules')
-            end
-            xmlNodeSetValue(file, 'viewed')
-            xmlSaveFile(file)
-            xmlUnloadFile(file)
-        end
-    end
-end
-
-
 -- -- /ignore <playername> -- Uncommented by KaliBwoy, added to settings menu.
 
 -- local ignores = nil
@@ -271,8 +208,13 @@ function checkGear()
         end
     end
 end
-
 addEventHandler("onClientMapStarting", root, checkGear)
+
+-- disable randomfoliage
+
+addEventHandler("onClientMapStarting", root, function()
+    setWorldSpecialPropertyEnabled("randomfoliage", false)
+end)
 
 -- Vehicle ID change
 local lastVehID
