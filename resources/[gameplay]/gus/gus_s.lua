@@ -422,6 +422,19 @@ addEventHandler('onMapStarting', root, handleOcclusions)
 local currentStreakPlayer;
 local currentPlayerStreakCount = 0;
 local requiredPlayersToRecordAStreak = 10;
+
+function getGreenCoinsAmountForStreak()
+	if (currentPlayerStreakCount == 1) then
+		return 5;
+	elseif (currentPlayerStreakCount == 2) then
+		return 10;
+	elseif (currentPlayerStreakCount == 3) then
+		return 15;
+	elseif (currentPlayerStreakCount >= 4) then
+		return 20;
+	end
+end
+
 addEventHandler('onPlayerFinish', root, 
 	function(rank) 
 		if (getPlayerCount() >= requiredPlayersToRecordAStreak) then
@@ -429,12 +442,14 @@ addEventHandler('onPlayerFinish', root,
 				if (currentStreakPlayer ~= source) then
 					currentStreakPlayer = source
 					currentPlayerStreakCount = 1;
+					exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
 				else
 					if (currentStreakPlayer) then
 						currentPlayerStreakCount = currentPlayerStreakCount+1;
+						exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
 					end
 				end
-				outputChatBox(getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00)", root, 0, 255, 0, true)
+				outputChatBox("[Streak]"..getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00) (earned "..getGreenCoinsAmountForStreak().."GC)", root, 0, 255, 0, true)
 			end
 		else
 			outputChatBox("there's no enough players online to record a streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
@@ -447,12 +462,14 @@ function triggerStreakForOtherGamemodes()
 		if (currentStreakPlayer ~= source) then
 			currentStreakPlayer = source
 			currentPlayerStreakCount = 1;
+			exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
 		else
 			if (currentStreakPlayer) then
 				currentPlayerStreakCount = currentPlayerStreakCount+1;
+				exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
 			end
 		end
-		outputChatBox(getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00)", root, 0, 255, 0, true)
+		outputChatBox("[Streak]"..getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00) (earned "..getGreenCoinsAmountForStreak().."GC)", root, 0, 255, 0, true)
 	else
 		outputChatBox("there's no enough players online to record a streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
 	end
