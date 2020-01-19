@@ -1,19 +1,5 @@
-function getPositionAndVelocityForProjectile(theVehicle, x, y, z)
-	local matrix = getElementMatrix(theVehicle)
-	local offX = 0 * matrix[1][1] + 1 * matrix[2][1] + 0 * matrix[3][1] + 1 * matrix[4][1]
-	local offY = 0 * matrix[1][2] + 1 * matrix[2][2] + 0 * matrix[3][2] + 1 * matrix[4][2]
-	local offZ = 0 * matrix[1][3] + 1 * matrix[2][3] + 0 * matrix[3][3] + 1 * matrix[4][3]
-	local vx = offX - x
-	local vy = offY - y
-	local vz = offZ - z
-	local x = 0 * matrix[1][1] + 3 * matrix[2][1] + 0 * matrix[3][1] + 1 * matrix[4][1]
-	local y = 0 * matrix[1][2] + 3 * matrix[2][2] + 0 * matrix[3][2] + 1 * matrix[4][2]
-	local z = 0 * matrix[1][3] + 3 * matrix[2][3] + 0 * matrix[3][3] + 1 * matrix[4][3]
-	return x, y, z, vx, vy, vz
-end	
-	
 function getPositionFromElementOffset(element,offX,offY,offZ)
-    local m = getElementMatrix ( element )
+    local m = getElementMatrix(element)
     local x = offX * m[1][1] + offY * m[2][1] + offZ * m[3][1] + m[4][1]
     local y = offX * m[1][2] + offY * m[2][2] + offZ * m[3][2] + m[4][2]
     local z = offX * m[1][3] + offY * m[2][3] + offZ * m[3][3] + m[4][3]

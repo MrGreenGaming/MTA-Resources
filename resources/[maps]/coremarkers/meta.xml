@@ -2,11 +2,15 @@
 	<file src="marker.mp3"></file>
 	<file src="kmz.mp3"></file>
 	<file src="speed.mp3"></file>
+	<file src="fly.mp3"></file>
     <file src="oil.txd"></file>
 	<file src="crate.txd"></file>
     <file src="pics/effect.png"></file>
 	<file src="pics/wheel.png"></file>
 	<file src="pics/background.png"></file>
+	
+	<script src="c_circle.lua" type="client" />
+	<file src="circle.fx" type="client" />
 	
     <file src="pics/barrels.png"></file>
     <file src="pics/hay.png"></file>
@@ -26,13 +30,14 @@
 	<file src="pics/kmz.png"></file>
 	<file src="pics/minigun.png"></file>
 	
+	<script src="utilites_s.lua" type="server"></script>
+	<script src="utilites_c.lua" type="client"></script>
+	<script src="shared.lua" type="shared"></script>
 	<script src="chatbar_c.lua" type="client"></script>
     <script src="chatbar_s.lua" type="server"></script>
     <script src="client.lua" type="client"></script>
     <script src="server.lua" type="server"></script>
-    <script src="utilites_s.lua" type="server"></script>
-	<script src="utilites_c.lua" type="client"></script>
 
-<info author="AleksCore" name="Core Markers" description="Pickups with random power-ups by AleksCore" version="0.9" type="script" />
+<info author="AleksCore" name="Core Markers" description="Pickups with random power-ups by AleksCore" version="0.9.1" type="script" />
 	<min_mta_version server="1.5.5-9.14060" />
 </meta>
