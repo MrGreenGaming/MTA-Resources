@@ -206,16 +206,6 @@ function buildGUI()
 	guiLabelSetVerticalAlign(CloseLabel, "center")
 	guiSetProperty(CloseLabel, "AlwaysOnTop", "true")
 	
-	addEventHandler("onClientMouseEnter", CloseLabel, function()
-		guiSetAlpha(CloseButton, 1)
-		guiSetAlpha(CloseButtonTwo, 1)
-	end)
-
-	addEventHandler("onClientMouseLeave", CloseLabel, function()
-		guiSetAlpha(CloseButton, 0.5)
-		guiSetAlpha(CloseButtonTwo, 0.5)
-	end)
-
 	if on_pushButton_clicked then
 		addEventHandler("onClientGUIClick", CloseLabel, on_pushButton_clicked, false)
 	end
@@ -234,15 +224,6 @@ function buildGUI()
 	guiLabelSetVerticalAlign(SwitchButton, "center")
 	guiSetProperty(SwitchButton, "AlwaysOnTop", "true")
 	
-	addEventHandler("onClientMouseEnter", SwitchButton, function()
-		guiSetAlpha(SwitchButtonOne, 1)
-		guiSetAlpha(SwitchButtonTwo, 1)
-	end)
-
-	addEventHandler("onClientMouseLeave", SwitchButton, function()
-		guiSetAlpha(SwitchButtonOne, 0.5)
-		guiSetAlpha(SwitchButtonTwo, 0.5)
-	end)
 	addEventHandler("onClientGUIClick", SwitchButton, function() triggerServerEvent('onRequestRedirect', localPlayer) end, false)
 	
 	-- settingsbutton
@@ -259,16 +240,6 @@ function buildGUI()
 	guiLabelSetVerticalAlign(SettingsButton, "center")
 	guiSetProperty(SettingsButton, "AlwaysOnTop", "true")
 	
-	addEventHandler("onClientMouseEnter", SettingsButton, function()
-		guiSetAlpha(SettingsButtonOne, 1)
-		guiSetAlpha(SettingsButtonTwo, 1)
-	end)
-
-	addEventHandler("onClientMouseLeave", SettingsButton, function()
-		guiSetAlpha(SettingsButtonOne, 0.5)
-		guiSetAlpha(SettingsButtonTwo, 0.5)
-	end)
-
 	if on_pushButton_2_clicked then
 		addEventHandler("onClientGUIClick", SettingsButton, on_pushButton_2_clicked, false)
 	end
