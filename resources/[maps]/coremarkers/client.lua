@@ -27,20 +27,20 @@ addEventHandler("getAllowedPowerTypes", root, getAllowedPowerTypes)
 
 
 addEventHandler("onClientResourceStart", resourceRoot, 
-function()	
-	setElementData(localPlayer, "coremarkers_powerType", false, true)
-	setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false, true)
-	setElementData(localPlayer, "coremarkers_isPlayerRektBySpikes", false, true)
-	
-	engineImportTXD ( engineLoadTXD ( "oil.txd" ) , 2717 ) 
-	engineImportTXD ( engineLoadTXD ( "crate.txd" ) , 3798 ) 
-	
-	engineSetModelLODDistance(1225, 100)
-	engineSetModelLODDistance(3374, 300)
-	engineSetModelLODDistance(2717, 300)
-	engineSetModelLODDistance(3798, 300)
-	engineSetModelLODDistance(13645, 300)
-end
+	function()	
+		setElementData(localPlayer, "coremarkers_powerType", false, true)
+		setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false, true)
+		setElementData(localPlayer, "coremarkers_isPlayerRektBySpikes", false, true)
+		
+		engineImportTXD ( engineLoadTXD ( "oil.txd" ) , 2717 ) 
+		engineImportTXD ( engineLoadTXD ( "crate.txd" ) , 3798 ) 
+		
+		engineSetModelLODDistance(1225, 100)
+		engineSetModelLODDistance(3374, 300)
+		engineSetModelLODDistance(2717, 300)
+		engineSetModelLODDistance(3798, 300)
+		engineSetModelLODDistance(13645, 300)
+	end
 )
 
 
@@ -402,7 +402,9 @@ addEvent("startShootMinigun", true)
 addEventHandler("startShootMinigun", root, 
 	function(thePlayer)
 		if not isTimer(minigunTimer[thePlayer]) then
-			removePower(nil, minigunItemTime)
+			if thePlayer == localPlayer then
+				removePower(nil, minigunItemTime)
+			end
 			minigunTimer[thePlayer] = setTimer(
 				function()
 					if minigunPlayer[thePlayer] then
