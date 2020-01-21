@@ -451,7 +451,9 @@ addEventHandler('onPlayerFinish', root,
 				end
 			end
 		else
-			outputChatBox("there's no enough players online to record a streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
+			if (rank == 1) then
+				outputChatBox("There aren't enough players online to record this streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
+			end
 		end
     end
 )
@@ -469,7 +471,7 @@ function triggerStreakForOtherGamemodes()
 			end
 		end
 	else
-		outputChatBox("there's no enough players online to record a streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
+		outputChatBox("There aren't enough players online to record this streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
 	end
 end
 addEventHandler("onPlayerWinDD", root, triggerStreakForOtherGamemodes)
