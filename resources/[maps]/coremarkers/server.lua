@@ -733,3 +733,16 @@ function removeMinigun()
 end
 addEvent("removeMinigun", true)
 addEventHandler("removeMinigun", root, removeMinigun)
+
+
+--------------------------------------------
+-- Force CoreMarkers to stop on map stops --
+--------------------------------------------
+addEvent('onGamemodeMapStop', true)
+addEventHandler('onGamemodeMapStop', root, 
+	function()
+		if getResourceState(resource) == "running" then
+			stopResource(resource)
+		end
+    end
+)
