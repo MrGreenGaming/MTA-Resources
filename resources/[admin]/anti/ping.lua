@@ -94,5 +94,11 @@ end
 addEvent("clientCheck", true)
 addEventHandler("clientCheck", getRootElement(), doubleCheck )
 
+-------------------------------------------------------
+----------- Lagger detection 
+-------------------------------------------------------
 
-
+addEvent("onLaggerRequestKick", true)
+addEventHandler("onLaggerRequestKick", root, function()
+    kickPlayer(source, "High Packet Loss (lagger)")
+end)
