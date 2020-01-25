@@ -1,80 +1,104 @@
-------------------------------------------
--- Fps checker, invertal check system, 	--
--- with strikes. Limit = kickPlayer		--
--------------------------------------------
+----------------------------------------------
+-- Ping checker, sends a request to client,	--
+-- client checks if downloading, responds,	--
+-- server double-checks and kicks if needed	--
+-- Also does check for stuck 0-ping players --
+----------------------------------------------
 
-local fpsMinimum = 25
-local checkInterval = 3 * 1000
-local maxStrikes = 5
-local fpsStrikes = {}
+local pingLimit1 = 250
+local pingLimit2 = 350
+local hour1 = 0
+local hour2 = 8
+local pingCheckTime = 5 * 1000
 
--- Set limit to element data
-addEventHandler("onResourceStart",resourceRoot,
-	function()
-		setElementData(root,"anti_fpsMinimum",fpsMinimum)
-	end)
-addEventHandler("onResourceStop",resourceRoot,
-	function()
-		setElementData(root,"anti_fpsMinimum",nil)
-	end)
 
 -------------------
 -- Checking ping --
 -------------------
 
-addEvent("onGamemodeMapStart")
-addEventHandler("onGamemodeMapStart",root,function() fpsStrikes = {} end)
-
 addEventHandler ( "onResourceStart", resourceRoot,
 	function()
-		setTimer(checkFPS, checkInterval, 0)	
+		setTimer(checkPing, pingCheckTime, 0)	
 	end
 )
 
-function checkFPS()
-	-- if not (getResourceRootElement(getResourceFromName'race') and getElementData(getResourceRootElement(getResourceFromName'race'), 'info') and getElementData(getResourceRootElement(getResourceFromName'race'), 'info').mapInfo.modename == "Destruction derby") then
-	-- 	return
-	-- end
+
+function getPingLimit()
+	local h = getRealTime().hour
+	return (hour1 <= h and h <= hour2) and pingLimit2 or pingLimit1
+end
+addCommandHandler( "ping", function(plyr) outputChatBox("Max Ping: ".. getPingLimit() ..". Your ping: ".. getPlayerPing(plyr)..".",plyr) end )
+
+
+-- Set limit to element data
+addEventHandler("onResourceStart",resourceRoot,
+	function()
+		setElementData(root,"anti_pinglimit",getPingLimit())
+		setTimer(function() setElementData(root,"anti_pinglimit",getPingLimit()) end,60000,0)
+	end)
+addEventHandler("onResourceStop",resourceRoot,
+	function()
+		setElementData(root,"anti_pinglimit",nil)
+	end)
+
+
+function checkPing()
+	local pingLimit = getPingLimit()
 	for theKey,thePlayer in ipairs(getElementsByType ( "player" )) do
-		local fps = getElementData(thePlayer, "fps")
-		if not tonumber(fps) then return end
 		if raceState ~= "Running" then return end
-		if not punishedForMap[thePlayer] and (fps < fpsMinimum) and not getElementData(thePlayer, "isGameMinimized") and getElementData(thePlayer, 'state') == "alive" and not isGhostModeEnabled(thePlayer) then
-			-- If the player's fps is low, add a strike
-			fpsStrikes[thePlayer] = fpsStrikes[thePlayer] and (fpsStrikes[thePlayer] + 1) or 1
-			-- textDisplayAddObserver ( warnFPS, thePlayer )
-			if fpsStrikes[thePlayer] > maxStrikes then
-				if not hasObjectPermissionTo ( thePlayer, "general.adminpanel" ) then
-					local action = "killed"
-					if exports.race:getRaceMode() == "Shooter" or exports.race:getRaceMode() == "Destruction derby" or exports.race:getRaceMode() == "Deadline" then
-						setElementHealth(thePlayer, 0)
-					else
-						-- triggerClientEvent(thePlayer, 'spectate', resourceRoot)
-						action = "put in collisionless state"
-						setPlayerCollisionless(thePlayer)
-					end
-					outputChatBox('You were '..action..' for low fps (min ' .. fpsMinimum .. ')', thePlayer, 255, 165, 0)
-					fpsStrikes[thePlayer] = nil
-					punishedForMap[thePlayer] = true
-					-- textDisplayRemoveObserver(warnFPS, thePlayer)
-				end
-			end
-		elseif fpsStrikes[thePlayer] then
-			fpsStrikes[thePlayer] = nil
-			-- textDisplayRemoveObserver(warnFPS, thePlayer)
+		local ip = split(getPlayerIP(thePlayer), '.')
+
+		if not hasObjectPermissionTo ( thePlayer, "general.adminpanel" ) and (getPlayerPing(thePlayer) > pingLimit) and getElementData(thePlayer, 'state') == "alive" and not isGhostModeEnabled(thePlayer) then
+			-- If the player's ping is too high and he's not an admin, show him the text and set a timer for the next check
+			-- textDisplayAddObserver ( warn, thePlayer )
+			setTimer(firstCheck, pingCheckTime, 1, thePlayer)
+		end	
+	end
+end
+
+function firstCheck ( thePlayer )
+	local pingLimit = getPingLimit()
+	if not isElement ( thePlayer ) then return end
+	if (getPlayerPing(thePlayer) > pingLimit and getElementData(thePlayer, 'state') == "alive") then
+		-- If the player's ping is still to high, send him an event
+		triggerClientEvent(thePlayer, 'downloadCheck', root, pingLimit, pingCheckTime)
+	else
+		-- textDisplayRemoveObserver(warn, thePlayer)
+	end
+end
+
+----------------------------
+-- Last check and kicking --
+----------------------------
+
+function doubleCheck ( needKill )
+	local pingLimit = getPingLimit()
+	local thePlayer = client
+	if punishedForMap[thePlayer] then return end
+	if (needKill) and (getPlayerPing(thePlayer) > pingLimit) and getElementData(thePlayer, 'state') == "alive" then
+		local action = "killed"
+		if exports.race:getRaceMode() == "Shooter" or exports.race:getRaceMode() == "Destruction derby" or exports.race:getRaceMode() == "Deadline" then
+			setElementHealth(thePlayer, 0)
+		else
+			-- triggerClientEvent(thePlayer, 'spectate', resourceRoot)
+			action = "put in collisionless state"
+			setPlayerCollisionless(thePlayer)
 		end
+		outputChatBox('You were '..action..' for high ping (Max ' .. pingLimit .. ')', thePlayer, 255, 165, 0)
+		outputConsole(getPlayerName(thePlayer) .. ' was '..action..' for high ping (Max ' .. pingLimit .. ')')
+		punishedForMap[thePlayer] = true
+	else
+		-- textDisplayRemoveObserver(warn, thePlayer)
 	end
 end
+addEvent("clientCheck", true)
+addEventHandler("clientCheck", getRootElement(), doubleCheck )
 
-addEventHandler('onPlayerQuit', root, function()
-	fpsStrikes[source] = nil
+-------------------------------------------------------
+----------- Lagger detection 
+-------------------------------------------------------
+
+addEvent("onLaggerRequestKick", true)
+addEventHandler("onLaggerRequestKick", root, function()
+    kickPlayer(source, "High Packet Loss (lagger)")
 end)
-
-
-
-function isGhostModeEnabled(player)
-	if getElementData( player, "overrideCollide.uniqueblah" ) and getElementData( player, "overrideAlpha.uniqueblah" ) then
-		return true
-	end
-	return false
-end
