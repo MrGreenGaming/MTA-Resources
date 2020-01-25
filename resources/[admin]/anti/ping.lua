@@ -95,27 +95,10 @@ addEvent("clientCheck", true)
 addEventHandler("clientCheck", getRootElement(), doubleCheck )
 
 -------------------------------------------------------
------------ Packet Loss detection 
+----------- Lagger detection 
 -------------------------------------------------------
 
-function doubleCheckForPacket( needKill )
-	local thePlayer = client
-	if punishedForMap[thePlayer] then return end
-	if (needKill) and getElementData(thePlayer, 'state') == "alive" then
-		local action = "killed"
-		if exports.race:getRaceMode() == "Shooter" or exports.race:getRaceMode() == "Destruction derby" or exports.race:getRaceMode() == "Deadline" then
-			setElementHealth(thePlayer, 0)
-		else
-			-- triggerClientEvent(thePlayer, 'spectate', resourceRoot)
-			action = "put in collisionless state"
-			setPlayerCollisionless(thePlayer)
-		end
-		outputChatBox('You were '..action..' for high packet loss.', thePlayer, 255, 165, 0)
-		outputConsole(getPlayerName(thePlayer) .. ' was '..action..' for high packet loss.')
-		punishedForMap[thePlayer] = true
-	else
-		-- textDisplayRemoveObserver(warn, thePlayer)
-	end
-end
-addEvent("onLaggerRequestKill", true)
-addEventHandler("onLaggerRequestKill", root, doubleCheckForPacket)
+addEvent("onLaggerRequestKick", true)
+addEventHandler("onLaggerRequestKick", root, function()
+    kickPlayer(source, "High Packet Loss (lagger)")
+end)
