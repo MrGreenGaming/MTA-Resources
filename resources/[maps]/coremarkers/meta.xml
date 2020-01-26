@@ -1,6 +1,6 @@
 <meta>
 	<file src="marker.mp3"></file>
-	<file src="kmz.mp3"></file>
+	<!--Disabled <file src="kmz.mp3"></file> -->
 	<file src="speed.mp3"></file>
 	<file src="fly.mp3"></file>
     <file src="oil.txd"></file>
@@ -27,7 +27,7 @@
 	<file src="pics/nitro.png"></file>
 	<file src="pics/speed.png"></file>
 	<file src="pics/fly.png"></file>
-	<file src="pics/kmz.png"></file>
+	<!--Disabled <file src="pics/kmz.png"></file> -->
 	<file src="pics/minigun.png"></file>
 	
 	<script src="utilites_s.lua" type="server"></script>
@@ -38,6 +38,6 @@
     <script src="client.lua" type="client"></script>
     <script src="server.lua" type="server"></script>
 
-<info author="AleksCore" name="Core Markers" description="Pickups with random power-ups by AleksCore" version="0.9.1.3" type="script" />
+	<info author="AleksCore" name="Core Markers" description="Pickups with random power-ups by AleksCore" version="0.9.1.4" type="script" />
 	<min_mta_version server="1.5.5-9.14060" />
 </meta>
