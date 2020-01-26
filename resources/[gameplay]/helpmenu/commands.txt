@@ -1,5 +1,7 @@
 -------------------------------> Keys <-------------------------------
 
+
+
 GC Bike Trails  (Required perk)
 1, 2, 3, 4, 5 - Each of these do different animations when the bike is in the air.
 to turn off perk /trials or /trials 0 
@@ -31,6 +33,7 @@ B       - Toggle spectator.
 
    
 -------------------------------> Commands <-------------------------------
+
 
 
 /autologin name pass                                Auto login
@@ -102,9 +105,11 @@ B       - Toggle spectator.
 /time                                               Time of server.
 /toggleicon                                         Toggle typing icon.
 /upload                                             Show upload address.
+/getpackets [player]                                Show's if a player is lagging (anything above %0.0 considered as a lag number).
 
 
 -------------------------------> Mods <-------------------------------
+
 
 /blocker <name> <hours>
 For example the following command will mark me as blocker for 2 hours:

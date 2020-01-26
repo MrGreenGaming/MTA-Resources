@@ -119,3 +119,47 @@ function doubleCheckForPacket( needKill )
 end
 addEvent("onLaggerRequestKill", true)
 addEventHandler("onLaggerRequestKill", root, doubleCheckForPacket)
+
+function getPlayerFromPartialName(name)
+    local name = name and name:gsub("#%x%x%x%x%x%x", ""):lower() or nil
+    if name then
+        for _, player in ipairs(getElementsByType("player")) do
+            local name_ = getPlayerName(player):gsub("#%x%x%x%x%x%x", ""):lower()
+            if name_:find(name, 1, true) then
+                return player
+            end
+        end
+    end
+end
+
+function getPackets(thePlayer, commandName, playerName)
+	local r, g, b
+	local nick = getPlayerFromPartialName(tostring(playerName))
+	local lossTotal = getNetworkStats(nick)["packetlossTotal"]
+	local lossLastSecond = getNetworkStats(nick)["packetlossLastSecond"]
+	if (playerName) then
+		if (string.len(playerName) >= 3) then
+			if (isElement(nick)) then
+				if (getElementType( nick ) == "player") then
+					if (lossTotal > 0) or (lossLastSecond > 0) then
+						r, g, b = 255, 0, 0
+					else
+						r, g, b = 0, 255, 0
+					end
+					outputChatBox(playerName.."'s packetlossTotal: %"..lossTotal, thePlayer, 0, 255, 0)
+					outputChatBox(playerName.."'s packetlossLastSecond: %"..lossLastSecond, thePlayer, 0, 255, 0)
+				end
+			else
+				r, g, b = 255, 0, 0
+				outputChatBox("no player found with this name.", thePlayer, r, g, b)
+			end
+		else
+			r, g, b = 255, 0, 0
+			outputChatBox("please write a longer partial name.", thePlayer, r, g, b)
+		end
+	else
+		r, g, b = 255, 0, 0
+		outputChatBox("please write a player name.", thePlayer, r, g, b)
+	end
+end
+addCommandHandler("getpackets", getPackets)
