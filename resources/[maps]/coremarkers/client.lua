@@ -40,6 +40,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		engineSetModelLODDistance(2717, 300)
 		engineSetModelLODDistance(3798, 300)
 		engineSetModelLODDistance(13645, 300)
+		triggerServerEvent("requestAllowedPowerTypes", resourceRoot)
 	end
 )
 

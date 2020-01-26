@@ -122,7 +122,7 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"ramp"},
 					{"rocket"},
 					{"magnet"},
-					{"jump"},
+					--{"jump"},
 					{"rock"},
 					{"smoke"},
 					--{"nitro"},
@@ -155,6 +155,14 @@ addEventHandler('onMapStarting', resourceRoot,
 		triggerClientEvent(root, "getAllowedPowerTypes", resourceRoot, powerTypes)
 	end
 )
+
+addEvent("requestAllowedPowerTypes", true)
+addEventHandler("requestAllowedPowerTypes", root, 
+	function()
+		triggerClientEvent(client, "getAllowedPowerTypes", resourceRoot, powerTypes)
+	end
+)
+
 
 --------------------
 -- Initialization --
