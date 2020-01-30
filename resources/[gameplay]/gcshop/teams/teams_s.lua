@@ -266,6 +266,13 @@ function checkPlayerTeam2(qh, player, bLogin)
             -- Don't use team elements in CTF
             if exports.race:getRaceMode() ~= "Capture the flag" then
                 setPlayerTeam(player, teams[r.teamid])
+				-- Colored blips for default radar by AleksCore
+				local blips = getElementsByType("blip")
+				for _, blip in pairs(blips) do
+					if getElementAttachedTo(blip) == player then
+						setBlipColor(blip, tr, tg, tb, 255)
+					end
+				end
             end
             -- Show personal team message
             if r.message and bLogin then
@@ -285,6 +292,13 @@ function leaveTeam(player)
     end
     if exports.race:getRaceMode() ~= "Capture the flag" then
         setPlayerTeam(player, nil)
+		-- Colored blips for default radar by AleksCore
+		local blips = getElementsByType("blip")
+		for _, blip in pairs(blips) do
+			if getElementAttachedTo(blip) == player then
+				setBlipColor(blip, 200, 200, 200, 255)
+			end
+		end
     end
     invites[player] = nil
 end
@@ -294,6 +308,14 @@ addEventHandler('onGamemodeMapStop', root, function()
     for player, r in pairs(playerteams) do
         if r.status == 1 then
             setPlayerTeam(player, teams[r.teamid])
+			-- Colored blips for default radar by AleksCore
+			local tr, tg, tb = getColorFromString(r.colour)
+			local blips = getElementsByType("blip")
+			for _, blip in pairs(blips) do
+				if getElementAttachedTo(blip) == player then
+					setBlipColor(blip, tr, tg, tb, 255)
+				end
+			end
         end
     end
 end)

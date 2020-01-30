@@ -15,7 +15,7 @@ addEventHandler('onMapStarting', resourceRoot,
 			powerTypes = {
 					{"repair"},
 					{"spikes"},
-					{"boost"},
+					--{"boost"},
 					{"oil"},
 					{"hay"},
 					{"barrels"},
@@ -26,12 +26,12 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"rock"},
 					--{"smoke"},
 					{"nitro"},
-					{"speed"},
+					--{"speed"},
 					--{"fly"},
-					{"kmz"},
+					--{"kmz"},
 					{"minigun"},
 			}
-		elseif currentGameMode == "FREEROAM" then
+		elseif currentGameMode == "FREEROAM" then --race
 			powerTypes = {
 					{"repair"},
 					{"spikes"},
@@ -48,10 +48,10 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"nitro"},
 					{"speed"},
 					{"fly"},
-					{"kmz"},
+					--{"kmz"},
 					{"minigun"},
 			}
-		elseif currentGameMode == "SPRINT" then
+		elseif currentGameMode == "SPRINT" then --also race
 			powerTypes = {
 					{"repair"},
 					{"spikes"},
@@ -68,7 +68,7 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"nitro"},
 					{"speed"},
 					{"fly"},
-					{"kmz"},
+					--{"kmz"},
 					{"minigun"},
 			}
 		elseif currentGameMode == "CAPTURE THE FLAG" then
@@ -88,7 +88,7 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"nitro"},
 					{"speed"},
 					{"fly"},
-					{"kmz"},
+					--{"kmz"},
 					{"minigun"},
 			}
 		elseif currentGameMode == "REACH THE FLAG" then
@@ -108,12 +108,12 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"nitro"},
 					{"speed"},
 					{"fly"},
-					{"kmz"},
+					--{"kmz"},
 					{"minigun"},
 			}
 		elseif currentGameMode == "NEVER THE SAME" then
 			powerTypes = {
-					{"repair"},
+					--{"repair"},
 					{"spikes"},
 					{"boost"},
 					{"oil"},
@@ -128,7 +128,7 @@ addEventHandler('onMapStarting', resourceRoot,
 					--{"nitro"},
 					{"speed"},
 					{"fly"},
-					{"kmz"},
+					--{"kmz"},
 					{"minigun"},
 			}
 		elseif currentGameMode == "SHOOTER" then
@@ -148,7 +148,7 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"nitro"},
 					{"speed"},
 					{"fly"},
-					{"kmz"},
+					--{"kmz"},
 					{"minigun"},
 			}
 		end
