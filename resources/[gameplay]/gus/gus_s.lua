@@ -477,3 +477,27 @@ end
 addEventHandler("onPlayerWinDD", root, triggerStreakForOtherGamemodes)
 addEventHandler("onPlayerWinShooter", root, triggerStreakForOtherGamemodes)
 addEventHandler("onPlayerWinDeadline", root, triggerStreakForOtherGamemodes)
+
+--------------------------------
+-- admin floating message
+--------------------------------
+function isPlayerInACL(player, acl)
+	if isElement(player) and getElementType(player) == "player" and aclGetGroup(acl or "") and not isGuestAccount(getPlayerAccount(player)) then
+		local account = getPlayerAccount(player)
+		
+		return isObjectInACLGroup( "user.".. getAccountName(account), aclGetGroup(acl) )
+	end
+	return false
+end
+
+function sendMessageToAllPlayers(thePlayer, commandName, ...)
+	local message = table.concat({...}, " ")
+	if (isPlayerInACL(thePlayer, "Admin")) then
+		if (...) then
+			exports.messages:outputGameMessage(message, who or root, nil, 255, 153, 51)
+		else 
+			outputChatBox("SYNTAX: /"..commandName.." [text]", thePlayer, 255, 0, 0)
+		end
+	end
+end
+addCommandHandler("msgall", sendMessageToAllPlayers, false, false)
