@@ -3,6 +3,7 @@ local magnetSlowDownTime = 7000
 local markersRespawn = 5000
 local marker = {}
 local markerTimer = {}
+local powerTypes = {}
 
 ------------------------
 -- Gamemode Detection --
@@ -42,13 +43,13 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"ramp"},
 					{"rocket"},
 					{"magnet"},
-					{"jump"},
+					--{"jump"},
 					{"rock"},
 					{"smoke"},
 					{"nitro"},
 					{"speed"},
 					{"fly"},
-					--{"kmz"},
+					{"kmz"},
 					{"minigun"},
 			}
 		elseif currentGameMode == "SPRINT" then --also race
@@ -62,13 +63,13 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"ramp"},
 					{"rocket"},
 					{"magnet"},
-					{"jump"},
+					--{"jump"},
 					{"rock"},
 					{"smoke"},
 					{"nitro"},
 					{"speed"},
 					{"fly"},
-					--{"kmz"},
+					{"kmz"},
 					{"minigun"},
 			}
 		elseif currentGameMode == "CAPTURE THE FLAG" then
@@ -88,7 +89,7 @@ addEventHandler('onMapStarting', resourceRoot,
 					{"nitro"},
 					{"speed"},
 					{"fly"},
-					--{"kmz"},
+					{"kmz"},
 					{"minigun"},
 			}
 		elseif currentGameMode == "REACH THE FLAG" then
@@ -128,7 +129,7 @@ addEventHandler('onMapStarting', resourceRoot,
 					--{"nitro"},
 					{"speed"},
 					{"fly"},
-					--{"kmz"},
+					{"kmz"},
 					{"minigun"},
 			}
 		elseif currentGameMode == "SHOOTER" then
@@ -673,14 +674,16 @@ addEventHandler("doJump", root,
 -- Function: Attach Marker --
 -----------------------------
 function attachMarker(theVehicle, timer, r, g, b, a)
-	local player = getVehicleOccupant(theVehicle)
+	local player = theVehicle and getVehicleOccupant(theVehicle) or client
+	local vehicle = theVehicle or getPedOccupiedVehicle(client)
 	if isElement(marker[player]) then destroyElement(marker[player]) end
 	marker[player] = createMarker( 0, 0, -200, 'corona', 2, r, g, b, 80)
-	attachElements(marker[player], theVehicle)
+	attachElements(marker[player], vehicle)
 	markerTimer[player] = setTimer(function(marker) if isElement(marker) then destroyElement(marker) end end, timer, 1, marker[player])
 	return marker[player]
 end
-
+addEvent("attachMarker", true)
+addEventHandler("attachMarker", root, attachMarker)
 
 -----------------------
 -- Kills Information --
