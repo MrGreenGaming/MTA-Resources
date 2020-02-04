@@ -4,8 +4,8 @@ local delay = 2000
 local animSpeed = 20
 
 local speedItemTime = 12000
-local flyItemTime = 12000
-local minigunItemTime = 6000
+local flyItemTime = 4000
+local minigunItemTime = 5000
 
 local sWidth, sHeight = guiGetScreenSize()
 local iconPosX = 902.5*sWidth/1920
@@ -17,6 +17,7 @@ local circleSize = 170*sHeight/1080
 
 local powerTypes
 local powerTypesBackup
+local lastModel
 
 function getAllowedPowerTypes(tbl)
 	powerTypes = tbl
@@ -56,12 +57,21 @@ function getRandomPower()
 	table.remove(powerTypes, randomNumber)
 	--Make kmz appear less often
 	if randomPower == "kmz" then
-		if math.random(5) == math.random(5) then
+		local num1 = math.random(10)
+		local num2 = math.random(10)
+		--outputChatBox(num1.." - "..num2)
+		if num1 == num2 then
 			--kmz!!!
 		else
 			--new item
 			if #powerTypes == 0 then
 				powerTypes = table.copy(powerTypesBackup)
+				for i=1, #powerTypes do
+					if unpack(powerTypes[i]) == "kmz" then
+						table.remove(powerTypes, i)
+						--outputChatBox('removed kmz from new table')
+					end
+				end
 			end
 			local randomNumber = math.random(#powerTypes)
 			randomPower = unpack(powerTypes[randomNumber])
@@ -174,7 +184,9 @@ function onPlayerUsePower(key, keyState, powerType)
 		triggerServerEvent("dropSpikes", resourceRoot, x, y, z, rz)
 	elseif powerType == "boost" then
 		local currentSpeed = getElementSpeed(theVehicle, "kmh")
-		setElementSpeed(theVehicle, "kmh", currentSpeed+250)
+		setElementSpeed(theVehicle, "kmh", currentSpeed+150)
+		triggerServerEvent("startSound3D", resourceRoot, "boost.mp3")
+		triggerServerEvent("attachMarker", resourceRoot, nil, 1000, 0, 255, 0, 80)
 	elseif powerType == "oil" then 
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
 		local z = getGroundPosition(x, y, z)	
@@ -305,21 +317,31 @@ function onPlayerUsePower(key, keyState, powerType)
 				setRadioChannel(radioChannel)
 				
 				if isElement(theVehicle) then
-					setElementModel(theVehicle, 539)
+					local x, y, z = getElementPosition(theVehicle)
+					local groundZ = getGroundPosition(x, y, z)
+					--outputChatBox(z.." - "..groundZ)
 					setWorldSpecialPropertyEnabled("aircars", false)
-					--setGravity(0.016)
-					gravityTimer = setTimer(
-						function()
-							if not isElement(theVehicle) then return end
-							if isVehicleOnGround(theVehicle) then
-								--setGravity(0.008)
-								local x, y, z = getElementVelocity(theVehicle)
-								setElementVelocity(theVehicle, x, y, z+0.1)
-								setElementModel(theVehicle, vehicleModel)
-								if isTimer(gravityTimer) then killTimer(gravityTimer) end
+					if not lastModel then lastModel = vehicleModel end
+					if math.abs(z-groundZ) >= 7 and getVehicleType(lastModel) ~= "Helicopter" and getVehicleType(lastModel) ~= "Plane" and getVehicleType(lastModel) ~= "Boat" then
+						setElementModel(theVehicle, 539)
+						gravityTimer = setTimer(
+							function()
+								if not isElement(theVehicle) then return end
+									local x, y, z = getElementPosition(theVehicle)
+									local groundZ = getGroundPosition(x, y, z)
+									local z = (z+vehicleBoundingBox[lastModel][3])-1
+									--outputChatBox("vehicle min z: "..z.." - groundZ: "..groundZ)
+								if z <= groundZ or isVehicleOnGround(theVehicle) then
+									local x, y, z = getElementVelocity(theVehicle)
+									setElementVelocity(theVehicle, x, y, z+0.1)
+									setElementModel(theVehicle, lastModel)
+									if isTimer(gravityTimer) then killTimer(gravityTimer) end
+								end
 							end
-						end
-					, 50, 0)
+						, 50, 0)
+					else
+						setElementModel(theVehicle, lastModel)
+					end					
 				end 
 			end
 		, flyItemTime, 1)
@@ -653,6 +675,12 @@ addEventHandler("onClientPlayerWasted", root, onClientPlayerWasted)
 function vehicleChange(oldModel, newModel)
 	if getElementType(source) == "vehicle" then
 		--outputChatBox("Model ID changing from: "..oldModel.." to: ".. newModel, 0, 255, 0)
+		if getVehicleOccupant(source) == localPlayer then
+			if newModel ~= 539 and newModel ~= 411 then
+				lastModel = newModel
+			end
+			if isTimer(gravityTimer) then killTimer(gravityTimer) end
+		end
 		local thePlayer = getVehicleOccupant(source)
 		if isElement(thePlayer) and getElementData(thePlayer, "coremarkers_powerType") == "minigun" then 
 			local minX, minY, minZ, maxX, maxY, maxZ = getElementBoundingBox(source)
