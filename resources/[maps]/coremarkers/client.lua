@@ -4,7 +4,7 @@ local delay = 2000
 local animSpeed = 20
 
 local speedItemTime = 12000
-local flyItemTime = 4000
+local flyItemTime = 7000
 local minigunItemTime = 5000
 
 local sWidth, sHeight = guiGetScreenSize()
