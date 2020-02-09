@@ -1,0 +1,14 @@
+<def name="NFS Arrows">
+	<setting name="nfsarrows_color" friendlyname="NFS Arrows Color" type="selection:red,green,blue,cyan,purple,orange,yellow,pink" description="" default="blue" required="true"/>
+	
+	<element name="nfs_arrow" friendlyname="NFS Arrow" icon="img/icon.png">
+		<object model="3851" posZ="0.05" />
+		<marker position="0,0,0" type="corona" size="5.35" color="#00000000" editorOnly="true"/>
+		<data name="doublesided" type="selection:false,true" description="MTA double sidedness" required="true" default="true" />
+		<data name="position" type="coord3d" required="true" default="0,0,0" />
+		<data name="rotation" type="coord3d" required="true" default="0,0,0" />
+	</element>
+	
+	<script src="edf_c.lua" type="client" />
+	<script src="edf_s.lua" type="server" />
+</def>
