@@ -11,31 +11,60 @@
 				description="If the MrGreenGaming racemode has dynamic ghostmode enabled, ghostmode will turn off after reaching this checkpoint (default is 5)" 
 				required="false"
 	/>
-
+	<setting 	name="nfsarrows_color" 
+				friendlyname="NFS Arrows Color" 
+				type="selection:red,green,blue,cyan,purple,orange,yellow,pink" 
+				description="" 
+				default="blue" 
+				required="true"
+	/>
+	<setting 	name="coremarkers_respawn" 
+				friendlyname="CoreMarkers Respawn"
+				type="natural" 				
+				default="5000"
+				description="Respawn delay in miliseconds. 1s = 1000ms" 
+				required="true"
+	/>
+	
  	<!-- <element name="checkpoint" friendlyname="NTS Checkpoint">
 		<data name="nts" type="selection:vehicle,water,air" required="true" />
 	</element> -->
 
-	<element name="rtf" friendlyname="RTF Flag" instructions="The flag to be captured." >
+	<element name="rtf" friendlyname="***RTF Flag" instructions="The flag to be captured." >
 		<data name="position" type="coord3d" default="0,0,0" />
 		<object model="2993" position="0,0,0" />
 		<marker position="0,0,0" size="1.5" type="corona" color="#00ff00ff" />
 	</element>
-	<element name="ctfred" friendlyname="Red CTF Flag" instructions="The Red flag to be captured." icon="red.png" >
+	<element name="ctfred" friendlyname="**Red CTF Flag" instructions="The Red flag to be captured." icon="red.png" >
 		<data name="position" type="coord3d" default="0,0,0" />
 		<object model="2914" position="0,0,0" />
 		<marker position="0,0,0" size="1.5" type="cylinder" color="#ff0000ff" />
 	</element>
-	<element name="ctfblue" friendlyname="Blue CTF Flag" instructions="The Blue flag to be captured." icon="blue.png" >
+	<element name="ctfblue" friendlyname="**Blue CTF Flag" instructions="The Blue flag to be captured." icon="blue.png" >
 		<data name="position" type="coord3d" default="0,0,0" />
 		<object model="2048" position="0,0,0" />
 		<marker position="0,0,0" size="1.5" type="cylinder" color="#0000ffff" />
 	</element>
-	<element name="randommarker" friendlyname="Random Marker" instructions="A pickup marker for the RandomMarkers script" >
+	<element name="randommarker" friendlyname="*Random Marker" instructions="A pickup marker for the RandomMarkers script" >
 		<data name="position" type="coord3d" default="0,0,0" />
 		<marker position="0,0,0" size="4" type="cylinder" color="#0000ffff" />
 	</element>
+	<element name="nfs_arrow" friendlyname="*NFS Arrow" icon="nfsarrows/img/icon.png">
+		<object model="3851" posZ="0.05" />
+		<marker position="0,0,0" type="corona" size="5.35" color="#00000000" editorOnly="true"/>
+		<data name="doublesided" type="selection:false,true" description="MTA double sidedness" required="true" default="true" />
+		<data name="position" type="coord3d" required="true" default="0,0,0" />
+		<data name="rotation" type="coord3d" required="true" default="0,0,0" />
+	</element>
+	<element name="coremarker" friendlyname="*CoreMarker" icon="coremarker.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<object model="3798" posZ="0.3" editorOnly="true"/>
+		<marker posZ="-2.75" size="3.3" type="cylinder" color="#00ff00ff" editorOnly="true" />
+	</element>
+	
 	<script src="edf_s.lua" type="server" />
 	<script src="edf_c.lua" type="client" />
-	
+	<script src="nfsarrows/edf_c.lua" type="client" />
+	<script src="nfsarrows/edf_s.lua" type="server" />
+		
  </def>

@@ -11,6 +11,7 @@ local powerTypes = {}
 addEvent('onMapStarting')
 addEventHandler('onMapStarting', resourceRoot, 
 	function(mapInfo, mapOptions, gameOptions)
+		currentMap = mapInfo.resname
 		currentGameMode = string.upper(mapInfo.modename)
 		if currentGameMode == "DESTRUCTION DERBY" then
 			powerTypes = {
@@ -184,10 +185,18 @@ addEventHandler("onResourceStart", resourceRoot,
 			end
 		, 1000, 11)
 		
-		for index, object in ipairs(getElementsByType("object")) do
-			if getElementModel(object) == 3798 then
-				local x, y, z = getElementPosition(object)
-				spawnPickup(object, x, y, z)
+		local coremarkers = getElementsByType("coremarker")
+		if #coremarkers > 0 then --new way, coremarkers as elements placed into .map file using mrgreen map editor plugin
+			for _, element in ipairs(coremarkers) do
+				local x, y, z = getElementPosition(element)
+				spawnPickup(element, x, y, z)
+			end
+		else --old way, coremarkers as solid boxes
+			for _, object in ipairs(getElementsByType("object")) do
+				if getElementModel(object) == 3798 then
+					local x, y, z = getElementPosition(object)
+					spawnPickup(object, x, y, z)
+				end
 			end
 		end
 	end
@@ -199,7 +208,7 @@ addEventHandler("onResourceStart", resourceRoot,
 ---------------------------
 function spawnPickup(object, x, y, z, isRespawn)
 	if not z then return end --for tests
-	if object == nil then
+	if object == nil or getElementType(object) == "coremarker" then
 		object = createObject(3798, x, y, z+0.3)
 	end
 	
@@ -254,8 +263,8 @@ function getRandomPower(thePlayer) --onColShapeHit
 			-- Markers Respawn --
 			---------------------
 			local x, y, z = getElementPosition(source)
-			if get("coremarkers_respawn") ~= false and type(get("coremarkers_respawn")) == "number" and get("coremarkers_respawn") >= 0  then
-				setTimer(spawnPickup, get("coremarkers_respawn"), 1, false, x, y, z, true)
+			if currentMap and get(currentMap..".coremarkers_respawn") ~= false and type(get(currentMap..".coremarkers_respawn")) == "number" and get(currentMap..".coremarkers_respawn") >= 0  then
+				setTimer(spawnPickup, get(currentMap..".coremarkers_respawn"), 1, nil, x, y, z, true)
 			else
 				setTimer(spawnPickup, markersRespawn, 1, nil, x, y, z, true)
 			end

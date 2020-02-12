@@ -1,5 +1,5 @@
 <meta>
-	<info author="SDK" description="Map editor plugin for MrGreenGaming race modes" type="script" version="0.2" edf:definition="mrgreen.edf" />
+	<info author="SDK" description="Map editor plugin for MrGreenGaming race modes" type="script" version="0.2.1" edf:definition="mrgreen.edf" />
 	
 	<script src="edf_s.lua" type="server" />
 	<script src="edf_c.lua" type="client" />
@@ -9,4 +9,22 @@
 	<file src="red.png" />
 	<file src="red.txd" />
 	<file src="flag.dff" />
+	<file src="crate.txd" />
+	
+	<file src="nfsarrows/img/icon.png" />
+    <file src="nfsarrows/img/red.png" />
+	<file src="nfsarrows/img/green.png" />
+	<file src="nfsarrows/img/blue.png" />
+	<file src="nfsarrows/img/cyan.png" />
+	<file src="nfsarrows/img/purple.png" />
+	<file src="nfsarrows/img/orange.png" />
+	<file src="nfsarrows/img/yellow.png" />
+	<file src="nfsarrows/img/pink.png" />
+	
+    <file src="nfsarrows/shader.fx" />
+	
+    <file src="nfsarrows/barrier.dff" />
+    <file src="nfsarrows/barrier.col" />
+	
+	<file src="coremarker.png" />
 </meta>
