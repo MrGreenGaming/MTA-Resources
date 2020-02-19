@@ -4,6 +4,8 @@ local color = nil
 addEventHandler("onResourceStart", root, 
 	function(res)
 		if getResourceName(res) ~= "editor_test" then return end
+		local nfsarrowsRes = getResourceFromName("nfsarrows")
+		if nfsarrowsRes and getResourceState( nfsarrowsRes ) == "running" then return end
 		--------------------------------------------------------------------------------------------------------
 		for _, v in pairs( getElementsByType("nfs_arrow", getResourceRootElement(res)) ) do
 			local x, y, z = getElementData(v, "posX"), getElementData(v, "posY"), getElementData(v, "posZ")+0.05

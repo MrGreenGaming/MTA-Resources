@@ -188,8 +188,10 @@ addEventHandler("onResourceStart", resourceRoot,
 		local coremarkers = getElementsByType("coremarker")
 		if #coremarkers > 0 then --new way, coremarkers as elements placed into .map file using mrgreen map editor plugin
 			for _, element in ipairs(coremarkers) do
-				local x, y, z = getElementPosition(element)
-				spawnPickup(element, x, y, z)
+				if getElementType(getElementParent(element)) == "map" then --for map editor. 'mapContainer' parent means objects created by map editor, ignore them
+					local x, y, z = getElementPosition(element)
+					spawnPickup(element, x, y, z)
+				end
 			end
 		else --old way, coremarkers as solid boxes
 			for _, object in ipairs(getElementsByType("object")) do

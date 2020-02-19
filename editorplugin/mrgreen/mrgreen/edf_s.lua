@@ -22,32 +22,37 @@ addEventHandler( "onResourceStart", root, function ( res )
 		racemode(source)
 	end
 
-	-- while testing in map editor this triggers twice for each randommarker, fuck it i dont know why
 	for _, mrkr in ipairs( getElementsByType'randommarker', getResourceRootElement(res) ) do
-		local x, y, z = getElementPosition(mrkr)
-		elements[#elements+1] = createMarker (x, y, z, "cylinder", markersize, 0, 255, 0, 150) -- Creates the markers
-		setElementParent(elements[#elements], mrkr)
-		addEventHandler('onMarkerHit', elements[#elements], function(hitElement, dim)
-			if not (dim and getElementType(hitElement) == 'vehicle' and not isVehicleBlown(hitElement) and getVehicleController(hitElement) and getElementHealth(getVehicleController(hitElement)) ~= 0) then return end
-			outputChatBox('Markers: You picked up a RandomMarkers pickup', getVehicleController(hitElement), 0, 255, 0)
-		end)
+		if getElementType(getElementParent(mrkr)) == "map" then --ignore elements with parent mapContainer (they are created by map editor), only elements from the .map will be used
+			local x, y, z = getElementPosition(mrkr)
+			elements[#elements+1] = createMarker (x, y, z, "cylinder", markersize, 0, 255, 0, 150) -- Creates the markers
+			setElementParent(elements[#elements], mrkr)
+			addEventHandler('onMarkerHit', elements[#elements], function(hitElement, dim)
+				if not (dim and getElementType(hitElement) == 'vehicle' and not isVehicleBlown(hitElement) and getVehicleController(hitElement) and getElementHealth(getVehicleController(hitElement)) ~= 0) then return end
+				outputChatBox('Markers: You picked up a RandomMarkers pickup', getVehicleController(hitElement), 0, 255, 0)
+			end)
+		end
 	end
-	
+
+	local coremarkersRes = getResourceFromName("coremarkers")
+	if coremarkersRes and getResourceState( coremarkersRes ) == "running" then return end
 	for _, mrkr in ipairs( getElementsByType'coremarker', getResourceRootElement(res) ) do
-		local x, y, z = getElementPosition(mrkr)
-		local col = createColSphere(x, y, z, 3.7)
-		elements[#elements+1] = col
-		local object = createObject(3798, x, y, z+0.3)
-		local marker = createMarker (x, y, z-2.75, "cylinder", 3.3, 0, 255, 0, 150)
-		setElementParent(object, col)
-		setElementParent(marker, col)
-		setObjectScale(object, 0.6)
-		setElementCollisionsEnabled(object, false)
-		addEventHandler("onColShapeHit", col, function(thePlayer)
-			if getElementType(thePlayer) == "player" then
-				outputChatBox('Markers: You picked up a CoreMarkers pickup', thePlayer, 0, 255, 0)
-			end
-		end)
+		if getElementType(getElementParent(mrkr)) == "map" then 
+			local x, y, z = getElementPosition(mrkr)
+			local col = createColSphere(x, y, z, 3.7)
+			elements[#elements+1] = col
+			local object = createObject(3798, x, y, z+0.3)
+			local marker = createMarker (x, y, z-2.75, "cylinder", 3.3, 0, 255, 0, 150)
+			setElementParent(object, col)
+			setElementParent(marker, col)
+			setObjectScale(object, 0.6)
+			setElementCollisionsEnabled(object, false)
+			addEventHandler("onColShapeHit", col, function(thePlayer)
+				if getElementType(thePlayer) == "player" then
+					outputChatBox('Markers: You picked up a CoreMarkers pickup', thePlayer, 0, 255, 0)
+				end
+			end)
+		end
 	end
 end)
 
