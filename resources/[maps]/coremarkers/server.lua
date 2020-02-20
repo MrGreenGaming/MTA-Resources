@@ -4,7 +4,26 @@ local markersRespawn = 5000
 local marker = {}
 local markerTimer = {}
 local powerTypes = {}
-
+local fullPowerTypesList = {
+	"repair",
+	"spikes",
+	"boost",
+	"oil",
+	"hay",
+	"barrels",
+	"ramp",
+	"rocket",
+	"magnet",
+	"jump",
+	"rock",
+	"smoke",
+	"nitro",
+	"speed",
+	"fly",
+	"kmz",
+	"minigun",
+}
+					
 ------------------------
 -- Gamemode Detection --
 ------------------------
@@ -15,149 +34,180 @@ addEventHandler('onMapStarting', resourceRoot,
 		currentGameMode = string.upper(mapInfo.modename)
 		if currentGameMode == "DESTRUCTION DERBY" then
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					--{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					--{"magnet"},
-					{"jump"},
-					{"rock"},
-					--{"smoke"},
-					{"nitro"},
-					--{"speed"},
-					--{"fly"},
-					--{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					--"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					--"magnet",
+					"jump",
+					"rock",
+					--"smoke",
+					"nitro",
+					--"speed",
+					--"fly",
+					--"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "FREEROAM" then --race
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					--{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					--"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "SPRINT" then --also race
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					--{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					--"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "CAPTURE THE FLAG" then
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "REACH THE FLAG" then
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					--{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					--"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "NEVER THE SAME" then
 			powerTypes = {
-					--{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					--{"jump"},
-					{"rock"},
-					{"smoke"},
-					--{"nitro"},
-					{"speed"},
-					{"fly"},
-					{"kmz"},
-					{"minigun"},
+					--"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					--"jump",
+					"rock",
+					"smoke",
+					--"nitro",
+					"speed",
+					"fly",
+					"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "SHOOTER" then
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					--{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					--"kmz",
+					"minigun",
 			}
+		end
+				
+		local powerTypes2 = checkItemsListInMapSettings()
+		if powerTypes2 then
+			powerTypes = powerTypes2
 		end
 		triggerClientEvent(root, "getAllowedPowerTypes", resourceRoot, powerTypes)
 	end
 )
 
+function checkItemsListInMapSettings()
+	local powerTypesList = get(currentMap..".coremarkers_items")
+	if powerTypesList then
+		local powerTypesTemp = {}
+		for power in string.gmatch(powerTypesList, '([^,]+)') do
+			--outputChatBox(power)
+			local isPower = false
+			for i=1, #fullPowerTypesList do
+				if power == fullPowerTypesList[i] then
+					isPower = true
+				end
+			end
+			if isPower then
+				--outputChatBox(power.." - checked, correct")
+				table.insert(powerTypesTemp, power)
+			else
+				--outputChatBox("You have incorrect item '"..power.."' in your list, default items list will be used")
+				return false
+			end
+		end
+		if #powerTypesTemp ~= 0 then
+			return powerTypesTemp
+		end
+	end
+end
+		
 addEvent("requestAllowedPowerTypes", true)
 addEventHandler("requestAllowedPowerTypes", resourceRoot, 
 	function()

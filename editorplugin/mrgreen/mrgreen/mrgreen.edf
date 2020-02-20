@@ -25,6 +25,13 @@
 				description="Respawn delay in miliseconds. 1s = 1000ms" 
 				required="true"
 	/>
+	<setting 	name="coremarkers_items" 
+				friendlyname="CoreMarkers Items"
+				type="string" 				
+				default=""
+				description="List of CoreMarkers items separated by comma. Leave empty if you want it to be default. Example: repair,spikes,boost,oil,hay,barrels,ramp,rocket,magnet,jump,rock,smoke,nitro,speed,fly,kmz,minigun" 
+				required="true"
+	/>
 	
  	<!-- <element name="checkpoint" friendlyname="NTS Checkpoint">
 		<data name="nts" type="selection:vehicle,water,air" required="true" />

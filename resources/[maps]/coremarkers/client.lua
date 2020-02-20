@@ -53,7 +53,7 @@ function getRandomPower()
 		powerTypes = table.copy(powerTypesBackup)
 	end
 	local randomNumber = math.random(#powerTypes)
-	randomPower = unpack(powerTypes[randomNumber])
+	randomPower = powerTypes[randomNumber]
 	table.remove(powerTypes, randomNumber)
 	--Make kmz appear less often
 	if randomPower == "kmz" then
@@ -67,14 +67,14 @@ function getRandomPower()
 			if #powerTypes == 0 then
 				powerTypes = table.copy(powerTypesBackup)
 				for i=1, #powerTypes do
-					if unpack(powerTypes[i]) == "kmz" then
+					if powerTypes[i] == "kmz" then
 						table.remove(powerTypes, i)
 						--outputChatBox('removed kmz from new table')
 					end
 				end
 			end
 			local randomNumber = math.random(#powerTypes)
-			randomPower = unpack(powerTypes[randomNumber])
+			randomPower = powerTypes[randomNumber]
 			table.remove(powerTypes, randomNumber)
 		end
 	end
@@ -105,7 +105,7 @@ function changePic(number)
 	if not isTimer(stopRoulette) then return end
 	
 	local timeleft = getTimerDetails(stopRoulette) 
-	guiStaticImageLoadImage(_typePicture, "pics/"..unpack(powerTypesBackup[number])..".png")
+	guiStaticImageLoadImage(_typePicture, "pics/"..powerTypesBackup[number]..".png")
 	
 	if number >= 1 and number < #powerTypesBackup then
 		nextNumber = number+1
