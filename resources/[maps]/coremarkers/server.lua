@@ -4,7 +4,26 @@ local markersRespawn = 5000
 local marker = {}
 local markerTimer = {}
 local powerTypes = {}
-
+local fullPowerTypesList = {
+	"repair",
+	"spikes",
+	"boost",
+	"oil",
+	"hay",
+	"barrels",
+	"ramp",
+	"rocket",
+	"magnet",
+	"jump",
+	"rock",
+	"smoke",
+	"nitro",
+	"speed",
+	"fly",
+	"kmz",
+	"minigun",
+}
+					
 ------------------------
 -- Gamemode Detection --
 ------------------------
@@ -15,151 +34,182 @@ addEventHandler('onMapStarting', resourceRoot,
 		currentGameMode = string.upper(mapInfo.modename)
 		if currentGameMode == "DESTRUCTION DERBY" then
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					--{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					--{"magnet"},
-					{"jump"},
-					{"rock"},
-					--{"smoke"},
-					{"nitro"},
-					--{"speed"},
-					--{"fly"},
-					--{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					--"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					--"magnet",
+					"jump",
+					"rock",
+					--"smoke",
+					"nitro",
+					--"speed",
+					--"fly",
+					--"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "FREEROAM" then --race
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					--{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					--"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "SPRINT" then --also race
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					--{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					--"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "CAPTURE THE FLAG" then
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "REACH THE FLAG" then
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					--{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					--"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "NEVER THE SAME" then
 			powerTypes = {
-					--{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					--{"jump"},
-					{"rock"},
-					{"smoke"},
-					--{"nitro"},
-					{"speed"},
-					{"fly"},
-					{"kmz"},
-					{"minigun"},
+					--"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					--"jump",
+					"rock",
+					"smoke",
+					--"nitro",
+					"speed",
+					"fly",
+					"kmz",
+					"minigun",
 			}
 		elseif currentGameMode == "SHOOTER" then
 			powerTypes = {
-					{"repair"},
-					{"spikes"},
-					{"boost"},
-					{"oil"},
-					{"hay"},
-					{"barrels"},
-					{"ramp"},
-					{"rocket"},
-					{"magnet"},
-					{"jump"},
-					{"rock"},
-					{"smoke"},
-					{"nitro"},
-					{"speed"},
-					{"fly"},
-					--{"kmz"},
-					{"minigun"},
+					"repair",
+					"spikes",
+					"boost",
+					"oil",
+					"hay",
+					"barrels",
+					"ramp",
+					"rocket",
+					"magnet",
+					"jump",
+					"rock",
+					"smoke",
+					"nitro",
+					"speed",
+					"fly",
+					--"kmz",
+					"minigun",
 			}
+		end
+				
+		local powerTypes2 = checkItemsListInMapSettings()
+		if powerTypes2 then
+			powerTypes = powerTypes2
 		end
 		triggerClientEvent(root, "getAllowedPowerTypes", resourceRoot, powerTypes)
 	end
 )
 
+function checkItemsListInMapSettings()
+	local powerTypesList = get(currentMap..".coremarkers_items")
+	if powerTypesList then
+		local powerTypesTemp = {}
+		for power in string.gmatch(powerTypesList, '([^,]+)') do
+			--outputChatBox(power)
+			local isPower = false
+			for i=1, #fullPowerTypesList do
+				if power == fullPowerTypesList[i] then
+					isPower = true
+				end
+			end
+			if isPower then
+				--outputChatBox(power.." - checked, correct")
+				table.insert(powerTypesTemp, power)
+			else
+				--outputChatBox("You have incorrect item '"..power.."' in your list, default items list will be used")
+				return false
+			end
+		end
+		if #powerTypesTemp ~= 0 then
+			return powerTypesTemp
+		end
+	end
+end
+		
 addEvent("requestAllowedPowerTypes", true)
-addEventHandler("requestAllowedPowerTypes", root, 
+addEventHandler("requestAllowedPowerTypes", resourceRoot, 
 	function()
 		triggerClientEvent(client, "getAllowedPowerTypes", resourceRoot, powerTypes)
 	end
@@ -188,8 +238,10 @@ addEventHandler("onResourceStart", resourceRoot,
 		local coremarkers = getElementsByType("coremarker")
 		if #coremarkers > 0 then --new way, coremarkers as elements placed into .map file using mrgreen map editor plugin
 			for _, element in ipairs(coremarkers) do
-				local x, y, z = getElementPosition(element)
-				spawnPickup(element, x, y, z)
+				if getElementType(getElementParent(element)) == "map" then --for map editor. 'mapContainer' parent means objects created by map editor, ignore them
+					local x, y, z = getElementPosition(element)
+					spawnPickup(element, x, y, z)
+				end
 			end
 		else --old way, coremarkers as solid boxes
 			for _, object in ipairs(getElementsByType("object")) do
@@ -284,7 +336,7 @@ end
 -- Drop Spikes Event --
 -----------------------
 addEvent("dropSpikes", true)
-addEventHandler("dropSpikes", root, 
+addEventHandler("dropSpikes", resourceRoot, 
 	function (x, y, z, rz)
 		local spikes = createObject(2892, 0, 0, -200, 0, 0, rz+90)
 		setObjectScale(spikes, 0.5)
@@ -312,7 +364,7 @@ addEventHandler("dropSpikes", root,
 )
 
 addEvent("onPlayerPickUpRacePickup", true)
-addEventHandler("onPlayerPickUpRacePickup", root, 
+addEventHandler("onPlayerPickUpRacePickup", resourceRoot, 
 	function(pickupID, pickupType)
 		if pickupType == "repair" then
 			setElementData(source, "coremarkers_isPlayerRektBySpikes", false, true)
@@ -324,7 +376,7 @@ addEventHandler("onPlayerPickUpRacePickup", root,
 --- Drop Hay Event --
 ---------------------
 addEvent("dropHay", true)
-addEventHandler("dropHay", root, 
+addEventHandler("dropHay", resourceRoot, 
 	function (x, y, z, rz)
 		createObject(3374, x, y, z+1.5, 0, 0, rz+90)
 	end
@@ -335,7 +387,7 @@ addEventHandler("dropHay", root,
 --- Drop Rock Event --
 ----------------------
 addEvent("dropRock", true)
-addEventHandler("dropRock", root, 
+addEventHandler("dropRock", resourceRoot, 
 	function (x, y, z, rz)
 		createObject(1305, x, y, z+1.5, 0, 0, rz+90)
 	end
@@ -346,7 +398,7 @@ addEventHandler("dropRock", root,
 --- Smoke Event --
 ------------------
 addEvent("doSmoke", true)
-addEventHandler("doSmoke", root, 
+addEventHandler("doSmoke", resourceRoot, 
 	function (x, y, z, rz)
 		local theVehicle = getPedOccupiedVehicle(client)
 		triggerClientEvent(root, "createSmokeEffect", resourceRoot, x, y, z, rz, theVehicle)
@@ -359,7 +411,7 @@ addEventHandler("doSmoke", root,
 ----------------------
 droppedRampTimer = {}
 addEvent("dropRamp", true)
-addEventHandler("dropRamp", root, 
+addEventHandler("dropRamp", resourceRoot, 
 	function (x, y, z, rz)
 		local ramp = createObject(13645, x, y, z+0.4, 4, 0, rz)
 		local rampCol = createColSphere(x, y, z+0.4, 4)
@@ -385,12 +437,12 @@ addEventHandler("dropRamp", root,
 )
 
 
--------------------------
---- Drop Barrels Event --
--------------------------
+--------------------------
+--- Drop Barrels Events --
+--------------------------
 barrelCreator = {}
 addEvent("dropBarrels", true)
-addEventHandler("dropBarrels", root, 
+addEventHandler("dropBarrels", resourceRoot, 
 	function (x, y, z, rz)
 		local barrels = {}
 		barrels[1] = createObject(1225, x, y, z+0.4)
@@ -405,13 +457,22 @@ addEventHandler("dropBarrels", root,
 	end
 )
 
+addEvent("destroyBarrel", true)
+addEventHandler("destroyBarrel", resourceRoot, 
+	function(barrel)
+		if barrelCreator and barrelCreator[barrel] and isElement(barrelCreator[barrel]) then
+			destroyElement(barrel)
+		end
+	end
+)
+
 
 ----------------------------
 -- Rocket Launcher Events --
 ----------------------------
 local rocketLauncher = {}
 addEvent("createRocketLauncher", true)
-addEventHandler("createRocketLauncher", root, 
+addEventHandler("createRocketLauncher", resourceRoot, 
 	function(maxY)
 		local theVehicle = getPedOccupiedVehicle(client)
 		rocketLauncher[client] = createObject(360, 0, 0, -50)
@@ -420,7 +481,7 @@ addEventHandler("createRocketLauncher", root,
 )
 
 addEvent("removeRocketLauncher", true)
-addEventHandler("removeRocketLauncher", root, 
+addEventHandler("removeRocketLauncher", resourceRoot, 
 	function()
 		if rocketLauncher and isElement(rocketLauncher[client]) then destroyElement(rocketLauncher[client]) end
 	end
@@ -435,14 +496,14 @@ function vehicleChange(oldModel, newModel)
 		end
 	end
 end
-addEventHandler("onElementModelChange", root, vehicleChange)
+addEventHandler("onElementModelChange", resourceRoot, vehicleChange)
 
 
 ---------------------
 --- Drop Oil Event --
 ---------------------
 addEvent("dropOil", true)
-addEventHandler("dropOil", root, 
+addEventHandler("dropOil", resourceRoot, 
 	function (x, y, z, rz)
 		local oil = createObject(2717, x, y, z, 90, 0, 0)
 		setObjectScale(oil, 2)
@@ -481,7 +542,7 @@ addEventHandler("dropOil", root,
 kamikazeTimer = {}
 preKamikazeTimer = {}
 addEvent("kamikazeMode", true)
-addEventHandler("kamikazeMode", root, 
+addEventHandler("kamikazeMode", resourceRoot, 
 	function()
 		local theVehicle = getPedOccupiedVehicle(client)
 		local marker = attachMarker(theVehicle, 6000, 255, 0, 0, 80)
@@ -530,7 +591,7 @@ addEventHandler("kamikazeMode", root,
 --------------------
 local speedMarkerColorTimer = {}
 addEvent("speedMode", true)
-addEventHandler("speedMode", root, 
+addEventHandler("speedMode", resourceRoot, 
 	function(speedItemTime)
 		local theVehicle = getPedOccupiedVehicle(client)
 		local marker = attachMarker(theVehicle, speedItemTime+200, 255, 125, 0, 80)
@@ -554,7 +615,7 @@ addEventHandler("speedMode", root,
 -- Fly Event --
 ---------------
 addEvent("flyMode", true)
-addEventHandler("flyMode", root, 
+addEventHandler("flyMode", resourceRoot, 
 	function(flyItemTime)
 		local theVehicle = getPedOccupiedVehicle(client)
 		attachMarker(theVehicle, flyItemTime+200, 125, 0, 125, 80)
@@ -566,7 +627,7 @@ addEventHandler("flyMode", root,
 -- Magnet Event --
 ------------------
 addEvent("doMagnet", true)
-addEventHandler("doMagnet", root, 
+addEventHandler("doMagnet", resourceRoot, 
 	function()
 	-----------for tests
 		--[[for k, victim in ipairs(getElementsByType("player")) do
@@ -640,7 +701,7 @@ addEventHandler("onElementDataChange", root,
 -- Repair Vehicle Event --
 --------------------------
 addEvent("fixVehicle", true)
-addEventHandler("fixVehicle", root, 
+addEventHandler("fixVehicle", resourceRoot, 
 	function(fix) 
 		local theVehicle = getPedOccupiedVehicle(client)
 		if fix then
@@ -657,7 +718,7 @@ addEventHandler("fixVehicle", root,
 -- Nitro Event --
 -----------------
 addEvent("giveNitro", true)
-addEventHandler("giveNitro", root, 
+addEventHandler("giveNitro", resourceRoot, 
 	function() 
 		local theVehicle = getPedOccupiedVehicle(client)
 		addVehicleUpgrade(theVehicle, 1010)
@@ -670,7 +731,7 @@ addEventHandler("giveNitro", root,
 -- Jump Event --
 ----------------
 addEvent("doJump", true)
-addEventHandler("doJump", root, 
+addEventHandler("doJump", resourceRoot, 
 	function()
 		local theVehicle = getPedOccupiedVehicle(client)
 		local x, y, z = getElementVelocity(theVehicle)
@@ -692,7 +753,7 @@ function attachMarker(theVehicle, timer, r, g, b, a)
 	return marker[player]
 end
 addEvent("attachMarker", true)
-addEventHandler("attachMarker", root, attachMarker)
+addEventHandler("attachMarker", resourceRoot, attachMarker)
 
 -----------------------
 -- Kills Information --
@@ -724,7 +785,7 @@ function startSound3D(sound)
 	triggerClientEvent(root, "create3DSound", resourceRoot, theVehicle, sound)
 end
 addEvent("startSound3D", true)
-addEventHandler("startSound3D", root, startSound3D)
+addEventHandler("startSound3D", resourceRoot, startSound3D)
 
 
 -------------
@@ -745,14 +806,14 @@ function preGiveMinigun()
 	bindKey(client, "lctrl", "both", preShootMinigun)
 end
 addEvent("preGiveMinigun", true)
-addEventHandler("preGiveMinigun", root, preGiveMinigun)
+addEventHandler("preGiveMinigun", resourceRoot, preGiveMinigun)
 
 function removeMinigun()
 	unbindKey(client, "mouse1", "both", preShootMinigun)
 	unbindKey(client, "lctrl", "both", preShootMinigun)
 end
 addEvent("removeMinigun", true)
-addEventHandler("removeMinigun", root, removeMinigun)
+addEventHandler("removeMinigun", resourceRoot, removeMinigun)
 
 
 --------------------------------------------

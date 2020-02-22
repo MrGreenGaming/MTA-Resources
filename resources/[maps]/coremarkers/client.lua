@@ -24,7 +24,7 @@ function getAllowedPowerTypes(tbl)
 	powerTypesBackup = table.copy(powerTypes)
 end
 addEvent("getAllowedPowerTypes", true)
-addEventHandler("getAllowedPowerTypes", root, getAllowedPowerTypes)
+addEventHandler("getAllowedPowerTypes", resourceRoot, getAllowedPowerTypes)
 
 
 addEventHandler("onClientResourceStart", resourceRoot, 
@@ -53,7 +53,7 @@ function getRandomPower()
 		powerTypes = table.copy(powerTypesBackup)
 	end
 	local randomNumber = math.random(#powerTypes)
-	randomPower = unpack(powerTypes[randomNumber])
+	randomPower = powerTypes[randomNumber]
 	table.remove(powerTypes, randomNumber)
 	--Make kmz appear less often
 	if randomPower == "kmz" then
@@ -67,14 +67,14 @@ function getRandomPower()
 			if #powerTypes == 0 then
 				powerTypes = table.copy(powerTypesBackup)
 				for i=1, #powerTypes do
-					if unpack(powerTypes[i]) == "kmz" then
+					if powerTypes[i] == "kmz" then
 						table.remove(powerTypes, i)
 						--outputChatBox('removed kmz from new table')
 					end
 				end
 			end
 			local randomNumber = math.random(#powerTypes)
-			randomPower = unpack(powerTypes[randomNumber])
+			randomPower = powerTypes[randomNumber]
 			table.remove(powerTypes, randomNumber)
 		end
 	end
@@ -98,14 +98,14 @@ function getRandomPower()
 	, delay, 1, randomPower)
 end
 addEvent("getRandomPower", true)
-addEventHandler("getRandomPower", root, getRandomPower)
+addEventHandler("getRandomPower", resourceRoot, getRandomPower)
 
 function changePic(number)
 	if not isElement(_typePicture) then return end
 	if not isTimer(stopRoulette) then return end
 	
 	local timeleft = getTimerDetails(stopRoulette) 
-	guiStaticImageLoadImage(_typePicture, "pics/"..unpack(powerTypesBackup[number])..".png")
+	guiStaticImageLoadImage(_typePicture, "pics/"..powerTypesBackup[number]..".png")
 	
 	if number >= 1 and number < #powerTypesBackup then
 		nextNumber = number+1
@@ -164,7 +164,7 @@ function removePower(powerType, delay)
 	, delay or 0, 1)
 end
 addEvent('removePower', true)
-addEventHandler('removePower', root, removePower)
+addEventHandler('removePower', resourceRoot, removePower)
 addEvent('onClientPlayerFinish', true)
 addEventHandler('onClientPlayerFinish', root, removePower)
 
@@ -377,7 +377,7 @@ function DrawLaser(player)
 end
 
 addEvent("slowDownPlayer", true)
-addEventHandler("slowDownPlayer", root, 
+addEventHandler("slowDownPlayer", resourceRoot, 
 	function (magnetSlowDownTime)
 		stopSpeed()
 		if isTimer(slowDownTimer) then
@@ -394,7 +394,7 @@ local minigun = {}
 local minigunPlayer = {}
 local minigunTimer = {}
 addEvent("giveMinigun", true)
-addEventHandler("giveMinigun", root, 
+addEventHandler("giveMinigun", resourceRoot, 
 	function(theVehicle)
 		local minX, minY, minZ, maxX, maxY, maxZ = getElementBoundingBox(theVehicle)
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, maxY+1, 0)
@@ -422,7 +422,7 @@ addEventHandler("giveMinigun", root,
 )
 
 addEvent("startShootMinigun", true)
-addEventHandler("startShootMinigun", root, 
+addEventHandler("startShootMinigun", resourceRoot, 
 	function(thePlayer)
 		if not isTimer(minigunTimer[thePlayer]) then
 			if thePlayer == localPlayer then
@@ -451,7 +451,7 @@ addEventHandler("startShootMinigun", root,
 )
 
 addEvent("stopShootMinigun", true)
-addEventHandler("stopShootMinigun", root, 
+addEventHandler("stopShootMinigun", resourceRoot, 
 	function(thePlayer)
 		local minigun1 = minigunPlayer[thePlayer][1]
 		local minigun2 = minigunPlayer[thePlayer][2]
@@ -463,7 +463,7 @@ addEventHandler("stopShootMinigun", root,
 )
 
 addEvent('createExplosionEffect', true)
-addEventHandler('createExplosionEffect', root, 
+addEventHandler('createExplosionEffect', resourceRoot, 
 function (x, y, z)
 	createExplosion(x, y, z, 0, true, -1.0, false)
 
@@ -503,7 +503,7 @@ addEventHandler("onClientPreRender", root,
 
 local smoke = {}
 addEvent("createSmokeEffect", true)
-addEventHandler("createSmokeEffect", root,
+addEventHandler("createSmokeEffect", resourceRoot,
 function (x, y, z, rz, theVehicle)
 	local effect0 = createEffect("riot_smoke", x, y, z, 0, 0, rz, 300)
 	local effect1 = createEffect("riot_smoke", x, y, z, 0, 0, rz, 300)
@@ -519,7 +519,7 @@ end
 )
 
 addEvent("spikesTimerFunction", true)
-addEventHandler("spikesTimerFunction", root, 
+addEventHandler("spikesTimerFunction", resourceRoot, 
 function ()
 	if isTimer(spikesTimer) then
 		killTimer(spikesTimer)
@@ -539,7 +539,7 @@ end
 
 
 addEvent("hideSpikesRepairHUD", true)
-addEventHandler("hideSpikesRepairHUD", root, 
+addEventHandler("hideSpikesRepairHUD", resourceRoot, 
 function ()
 	if isTimer(spikesTimer) then
 		killTimer(spikesTimer)
@@ -566,10 +566,10 @@ function stopSpeed()
 	screenColor = nil
 end
 addEvent("stopSpeed", true)
-addEventHandler("stopSpeed", root, stopSpeed)
+addEventHandler("stopSpeed", resourceRoot, stopSpeed)
 
 addEvent("stopFly", true)
-addEventHandler("stopFly", root, 
+addEventHandler("stopFly", resourceRoot, 
 function ()
 	if tRestoreAllSounds then
 		for sound,volume in pairs(tRestoreAllSounds) do
@@ -624,13 +624,13 @@ function create3DSound(theVehicle, sound)
 	return sounds[theVehicle]
 end
 addEvent("create3DSound", true)
-addEventHandler("create3DSound", root, create3DSound)
+addEventHandler("create3DSound", resourceRoot, create3DSound)
 
 function stop3DSound(theVehicle)
 	if isElement(sounds[theVehicle]) then stopSound(sounds[theVehicle]) end
 end
 addEvent("stop3DSound", true)
-addEventHandler("stop3DSound", root, stop3DSound)
+addEventHandler("stop3DSound", resourceRoot, stop3DSound)
 
 local lasthit, lasttick
 
@@ -754,3 +754,10 @@ addEventHandler("onClientRender",  root,
 		end
 	end
 )
+
+function onClientObjectDamage(loss, attacker)
+	if getElementModel(source) == 1225 then
+		triggerServerEvent("destroyBarrel", resourceRoot, source)
+	end
+end
+addEventHandler("onClientObjectDamage", root, onClientObjectDamage)
