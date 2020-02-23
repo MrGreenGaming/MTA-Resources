@@ -84,6 +84,7 @@ function LocalGhostPlayback:loadGhost(mapName)
 			if v.ty == "st" then
 				ped = createPed( v.p, v.x, v.y, v.z )
 				vehicle = createVehicle( v.m, v.x, v.y, v.z, v.rX, v.rY, v.rZ )
+				setElementData(vehicle, "race.isGhostVehicle", true)
 				blip = createBlipAttachedTo( ped, 0, 1, 150, 150, 150, 50 )
 				setElementParent( blip, ped )
 				warpPedIntoVehicle( ped, vehicle )
