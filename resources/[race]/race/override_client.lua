@@ -71,6 +71,7 @@ function isCollideOthers ( element )
 end
 
 function isCollideWorld ( element )
+	if getElementData(element, "race.isGhostVehicle") == true then return false end
 	return ( getElementData ( element, 'race.collideworld' ) or 1 ) ~= 0
 end
 

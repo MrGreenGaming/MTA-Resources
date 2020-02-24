@@ -89,6 +89,7 @@ function GhostPlayback:loadGhost()
 			if v.ty == "st" then
 				self.ped = createPed( v.p, v.x, v.y, v.z )
 				self.vehicle = createVehicle( v.m, v.x, v.y, v.z, v.rX, v.rY, v.rZ )
+				setElementData(self.vehicle, "race.isGhostVehicle", true)
 				self.blip = createBlipAttachedTo( self.ped, 0, 1, 150, 150, 150, 50 )
 				setElementParent( self.blip, self.ped )
 				warpPedIntoVehicle( self.ped, self.vehicle )

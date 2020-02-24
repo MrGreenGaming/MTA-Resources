@@ -56,7 +56,7 @@ function createNextmapWindow(tabPanel)
         guiLabelSetColor( tab.label5, 255, 0, 0 )
         guiSetFont( tab.label5, "default-bold-small" )
 
-        tab.viplabel = guiCreateLabel(0.03, 0.14, 0.50, 0.12, "Purchase VIP to get a free map every day!", true, tab.maps)
+        tab.viplabel = guiCreateLabel(0.03, 0.14, 0.36, 0.08, "Purchase VIP to get a free map every day!", true, tab.maps)
         guiLabelSetColor( tab.viplabel, 255, 0, 0 )
         guiSetFont( tab.viplabel, "default-bold-small" )
         guiSetFont( tab.viplabel, "default-bold-small" )
