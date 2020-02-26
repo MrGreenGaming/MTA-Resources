@@ -476,6 +476,16 @@ hornsTable = {
     [473] = "Move bro",
     [474] = "Move Fat As",
     [475] = "Why",
+	[476] = "Dew it",
+	[477] = "Flying is for droids",
+	[478] = "Fun begins",
+	[479] = "High ground!",
+	[480] = "I don't think so",
+	[481] = "I hate you!",
+	[482] = "I've been looking forward",
+	[483] = "Outrageous, unfair",
+	[484] = "So uncivilized",
+	[485] = "Underestimate my power",
     
     
  
