@@ -668,7 +668,7 @@ function Shooter:start()
 	else
 		--outputChatBox("Shooter launched in Shooter mode, next mode : CarGame",root,0,255,0)
 		local options = {
-			duration = 3 * 60 * 1000,
+			duration = 4 * 60 * 1000,
 			respawn = 'none',
 			autopimp = false,
 			autopimp_map_can_override = false,
@@ -928,7 +928,7 @@ end
 
 
 Shooter.modeOptions = {
-	duration = 3 * 60 * 1000,
+	duration = 4 * 60 * 1000,
 	respawn = 'none',
 	autopimp = false,
 	autopimp_map_can_override = false,
