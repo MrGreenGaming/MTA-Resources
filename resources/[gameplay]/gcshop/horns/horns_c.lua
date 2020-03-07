@@ -486,6 +486,7 @@ hornsTable = {
 	[483] = "Outrageous, unfair",
 	[484] = "So uncivilized",
 	[485] = "Underestimate my power",
+	[486] = "I'm so sorry",
     
     
  
