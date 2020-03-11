@@ -328,6 +328,6 @@ end)
 
 addEventHandler("onPlayerJoin", root, function()
     local getCountry = getCountry()
-    outputChatBox("#FF6464✶ Corona virus status in "..getPlayerName(source).."'s country ("..getCountry..") are:", root, 0, 255, 0, true)
+    outputChatBox("#FF6464✶ Corona virus status in "..getPlayerName(source).."#FF6464's country ("..getCountry..") are:", root, 0, 255, 0, true)
     getCasesInformation(getCountry)
 end)
