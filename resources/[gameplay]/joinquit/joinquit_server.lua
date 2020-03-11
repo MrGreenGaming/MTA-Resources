@@ -254,34 +254,6 @@ function getCountry()
     return 'N/A'
 end
 
-function getCasesInformation(country)
-    fetchRemote("https://corona.lmao.ninja/countries", printCasesInformation, "", false, country)
-end
-
-function printCasesInformation(responseData, errno, country)
-    if errno == 0 then
-        local data = fromJSON("["..responseData.."]")
-        for k,v in ipairs(data) do
-            if v.country == country then
-                outputChatBox("Country: "..tostring(v.country).." | Cases: "..tostring(v.cases).." | Today Cases: "..tostring(v.todayCases), root, 0, 255, 0)
-            end
-        end
-    end
-end
-
-addCommandHandler("coronastats", function(thePlayer, commandName, country)
-    if country then
-        getCasesInformation(country)
-    else
-        outputChatBox("please write a country name, SYNTAX: /"..commandName.." [COUNTRY].", thePlayer, 255, 0, 0)
-    end
-end)
-
-addEventHandler("onPlayerJoin", root, function()
-    local getCountry = getCountry()
-    outputChatBox("Corona virus status in "..getPlayerName(source).."'s country ("..getCountry..") are:", root, 0, 255, 0)
-    getCasesInformation(getCountry)
-end)
 
 -----------------------------------------------------------------
 
@@ -329,3 +301,32 @@ addEventHandler('onPlayerQuit', root,
         end
 	end
 )
+
+function getCasesInformation(country)
+    fetchRemote("https://corona.lmao.ninja/countries", printCasesInformation, "", false, country)
+end
+
+function printCasesInformation(responseData, errno, country)
+    if errno == 0 then
+        local data = fromJSON("["..responseData.."]")
+        for k,v in ipairs(data) do
+            if v.country == country then
+                outputChatBox("#FF6464✶ Country: "..tostring(v.country).." | Cases: "..tostring(v.cases).." | Today Cases: "..tostring(v.todayCases), root, 0, 255, 0, true)
+            end
+        end
+    end
+end
+
+addCommandHandler("coronastats", function(thePlayer, commandName, country)
+    if country then
+        getCasesInformation(country)
+    else
+        outputChatBox("please write a country name, SYNTAX: /"..commandName.." [COUNTRY].", thePlayer, 255, 0, 0)
+    end
+end)
+
+addEventHandler("onPlayerJoin", root, function()
+    local getCountry = getCountry()
+    outputChatBox("#FF6464✶ Corona virus status in "..getPlayerName(source).."'s country ("..getCountry..") are:", root, 0, 255, 0, true)
+    getCasesInformation(getCountry)
+end)
