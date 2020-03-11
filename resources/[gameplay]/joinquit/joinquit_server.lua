@@ -311,7 +311,8 @@ function printCasesInformation(responseData, errno, country)
         local data = fromJSON("["..responseData.."]")
         for k,v in ipairs(data) do
             if v.country == country then
-                outputChatBox("#FF6464✶ Country: "..tostring(v.country).." | Cases: "..tostring(v.cases).." | Today Cases: "..tostring(v.todayCases), root, 0, 255, 0, true)
+				-- {"country":"China","cases":80790,"todayCases":12,"deaths":3158,"todayDeaths":0,"recovered":61611,"critical":4492}
+                outputChatBox("#FF6464✶ Country: "..tostring(v.country).." | Cases: "..tostring(v.cases).." | Today Cases: "..tostring(v.todayCases).." | Deaths: "..tostring(v.deaths).." | Recovered: "..tostring(v.recovered).." | Critical: "..tostring(v.critical), root, 0, 255, 0, true)
             end
         end
     end
