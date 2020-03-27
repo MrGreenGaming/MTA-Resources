@@ -5,7 +5,7 @@
 -- Also does check for stuck 0-ping players --
 ----------------------------------------------
 
-local pingLimit1 = 250
+local pingLimit1 = 300
 local pingLimit2 = 350
 local hour1 = 0
 local hour2 = 8
