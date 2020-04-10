@@ -337,17 +337,28 @@ function startNextMapVote()
 end
 
 -- Change gamemode order here
-modes = {
-        [1]='nts',
-        [2]='ctf',
-        [3]='shooter',
-        [4]='race',
-        [5]='rtf',
-        [6]='nts',
-	[7]='deadline',
-        [8]='shooter',
-        [9]='race',
-        [10]='rtf',
+
+modes = {	
+	'nts',
+	'ctf',
+	'shooter',
+	'race',
+	'rtf',
+	'nts',
+	'deadline',
+	'shooter',
+	'race',
+	'rtf',
+	'nts',
+	'ctf',
+	'shooter',
+	'race',
+	'rtf',
+	'nts',
+	'manhunt',
+	'shooter',
+	'race',
+	'rtf',
 }
 math.randomseed( getTickCount() % 50000 )
 currentmode = math.random(#modes)
