@@ -327,7 +327,86 @@ function()
 			dxDrawImage(rankBoardPosX, rankBoardPosY + boardsizeY, sizeX, sizeY,localPlayerRenderTarget)
 			dxSetBlendMode("blend")
 		end
+	
+	elseif countmode == "downTime" then
+		for number, tableRank in ipairs(clientTable) do 
+			dxSetRenderTarget(rankRenderTarget,true)
+			dxSetBlendMode("add")
+			if number <= maxVisibleRanks then
+				rank = number
+				name = tableRank.name
+				time = tableRank.time
 
+				local theColor = tocolor(255,255,255,255)
+				local timeColor = "#FFFFFF"
+
+				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
+
+
+				
+				minutes, seconds, ms = msToTimeStr(time)
+				if (seconds < 10) and (seconds >= 0) then
+					seconds = tostring(seconds)
+					seconds = "0"..seconds
+				end
+				if (ms < 10) and (ms >=0) then
+					ms = tostring(ms)
+					ms = "0"..ms
+				end	
+
+				shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
+				shadowDrawnTexts[name] = dxDrawText(tostring(rank)..") "..tostring(shadowName).."  "..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 1, startY+add+1, x, startY+add+15+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
+				drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).."  "..timeColor..""..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 0, startY+add, x, startY+add+15, theColor, rScale, theFont, "left","center",true,false,false,true,true)
+			
+				
+
+				add = add + textHeight
+			end
+		end
+		-- dxSetBlendMode("blend")
+		dxSetRenderTarget()
+		local sizeX,sizeY = dxGetMaterialSize(rankRenderTarget)
+		dxSetBlendMode("add")	
+		dxDrawImage(rankBoardPosX, rankBoardPosY, sizeX, sizeY,rankRenderTarget)
+		dxSetBlendMode("blend")
+
+		-- if not false then -- Test 
+		if not localPlayerRendered and localPlayerFinishInfo ~= false then -- if local player isnt rendered but is finished
+
+			local name = (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer))
+			local rank = localPlayerFinishInfo.rank
+			local time = localPlayerFinishInfo.time
+
+
+			dxSetRenderTarget(localPlayerRenderTarget,true)
+			dxSetBlendMode("add")
+
+			msNext = time - firstTimeMS
+			minutes, seconds, ms = msToTimeStr(msNext)
+			if (seconds < 10) and (seconds >= 0) then
+				seconds = tostring(seconds)
+				seconds = "0"..seconds
+			end
+			if (ms < 10) and (ms >=0) then
+				ms = tostring(ms)
+				ms = "0"..ms
+			end
+			startX = 0
+			
+			shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )	
+			shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName).." +"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 1, 1, x, textHeight+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
+			drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).." #01FFFF+"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 0, 0, x, textHeight, tocolor(1,255,255,255), rScale, theFont, "left","center",true,false,false,true,true)
+
+			
+			-- dxSetBlendMode("blend")
+			dxSetRenderTarget()
+
+			local boardsizeX,boardsizeY = dxGetMaterialSize(rankRenderTarget)
+			local sizeX,sizeY = dxGetMaterialSize(localPlayerRenderTarget)
+			dxSetBlendMode("add")
+			dxDrawImage(rankBoardPosX, rankBoardPosY + boardsizeY, sizeX, sizeY,localPlayerRenderTarget)
+			dxSetBlendMode("blend")
+		end
 	elseif countmode == "cargame" then
 		localPlayerRendered = false
 		for number, tableRank in ipairs(clientTable) do 
