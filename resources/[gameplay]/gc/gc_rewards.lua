@@ -546,6 +546,8 @@ addEventHandler("onPlayerFinish", root, RTFfinish)
 -------------------
 
 rewardManhunt = {16, 12, 8}
+local victimKillReward = 1
+local victimKillTopToReward = 3
 
 function onManhuntRoundEnded( results )
 	for i=#results, 1, -1 do
@@ -568,6 +570,23 @@ function manhuntFinish (player, rank)
 end
 addEventHandler("onManhuntRoundEnded", root, onManhuntRoundEnded)
 
+function manhuntVictimKills(list)
+	local victim = source
+	for i, v in ipairs(list) do
+		if i > victimKillTopToReward then break end
+		if v.player and isElement(v.player) and getElementType(v.player) == "player" then
+			if areRewardsActivated() then
+				local reward = getRewardAmount(victimKillReward)
+				reward = vipRewardMult(player,reward)
+				if isHoliday() then reward = reward * 2 end
+				addPlayerGreencoins(v.player, reward)
+				outputChatBox(prefix .. getPlayerName(v.player) .. '#00FF00 has earned ' .. reward .. ' GC for being in the top '..victimKillTopToReward..' victim damage dealers.', root, 0, 255, 0, true)
+			end
+		end
+	end
+end
+addEvent("onManhuntVictimKillList")
+addEventHandler("onManhuntVictimKillList", root, manhuntVictimKills)
 
 -----------------
 ---   Utils   ---
