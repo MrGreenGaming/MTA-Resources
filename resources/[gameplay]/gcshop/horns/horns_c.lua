@@ -489,6 +489,10 @@ hornsTable = {
     [486] = "I'm so sorry",
     [487] = "Lick lick lick my baaaalls!",
     [488] = "Turk Korona",
+    [489] = "Abilere Selam Çatışmaya Devam",
+    [490] = "Party Thieves Chief",
+    [491] = "Sevmek Suç Olmamalı",
+    [492] = "Zabaha Kadar Burdayım",
     
     
  
