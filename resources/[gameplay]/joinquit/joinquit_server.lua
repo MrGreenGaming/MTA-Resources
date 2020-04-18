@@ -1,4 +1,4 @@
-countryName = { 
+--[[countryName = { 
     ["AF"] = "Afghanistan", 
     ["AX"] = "Aland Islands", 
     ["AL"] = "Albania", 
@@ -253,7 +253,7 @@ function getCountry()
     end
     return 'N/A'
 end
-
+]]
 
 -----------------------------------------------------------------
 
@@ -301,7 +301,8 @@ addEventHandler('onPlayerQuit', root,
         end
 	end
 )
-
+--[[
+-- DISABLED, API NOT WORKING // new API https://corona.lmao.ninja/v2/countries
 function getCasesInformation(country)
     fetchRemote("https://corona.lmao.ninja/countries", printCasesInformation, "", false, country)
 end
@@ -331,3 +332,4 @@ addEventHandler("onPlayerJoin", root, function()
     outputChatBox("#FF6464✶ Corona virus status in "..getPlayerName(source).."#FF6464's country ("..getCountry..") are:", root, 0, 255, 0, true)
     getCasesInformation(getCountry)
 end)
+]]
