@@ -100,18 +100,18 @@ addEventHandler('onRaceStateChanging', root, onRaceStateChanging)
 
 local perks = {
 --  [id]= { ID,     price,         description,               , loading function,     				, expire length in days,		allowed modes filter},
-	[1] = { ID = 1, price =  5000, description = 'Bike trials', func = 'loadGCTrials'},
-	[2] = { ID = 2, price =  3000, description = 'Faster respawn for 60 days', func = 'loadGCRespawn', exp = 60},
-	[3] = { ID = 3, price =  2000, description = 'HP Regen for 30 days', func = 'loadGCRegenHP', exp = 30},
+	[1] = { ID = 1, price =  3000, description = 'Bike trials', func = 'loadGCTrials'},
+	[2] = { ID = 2, price =  3250, description = 'Faster respawn for 60 days', func = 'loadGCRespawn', exp = 60},
+	[3] = { ID = 3, price =  2250, description = 'HP Regen for 30 days', func = 'loadGCRegenHP', exp = 30},
 	[4] = { ID = 4, price = 15000, description = 'Custom paintjob', func = 'loadGCCustomPaintjob', defaultAmount = 1, extraPrice = 15000, modes = {'Sprint', 'Never the same', 'Manhunt'}},
-	[5] = { ID = 5, price =  2500, description = 'Voice', func = 'loadGCVoice'},
-	[6] = { ID = 6, price =  2000, description = 'Longer burnup time', func = 'loadGCBurn', modes = {'Sprint', 'Never the same', 'Deadline', 'Reach the flag', 'Capture the flag', 'Destruction derby'}},
-	[7] = { ID = 7, price =  3000, description = 'Extra long burnup time', func = 'loadGCBurnExtra', requires = {6}, exp = 30, modes = {'Sprint', 'Never the same', 'Deadline', 'Reach the flag', 'Capture the flag', 'Destruction derby'}},
+	[5] = { ID = 5, price =  1500, description = 'Voice', func = 'loadGCVoice'},
+	[6] = { ID = 6, price =  2250, description = 'Longer burnup time', func = 'loadGCBurn', modes = {'Sprint', 'Never the same', 'Shooter', 'Deadline', 'Reach the flag', 'Capture the flag', 'Destruction derby'}},
+	[7] = { ID = 7, price =  3250, description = 'Extra long burnup time', func = 'loadGCBurnExtra', requires = {6}, exp = 30, modes = {'Sprint', 'Never the same', 'Shooter', 'Deadline', 'Reach the flag', 'Capture the flag', 'Destruction derby'}},
 	[8] = { ID = 8, price =  3000, description = 'Health transfer', func = 'loadGCBurnTransfer', requires = {6}, exp = 30, disabled = true},
 	[9] = { ID = 9, price =  3000, description = 'Double sided objects', func = 'loadDoubleSided'},
-	[10] = { ID = 10, price =  1000, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
-	[11] = { ID = 11, price =  1000, description = 'NTS/DD Vehicle reroll for 30 days', func = 'loadVehicleReroll', exp = 30},
-	[12] = { ID = 12, price =  1000, description = 'Deadline color change', func = 'loadDeadlineColorChange', exp = 30},
+	[10] = { ID = 10, price =  500, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
+	[11] = { ID = 11, price =  1500, description = 'NTS/DD Vehicle reroll for 30 days', func = 'loadVehicleReroll', exp = 30},
+	[12] = { ID = 12, price =  500, description = 'Deadline color change', func = 'loadDeadlineColorChange', exp = 30},
 
 }
 
