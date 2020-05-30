@@ -1,4 +1,5 @@
 local team_price = 2750
+local team_update_price = 100
 local teams = {} -- [teamid] = <teamelement>
 local teamwars = {} -- i = {player element challenger, player element victim}
 local playerteams = {}
@@ -130,6 +131,59 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
         if error then
             outputChatBox('An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0)
             addToLog('Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team: ' .. table.concat({ teamname, teamtag, teamcolour, teammsg }, ', ') .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
+        end
+    end
+end)
+
+addEvent('updateTeam', true)
+addEventHandler("updateTeam", resourceRoot, function(teamname, teamtag, teamcolour, teammsg)
+    local player = client
+    local forumID = tonumber(exports.gc:getPlayerForumID(player))
+    local r = playerteams[player]
+    if (not forumID) then
+        return outputChatBox('You\'re not logged into a Green-Coins account!', player, 255, 0, 0)
+        -- Check if player is the owner
+    elseif r and r.owner ~= forumID then
+        return outputChatBox('[TEAMS] Only the owner of the team can update it!', player, 0, 255, 0)
+    else
+        if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255 * 255 * 255)) end
+        if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
+
+        if type(teamname) ~= 'string' or #teamname < 3 then
+            outputChatBox('Not a valid teamname', player, 255, 0, 0)
+            return
+        elseif type(teamtag) ~= 'string' or #teamtag < 3 then
+            outputChatBox('Not a valid teamtag', player, 255, 0, 0)
+            return
+        elseif type(teamcolour) ~= 'string' or not getColorFromString(teamcolour) then
+            outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
+            return
+        end
+				
+		-- Checking team name for illegal characters
+		for i=1,string.len(teamname) do
+			local char = string.sub(teamname, i, i)
+			if not string.find(team_allowedcharacters, char) then
+				outputChatBox('Team name contains illegal characters!', player, 255, 0, 0)
+				return
+			end
+		end
+		
+        local result, error = gcshopBuyItem(player, team_update_price, 'Team update: ' .. tostring(r.teamid))
+        if result == true then
+            local added
+	    added = dbExec(handlerConnect, [[UPDATE `team` SET `name`=?, `tag`=?, `colour`=?, `message`=? WHERE `teamid`=?]], teamname, teamtag, teamcolour, teammsg, r.teamid)
+	    setTeamName(teams[r.teamid], teamtag .. ' ' .. teamname)
+	    setTeamColor(teams[r.teamid], getColorFromString(teamcolour))
+            
+            addToLog('"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team update: ' .. tostring(r.teamid))
+            outputChatBox('Team updated.', player, 0, 255, 0)
+            checkPlayerTeam(player)
+            return
+        end
+        if error then
+            outputChatBox('An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0)
+            addToLog('Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team update: ' .. tostring(r.teamid) .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
         end
     end
 end)
