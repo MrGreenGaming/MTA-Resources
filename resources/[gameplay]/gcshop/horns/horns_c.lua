@@ -493,6 +493,10 @@ hornsTable = {
     [490] = "Party Thieves Chief",
     [491] = "Sevmek Suç Olmamalı",
     [492] = "Zabaha Kadar Burdayım",
+    [493] = "KneeLzy antheme",
+    [494] = "Chillim",
+    [495] = "Mazule",
+    [496] = "Beat me",
     
     
  
