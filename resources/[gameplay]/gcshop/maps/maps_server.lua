@@ -4,7 +4,7 @@ prices["rtf"] = 800
 prices["ctf"] = 800
 prices["nts"] = 1000
 prices["shooter"] = 1200
-prices["deadline"] = 900
+prices["deadline"] = 500
 
 local PRICE = 1000
 local mp_maxBuyAmount = 3 -- Daily map buy amount
