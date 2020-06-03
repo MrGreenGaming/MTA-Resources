@@ -344,7 +344,6 @@ modes = {
 	'shooter',
 	'race',
 	'rtf',
-	'nts',
 }
 math.randomseed( getTickCount() % 50000 )
 currentmode = math.random(#modes)
