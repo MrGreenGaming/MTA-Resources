@@ -852,20 +852,20 @@ function createSoundForCar(car, horn)
     length = length * 1000
 
     -- update horn icon position/alpha
-    if getResourceState(getResourceFromName( 'mrgreen-settings' )) == 'running' and exports['mrgreen-settings']:isCustomHornIconEnabled() then
-        soundTimer[car] = setTimer(function(sound, car)
-            if not isElement(sound) or not isElement(car) then return end
-            local rx, ry, rz = getElementPosition(car)
-            setElementPosition(sound, rx, ry, rz)
-            setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
+    soundTimer[car] = setTimer(function(sound, car)
+        if not isElement(sound) or not isElement(car) then return end
+        local rx, ry, rz = getElementPosition(car)
+        setElementPosition(sound, rx, ry, rz)
+        setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
 
-            local target = getCameraTarget()
-            local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
-            if target then
-                playerx, playery, playerz = getElementPosition(target)
-            end
-            cp_x, cp_y, cp_z = getElementPosition(car)
-            local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
+        local target = getCameraTarget()
+        local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
+        if target then
+            playerx, playery, playerz = getElementPosition(target)
+        end
+        cp_x, cp_y, cp_z = getElementPosition(car)
+        local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
+	if getResourceState(getResourceFromName( 'mrgreen-settings' )) == 'running' and exports['mrgreen-settings']:isCustomHornIconEnabled() then
             if dist and dist < 40 and (isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false)) then
                 local screenX, screenY = getScreenFromWorldPosition(cp_x, cp_y, cp_z)
                 local scaled = screenSizex * (1 / (2 * (dist + 5))) * .85
@@ -882,8 +882,8 @@ function createSoundForCar(car, horn)
             else
                 guiSetVisible(icon[car], false)
             end
-        end, 50, 0, soundElements[car], car)
-    end
+	end
+    end, 50, 0, soundElements[car], car)
 
     killOtherTimer[car] = setTimer(function(theTimer, car) if isTimer(theTimer) then killTimer(theTimer) if isElement(icon[car]) then destroyElement(icon[car]) end end end, length, 50, soundTimer[car], car)
 end
