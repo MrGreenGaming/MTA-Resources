@@ -242,6 +242,7 @@ trueBackgroundY = false -- True Y position where it should go after anim
 
 font = "default"
 fontBold = "default-bold"
+middleFont = "default-bold"
 bigFont = "default-bold"
 
 countdown_text = "10"
@@ -279,7 +280,7 @@ local function draw()
 		--Selected option
 		if i == selectedVote then
 			dxDrawRectangle(backgroundX, backgroundY+first_option_text_Yoffset+(option_text_height*i), backgroundWidth, option_text_height, tocolor(255, 255, 255, 228), isPostGUI,false)
-			curFont = bigFont
+			curFont = middleFont
 			curColor = tocolor(10, 10, 10, 255)
 		else
 			curFont = font
@@ -385,6 +386,7 @@ local function createFonts()
 	local f = fontsLoad[1]
 	local b = fontsLoad[2]
 	bigFont = dxCreateFont(f[1], 20, f[3], f[4]) or "default-bold"
+	middleFont = dxCreateFont(f[1], 16, f[3], f[4]) or "default-bold"
 	fontBold = dxCreateFont(f[1], f[2], f[3], f[4]) or "default-bold"
 	font = dxCreateFont(b[1], b[2], b[3], b[4]) or "default"
 end
