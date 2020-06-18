@@ -1,8 +1,17 @@
 <meta>
-	<info name="Ranking board" addon='race' description="Shows ranking board" author='SDK, Ruff' version='1.0' type='script' />
+	<info name="Ranking board" addon='race' description="Shows ranking board" author='SDK, Ruff, CBY' version='2.0' type='script' />
+	
 	<script src='board_s.lua' />
+	<script src='animation.lua' type='client' />
 	<script src='board_c.lua' type='client' />
+	<script src='gui.lua' type='client' />
+	
+	<file src="fonts/StateIcons.ttf" type="client" /> 
+	<file src="fonts/TitilliumWeb-Regular.ttf" type="client" /> 
+	<file src="fonts/TitilliumWeb-SemiBold.ttf" type="client" />
+	
 	<!-- Exports for settings resource  KaliBwoy -->
     <export function="showBoard" type="client"/>
     <export function="hideBoard" type="client"/>
+    <export function="toggleSettings" type="client"/>
 </meta>
