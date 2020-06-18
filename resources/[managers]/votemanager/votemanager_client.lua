@@ -386,7 +386,7 @@ local function createFonts()
 	local f = fontsLoad[1]
 	local b = fontsLoad[2]
 	bigFont = dxCreateFont(f[1], 20, f[3], f[4]) or "default-bold"
-	middleFont = dxCreateFont(f[1], 16, f[3], f[4]) or "default-bold"
+	middleFont = dxCreateFont(f[1], 14, f[3], f[4]) or "default-bold"
 	fontBold = dxCreateFont(f[1], f[2], f[3], f[4]) or "default-bold"
 	font = dxCreateFont(b[1], b[2], b[3], b[4]) or "default"
 end
