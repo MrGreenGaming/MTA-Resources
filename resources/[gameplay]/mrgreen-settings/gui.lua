@@ -208,7 +208,7 @@ local screenW, screenH = guiGetScreenSize()
         
         GUIEditor.checkbox[5] = guiCreateCheckBox(64, 26+70, 15, 15, "Enable Rank Board", false, false, GUIEditor.tab[3])
         GUIEditor.label[23] = guiCreateLabel(104, 27+70, 113, 15, "Enable Rank Board", false, GUIEditor.tab[3])
-        
+        GUIEditor.button[5] = guiCreateButton(216, 25+70, 60, 22, "Settings", false, GUIEditor.tab[3])
         
 
         GUIEditor.label[24] = guiCreateLabel(104, 52+70, 123, 15, "Enable Traffic Sensor", false, GUIEditor.tab[3])
@@ -366,7 +366,7 @@ addEventHandler("sb_showSettings",root,function()
 addEventHandler("onClientGUIClick", resourceRoot, function()
     if source == GUIEditor.button[3] then
         executeCommandHandler("settings") 
-    end 
+    end
 end)
 
 

@@ -16,3 +16,11 @@ addEventHandler('onPlayerReachCheckpoint', root,
 		triggerClientEvent('onClientPlayerReachCheckpoint', source, checkpointNum, timePassed)
 	end
 )
+
+addEvent('onPlayerFinish')
+addEventHandler('onPlayerFinish', root,
+	function(rank, time)
+		triggerClientEvent('onClientPlayerStateChange', source, "finished")
+		triggerClientEvent('onClientPlayerReachCheckpoint', source, 0, time)
+	end
+)
