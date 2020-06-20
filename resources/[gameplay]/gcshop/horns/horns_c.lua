@@ -1,5 +1,6 @@
 ﻿local screenWidth, screenHeight = guiGetScreenSize()
 downloadHornList = {}
+hornsSearchMapping = {}
 hornsTable = {
     [1] = "Birdo-geluidje",
     [2] = "Boo-gebulder",
@@ -499,8 +500,6 @@ hornsTable = {
 }
 
 
-
-
 function onShopInit(tabPanel)
     shopTabPanel = tabPanel
     --triggerServerEvent('getHornsData', localPlayer)
@@ -509,13 +508,13 @@ function onShopInit(tabPanel)
 
     --// Tab Panels //--
     hornsTab = guiCreateTab("Custom Horns", shopTabPanel)
-    buyHornsTabPanel = guiCreateTabPanel(35, 30, 641, 381, false, hornsTab)
+    buyHornsTabPanel = guiCreateTabPanel(35, 20, 641, 391, false, hornsTab)
     buyHornsTab = guiCreateTab("Buy horns", buyHornsTabPanel)
     perkTab = guiCreateTab("Horn Perks", buyHornsTabPanel)
 
 
     --// Gridlists //--
-    availableHornsList = guiCreateGridList(0.05, 0.15, 0.42, 0.66, true, buyHornsTab)
+    availableHornsList = guiCreateGridList(0.05, 0.20, 0.42, 0.60, true, buyHornsTab)
     guiGridListSetSortingEnabled(availableHornsList, false)
     local column = guiGridListAddColumn(availableHornsList, "Available horns", 0.9)
     for id, horn in ipairs(hornsTable) do
@@ -523,17 +522,20 @@ function onShopInit(tabPanel)
         guiGridListSetItemText(availableHornsList, row, column, tostring(id) .. ") " .. horn, false, false)
     end
     --
-    myHornsList = guiCreateGridList(0.53, 0.15, 0.42, 0.66, true, buyHornsTab)
+    myHornsList = guiCreateGridList(0.53, 0.20, 0.42, 0.60, true, buyHornsTab)
     guiGridListSetSortingEnabled(myHornsList, false)
     myHornsNameColumn = guiGridListAddColumn(myHornsList, "My horns", 0.7)
     myHornsKeyColumn = guiGridListAddColumn(myHornsList, "Key", 0.2)
 
+    --// Search //--
+    local search = guiCreateEdit(0.05, 0.09, 0.25, 0.06, "", true, buyHornsTab)
+    guiCreateStaticImage(0.305, 0.095, 0.035, 0.05, "maps/search.png", true, buyHornsTab)
 
     --// Labels //--
-    guiCreateLabel(0.05, 0.04, 0.9, 0.15, 'Select a horn out of the left box and press "Buy" to buy for regular usage or double-click to listen it.', true, buyHornsTab)
-    guiCreateLabel(0.06, 0.105, 0.9, 0.15, 'Double-click to listen horn:', true, buyHornsTab)
+    guiCreateLabel(0.05, 0.03, 0.9, 0.08, 'Select a horn out of the left box and press "Buy" to buy for regular usage or double-click to listen it.', true, buyHornsTab)
+    guiCreateLabel(0.06, 0.155, 0.9, 0.15, 'Double-click to listen horn:', true, buyHornsTab)
     guiCreateLabel(0.04, 0.08, 0.9, 0.15, "Horns can only be used 3 times per map (10 secs cool-off). However, you can buy\nunlimited usage of the custom horn for 5000 GC. This item applies to all horns.", true, perkTab)
-    guiCreateLabel(0.54, 0.105, 0.9, 0.15, 'Double-click to bind horn to a key:', true, buyHornsTab)
+    guiCreateLabel(0.54, 0.155, 0.9, 0.15, 'Double-click to bind horn to a key:', true, buyHornsTab)
     guiCreateLabel(0.41, 0.95, 0.90, 0.15, '(for gamepads)', true, buyHornsTab)
 
 
@@ -552,6 +554,7 @@ function onShopInit(tabPanel)
     addEventHandler("onClientGUIClick", bindForGamepads, bindToHornControlName, false)
     addEventHandler("onClientGUIClick", sell, sellHorn, false)
     addEventHandler("onClientGUIClick", unlimited, unlimitedHorn, false)
+    addEventHandler("onClientGUIChanged", search, hornSearchGuiChanged)
 end
 
 addEvent('onShopInit', true)
@@ -587,6 +590,7 @@ function playButton(button, state)
             return
         end
         row = row + 1
+        row = getMappedHornId(row)
         local extension
         extension = ".mp3"
 
@@ -603,8 +607,34 @@ function buyButton(button, state)
             return
         end
         row = row + 1
+        row = getMappedHornId(row)
         triggerServerEvent('onPlayerBuyHorn', localPlayer, row)
     end
+end
+
+function hornSearchGuiChanged()
+    guiGridListClear(availableHornsList)
+    local text = string.lower(guiGetText(source))
+    hornsSearchMapping = {}
+
+    if not text:match("%S") then
+        for id, horn in ipairs(hornsTable) do
+            local row = guiGridListAddRow(availableHornsList)
+            guiGridListSetItemText(availableHornsList, row, 1, tostring(id) .. ") " .. horn, false, false)
+        end
+    else
+        for id, horn in ipairs(hornsTable) do
+            if string.find(tostring(id) .. " " .. string.lower(horn), text, 1, true) then
+                local row = guiGridListAddRow(availableHornsList)
+                guiGridListSetItemText(availableHornsList, row, 1, tostring(id) .. ") " .. horn, false, false)
+                hornsSearchMapping[#hornsSearchMapping + 1] = id
+            end
+        end
+    end
+end
+
+function getMappedHornId(row)
+    return hornsSearchMapping[row] ~= nil and hornsSearchMapping[row] or row
 end
 
 ------------------
