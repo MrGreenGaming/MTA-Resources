@@ -554,7 +554,7 @@ function onShopInit(tabPanel)
     addEventHandler("onClientGUIClick", bindForGamepads, bindToHornControlName, false)
     addEventHandler("onClientGUIClick", sell, sellHorn, false)
     addEventHandler("onClientGUIClick", unlimited, unlimitedHorn, false)
-    addEventHandler("onClientGUIChanged", search, hornGuiChanged)
+    addEventHandler("onClientGUIChanged", search, hornSearchGuiChanged)
 end
 
 addEvent('onShopInit', true)
@@ -612,26 +612,24 @@ function buyButton(button, state)
     end
 end
 
-function hornGuiChanged()
+function hornSearchGuiChanged()
     guiGridListClear(availableHornsList)
     local text = string.lower(guiGetText(source))
-    for row, hornid in ipairs(hornsSearchMapping) do
-        hornsSearchMapping[row] = nil
-    end
-    if ( text == "" ) then
-            hornsSearchMapping = {}
-            for id, horn in ipairs(hornsTable) do
+    hornsSearchMapping = {}
+
+    if not text:match("%S") then
+        for id, horn in ipairs(hornsTable) do
+            local row = guiGridListAddRow(availableHornsList)
+            guiGridListSetItemText(availableHornsList, row, 1, tostring(id) .. ") " .. horn, false, false)
+        end
+    else
+        for id, horn in ipairs(hornsTable) do
+            if string.find(tostring(id) .. " " .. string.lower(horn), text, 1, true) then
                 local row = guiGridListAddRow(availableHornsList)
                 guiGridListSetItemText(availableHornsList, row, 1, tostring(id) .. ") " .. horn, false, false)
+                hornsSearchMapping[#hornsSearchMapping + 1] = id
             end
-    else
-            for id, horn in ipairs(hornsTable) do
-                if string.find(tostring(id) .. " " .. string.lower(horn), text, 1, true) then
-                    local row = guiGridListAddRow(availableHornsList)
-                    guiGridListSetItemText(availableHornsList, row, 1, tostring(id) .. ") " .. horn, false, false)
-                    hornsSearchMapping[#hornsSearchMapping + 1] = id
-                end
-            end
+        end
     end
 end
 
