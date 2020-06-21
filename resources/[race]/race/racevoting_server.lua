@@ -349,6 +349,14 @@ math.randomseed( getTickCount() % 50000 )
 currentmode = math.random(#modes)
 
 function calculateNextmap()
+	if exports.gcshop:isAnyMapQueued() then
+		local queuedMap = exports.gcshop:getCurrentMapQueued()
+		if queuedMap then
+			local queuedMapResource = getResourceFromName(queuedMap)
+			triggerEvent('onNextmapSettingChange', root, queuedMapResource)
+			return queuedMapResource
+		end
+	end
 	-- local chance = math.random(1,6)
 	local compatibleMaps
 	-- if chance == 2 or chance == 4 then
