@@ -54,6 +54,7 @@ RankBoard.linePosition = 0
 RankBoard.lineY = 0
 RankBoard.showIntervals = showIntervals
 RankBoard.liveIntervals = liveIntervals
+RankBoard.backgroundOpacity = 0.65
 RankBoard.animations = {}
 RankBoard.sorted = {}
 RankBoard.bestCPTimes = {}
@@ -117,7 +118,7 @@ function RankBoard:update(what)
 			if not self.hidden and not self.willHide then
 				if RankBoard.animate and not self.willShow then
 					if self.animations["y"] ~= nil then destroyAnimation(self.animations["y"]) end
-					self.animations["y"] = animate(self.y, newY, "OutQuad", 300, function(y)
+					self.animations["y"] = animate(self.y, newY, "OutQuad", 250, function(y)
 			        		self.y = y
 			    		end, function()
 			    			self.animations["y"] = nil
@@ -201,7 +202,7 @@ function RankBoard:hide(hide)
 		return
 	end
 	if self.animations["a"] ~= nil then destroyAnimation(self.animations["a"]) end
-	self.animations["a"] = animate(self.a, hide and 0 or 1, "OutQuad", 300, function(a)
+	self.animations["a"] = animate(self.a, hide and 0 or 1, "Linear", 200, function(a)
 		self.a = a
 	end, function()
 		self.willHide = false
@@ -225,11 +226,12 @@ function RankBoard:draw()
 	
 	local teamColor = (alpha>0 and alpha<1) and tocolor(self.colorRGB[1], self.colorRGB[2], self.colorRGB[3], 255*alpha) or self.color
 	
-	local bgcolor
+	local bgcolor = nil
+	local bgalpha = 255 * RankBoard.backgroundOpacity * alpha
 	if self.localPlayer then
-		bgcolor = self.state == "finished" and tocolor(20,80,20,160*alpha) or tocolor(40,40,40,160*alpha)
+		bgcolor = self.state == "finished" and tocolor(20,80,20,bgalpha) or tocolor(40,40,40,bgalpha)
 	else
-		bgcolor = self.state == "finished" and tocolor(0,60,0,160*alpha) or tocolor(0,0,0,160*alpha)
+		bgcolor = self.state == "finished" and tocolor(0,60,0,bgalpha) or tocolor(0,0,0,bgalpha)
 	end
 	
 	
@@ -475,7 +477,7 @@ function updateWhiteList()
 	local etime = getTickCount()
 end
 
-setTimer(updateWhiteList, 250, 0)
+setTimer(updateWhiteList, 333, 0)
 
 --
 -- Events
@@ -492,8 +494,17 @@ addEventHandler("serverSendGM",root,gameModeHandler)
 
 addEventHandler("onClientElementDataChange", root, function(dataName, old, new)
 	if getElementType(source) ~= "player" or not RankBoard.items[source] then return end
-	if dataName == "player state" then
+	if dataName == "player state" and RankBoard.items[source].state ~= "finished" then
 		RankBoard.items[source]:update({state = new})
+	elseif dataName == "vip.colorNick" then
+		local name = new or getPlayerName(source)
+		local team = getPlayerTeam(source)
+		if team then
+			local r,g,b = getTeamColor(team)
+			RankBoard.items[source].name = RGBToHex(r,g,b) .. name
+		else
+			RankBoard.items[source].name = name
+		end
 	end
 	
 end)
@@ -788,4 +799,23 @@ end
 
 function setNumberOfPositions(positions)
 	lines = tonumber(positions) and positions or 8
+end
+
+function setBackgroudOpacity(value)
+	if not tonumber(value) or value < 0 or value > 1 then return end
+	RankBoard.backgroundOpacity = value
+end
+
+function setBoardScale(value)
+	if not tonumber(value) then return end
+	scale = value == 0 and round((screenY/800)*10)/10 or value
+	RankBoard.scale = scale
+	RankBoard.itemheight = round(itemHeight * scale)
+	RankBoard.padding = round(itemPadding * scale)
+	RankBoard.font = dxCreateFont("fonts/TitilliumWeb-SemiBold.ttf", round(11 * scale)) or "default-bold"
+	RankBoard.fontSmall = dxCreateFont("fonts/TitilliumWeb-Regular.ttf", round(11 * scale)) or "default"
+	RankBoard.fontState = dxCreateFont("fonts/StateIcons.ttf", round(9 * scale)) or "default"
+	RankBoard.timeW = round((dxGetTextWidth("+00:00:00", 1, RankBoard.fontSmall) + itemPadding*2) * scale)
+	RankBoard.x = screenX - round((w+40) * scale) - (showIntervals and RankBoard.timeW or 0)
+	RankBoard.w = round(w * scale);
 end
