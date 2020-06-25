@@ -19,6 +19,7 @@ splitsBehind = 1
 animationsEnabled = true
 showIntervals = false
 liveIntervals = false
+lightenDarkColors = false
 
 y = 200
 w = 190
@@ -628,6 +629,80 @@ function RGBToHex(red, green, blue, alpha)
 	end
 end
 
+function RGBToHSV(red, green, blue)
+	local hue, saturation, value;
+
+	local min_value = math.min( red, green, blue );
+	local max_value = math.max( red, green, blue );
+
+	value = max_value;
+
+	local value_delta = max_value - min_value;
+	if max_value ~= 0 then
+		saturation = value_delta / max_value;
+	else
+		saturation = 0;
+		hue = 0;
+		return hue, saturation, value;
+	end
+
+	if red == max_value then
+		hue = ( green - blue ) / value_delta;
+	elseif green == max_value then
+		hue = 2 + ( blue - red ) / value_delta;
+	else
+		hue = 4 + ( red - green ) / value_delta;
+	end
+
+	hue = hue * 60;
+	if hue < 0 then
+		hue = hue + 360;
+	end
+
+	return hue, saturation, value
+end
+
+function HSVToRGB(hue, saturation, value)
+	if saturation == 0 then
+		return value, value, value
+	end
+
+	local hue_sector = math.floor( hue / 60 );
+	local hue_sector_offset = ( hue / 60 ) - hue_sector;
+
+	local p = value * ( 1 - saturation )
+	local q = value * ( 1 - saturation * hue_sector_offset )
+	local t = value * ( 1 - saturation * ( 1 - hue_sector_offset ) )
+
+	if hue_sector == 0 then
+		return value, t, p
+	elseif hue_sector == 1 then
+		return q, value, p
+	elseif hue_sector == 2 then
+		return p, value, t
+	elseif hue_sector == 3 then
+		return p, q, value
+	elseif hue_sector == 4 then
+		return t, p, value
+	elseif hue_sector == 5 then
+		return value, p, q
+	end
+end
+
+function toNameColor(red, green, blue, alpha)
+	if not lightenDarkColors then
+		return tocolor(red, green, blue, alpha)
+	else
+		local h,s,v = RGBToHSV(red, green, blue)
+		if v > 180 then
+			return tocolor(red, green, blue, alpha)
+		else
+			local r, g, b = HSVToRGB(h, s, 180)
+			return tocolor(r, g, b, alpha)
+		end
+	end
+end
+
 function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY, clip, alpha)
  
 	if alignX then
@@ -654,13 +729,13 @@ function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY
 	local s, e, cap, col = str:find(pat, 1)
 	local last = 1
 	while s do
-		if cap == "" and col then color = tocolor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255 * (alpha or 1)) end
+		if cap == "" and col then color = toNameColor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255 * (alpha or 1)) end
 		if s ~= 1 or cap ~= "" then
 			local w = dxGetTextWidth(cap, scale, font)
 			if clip and ax + w > bx then w = w - ( ax + w - bx) end
 			dxDrawText(cap, ax, ay, ax + w, by, color, scale, font, nil, nil, clip)
 			ax = ax + w  
-			color = tocolor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255 * (alpha or 1))
+			color = toNameColor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255 * (alpha or 1))
 		end
 		last = e + 1
 		s, e, cap, col = str:find(pat, last)
@@ -795,6 +870,10 @@ function setShowIntervals(enabled, live)
 	RankBoard.showIntervals = showIntervals
 	RankBoard.liveIntervals = liveIntervals
 	RankBoard.x = screenX - round((w+40) * scale) - (showIntervals and RankBoard.timeW or 0)
+end
+
+function setLightenDarkColors(enabled)
+	lightenDarkColors = enabled and true or false
 end
 
 function setNumberOfPositions(positions)
