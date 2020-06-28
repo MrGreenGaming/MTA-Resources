@@ -494,6 +494,8 @@ hornsTable = {
     [490] = "Party Thieves Chief",
     [491] = "Sevmek Suç Olmamalı",
     [492] = "Zabaha Kadar Burdayım",
+    [493] = "6ix9ine",
+    [494] = "YaaaaaaH",
     
     
  
