@@ -1,5 +1,4 @@
 local theCon = false
-local rateCost = 30;
 
 addEventHandler('onResourceStart', resourceRoot,
 	function()
@@ -24,15 +23,12 @@ function rate (player, cmd)
 		 dbExec( theCon, "UPDATE mapratings SET rating=?, forumid=? WHERE mapresourcename=? AND (forumid=? OR serial=? OR playername=?)", rating, forumid, mapresourcename, forumid, serial, _getPlayerName(player) )
 		 if sql[1].rating == rating then
 			outputChatBox("You already "..cmd.."d this map.", player, 255, 0, 0, true)
-			exports.gc:addPlayerGreencoins(player, -rateCost)
 		else
 			outputChatBox("Changed from "..(rating==1 and "dislike" or "like").." to "..cmd..".", player, 225, 170, 90, true)
-			exports.gc:addPlayerGreencoins(player, -rateCost)
 		end
 	else
 		if dbExec( theCon, "INSERT INTO mapratings (forumid, mapresourcename,rating) VALUES (?,?,?)", forumid, mapresourcename, rating) then
 			outputChatBox("You "..cmd.."d the map: "..mapname, player, 225, 170, 90, true)
-			exports.gc:addPlayerGreencoins(player, -rateCost)
 		end
 	end
 	triggerEvent("onSendMapRating", root, getMapRating(mapresourcename, true) or "unrated")
