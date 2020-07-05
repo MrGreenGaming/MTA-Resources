@@ -498,6 +498,8 @@ hornsTable = {
     [494] = "Chillim",
     [495] = "Mazule",
     [496] = "Beat me",
+    [497] = "Dummy",
+    [498] = "+18",
     
     
  
