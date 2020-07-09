@@ -58,7 +58,7 @@ function longestTimeMode(time)
 	t.name = getElementData(source, 'vip.colorNick') or getPlayerName(source)
 	t.time = time
 	t.player = source
-	
+
 	local inserted = false
 	for i, v in ipairs(playerTable) do
 		if v.player == source then
@@ -118,7 +118,7 @@ end
 )
 
 function addTeamColor(player)
-	local playerTeam = getPlayerTeam ( player ) 
+	local playerTeam = getPlayerTeam ( player )
 	if ( playerTeam ) then
 		local r,g,b = getTeamColor ( playerTeam )
 		local n1 = toHex(r)

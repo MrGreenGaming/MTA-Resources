@@ -42,69 +42,11 @@ end
 addEvent('freecam', true)
 addEventHandler('freecam', resourceRoot, freecam)
 
--- -- /ignore <playername> -- Uncommented by KaliBwoy, added to settings menu.
-
--- local ignores = nil
--- function findPlayerByName(playerPart)
--- 	local pl = playerPart and getPlayerFromName(playerPart)
--- 	if pl and isElement(pl) then
--- 		return pl
--- 	elseif playerPart then
--- 		for i,v in ipairs (getElementsByType ("player")) do
--- 			if (string.find(string.gsub ( string.lower(getPlayerName(v)), '#%x%x%x%x%x%x', '' ),string.lower(playerPart))) then
--- 				return v
--- 			end
--- 		end
---     end
---  end
- 
--- function ignorePlayer(cmd, playername)
--- 	local player = findPlayerByName(playername)
--- 	if player == localPlayer then
--- 		outputChatBox ( 'Press F2 2x times for full server ignore', 255, 0, 0 )
--- 	elseif not player then
--- 		outputChatBox ( '/ignore: Could not find \'' .. (playername or '') .. '\'', 255, 0, 0 )
--- 	else
--- 		if not ignores then
--- 			ignores = {}
--- 		end
--- 		outputChatBox ( '/ignore: ignoring player ' .. getPlayerName(player), 255, 0, 0 )
--- 		setElementData(player, 'ignored', true, false)
--- 		setTimer(function()
--- 		table.insert(ignores, player)
--- 		end, 100,1)
--- 	end
--- end
--- addCommandHandler ( 'ignore', ignorePlayer)
-
--- function onClientChatMessageHandler( text )
--- 	if not ignores or not text then return end
-	
--- 	for k, player in ipairs(ignores) do
--- 		if isElement(player) and text:find(getPlayerName(player), 1, true) then
--- 			return cancelEvent()
--- 		end
--- 	end
--- end
--- addEventHandler("onClientChatMessage", root, onClientChatMessageHandler)
-
 -- /fpslimit <limit>
-
-local limit
 function clientFPSLimit(cmd, limit_)
-	--if (tonumber(limit_) and tonumber(limit_) > 19 and tonumber(limit_) < 61) then
-	--	outputChatBox('Your FPS limit will be changed on next map change')
-	--	limit = tonumber(limit_)
-	--else
-	--	outputChatBox('Bad limit.')
-	--end
 	triggerEvent("gus_c_fpslimit", root, limit_)
 end
 addCommandHandler ( 'fpslimit', clientFPSLimit)
-
---addEventHandler('onClientMapStarting', root, function ()
---	if limit then setFPSLimit(limit) end
---end)
 
 addCommandHandler('votekut', function() playSound(":gcshop/horns/files/38.mp3", false) end)
 

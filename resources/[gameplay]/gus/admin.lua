@@ -1,10 +1,10 @@
-function adsay(player, c, ...) 			-- Admin chat 
+function adsay(player, c, ...) 			-- Admin chat
 	if not (hasObjectPermissionTo(player, "function.banPlayer", false)) then
 		return
 	end
-	
+
 	local message = table.concat({...}, ' ')
-	
+
 	for k, v in ipairs (getElementsByType("player")) do
 		if hasObjectPermissionTo ( v, "general.adminpanel", false ) then
 			outputChatBox ( "ADMIN> "..string.gsub ( (getPlayerName(player)), '#%x%x%x%x%x%x', '' )..": "..message, v, 255, 0, 0,true )
@@ -14,7 +14,7 @@ function adsay(player, c, ...) 			-- Admin chat
 end
 addCommandHandler('adsay', adsay)
 
-addCommandHandler('achat', 
+addCommandHandler('achat',
 function(player, cmd, ...)
 	if hasObjectPermissionTo(player, "function.banPlayer", false) then
 	    local langs = {'ca', 'cs', 'da', 'de', 'en_us', 'en_gb', 'en_au', 'es', 'fi', 'fr', 'hi', 'ht', 'hu', 'id', 'it', 'ja', 'ko', 'la', 'nl', 'no', 'pl', 'pt', 'ru', 'sk', 'sv', 'tr', 'zh'}
@@ -38,7 +38,7 @@ function findPlayerByName(playerPart)
 		end
     end
  end
- 
+
 function removePlayerFromTimes(player)
 	local nameOfPlayer = getPlayerName(player)
 	local map_names = {}
@@ -58,11 +58,11 @@ function removePlayerFromTimes(player)
 			end
 		end
 end
- 
+
 
 function serialBan(player, commandName, ...)
 	if not (hasObjectPermissionTo(player, "function.banPlayer", false)) then
-		return 
+		return
 	end
 	local parameterCount = #arg
 	if (arg[1]) then
@@ -83,14 +83,14 @@ function serialBan(player, commandName, ...)
 				outputChatBox("Current map's (if existent) needs to be deleted manually", player)]]
 				-- ^ TOO LAGGY.
 				addBan(getPlayerIP(bannedPlayer), nil, getPlayerSerial(bannedPlayer), player , fullReason )
-			end	
-		else 
+			end
+		else
 			outputChatBox('No player matches that nickname', player, 255, 0, 0)
 		end
-	else 
+	else
 		outputChatBox('Correct command: /sban [nick] [reason]', player, 255, 0, 0)
-	end	
-end	
+	end
+end
 addCommandHandler('sban', serialBan)
 
 -- /update
@@ -184,10 +184,10 @@ function useIRC()
     return false
 end
 
-addCommandHandler('addban', 
+addCommandHandler('addban',
 function(player,cmd,...)
 	if not (hasObjectPermissionTo(player, "function.banPlayer", false)) then
-		return 
+		return
 	end
 	if not (arg[1]) then outputChatBox("State the player's full name (no color codes).",player) return end
 	local banPlayerName = string.gsub (arg[1], '#%x%x%x%x%x%x', '' )
@@ -204,9 +204,9 @@ function(player,cmd,...)
 		theBan = addBan(theIP, nil, theSerial, player, reason, 0)
 		if not theBan then outputChatBox("An error has occured. Can't ban player.", player)
 		else outputChatBox("Successfully banned.", player)
-			 outputChatBox(remcol(banPlayerName).." has been banned by "..remcol(getPlayerName(player)),root, 255,0,0)	
+			 outputChatBox(remcol(banPlayerName).." has been banned by "..remcol(getPlayerName(player)),root, 255,0,0)
 		end
-	else outputChatBox("No player match. Try again.", player)	
+	else outputChatBox("No player match. Try again.", player)
 	end
 end
 )

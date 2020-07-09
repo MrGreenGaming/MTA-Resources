@@ -10,11 +10,11 @@ function joinPlayer ( )
 		if (joinedPlayerName == 'Player') then
 			setTimer(outputChatBox, 3000, 1, 'Please use an other nickname then "Player"', source, 0xFF, 0x00, 0x00 )
 		elseif isNameInUse(joinedPlayerName) then
-			setTimer(outputChatBox, 3000, 1, 'Your nickname was already in use, changed to random one', source, 0xFF, 0x00, 0x00 )		
+			setTimer(outputChatBox, 3000, 1, 'Your nickname was already in use, changed to random one', source, 0xFF, 0x00, 0x00 )
 		elseif noColorName:gsub ( '#%x%x%x%x%x%x', '' ) ~= noColorName then
-			setTimer(outputChatBox, 3000, 1, 'Your nickname is using multiple colour codes, which causes bugs. Please change', source, 0xFF, 0x00, 0x00 )		
+			setTimer(outputChatBox, 3000, 1, 'Your nickname is using multiple colour codes, which causes bugs. Please change', source, 0xFF, 0x00, 0x00 )
 		else
-			setTimer(outputChatBox, 3000, 1, 'Please use a nickname longer then 2 characters', source, 0xFF, 0x00, 0x00 )		
+			setTimer(outputChatBox, 3000, 1, 'Please use a nickname longer then 2 characters', source, 0xFF, 0x00, 0x00 )
 		end
 		setPlayerName ( source , 'Green' .. tostring(math.random(100,999)))
 	elseif not (noColorName:len() > 2) then
@@ -31,13 +31,13 @@ function nickChangeHandler(oldNick, newNick)
 		if (newNick == 'Player') then
 			outputChatBox('Please use an other nickname then "Player"', source, 0xFF, 0x00, 0x00 )
 		elseif isNameInUse(newNick) and isNameInUse(newNick) ~= source then
-			outputChatBox('This nickname is already in use', source, 0xFF, 0x00, 0x00 )		
+			outputChatBox('This nickname is already in use', source, 0xFF, 0x00, 0x00 )
 		elseif isPlayerMuted(source) or chat_is_disabled then
-			outputChatBox('You can\'t change your nick while you are muted', source, 0xFF, 0x00, 0x00 )		
+			outputChatBox('You can\'t change your nick while you are muted', source, 0xFF, 0x00, 0x00 )
 		elseif noColorName:gsub ( '#%x%x%x%x%x%x', '' ) ~= noColorName then
-			outputChatBox('Your nickname is using multiple colour codes, which causes bugs. Please change', source, 0xFF, 0x00, 0x00 )		
+			outputChatBox('Your nickname is using multiple colour codes, which causes bugs. Please change', source, 0xFF, 0x00, 0x00 )
 		else
-			outputChatBox('Please use a nickname longer then 2 characters', source, 0xFF, 0x00, 0x00 )		
+			outputChatBox('Please use a nickname longer then 2 characters', source, 0xFF, 0x00, 0x00 )
 		end
 		cancelEvent()
 	end
