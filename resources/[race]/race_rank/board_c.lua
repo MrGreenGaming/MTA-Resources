@@ -141,7 +141,7 @@ function RankBoard:update(what)
 			--self.splitTime = getTickCount()
 		elseif key == "state" then
 			if value == "dead" then
-				self.a = 0.6
+				self.a = 0.5
 			elseif self.state == "dead" then
 				self.a = 1
 			end
@@ -228,7 +228,7 @@ function RankBoard:draw()
 	local teamColor = (alpha>0 and alpha<1) and tocolor(self.colorRGB[1], self.colorRGB[2], self.colorRGB[3], 255*alpha) or self.color
 	
 	local bgcolor = nil
-	local bgalpha = 255 * RankBoard.backgroundOpacity * alpha
+	local bgalpha = 255 * RankBoard.backgroundOpacity * (self.state == "dead" and 1 or alpha)
 	if self.localPlayer then
 		bgcolor = self.state == "finished" and tocolor(20,80,20,bgalpha) or tocolor(40,40,40,bgalpha)
 	else
@@ -495,7 +495,7 @@ addEventHandler("serverSendGM",root,gameModeHandler)
 
 addEventHandler("onClientElementDataChange", root, function(dataName, old, new)
 	if getElementType(source) ~= "player" or not RankBoard.items[source] then return end
-	if dataName == "player state" and RankBoard.items[source].state ~= "finished" then
+	if dataName == "player state" and (new ~= "dead" or (new == "dead" and RankBoard.items[source].state ~= "finished")) then
 		RankBoard.items[source]:update({state = new})
 	elseif dataName == "vip.colorNick" then
 		local name = new or getPlayerName(source)
