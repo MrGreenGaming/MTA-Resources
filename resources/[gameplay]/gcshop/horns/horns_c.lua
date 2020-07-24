@@ -561,6 +561,9 @@ function onShopInit(tabPanel)
     addEventHandler("onClientGUIClick", sell, sellHorn, false)
     addEventHandler("onClientGUIClick", unlimited, unlimitedHorn, false)
     addEventHandler("onClientGUIChanged", search, hornSearchGuiChanged)
+	
+    guiBringToFront(availableHornsList)
+    guiBringToFront(myHornsList)
 end
 
 addEvent('onShopInit', true)
