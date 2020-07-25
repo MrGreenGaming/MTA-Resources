@@ -65,7 +65,7 @@ achievementListRace = {
 	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 100 },
 	{ s = "Finish the map *ChrML Hard*",               	id = 57,		reward = 100 },
 	{ s = "Finish the map *Long Venturas Trip, Jumps and Fun*",               	id = 63,		reward = 100 },
-	{ s = "Finish the map *Whirlwind Journey in less than 8:30 minutes*",               	id = 64,		reward = 100 },
+	{ s = "Finish the map *Whirlwind Journey in less than 7:40 minutes*",               	id = 64,		reward = 100 },
 	{ s = "Finish the map *Hydratastic!*",               	id = 58,		reward = 100 },
 	{ s = "Finish the map *Cryo's Hydra challenge VOL 1*",               	id = 59,		reward = 100 },
 	{ s = "Besweeet award",     									id = 52,			reward = 44, max = 4 },
@@ -215,7 +215,7 @@ function(rank, time)
 	if mapResName == "race-VenturasTwistsAndTurns" then
 		addPlayerAchievementRace(source, 63)
 	end
-	if mapResName == "race-whirlwindjourney" and time <= 498000 then
+	if mapResName == "race-whirlwindjourney" and time <= 444000 then
 		addPlayerAchievementRace(source, 64)
 	end
 
