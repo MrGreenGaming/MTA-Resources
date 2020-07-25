@@ -13,25 +13,22 @@
 	<script src="rankboard_c.lua" type="client" protected="true" />
     <script src="antipickups.lua" />
     <script src="antipickups_c.lua" type="client" />
-    <script src="bounty_s.lua" />
-    <script src="bounty_c.lua" type="client" />
     <script src="blocker.lua" />
     <script src="blocker_c.lua" type="client" />
 	<script src="settings.lua" />
-	<script src="leaderboards_c.lua" type="client" />
 
     <export function="chatDisabled" type="server" />
     <file src="chat.png" />
     <file src="text.png" />
     <include resource="freecam" />
 	<include resource="settingsmanager" />
-    
+
     <min_mta_version server="1.3.0-9.03739"></min_mta_version>
 
     <!-- Exports for settings resource  KaliBwoy -->
     <export function="showChaticon" type="client"/>
     <export function="hideChaticon" type="client"/>
-	
+
 	<settings>
 		<setting
 			name="*gus_debugMessages"

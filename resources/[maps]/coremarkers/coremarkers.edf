@@ -1,0 +1,25 @@
+<def name="CoreMarkers" extends="race" >
+	<setting 	name="coremarkers_respawn" 
+				friendlyname="CoreMarkers Respawn"
+				type="natural" 				
+				default="5000"
+				description="Respawn delay in miliseconds. 1s = 1000ms" 
+				required="true"
+	/>
+	<setting 	name="coremarkers_items" 
+				friendlyname="CoreMarkers Items"
+				type="string" 				
+				default=""
+				description="List of CoreMarkers items separated by comma. Leave empty if you want it to be default. Example: repair,spikes,boost,oil,hay,barrels,ramp,rocket,magnet,jump,rock,smoke,nitro,speed,fly,kmz,minigun" 
+				required="true"
+	/>
+	
+	<element name="coremarker" friendlyname="CoreMarker" icon="pics/icon.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<object model="3798" posZ="0.3" editorOnly="true"/>
+		<marker posZ="-2.75" size="3.3" type="cylinder" color="#00ff00ff" editorOnly="true" />
+	</element>
+	
+	<script src="edf_s.lua" type="server" />
+	<script src="edf_c.lua" type="client" />		
+ </def>

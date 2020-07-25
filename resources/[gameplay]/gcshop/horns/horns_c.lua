@@ -1,5 +1,6 @@
 ﻿local screenWidth, screenHeight = guiGetScreenSize()
 downloadHornList = {}
+hornsSearchMapping = {}
 hornsTable = {
     [1] = "Birdo-geluidje",
     [2] = "Boo-gebulder",
@@ -468,12 +469,41 @@ hornsTable = {
     [465] = "Serdar Mortal Kombat",
     [466] = "Speak",
     [467] = "Fuck Ballas",
+    [468] = "FAP FAP FAP",
+    [469] = "General Kenobi!",
+    [470] = "You are a bold one!",
+    [471] = "Chill Boy",
+    [472] = "Low",
+    [473] = "Move bro",
+    [474] = "Move Fat As",
+    [475] = "Why",
+    [476] = "Dew it",
+    [477] = "Flying is for droids",
+    [478] = "Fun begins",
+    [479] = "High ground!",
+    [480] = "I don't think so",
+    [481] = "I hate you!",
+    [482] = "I've been looking forward",
+    [483] = "Outrageous, unfair",
+    [484] = "So uncivilized",
+    [485] = "Underestimate my power",
+    [486] = "I'm so sorry",
+    [487] = "Lick lick lick my baaaalls!",
+    [488] = "Turk Korona",
+    [489] = "Abilere Selam Çatışmaya Devam",
+    [490] = "Party Thieves Chief",
+    [491] = "Sevmek Suç Olmamalı",
+    [492] = "Zabaha Kadar Burdayım",
+    [493] = "KneeLzy antheme",
+    [494] = "Chillim",
+    [495] = "Mazule",
+    [496] = "Beat me",
+    [497] = "Dummy",
+    [498] = "+18",
     
     
  
 }
-
-
 
 
 function onShopInit(tabPanel)
@@ -484,13 +514,13 @@ function onShopInit(tabPanel)
 
     --// Tab Panels //--
     hornsTab = guiCreateTab("Custom Horns", shopTabPanel)
-    buyHornsTabPanel = guiCreateTabPanel(35, 30, 641, 381, false, hornsTab)
+    buyHornsTabPanel = guiCreateTabPanel(35, 20, 641, 391, false, hornsTab)
     buyHornsTab = guiCreateTab("Buy horns", buyHornsTabPanel)
     perkTab = guiCreateTab("Horn Perks", buyHornsTabPanel)
 
 
     --// Gridlists //--
-    availableHornsList = guiCreateGridList(0.05, 0.15, 0.42, 0.66, true, buyHornsTab)
+    availableHornsList = guiCreateGridList(0.05, 0.20, 0.42, 0.60, true, buyHornsTab)
     guiGridListSetSortingEnabled(availableHornsList, false)
     local column = guiGridListAddColumn(availableHornsList, "Available horns", 0.9)
     for id, horn in ipairs(hornsTable) do
@@ -498,17 +528,20 @@ function onShopInit(tabPanel)
         guiGridListSetItemText(availableHornsList, row, column, tostring(id) .. ") " .. horn, false, false)
     end
     --
-    myHornsList = guiCreateGridList(0.53, 0.15, 0.42, 0.66, true, buyHornsTab)
+    myHornsList = guiCreateGridList(0.53, 0.20, 0.42, 0.60, true, buyHornsTab)
     guiGridListSetSortingEnabled(myHornsList, false)
     myHornsNameColumn = guiGridListAddColumn(myHornsList, "My horns", 0.7)
     myHornsKeyColumn = guiGridListAddColumn(myHornsList, "Key", 0.2)
 
+    --// Search //--
+    local search = guiCreateEdit(0.05, 0.09, 0.25, 0.06, "", true, buyHornsTab)
+    guiCreateStaticImage(0.305, 0.095, 0.035, 0.05, "maps/search.png", true, buyHornsTab)
 
     --// Labels //--
-    guiCreateLabel(0.05, 0.04, 0.9, 0.15, 'Select a horn out of the left box and press "Buy" to buy for regular usage or double-click to listen it.', true, buyHornsTab)
-    guiCreateLabel(0.06, 0.105, 0.9, 0.15, 'Double-click to listen horn:', true, buyHornsTab)
+    guiCreateLabel(0.05, 0.03, 0.9, 0.08, 'Select a horn out of the left box and press "Buy" to buy for regular usage or double-click to listen it.', true, buyHornsTab)
+    guiCreateLabel(0.06, 0.155, 0.9, 0.15, 'Double-click to listen horn:', true, buyHornsTab)
     guiCreateLabel(0.04, 0.08, 0.9, 0.15, "Horns can only be used 3 times per map (10 secs cool-off). However, you can buy\nunlimited usage of the custom horn for 5000 GC. This item applies to all horns.", true, perkTab)
-    guiCreateLabel(0.54, 0.105, 0.9, 0.15, 'Double-click to bind horn to a key:', true, buyHornsTab)
+    guiCreateLabel(0.54, 0.155, 0.9, 0.15, 'Double-click to bind horn to a key:', true, buyHornsTab)
     guiCreateLabel(0.41, 0.95, 0.90, 0.15, '(for gamepads)', true, buyHornsTab)
 
 
@@ -527,6 +560,10 @@ function onShopInit(tabPanel)
     addEventHandler("onClientGUIClick", bindForGamepads, bindToHornControlName, false)
     addEventHandler("onClientGUIClick", sell, sellHorn, false)
     addEventHandler("onClientGUIClick", unlimited, unlimitedHorn, false)
+    addEventHandler("onClientGUIChanged", search, hornSearchGuiChanged)
+	
+    guiBringToFront(availableHornsList)
+    guiBringToFront(myHornsList)
 end
 
 addEvent('onShopInit', true)
@@ -562,6 +599,7 @@ function playButton(button, state)
             return
         end
         row = row + 1
+        row = getMappedHornId(row)
         local extension
         extension = ".mp3"
 
@@ -578,8 +616,34 @@ function buyButton(button, state)
             return
         end
         row = row + 1
+        row = getMappedHornId(row)
         triggerServerEvent('onPlayerBuyHorn', localPlayer, row)
     end
+end
+
+function hornSearchGuiChanged()
+    guiGridListClear(availableHornsList)
+    local text = string.lower(guiGetText(source))
+    hornsSearchMapping = {}
+
+    if not text:match("%S") then
+        for id, horn in ipairs(hornsTable) do
+            local row = guiGridListAddRow(availableHornsList)
+            guiGridListSetItemText(availableHornsList, row, 1, tostring(id) .. ") " .. horn, false, false)
+        end
+    else
+        for id, horn in ipairs(hornsTable) do
+            if string.find(tostring(id) .. " " .. string.lower(horn), text, 1, true) then
+                local row = guiGridListAddRow(availableHornsList)
+                guiGridListSetItemText(availableHornsList, row, 1, tostring(id) .. ") " .. horn, false, false)
+                hornsSearchMapping[#hornsSearchMapping + 1] = id
+            end
+        end
+    end
+end
+
+function getMappedHornId(row)
+    return hornsSearchMapping[row] ~= nil and hornsSearchMapping[row] or row
 end
 
 ------------------
@@ -827,20 +891,20 @@ function createSoundForCar(car, horn)
     length = length * 1000
 
     -- update horn icon position/alpha
-    if getResourceState(getResourceFromName( 'mrgreen-settings' )) == 'running' and exports['mrgreen-settings']:isCustomHornIconEnabled() then
-        soundTimer[car] = setTimer(function(sound, car)
-            if not isElement(sound) or not isElement(car) then return end
-            local rx, ry, rz = getElementPosition(car)
-            setElementPosition(sound, rx, ry, rz)
-            setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
+    soundTimer[car] = setTimer(function(sound, car)
+        if not isElement(sound) or not isElement(car) then return end
+        local rx, ry, rz = getElementPosition(car)
+        setElementPosition(sound, rx, ry, rz)
+        setSoundSpeed(sound, getGameSpeed() or 1) -- change horn pitch
 
-            local target = getCameraTarget()
-            local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
-            if target then
-                playerx, playery, playerz = getElementPosition(target)
-            end
-            cp_x, cp_y, cp_z = getElementPosition(car)
-            local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
+        local target = getCameraTarget()
+        local playerx, playery, playerz = getElementPosition(getPedOccupiedVehicle(localPlayer))
+        if target then
+            playerx, playery, playerz = getElementPosition(target)
+        end
+        cp_x, cp_y, cp_z = getElementPosition(car)
+        local dist = getDistanceBetweenPoints3D(cp_x, cp_y, cp_z, playerx, playery, playerz)
+	if getResourceState(getResourceFromName( 'mrgreen-settings' )) == 'running' and exports['mrgreen-settings']:isCustomHornIconEnabled() then
             if dist and dist < 40 and (isLineOfSightClear(cp_x, cp_y, cp_z, playerx, playery, playerz, true, false, false, false)) then
                 local screenX, screenY = getScreenFromWorldPosition(cp_x, cp_y, cp_z)
                 local scaled = screenSizex * (1 / (2 * (dist + 5))) * .85
@@ -857,8 +921,8 @@ function createSoundForCar(car, horn)
             else
                 guiSetVisible(icon[car], false)
             end
-        end, 50, 0, soundElements[car], car)
-    end
+	end
+    end, 50, 0, soundElements[car], car)
 
     killOtherTimer[car] = setTimer(function(theTimer, car) if isTimer(theTimer) then killTimer(theTimer) if isElement(icon[car]) then destroyElement(icon[car]) end end end, length, 50, soundTimer[car], car)
 end

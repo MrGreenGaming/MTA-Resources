@@ -128,7 +128,9 @@ function ui_ClickHandler()
 
 			UI["rankboard"] = false
 		end
-
+	-- Open RankBoard settings
+	elseif source == GUIEditor.button[5] then
+		exports["race_rank"].toggleSettings()
 	-- Toggle Traffic Sensor
 	elseif source == GUIEditor.checkbox[7] then
 		saveTime()

@@ -46,8 +46,6 @@ end
 
 
 function onAutoLogin(forumID, player)
-    
-
     if not forumID then
         return
     end
@@ -66,8 +64,6 @@ function onAutoLogin(forumID, player)
         onLoginFailed(player, true)
     end
 end
-
-
 addEvent("onGCLogin") -- broadcast event
 addEvent("onLogin", true)
 addEventHandler("onLogin", root, onLogin)
@@ -317,7 +313,9 @@ local holidays = {
     { day = 16, month = 9 }, -- anniversary
     { day = 24, month = 12, hour = 18 }, -- christmas evening
     { day = 25, month = 12 }, -- first christmas day
-    { day = 26, month = 12 } -- second christmas day
+    { day = 26, month = 12 }, -- second christmas day
+    { day = 31, month = 12 }, -- last day of the year
+    { day = 1, month = 1 } -- first day of the year
 }
 function isHoliday()
     local bool = false

@@ -35,6 +35,7 @@ local permissions = {
 		['Reach the flag'] = true,
 		['Shooter'] = true,
 		['Deadline'] = true,
+		['Manhunt'] = true,
 	},
 	preview = {								-- the rules for custom colours are the same for paintjobs, since they both change colours
 		['Sprint'] = true,

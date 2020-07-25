@@ -42,132 +42,11 @@ end
 addEvent('freecam', true)
 addEventHandler('freecam', resourceRoot, freecam)
 
---- Rules window ---
-
-GUIEditor = {
-    button = {},
-    window = {},
-    label = {}
-}
-addCommandHandler('rules',
-    function()
-		local screenW, screenH = guiGetScreenSize()
-        GUIEditor.window[1] = guiCreateWindow((screenW - 350) / 2, (screenH - 230) / 2, 350, 230, "Server Rules", false) 
-        guiWindowSetMovable(GUIEditor.window[1], false)
-        guiWindowSetSizable(GUIEditor.window[1], false)
-
-        GUIEditor.label[1] = guiCreateLabel(10, 23, 330, 166, "1. Don't spam, swear, exploit, be a retard.\n2. Our main language here is English.\nIf an admin asks you to use English, use English.\n3. The admins ( /admins ) are always right.\n4. Do not deliberately block to ruin maps.\n5. Do not camp in DD and/or SH maps.\n6. Do not teamkill in CTF maps\n7. Don't escape map boundaries if any.\n\nFailure to comply with the rules can get you kicked or banned!", false, GUIEditor.window[1])
-        guiSetFont(GUIEditor.label[1], "clear-normal")
-        guiLabelSetColor(GUIEditor.label[1], 0, 255, 0)
-        guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
-        GUIEditor.button[1] = guiCreateButton(10, 199, 330, 18, "I have read and agreed to the rules", false, GUIEditor.window[1])    
-		showCursor(true)
-        addEventHandler("onClientGUIClick", GUIEditor.button[1], closeRules, false)
-		
-		-- Centered, size mantains, the only problem with this is that the 1080p players would see it very tiny, this can be changed with comparing resolutions, if its too high, the size is doubled. I also removed all relatives values on the label and button
-    end
-)
-
-function hasPlayerSeenTheRules()
-    local file = xmlLoadFile('rules_.xml')
-    if not file then
-        file = xmlCreateFile('rules_.xml', 'rules')
-    end
-    if not xmlNodeGetValue(file) or xmlNodeGetValue(file) == '' then
-        return false
-    elseif xmlNodeGetValue(file) == 'viewed' then
-        return true
-    end
-    xmlUnloadFile(file)
-end
-
-addEventHandler('onClientResourceStart', resourceRoot,
-function()
-    if not hasPlayerSeenTheRules() then
-        executeCommandHandler('rules')
-    end
-end)
-
-function closeRules(button)
-    if button == "left" then
-        if isElement(GUIEditor.window[1]) then
-            destroyElement(GUIEditor.window[1])
-            showCursor(false)
-            local file = xmlLoadFile('rules_.xml')
-            if not file then
-               file = xmlCreateFile('rules_.xml', 'rules')
-            end
-            xmlNodeSetValue(file, 'viewed')
-            xmlSaveFile(file)
-            xmlUnloadFile(file)
-        end
-    end
-end
-
-
--- -- /ignore <playername> -- Uncommented by KaliBwoy, added to settings menu.
-
--- local ignores = nil
--- function findPlayerByName(playerPart)
--- 	local pl = playerPart and getPlayerFromName(playerPart)
--- 	if pl and isElement(pl) then
--- 		return pl
--- 	elseif playerPart then
--- 		for i,v in ipairs (getElementsByType ("player")) do
--- 			if (string.find(string.gsub ( string.lower(getPlayerName(v)), '#%x%x%x%x%x%x', '' ),string.lower(playerPart))) then
--- 				return v
--- 			end
--- 		end
---     end
---  end
- 
--- function ignorePlayer(cmd, playername)
--- 	local player = findPlayerByName(playername)
--- 	if player == localPlayer then
--- 		outputChatBox ( 'Press F2 2x times for full server ignore', 255, 0, 0 )
--- 	elseif not player then
--- 		outputChatBox ( '/ignore: Could not find \'' .. (playername or '') .. '\'', 255, 0, 0 )
--- 	else
--- 		if not ignores then
--- 			ignores = {}
--- 		end
--- 		outputChatBox ( '/ignore: ignoring player ' .. getPlayerName(player), 255, 0, 0 )
--- 		setElementData(player, 'ignored', true, false)
--- 		setTimer(function()
--- 		table.insert(ignores, player)
--- 		end, 100,1)
--- 	end
--- end
--- addCommandHandler ( 'ignore', ignorePlayer)
-
--- function onClientChatMessageHandler( text )
--- 	if not ignores or not text then return end
-	
--- 	for k, player in ipairs(ignores) do
--- 		if isElement(player) and text:find(getPlayerName(player), 1, true) then
--- 			return cancelEvent()
--- 		end
--- 	end
--- end
--- addEventHandler("onClientChatMessage", root, onClientChatMessageHandler)
-
 -- /fpslimit <limit>
-
-local limit
 function clientFPSLimit(cmd, limit_)
-	--if (tonumber(limit_) and tonumber(limit_) > 19 and tonumber(limit_) < 61) then
-	--	outputChatBox('Your FPS limit will be changed on next map change')
-	--	limit = tonumber(limit_)
-	--else
-	--	outputChatBox('Bad limit.')
-	--end
 	triggerEvent("gus_c_fpslimit", root, limit_)
 end
 addCommandHandler ( 'fpslimit', clientFPSLimit)
-
---addEventHandler('onClientMapStarting', root, function ()
---	if limit then setFPSLimit(limit) end
---end)
 
 addCommandHandler('votekut', function() playSound(":gcshop/horns/files/38.mp3", false) end)
 
@@ -271,8 +150,13 @@ function checkGear()
         end
     end
 end
-
 addEventHandler("onClientMapStarting", root, checkGear)
+
+-- disable randomfoliage
+
+addEventHandler("onClientMapStarting", root, function()
+    setWorldSpecialPropertyEnabled("randomfoliage", false)
+end)
 
 -- Vehicle ID change
 local lastVehID
@@ -291,3 +175,119 @@ function checkVehicleID()
     lastVehID = currentVehID
 end
 setTimer(checkVehicleID, 50, 0)
+
+-- Toggle UI
+local ToggleUI = {}
+ToggleUI.screenSize = { guiGetScreenSize() }
+ToggleUI.visible = true
+ToggleUI.screenSource = false
+
+function ToggleUI.toggleUIVisibility()
+    ToggleUI.visible = not ToggleUI.visible
+    removeEventHandler("onClientPreRender", root, ToggleUI.render)
+    if ToggleUI.visible and isElement(ToggleUI.screenSource) then
+        destroyElement(ToggleUI.screenSource)
+        ToggleUI.screenSource = false
+    else
+        ToggleUI.screenSource = dxCreateScreenSource(ToggleUI.screenSize[1], ToggleUI.screenSize[2])
+        if ToggleUI.screenSource then
+            addEventHandler("onClientPreRender", root, ToggleUI.render)
+        end
+    end
+end
+addCommandHandler("toggleui", ToggleUI.toggleUIVisibility)
+
+function ToggleUI.render()
+    if not ToggleUI.screenSource then
+        ToggleUI.toggleUIVisibility()
+        return
+    elseif isChatBoxInputActive() or isConsoleActive() then
+        return
+    end
+    dxUpdateScreenSource(ToggleUI.screenSource)
+    dxDrawImage(0, 0, ToggleUI.screenSize[1], ToggleUI.screenSize[2], ToggleUI.screenSource, 0, 0, 0, "0xFFFFFFFF", true)
+end
+
+-- Daylight
+local Daylight = {}
+Daylight.allowedModes = {
+    ["never the same"] = true,
+    sprint = true,
+    ["reach the flag"] = true
+}
+Daylight.timer = false
+Daylight.timeCache = {getTime()}
+Daylight.durationCache = getMinuteDuration()
+Daylight.currentMode = false
+Daylight.enabled = false
+
+function Daylight.toggleDaylight()
+    Daylight.enabled = not Daylight.enabled
+    if Daylight.enabled then
+        local allowed = Daylight.isAllowed()
+        outputChatBox("Daylight enabled." .. (allowed and "" or " It will only be applied in allowed modes."), 0, 200, 0)
+        if allowed then
+            Daylight.apply()
+        end
+    else
+        Daylight.apply(true)
+        outputChatBox("Daylight disabled.", 200, 0, 0)
+    end
+end
+addCommandHandler("daylight", Daylight.toggleDaylight)
+
+function Daylight.apply(fromCache)
+    if not fromCache then
+        setTime(12,0)
+        setMinuteDuration(2147483647)
+        if not isTimer(Daylight.timer) then
+            Daylight.timer = setTimer(
+                function()
+                    if getTime() ~= 12 then
+                        setTime(12,0)
+                        setMinuteDuration(2147483647)
+                    end
+                end,
+            200, 0)
+        end
+    else
+        if isTimer(Daylight.timer) then
+            killTimer(Daylight.timer)
+        end
+        setTime(Daylight.timeCache[1], Daylight.timeCache[2])
+        setMinuteDuration(Daylight.durationCache)
+    end
+end
+
+function Daylight.onMapStart(info)
+    Daylight.currentMode = info.modename:lower()
+    Daylight.setCache()
+    if Daylight.enabled and Daylight.isAllowed() then
+        Daylight.apply(false)
+    end
+end
+addEvent("onClientMapStarting")
+addEventHandler("onClientMapStarting", root, Daylight.onMapStart)
+
+function Daylight.onMapStop()
+    if isTimer(Daylight.timer) then
+        killTimer(Daylight.timer)
+    end
+    Daylight.setCache(true)
+end
+addEvent("onClientMapStopping")
+addEventHandler("onClientMapStopping", root, Daylight.onMapStop)
+
+function Daylight.setCache(reset)
+    if reset then
+        Daylight.timeCache = {12, 0}
+        Daylight.durationCache = 1000
+        return
+    end
+    Daylight.timeCache = {getTime()}
+    Daylight.durationCache = getMinuteDuration()
+end
+
+function Daylight.isAllowed()
+    return Daylight.allowedModes[Daylight.currentMode] and true or false
+end

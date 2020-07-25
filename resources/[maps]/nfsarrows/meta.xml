@@ -1,0 +1,24 @@
+<meta>
+   	<info author="AleksCore" name="NFS Arrows" description="" version="2.0" type="script" edf:definition="nfs.edf" ></info>
+	
+	<file src="img/icon.png" />
+    <file src="img/red.png" />
+	<file src="img/green.png" />
+	<file src="img/blue.png" />
+	<file src="img/cyan.png" />
+	<file src="img/purple.png" />
+	<file src="img/orange.png" />
+	<file src="img/yellow.png" />
+	<file src="img/pink.png" />
+	
+    <file src="shader.fx" />
+	
+    <file src="barrier.dff" />
+    <file src="barrier.col" />
+	
+	<script src="main_c.lua" type="client" />
+	<script src="main_s.lua" type="server" />
+	<aclrequest>
+		<right name="function.stopResource" access="true" />
+	</aclrequest>
+</meta>

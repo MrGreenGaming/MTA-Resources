@@ -49,7 +49,6 @@ addEventHandler("onElementDataChange", root,
     function(dataName, oldValue)
         -- Check data is coming from a client
         if client and getElementType(source) == 'player' and client ~= source then
- 
 			-- Report
 			outputConsole( "Possible rouge client!"
 					.. " client:" .. tostring(getPlayerName(client))
@@ -59,7 +58,7 @@ addEventHandler("onElementDataChange", root,
 					.. " source:" .. tostring(source)
 					)
 			-- Revert (Note this will cause an onElementDataChange event, but 'client' will be nil)
-			setElementData( source, dataName, oldValue )               
+			setElementData( source, dataName, oldValue )
         end
     end
 )
@@ -229,11 +228,11 @@ addCommandHandler("lol",
 				else
 					outputChatBox(lolString, root, 255, 215, 0, true)
 				end
-				
+
 				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
 				g_lolPlayers[player] = getTickCount()
 			end
-		end	
+		end
     end
 )
 
@@ -304,9 +303,8 @@ addEventHandler("onRaceStateChanging", root,
 		if state == "GridCountdown" then
 			correctWeather()
 		end
-	end)
-
-
+	end
+)
 
 -- /round command
 local roundCount
@@ -416,3 +414,65 @@ function handleOcclusions(mapInfo)
 end
 addEvent('onMapStarting')
 addEventHandler('onMapStarting', root, handleOcclusions)
+
+--------------------------------
+-- Streak
+--------------------------------
+local currentStreakPlayer;
+local currentPlayerStreakCount = 0;
+local requiredPlayersToRecordAStreak = 10;
+
+function getGreenCoinsAmountForStreak()
+	if (currentPlayerStreakCount == 2) then
+		return 10;
+	elseif (currentPlayerStreakCount == 3) then
+		return 15;
+	elseif (currentPlayerStreakCount == 4) then
+		return 20;
+	elseif (currentPlayerStreakCount >= 5) then
+		return 25;
+	end
+end
+
+addEventHandler('onPlayerFinish', root, 
+	function(rank) 
+		if (getPlayerCount() >= requiredPlayersToRecordAStreak) then
+			if (rank == 1) then
+				if (currentStreakPlayer ~= source) then
+					currentStreakPlayer = source
+					currentPlayerStreakCount = 1;
+				else
+					if (currentStreakPlayer) then
+						currentPlayerStreakCount = currentPlayerStreakCount+1;
+						exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
+						outputChatBox("[Streak]"..getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00) (earned "..getGreenCoinsAmountForStreak().."GC)", root, 0, 255, 0, true)
+					end
+				end
+			end
+		else
+			if (rank == 1) then
+				outputChatBox("There aren't enough players online to record this streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
+			end
+		end
+    end
+)
+
+function triggerStreakForOtherGamemodes()
+	if (getPlayerCount() >= requiredPlayersToRecordAStreak) then
+		if (currentStreakPlayer ~= source) then
+			currentStreakPlayer = source
+			currentPlayerStreakCount = 1;
+		else
+			if (currentStreakPlayer) then
+				currentPlayerStreakCount = currentPlayerStreakCount+1;
+				exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
+				outputChatBox("[Streak]"..getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00) (earned "..getGreenCoinsAmountForStreak().."GC)", root, 0, 255, 0, true)
+			end
+		end
+	else
+		outputChatBox("There aren't enough players online to record this streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
+	end
+end
+addEventHandler("onPlayerWinDD", root, triggerStreakForOtherGamemodes)
+addEventHandler("onPlayerWinShooter", root, triggerStreakForOtherGamemodes)
+addEventHandler("onPlayerWinDeadline", root, triggerStreakForOtherGamemodes)

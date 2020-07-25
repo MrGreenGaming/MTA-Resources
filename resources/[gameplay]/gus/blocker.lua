@@ -10,7 +10,7 @@ function blocker(player, _, nick, duration)
 	if not blockPlayer then
 		outputChatBox("No player found", player, 0, 255,0)
 	else
-		
+
 		if not getElementData(blockPlayer,"markedblocker") then
 			duration = tonumber(duration)
 			if not duration or not hasObjectPermissionTo ( player, "command.serialblocker", false ) then
@@ -29,7 +29,7 @@ function blocker(player, _, nick, duration)
 			if added then
 				setElementData(blockPlayer , 'markedblocker', t)
 
-	
+
 				outputChatBox(remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
 				logBlockAction(player, blockPlayer,"marked",duration)
 				if useIRC() then
@@ -65,11 +65,11 @@ function unblocker(player, _, nick)
 			outputChatBox("Only admins can unmark /blocker's marked by admins",player)
 			return false
 		end
-			
+
 		local serial = getPlayerSerial(blockPlayer)
 		if getElementData(blockPlayer,"markedblocker") then
 			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
-		
+
 			setElementData(blockPlayer , 'markedblocker', nil)
 			removeBlockerFromDB(serial)
 			logBlockAction(player, blockPlayer,"unmarked")
@@ -78,9 +78,9 @@ function unblocker(player, _, nick)
 			end
 
 		end
-		
+
 	end
-	
+
 end
 addCommandHandler('unblocker', unblocker, true, true)
 
@@ -123,17 +123,17 @@ function dispBlockers(source)
 			local byAdmin = getElementData(player, 'markedblocker').byAdmin
 			local expireTimestamp = getElementData(player, 'markedblocker').expireTimestamp
 			local secondsLeft = expireTimestamp - getRealTime().timestamp
-			
-			
-			
-			local duration = secondsToTimeDesc(secondsLeft)
-			
 
-		
+
+
+			local duration = secondsToTimeDesc(secondsLeft)
+
+
+
 			t[#t+1] = remcol(getPlayerName(player)) .. ' (' .. duration .. ' by: '..byAdmin..')'
 
 			outputConsole("Blocker: "..getPlayerName(player).." ("..duration..") by: "..byAdmin)
-			
+
 		end
 	end
 	if #t < 1 then
@@ -143,9 +143,9 @@ function dispBlockers(source)
 		for _,line in ipairs(chatboxLines) do
 			outputChatBox(line,source,255,0,0)
 		end
-		
+
 	end
-	
+
 end
 addCommandHandler('blockers', dispBlockers, true, true)
 
@@ -162,7 +162,7 @@ function checkBlockerJoin(thePlayer)
 
 	if isElement(dbHandler) then
 		dbQuery(
-			function(query) 
+			function(query)
 				local sql = dbPoll(query,0)
 
 				if sql and #sql > 0 then
@@ -181,7 +181,7 @@ function checkBlockerJoin(thePlayer)
 						removeBlockerFromDB(getPlayerSerial(player))
 					end
 				end
-			end, 
+			end,
 		dbHandler, "SELECT * FROM blockers WHERE serial = ?", serial)
 	end
 end
@@ -262,14 +262,14 @@ end
 -- GC Handler and resource start handling
 
 addEventHandler("onResourceStart",resourceRoot,
-	function() 
+	function()
 		dbHandler = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 		if dbHandler then
 			for _,p in ipairs(getElementsByType("player")) do
 				checkBlockerJoin(p)
 			end
 		end
-  end)	
+  end)
 addEventHandler("onResourceStop",resourceRoot,
 	function()
 		for _,p in ipairs(getElementsByType("player")) do
@@ -285,12 +285,12 @@ function secondsToTimeDesc( seconds )
 		local min = math.floor ( ( seconds % 3600 ) /60 )
 		local hou = math.floor ( ( seconds % 86400 ) /3600 )
 		local day = math.floor ( seconds /86400 )
- 
+
 		if day > 0 then table.insert( results, day .. ( day == 1 and " d" or " d" ) ) end
 		if hou > 0 then table.insert( results, hou .. ( hou == 1 and " h" or " h" ) ) end
 		if min > 0 then table.insert( results, min .. ( min == 1 and " m" or " m" ) ) end
 		if sec > 0 then table.insert( results, sec .. ( sec == 1 and " s" or " s" ) ) end
- 
+
 		return string.reverse ( table.concat ( results, ", " ):reverse():gsub(" ,", " dna ", 1 ) )
 	end
 	return ""
@@ -310,8 +310,8 @@ function splitStringforChatBox(str)
 	local max_line_length = 127
    local lines = {}
    local line
-   str:gsub('(%s*)(%S+)', 
-      function(spc, word) 
+   str:gsub('(%s*)(%S+)',
+      function(spc, word)
          if not line or #line + #spc + #word > max_line_length then
             table.insert(lines, line)
             line = word

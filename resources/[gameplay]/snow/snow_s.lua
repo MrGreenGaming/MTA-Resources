@@ -35,5 +35,5 @@ function playerHowToCheck(p)
 end
 
 function tellPlayerHowTo(p)
-	outputChatBox("You can enable/disable snow by pressing F12",p,0,255,0)
+	outputChatBox("You can enable/disable snow by pressing J",p,0,255,0)
 end

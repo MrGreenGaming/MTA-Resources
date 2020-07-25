@@ -13,6 +13,7 @@ local tDuelCars = {
 					--"Sports Cars"
 402, 411, 415, 429, 451, 477, 480, 506, 541, 555, 558, 559, 560, 562, 565, 587, 602, 603					
 }
+local duelPlayers = {}
 
 local function getAlivePlayers()
 	local players = {}
@@ -25,12 +26,20 @@ local function getAlivePlayers()
 end
 
 local maproot, initiator, duelType
+local resetPositionColshapes = {}
+local originalDuelPos = {}
+local duelCountDownTime = 10
+local initiated = {}
 
 function startDuel(p, c, t)
+	if initiated[p] then
+		outputChatBox("You have already requested a duel", p, 255, 0, 0)
+		return
+	end
 	if maproot then return end
 	local players = getAlivePlayers()
 	if exports.race:getRaceMode() ~= "Destruction derby" then return outputChatBox("Not a DD map", p) end
-	if #players ~= 2 then return outputChatBox(#players .. " != 2 players for duel", p) end
+	if #players ~= 2 then return outputChatBox("Only the last two players can start duels. There are "..#players.." players alive.", p) end
 	
 	if getElementData(p, 'player state') ~= 'alive' then return outputChatBox("Only the last two players can start duels", p, 255,0,0) end
 	if not initiator then
@@ -41,62 +50,110 @@ function startDuel(p, c, t)
 		end
 		initiator = p
 		duelType = t
+		initiated[p] = true
 		return
 	elseif p == initiator then
 		return
 	end
-	
-	-- Load in random map
-	local node = getResourceConfig ( maps[math.random(#maps)] )
-	if not node then return outputChatBox("Couldn't load xml", p) end
-	maproot = loadMapData ( node, resourceRoot )
-	xmlUnloadFile ( node )
-	if not maproot then return outputChatBox("Couldn't load map", p) end
-	
-	exports.race:disableNTSModeForDD()
-	exports.gcshop:disableReRoll()
-	
-	-- Reset water level
-	resetWaterLevel ()
-	
-	-- Find spawns
-	local spawns = getElementsByType('spawnpoint', maproot)
-	
-	local vehicle = tDuelCars[math.random(#tDuelCars)]
-	local function returnVehicleModel() 
-			if duelType == 2 then 
-				return vehicle 
-			else 
-				return tDuelCars[math.random(#tDuelCars)] 
+	table.insert(duelPlayers, initiator)
+	table.insert(duelPlayers, p)
+	initiated[p] = true
+	outputChatBox("[DUEL] " .. getPlayerName(p) .. " #00FF00accepted a duel!", root, 0,255,0, true)
+	-- Start the countdown, at the last execution start duel
+	setTimer(
+		function()
+			local _, remainingTimes = getTimerDetails( sourceTimer )
+			if #getAlivePlayers() ~= 2 or getElementData(initiator, 'player state') ~= 'alive' or getElementData(p, 'player state') ~= 'alive' then
+				triggerClientEvent('duelCountdown', resourceRoot,false)
+				killTimer(sourceTimer)
+				return 
+			end
+			triggerClientEvent('duelCountdown', resourceRoot, remainingTimes)
+			if remainingTimes == 1 then
+				-- Load in random map
+				local node = getResourceConfig ( maps[math.random(#maps)] )
+				if not node then return outputChatBox("Couldn't load xml", p) end
+				maproot = loadMapData ( node, resourceRoot )
+				xmlUnloadFile ( node )
+				if not maproot then return outputChatBox("Couldn't load map", p) end
+
+				exports.race:disableNTSModeForDD()
+				exports.gcshop:disableReRoll()
+
+				-- Reset water level
+				resetWaterLevel ()
+
+				-- Find spawns
+				local spawns = getElementsByType('spawnpoint', maproot)
+				local vehicle = tDuelCars[math.random(#tDuelCars)]
+
+				for k, p in ipairs(getAlivePlayers()) do
+					local veh = getPedOccupiedVehicle(p)
+					setElementModel(veh, duelType == 2 and vehicle or tDuelCars[math.random(#tDuelCars)])
+					setElementHealth( veh, 1000 )
+					local s = spawns[k]
+					local x, y, z = getElementPosition(s)
+					originalDuelPos[p] = {x = x, y = y}
+					setElementPosition(veh, x, y, z+1)
+					setElementRotation(veh, 0, 0, getElementData(s, 'rotZ'))
+					setElementFrozen(veh, true)
+					setVehicleHandling( veh, 'collisionDamageMultiplier', 10.0 )
+					toggleControl ( p, "accelerate", false )
+					toggleControl ( p, "brake_reverse", false )
+					toggleControl ( p, "handbrake", false )
+					setControlState ( p, "accelerate", true )
+					setTimer(setElementFrozen, 100, 1, veh, false)
+					-- Position reset colshape
+					resetPositionColshapes[k] = createColCircle( x, y, 10 )
+					addEventHandler( "onColShapeHit", resetPositionColshapes[k], function(element, matchDim)
+						if not matchDim or getElementType( element ) ~= "player" or element == p or not originalDuelPos[element] then return end
+						local pVeh = getPedOccupiedVehicle( element )
+						if pVeh then
+							local tX, tY, tZ =  getElementPosition(pVeh)
+							local vX, vY, vZ = getElementVelocity(pVeh)
+							setElementPosition( pVeh, originalDuelPos[element].x, originalDuelPos[element].y, tZ )
+							setElementVelocity( pVeh, vX, vY, vZ )
+						end
+					end)
+				end
+				triggerClientEvent('its_time_to_duel.mp3', resourceRoot)
+
 			end
 		end
-
-	for k, p in ipairs(players) do
-		local veh = getPedOccupiedVehicle(p)
-		setElementModel(veh, returnVehicleModel())
-		
-		local s = spawns[k]
-		local x, y, z = getElementPosition(s)
-		setElementPosition(veh, x, y, z+1)
-		setElementRotation(veh, 0, 0, getElementData(s, 'rotZ'))
-		setElementFrozen(veh, true)
-		setTimer(setElementFrozen, 100, 1, veh, false)
-	end
-	triggerClientEvent('its_time_to_duel.mp3', resourceRoot)
-	outputChatBox("[DUEL] " .. getPlayerName(p) .. " #00FF00accepted a duel!", root, 0,255,0, true)
+	, 1000, duelCountDownTime)
 end
 addCommandHandler('duel', startDuel)
 
-function stopDuel() 
+
+function stopDuel()
+	for _, el in pairs(resetPositionColshapes) do
+		if isElement(el) then destroyElement(el) end
+	end
+	resetPositionColshapes = {}
+	originalDuelPos = {}
+
 	if maproot then
 		destroyElement(maproot)
 	end
+
+	for _, p in ipairs(duelPlayers) do
+		if isElement(p) and getElementType(p) == 'player' then
+			toggleControl ( p, "accelerate", true )
+			toggleControl ( p, "brake_reverse", true )
+			toggleControl ( p, "handbrake", true )
+			setControlState ( p, "accelerate", false )
+		end
+	end
+
+	duelPlayers = {}
 	maproot = nil
 	initiator = nil
 	duelType = nil
+	initiated = {}
 end
 addEvent('stopDuel')
 addEventHandler('onPostFinish', root, stopDuel)
+
 
 function removeHEXFromString(str)
 	return str:gsub("#%x%x%x%x%x%x", "")

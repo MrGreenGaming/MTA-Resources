@@ -7,8 +7,8 @@ Manhunt.modeOptions = {
 	duration = 5 * 60 * 1000,
 	respawn = 'timelimit',
 	respawntime = 5,
-	autopimp = false,
-	autopimp_map_can_override = false,
+	autopimp = true,
+	vehicleweapons = true,
 }
 
 Manhunt.name = 'Manhunt'
@@ -16,6 +16,7 @@ Manhunt.VictimTeamName = "Victim"
 Manhunt.VictimColor = {0, 255, 0}
 Manhunt.ManhuntersTeamName = "Manhunters"
 Manhunt.ManhuntersColor = {255, 255, 255}
+Manhunt.DamageList = {}
 
 function Manhunt:isMapValid()
 	if self.getNumberOfCheckpoints() > 0 then
@@ -27,7 +28,8 @@ end
 
 function Manhunt:start()
 	self:cleanup()
-	
+	addEventHandler("onManhuntVictimReportsDamage", resourceRoot, self.receiveDamageList)
+	Manhunt.victimMarkerFadeTimer = setTimer(self.victimMarkerSizer, 20, 0)
 	exports.scoreboard:removeScoreboardColumn('race rank')
 	exports.scoreboard:removeScoreboardColumn('checkpoint')
 
@@ -48,8 +50,7 @@ function Manhunt:onPlayerJoin(player, spawnpoint)
 			break
 		end
 	end
-	if idx == 1 and countPlayersInTeam(Manhunt.VictimTeam) < 1 then
-		-- At the start of the mode (when the victim team is still empty), the player that spawns on spawnpoint 1 will be the first one to join the Victim team
+	if not self:getVictim() then
 		self:setVictim(player, true)
 	else
 		self:setHunter(player)
@@ -107,10 +108,10 @@ function Manhunt:restorePlayer(id, player, bNoFade, bDontFix)
     setCameraTarget(player)
 	setPlayerStatus( player, "alive", "" )
 	clientCall(player, 'remoteSoonFadeIn', bNoFade )
-	local team = getPlayerTeam(player)
-	local r, g, b = getTeamColor(team)
-	setVehicleColor(g_CurrentRaceMode.getPlayerVehicle( player ), r, g, b, r, g, b, r, g, b, r, g, b)
-	self:setHunter(player)
+
+	if (self:getVictim() ~= player) then
+		self:setHunter(player)
+	end
 end
 
 function Manhunt.handleDriveBy(player, key, state, self)
@@ -139,6 +140,13 @@ function Manhunt:setHunter(player)
 end
 
 function Manhunt:setVictim(player, bInit, oldVictim)
+	clientCall(root, "Manhunt.startDamageDetection", false )
+	clientCall(player, "Manhunt.startDamageDetection", true )
+	Manhunt.DamageList = {}
+	if isPlayerSpectating(player) then
+		clientCall(player, "Spectate.stop", 'auto' )
+		self.restorePlayer(self,self.id,player)
+	end
 	self:clearPickupBlips()
 	if self:getVictim() then
 		self:setHunter(self:getVictim())
@@ -154,6 +162,9 @@ function Manhunt:setVictim(player, bInit, oldVictim)
 	local r, g, b = unpack(Manhunt.VictimColor)
 	setVehicleColor(veh, r, g, b, r, g, b, r, g, b, r, g, b)
 	if Manhunt.VictimBlip and isElement(Manhunt.VictimBlip) then destroyElement(Manhunt.VictimBlip) end
+	if Manhunt.victimMarker and isElement(Manhunt.victimMarker) then destroyElement(Manhunt.victimMarker) end
+	Manhunt.victimMarker = createMarker(0, 0, -100, "arrow", 1.5, 0, 255, 0, 150)
+	attachElements(Manhunt.victimMarker, getPedOccupiedVehicle(player), 0, 0, 4)
 	Manhunt.VictimBlip = createBlipAttachedTo(player, 60, 1.5, 200, 200, 200)
 	self:addPickupBlips(player)
 	Manhunt.Victim = player
@@ -206,12 +217,63 @@ function Manhunt:checkVictim(player, bLeft)
 	end
 end
 
+local fadeDir = "down"
+local sizeMin = 0.4
+local sizeMax = 1.2
+function Manhunt.victimMarkerSizer()
+	if (isElement(Manhunt.victimMarker)) then
+		local fSize = getMarkerSize(Manhunt.victimMarker)
+		if (fadeDir == "down" and fSize <= sizeMin) then 
+			fadeDir = "up"
+		elseif (fadeDir == "up" and fSize >= sizeMax) then
+			fadeDir = "down"
+		end
+		setMarkerSize(Manhunt.victimMarker, fadeDir == "up" and fSize + 0.025 or fSize - 0.025)
+	end
+end
+
+function Manhunt.receiveDamageList(list)
+	-- Validate client to victim then overwrite
+	if client == Manhunt.getVictim() and list then
+		table.sort(list, function(a,b) return a.damage > b.damage end)
+		Manhunt.DamageList = list
+	end
+end
+addEvent("onManhuntVictimReportsDamage", true)
+
+
 function Manhunt:pickNewVictimFrom(player)
+	-- Pick top from damage list
+	if (Manhunt.DamageList and #Manhunt.DamageList > 0) then
+		-- Remove invalid players from damage list
+		for i = #Manhunt.DamageList, 1, -1 do
+			local player = Manhunt.DamageList[i].player
+			local damage = Manhunt.DamageList[i].damage
+			if not isElement(player) or getElementData(player, 'player state') == 'away' then
+				table.remove(Manhunt.DamageList, i)
+			end
+		end
+		
+		if (#Manhunt.DamageList > 0) then
+			-- Reward players with top 3 kill
+			triggerEvent("onManhuntVictimKillList", root, Manhunt.DamageList)
+			-- Pick first valid player as next victim
+			for i, v in ipairs(Manhunt.DamageList) do
+				return v.player
+			end
+		end
+
+	end
+
+	-- If we could not pick from damage list, use old method
 	local activePlayers = getActivePlayers()
 	--outputDebugString('picking new victim from ' .. #activePlayers .. ' activePlayers')
 	local filtered = {}
 	for k, v in ipairs(activePlayers) do
-		if player ~= v and not isPlayerSpectating(v) and not (getElementData(v, 'state') ~= 'alive' or getElementHealth(v) == 0 or isPedDead(v)) then
+		-- if player ~= v and not isPlayerSpectating(v) and not (getElementData(v, 'state') ~= 'alive' or getElementHealth(v) == 0 or isPedDead(v)) then
+		-- 	table.insert(filtered, v)
+		-- end
+		if player ~= v and getElementData(v, 'player state') ~= 'away' then
 			table.insert(filtered, v)
 		end
 	end
@@ -260,12 +322,8 @@ function Manhunt:addTime(player)
 		return --outputDebugString('time was not improved')
 	end
 	table.sort(self.toptimes, function(a,b) return a.time > b.time end)
-	--outputDebugString('Victim time: ' .. getPlayerName(player) .. ' survived for ' .. time .. ' #' .. table.find(self.toptimes, 'player', player))
-	if not self.rankingBoard then
-		self.rankingBoard = RankingBoard:create()
-		self.rankingBoard:setDirection( 'longest' )
-	end
-	self.rankingBoard:add(player, time)
+
+	triggerEvent( "onPlayerFinishManhunt", player, time)
 end
 
 function Manhunt:addPickupBlips(player)
@@ -341,13 +399,17 @@ end
 
 function Manhunt:cleanup()
 	-- Cleanup for next mode
-	
+	removeEventHandler("onManhuntVictimReportsDamage", resourceRoot, self.receiveDamageList)
 	for k, v in ipairs(getElementsByType'player') do
 		if isKeyBound(v, 'mouse2', 'down', self.handleDriveBy) then
 			unbindKey(v, 'mouse2', 'both', self.handleDriveBy)
 		end
 	end
-	
+	if (Manhunt.victimMarkerFadeTimer and isTimer(Manhunt.victimMarkerFadeTimer)) then
+		killTimer(Manhunt.victimMarkerFadeTimer)
+	end
+
+	if Manhunt.victimMarker and isElement(Manhunt.victimMarker) then destroyElement(Manhunt.victimMarker) end
 	Manhunt.drivebyDelay = {}
 	Manhunt.toptimes = {}
 	if Manhunt.VictimBlip and isElement(Manhunt.VictimBlip) then destroyElement(Manhunt.VictimBlip) end
@@ -381,10 +443,10 @@ function Manhunt:destroy()
 	exports.scoreboard:scoreboardAddColumn("race rank", root, 40, "Rank", 4)
 	exports.scoreboard:scoreboardAddColumn("checkpoint", root, 77, "Checkpoint", 5)
 
-	if self.rankingBoard then
-		self.rankingBoard:destroy()
-		self.rankingBoard = nil
-	end
+	-- if self.rankingBoard then
+	-- 	self.rankingBoard:destroy()
+	-- 	self.rankingBoard = nil
+	-- end
 	TimerManager.destroyTimersFor("checkpointBackup")
 	RaceMode.instances[self.id] = nil
 end

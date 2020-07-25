@@ -72,7 +72,6 @@ MenuItems = { -- Name, Icon
 	{name = "GC Shop", event = "sb_showGCShop"},
 	{name = "Transfer GCs", event = "sb_transferGC"},
 	{name = "Achievements", event = "sb_showAchievements"},
-	{name = "Leaderboards", event = "sb_showLeaderboards"},
 	{name = "My Stats", event = "sb_showStats"},
 	{name = "Settings", event = "sb_showSettings"},
 	{name = "PM", event = "sb_showPM"},

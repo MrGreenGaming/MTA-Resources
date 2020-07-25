@@ -33,8 +33,6 @@ addEvent("onPlayerFinishDeadline")
 addEvent("onPlayerWinDeadline")
 
 function downCountModes(rank,time)
-
-
 	local name = getElementData(source, 'vip.colorNick') or getPlayerName(source)
 	local t = {}
 	t.name = name
@@ -54,7 +52,35 @@ addEventHandler('onPlayerWinShooter', getRootElement(),downCountModes)
 addEventHandler('onPlayerFinishDeadline', getRootElement(),downCountModes)
 addEventHandler('onPlayerWinDeadline', getRootElement(),downCountModes)
 
+function longestTimeMode(time)
+	-- Insert into table
+	local t = {}
+	t.name = getElementData(source, 'vip.colorNick') or getPlayerName(source)
+	t.time = time
+	t.player = source
 
+	local inserted = false
+	for i, v in ipairs(playerTable) do
+		if v.player == source then
+			playerTable[i] = t
+			inserted = true
+			break
+		end
+	end
+	if not inserted then table.insert(playerTable, 1, t) end
+
+	-- Sort
+	table.sort(playerTable, function(a,b) return a.time > b.time end)
+
+	-- Add rank
+	for i, v in ipairs(playerTable) do
+		playerTable[i].rank = i
+	end
+
+	triggerClientEvent("updatePlayerTimes", root, playerTable, "downTime")
+end
+addEvent("onPlayerFinishManhunt")
+addEventHandler('onPlayerFinishManhunt', root, longestTimeMode)
 
 function carGameMode(rankTable)
 	triggerClientEvent("updatePlayerTimes",root,rankTable,"cargame")
@@ -92,7 +118,7 @@ end
 )
 
 function addTeamColor(player)
-	local playerTeam = getPlayerTeam ( player ) 
+	local playerTeam = getPlayerTeam ( player )
 	if ( playerTeam ) then
 		local r,g,b = getTeamColor ( playerTeam )
 		local n1 = toHex(r)

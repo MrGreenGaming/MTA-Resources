@@ -22,11 +22,13 @@ function onShopInit ( tabPanel )
 
 	GUIEditor.tab[1] = guiCreateTab("Your team", GUIEditor.tabpanel[1])
 
-	GUIEditor.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 20/40/60 days, but everyone in the team can refresh the team duration (Up to 60 days). You can only own one team or be in one team.", false, GUIEditor.tab[1])
+	GUIEditor.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 20/40/60 days, but everyone in the team can refresh the team duration (Up to 60 days). Clan owners can transfer ownership with /makeowner PlayerName with color code.", false, GUIEditor.tab[1])
 	guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
 	GUIEditor.btnBuyTeam = guiCreateButton(46, 263, 165, 50, "Create team\n2750 GC / 20 days", false, GUIEditor.tab[1])
 	guiSetProperty(GUIEditor.btnBuyTeam, "Disabled", "True")
 	guiSetProperty(GUIEditor.btnBuyTeam, "NormalTextColour", "FFAAAAAA")
+	GUIEditor.btnUpdateTeam = guiCreateButton(212, 263, 165, 50, "Save changes\n100 GC", false, GUIEditor.tab[1])
+	guiSetVisible(GUIEditor.btnUpdateTeam, false)
 	GUIEditor.label[2] = guiCreateLabel(46, 111, 73, 28, "Team name", false, GUIEditor.tab[1])
 	guiLabelSetVerticalAlign(GUIEditor.label[2], "center")
 	GUIEditor.teamname = guiCreateEdit(145, 111, 228, 28, "", false, GUIEditor.tab[1])
@@ -98,6 +100,7 @@ function onShopInit ( tabPanel )
 	guiSetVisible(GUIEditor.chkIgnore, false)
 	teamGUI = GUIEditor
 	addEventHandler('onClientGUIClick', GUIEditor.btnBuyTeam, buyTeam, false)
+	addEventHandler('onClientGUIClick', GUIEditor.btnUpdateTeam, updateTeam, false)
 	addEventHandler('onClientGUIClick', GUIEditor.btnKick, kickTeam, false)
 	addEventHandler('onClientGUIClick', GUIEditor.btnLeave, leaveTeam, false)
 	addEventHandler('onClientGUIClick', GUIEditor.btnInvite, inviteTeam, false)
@@ -116,6 +119,27 @@ addEventHandler("teamLogin", root, function()
 	guiSetProperty(teamGUI.teamtag, "Disabled", "False")
 	guiSetProperty(teamGUI.teammsg, "Disabled", "False")
 	guiSetProperty(teamGUI.teamcolour, "Disabled", "False")
+end)
+
+addEvent("teamLogout", true)
+addEventHandler("teamLogout", root, function()
+	-- Reset GUI
+	guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "True")
+	guiSetText(teamGUI.btnBuyTeam, "Create team\n2750 GC / 20 days")
+	guiSetVisible(teamGUI.btnUpdateTeam, false)
+	guiSetProperty(teamGUI.teamname, "Disabled", "True")
+	guiSetText(teamGUI.teamname, "");
+	guiSetProperty(teamGUI.teamtag, "Disabled", "True")
+	guiSetText(teamGUI.teamtag, "");
+	guiSetProperty(teamGUI.teammsg, "Disabled", "True")
+	guiSetText(teamGUI.teammsg, "");
+	guiSetProperty(teamGUI.teamcolour, "Disabled", "True")
+	guiSetText(teamGUI.teamcolour, "#FFFFFF");
+	guiSetVisible(teamGUI.btnLeave, false)
+	guiSetVisible(teamGUI.btnInvite, false)
+	guiSetVisible(teamGUI.btnKick, false)
+	guiGridListClear(teamGUI.gridMembers)
+	guiGridListClear(teamGUI.gridlist[1])
 end)
 
 addEvent("teamsData", true)
@@ -153,6 +177,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 			guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "False")
 		end
 		
+		guiSetVisible(teamGUI.btnUpdateTeam, t.forumid == t.owner)
 		guiSetEnabled(teamGUI.teamname, t.forumid == t.owner)
 		guiSetEnabled(teamGUI.teamtag, t.forumid == t.owner)
 		guiSetEnabled(teamGUI.teammsg, t.forumid == t.owner)
@@ -169,6 +194,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 	else
 		guiSetText(teamGUI.btnBuyTeam, "Buy team\n2750 GC / 20 days")
 		
+		guiSetVisible(teamGUI.btnUpdateTeam, false)
 		guiSetEnabled(teamGUI.teamname, true)
 		guiSetEnabled(teamGUI.teamtag, true)
 		guiSetEnabled(teamGUI.teammsg, true)
@@ -192,6 +218,9 @@ end)
 -- Buying/extending team --
 function buyTeam (btn)
 	triggerServerEvent('buyTeam', resourceRoot, guiGetText(teamGUI.teamname), guiGetText(teamGUI.teamtag), guiGetText(teamGUI.teamcolour), guiGetText(teamGUI.teammsg))
+end
+function updateTeam (btn)
+	triggerServerEvent('updateTeam', resourceRoot, guiGetText(teamGUI.teamname), guiGetText(teamGUI.teamtag), guiGetText(teamGUI.teamcolour), guiGetText(teamGUI.teammsg))
 end
 
 function kickTeam(btn)

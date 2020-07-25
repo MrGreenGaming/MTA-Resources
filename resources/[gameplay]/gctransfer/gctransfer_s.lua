@@ -1,5 +1,5 @@
 local transfers = {}
-local cooldown = 60
+local cooldown = 7200 -- seconds
 
 function getPlayersTable()
 	local players = {}
@@ -96,17 +96,21 @@ function(pName, amount)
 		return
 	end
 	
-	if transfers[source] and transfers[source] + cooldown > getTimestamp() then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You can transfer GCs every " .. tostring(cooldown) .. " seconds!")
-		return
-	end
-	
 	local logged = exports.gc:isPlayerLoggedInGC(source)
 	if not logged then
 		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You are not logged in!")
 		return
 	end
 	
+	local forumid = tostring(exports.gc:getPlayerForumID( source ))
+	
+	local currentTime = getTimestamp()
+	
+	if transfers[forumid] and transfers[forumid] + cooldown > currentTime then
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You need to wait "..tostring(transfers[forumid] + cooldown - currentTime).." more second(s) to be able to transfer greencoins again!")
+		return
+	end
+		
 	if amount ~= math.floor(amount) then
 		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "The amount must be a whole number!")
 		return
@@ -135,7 +139,6 @@ function(pName, amount)
 	end
 	
 	local fid = tostring(exports.gc:getPlayerForumID( transferTo ))
-	local forumid = tostring(exports.gc:getPlayerForumID( source ))
 	
 	if fid == forumid then
 		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You cannot send GCs to yourself!")
@@ -144,9 +147,9 @@ function(pName, amount)
 
 	-- Minimum playtime
 	local minPlayTime = 100 -- hours
-	local playTime = exports.stats:getPlayerStat(source, 'id5')
-	if not playTime or not tonumber(playTime) or (playTime/1000)/3600 < minPlayTime then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You must have a minimum of "..minPlayTime.." to transfer greencoins!")
+	local playTime = exports['mrgreen-stats']:getPlayerStat(source, 'General', 'Playtime')
+	if not playTime or not tonumber(playTime) or playTime/3600 < minPlayTime then
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You must have a minimum of "..minPlayTime.." hours to transfer greencoins!")
 		return
 	end
 
@@ -176,18 +179,20 @@ function doTransfer(player, argTransferTo, argAmount)
 	
 	-- Args are sent
 	
-	if transfers[player] and transfers[player] + cooldown > getTimestamp() then
-		return false
-	end
-	
-	-- Player doesn't have cooldown
-	
 	local logged = exports.gc:isPlayerLoggedInGC(player)
 	if not logged then
 		return false
 	end
 	
 	-- Player is logged in
+	
+	local forumid = tostring(exports.gc:getPlayerForumID( player ))
+	
+	if transfers[forumid] and transfers[forumid] + cooldown > getTimestamp() then
+		return false
+	end
+	
+	-- Player doesn't have cooldown
 	
 	local amount = tonumber(argAmount)
 	
@@ -219,7 +224,6 @@ function doTransfer(player, argTransferTo, argAmount)
 	end
 	
 	local fid = tostring(exports.gc:getPlayerForumID( transferTo ))
-	local forumid = tostring(exports.gc:getPlayerForumID( player ))
 	
 	if fid == forumid then
 		return false
@@ -248,7 +252,7 @@ function doTransfer(player, argTransferTo, argAmount)
 
 	elseif check1 and check2 then -- both succeded
 		success(player, transferTo, amount)
-		transfers[player] = getTimestamp()
+		transfers[forumid] = getTimestamp()
 	end
 	
 	local name, acc = getPlayerName(player), (isGuestAccount(getPlayerAccount(player)) and '') or getAccountName(getPlayerAccount(player))

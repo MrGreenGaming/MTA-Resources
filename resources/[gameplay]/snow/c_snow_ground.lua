@@ -26,7 +26,7 @@ local naughtyTreeShader
 addEventHandler( "onClientResourceStart", resourceRoot,
 	function()
 		-- triggerEvent( "switchGoundSnow", resourceRoot, true )
-		outputChatBox("You can enable/disable snow by pressing F12",0,255,0)
+		outputChatBox("You can enable/disable snow by pressing J",0,255,0)
 		outputChatBox("If you have a black screen, please disable skybox or the snow",0,255,0)
 	end
 )

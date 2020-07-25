@@ -255,14 +255,32 @@ function saveStat(forumid, category, name, value, increment)
     triggerEvent('onPlayerStatsUpdated', root, forumid, category, name)
 end
 
-function getStat(forumid, category, name)
-    local catIndex = categoryMap[tostring(category)]
-    local statIndex = statsMap[tostring(category)][tostring(name)]
+function getStat(idOrPlayer, statCat, statName)
+    local forumid = idOrPlayer
+    if isElement(idOrPlayer) and getElementType(idOrPlayer) == 'player' then
+        forumid = getPlayerID(idOrPlayer)
+        if not forumid then
+            outputDebugString('getStat() player not logged in',1)
+            return false
+        end
+    elseif type(idOrPlayer) == 'number' or (type(idOrPlayer) ~= 'number' and tonumber(idOrPlayer)) then
+        forumid = tonumber(idOrPlayer)
+    else
+        outputDebugString('getStat() invalid forumid or player',1)
+        return false
+    end
+
+    local catIndex = categoryMap[tostring(statCat)]
+    local statIndex = statsMap[tostring(statCat)][tostring(statName)]
     if not catIndex or not statIndex then 
         outputDebugString('getStat() invalid category or stat name',1)
-        return false 
+        return false
     end
     return playerStats[forumid] and playerStats[forumid][catIndex] and playerStats[forumid][catIndex].items[statIndex].value or false
+end
+
+function getPlayerStat(...)
+    return getStat(unpack({...}))
 end
 -----------------------
 -- Server <-> Server --

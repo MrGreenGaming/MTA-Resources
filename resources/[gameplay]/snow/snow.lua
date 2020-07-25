@@ -3,7 +3,7 @@ function()
 	toggleSnow()
 end
 )
-bindKey("f12","down",function()
+bindKey("J","down",function()
 	executeCommandHandler("snow")
 end)
 

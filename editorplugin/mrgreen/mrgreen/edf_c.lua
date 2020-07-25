@@ -45,6 +45,8 @@ function onStart() --Callback triggered by edf
 		models[name].dff = engineLoadDFF(':mrgreen/flag.dff', id)
 		engineReplaceModel(models[name].dff, id)
 	end
+	
+	engineImportTXD( engineLoadTXD(":mrgreen/crate.txd"), 3798)
 end
 function onStop()
 	for name,id in pairs(g_ModelForPickupType) do
@@ -70,3 +72,11 @@ function updateFlags()
 	end
 end
 addEventHandler('onClientRender', root, updateFlags)
+
+addEventHandler( "onClientElementStreamIn", root,
+    function()
+		if getElementModel(source) == 3798 then
+			setObjectScale(source, 0.6)
+		end
+    end
+)
