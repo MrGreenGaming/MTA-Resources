@@ -5,7 +5,7 @@ startY = 0
 bottomDistance = y-((1/4)*y)
 textHeight = 20
 maxVisibleRanks = 8 -- maximum visible ranks
-rankBoardPosX,rankBoardPosY = math.ceil(x * 0.014), math.ceil(y * 0.394) 
+rankBoardPosX,rankBoardPosY = math.ceil(x * 0.014), math.ceil(y * 0.394)
 countmode = false -- down = countdown (no respawn modes), up = countup (race modes), cargame = gamemode cargame
 
 rankRenderTarget = dxCreateRenderTarget(math.ceil(x * 0.248), math.ceil(textHeight * maxVisibleRanks),true) -- All ranks are rendered in this
@@ -45,7 +45,7 @@ addEventHandler("updatePlayerTimes", getRootElement(),
 function(playerTable,downup)
 	countmode = downup
 	clientTable = playerTable
-	if clientTable ~= false then 
+	if clientTable ~= false then
 		drawnTexts = {}
 		shadowDrawnTexts = {}
 
@@ -66,7 +66,6 @@ end
 
 
 function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY)
- 
 	if alignX then
 		if alignX == "center" then
 			local w = dxGetTextWidth(str:gsub("#%x%x%x%x%x%x",""), scale, font)
@@ -121,9 +120,9 @@ function()
 
 
 
-	add = 0 
+	add = 0
 	if countmode == "up" then
-		for number, tableRank in ipairs(clientTable) do 
+		for number, tableRank in ipairs(clientTable) do
 			dxSetRenderTarget(rankRenderTarget,true)
 			dxSetBlendMode("add")
 			if number <= maxVisibleRanks then
@@ -134,7 +133,7 @@ function()
 				local theColor = tocolor(255,255,255,255)
 				local timeColor = "#FFFFFF"
 
-				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
+				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end
 
 
 				if (add == 0) then
@@ -146,7 +145,7 @@ function()
 					if (ms < 10) and (ms >=0) then
 						ms = tostring(ms)
 						ms = "0"..ms
-					end	
+					end
 					firstTimeMS = time
 					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 					shadowDrawnTexts[name] = dxDrawText(tostring(rank)..") "..tostring(shadowName).."  "..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 1, startY+add+1, x, startY+add+15+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
@@ -163,12 +162,12 @@ function()
 						ms = "0"..ms
 					end
 					startX = 0
-		
-					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )	
+
+					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 					shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName).." +"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), startX+1, startY+add+1, x, startY+add+15+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 					drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).."" ..timeColor.." +"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), startX, startY+add, x, startY+add+15, theColor, rScale, theFont, "left","center",true,false,false,true,true)
 				end
-				
+
 
 				add = add + textHeight
 			end
@@ -176,11 +175,11 @@ function()
 		-- dxSetBlendMode("blend")
 		dxSetRenderTarget()
 		local sizeX,sizeY = dxGetMaterialSize(rankRenderTarget)
-		dxSetBlendMode("add")	
+		dxSetBlendMode("add")
 		dxDrawImage(rankBoardPosX, rankBoardPosY, sizeX, sizeY,rankRenderTarget)
 		dxSetBlendMode("blend")
 
-		-- if not false then -- Test 
+		-- if not false then -- Test
 		if not localPlayerRendered and localPlayerFinishInfo ~= false then -- if local player isnt rendered but is finished
 
 			local name = (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer))
@@ -202,12 +201,11 @@ function()
 				ms = "0"..ms
 			end
 			startX = 0
-			
-			shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )	
+
+			shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 			shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName).." +"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 1, 1, x, textHeight+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 			drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).." #01FFFF+"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 0, 0, x, textHeight, tocolor(1,255,255,255), rScale, theFont, "left","center",true,false,false,true,true)
 
-			
 			-- dxSetBlendMode("blend")
 			dxSetRenderTarget()
 
@@ -221,7 +219,7 @@ function()
 
 	elseif countmode == "down" then
 		localPlayerRendered = false
-		for number, tableRank in ipairs(clientTable) do 
+		for number, tableRank in ipairs(clientTable) do
 			dxSetRenderTarget(rankRenderTarget,true)
 			dxSetBlendMode("add")
 			if number <= maxVisibleRanks then
@@ -231,14 +229,14 @@ function()
 				kills = tableRank.kills or false
 
 				local killString = ""
-				if kills then 
-					killString = " Kills: "..tostring(kills) 
+				if kills then
+					killString = " Kills: "..tostring(kills)
 				end
 
 				local theColor = tocolor(255,255,255,255)
 				local timeColor = "#FFFFFF"
 
-				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
+				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end
 
 
 				if (add == 0) then
@@ -250,7 +248,7 @@ function()
 					if (ms < 10) and (ms >=0) then
 						ms = tostring(ms)
 						ms = "0"..ms
-					end	
+					end
 					firstTimeMS = time
 					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 					shadowDrawnTexts[name] = dxDrawText(tostring(rank)..") "..tostring(shadowName)..killString, 1, startY+add+1, x, startY+add+15+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
@@ -267,12 +265,12 @@ function()
 						ms = "0"..ms
 					end
 					startX = 0
-		
-					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )	
+
+					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 					shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName)..killString, startX+1, startY+add+1, x, startY+add+15+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 					drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name)..timeColor..killString, startX, startY+add, x, startY+add+15, theColor, rScale, theFont, "left","center",true,false,false,true,true)
 				end
-				
+
 
 				add = add + textHeight
 			end
@@ -280,11 +278,11 @@ function()
 		-- dxSetBlendMode("blend")
 		dxSetRenderTarget()
 		local sizeX,sizeY = dxGetMaterialSize(rankRenderTarget)
-		dxSetBlendMode("add")	
+		dxSetBlendMode("add")
 		dxDrawImage(rankBoardPosX, rankBoardPosY, sizeX, sizeY,rankRenderTarget)
 		dxSetBlendMode("blend")
 
-		-- if not false then -- Test 
+		-- if not false then -- Test
 		if not localPlayerRendered and localPlayerFinishInfo ~= false then -- if local player isnt rendered but is finished
 
 			local name = (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer))
@@ -294,8 +292,8 @@ function()
 
 
 			local killString = ""
-			if kills then 
-				killString = " (Kills: "..tostring(kills)..")" 
+			if kills then
+				killString = " (Kills: "..tostring(kills)..")"
 			end
 
 			dxSetRenderTarget(localPlayerRenderTarget,true)
@@ -312,12 +310,12 @@ function()
 				ms = "0"..ms
 			end
 			startX = 0
-			
-			shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )	
+
+			shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 			shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName)..killString, 1, 1, x, textHeight+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 			drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).."#01FFFF"..killString, 0, 0, x, textHeight, tocolor(1,255,255,255), rScale, theFont, "left","center",true,false,false,true,true)
 
-			
+
 			-- dxSetBlendMode("blend")
 			dxSetRenderTarget()
 
@@ -327,9 +325,9 @@ function()
 			dxDrawImage(rankBoardPosX, rankBoardPosY + boardsizeY, sizeX, sizeY,localPlayerRenderTarget)
 			dxSetBlendMode("blend")
 		end
-	
+
 	elseif countmode == "downTime" then
-		for number, tableRank in ipairs(clientTable) do 
+		for number, tableRank in ipairs(clientTable) do
 			dxSetRenderTarget(rankRenderTarget,true)
 			dxSetBlendMode("add")
 			if number <= maxVisibleRanks then
@@ -340,10 +338,10 @@ function()
 				local theColor = tocolor(255,255,255,255)
 				local timeColor = "#FFFFFF"
 
-				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
+				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end
 
 
-				
+
 				minutes, seconds, ms = msToTimeStr(time)
 				if (seconds < 10) and (seconds >= 0) then
 					seconds = tostring(seconds)
@@ -352,13 +350,13 @@ function()
 				if (ms < 10) and (ms >=0) then
 					ms = tostring(ms)
 					ms = "0"..ms
-				end	
+				end
 
 				shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 				shadowDrawnTexts[name] = dxDrawText(tostring(rank)..") "..tostring(shadowName).."  "..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 1, startY+add+1, x, startY+add+15+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 				drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).."  "..timeColor..""..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 0, startY+add, x, startY+add+15, theColor, rScale, theFont, "left","center",true,false,false,true,true)
-			
-				
+
+
 
 				add = add + textHeight
 			end
@@ -366,11 +364,11 @@ function()
 		-- dxSetBlendMode("blend")
 		dxSetRenderTarget()
 		local sizeX,sizeY = dxGetMaterialSize(rankRenderTarget)
-		dxSetBlendMode("add")	
+		dxSetBlendMode("add")
 		dxDrawImage(rankBoardPosX, rankBoardPosY, sizeX, sizeY,rankRenderTarget)
 		dxSetBlendMode("blend")
 
-		-- if not false then -- Test 
+		-- if not false then -- Test
 		if not localPlayerRendered and localPlayerFinishInfo ~= false then -- if local player isnt rendered but is finished
 
 			local name = (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer))
@@ -392,12 +390,12 @@ function()
 				ms = "0"..ms
 			end
 			startX = 0
-			
-			shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )	
+
+			shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 			shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName).." +"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 1, 1, x, textHeight+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 			drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).." #01FFFF+"..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms), 0, 0, x, textHeight, tocolor(1,255,255,255), rScale, theFont, "left","center",true,false,false,true,true)
 
-			
+
 			-- dxSetBlendMode("blend")
 			dxSetRenderTarget()
 
@@ -409,7 +407,7 @@ function()
 		end
 	elseif countmode == "cargame" then
 		localPlayerRendered = false
-		for number, tableRank in ipairs(clientTable) do 
+		for number, tableRank in ipairs(clientTable) do
 			dxSetRenderTarget(rankRenderTarget,true)
 			dxSetBlendMode("add")
 			if number <= maxVisibleRanks then
@@ -421,14 +419,14 @@ function()
 				level = tableRank.level or 1
 
 				local killString = ""
-				if kills then 
-					killString = " level: "..tostring(level) 
+				if kills then
+					killString = " level: "..tostring(level)
 				end
 
 				local theColor = tocolor(255,255,255,255)
 				local timeColor = "#FFFFFF"
 
-				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end 
+				if name == (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer)) then theColor = tocolor(1,255,255,255) timeColor = "#01FFFF" localPlayerRendered = true end
 
 
 				if (add == 0) then
@@ -440,7 +438,7 @@ function()
 					if (ms < 10) and (ms >=0) then
 						ms = tostring(ms)
 						ms = "0"..ms
-					end	
+					end
 					firstTimeMS = time
 					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 					shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName)..killString.." ("..tostring(minutes)..":"..tostring(seconds)..":"..tostring(ms)..")", 1, 1, x, textHeight+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
@@ -457,12 +455,12 @@ function()
 						ms = "0"..ms
 					end
 					startX = 0
-		
-					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )	
+
+					shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 					shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName)..killString, startX+1, startY+add+1, x, startY+add+15+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 					drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name)..timeColor..killString, startX, startY+add, x, startY+add+15, theColor, rScale, theFont, "left","center",true,false,false,true,true)
 				end
-				
+
 
 				add = add + textHeight
 			end
@@ -470,11 +468,11 @@ function()
 		-- dxSetBlendMode("blend")
 		dxSetRenderTarget()
 		local sizeX,sizeY = dxGetMaterialSize(rankRenderTarget)
-		dxSetBlendMode("add")	
+		dxSetBlendMode("add")
 		dxDrawImage(rankBoardPosX, rankBoardPosY, sizeX, sizeY,rankRenderTarget)
 		dxSetBlendMode("blend")
 
-		-- if not false then -- Test 
+		-- if not false then -- Test
 		if not localPlayerRendered and localPlayerFinishInfo ~= false then -- if local player isnt rendered but is finished
 
 			local name = (getElementData(localPlayer, 'vip.colorNick') or getPlayerName(localPlayer))
@@ -484,8 +482,8 @@ function()
 
 
 			local killString = ""
-			if kills then 
-				killString = " (Kills: "..tostring(kills)..")" 
+			if kills then
+				killString = " (Kills: "..tostring(kills)..")"
 			end
 
 			dxSetRenderTarget(localPlayerRenderTarget,true)
@@ -502,12 +500,12 @@ function()
 				ms = "0"..ms
 			end
 			startX = 0
-			
-			shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )	
+
+			shadowName = string.gsub(name, '#%x%x%x%x%x%x', '' )
 			shadowDrawnTexts[rank] = dxDrawText(tostring(rank)..") "..tostring(shadowName)..killString, 1, 1, x, textHeight+1, tocolor(0,0,0, 255), rScale, theFont, "left","center",true,false,false,true,true)
 			drawnTexts[rank] = dxDrawColorText(tostring(rank)..") "..tostring(name).."#01FFFF"..killString, 0, 0, x, textHeight, tocolor(1,255,255,255), rScale, theFont, "left","center",true,false,false,true,true)
 
-			
+
 			-- dxSetBlendMode("blend")
 			dxSetRenderTarget()
 
@@ -521,7 +519,7 @@ function()
 	end
 
 
-		
+
 end
 )
 

@@ -15,26 +15,26 @@ disallowedVehs = {
 		556, -- Monster 2
 		557, -- Monster 3
 		--Air vehicles
-		592, --Andromada	
-		577, --AT-400	
-		511, --Beagle	
-		512, --Cropduster	
-		593, --Dodo	
-		520, --Hydra	
-		553, --Nevada	
-		476, --Rustler	
-		519, --Shamal	
-		460, --Skimmer	
-		513, --Stuntplane	
-		548, --Cargobob	
-		425, --Hunter	
-		417, --Leviathan	
-		487, --Maverick	
-		488, --News Chopper	
-		497, --Police Maverick	
-		563, --Raindance	
-		447, --Seasparrow	
-		469, --Sparrow	
+		592, --Andromada
+		577, --AT-400
+		511, --Beagle
+		512, --Cropduster
+		593, --Dodo
+		520, --Hydra
+		553, --Nevada
+		476, --Rustler
+		519, --Shamal
+		460, --Skimmer
+		513, --Stuntplane
+		548, --Cargobob
+		425, --Hunter
+		417, --Leviathan
+		487, --Maverick
+		488, --News Chopper
+		497, --Police Maverick
+		563, --Raindance
+		447, --Seasparrow
+		469, --Sparrow
 	},
 	["SHOOTER"] = {
 		--Bikes--
@@ -53,11 +53,11 @@ disallowedVehs = {
 		471, --Quadbike
 
 		--RC--
-		441, --RC Bandit	
-		464, --RC Baron	
-		501, --RC Goblin	
-		465, --RC Raider	
-		564, --RC Tiger	
+		441, --RC Bandit
+		464, --RC Baron
+		501, --RC Goblin
+		465, --RC Raider
+		564, --RC Tiger
 
 		--Other--
 		571, --Kart
@@ -72,11 +72,11 @@ disallowedVehs = {
 		425, -- hunter
 	},
 	["DESTRUCTION DERBY"] = {
-		441, --RC Bandit	
-		464, --RC Baron	
-		501, --RC Goblin	
-		465, --RC Raider	
-		564, --RC Tiger	
+		441, --RC Bandit
+		464, --RC Baron
+		501, --RC Goblin
+		465, --RC Raider
+		564, --RC Tiger
 		592, --Andromada
 		553, --Nevada
 		577, --AT-400
@@ -120,4 +120,4 @@ function sendToClient(newState)
 end
 addEventHandler("onRaceStateChanging", getRootElement(), sendToClient)
 
-	
+

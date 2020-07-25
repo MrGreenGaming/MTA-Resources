@@ -19,6 +19,7 @@ splitsBehind = 1
 animationsEnabled = true
 showIntervals = false
 liveIntervals = false
+lightenDarkColors = false
 
 y = 200
 w = 190
@@ -54,6 +55,7 @@ RankBoard.linePosition = 0
 RankBoard.lineY = 0
 RankBoard.showIntervals = showIntervals
 RankBoard.liveIntervals = liveIntervals
+RankBoard.backgroundOpacity = 0.65
 RankBoard.animations = {}
 RankBoard.sorted = {}
 RankBoard.bestCPTimes = {}
@@ -117,7 +119,7 @@ function RankBoard:update(what)
 			if not self.hidden and not self.willHide then
 				if RankBoard.animate and not self.willShow then
 					if self.animations["y"] ~= nil then destroyAnimation(self.animations["y"]) end
-					self.animations["y"] = animate(self.y, newY, "OutQuad", 300, function(y)
+					self.animations["y"] = animate(self.y, newY, "OutQuad", 250, function(y)
 			        		self.y = y
 			    		end, function()
 			    			self.animations["y"] = nil
@@ -201,7 +203,7 @@ function RankBoard:hide(hide)
 		return
 	end
 	if self.animations["a"] ~= nil then destroyAnimation(self.animations["a"]) end
-	self.animations["a"] = animate(self.a, hide and 0 or 1, "OutQuad", 300, function(a)
+	self.animations["a"] = animate(self.a, hide and 0 or 1, "Linear", 200, function(a)
 		self.a = a
 	end, function()
 		self.willHide = false
@@ -225,11 +227,12 @@ function RankBoard:draw()
 	
 	local teamColor = (alpha>0 and alpha<1) and tocolor(self.colorRGB[1], self.colorRGB[2], self.colorRGB[3], 255*alpha) or self.color
 	
-	local bgcolor
+	local bgcolor = nil
+	local bgalpha = 255 * RankBoard.backgroundOpacity * alpha
 	if self.localPlayer then
-		bgcolor = self.state == "finished" and tocolor(20,80,20,160*alpha) or tocolor(40,40,40,160*alpha)
+		bgcolor = self.state == "finished" and tocolor(20,80,20,bgalpha) or tocolor(40,40,40,bgalpha)
 	else
-		bgcolor = self.state == "finished" and tocolor(0,60,0,160*alpha) or tocolor(0,0,0,160*alpha)
+		bgcolor = self.state == "finished" and tocolor(0,60,0,bgalpha) or tocolor(0,0,0,bgalpha)
 	end
 	
 	
@@ -475,7 +478,7 @@ function updateWhiteList()
 	local etime = getTickCount()
 end
 
-setTimer(updateWhiteList, 250, 0)
+setTimer(updateWhiteList, 333, 0)
 
 --
 -- Events
@@ -492,8 +495,17 @@ addEventHandler("serverSendGM",root,gameModeHandler)
 
 addEventHandler("onClientElementDataChange", root, function(dataName, old, new)
 	if getElementType(source) ~= "player" or not RankBoard.items[source] then return end
-	if dataName == "player state" then
+	if dataName == "player state" and RankBoard.items[source].state ~= "finished" then
 		RankBoard.items[source]:update({state = new})
+	elseif dataName == "vip.colorNick" then
+		local name = new or getPlayerName(source)
+		local team = getPlayerTeam(source)
+		if team then
+			local r,g,b = getTeamColor(team)
+			RankBoard.items[source].name = RGBToHex(r,g,b) .. name
+		else
+			RankBoard.items[source].name = name
+		end
 	end
 	
 end)
@@ -617,6 +629,80 @@ function RGBToHex(red, green, blue, alpha)
 	end
 end
 
+function RGBToHSV(red, green, blue)
+	local hue, saturation, value;
+
+	local min_value = math.min( red, green, blue );
+	local max_value = math.max( red, green, blue );
+
+	value = max_value;
+
+	local value_delta = max_value - min_value;
+	if max_value ~= 0 then
+		saturation = value_delta / max_value;
+	else
+		saturation = 0;
+		hue = 0;
+		return hue, saturation, value;
+	end
+
+	if red == max_value then
+		hue = ( green - blue ) / value_delta;
+	elseif green == max_value then
+		hue = 2 + ( blue - red ) / value_delta;
+	else
+		hue = 4 + ( red - green ) / value_delta;
+	end
+
+	hue = hue * 60;
+	if hue < 0 then
+		hue = hue + 360;
+	end
+
+	return hue, saturation, value
+end
+
+function HSVToRGB(hue, saturation, value)
+	if saturation == 0 then
+		return value, value, value
+	end
+
+	local hue_sector = math.floor( hue / 60 );
+	local hue_sector_offset = ( hue / 60 ) - hue_sector;
+
+	local p = value * ( 1 - saturation )
+	local q = value * ( 1 - saturation * hue_sector_offset )
+	local t = value * ( 1 - saturation * ( 1 - hue_sector_offset ) )
+
+	if hue_sector == 0 then
+		return value, t, p
+	elseif hue_sector == 1 then
+		return q, value, p
+	elseif hue_sector == 2 then
+		return p, value, t
+	elseif hue_sector == 3 then
+		return p, q, value
+	elseif hue_sector == 4 then
+		return t, p, value
+	elseif hue_sector == 5 then
+		return value, p, q
+	end
+end
+
+function toNameColor(red, green, blue, alpha)
+	if not lightenDarkColors then
+		return tocolor(red, green, blue, alpha)
+	else
+		local h,s,v = RGBToHSV(red, green, blue)
+		if v > 180 then
+			return tocolor(red, green, blue, alpha)
+		else
+			local r, g, b = HSVToRGB(h, s, 180)
+			return tocolor(r, g, b, alpha)
+		end
+	end
+end
+
 function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY, clip, alpha)
  
 	if alignX then
@@ -643,13 +729,13 @@ function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY
 	local s, e, cap, col = str:find(pat, 1)
 	local last = 1
 	while s do
-		if cap == "" and col then color = tocolor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255 * (alpha or 1)) end
+		if cap == "" and col then color = toNameColor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255 * (alpha or 1)) end
 		if s ~= 1 or cap ~= "" then
 			local w = dxGetTextWidth(cap, scale, font)
 			if clip and ax + w > bx then w = w - ( ax + w - bx) end
 			dxDrawText(cap, ax, ay, ax + w, by, color, scale, font, nil, nil, clip)
 			ax = ax + w  
-			color = tocolor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255 * (alpha or 1))
+			color = toNameColor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255 * (alpha or 1))
 		end
 		last = e + 1
 		s, e, cap, col = str:find(pat, last)
@@ -786,6 +872,29 @@ function setShowIntervals(enabled, live)
 	RankBoard.x = screenX - round((w+40) * scale) - (showIntervals and RankBoard.timeW or 0)
 end
 
+function setLightenDarkColors(enabled)
+	lightenDarkColors = enabled and true or false
+end
+
 function setNumberOfPositions(positions)
 	lines = tonumber(positions) and positions or 8
+end
+
+function setBackgroudOpacity(value)
+	if not tonumber(value) or value < 0 or value > 1 then return end
+	RankBoard.backgroundOpacity = value
+end
+
+function setBoardScale(value)
+	if not tonumber(value) then return end
+	scale = value == 0 and round((screenY/800)*10)/10 or value
+	RankBoard.scale = scale
+	RankBoard.itemheight = round(itemHeight * scale)
+	RankBoard.padding = round(itemPadding * scale)
+	RankBoard.font = dxCreateFont("fonts/TitilliumWeb-SemiBold.ttf", round(11 * scale)) or "default-bold"
+	RankBoard.fontSmall = dxCreateFont("fonts/TitilliumWeb-Regular.ttf", round(11 * scale)) or "default"
+	RankBoard.fontState = dxCreateFont("fonts/StateIcons.ttf", round(9 * scale)) or "default"
+	RankBoard.timeW = round((dxGetTextWidth("+00:00:00", 1, RankBoard.fontSmall) + itemPadding*2) * scale)
+	RankBoard.x = screenX - round((w+40) * scale) - (showIntervals and RankBoard.timeW or 0)
+	RankBoard.w = round(w * scale);
 end

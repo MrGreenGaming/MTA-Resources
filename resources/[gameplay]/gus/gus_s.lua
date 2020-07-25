@@ -49,7 +49,6 @@ addEventHandler("onElementDataChange", root,
     function(dataName, oldValue)
         -- Check data is coming from a client
         if client and getElementType(source) == 'player' and client ~= source then
- 
 			-- Report
 			outputConsole( "Possible rouge client!"
 					.. " client:" .. tostring(getPlayerName(client))
@@ -59,7 +58,7 @@ addEventHandler("onElementDataChange", root,
 					.. " source:" .. tostring(source)
 					)
 			-- Revert (Note this will cause an onElementDataChange event, but 'client' will be nil)
-			setElementData( source, dataName, oldValue )               
+			setElementData( source, dataName, oldValue )
         end
     end
 )
@@ -229,11 +228,11 @@ addCommandHandler("lol",
 				else
 					outputChatBox(lolString, root, 255, 215, 0, true)
 				end
-				
+
 				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
 				g_lolPlayers[player] = getTickCount()
 			end
-		end	
+		end
     end
 )
 

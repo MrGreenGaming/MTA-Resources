@@ -1,6 +1,6 @@
 blockerTable = {}
 addEventHandler("onClientElementDataChange",root,
-	function(name) 
+	function(name)
 		if getElementType(source) == "player" and name == "markedblocker" then
 			if source == localPlayer then
 				checkDisplayBlockerTimer()
@@ -12,7 +12,7 @@ addEventHandler("onClientElementDataChange",root,
 			else
 				removeBlockerFromTable(p)
 			end
-		end 
+		end
 	end)
 
 addEventHandler("onClientResourceStart",resourceRoot,
@@ -58,7 +58,7 @@ function checkDisplayBlockerTimer()
 		playerIsBlocker = true
 		local durationSec = getElementData(localPlayer,"markedblocker").expireTimestamp - getElementData(resourceRoot,"serverTimestamp")
 		localBlockerTimer = setTimer( function() localBlockerTimer = false end, durationSec*1000, 1 )
-		
+
 	else
 		playerIsBlocker = false
 		if isTimer(checkDisplayBlockerTimer) then killTimer(checkDisplayBlockerTimer) checkDisplayBlockerTimer = false end
@@ -73,7 +73,7 @@ local screenW, screenH = guiGetScreenSize()
 
 function displayBlockerTimer()
 	if not playerIsBlocker or not isTimer(localBlockerTimer) then
-		return 
+		return
 	end
 
 
@@ -106,12 +106,12 @@ function secondsToTimeDesc( seconds )
 		local min = math.floor ( ( seconds % 3600 ) /60 )
 		local hou = math.floor ( ( seconds % 86400 ) /3600 )
 		local day = math.floor ( seconds /86400 )
- 
+
 		if day > 0 then table.insert( results, day .. ( day == 1 and " d" or " d" ) ) end
 		if hou > 0 then table.insert( results, hou .. ( hou == 1 and " h" or " h" ) ) end
 		if min > 0 then table.insert( results, min .. ( min == 1 and " m" or " m" ) ) end
 		if sec > 0 then table.insert( results, sec .. ( sec == 1 and " s" or " s" ) ) end
- 
+
 		return string.reverse ( table.concat ( results, ", " ):reverse():gsub(" ,", " dna ", 1 ) )
 	end
 	return ""

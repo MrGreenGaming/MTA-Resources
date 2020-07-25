@@ -494,6 +494,12 @@ hornsTable = {
     [490] = "Party Thieves Chief",
     [491] = "Sevmek Suç Olmamalı",
     [492] = "Zabaha Kadar Burdayım",
+    [493] = "KneeLzy antheme",
+    [494] = "Chillim",
+    [495] = "Mazule",
+    [496] = "Beat me",
+    [497] = "Dummy",
+    [498] = "+18",
     
     
  
@@ -555,6 +561,9 @@ function onShopInit(tabPanel)
     addEventHandler("onClientGUIClick", sell, sellHorn, false)
     addEventHandler("onClientGUIClick", unlimited, unlimitedHorn, false)
     addEventHandler("onClientGUIChanged", search, hornSearchGuiChanged)
+	
+    guiBringToFront(availableHornsList)
+    guiBringToFront(myHornsList)
 end
 
 addEvent('onShopInit', true)

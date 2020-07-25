@@ -13,10 +13,9 @@ local globalalpha = .85
 addEvent("updateChatList", true )
 
 gChatting = false
- 
+
 function chatCheckPulse()
     local chatState = isChatBoxInputActive() or isConsoleActive()
- 
     if chatState ~= gChatting then
         if chatState then
             triggerServerEvent("playerChatting", localPlayer)
@@ -35,13 +34,12 @@ function showTextIcon()
 		playerx,playery,playerz = getElementPosition(target)
 	end
 	for player, truth in pairs(chattingPlayers) do
-		
 		if (player == localPlayer) then
 			if(not showMyIcon) then
 				return
 			end
 		end
-	
+
 		if(truth) then
 			local chatx, chaty, chatz = getElementPosition( player )
 			if(isPedInVehicle(player)) then
@@ -51,11 +49,11 @@ function showTextIcon()
 			if dist < drawDistance then
 				if( isLineOfSightClear(playerx, playery, playerz, chatx, chaty, chatz, true, false, false, false )) then
 					local screenX, screenY = getScreenFromWorldPosition ( chatx, chaty, chatz+1.2 )
-					if not screenX then 
+					if not screenX then
 						if guiGetVisible(chatIconFor[player]) == true then
 							guiSetVisible(chatIconFor[player], false)
-						end	
-						return 
+						end
+						return
 					end
 					local scaled = screenSizex * (1/(2*(dist+5))) *.85
 					local relx, rely = scaled * globalscale, scaled * globalscale
@@ -69,7 +67,7 @@ function showTextIcon()
 					if(screenX and screenY) then
 						if getElementData(player, "dim") == getElementData(localPlayer, "dim") then
 						 guiSetVisible(chatIconFor[player], true)
-						end 
+						end
 					end
 				else
 					guiSetVisible(chatIconFor[player], false)

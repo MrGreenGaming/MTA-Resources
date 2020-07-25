@@ -42,69 +42,11 @@ end
 addEvent('freecam', true)
 addEventHandler('freecam', resourceRoot, freecam)
 
--- -- /ignore <playername> -- Uncommented by KaliBwoy, added to settings menu.
-
--- local ignores = nil
--- function findPlayerByName(playerPart)
--- 	local pl = playerPart and getPlayerFromName(playerPart)
--- 	if pl and isElement(pl) then
--- 		return pl
--- 	elseif playerPart then
--- 		for i,v in ipairs (getElementsByType ("player")) do
--- 			if (string.find(string.gsub ( string.lower(getPlayerName(v)), '#%x%x%x%x%x%x', '' ),string.lower(playerPart))) then
--- 				return v
--- 			end
--- 		end
---     end
---  end
- 
--- function ignorePlayer(cmd, playername)
--- 	local player = findPlayerByName(playername)
--- 	if player == localPlayer then
--- 		outputChatBox ( 'Press F2 2x times for full server ignore', 255, 0, 0 )
--- 	elseif not player then
--- 		outputChatBox ( '/ignore: Could not find \'' .. (playername or '') .. '\'', 255, 0, 0 )
--- 	else
--- 		if not ignores then
--- 			ignores = {}
--- 		end
--- 		outputChatBox ( '/ignore: ignoring player ' .. getPlayerName(player), 255, 0, 0 )
--- 		setElementData(player, 'ignored', true, false)
--- 		setTimer(function()
--- 		table.insert(ignores, player)
--- 		end, 100,1)
--- 	end
--- end
--- addCommandHandler ( 'ignore', ignorePlayer)
-
--- function onClientChatMessageHandler( text )
--- 	if not ignores or not text then return end
-	
--- 	for k, player in ipairs(ignores) do
--- 		if isElement(player) and text:find(getPlayerName(player), 1, true) then
--- 			return cancelEvent()
--- 		end
--- 	end
--- end
--- addEventHandler("onClientChatMessage", root, onClientChatMessageHandler)
-
 -- /fpslimit <limit>
-
-local limit
 function clientFPSLimit(cmd, limit_)
-	--if (tonumber(limit_) and tonumber(limit_) > 19 and tonumber(limit_) < 61) then
-	--	outputChatBox('Your FPS limit will be changed on next map change')
-	--	limit = tonumber(limit_)
-	--else
-	--	outputChatBox('Bad limit.')
-	--end
 	triggerEvent("gus_c_fpslimit", root, limit_)
 end
 addCommandHandler ( 'fpslimit', clientFPSLimit)
-
---addEventHandler('onClientMapStarting', root, function ()
---	if limit then setFPSLimit(limit) end
---end)
 
 addCommandHandler('votekut', function() playSound(":gcshop/horns/files/38.mp3", false) end)
 
@@ -233,3 +175,119 @@ function checkVehicleID()
     lastVehID = currentVehID
 end
 setTimer(checkVehicleID, 50, 0)
+
+-- Toggle UI
+local ToggleUI = {}
+ToggleUI.screenSize = { guiGetScreenSize() }
+ToggleUI.visible = true
+ToggleUI.screenSource = false
+
+function ToggleUI.toggleUIVisibility()
+    ToggleUI.visible = not ToggleUI.visible
+    removeEventHandler("onClientPreRender", root, ToggleUI.render)
+    if ToggleUI.visible and isElement(ToggleUI.screenSource) then
+        destroyElement(ToggleUI.screenSource)
+        ToggleUI.screenSource = false
+    else
+        ToggleUI.screenSource = dxCreateScreenSource(ToggleUI.screenSize[1], ToggleUI.screenSize[2])
+        if ToggleUI.screenSource then
+            addEventHandler("onClientPreRender", root, ToggleUI.render)
+        end
+    end
+end
+addCommandHandler("toggleui", ToggleUI.toggleUIVisibility)
+
+function ToggleUI.render()
+    if not ToggleUI.screenSource then
+        ToggleUI.toggleUIVisibility()
+        return
+    elseif isChatBoxInputActive() or isConsoleActive() then
+        return
+    end
+    dxUpdateScreenSource(ToggleUI.screenSource)
+    dxDrawImage(0, 0, ToggleUI.screenSize[1], ToggleUI.screenSize[2], ToggleUI.screenSource, 0, 0, 0, "0xFFFFFFFF", true)
+end
+
+-- Daylight
+local Daylight = {}
+Daylight.allowedModes = {
+    ["never the same"] = true,
+    sprint = true,
+    ["reach the flag"] = true
+}
+Daylight.timer = false
+Daylight.timeCache = {getTime()}
+Daylight.durationCache = getMinuteDuration()
+Daylight.currentMode = false
+Daylight.enabled = false
+
+function Daylight.toggleDaylight()
+    Daylight.enabled = not Daylight.enabled
+    if Daylight.enabled then
+        local allowed = Daylight.isAllowed()
+        outputChatBox("Daylight enabled." .. (allowed and "" or " It will only be applied in allowed modes."), 0, 200, 0)
+        if allowed then
+            Daylight.apply()
+        end
+    else
+        Daylight.apply(true)
+        outputChatBox("Daylight disabled.", 200, 0, 0)
+    end
+end
+addCommandHandler("daylight", Daylight.toggleDaylight)
+
+function Daylight.apply(fromCache)
+    if not fromCache then
+        setTime(12,0)
+        setMinuteDuration(2147483647)
+        if not isTimer(Daylight.timer) then
+            Daylight.timer = setTimer(
+                function()
+                    if getTime() ~= 12 then
+                        setTime(12,0)
+                        setMinuteDuration(2147483647)
+                    end
+                end,
+            200, 0)
+        end
+    else
+        if isTimer(Daylight.timer) then
+            killTimer(Daylight.timer)
+        end
+        setTime(Daylight.timeCache[1], Daylight.timeCache[2])
+        setMinuteDuration(Daylight.durationCache)
+    end
+end
+
+function Daylight.onMapStart(info)
+    Daylight.currentMode = info.modename:lower()
+    Daylight.setCache()
+    if Daylight.enabled and Daylight.isAllowed() then
+        Daylight.apply(false)
+    end
+end
+addEvent("onClientMapStarting")
+addEventHandler("onClientMapStarting", root, Daylight.onMapStart)
+
+function Daylight.onMapStop()
+    if isTimer(Daylight.timer) then
+        killTimer(Daylight.timer)
+    end
+    Daylight.setCache(true)
+end
+addEvent("onClientMapStopping")
+addEventHandler("onClientMapStopping", root, Daylight.onMapStop)
+
+function Daylight.setCache(reset)
+    if reset then
+        Daylight.timeCache = {12, 0}
+        Daylight.durationCache = 1000
+        return
+    end
+    Daylight.timeCache = {getTime()}
+    Daylight.durationCache = getMinuteDuration()
+end
+
+function Daylight.isAllowed()
+    return Daylight.allowedModes[Daylight.currentMode] and true or false
+end

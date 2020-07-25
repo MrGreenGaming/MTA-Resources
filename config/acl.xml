@@ -38,7 +38,10 @@
         <object name="resource.maptools"></object>
         <object name="resource.race_achs"></object>
         <object name="resource.event"></object>
-        <object name="resource.mtatranslate"></object>
+        <object name="resource.resourcestart"></object>
+        <object name="resource.mrgreen-stats"></object>
+        <object name="resource.analytics"></object>
+        <object name="resource.joinquit"></object>
     </group>
     <group name="Console">
         <acl name="Moderator"></acl>
@@ -112,6 +115,89 @@
     </group>
     <group name="mapmanager_helper">
         <acl name="mapmanager_helper"></acl>
+        <object name="user.Bob_Taylor"></object>
+        <object name="user.NITROX"></object>
+        <object name="user.P0L"></object>
+    </group>
+    <group name="Developer">
+        <object name="user.Mihoje"></object>
+        <object name="user.KaliBwoy"></object>
+        <object name="user.bierbuikje"></object>
+        <object name="user.Axa"></object>
+    </group>
+    <group name="allow_fileDelete">
+        <acl name="allowed_fileDelete"></acl>
+        <object name="resource.-shaders-SkyBox_ALT"></object>
+        <object name="resource.-shaders-bloom_fix"></object>
+        <object name="resource.-shaders-car_paint_reflect"></object>
+        <object name="resource.-shaders-contrast"></object>
+        <object name="resource.-shaders-depth_of_field"></object>
+        <object name="resource.-shaders-dynamic_sky"></object>
+        <object name="resource.-shaders-nitro"></object>
+        <object name="resource.-shaders-palette"></object>
+        <object name="resource.-shaders-radial_blur"></object>
+        <object name="resource.-shaders-watershine"></object>
+        <object name="resource.achievements"></object>
+        <object name="resource.acpanel"></object>
+        <object name="resource.admin"></object>
+        <object name="resource.ajax"></object>
+        <object name="resource.analytics"></object>
+        <object name="resource.anti"></object>
+        <object name="resource.blur_box"></object>
+        <object name="resource.censorship"></object>
+        <object name="resource.chatbox_ads"></object>
+        <object name="resource.chattags"></object>
+        <object name="resource.cpicker"></object>
+        <object name="resource.custom_coronas"></object>
+        <object name="resource.customblips"></object>
+        <object name="resource.data"></object>
+        <object name="resource.datasaves"></object>
+        <object name="resource.discord"></object>
+        <object name="resource.discord-events"></object>
+        <object name="resource.elementbrowser"></object>
+        <object name="resource.event"></object>
+        <object name="resource.eventmanager"></object>
+        <object name="resource.fonts"></object>
+        <object name="resource.freecam"></object>
+        <object name="resource.gc"></object>
+        <object name="resource.gctransfer"></object>
+        <object name="resource.guieditor"></object>
+        <object name="resource.geoloc"></object>
+        <object name="resource.gcshop"></object>
+        <object name="resource.gus"></object>
+        <object name="resource.hdradar"></object>
+        <object name="resource.hdwheels"></object>
+        <object name="resource.helpmenu"></object>
+        <object name="resource.interchat"></object>
+        <object name="resource.ipb"></object>
+        <object name="resource.joinquit"></object>
+        <object name="resource.irc"></object>
+        <object name="resource.mapmanager"></object>
+        <object name="resource.mapratings"></object>
+        <object name="resource.mapstop100"></object>
+        <object name="resource.maptools"></object>
+        <object name="resource.messages"></object>
+        <object name="resource.missiontimer"></object>
+        <object name="resource.mrgreen-settings"></object>
+        <object name="resource.mrgreen-sidebar"></object>
+        <object name="resource.mrgreen-vip"></object>
+        <object name="resource.msgbox"></object>
+        <object name="resource.mtatranslate"></object>
+        <object name="resource.nickprotection"></object>
+        <object name="resource.snow"></object>
+        <object name="resource.speed-o-meter"></object>
+        <object name="resource.sqlitebrowser"></object>
+        <object name="resource.stats"></object>
+        <object name="resource.test"></object>
+        <object name="resource.voice"></object>
+        <object name="resource.votemanager"></object>
+        <object name="resource.webadmin"></object>
+        <object name="resource.webbrowser"></object>
+        <object name="resource.webpanel"></object>
+    </group>
+    <group name="stopResourceAccess">
+        <acl name="stopResourceAccess"></acl>
+        <object name="resource.coremarkers"></object>
     </group>
     <acl name="Default">
         <right name="general.ModifyOtherObjects" access="false"></right>
@@ -262,6 +348,12 @@
         <right name="command.votes100" access="false"></right>
         <right name="command.ghostmode" access="false"></right>
         <right name="command.gm" access="false"></right>
+        <right name="function.fileDelete" access="false"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
     </acl>
     <acl name="Moderator">
         <right name="general.ModifyOtherObjects" access="false"></right>
@@ -349,6 +441,9 @@
         <right name="command.setwaveheight" access="true"></right>
         <right name="command.setgamespeed" access="true"></right>
         <right name="command.setgravity" access="true"></right>
+        <right name="command.delete" access="false"></right>
+        <right name="command.setfpslimit" access="false"></right>
+        <right name="command.clearchat" access="true"></right>
     </acl>
     <acl name="SuperModerator">
         <right name="general.ModifyOtherObjects" access="false"></right>
@@ -425,6 +520,9 @@
         <right name="command.setwaveheight" access="true"></right>
         <right name="command.setgamespeed" access="true"></right>
         <right name="command.setgravity" access="true"></right>
+        <right name="command.delete" access="false"></right>
+        <right name="command.setfpslimit" access="false"></right>
+        <right name="command.clearchat" access="true"></right>
     </acl>
     <acl name="Admin">
         <right name="general.ModifyOtherObjects" access="true"></right>
@@ -557,6 +655,9 @@
         <right name="command.translate" access="true"></right>
         <right name="command.shutdown" access="false"></right>
         <right name="function.shutdown" access="false"></right>
+        <right name="resource.performancebrowser" access="true"></right>
+        <right name="function.fileDelete" access="true"></right>
+        <right name="command.clearchat" access="true"></right>
     </acl>
     <acl name="RPC">
         <right name="function.callRemote" access="true"></right>
@@ -627,6 +728,11 @@
         <right name="command.resourcesettings" access="false"></right>
         <right name="command.manageacl" access="false"></right>
         <right name="command.debugscript" access="false"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
     </acl>
     <acl name="MapEditor">
         <right name="general.ModifyOtherObjects" access="true"></right>
@@ -708,6 +814,11 @@
         <right name="command.resourcesettings" access="false"></right>
         <right name="command.manageacl" access="false"></right>
         <right name="command.debugscript" access="false"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
     </acl>
     <acl name="raceACL">
         <right name="general.ModifyOtherObjects" access="true"></right>
@@ -782,6 +893,11 @@
         <right name="command.resourcesettings" access="false"></right>
         <right name="command.manageacl" access="false"></right>
         <right name="command.debugscript" access="false"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
     </acl>
     <acl name="InputRPC">
         <right name="general.http" access="true"></right>
@@ -863,6 +979,12 @@
         <right name="command.resourcesettings" access="false"></right>
         <right name="command.manageacl" access="false"></right>
         <right name="command.debugscript" access="false"></right>
+        <right name="resource.maptools" access="true"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
     </acl>
     <acl name="OutputRPC">
         <right name="function.callRemote" access="true"></right>
@@ -934,6 +1056,11 @@
         <right name="command.resourcesettings" access="false"></right>
         <right name="command.manageacl" access="false"></right>
         <right name="command.debugscript" access="false"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
     </acl>
     <acl name="autoACL_guieditor">
         <right name="general.ModifyOtherObjects" access="false" who="" pending="true" date=""></right>
@@ -1014,6 +1141,11 @@
         <right name="command.manageacl" access="false"></right>
         <right name="command.debugscript" access="false"></right>
         <right name="command.addGC" access="true"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
     </acl>
     <acl name="Killers">
         <right name="command.k" access="true"></right>
@@ -1089,6 +1221,11 @@
         <right name="command.duel" access="true"></right>
         <right name="command.unmute" access="true"></right>
         <right name="command.votekick" access="true"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
     </acl>
     <acl name="mapmanager">
         <right name="command.deletemap" access="true"></right>
@@ -1167,6 +1304,11 @@
         <right name="command.ghostmode" access="true"></right>
         <right name="command.event" access="true"></right>
         <right name="command.teamwar" access="true"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
     </acl>
     <acl name="ServerManager">
         <right name="command.aexec" access="true"></right>
@@ -1185,82 +1327,6 @@
         <right name="command.addcountry" access="true"></right>
         <right name="command.shutdown" access="true"></right>
         <right name="function.shutdown" access="true"></right>
-    </acl>
-    <acl name="mapmanager_helper">
-        <right name="command.acceptmap" access="true"></right>
-        <right name="command.debugscript" access="true"></right>
-        <right name="command.declinemap" access="true"></right>
-        <right name="command.deletemap" access="true"></right>
-        <right name="command.nextmap" access="true"></right>
-        <right name="general.tab_maps" access="true"></right>
-        <right name="general.adminpanel" access="false"></right>
-        <right name="general.tab_players" access="false"></right>
-        <right name="general.tab_resources" access="false"></right>
-        <right name="general.tab_server" access="false"></right>
-        <right name="general.tab_bans" access="false"></right>
-        <right name="general.tab_adminchat" access="false"></right>
-        <right name="command.kick" access="false"></right>
-        <right name="command.freeze" access="false"></right>
-        <right name="command.mute" access="false"></right>
-        <right name="command.setnick" access="false"></right>
-        <right name="command.shout" access="false"></right>
-        <right name="command.spectate" access="false"></right>
-        <right name="command.slap" access="false"></right>
-        <right name="command.setgroup" access="false"></right>
-        <right name="command.sethealth" access="false"></right>
-        <right name="command.setarmour" access="false"></right>
-        <right name="command.setmoney" access="false"></right>
-        <right name="command.setskin" access="false"></right>
-        <right name="command.setteam" access="false"></right>
-        <right name="command.giveweapon" access="false"></right>
-        <right name="command.setstat" access="false"></right>
-        <right name="command.jetpack" access="false"></right>
-        <right name="command.warp" access="false"></right>
-        <right name="command.setdimension" access="false"></right>
-        <right name="command.setinterior" access="false"></right>
-        <right name="command.givevehicle" access="false"></right>
-        <right name="command.repair" access="false"></right>
-        <right name="command.blow" access="false"></right>
-        <right name="command.destroy" access="false"></right>
-        <right name="command.customize" access="false"></right>
-        <right name="command.setcolor" access="false"></right>
-        <right name="command.setpaintjob" access="false"></right>
-        <right name="command.listmessages" access="false"></right>
-        <right name="command.readmessage" access="false"></right>
-        <right name="command.listresources" access="false"></right>
-        <right name="command.resourcesettings" access="false"></right>
-        <right name="command.start" access="false"></right>
-        <right name="command.stop" access="false"></right>
-        <right name="command.stopall" access="false"></right>
-        <right name="command.restart" access="false"></right>
-        <right name="command.execute" access="false"></right>
-        <right name="command.manageacl" access="false"></right>
-        <right name="command.delete" access="false"></right>
-        <right name="command.setpassword" access="false"></right>
-        <right name="command.setwelcome" access="false"></right>
-        <right name="command.setgame" access="false"></right>
-        <right name="command.setmap" access="false"></right>
-        <right name="command.setweather" access="false"></right>
-        <right name="command.blendweather" access="false"></right>
-        <right name="command.setblurlevel" access="false"></right>
-        <right name="command.setwaveheight" access="false"></right>
-        <right name="command.setskygradient" access="false"></right>
-        <right name="command.setgamespeed" access="false"></right>
-        <right name="command.setgravity" access="false"></right>
-        <right name="command.settime" access="false"></right>
-        <right name="function.shutdown" access="false"></right>
-        <right name="command.setfpslimit" access="false"></right>
-        <right name="command.fetchRemote" access="false"></right>
-        <right name="command.ban" access="false"></right>
-        <right name="command.unban" access="false"></right>
-        <right name="command.banip" access="false"></right>
-        <right name="command.unbanip" access="false"></right>
-        <right name="command.banserial" access="false"></right>
-        <right name="command.unbanserial" access="false"></right>
-        <right name="command.listbans" access="false"></right>
-    </acl>
-    <acl name="addcountry_rights">
-        <right name="command.addcountry" access="true"></right>
         <right name="general.adminpanel" access="false"></right>
         <right name="general.tab_players" access="false"></right>
         <right name="general.tab_resources" access="false"></right>
@@ -1287,25 +1353,23 @@
         <right name="command.warp" access="false"></right>
         <right name="command.setdimension" access="false"></right>
         <right name="command.setinterior" access="false"></right>
+        <right name="command.createteam" access="false"></right>
+        <right name="command.destroyteam" access="false"></right>
         <right name="command.givevehicle" access="false"></right>
         <right name="command.repair" access="false"></right>
-        <right name="command.blow" access="false"></right>
-        <right name="command.destroy" access="false"></right>
+        <right name="command.blowvehicle" access="false"></right>
+        <right name="command.destroyvehicle" access="false"></right>
         <right name="command.customize" access="false"></right>
         <right name="command.setcolor" access="false"></right>
         <right name="command.setpaintjob" access="false"></right>
         <right name="command.listmessages" access="false"></right>
         <right name="command.readmessage" access="false"></right>
         <right name="command.listresources" access="false"></right>
-        <right name="command.resourcesettings" access="false"></right>
         <right name="command.start" access="false"></right>
         <right name="command.stop" access="false"></right>
         <right name="command.stopall" access="false"></right>
-        <right name="command.restart" access="false"></right>
-        <right name="command.execute" access="false"></right>
-        <right name="command.manageacl" access="false"></right>
         <right name="command.delete" access="false"></right>
-        <right name="command.debugscript" access="false"></right>
+        <right name="command.restart" access="false"></right>
         <right name="command.setpassword" access="false"></right>
         <right name="command.setwelcome" access="false"></right>
         <right name="command.setgame" access="false"></right>
@@ -1318,9 +1382,8 @@
         <right name="command.setgamespeed" access="false"></right>
         <right name="command.setgravity" access="false"></right>
         <right name="command.settime" access="false"></right>
-        <right name="function.shutdown" access="false"></right>
         <right name="command.setfpslimit" access="false"></right>
-        <right name="command.fetchRemote" access="false"></right>
+        <right name="command.clearchat" access="false"></right>
         <right name="command.ban" access="false"></right>
         <right name="command.unban" access="false"></right>
         <right name="command.banip" access="false"></right>
@@ -1328,5 +1391,23 @@
         <right name="command.banserial" access="false"></right>
         <right name="command.unbanserial" access="false"></right>
         <right name="command.listbans" access="false"></right>
+    </acl>
+    <acl name="mapmanager_helper">
+        <right name="command.acceptmap" access="true"></right>
+        <right name="command.debugscript" access="true"></right>
+        <right name="command.declinemap" access="true"></right>
+        <right name="command.deletemap" access="true"></right>
+        <right name="command.nextmap" access="true"></right>
+        <right name="general.tab_maps" access="true"></right>
+    </acl>
+    <acl name="addcountry_rights">
+        <right name="command.addcountry" access="true"></right>
+    </acl>
+    <acl name="allowed_fileDelete">
+        <right name="function.fileDelete" access="true"></right>
+    </acl>
+    <acl name="stopResourceAccess">
+        <right name="function.startResource" access="true"></right>
+        <right name="function.stopResource" access="true"></right>
     </acl>
 </acl>
