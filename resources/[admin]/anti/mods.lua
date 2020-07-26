@@ -103,7 +103,7 @@ addEventHandler('onRaceStateChanging', root, function(state) local gm = exports.
 local virtualMachineWhitelist = {
 	-- ["serial"] == true,	
 	["EB8EA4A9C0424281C602EB455E5CF753"] = true,	-- Rokkas linux vm https://mrgreengaming.com/forums/topic/19443-playing-on-a-virtual-machine/#comment-152720
-	["6029B8094EE77539249FF4E36AE28BA3"] == true, -- Haxardous VM
+	["6029B8094EE77539249FF4E36AE28BA3"] = true, -- Haxardous VM
 }
 function handleOnPlayerACInfo( detectedACList, d3d9Size, d3d9MD5, d3d9SHA256 )
     -- outputDebugString( "ACInfo for " .. getPlayerName(source)
