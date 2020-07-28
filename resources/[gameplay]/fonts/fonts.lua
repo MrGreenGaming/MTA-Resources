@@ -1,5 +1,5 @@
 fontLocations = {
-    ["Century Gothic Bold"] = "fonts/Century Gothic Bold.ttf",
+    ["Century Gothic Bold"] = "fonts/CenturyGothicBold.ttf",
     ["OpenSans"] = "fonts/OpenSans.ttf",
 	["Arial"] = "fonts/arial.ttf",
 	["Tahoma Bold"] = "fonts/tahomabd.ttf",
