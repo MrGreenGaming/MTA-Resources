@@ -2,11 +2,11 @@ addEvent("onDiscordPacket")
 
 local socket = false
 
-function createSocketFromConfig()
-    local channel = get("channel")
-    local passphrase = get("passphrase")
-    local hostname = get("hostname")
-    local port = tonumber(get("port"))
+function createSocketFromConfig(config)
+    local channel = config.channelname
+    local passphrase = config.passphrase
+    local hostname = config.hostname
+    local port = config.hostport
 
     if not channel or not passphrase or not hostname or not port then
         return
@@ -31,7 +31,7 @@ function createDiscordPipe(hostname, port, passphrase, channel)
     socket.passphrase = passphrase
     socket.ready = false
 
-    socket:on("ready", 
+    socket:on("ready",
         function (socket)
             outputDebugString("[Discord] Connected to ".. hostname .." on port ".. port)
             sendAuthPacket(socket)
@@ -40,10 +40,10 @@ function createDiscordPipe(hostname, port, passphrase, channel)
 
     socket:on("data", handleDiscordPacket)
 
-    socket:on("close", 
+    socket:on("close",
         function (socket)
             outputDebugString("[Discord] Disconnected from ".. hostname)
-            
+
             setTimer(
                 function ()
                     outputDebugString("[Discord] Reconnecting now..")
@@ -57,7 +57,7 @@ end
 function sendAuthPacket(socket)
     local salt = md5(getTickCount() + getRealTime().timestamp)
 
-    socket:write(table.json { 
+    socket:write(table.json {
         type = "auth",
         payload = {
             salt = salt,
@@ -81,7 +81,7 @@ function handleAuthPacket(socket, payload)
             }
         })
     else
-        local error = tostring(payload.error) or "unknown error" 
+        local error = tostring(payload.error) or "unknown error"
         outputDebugString("[Discord] Failed to authenticate: ".. error)
         socket:disconnect()
     end

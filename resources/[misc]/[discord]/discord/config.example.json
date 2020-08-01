@@ -1,0 +1,6 @@
+{
+    "channelname": "channel-name",
+    "hostname": "localhost",
+    "passphrase": "passphrase",
+    "hostport": 1234
+}

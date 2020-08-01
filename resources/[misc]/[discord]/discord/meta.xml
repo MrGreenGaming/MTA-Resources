@@ -6,10 +6,4 @@
     <script type="server" src="util.lua"/>
     <script type="server" src="discord.lua"/>
     <export type="server" function="send"/>
-    <settings>
-		<setting name="*channel" value="mrgreen" friendlyname="Discord channel" group="" accept="" examples="" desc="" />
-		<setting name="*port" value="8100" friendlyname="Host port" group="" accept="" examples="" desc="" />
-		<setting name="*hostname" value="localhost" friendlyname="Hostname" group="" accept="" examples="" desc="" />
-		<setting name="*passphrase" value="" friendlyname="Passphrase" group="" accept="" examples="" desc="" />
-    </settings>
 </meta>

@@ -13,8 +13,18 @@ addEventHandler("onResourceStart", resourceRoot,
         if not found then
             outputServerLog("Module 'ml_sockets' not found, please install.")
             cancelEvent()
-        else
-            createSocketFromConfig()
+            return
         end
+
+        local configFile = fileOpen("config.json")
+        local config = fileRead(configFile, fileGetSize(cconfigFile))
+        fileClose(configFile)
+        config = fromJSON(config)
+        if not config then
+            outputServerLog("Could not parse config.json")
+            cancelEvent()
+            return
+        end
+        createSocketFromConfig(config)
     end,
 false, "high+9")
