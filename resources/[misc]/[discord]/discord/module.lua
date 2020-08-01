@@ -17,7 +17,7 @@ addEventHandler("onResourceStart", resourceRoot,
         end
 
         local configFile = fileOpen("config.json")
-        local config = fileRead(configFile, fileGetSize(cconfigFile))
+        local config = fileRead(configFile, fileGetSize(configFile))
         fileClose(configFile)
         config = fromJSON(config)
         if not config then
