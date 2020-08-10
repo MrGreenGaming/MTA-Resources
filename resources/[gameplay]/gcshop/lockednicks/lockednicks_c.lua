@@ -40,13 +40,13 @@ addCommandHandler('locknick',function() if not guiGetVisible(locknickGUI.tab[1])
 
 function translateLockedNicksGUI()
     guiSetText(locknickGUI.label[1], _("In this tab you can manage your locked nicknames."))
-    guiSetText(locknickGUI.label[2], _('To lock your current nickname you have to click on "%(btn1)". \nTo remove a locked nick, select the nick in the gridlist, then click on "%(btn2)". \nIf you are in need of some extra locked nicknames, you can buy extra slots. Click on "%(btn3)" to do so. \nTrolling and deliberate nickstealing can get you banned.'):itpl{btn1=_("Lock current nickname"), btn2=_("Remove selected nick"), btn3=_("Buy extra lock nick slot")})
+    guiSetText(locknickGUI.label[2], _('To lock your current nickname you have to click on "${btn1}". \nTo remove a locked nick, select the nick in the gridlist, then click on "${btn2}". \nIf you are in need of some extra locked nicknames, you can buy extra slots. Click on "${btn3}" to do so. \nTrolling and deliberate nickstealing can get you banned.') % {btn1=_("Lock current nickname"), btn2=_("Remove selected nick"), btn3=_("Buy extra lock nick slot")})
     guiGridListSetColumnTitle(locknickGUI.gridlist[1], locknickGUI.glcolumn[1], _("My Locked Nicknames"))
     guiSetText(locknickGUI.button[1], _("Lock current nickname"))
     guiSetText(locknickGUI.button[2], _("Remove selected nickname"))
-    guiSetText(locknickGUI.label[4], _("Current price: %(price) GC per extra slot (max: %(slots) slots)"):itpl{price=750, slots=10})
+    guiSetText(locknickGUI.label[4], _("Current price: ${price} GC per extra slot (max: ${slots} slots)") % {price=750, slots=10})
     guiSetText(locknickGUI.button[3], _("Buy extra locknick slot"))
-    guiSetText(locknickGUI.label[3], _("%(used)/%(max) nickname slots in use"):itpl{used=tostring(slotsUsed or 0), max=tostring(maxAmount or 10)})
+    guiSetText(locknickGUI.label[3], _("${used}/${max} nickname slots in use") % {used=tostring(slotsUsed or 0), max=tostring(maxAmount or 10)})
 end
 addEventHandler("onClientPlayerLocaleChange", root, translateLockedNicksGUI)
 
@@ -55,7 +55,7 @@ function handleSlotAmountLabel()
     local used = slotsUsed
     local max = maxAmount
 
-    guiSetText(label,_("%(used)/%(max) nickname slots in use"):itpl{used=tostring(used), max=tostring(max)})
+    guiSetText(label,_("${used}/${max} nickname slots in use") % {used=tostring(used), max=tostring(max)})
     if tonumber(used) >= tonumber(max) then
         -- make text red
         guiLabelSetColor(label,255,0,0)
@@ -110,7 +110,7 @@ function lockednicksButtonHandler()
         if maxAmount < 10 then -- Max 10 slots
             triggerServerEvent("onPlayerBuyLockedNickSlot",resourceRoot)
         else
-            outputChatBox(_("Maximum amount of nickname slots reached (%(max))"):itpl{max=10},255,0,0)
+            outputChatBox(_("Maximum amount of nickname slots reached (${max})") % {max=10},255,0,0)
 
         end
 

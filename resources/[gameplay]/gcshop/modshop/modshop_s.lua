@@ -46,7 +46,7 @@ function buyVehicle ( player, cmd, vehicleID )
 		outputChatBox(_.For(player, 'Not a valid vehicle (use the correct name or ID)'), player, 255, 0, 0 )
 		return
 	elseif isVehInDatabase ( forumID, vehicleID ) then
-		outputChatBox(_.For(player, 'You already bought this vehicle: %(model) (%(id))'):itpl{model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 255, 165, 0 )
+		outputChatBox(_.For(player, 'You already bought this vehicle: ${model} (${id})') % {model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 255, 165, 0 )
 		return
 	end
 
@@ -55,7 +55,7 @@ function buyVehicle ( player, cmd, vehicleID )
 	if result == true then
 		local added = addVehToDatabase( forumID, vehicleID )
 		addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought vehicle=' .. tostring(vehicleID) .. ' ' .. tostring(added))
-		outputChatBox (_.For(player, 'Vehicle "%(model)" (%(id)) bought.'):itpl{model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 0, 255, 0)
+		outputChatBox (_.For(player, 'Vehicle "${model}" (${id}) bought.') % {model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 0, 255, 0)
 		-- getModsFromDB(forumID, )
 		getModsFromDB(forumID, true,
 		function(data)
@@ -137,7 +137,7 @@ function setMod ( player, cmd, vehicleID, upgradeType, ... )
 		outputChatBox(_.For(player, 'Not a valid vehicle (use the correct name or ID)'), player, 255, 0, 0 )
 		return
 	elseif vehicleID ~= '*' and not isVehInDatabase ( forumID, vehicleID ) then
-		outputChatBox(_.For(player,"You don't own this vehicle: %(model) (%(id))"):itpl{model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 255, 0, 0 )
+		outputChatBox(_.For(player,"You don't own this vehicle: ${model} (${id})") % {model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 255, 0, 0 )
 		return
 	elseif not upgradeType then
 		outputChatBox(_.For(player, 'Not a valid upgrade type'), player, 255, 0, 0 )
@@ -185,12 +185,12 @@ function addShopUpgrade ( player, forumID, vehicleID, upgradeID)
 			end
 		)
 	elseif not isUpgradeCompatible ( vehicleID, upgradeID ) then
-		outputChatBox ( _.For(player,"Upgrade %(upgrade) isn't compatible with: %(vehicle)"):itpl{upgrade=tostring(upgradeID), vehicle=tostring(getVehicleNameFromModel(vehicleID))}, player, 255, 0, 0 )
+		outputChatBox ( _.For(player,"Upgrade ${upgrade} isn't compatible with: ${vehicle}") % {upgrade=tostring(upgradeID), vehicle=tostring(getVehicleNameFromModel(vehicleID))}, player, 255, 0, 0 )
 	elseif isUpgInDatabase ( forumID, vehicleID, upgradeID ) then
-		outputChatBox ( _.For(player, 'This upgrade is already added: %(model) + %(id)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), id=tostring(upgradeID)}, player, 255, 165, 0 )
+		outputChatBox ( _.For(player, 'This upgrade is already added: ${model} + ${id}') % {model=tostring(getVehicleNameFromModel(vehicleID)), id=tostring(upgradeID)}, player, 255, 165, 0 )
 	else
 		local added = addUpgToDatabase (forumID, vehicleID, upgradeID )
-		outputChatBox (_.For(player, 'Vehicle "%(model)": new upgrade %(id) %(isFailed)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), id=tostring(upgradeID), isFailed=added and '' or ' FAILED'}, player, 0, 255, 0 )
+		outputChatBox (_.For(player, 'Vehicle "${model}": new upgrade ${id} ${isFailed}') % {model=tostring(getVehicleNameFromModel(vehicleID)), id=tostring(upgradeID), isFailed=added and '' or ' FAILED'}, player, 0, 255, 0 )
 		local veh = getPedOccupiedVehicle(player)
 		if veh and vehicleID == getElementModel(veh) then
 			addVehicleUpgrade(veh, upgradeID)
@@ -225,10 +225,10 @@ function remShopUpgrade ( player, forumID, vehicleID, upgradeID)
 			end
 		)
 	elseif not isUpgInDatabase ( forumID, vehicleID, upgradeID ) then
-		outputChatBox ( _.For('This upgrade is not added: %(model) + %(upgrade)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), upgrade=tostring(upgradeID)}, player, 255, 165, 0 )
+		outputChatBox ( _.For('This upgrade is not added: ${model} + ${upgrade}') % {model=tostring(getVehicleNameFromModel(vehicleID)), upgrade=tostring(upgradeID)}, player, 255, 165, 0 )
 	else
 		local removed = remUpgFromDatabase (forumID, vehicleID, upgradeID )
-		outputChatBox (_.For(player, 'Vehicle "%(model)": removed upgrade %(upgrade) %(isFailed)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), upgrade=tostring(upgradeID), isFailed=removed and '' or ' FAILED'}, player, 0, 255, 0 )
+		outputChatBox (_.For(player, 'Vehicle "${model}": removed upgrade ${upgrade} ${isFailed}') % {model=tostring(getVehicleNameFromModel(vehicleID)), upgrade=tostring(upgradeID), isFailed=removed and '' or ' FAILED'}, player, 0, 255, 0 )
 		local veh = getPedOccupiedVehicle(player)
 		if veh and vehicleID == getElementModel(veh) then
 			removeVehicleUpgrade(veh, upgradeID)
@@ -242,7 +242,7 @@ function addShopPaintJob ( player, forumID, vehicleID, paintjob)
 		getPerkSettings(player, 4,
 		function(perkSetting)
 			if bool and not math.range(paintjob, 0, 3 + (perkSetting.amount or 0)) then
-				outputChatBox ( _.For(player, 'Wrong input, need a paintjob between 1 and 3 (0 = no paintjob) or %(amount) for custom paintjobs!'):itpl{amount=3 + perkSetting.amount}, player, 255, 0, 0 )
+				outputChatBox ( _.For(player, 'Wrong input, need a paintjob between 1 and 3 (0 = no paintjob) or ${amount} for custom paintjobs!') % {amount=3 + perkSetting.amount}, player, 255, 0, 0 )
 			elseif not bool and not math.range(paintjob, 0, 3)  then
 				outputChatBox ( _.For(player, 'Wrong input, need a paintjob between 1 and 3 (0 = no paintjob)'), player, 255, 0, 0 )
 			else
@@ -251,21 +251,21 @@ function addShopPaintJob ( player, forumID, vehicleID, paintjob)
 				if vehicleID ~= '*' then
 					if paintjob > 3  then
 						addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob )
-						outputChatBox (_.For(player, 'Vehicle "%(model)": new custom paintjob # %(pj)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), pj=paintjob}, player, 0, 255, 0 )
+						outputChatBox (_.For(player, 'Vehicle "${model}": new custom paintjob # ${pj}') % {model=tostring(getVehicleNameFromModel(vehicleID)), pj=paintjob}, player, 0, 255, 0 )
 					elseif paintjob ~= 0 then
 						addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob - 1 )
-						outputChatBox (_.For(player, 'Vehicle "%(model)": new paintjob # %(pj)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), pl=paintjob}, player, 0, 255, 0 )
+						outputChatBox (_.For(player, 'Vehicle "${model}": new paintjob # ${pj}') % {model=tostring(getVehicleNameFromModel(vehicleID)), pl=paintjob}, player, 0, 255, 0 )
 					else
 						remUpgFromSlotDatabase (forumID, vehicleID, 'slot17' )
-						outputChatBox (_.For(player, 'Vehicle "%(model)": paintjob removed'):itpl{model=tostring(getVehicleNameFromModel(vehicleID))} , player, 0, 255, 0 )
+						outputChatBox (_.For(player, 'Vehicle "${model}": paintjob removed') % {model=tostring(getVehicleNameFromModel(vehicleID))} , player, 0, 255, 0 )
 					end
 				else
 					if paintjob > 3  then
 						addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob )
-						outputChatBox (_.For(player, 'All your vehicles have a new custom paintjob # %s'):format(paintjob), player, 0, 255, 0 )
+						outputChatBox (_.For(player, 'All your vehicles have a new custom paintjob #${paintjob}') % {paintjob=paintjob}, player, 0, 255, 0 )
 					elseif paintjob ~= 0 then
 						addUpgToSlotDatabase (forumID, vehicleID, 'slot17', paintjob - 1 )
-						outputChatBox (_.For(player, 'All your vehicles have a new paintjob # %s'):format(paintjob), player, 0, 255, 0 )
+						outputChatBox (_.For(player, 'All your vehicles have a new paintjob #${paintjob}') % {paintjob=paintjob}, player, 0, 255, 0 )
 					else
 						remUpgFromSlotDatabase (forumID, vehicleID, 'slot17' )
 						outputChatBox (_.For(player, 'Paintjob removed from all your vehicles') , player, 0, 255, 0 )
@@ -305,22 +305,22 @@ function addShopVColor ( player, forumID, vehicleID, arg1, arg2, arg3, arg4 )
 	remUpgFromSlotDatabase (forumID, vehicleID, 'slot20' )
 	remUpgFromSlotDatabase (forumID, vehicleID, 'slot21' )
 	if not (arg1) then
-		outputChatBox ( _.For(player, 'Vehicle "%s" : colors removed'):format(tostring(getVehicleNameFromModel(vehicleID))), player, 0, 255, 0 )
+		outputChatBox ( _.For(player, 'Vehicle "${vehicle}" : colors removed') % {vehicle = getVehicleNameFromModel(vehicleID)}, player, 0, 255, 0 )
 	else
 		addUpgToSlotDatabase (forumID, vehicleID, 'slot18', arg1 )
 		if not arg2 then
-			outputChatBox (_.For(player, 'Vehicle "%(model)" has a new color: %(color)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), color=arg1}, player, 0, 255, 0 )
+			outputChatBox (_.For(player, 'Vehicle "${model}" has a new color: ${color}') % {model=tostring(getVehicleNameFromModel(vehicleID)), color=arg1}, player, 0, 255, 0 )
 		else
 			addUpgToSlotDatabase (forumID, vehicleID, 'slot19', arg2 )
 			if not arg3 then
-				outputChatBox (_.For(player, 'Vehicle "%(model)" has a new color scheme: %(color)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), color=arg1 .. " " .. arg2}, player, 0, 255, 0 )
+				outputChatBox (_.For(player, 'Vehicle "${model}" has a new color scheme: ${color}') % {model=tostring(getVehicleNameFromModel(vehicleID)), color=arg1 .. " " .. arg2}, player, 0, 255, 0 )
 			else
 				addUpgToSlotDatabase (forumID, vehicleID, 'slot20', arg3 )
 				if not arg4 then
-					outputChatBox (_.For(player, 'Vehicle "%(model)" has a new color scheme: %(color)' ):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), color=arg1 .. " " .. arg2 .. " " .. arg3}, player, 0, 255, 0 )
+					outputChatBox (_.For(player, 'Vehicle "${model}" has a new color scheme: ${color}' ) % {model=tostring(getVehicleNameFromModel(vehicleID)), color=arg1 .. " " .. arg2 .. " " .. arg3}, player, 0, 255, 0 )
 				else
 					addUpgToSlotDatabase (forumID, vehicleID, 'slot21', arg4 )
-					outputChatBox (_.For(player, 'Vehicle "%(model)" has a new color scheme: %(color)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), color=arg1 .. " " .. arg2 .. " " .. arg3 .. " " .. arg4}, player, 0, 255, 0 )
+					outputChatBox (_.For(player, 'Vehicle "${model}" has a new color scheme: ${color}') % {model=tostring(getVehicleNameFromModel(vehicleID)), color=arg1 .. " " .. arg2 .. " " .. arg3 .. " " .. arg4}, player, 0, 255, 0 )
 				end
 			end
 		end
@@ -360,7 +360,7 @@ function addShopVColorRGB ( player, forumID, vehicleID, ... )
 	end
 	if not (colors[0][1]) then
 		if vehicleID ~= '*' then
-			outputChatBox ( _.For(player, 'Vehicle "%s": colors removed'):format(tostring(getVehicleNameFromModel(vehicleID))), player, 0, 255, 0 )
+			outputChatBox ( _.For(player, 'Vehicle "${vehicle}": colors removed') % {vehicle=getVehicleNameFromModel(vehicleID)}, player, 0, 255, 0 )
 		end
 	else
 		local text = ''
@@ -371,9 +371,9 @@ function addShopVColorRGB ( player, forumID, vehicleID, ... )
 			text = text ..' '.. s
 		end
 		if vehicleID ~= '*' then
-			outputChatBox ( _.For(player, 'Vehicle "%(model)" has a new color scheme: %(color)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), color=text}, player, 0, 255, 0 )
+			outputChatBox ( _.For(player, 'Vehicle "${model}" has a new color scheme: ${color}') % {model=tostring(getVehicleNameFromModel(vehicleID)), color=text}, player, 0, 255, 0 )
 		else
-			outputChatBox (_.For(player, 'All your vehicles have a new color scheme: %s'):format(text), player, 0, 255, 0 )
+			outputChatBox (_.For(player, 'All your vehicles have a new color scheme: ${color}') % {color = text}, player, 0, 255, 0 )
 		end
 		local veh = getPedOccupiedVehicle(player)
 		if veh and ( vehicleID == getElementModel(veh) or isVehInDatabase ( forumID, getElementModel(veh) ) ) then
@@ -396,7 +396,7 @@ function addShopLColor ( player, forumID, vehicleID, red, green, blue )
 			remUpgFromSlotDatabase (forumID, vehicleID, 'slot24' )
 			local veh = getPedOccupiedVehicle(player)
 			setVehicleHeadLightColor(veh, 255, 255, 255)
-			outputChatBox ( _.For(player, 'Vehicle "%s": headlight colors removed'):format(tostring(getVehicleNameFromModel(vehicleID))), player, 0, 255, 0 )
+			outputChatBox ( _.For(player, 'Vehicle "${model}": headlight colors removed') % {model=getVehicleNameFromModel(vehicleID)}, player, 0, 255, 0 )
 		end
 	else
 		red = math.range(red, 0, 255)
@@ -409,9 +409,9 @@ function addShopLColor ( player, forumID, vehicleID, red, green, blue )
 			addUpgToSlotDatabase (forumID, vehicleID, 'slot23', green )
 			addUpgToSlotDatabase (forumID, vehicleID, 'slot24', blue )
 			if vehicleID ~= '*' then
-				outputChatBox (_.For(player, 'Vehicle "%(model)" has new headlights: %(color)' ):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), color=red .. " " .. green .. " " .. blue}, player, 0, 255, 0 )
+				outputChatBox (_.For(player, 'Vehicle "${model}" has new headlights: ${color}' ) % {model=tostring(getVehicleNameFromModel(vehicleID)), color=red .. " " .. green .. " " .. blue}, player, 0, 255, 0 )
 			else
-				outputChatBox (_.For(player, 'All your vehicles have new headlights: %s'):format(red .. " " .. green .. " " .. blue), player, 0, 255, 0 )
+				outputChatBox (_.For(player, 'All your vehicles have new headlights: ${color}') % {color=red .. " " .. green .. " " .. blue}, player, 0, 255, 0 )
 			end
 			local veh = getPedOccupiedVehicle(player)
 			if veh and ( vehicleID == getElementModel(veh) or isVehInDatabase ( forumID, getElementModel(veh) ) ) then
@@ -429,10 +429,10 @@ function addShopNeon ( player, forumID, vehicleID, color)
 	else
         if not (color) then
             remUpgFromSlotDatabase (forumID, vehicleID, 'slot26' )
-            outputChatBox ( _.For(player, 'Removed neon lights from %s'):format(tostring(getVehicleNameFromModel(vehicleID))), player, 0, 255, 0 )
+            outputChatBox ( _.For(player, 'Removed neon lights from ${vehicle}') % {vehicle = getVehicleNameFromModel(vehicleID)}, player, 0, 255, 0 )
         else
             addUpgToSlotDatabase (forumID, vehicleID, 'slot26', color )
-            outputChatBox (_.For(player, 'Vehicle "%(model)" has new neon lights: %(color)'):itpl{model=tostring(getVehicleNameFromModel(vehicleID)), color=color}, player, 0, 255, 0 )
+            outputChatBox (_.For(player, 'Vehicle "${model}" has new neon lights: ${color}') % {model=tostring(getVehicleNameFromModel(vehicleID)), color=color}, player, 0, 255, 0 )
         end
         local veh = getPedOccupiedVehicle(player)
         if veh and vehicleID == getElementModel(veh) then
@@ -750,7 +750,7 @@ local function modshopTestVehicle(player, c , vehicleID)
 		outputChatBox(_.For(player, 'Not a valid vehicle (use the correct name or ID)'), player, 255, 0, 0 )
 		return
 	elseif not isVehInDatabase ( forumID, vehicleID ) then
-		outputChatBox(_.For(player, "You don't own this vehicle: %(model) (%(id))"):itpl{model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 255, 0, 0 )
+		outputChatBox(_.For(player, "You don't own this vehicle: ${model} (${id})") % {model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 255, 0, 0 )
 		return
 	elseif not permissions.preview[exports.race:getRaceMode()] or getElementData(player,"race.finished")
 		or (currentRaceState and currentRaceState ~= "Running" and currentRaceState ~= "SomeoneWon") or playerState ~= "alive" or isElementFrozen(veh)
@@ -785,7 +785,7 @@ local function modshopTestVehicle(player, c , vehicleID)
 		setVehicleDoorState(veh, i, 0);
 	end
 	setTimer(setElementFrozen,50,1,veh, false);
-	outputChatBox(_.For(player, 'Modding %(model) (%(id))'):itpl{model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 0, 255, 0);
+	outputChatBox(_.For(player, 'Modding ${model} (${id})') % {model=getVehicleNameFromModel(vehicleID), id=tostring(vehicleID)}, player, 0, 255, 0);
 	outputChatBox(_.For(player, 'Press enter to go back to racing!'), player, 0, 255, 0);
 	end, 150, 1)
 end

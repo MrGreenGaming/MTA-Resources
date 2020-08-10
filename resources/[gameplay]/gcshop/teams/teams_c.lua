@@ -125,8 +125,8 @@ function translateTeamsGUI()
 	guiSetText(teamTab, _.context("GCshop Teams Tab", "Teams"))
 	guiSetText(teamsGUI.tab[1], _("Your Team"))
 	guiSetText(teamsGUI.label[1], _("Create your own team! You will be able to set a team name, tag, color, welcome message and invite players to your team. Teams expire after 20/40/60 days, but everyone in the team can refresh the team duration. Clan owners can transfer ownership with /makeowner PlayerName with color code."))
-	guiSetText(teamsGUI.btnBuyTeam, _("Create team\n%(price) GC / %(amount) days"):itpl{price=2750, amount=20})
-	guiSetText(teamsGUI.btnUpdateTeam, _("Save changes\n%s GC"):format(100))
+	guiSetText(teamsGUI.btnBuyTeam, _("Create team\n${price} GC / ${amount} days") % {price=2750, amount=20})
+	guiSetText(teamsGUI.btnUpdateTeam, _("Save changes\n${price} GC") % {price=100})
 	guiSetText(teamsGUI.label[2], _("Team Name"))
 	guiSetText(teamsGUI.label[3], _("Team Tag"))
 	guiSetText(teamsGUI.label[4], _("Team Color"))
@@ -198,7 +198,7 @@ function handleTeamData(teams, player, t)
 		end
 		if z.status == 1 then
 			i = guiGridListAddRow(g)
-			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name or 'UNKNOWN',"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (_(' (Owner) (%(age)/%(remain) days left'):itpl{age=z.age, remain=60}) or ''), false, false)
+			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name or 'UNKNOWN',"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (_(' (Owner) (${age}/${remain} days left') % {age=z.age, remain=60}) or ''), false, false)
 		end
 	end
 	if not t or player ~= localPlayer then return end
@@ -206,12 +206,12 @@ function handleTeamData(teams, player, t)
 	for r, z in ipairs(teams) do
 		if t and t.teamid == z.teamid and z.status == 1 then
 			i = guiGridListAddRow(g2)
-			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name or 'UNKNOWN',"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (_(' (Owner) (%(age)/%(remain) days left'):itpl{age=z.age, remain=60}) or ''), false, false)
+			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name or 'UNKNOWN',"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (_(' (Owner) (${age}/${remain} days left') % {age=z.age, remain=60}) or ''), false, false)
 			guiGridListSetItemData(g2, i, 1, z.forumid, false, false)
 		end
 	end
 	if t.status == 1 then
-		guiSetText(teamGUI.btnBuyTeam, _("Renew team\n%(price) GC / %(amount) days"):itpl{price=2750, amount=20})
+		guiSetText(teamGUI.btnBuyTeam, _("Renew team\n${price} GC / ${amount} days") % {price=2750, amount=20})
 		if tonumber(t.age) == 60 then
 			guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "True")
 		else
@@ -233,7 +233,7 @@ function handleTeamData(teams, player, t)
 		guiSetVisible(teamGUI.btnInvite, t.forumid == t.owner)
 		guiSetVisible(teamGUI.btnKick, t.forumid == t.owner)
 	else
-		guiSetText(teamGUI.btnBuyTeam, _("Buy team\n%(price) GC / %(amount) days"):itpl{price=2750, amount=20})
+		guiSetText(teamGUI.btnBuyTeam, _("Buy team\n${price} GC / ${amount} days") % {price=2750, amount=20})
 
 		guiSetVisible(teamGUI.btnUpdateTeam, false)
 		guiSetEnabled(teamGUI.teamname, true)

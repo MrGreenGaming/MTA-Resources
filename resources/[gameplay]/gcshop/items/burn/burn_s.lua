@@ -170,11 +170,11 @@ function onPlayersVehicleCollide (player1, car1, player2, car2)
 		setElementHealth(car1, getElementHealth(car2))
 		setElementHealth(car2, saveFireHealth)    --transfer the fire !
 
-		outputChatBox(_.For(player1, "You have taken %(player)'s health!"):itpl{player=getPlayerName(player2)}, player1, 50, 202, 50)
-		exports.messages:outputGameMessage(_.For(player1, "You have taken %(player)'s health!"):itpl{player=getPlayerName(player2)}, player1, 2, 50, 202, 50, true)
+		outputChatBox(_.For(player1, "You have taken ${player}'s health!") % {player=getPlayerName(player2)}, player1, 50, 202, 50)
+		exports.messages:outputGameMessage(_.For(player1, "You have taken ${player}'s health!") % {player=getPlayerName(player2)}, player1, 2, 50, 202, 50, true)
 
-		outputChatBox(_.For(player2, '%(player) has given you his vehicle fire!'):itpl{player=getPlayerName(player1)}, player2, 50, 202, 50)
-		exports.messages:outputGameMessage(_.For(player2, '%(player) has given you his vehicle fire!'):itpl{player=getPlayerName(player1)}, player2,2, 50, 202, 50, true)
+		outputChatBox(_.For(player2, '${player} has given you his vehicle fire!') % {player=getPlayerName(player1)}, player2, 50, 202, 50)
+		exports.messages:outputGameMessage(_.For(player2, '${player} has given you his vehicle fire!') % {player=getPlayerName(player1)}, player2,2, 50, 202, 50, true)
 
 	elseif g_PlayersBurnTransfer[player2] and isPerkAllowedInMode(ID) and getElementHealth(car2) <= 245 and getElementHealth(car1) > 245 and not isVehicleBlown(car1) and not isVehicleBlown(car2) then   --isOnFire
 		saveFireHealth = getElementHealth(car2)
@@ -182,11 +182,11 @@ function onPlayersVehicleCollide (player1, car1, player2, car2)
 		setElementHealth(car2, getElementHealth(car1))
 		setElementHealth(car1, saveFireHealth)	 --transfer the fire !
 
-		outputChatBox(_.For(player2, "You have taken %(player)'s health!"):itpl{player=getPlayerName(player1)}, player2, 50, 202, 50)
-		exports.messages:outputGameMessage(_.For(player2, "You have taken %(player)'s health!"):itpl{player=getPlayerName(player1)}, player2, 2, 50, 202, 50, true)
+		outputChatBox(_.For(player2, "You have taken ${player}'s health!") % {player=getPlayerName(player1)}, player2, 50, 202, 50)
+		exports.messages:outputGameMessage(_.For(player2, "You have taken ${player}'s health!") % {player=getPlayerName(player1)}, player2, 2, 50, 202, 50, true)
 
-		outputChatBox(_.For(player1, '%(player) has given you his vehicle fire! '):itpl{player=getPlayerName(player2)}, player1, 50, 202, 50)
-		exports.messages:outputGameMessage(_.For(player1, '%(player) has given you his vehicle fire! '):itpl{player=getPlayerName(player2)}, player1,2, 50, 202, 50, true)
+		outputChatBox(_.For(player1, '${player} has given you his vehicle fire! ') % {player=getPlayerName(player2)}, player1, 50, 202, 50)
+		exports.messages:outputGameMessage(_.For(player1, '${player} has given you his vehicle fire! ') % {player=getPlayerName(player2)}, player1,2, 50, 202, 50, true)
 	end
 end
 addEvent('onPlayersVehicleCollide', true)

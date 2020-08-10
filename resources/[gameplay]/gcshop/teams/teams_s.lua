@@ -49,7 +49,7 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
         return outputChatBox(_.For(player, "You're not logged in!"), player, 255, 0, 0)
         -- Check if there are no previous teams in the last 30 days
     elseif r and r.status ~= 1 and (getRealTime().timestamp - r.join_timestamp) < duration then
-        return outputChatBox('[TEAMS] ' .. _.For(player, 'You were in a team less than %s days ago. Wait before creating another team'):format(30), player, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(player, 'You were in a team less than ${days} days ago. Wait before creating another team') % {days=30}, player, 0, 255, 0)
         -- Check if it's renewing a team
     elseif r and r.status == 1 then
         if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255 * 255 * 255)) end
@@ -124,7 +124,7 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
         if result == true then
             local added = addTeamToDatabase(forumID, teamname, teamtag, teamcolour, teammsg)
             addToLog('"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team: ' .. table.concat({ teamname, teamtag, teamcolour, teammsg }, ', '))
-            outputChatBox(_.For(player, 'Team "%(name)" (%(tag)) bought.'):itpl{name=teamname, tag=teamtag}, player, 0, 255, 0)
+            outputChatBox(_.For(player, 'Team "${name}" (${tag}) bought.') % {name=teamname, tag=teamtag}, player, 0, 255, 0)
             checkPlayerTeam(player)
             return
         end
@@ -305,7 +305,7 @@ function checkPlayerTeam2(qh, player, bLogin)
             outputConsole('[TEAMS] Team days left: ' .. r.age, player)
             if age < 0 then
                 if bLogin then
-                    outputChatBox('[TEAMS] ' .. _.For(player, 'Your %s days team has expired, go to the gcshop to renew it'):format(30), player, 0, 255, 0)
+                    outputChatBox('[TEAMS] ' .. _.For(player, 'Your ${days} days team has expired, go to the gcshop to renew it') % {days=30}, player, 0, 255, 0)
                 end
                 return
             end
@@ -383,20 +383,20 @@ function invite(sender, c, playername)
     -- Check if the player exists and is logged in
     local player = getPlayerFromName_(playername)
     if not player then
-        return outputChatBox("[TEAMS] " .. _.For(sender, 'Could not find %s, please type the full nickname'):format(playername), sender, 0, 255, 0)
+        return outputChatBox("[TEAMS] " .. _.For(sender, 'Could not find ${name}, please type the full nickname') % {name=playername}, sender, 0, 255, 0)
     elseif not tonumber(exports.gc:getPlayerForumID(player)) then
-        return outputChatBox('[TEAMS] ' .. _.For(sender, '%s is not logged in'):format(playername), sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, '${player} is not logged in') % {player=playername}, sender, 0, 255, 0)
         -- Check if the sender is the owner and if the player can join the team
     elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) then
         return outputChatBox("[TEAMS] "  .. _.For(sender, 'Only team owners can send invites!'), sender, 255, 0, 0)
     elseif playerteams[player] and playerteams[sender].status ~= 1 and playerteams[player].teamid == playerteams[sender].teamid then
-        return outputChatBox('[TEAMS] ' .. _.For(sender, '%s is already in your team'):format(playername), sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, '${player} is already in your team') % {player=playername}, sender, 0, 255, 0)
     elseif playerteams[player] and playerteams[player].teamid ~= playerteams[sender].teamid and (getRealTime().timestamp - playerteams[player].join_timestamp) < duration then
-        return outputChatBox('[TEAMS] ' ..  _.For(sender, "%(player) is or has been in a team less than %(days) days ago and can't join other teams"):itpl{player=playername, days=30}, sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' ..  _.For(sender, "${player} is or has been in a team less than ${days} days ago and can't join other teams") % {player=playername, days=30}, sender, 0, 255, 0)
     end
 
-    outputChatBox('[TEAMS] ' .. _.For(sender, 'You invited %s'):format(getPlayerName(player)), sender, 0, 255, 0)
-    outputChatBox('[TEAMS] ' .. _.For(player, '%(player) has sent you an invite to join his team: %(team)'):itpl{player=getPlayerName(sender), team=playerteams[sender].name}, player, 0, 255, 0)
+    outputChatBox('[TEAMS] ' .. _.For(sender, 'You invited ${name}') % {name=getPlayerName(player)}, sender, 0, 255, 0)
+    outputChatBox('[TEAMS] ' .. _.For(player, '${player} has sent you an invite to join his team: ${team}') % {player=getPlayerName(sender), team=playerteams[sender].name}, player, 0, 255, 0)
     outputChatBox('[TEAMS] ' .. _.For(player, 'Type /accept to join his team'), player, 0, 255, 0)
     invites[player] = { team = playerteams[sender], sender = sender }
 end
@@ -413,9 +413,9 @@ function accept(player)
         -- return outputChatBox('[TEAMS] You were in a team less than 30 days ago. Wait before joining another team', sender, 0,255,0)
     end
 
-    outputChatBox('[TEAMS] ' .. _.For(player, 'You accepted the invite and joined team: %s'):format(invites[player].team.name), player, 202, 255, 112)
+    outputChatBox('[TEAMS] ' .. _.For(player, 'You accepted the invite and joined team: ${team}') % {team=invites[player].team.name}, player, 202, 255, 112)
     if isElement(invites[player].sender) then
-        outputChatBox('[TEAMS] ' .. _.For(invites[player].sender, '%s accepted the invite'):format(getPlayerName(player)), invites[player].sender, 202, 255, 112)
+        outputChatBox('[TEAMS] ' .. _.For(invites[player].sender, '${player} accepted the invite') % {player=getPlayerName(player)}, invites[player].sender, 202, 255, 112)
     end
     addPlayerToTeamDatabase(forumID, invites[player].team.teamid)
     checkPlayerTeam(player)
@@ -461,20 +461,20 @@ function makeowner(sender, c, playername)
     -- Check if the player exists and is logged in
     local player = getPlayerFromName_(playername)
     if not player then
-        return outputChatBox('[TEAMS] ' .. _.For(sender, 'Could not find %s, please type the full nickname'):format(playername), sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, 'Could not find ${name}, please type the full nickname') % {name=playername}, sender, 0, 255, 0)
     elseif not tonumber(exports.gc:getPlayerForumID(player)) then
-        return outputChatBox('[TEAMS] ' .. _.For(sender, '%s is not logged in'):format(playername), sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, '${player} is not logged in') % {player=playername}, sender, 0, 255, 0)
         -- Check if the sender is the owner and if the player can join the team
     elseif not ((playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) or ((not isGuestAccount(getPlayerAccount(sender))) and isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(sender)), aclGetGroup("ServerManager")))) then
         return outputChatBox('[TEAMS] ' .. _.For(sender, 'Only team owners can do this!'), sender, 255, 0, 0)
     elseif playerteams[player] and (playerteams[player].status ~= 1 or playerteams[player].teamid ~= playerteams[sender].teamid) then
-        return outputChatBox('[TEAMS] ' .. _.For(sender, '%s is not in your team'):format(playername), sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, '${player} is not in your team') % {player=playername}, sender, 0, 255, 0)
     end
 
     dbExec(handlerConnect, [[UPDATE `team` SET `owner`=? WHERE `teamid`=?]], exports.gc:getPlayerForumID(player), playerteams[sender].teamid)
     for k, r in pairs(playerteams) do
         if r.teamid == playerteams[sender].teamid then
-            outputChatBox('[TEAMS] ' .. _.For(k ,'%(owner) made %(newOwner) the new team owner'):itpl{owner=getPlayerName(sender), newOwner=getPlayerName(player)}, k, 0, 255, 0)
+            outputChatBox('[TEAMS] ' .. _.For(k ,'${owner} made ${newOwner} the new team owner') % {owner=getPlayerName(sender), newOwner=getPlayerName(player)}, k, 0, 255, 0)
             checkPlayerTeam(k)
         end
     end
@@ -495,7 +495,7 @@ function teamkick(sender, c, forumid)
     dbExec(handlerConnect, [[UPDATE `team_members` SET `status`=-1 WHERE `forumid`=? AND `teamid`=?]], forumid, playerteams[sender].teamid)
     for k, r in pairs(playerteams) do
         if r.teamid == playerteams[sender].teamid then
-            outputChatBox('[TEAMS] ' .. _.For(k, '%(player) kicked %(kickedPlayer) from the team'):itpl{player=getPlayerName(sender), kickedPlayer=forumid}, k, 0, 255, 0)
+            outputChatBox('[TEAMS] ' .. _.For(k, '${player} kicked ${kickedPlayer} from the team') % {player=getPlayerName(sender), kickedPlayer=forumid}, k, 0, 255, 0)
             checkPlayerTeam(k)
         end
     end

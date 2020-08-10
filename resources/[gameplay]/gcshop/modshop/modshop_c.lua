@@ -44,7 +44,7 @@ function modshopLogin ( price, modshop_table )
 		modshopTab = guiCreateTab ( 'Modshop', shopTabPanel )
 		if modshopTab then
 			modshop_gui = build_modshopWidget( modshopTab, 35, 10 )
-			guiSetText(modshop_gui['labelPrice'], _('Current price for one vehicle: %(price) GC\n\nAll upgrades are free for owned vehicles'):itpl{price=tostring(vehicle_price) or 550})
+			guiSetText(modshop_gui['labelPrice'], _('Current price for one vehicle: ${price} GC\n\nAll upgrades are free for owned vehicles') % {price=tostring(vehicle_price) or 550})
 			addEventHandler( 'onClientGUIClick', modshop_gui["carsTable"], vehicleSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["upgradeTable"], upgradeSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["tabelPaintjob"], paintjobSelected, false)
