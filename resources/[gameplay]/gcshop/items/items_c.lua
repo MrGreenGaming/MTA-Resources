@@ -47,7 +47,7 @@ function itemLogin ( perks_, player_perks_ )
 			if items_gui["btnBuyPerk_" .. perk.ID] then
 				if perk.exp then
 					local expiryDate = string.format('%02d/%02d', getRealTime(perk.expires).monthday, getRealTime(perk.expires).month + 1)
-					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], _("Price: \n%s GC\n"):format(tostring(perk.price)) ..  _('Expires %s'):format(expiryDate) )
+					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], _("Price: \n%(price) GC\n"):itpl{price=tostring(perk.price)} ..  _('Expires %(expiry)'):itpl{expiry=expiryDate} )
 					guiSetEnabled(items_gui["btnBuyPerk_" .. perk.ID], false)
 					if id == 10 then -- If colored rockets are bought, enable coloring button
 						guiSetEnabled(items_gui["setRocketColorButton"],true)

@@ -85,7 +85,7 @@ function translateMapsCenterGUI()
 	guiSetText(tab.label1,_("This is the Maps-Center. Here you can buy maps."))
 	guiSetText(tab.label2,_("Select a map you like and click \"Buy selected map\""))
 	guiSetText(tab.label3,_("The map will be added to the Server Queue, where all bought maps are stored until they're played"))
-	guiSetText(tab.label5,_("The winner of the last map played\ngets %s %% off!"):format(tostring(lastWinnerDiscount)))
+	guiSetText(tab.label5,_("The winner of the last map played\ngets %(discount) % off!"):itpl{discount=tostring(lastWinnerDiscount)})
 	guiSetText(tab.viplabel,_("Purchase VIP to get a free map every day!"))
 end
 addEventHandler("onClientPlayerLocaleChange")
@@ -257,10 +257,10 @@ addEvent('onGCShopWinnerDiscount', true)
 addEventHandler('onGCShopWinnerDiscount', root, function()
 	if source == localPlayer then
 		guiLabelSetColor( tab.label5, 0, 255, 0 )
-		guiSetText(tab.label5, _("Every map is %s%% off\nbecause you have won the last map!"):format(lastWinnerDiscount) )
+		guiSetText(tab.label5, _("Every map is %(discount)% off\nbecause you have won the last map!"):itpl{discount=lastWinnerDiscount})
 	else
 		guiLabelSetColor( tab.label5, 255, 0, 0 )
-		guiSetText(tab.label5, _("The winner of the last map played\ngets %s%% off!"):format(lastWinnerDiscount))
+		guiSetText(tab.label5, _("The winner of the last map played\ngets %(discount)% off!"):itpl{discount=lastWinnerDiscount})
 	end
 end)
 

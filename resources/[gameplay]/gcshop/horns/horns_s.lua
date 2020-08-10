@@ -105,7 +105,7 @@ function useHorn(player, arg1, arg2, hornID)
 								end
 							end
 
-							if not useHorn then outputChatBox(_.For(player, "Please buy the horn (%s) before using it"):format(tostring(hornID or arg2)),player,255,0,0) return end
+							if not useHorn then outputChatBox(_.For(player, "Please buy the horn (%(hornName)) before using it"):itpl{hornName=tostring(hornID or arg2)},player,255,0,0) return end
 
 							local car = getPedOccupiedVehicle(player)
 							coolOffTimer[player] = setTimer(function(player) coolOff[player] = true end, 20000, 1, player)

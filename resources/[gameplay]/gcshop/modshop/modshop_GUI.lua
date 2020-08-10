@@ -317,7 +317,7 @@ function translateModshopWidget()
 	guiGridListSetColumnTitle(gui["carsTable"], gui["carsTable_col1"], _("ID"))
 
 	guiSetText(gui["buyVehicleButton"], _("Buy vehicle"))
-	guiSetText(gui["labelPrice"], _("Current price for one vehicle: %s GC\n\nAll upgrades are free for owned vehicles"):format(550))
+	guiSetText(gui["labelPrice"], _("Current price for one vehicle: %(price) GC\n\nAll upgrades are free for owned vehicles"):itpl{price=550})
 	guiSetText(gui["upgradeVehicleButton"], _("Upgrade this vehicle"))
 	guiSetText(gui["viewVehicleButton"], _("View current vehicle"))
 	guiSetText(gui["tabVehicleColors"], _("Colors + Paintjobs"))

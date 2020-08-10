@@ -141,10 +141,10 @@ function(choice)
             if vipIsRunning and exports['mrgreen-vip']:canBuyVipMap(source) then
                 mapprice = 0
             end
-            outputChatBox(_.For(source, "[Maps-Center] You do not have enough GCs to buy a nextmap. Current price: %s"):format(tostring(mapprice)), source, 255, 0, 0)
+            outputChatBox("[Maps-Center] ".. _.For(source, "You do not have enough GCs to buy a nextmap. Current price: %(price)"):itpl{price=tostring(mapprice)}, source, 255, 0, 0)
         end
     else
-        outputChatBox(_.For(source, "[Maps-Center] Error. You can only queue one map, you're not logged in or map was deleted"), source, 255, 0, 0)
+        outputChatBox("[Maps-Center] ".. _.For(source, "Error. You can only queue one map, you're not logged in or the map was deleted"), source, 255, 0, 0)
     end
 end)
 
@@ -173,7 +173,7 @@ function isDailyLimitReached(mapname)
         if ( getRealTime().timestamp-theAmountTable[mapname].timestamp ) < mp_cooldownTime then
             local timeLeft = mp_cooldownTime - (getRealTime().timestamp - theAmountTable[mapname].timestamp)
             local timeLeft = secondsToTimeDesc(math.ceil(timeLeft))--math.ceil(minsleft/60)
-            outputChatBox(_.For(source, "[Maps-Center] This map has recently been bought and is still on cooldown (%s remaining), please choose another map or wait."):format(tostring(timeLeft)), source, 255, 0, 0)
+            outputChatBox("[Maps-Center] ".. _.For(source, "This map has recently been bought and is still on cooldown (%(remain) remaining), please choose another map or wait."):itpl{remain=tostring(timeLeft)}, source, 255, 0, 0)
 
             return true
         end
@@ -224,7 +224,7 @@ function queue(choice, player)
     if getResourceState( getResourceFromName('irc') ) == 'running' then
         exports.irc:outputIRC("12*** Map queued by " .. getPlayerName(source):gsub( '#%x%x%x%x%x%x', '' ) .. ": 1" .. choice[1] )
     end
-    outputChatBox(_.For(player, "[Maps-Center] Your next map current queue number: %s"):format(#myQueue), player, 0, 255, 0)
+    outputChatBox("[Maps-Center] ".. _.For(player, "Your next map current queue number: %(num)"):itpl{num=#myQueue}, player, 0, 255, 0)
     triggerClientEvent('onTellClientPlayerBoughtMap', player, choice[1], #myQueue)
     triggerEvent('onNextmapSettingChange', root, getResourceFromName(myQueue[1][2]))
 	addToLog ( '"' .. getPlayerName(player) .. '" bought map=' .. tostring(choice[1]))

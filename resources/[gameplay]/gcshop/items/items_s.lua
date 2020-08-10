@@ -146,7 +146,7 @@ function onGCShopLogin (forumID)
 			for _, perk in pairs(prks) do
 				if tonumber(perk.exp) and (not expired[perk.ID] or expired[perk.ID] < getTimestamp()) then
 					-- Translators: Used when a GC perk expires
-					outputChatBox ( _.For(theSource, 'GC: %s has expired!'):format(_.For(theSource, perk.description)), theSource, 255, 0, 0)
+					outputChatBox ( _.For(theSource, 'GC: %(perk) has expired!'):itpl{perk=_.For(theSource, perk.description)}, theSource, 255, 0, 0)
 					removePerkFromDatabase(forumID, perk.ID)
 				else
 					loadPerk(theSource, perk.ID)
@@ -205,12 +205,12 @@ function buyPerk ( player, cmd, ID )
 	checkPerk(forumID, idsToCheck,
 	function(res)
 		if res and res[ID] then
-			outputChatBox(_.For(player, 'You already bought this perk: %s'):format(_.For(player, i.description)), player, 255, 165, 0 )
+			outputChatBox(_.For(player, 'You already bought this perk: %(perk)'):itpl{perk=_.For(player, i.description)}, player, 255, 165, 0 )
 			return
 		elseif i.requires and res then
 			for _, perk in ipairs(i.requires) do
 				if not res[perk] then
-					outputChatBox(_.For(player, 'This perk requires another perk: %s'):format(_.For(player, perks[perk].description)), player, 255, 0, 0 )
+					outputChatBox(_.For(player, 'This perk requires another perk: %(perk)'):itpl{perk=_.For(player, perks[perk].description)}, player, 255, 0, 0 )
 					return
 				end
 			end
@@ -223,7 +223,7 @@ function buyPerk ( player, cmd, ID )
 				setPerkSetting(player, ID, 'amount', i.defaultAmount, nil, function() end)
 			end
 			addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought perk=' .. tostring(ID) .. ' ' .. tostring(i.description) ..  ' ' .. tostring(i.defaultAmount) ..  ' ' .. tostring(added))
-			outputChatBox (_.For(player, 'Perk "%s" bought.'):format(_.For(player, i.description)), player, 0, 255, 0)
+			outputChatBox (_.For(player, 'Perk "%(perk)" bought.'):itpl{perk=_.For(player, i.description)}, player, 0, 255, 0)
 			loadPerk( player, ID )
 			getPerks(forumID,
 			function(thePerks)
@@ -272,7 +272,7 @@ function buyPerkExtra ( player, cmd, ID, total )
 			setPerkSetting(player, ID, 'amount', perkSetting.amount + total, false,
 			function(added)
 				addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought extra perk=' .. tostring(ID) .. ' ' .. tostring(i.description) ..  ' ' .. tostring(i.defaultAmount) ..  ' ' .. tostring(total) ..  ' ' .. tostring(added))
-				outputChatBox (_.For(player, 'Extra perk "%s" bought.'):format(_.For(player, i.description)), player, 0, 255, 0)
+				outputChatBox (_.For(player, 'Extra perk "%(perk)" bought.'):itpl{perk=_.For(player, i.description)}, player, 0, 255, 0)
 				--loadPerk( player, ID )
 
 				getPerks(forumID,

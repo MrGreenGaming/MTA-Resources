@@ -166,7 +166,7 @@ function receiveImage ( image, pid )
 
 		local maxFileSize = 0.5 -- In MB
 		if fileGetSize(dummy) > (maxFileSize*1048576) then -- If file is bigger then x MB
-			outputChatBox(_.For(player, "Custom paintjob image too big, please use a smaller image. (Maximum: %s MB)"):format(tostring(maxFileSize)),player,255,0,0)
+			outputChatBox(_.For(player, "Custom paintjob image too big, please use a smaller image. (Maximum: %(size) MB)"):itpl{size=tostring(maxFileSize)},player,255,0,0)
 			fileClose(dummy)
 			fileDelete(server_path .. forumID .. '-' .. pid .. 'dummy.bmp')
 			sendPaintjobs ( {player}, player, pid )
@@ -349,7 +349,7 @@ function receiveHostingFetch(responseData,errno,player,id)
 	if errno == 0 then
 		triggerEvent("receiveImage",player,responseData,id)
 	else
-		outputChatBox(_.For(player, "Downloading paintjob failed, please check the URL or contact staff (ERROR: %s )"):format(tostring(errno)),player,255,0,0)
+		outputChatBox(_.For(player, "Downloading paintjob failed, please check the URL or contact staff (ERROR: %(error) )"):itpl{error=tostring(errno)},player,255,0,0)
 	end
 end
 

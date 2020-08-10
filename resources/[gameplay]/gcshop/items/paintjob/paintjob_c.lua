@@ -473,7 +473,7 @@ function gcshopRequestPaintjob(imageMD5, forumID, filename, id)
 		end
 
 		if forbiddenFile ~= 1 then -- If file has forbidden extension
-			outputChatBox(_('Please use a different file extension. Only %s files are allowed'):format(table.concat(allowedExtensions, ", ")), 255, 0, 0)
+			outputChatBox(_('Please use a different file extension. Only %(extensions) files are allowed'):itpl{extensions=table.concat(allowedExtensions, ", ")}, 255, 0, 0)
 		elseif forbiddenFile == 1 then
 			triggerServerEvent("serverReceiveHostingURL",localPlayer,filename,id)
 		end
@@ -481,7 +481,7 @@ function gcshopRequestPaintjob(imageMD5, forumID, filename, id)
 		if not fileExists(filename) then
 			-- File not found, abort
 			--outputDebugString('c: File not found ' .. tostring(filename) .. ' ' .. tostring(forumID) .. ' ' .. getPlayerName(localPlayer))
-			outputChatBox(_('Custom paintjob image %s not found!'):format(tostring(filename)), 255, 0, 0)
+			outputChatBox(_('Custom paintjob image %(file) not found!'):itpl{file=tostring(filename)}, 255, 0, 0)
 		else
 			local localMD5 = getMD5(filename)
 			if localMD5 == imageMD5 then
@@ -489,7 +489,7 @@ function gcshopRequestPaintjob(imageMD5, forumID, filename, id)
 				--outputDebugString('c: Same image, not uploading ' .. tostring(localMD5) .. ' ' .. tostring(imageMD5) .. ' ' .. getPlayerName(localPlayer))
 				triggerServerEvent( 'receiveImage', localPlayer, false, id)
 			elseif not isValidImage(filename) then
-				outputChatBox(_('Custom paintjob image %s is not a valid image'):format(tostring(filename)), 255, 0, 0)
+				outputChatBox(_('Custom paintjob image %(file) is not a valid image'):itpl{file=tostring(filename)}, 255, 0, 0)
 			else
 				-- a new image needs to be uploaded
 				--outputDebugString('c: New image ' .. tostring(localMD5) .. ' ' .. tostring(imageMD5) .. ' ' .. getPlayerName(localPlayer))

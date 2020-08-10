@@ -124,7 +124,7 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
         if result == true then
             local added = addTeamToDatabase(forumID, teamname, teamtag, teamcolour, teammsg)
             addToLog('"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team: ' .. table.concat({ teamname, teamtag, teamcolour, teammsg }, ', '))
-            outputChatBox(_.For(player, 'Team "%s" (%s) bought.'):format(teamname, teamtag), player, 0, 255, 0)
+            outputChatBox(_.For(player, 'Team "%(name)" (%(tag)) bought.'):itpl{name=teamname, tag=teamtag}, player, 0, 255, 0)
             checkPlayerTeam(player)
             return
         end
@@ -392,11 +392,11 @@ function invite(sender, c, playername)
     elseif playerteams[player] and playerteams[sender].status ~= 1 and playerteams[player].teamid == playerteams[sender].teamid then
         return outputChatBox('[TEAMS] ' .. _.For(sender, '%s is already in your team'):format(playername), sender, 0, 255, 0)
     elseif playerteams[player] and playerteams[player].teamid ~= playerteams[sender].teamid and (getRealTime().timestamp - playerteams[player].join_timestamp) < duration then
-        return outputChatBox('[TEAMS] ' ..  _.For(sender, "%s is or has been in a team less than %s days ago and can't join other teams"):format(playername, 30), sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' ..  _.For(sender, "%(player) is or has been in a team less than %(days) days ago and can't join other teams"):itpl{player=playername, days=30}, sender, 0, 255, 0)
     end
 
     outputChatBox('[TEAMS] ' .. _.For(sender, 'You invited %s'):format(getPlayerName(player)), sender, 0, 255, 0)
-    outputChatBox('[TEAMS] ' .. _.For(player, '%s has sent you an invite to join his team: %s'):format(getPlayerName(sender), playerteams[sender].name), player, 0, 255, 0)
+    outputChatBox('[TEAMS] ' .. _.For(player, '%(player) has sent you an invite to join his team: %(team)'):itpl{player=getPlayerName(sender), team=playerteams[sender].name}, player, 0, 255, 0)
     outputChatBox('[TEAMS] ' .. _.For(player, 'Type /accept to join his team'), player, 0, 255, 0)
     invites[player] = { team = playerteams[sender], sender = sender }
 end
@@ -474,7 +474,7 @@ function makeowner(sender, c, playername)
     dbExec(handlerConnect, [[UPDATE `team` SET `owner`=? WHERE `teamid`=?]], exports.gc:getPlayerForumID(player), playerteams[sender].teamid)
     for k, r in pairs(playerteams) do
         if r.teamid == playerteams[sender].teamid then
-            outputChatBox('[TEAMS] ' .. _.For(k ,'%s made %s the new team owner'):format(getPlayerName(sender), getPlayerName(player)), k, 0, 255, 0)
+            outputChatBox('[TEAMS] ' .. _.For(k ,'%(owner) made %(newOwner) the new team owner'):itpl{owner=getPlayerName(sender), newOwner=getPlayerName(player)}, k, 0, 255, 0)
             checkPlayerTeam(k)
         end
     end
@@ -495,7 +495,7 @@ function teamkick(sender, c, forumid)
     dbExec(handlerConnect, [[UPDATE `team_members` SET `status`=-1 WHERE `forumid`=? AND `teamid`=?]], forumid, playerteams[sender].teamid)
     for k, r in pairs(playerteams) do
         if r.teamid == playerteams[sender].teamid then
-            outputChatBox('[TEAMS] ' .. _.For(k, '%s kicked %s from the team'):format(getPlayerName(sender), forumid), k, 0, 255, 0)
+            outputChatBox('[TEAMS] ' .. _.For(k, '%(player) kicked %(kickedPlayer) from the team'):itpl{player=getPlayerName(sender), kickedPlayer=forumid}, k, 0, 255, 0)
             checkPlayerTeam(k)
         end
     end

@@ -52,9 +52,9 @@ function handleAddRemoveNicks(nick,addRemoveBool)
 		if type(action) == "string" then
 			outputChatBox(action, client, 255, 0, 0)
 		elseif action == false then
-			outputChatBox(_.For(client, 'Failed to lock name: %s.'):format(nick), client, 255, 0, 0)
+			outputChatBox(_.For(client, 'Failed to lock name: %(nickname).'):itpl{nickname=nick}, client, 255, 0, 0)
 		elseif action == true then
-			outputChatBox(_.For(client, '%s has succesfully been added to your locked names and is now protected.'):format(nick), client, 0, 255, 0)
+			outputChatBox(_.For(client, '%(nickname) has succesfully been added to your locked names and is now protected.'):itpl{nickname=nick}, client, 0, 255, 0)
 			triggerClientEvent(client,"onServerSendLocknickResults",client,nick,"add")
 		end
 
@@ -63,10 +63,10 @@ function handleAddRemoveNicks(nick,addRemoveBool)
 		local action = removeNick(theID,nick)
 
 		if action then
-			outputChatBox(_.For(client, '%s has succesfully been removed from your locked names.'):format(nick), client, 0, 255, 0)
+			outputChatBox(_.For(client, '%(nickname) has succesfully been removed from your locked names.'):itpl{nickname=nick}, client, 0, 255, 0)
 			triggerClientEvent(client,"onServerSendLocknickResults",client,nick,"remove")
 		else
-			outputChatBox(_.For(client, 'Failed to unlock name: %s.'):format(nick), client, 255, 0, 0)
+			outputChatBox(_.For(client, 'Failed to unlock name: %(nickname).'):itpl{nickname=nick}, client, 255, 0, 0)
 		end
 	end
 end

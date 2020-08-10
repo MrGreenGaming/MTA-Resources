@@ -103,7 +103,7 @@ function rerollPlayerVehicle(player)
 	end
 
 	if playerRolledAmount[player] and playerRolledAmount[player] >= maxRollsPerMap then
-		outputChatBox(_.For(player, "Maximum vehicle reroll per map reached (%s)"):format(tostring(maxRollsPerMap)),player)
+		outputChatBox(_.For(player, "Maximum vehicle reroll per map reached (%(max))"):itpl{max=tostring(maxRollsPerMap)},player)
 		return
 	end
 

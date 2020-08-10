@@ -576,14 +576,14 @@ function setHornsGUIText()
     guiGridListSetColumnTitle(hornsGUI.myHornsList, hornsGUI.myHornsKeyColumn,  _.context("Keyboard","Key"))
     guiSetText(hornsGUI.selectLabel, _('Select a horn out of the list and press "Buy" to buy for regular usage or double-click to listen it.'))
     guiSetText(hornsGUI.listenLabel, _("Double-click to listen to a horn:"))
-    guiSetText(hornsGUI.cooloffLabel, _("Horns can only be used 3 times per map (%s seconds cool-off). However, you can buy unlimited usage of the custom horn for %s GC. This item applies to all horns."):format(10, 5000))
+    guiSetText(hornsGUI.cooloffLabel, _("Horns can only be used 3 times per map (%(cooldown) seconds cool-off). However, you can buy unlimited usage of the custom horn for %(price) GC. This item applies to all horns."):interpolate({cooldown=10, price=5000}))
     guiSetText(hornsGUI.bindLabel, _("Double-click to bind horn to a key:"))
     guiSetText(hornsGUI.gamepadLabel, _("(for gamepads)"))
-    guiSetText(hornsGUI.buy, _("Buy selected horn\nPrice: %s GC"):format(2000))
+    guiSetText(hornsGUI.buy, _("Buy selected horn\nPrice: %(price) GC"):interpolate({price=2000}))
     guiSetText(hornsGUI.unbindall, _("Unbind\nall horns"))
     guiSetText(hornsGUI.bindForGamepads, _("Bind to a horn control name\n(Esc -> Settings -> Binds)"))
     guiSetText(hornsGUI.sell, _("Sell horn"))
-    guiSetText(hornsGUI.unlimited, _("Buy unlimited usage\nPrice: %s GC"):format(5000))
+    guiSetText(hornsGUI.unlimited, _("Buy unlimited usage\nPrice: %(price) GC"):interpolate({price=5000}))
     guiSetText(hornsGUI.perkTab, _("Horn Perks"))
 end
 addEventHandler("onClientPlayerLocaleChange", root, setHornsGUIText)
@@ -829,7 +829,7 @@ addEventHandler("hornsLogin", root,
     function(isUnlimited, forumid)
         setElementData(localPlayer, "mrgreen_gc_forumID", forumid)
         if isUnlimited then
-            guiSetText(hornsGUI.unlimited, _("Buy unlimited usage\nPrice: %s GC\nBought!"):format(5000))
+            guiSetText(hornsGUI.unlimited, _("Buy unlimited usage\nPrice: %(price) GC\nBought!"):interpolate({price=5000}))
             guiSetEnabled(hornsGUI.unlimited, false)
         end
         triggerServerEvent('getHornsData', localPlayer)
@@ -841,7 +841,7 @@ addEventHandler("hornsLogout", root,
         triggerServerEvent("unbindAllHorns", resourceRoot)
 
         guiGridListClear(myHornsList)
-        guiSetText(hornsGUI.unlimited, _("Buy unlimited usage\nPrice: %s GC").format(5000))
+        guiSetText(hornsGUI.unlimited, _("Buy unlimited usage\nPrice: %(price) GC").interpolate({price=5000}))
         guiSetEnabled(hornsGUI.unlimited, true)
     end)
 
@@ -1050,7 +1050,7 @@ addEvent('onClientSuccessBuyUnlimitedUsage', true)
 addEventHandler('onClientSuccessBuyUnlimitedUsage', root,
     function(success)
         if success then
-            guiSetText(hornsGUI.unlimited, _("Buy unlimited usage\nPrice: %s GC\nBought!"):format(5000))
+            guiSetText(hornsGUI.unlimited, _("Buy unlimited usage\nPrice: %(price) GC\nBought!"):interpolate({price=5000}))
             guiSetEnabled(hornsGUI.unlimited, false)
         end
     end)
