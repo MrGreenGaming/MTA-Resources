@@ -92,7 +92,7 @@ function sellSkin(button, state)
 
 		triggerServerEvent('onPlayerSellSkin', getLocalPlayer(), tostring(id))
 	elseif state == "up" and button == "left" and cooldown == true then
-		outputChatBox("You can sell skins once every " .. cdTime .. " seconds!", 255, 0, 0)
+		outputChatBox(_("You can only sell skins once every ${cooldown} seconds!") % {cooldown = cdTime}, 255, 0, 0)
 	end
 end
 
@@ -126,7 +126,6 @@ end
 
 function onShopInit ( tabPanel )
 	shopTabPanel = tabPanel
-	--triggerServerEvent('getSkinPurchases', getLocalPlayer())
 	skinTab = guiCreateTab("Buy skins", shopTabPanel)
 	skinGrid = guiCreateGridList(0.01,0.02,0.40,0.97, true, skinTab)
 	guiGridListSetSortingEnabled(skinGrid, false)
@@ -149,9 +148,9 @@ function onShopInit ( tabPanel )
 	end
 	skinBuySellLabel = guiCreateLabel(0.4274,0.0505,0.45,0.05,"Buy price: 1500 GCs | Sell price: 750 GCs",true,skinTab)
 	skinMultipleLabel = guiCreateLabel(0.4274,0.1009,0.45,0.05,"You can own multiple skins, but only use one.",true, skinTab)
-	-- exactSkins = guiCreateLabel(0.4274,0.1537,0.55,0.05,"Owned skins:",true,skinTab)
-	-- exactSkins2 = guiCreateLabel(0.4274,0.2037,0.55,0.05,"",true,skinTab)
-	-- exactSkins3 = guiCreateLabel(0.4274,0.2537,0.55,0.05,"",true,skinTab)
+	exactSkins = guiCreateLabel(0.4274,0.1537,0.55,0.05,"Owned skins:",true,skinTab)
+	exactSkins2 = guiCreateLabel(0.4274,0.2037,0.55,0.05,"",true,skinTab)
+	exactSkins3 = guiCreateLabel(0.4274,0.2537,0.55,0.05,"",true,skinTab)
 	failLabel = guiCreateLabel(0.55, 0.75, 0.45, 0.1, "Not enough money/skin already bought", true, skinTab)
 	failLabel3 = guiCreateLabel(0.55, 0.75, 0.45, 0.1, "Please input a number.", true, skinTab)
 	failLabel2 = guiCreateLabel(0.55, 0.80, 0.45, 0.1, "Or not logged in", true, skinTab)
@@ -191,7 +190,8 @@ function translateSkinsGUI()
 	guiSetText(skinBuyButton, _("Buy skin"))
 	guiSetText(skinSellButton, _("Sell skin"))
 	guiSetText(skinUseButton, _("Set primary skin"))
-	guiSetText(skinDisableButton, _("Disable skins feature"))
+    guiSetText(skinDisableButton, _("Disable skins feature"))
+    triggerServerEvent('getSkinPurchases', getLocalPlayer())
 end
 addEventHandler("onClientPlayerLocaleChange", root, translateSkinsGUI)
 
@@ -199,9 +199,9 @@ addEvent("sendPlayerSkinPurchases", true)
 addEventHandler("sendPlayerSkinPurchases", root,
 function(purchases, current)
 	if purchases == false then
-		-- guiSetText(exactSkins, _('Your ID purchases so far: %s'):format(""))
-		-- guiSetText(exactSkins2, '')
-		-- guiSetText(exactSkins3, '')
+		guiSetText(exactSkins, _('Your ID purchases so far: %s'):format(""))
+		guiSetText(exactSkins2, '')
+		guiSetText(exactSkins3, '')
 		local rows = guiGridListGetRowCount(skinGrid)
 		for i = 0, rows do
 			if not string.find(guiGridListGetItemText(skinGrid, i, 1), 'Group') then
@@ -216,30 +216,30 @@ function(purchases, current)
 	currentID = tonumber(current) or 0
 	local _table = split(purchases, ',')
 	local rows = guiGridListGetRowCount(skinGrid)
-	-- guiSetText(exactSkins, _('Your ID purchases so far: %s'):format(""))
-	-- guiSetText(exactSkins2, '')
-	-- guiSetText(exactSkins3, '')
-	-- for i, purchase in ipairs(_table) do
-	-- 	if i < 10 then
-	-- 		if guiGetText(exactSkins) == 'Your ID purchases so far: none' then
-	-- 			guiSetText(exactSkins, "Your ID purchases so far: "..tostring(purchase))
-	-- 		else
-	-- 			guiSetText(exactSkins, guiGetText(exactSkins)..','..tostring(purchase))
-	-- 		end
-	-- 	elseif i < 25 then
-	-- 		if guiGetText(exactSkins2) == '' then
-	-- 			guiSetText(exactSkins2, tostring(purchase))
-	-- 		else
-	-- 			guiSetText(exactSkins2, guiGetText(exactSkins2)..','..tostring(purchase))
-	-- 		end
-	-- 	else
-	-- 		if guiGetText(exactSkins3) == '' then
-	-- 			guiSetText(exactSkins3, tostring(purchase))
-	-- 		else
-	-- 			guiSetText(exactSkins3, guiGetText(exactSkins3)..','..tostring(purchase))
-	-- 		end
-	-- 	end
-	-- end
+	guiSetText(exactSkins, _('Your ID purchases so far: %s'):format(""))
+	guiSetText(exactSkins2, '')
+	guiSetText(exactSkins3, '')
+	for i, purchase in ipairs(_table) do
+		if i < 10 then
+			if guiGetText(exactSkins) == 'Your ID purchases so far: none' then
+				guiSetText(exactSkins, "Your ID purchases so far: "..tostring(purchase))
+			else
+				guiSetText(exactSkins, guiGetText(exactSkins)..','..tostring(purchase))
+			end
+		elseif i < 25 then
+			if guiGetText(exactSkins2) == '' then
+				guiSetText(exactSkins2, tostring(purchase))
+			else
+				guiSetText(exactSkins2, guiGetText(exactSkins2)..','..tostring(purchase))
+			end
+		else
+			if guiGetText(exactSkins3) == '' then
+				guiSetText(exactSkins3, tostring(purchase))
+			else
+				guiSetText(exactSkins3, guiGetText(exactSkins3)..','..tostring(purchase))
+			end
+		end
+	end
 	local x,y
 	for i = 0, rows do
 		local gridID = guiGridListGetItemText(skinGrid, i, 2)
@@ -251,8 +251,8 @@ function(purchases, current)
 			guiGridListSetItemColor(skinGrid, i, 2, 255, 255, 255)
 		end
 	end
-	--guiSetText(exactSkins, "Your ID purchases so far: "..purchases)
-	--guiLabelSetHorizontalAlign(exactSkins,"left",true)
+	guiSetText(exactSkins, "Your ID purchases so far: "..purchases)
+	guiLabelSetHorizontalAlign(exactSkins,"left",true)
 end
 )
 

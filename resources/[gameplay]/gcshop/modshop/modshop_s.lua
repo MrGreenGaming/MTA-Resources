@@ -477,7 +477,11 @@ function mapRestart ( mapInfo, mapOptions, gameOptions )
 		end
 	end
 	if not map_allows_shop then
-		setTimer(outputChatBox, 1500, 1, 'This map has it\'s own custom upgrades, modshop upgrades are disabled')
+        setTimer(function()
+            for _, p in ipairs(getElementsByType("player")) do
+                outputChatBox(_.For(p, "This map has its own custom upgrades, modshop upgrades are disabled"))
+            end
+        end, 1500, 1)
 	end
 end
 addEventHandler ( "onMapStarting", root, mapRestart )
