@@ -12,7 +12,7 @@ local keyTable = { "mouse1", "mouse2", "mouse3", "mouse4", "mouse5", "mouse_whee
  "num_6", "num_7", "num_8", "num_9", "num_mul", "num_add", "num_sep", "num_sub", "num_div", "num_dec", "num_enter", "F1", "F2", "F3", "F4", "F5",
  "F6", "F7", "F8", "F9", "F10", "F11", "F12", "escape", "backspace", "tab", "lalt", "ralt", "enter", "space", "pgup", "pgdn", "end", "home",
  "insert", "delete", "lshift", "rshift", "lctrl", "rctrl", "[", "]", "pause", "capslock", "scroll", ";", ",", "-", ".", "/", "#", "\\", "=" }
- 
+
 addEventHandler('onMapStarting', root,
 function()
 	newMap = true
@@ -23,12 +23,12 @@ addEvent('onRaceStateChanging', true)
 addEventHandler('onRaceStateChanging', root,
 function(new)
 	if (new == 'Running') and (newMap == true) then
-		for i,j in ipairs(getElementsByType('player')) do 
+		for i,j in ipairs(getElementsByType('player')) do
 			canHornBeUsed[j] = true
 			howManyTimes[j] = 0
 		end
 		newMap = false
-	end	
+	end
 end
 )
 
@@ -44,14 +44,14 @@ addEventHandler("onGCShopLogin", root,
 function(forumid)
 	local player = source
 	local query = dbQuery(
-		function(qh) 
+		function(qh)
 			local sql = dbPoll(qh, 0)
 			local unlimited = false
 			if #sql >= 1 then
-				if sql[1].unlimited == 1 then unlimited = true else unlimited = false end	
+				if sql[1].unlimited == 1 then unlimited = true else unlimited = false end
 			end
 			triggerClientEvent(player, "hornsLogin", player, unlimited, forumid)
-		end, 
+		end,
 	handlerConnect, "SELECT unlimited FROM gc_horns WHERE forumid = ?", forumid)
 end
 )
@@ -75,7 +75,7 @@ end
 
 addEventHandler('onResourceStart', resourceRoot,
 function()
-	for i,j in ipairs(getElementsByType('player')) do 
+	for i,j in ipairs(getElementsByType('player')) do
 		canHornBeUsed[j] = true
 		howManyTimes[j] = 0
 		coolOff[j] = true
@@ -92,11 +92,11 @@ function useHorn(player, arg1, arg2, hornID)
 			forumid = tostring(forumid)
 			if tonumber(hornID or arg2) then
 				local query = dbQuery(
-					function(qh) 
+					function(qh)
 						local sql = dbPoll(qh,0)
 						if #sql > 0 then
 							local allHorns = split(sql[1].horns, string.byte(','))
-							
+
 							local useHorn = false
 							for i,j in ipairs(allHorns) do
 								if tonumber(j) == tonumber(hornID or arg2) then
@@ -105,7 +105,7 @@ function useHorn(player, arg1, arg2, hornID)
 								end
 							end
 
-							if not useHorn then outputChatBox("Please buy the horn (".. tostring(hornID or arg2) ..") first before using it",player,255,0,0) return end
+							if not useHorn then outputChatBox(_.For(player, "Please buy the horn (%s) before using it"):format(tostring(hornID or arg2)),player,255,0,0) return end
 
 							local car = getPedOccupiedVehicle(player)
 							coolOffTimer[player] = setTimer(function(player) coolOff[player] = true end, 20000, 1, player)
@@ -117,14 +117,14 @@ function useHorn(player, arg1, arg2, hornID)
 							if howManyTimes[player] == 3 then
 								canHornBeUsed[player] = false
 							end
-						end	
-					end, 
+						end
+					end,
 				handlerConnect, "SELECT horns, unlimited FROM gc_horns WHERE forumid = ?", forumid)
 			else
-				outputChatBox("Something went wrong",player,255,0,0)
+				outputChatBox(_.For(player, "Something went wrong"),player,255,0,0)
 			end
-		end	
-	end	
+		end
+	end
 end
 addCommandHandler("gchorn",useHorn)
 
@@ -159,11 +159,11 @@ function()
 		forumid = tostring(forumid)
 		local player = source
 		local query = dbQuery(
-			function(qh) 
+			function(qh)
 				local sql = dbPoll(qh,0)
 				if #sql > 0 then
 					if sql[1].unlimited == 1 then
-						outputChatBox("You already have unlimited horn usage.", player)
+						outputChatBox(_.For(player, "You already have unlimited horn usage."), player)
 						return
 					else
 						local money = exports.gc:getPlayerGreencoins(player)
@@ -171,21 +171,21 @@ function()
 							local ok = gcshopBuyItem ( player, unlimitedUses, 'Unlimited horns' )
 							if ok then
 								local result = dbExec(handlerConnect, "UPDATE gc_horns SET unlimited=? WHERE forumid=?", 1, forumid)
-								outputChatBox("You have bought unlimited horn usage for 5000 GC.", player)
+								outputChatBox(_.For(player, "You have bought unlimited horn usage for 5000 GC."), player)
 								triggerClientEvent(source, 'onClientSuccessBuyUnlimitedUsage', player, true)
 								addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumid) .. ') bought Unlimited horns ' .. tostring(result))
 							end
 						else
-							outputChatBox("You do not have enough GreenCoins", player)
-						end	
+							outputChatBox(_.For(player, "You do not have enough GreenCoins"), player)
+						end
 					end
 				else
-					outputChatBox("You have no horns bought.", player)
-				end	
-			end, 
+					outputChatBox(_.For(player, "You have no horns bought."), player)
+				end
+			end,
 		handlerConnect, "SELECT unlimited FROM gc_horns WHERE forumid = ?", forumid)
 	else
-		outputChatBox("You are not logged in GreenCoins", source)
+		outputChatBox(_.For(source, "You are not logged in"), source)
 	end
 end
 )
@@ -194,23 +194,23 @@ addEvent('onPlayerSellHorn', true)
 addEventHandler('onPlayerSellHorn', root,
 function(horn)
 	local logged = exports.gc:isPlayerLoggedInGC(source)
-	if not logged then 
-		triggerClientEvent(source, 'onClientSuccessSellHorn', source, false) 
-		return 
+	if not logged then
+		triggerClientEvent(source, 'onClientSuccessSellHorn', source, false)
+		return
 	end
-		
+
 	--player is logged in
 	local forumid = exports.gc:getPlayerForumID(source)
 	forumid = tostring(forumid)
 	local player = source
 	local query = dbQuery(
-		function(qh) 
+		function(qh)
 			local sql = dbPoll(qh,0)
-			if #sql == 0 then 
-				triggerClientEvent(player, 'onClientSuccessSellHorn', player, false) 
+			if #sql == 0 then
+				triggerClientEvent(player, 'onClientSuccessSellHorn', player, false)
 				return
 			end
-			
+
 			--There is a row
 			local hornString = ""
 			local hasTheHorn = false
@@ -218,19 +218,19 @@ function(horn)
 			for i,j in ipairs(allHorns) do
 				if j == tostring(horn) then
 					hasTheHorn = true
-				else 
+				else
 					hornString = hornString .. "," .. j
 				end
 			end
-			
+
 			if not hasTheHorn or hasTheHorn == false then triggerClientEvent(player, 'onClientSuccessSellHorn', player, false) end
-			
+
 			--Player has the selected horn
 			result = dbExec(handlerConnect, "UPDATE gc_horns SET horns=? WHERE forumid=?", hornString, forumid)
 			exports.gc:addPlayerGreencoins(player, price / 2)
 			triggerClientEvent(player, 'onClientSuccessSellHorn', player, true)
-		end, 
-	handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)	
+		end,
+	handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)
 end)
 
 
@@ -247,13 +247,13 @@ function(horn)
 				local sql = dbPoll(qh,0)
 				if #sql > 0 then
 					local allHorns = split(sql[1].horns, string.byte(','))
-					for i,j in ipairs(allHorns) do 
+					for i,j in ipairs(allHorns) do
 						if j == tostring(horn) then
 							triggerClientEvent(player, 'onClientSuccessBuyHorn', player, false)
 							return
 						end
 					end
-				end	
+				end
 				local money = exports.gc:getPlayerGreencoins(player)
 				if money >= price then
 					local ok = gcshopBuyItem ( player, price, 'Horn:' .. horn)
@@ -271,7 +271,7 @@ function(horn)
 				else
 					triggerClientEvent(player, 'onClientSuccessBuyHorn', player, false, nil)
 				end
-			end, 
+			end,
 		handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)
 	else
 		triggerClientEvent(source, 'onClientSuccessBuyHorn', source, false)
@@ -295,9 +295,9 @@ function()
 					local allHorns = split(sql[1].horns, string.byte(','))
 					triggerClientEvent(player, 'sendHornsData', player, allHorns)
 				end
-			end, 
-		handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)	
-	end	
+			end,
+		handlerConnect, "SELECT horns FROM gc_horns WHERE forumid = ?", forumid)
+	end
 end
 )
 
@@ -305,7 +305,7 @@ function playerUsingHorn_s(horn,car)
 	if getElementData(source, "state") == "alive" and getPedOccupiedVehicle(source) then
 		local gamemode = exports.race:getRaceMode()
 		--outputDebugString("Player: " .. getPlayerNametagText(source) .. " used horn " .. horn .. " in gamemode " .. gamemode, 0)
-		
+
 		if tonumber(horn) == 389 and not (gamemode == "Capture the flag") then -- Wololo horn from Age of Empires 2. Changes target's vehicle color to the color of the source's vehicle. Adds opponent to source's team for 5 minutes.
 			local c = {}
 			local d = {} -- delta
@@ -313,12 +313,12 @@ function playerUsingHorn_s(horn,car)
 			local t = {} -- target
 			local dist = 15
 			local dis = {dist, false}
-			
+
 			local p = getElementsByType("player")
 			local dim = getElementData(source, "dim")
 			c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12] = getVehicleColor(getPedOccupiedVehicle(source), true)
 			s[1],s[2],s[3] = getElementPosition(getPedOccupiedVehicle(source))
-			
+
 			for a,b in ipairs(p) do
 				if getElementData(b, "state") == "alive" and getElementData(b, "dim") == dim and getPedOccupiedVehicle(b) and not (b == source) then
 					t[1],t[2],t[3] = getElementPosition(getPedOccupiedVehicle(b))
@@ -326,14 +326,14 @@ function playerUsingHorn_s(horn,car)
 					d[2] = s[2] - t[2]
 					d[3] = s[3] - t[3]
 					local py = math.pow ( math.pow( math.pow(d[1],2) + math.pow(d[2],2) , 0.5) + math.pow(d[3],2) , 0.5)
-					
+
 					if py < dis[1] then
 						dis[1] = py
 						dis[2] = b
 					end
 				end
 			end
-			
+
 			if dis[1] < dist and getPedOccupiedVehicle(dis[2]) and getElementData(dis[2], "state") == "alive" then
 				local ct = {}
 				ct[1], ct[2], ct[3], ct[4] = getVehicleColor(getPedOccupiedVehicle(dis[2]))
@@ -341,7 +341,7 @@ function playerUsingHorn_s(horn,car)
 				setVehicleColor(getPedOccupiedVehicle(dis[2]), c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12])
 			end
 		end
-	end	
+	end
 end
 addEvent("onPlayerUsingHorn_s", true)
 addEventHandler("onPlayerUsingHorn_s", root,playerUsingHorn_s)

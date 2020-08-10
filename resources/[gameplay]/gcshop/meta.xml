@@ -1,18 +1,19 @@
 <meta>
-    <info author="SDK" version="1.5" type="script" />
+    <info author="SDK" version="1.5" type="script" i18n-project="mta-racemix" i18n-component="gcshop" />
     <min_mta_version server="1.5.4-9.11342" client="1.3.0-9.03772"></min_mta_version>
-    
+	<include resource="i18n" />
+	<script src="i18n.lua" type="shared" />
     <script src="gcshop_s.lua" />
     <script src="gcshop_c.lua" type="client" protected="true" />
     <script src="gcshop_gui.lua" type="client" protected="true" />
-	
+
 	<script src="utilites\tooltips\tooltips.lua" type="client" protected="false" />
 	<file src="utilites\tooltips\sprite.png" />
-	
+
 	<file src="utilites\img\blank_white.png" />
     <include resource="gc" />
 
-    
+
     <settings>
         <!-- allows to override the mysql connection data to test stuff on a local server (also applies to autologin in gc resource)-->
         <setting name="*host"/>
@@ -24,16 +25,16 @@
         <setting name="*pass"/>
         <!-- /srun set('*gcshop.pass','root') -->
     </settings>
-    
+
     <!-- srun set('*gcshop.host','localhost') set('*gcshop.user','mrgreen_mtasrvs') set('*gcshop.user','root') set('*gcshop.pass','root') -->
-    
+
     <!-- Item's	 -->
-    
+
     <script src="items\items_s.lua" type="server" />
     <script src="items\items_c.lua" type="client" />
     <script src="items\items_gui.lua" type="client" />
     <file src="items\voice.png" />
-    
+
     <script src="items\paintjob\paintjob_s.lua" type="server" />
     <script src="items\paintjob\paintjob_c.lua" type="client" />
 
@@ -68,10 +69,10 @@
     <file src="items\coloredprojectiles\customcorona\shaders\custom_corona0.fx" type="client" />
     <file src="items\coloredprojectiles\customcorona\shaders\custom_corona1.fx" type="client" />
     <file src="items\coloredprojectiles\customcorona\textures\coronastar.png" type="client" />
-    
+
     <script src="items\vehiclereroll\vehreroll_s.lua" type="server" />
     <!-- Modshop -->
-    
+
     <script src="modshop\modshop_s.lua" type="server" />
     <script src="modshop\modshop_c.lua" type="client" />
     <script src="modshop\modshop_GUI.lua" type="client" />
@@ -86,36 +87,36 @@
     <file src="modshop\drug_yellow.dff" />
 	<export function="doesPlayerOwnVehicle" type="server"/>
 	<export function="getPlayerSavedWheelsForVehicle" type="server"/>
-    
-    
+
+
     <!-- Locknick by Kali -->
     <script src="lockednicks\lockednicks_c.lua" type="client" />
     <script src="lockednicks\lockednicks.lua" type="server" />
-    
+
     <!-- Teams -->
     <script src="teams\teams_c.lua" type="client" />
     <script src="teams\teams_s.lua" type="server" />
-    
+
     <!-- Skins by BinSlayer    -->
-    
+
     <script src="skin\skins_client.lua" type="client" />
     <script src="skin\skins_server.lua" type="server" />
     <file src="skin\skins.xml" type="client" />
-    
+
     <!-- Maps top 100 -->
 	<export function='mapstop100_insert' type='server' />
 	<export function='mapstop100_remove' type='server' />
-	
+
     <!-- Maps by BinSlayer    -->
-	
+
 	<script src='maps\maps_server.lua' type='server' />
 	<script src='maps\maps_client.lua' type='client' />
-	<file   src='maps\search.png' />	
+	<file   src='maps\search.png' />
 	<export function='getCurrentMapQueued' type='server' />
 	<export function='isAnyMapQueued' type='server' />
-	
+
     <!-- Custom horns by BinSlayer     -->
-    
+
     <script src="horns\horns_c.lua" type="client" />
     <script src="horns\horns_s.lua" type="server" />
     <file src="horns\files\1.mp3" download="false"/>
@@ -292,7 +293,7 @@
     <file src="horns\files\172.mp3" download="false"/>
     <file src="horns\files\173.mp3" download="false"/>
     <file src="horns\files\174.mp3" download="false"/>
-    <file src="horns\files\175.mp3" download="false"/>  
+    <file src="horns\files\175.mp3" download="false"/>
     <file src="horns\files\176.mp3" download="false"/>
     <file src="horns\files\177.mp3" download="false"/>
     <file src="horns\files\178.mp3" download="false"/>
@@ -361,7 +362,7 @@
 	<file src="horns\files\241.mp3" download="false"/>
 	<file src="horns\files\242.mp3" download="false"/>
 	<file src="horns\files\243.mp3" download="false"/>
-	<file src="horns\files\244.mp3" download="false"/>	
+	<file src="horns\files\244.mp3" download="false"/>
 	<file src="horns\files\245.mp3" download="false"/>
 	<file src="horns\files\246.mp3" download="false"/>
 	<file src="horns\files\247.mp3" download="false"/>
@@ -411,32 +412,32 @@
 	<file src="horns\files\291.mp3" download="false"/>
 	<file src="horns\files\292.mp3" download="false"/>
 	<file src="horns\files\293.mp3" download="false"/>
-	<file src="horns\files\294.mp3" download="false"/>	
-	<file src="horns\files\295.mp3" download="false"/>	
-	<file src="horns\files\296.mp3" download="false"/>	
-	<file src="horns\files\297.mp3" download="false"/>	
-	<file src="horns\files\298.mp3" download="false"/>	
-	<file src="horns\files\299.mp3" download="false"/>	
-	<file src="horns\files\300.mp3" download="false"/>	
-	<file src="horns\files\301.mp3" download="false"/>	
-	<file src="horns\files\302.mp3" download="false"/>	
-	<file src="horns\files\303.mp3" download="false"/>	
+	<file src="horns\files\294.mp3" download="false"/>
+	<file src="horns\files\295.mp3" download="false"/>
+	<file src="horns\files\296.mp3" download="false"/>
+	<file src="horns\files\297.mp3" download="false"/>
+	<file src="horns\files\298.mp3" download="false"/>
+	<file src="horns\files\299.mp3" download="false"/>
+	<file src="horns\files\300.mp3" download="false"/>
+	<file src="horns\files\301.mp3" download="false"/>
+	<file src="horns\files\302.mp3" download="false"/>
+	<file src="horns\files\303.mp3" download="false"/>
 	<file src="horns\files\304.mp3" download="false"/>
-	<file src="horns\files\305.mp3" download="false"/>	
-	<file src="horns\files\306.mp3" download="false"/>	
-	<file src="horns\files\307.mp3" download="false"/>	
-	<file src="horns\files\308.mp3" download="false"/>	
-	<file src="horns\files\309.mp3" download="false"/>	
-	<file src="horns\files\310.mp3" download="false"/>	
-	<file src="horns\files\311.mp3" download="false"/>	
-	<file src="horns\files\312.mp3" download="false"/>	
-	<file src="horns\files\313.mp3" download="false"/>	
-	<file src="horns\files\314.mp3" download="false"/>	
-	<file src="horns\files\315.mp3" download="false"/>	
-	<file src="horns\files\316.mp3" download="false"/>	
-	<file src="horns\files\317.mp3" download="false"/>	
-	<file src="horns\files\318.mp3" download="false"/>	
-	<file src="horns\files\319.mp3" download="false"/>	
+	<file src="horns\files\305.mp3" download="false"/>
+	<file src="horns\files\306.mp3" download="false"/>
+	<file src="horns\files\307.mp3" download="false"/>
+	<file src="horns\files\308.mp3" download="false"/>
+	<file src="horns\files\309.mp3" download="false"/>
+	<file src="horns\files\310.mp3" download="false"/>
+	<file src="horns\files\311.mp3" download="false"/>
+	<file src="horns\files\312.mp3" download="false"/>
+	<file src="horns\files\313.mp3" download="false"/>
+	<file src="horns\files\314.mp3" download="false"/>
+	<file src="horns\files\315.mp3" download="false"/>
+	<file src="horns\files\316.mp3" download="false"/>
+	<file src="horns\files\317.mp3" download="false"/>
+	<file src="horns\files\318.mp3" download="false"/>
+	<file src="horns\files\319.mp3" download="false"/>
 	<file src="horns\files\320.mp3" download="false"/>
 	<file src="horns\files\321.mp3" download="false"/>
 	<file src="horns\files\322.mp3" download="false"/>
@@ -617,11 +618,11 @@
 	<file src="horns\files\497.mp3" download="false"/>
 	<file src="horns\files\498.mp3" download="false"/>
 	<file src="horns\files\499.mp3" download="false"/>
-	
-	
-	
-	
+
+
+
+
 	<file src="horns\icon.png" />
-	
+
 	<export function="disableReRoll" type="server"/>
 </meta>

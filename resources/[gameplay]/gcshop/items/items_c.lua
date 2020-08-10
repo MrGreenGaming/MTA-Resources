@@ -15,16 +15,16 @@ function onShopInit ( tabPanel )
 			items_gui = build_itemsWidget( itemsTab, 40, 30 )
 			guiSetVisible(items_gui["btnExtendScrollarea"], false);
 		end
-	end	
+	end
 end
 addEventHandler('onShopInit', resourceRoot, onShopInit )
 
 function itemLogin ( perks_, player_perks_ )
-	perks, player_perks = perks_, player_perks_; 
+	perks, player_perks = perks_, player_perks_;
 	if itemsTab then
 		for id, perk in pairs(perks) do
 			if not perk.requires then
-				guiSetText(items_gui["btnBuyPerk_" .. id], 'Price:\n ' .. (tostring(perk.price)) .. ' GC')
+				guiSetText(items_gui["btnBuyPerk_" .. id], _("Price:").. '\n ' .. (tostring(perk.price)) .. ' GC')
 				guiSetEnabled(items_gui["btnBuyPerk_" .. id], true)
 			else
 				local ok = true;
@@ -35,10 +35,10 @@ function itemLogin ( perks_, player_perks_ )
 					end
 				end
 				if ok then
-					guiSetText(items_gui["btnBuyPerk_" .. id], 'Price:\n ' .. (tostring(perk.price)) .. ' GC')
+					guiSetText(items_gui["btnBuyPerk_" .. id], _("Price:").. '\n ' .. (tostring(perk.price)) .. ' GC')
 					guiSetEnabled(items_gui["btnBuyPerk_" .. id], true)
 				else
-					guiSetText(items_gui["btnBuyPerk_" .. id], 'Requires perk' .. ((#(perk.requires) > 1) and 's' or '') .. ':\n' .. table.concat(perk.requires, ', '))
+					guiSetText(items_gui["btnBuyPerk_" .. id], _('Requires perk') .. ((#(perk.requires) > 1) and 's' or '') .. ':\n' .. table.concat(perk.requires, ', '))
 					guiSetEnabled(items_gui["btnBuyPerk_" .. id], false)
 				end
 			end
@@ -46,7 +46,8 @@ function itemLogin ( perks_, player_perks_ )
 		for id, perk in pairs(player_perks) do
 			if items_gui["btnBuyPerk_" .. perk.ID] then
 				if perk.exp then
-					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], 'Price:\n ' .. (tostring(perk.price)) .. ' GC\nExpires ' .. string.format('%02d/%02d', getRealTime(perk.expires).monthday, getRealTime(perk.expires).month + 1))
+					local expiryDate = string.format('%02d/%02d', getRealTime(perk.expires).monthday, getRealTime(perk.expires).month + 1)
+					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], _("Price: \n%s GC\n"):format(tostring(perk.price)) ..  _('Expires %s'):format(expiryDate) )
 					guiSetEnabled(items_gui["btnBuyPerk_" .. perk.ID], false)
 					if id == 10 then -- If colored rockets are bought, enable coloring button
 						guiSetEnabled(items_gui["setRocketColorButton"],true)
@@ -64,9 +65,9 @@ function itemLogin ( perks_, player_perks_ )
 
 					end
 				elseif perk.defaultAmount then
-					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], 'Extra Price:\n ' .. (tostring(perk.extraPrice)) .. '\n\nCurrent amount:\n' .. perk.options.amount )
+					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], _('Extra Price:') .. '\n ' .. (tostring(perk.extraPrice)) .. '\n\n' .. _('Current amount:') .. '\n' .. perk.options.amount )
 				else
-					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], 'Price:\n ' .. (tostring(perk.price)) .. ' GC\nBought!')
+					guiSetText(items_gui["btnBuyPerk_" .. perk.ID], _('Price:') .. '\n ' .. (tostring(perk.price)) .. ' GC\n' .. _('Bought!'))
 					guiSetEnabled(items_gui["btnBuyPerk_" .. perk.ID], false)
 				end
 			end
@@ -189,7 +190,7 @@ end
 local deadlineColorCache = false
 function deadlineColorChangeHandler(id, color, alpha)
 	if id == 201 then -- if it's the rocket colorpicker
-		
+
 		deadlineColorCache = color
 		local askServer = triggerServerEvent( "serverDeadLineColorChange", root, deadlineColorCache )
 
@@ -202,8 +203,8 @@ addEventHandler("onColorPickerOK", resourceRoot, deadlineColorChangeHandler)
 addEvent("clientDeadLineColorChangeConfirm",true)
 function deadlineColorChangeConfirm(bool)
 	if bool then
-		outputChatBox( "DeadLine color is now: "..deadlineColorCache.."COLOR", 255, 255, 255, true )
-		outputChatBox( "Colored DeadLine will only appear when you have bought the perk.", 255, 255, 255, true )
+		outputChatBox( _("DeadLine color is now: ")..deadlineColorCache.."COLOR", 255, 255, 255, true )
+		outputChatBox( _("Colored DeadLine will only appear when you have bought the perk."), 255, 255, 255, true )
 		guiSetProperty(deadlineColorImage, "ImageColours", setIMGcolor(deadlineColorCache:gsub("#","")))
 	else
 		deadlineColorCache = false
@@ -225,14 +226,14 @@ end
 local colorCache = false
 function rocketColorChangeHandler(id, color, alpha)
 	if id == 200 then -- if it's the rocket colorpicker
-		
+
 		colorCache = color
 		local askServer = triggerServerEvent( "serverRocketColorChange", root, colorCache )
 
 		if not askServer then rocketColorChangeConfirm(false) end -- if fail then continue with next function
 		-- rocketColorChangeConfirm(true)
 
-		
+
 	end
 end
 addEventHandler("onColorPickerOK", resourceRoot, rocketColorChangeHandler)
@@ -240,8 +241,8 @@ addEventHandler("onColorPickerOK", resourceRoot, rocketColorChangeHandler)
 addEvent("clientRocketColorChangeConfirm",true)
 function rocketColorChangeConfirm(bool)
 	if bool then
-		outputChatBox( "Rocket color is now: "..colorCache.."COLOR", 255, 255, 255, true )
-		outputChatBox( "Colored rockets will only appear when you have bought the perk.", 255, 255, 255, true )
+		outputChatBox( _("Rocket color is now: ")..colorCache.."COLOR", 255, 255, 255, true )
+		outputChatBox( _("Colored rockets will only appear when you have bought the perk."), 255, 255, 255, true )
 		guiSetProperty(RocketColorImage, "ImageColours", setIMGcolor(colorCache:gsub("#","")))
 	else
 		colorCache = false

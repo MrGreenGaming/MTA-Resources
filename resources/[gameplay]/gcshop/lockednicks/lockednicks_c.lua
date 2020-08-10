@@ -31,19 +31,31 @@ function createLockNickGUI(tp)
     guiSetProperty(locknickGUI.button[2], "NormalTextColour", "FFAAAAAA")
     locknickGUI.label[4] = guiCreateLabel(420, 361, 400, 19, "Current price: 750 GC per extra slot (max: 10 slots)", false, locknickGUI.tab[1])
     locknickGUI.button[3] = guiCreateButton(422, 382, 164, 28, "Buy extra locknick slot", false, locknickGUI.tab[1])
-    guiSetProperty(locknickGUI.button[3], "NormalTextColour", "FFAAAAAA")    
-
+    guiSetProperty(locknickGUI.button[3], "NormalTextColour", "FFAAAAAA")
+    translateLockedNicksGUI()
 end
 addEventHandler('onShopInit', getResourceRootElement(), createLockNickGUI )
 addCommandHandler('unlocknick',function() if not guiGetVisible(locknickGUI.tab[1]) then executeCommandHandler("gcshop") end guiSetSelectedTab(thePanel,locknickGUI.tab[1]) end)
 addCommandHandler('locknick',function() if not guiGetVisible(locknickGUI.tab[1]) then executeCommandHandler("gcshop") end guiSetSelectedTab(thePanel,locknickGUI.tab[1]) end)
+
+function translateLockedNicksGUI()
+    guiSetText(locknickGUI.label[1], _("In this tab you can manage your locked nicknames."))
+    guiSetText(locknickGUI.label[2], _('To lock your current nickname you have to click on "%s". \nTo remove a locked nick, select the nick in the gridlist, then click on "%s". \nIf you are in need of some extra locked nicknames, you can buy extra slots. Click on "%s" to do so. \nTrolling and deliberate nickstealing can get you banned.'):format(_("Lock current nickname"), _("Remove selected nick"), _("Buy extra lock nick slot")))
+    guiGridListSetColumnTitle(locknickGUI.gridlist[1], locknickGUI.glcolumn[1], _("My Locked Nicknames"))
+    guiSetText(locknickGUI.button[1], _("Lock current nickname"))
+    guiSetText(locknickGUI.button[2], _("Remove selected nickname"))
+    guiSetText(locknickGUI.label[4], _("Current price: %s GC per extra slot (max: %s slots)"):format(750, 10))
+    guiSetText(locknickGUI.button[3], _("Buy extra locknick slot"))
+    guiSetText(locknickGUI.label[3], _("%s / %s nickname slots in use"):format(tostring(slotsUsed or 0), tostring(maxAmount or 10)))
+end
+addEventHandler("onClientPlayerLocaleChange", root, translateLockedNicksGUI)
 
 function handleSlotAmountLabel()
     local label = locknickGUI.label[3]
     local used = slotsUsed
     local max = maxAmount
 
-    guiSetText(label,tostring(used).."/"..tostring(max).." nickname slots in use")
+    guiSetText(label,_("%s/%s nickname slots in use"):format(tostring(used), tostring(max)))
     if tonumber(used) >= tonumber(max) then
         -- make text red
         guiLabelSetColor(label,255,0,0)
@@ -70,8 +82,6 @@ function receiveLocknickInfo(nT,amount)
     maxAmount = amount
     handleSlotAmountLabel()
     populateLockNickGridList()
-
-
 end
 addEvent("serverSendLockedNickInfo",true)
 addEventHandler("serverSendLockedNickInfo",root,receiveLocknickInfo)
@@ -80,27 +90,27 @@ addEventHandler("serverSendLockedNickInfo",root,receiveLocknickInfo)
 local buttonSpamTimer = false
 local buttonSpamCooldown = 750
 function lockednicksButtonHandler()
-   
+
     if source == locknickGUI.button[1] then -- locknick
-        if slotsUsed >= maxAmount then outputChatBox("Maximum locked nicknames reached. Please buy more slots if you wish to lock more nicknames.") return end
+        if slotsUsed >= maxAmount then outputChatBox(_("Maximum locked nicknames reached. Please buy more slots if you wish to lock more nicknames.")) return end
         triggerServerEvent("clientNickLockAction",resourceRoot,safeStringNick(getPlayerName(localPlayer)),true)
 
 
     elseif source == locknickGUI.button[2] then -- unlocknick
         local selnam = getSelectedLockedName()
 
-        if not selnam or #selnam == 0 then outputChatBox("Please select a name before removing it",255,0,0) return end
+        if not selnam or #selnam == 0 then outputChatBox(_("Please select a name before removing it"),255,0,0) return end
 
         if selnam then triggerServerEvent("clientNickLockAction",resourceRoot,selnam,false) end
 
 
     elseif source == locknickGUI.button[3] then -- buy more slots
-         if isTimer(buttonSpamTimer) then outputChatBox("Please do not spam the buttons",255,0,0) return end
+         if isTimer(buttonSpamTimer) then outputChatBox(_("Please do not spam click buttons"),255,0,0) return end
          buttonSpamTimer = setTimer(function()end,buttonSpamCooldown,1)
         if maxAmount < 10 then -- Max 10 slots
             triggerServerEvent("onPlayerBuyLockedNickSlot",resourceRoot)
         else
-            outputChatBox("Maximum amount of nickname slots reached (10)",255,0,0)
+            outputChatBox(_("Maximum amount of nickname slots reached (%s)"):format(10),255,0,0)
 
         end
 

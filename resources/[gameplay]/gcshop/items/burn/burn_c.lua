@@ -17,8 +17,8 @@ function onClientVehicleCollision (vehicleElement, force, bodyPart, colX, colY, 
 	if not lastTick[vehicleElement] then lastTick[vehicleElement] = 0 end
 	if getTickCount() - lastTick[vehicleElement] > limit then
 		local vehicle = source
-		if getVehicleController(vehicle) == localPlayer 
-					and getVehicleController(vehicleElement) 
+		if getVehicleController(vehicle) == localPlayer
+					and getVehicleController(vehicleElement)
 					and not isVehicleBlown(vehicle)
 					and not isVehicleBlown(vehicleElement)
 					and (getElementHealth(vehicleElement) < 245 or getElementHealth(vehicle) < 245)    --reduce bandwidth
@@ -26,8 +26,8 @@ function onClientVehicleCollision (vehicleElement, force, bodyPart, colX, colY, 
 					and getElementData(localPlayer, 'state') == 'alive' and getElementData(getVehicleController(vehicleElement), 'state') == 'alive' then
 			triggerServerEvent('onServerRecieveCollisionData', localPlayer, vehicleElement, vehicle)
 			lastTick[vehicleElement] = getTickCount()
-		end	
-	end	
+		end
+	end
 end
 addEventHandler('onClientVehicleCollision', root, onClientVehicleCollision)
 

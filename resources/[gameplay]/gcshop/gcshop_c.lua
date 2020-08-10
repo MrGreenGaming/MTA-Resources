@@ -81,15 +81,17 @@ end
 
 local loggedInGC = false
 function gcLogin(forumID_, amount)
-    guiSetText(shop_GUI["labelGreencoinsShadow1"], tostring(comma_value(tonumber(amount)) or 0) .. ' GreenCoins')
+    -- Translators: Try to use English version, but with native plurality (As if it was a name)
+    local gcStr = _.many("GreenCoin", "GreenCoins", tonumber(amount))
+    guiSetText(shop_GUI["labelGreencoinsShadow1"], tostring(comma_value(tonumber(amount)) or 0) .. gcStr)
     guiLabelSetColor(shop_GUI["labelGreencoinsShadow1"], 0, 0, 0)
 
-    guiSetText(shop_GUI["labelGreencoins"], tostring(comma_value(tonumber(amount)) or 0) .. ' GreenCoins')
+    guiSetText(shop_GUI["labelGreencoins"], tostring(comma_value(tonumber(amount)) or 0) .. gcStr)
     guiLabelSetColor(shop_GUI["labelGreencoins"], 0, 255, 0)
 
 
-    guiSetText(shop_GUI["labelLoginInfo"], "You successfully logged in!\n\nYour account is linked and will be auto logged in from now on.")
-    guiSetText(shop_GUI["buttonLink"], "Logout")
+    guiSetText(shop_GUI["labelLoginInfo"], _("You successfully logged in!\n\nYour account is linked to your pc and you will automatically log in."))
+    guiSetText(shop_GUI["buttonLink"], _("Log out"))
     guiLabelSetColor(shop_GUI["labelLoginInfo"], 0x00, 0xFF, 0x00)
     loggedInGC = true
     amount_GCS = tonumber(amount) or 0;
@@ -100,10 +102,10 @@ addEvent("cShopGCLogin", true)
 addEventHandler("cShopGCLogin", root, gcLogin)
 
 function gcLoginFail()
-    guiSetText(shop_GUI["buttonLink"], "Login")
+    guiSetText(shop_GUI["buttonLink"], _("Login"))
     loggedInGC = false
     forumID = nil
-    guiSetText(shop_GUI["labelLoginInfo"], "Wrong username/emailaddress or password! There is a Lost Password functionality on the Forums.")
+    guiSetText(shop_GUI["labelLoginInfo"], _("Wrong username, e-mail or password! Go to www.mrgreengaming.com/forums/lostpassword/ to retrieve your password."))
     guiLabelSetColor(shop_GUI["labelLoginInfo"], 0xFF, 0x00, 0x00)
 end
 
@@ -111,10 +113,10 @@ addEvent("onLoginFail", true)
 addEventHandler("onLoginFail", root, gcLoginFail)
 
 function gcLogout(initShop)
-    guiSetText(shop_GUI["buttonLink"], "Login")
+    guiSetText(shop_GUI["buttonLink"], _("Login"))
     guiSetText(shop_GUI["labelGreencoinsShadow1"], '')
     guiSetText(shop_GUI["labelGreencoins"], '')
-    guiSetText(shop_GUI["labelLoginInfo"], "Not logged in!")
+    guiSetText(shop_GUI["labelLoginInfo"], _("Not logged in!"))
     guiLabelSetColor(shop_GUI["labelLoginInfo"], 0x00, 0xFF, 0x00)
     loggedInGC = false
     forumID = nil
@@ -154,7 +156,7 @@ end
 function startMsg()
     setTimer(function()
         if not loggedInGC then
-            outputChatBox("Press F6 to buy items in the GreenCoins shop.", 0, 255, 0)
+            outputChatBox(_("Press F6 to buy items in the GreenCoins shop."), 0, 255, 0)
         end
     end, 10000, 1)
 end
@@ -186,6 +188,16 @@ addEventHandler("sb_showMyAccount", root, function()
         hideShop()
     end
 end)
+
+setTimer(
+    function()
+        exports.messages:outputGameMessage(_("Need more GreenCoins?"), 3, 255, 255, 255, true)
+        setTimer(
+            function()
+                exports.messages:outputGameMessage(_("Then visit: https://mrgreengaming.com/greencoins/donate"), 2.4, 50, 205, 50, true)
+            end, 1000, 1)
+    end,
+2700000, 0)
 
 --http://lua-users.org/wiki/FormattingNumbers
 function comma_value(amount)

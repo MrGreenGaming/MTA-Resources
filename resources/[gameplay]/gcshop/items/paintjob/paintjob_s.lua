@@ -66,7 +66,7 @@ local server_path = 'items/paintjob/'
 function sendPaintjobs ( from, to, pid )
 	-- outputChatBox('Sending to')
 	-- outputChatBox(tostring(getElementType(to)))
-	getPerkSettings(from, ID, 
+	getPerkSettings(from, ID,
 	function(res)
 		local md5list = {}
 		if type(res) == 'table' then
@@ -126,7 +126,7 @@ addEventHandler('clientRequestsPaintjobs', root, clientRequestsPaintjobs)
 addEventHandler('onPlayerQuit', root, function()
 	g_CustomPlayers[source] = nil
 
-	
+
 end)
 
 ----------------------------------------
@@ -166,7 +166,7 @@ function receiveImage ( image, pid )
 
 		local maxFileSize = 0.5 -- In MB
 		if fileGetSize(dummy) > (maxFileSize*1048576) then -- If file is bigger then x MB
-			outputChatBox("Custom paintjob image too big, please use a smaller image. (Max: "..tostring(maxFileSize).."MB)",player,255,0,0)
+			outputChatBox(_.For(player, "Custom paintjob image too big, please use a smaller image. (Maximum: %s MB)"):format(tostring(maxFileSize)),player,255,0,0)
 			fileClose(dummy)
 			fileDelete(server_path .. forumID .. '-' .. pid .. 'dummy.bmp')
 			sendPaintjobs ( {player}, player, pid )
@@ -179,9 +179,6 @@ function receiveImage ( image, pid )
 			sendPaintjobs ( {player}, player, pid )
 			sendAPICustomPaintjob(player, forumID .. '-' .. pid, base64Encode(image))
 		end
-
-		
-		
 	end
 end
 addEvent('receiveImage', true)
@@ -254,7 +251,7 @@ function receiveAPICustomPaintjobMD5(res, info)
 	if not result or result.error then
 		return
 	end
-	
+
 	-- Check for changes
 	for name, hash in pairs(result) do
 		if type(hash) == 'string' and type(name) == 'string' then
@@ -325,7 +322,7 @@ function sendAPICustomPaintjob(player, paintjobID, imageData)
 	}
 	fetchRemote(PJ_API_URL .. "savepaintjob", fetchOptions, function(res, status)
 		if type(status) == 'table' and status.success then
-			outputChatBox('GCShop: Successfully uploaded new paintjob!', player, 0, 255, 0)
+			outputChatBox("GCShop: " .. _.For(player, 'Successfully uploaded new paintjob!'), player, 0, 255, 0)
 		else
 			if not status.success or not res then
 				if not res then
@@ -333,7 +330,7 @@ function sendAPICustomPaintjob(player, paintjobID, imageData)
 				end
 				outputDebugString("sendAPICustomPaintjob: invalid response (status " .. status.statusCode .. "). Res: " .. res, 1)
 			end
-			outputChatBox('GCShop: Could not upload paintjob, please try again', player, 255, 0 , 0)
+			outputChatBox("GCShop: " .. _.For(player, "Could not upload custom paintjob, please try again"), player, 255, 0 , 0)
 		end
 	end)
 end
@@ -352,7 +349,7 @@ function receiveHostingFetch(responseData,errno,player,id)
 	if errno == 0 then
 		triggerEvent("receiveImage",player,responseData,id)
 	else
-		outputChatBox("Downloading paintjob failed, please check the URL or contact an admin (ERROR CODE: "..tostring(errno).." )",player,255,0,0)
+		outputChatBox(_.For(player, "Downloading paintjob failed, please check the URL or contact staff (ERROR: %s )"):format(tostring(errno)),player,255,0,0)
 	end
 end
 

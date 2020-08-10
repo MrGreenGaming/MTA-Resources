@@ -14,14 +14,14 @@ function onShopInit ( tabPanel )
 	modshopTab = guiCreateTab ( 'Modshop', shopTabPanel )
 	if modshopTab then
 			modshop_gui = build_modshopWidget( modshopTab, 35, 10 )
-			guiSetText(modshop_gui['labelPrice'], 'You should register and log in to buy\nvehicles and upgrade them')
+			guiSetText(modshop_gui['labelPrice'], _('You should register and log in to buy vehicles and upgrade them'))
 			addEventHandler( 'onClientGUIClick', modshop_gui["carsTable"], vehicleSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["upgradeTable"], upgradeSelected, false)
 	end
 	if modshop_gui then
             guiSetVisible(modshop_gui["tabBuyExtras"], false)
             guiSetVisible(modshop_gui["tabNeonlights"], false)
-            guiSetVisible(modshop_gui["tabCustomHorns"], false)        
+            guiSetVisible(modshop_gui["tabCustomHorns"], false)
 		loadVehicleList()
 		--loadUpgradeList(tonumber(current_vehicle) or nil)
        -- loadNeon(tonumber(current_vehicle) or nil)
@@ -39,12 +39,12 @@ function modshopLogin ( price, modshop_table )
 		guiDeleteTab(modshopTab, shopTabPanel)
 	end
 	vehicle_price = price
-	
+
 	if shopTabPanel and not isElement(modshopTab) then
 		modshopTab = guiCreateTab ( 'Modshop', shopTabPanel )
 		if modshopTab then
 			modshop_gui = build_modshopWidget( modshopTab, 35, 10 )
-			guiSetText(modshop_gui['labelPrice'], 'Current price for one vehicle: ' .. (tostring(vehicle_price) or 550) .. ' GC\n\nAll upgrades are free for bought vehicles')
+			guiSetText(modshop_gui['labelPrice'], _('Current price for one vehicle: %s GC\n\nAll upgrades are free for owned vehicles'):format(tostring(vehicle_price) or 550))
 			addEventHandler( 'onClientGUIClick', modshop_gui["carsTable"], vehicleSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["upgradeTable"], upgradeSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["tabelPaintjob"], paintjobSelected, false)
@@ -78,7 +78,7 @@ function modshopLogout()
 		guiDeleteTab ( modshopTab, shopTabPanel )
 		modshopTab = nil
 	end]]
-	
+
 end
 addEvent('modshopLogout', true)
 addEventHandler('modshopLogout', localPlayer, modshopLogout)
@@ -140,9 +140,9 @@ function on_btnEnableExtras_clicked(button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") then
 		return
 	end
-	
+
 	triggerServerEvent ( 'gcbuyextras', resourceRoot, localPlayer, 'gcbuyextras' )
-	
+
 end
 
 
@@ -204,7 +204,7 @@ function on_upgradeVehicleButton_clicked(button, state, absoluteX, absoluteY)
 	guiSetText( modshop_gui["labelCurrentVehicle"] , "Currently modding: " .. selectedName .. " (" .. current_vehicle .. ")")
 	loadUpgradeList(current_vehicle)
     loadNeon(current_vehicle)
-	
+
 	local col = rgbaToHex(0, 0, 0, 0)
 	guiSetProperty(modshop_gui["squareCol1"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
 	guiSetProperty(modshop_gui["squareCol2"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
@@ -222,7 +222,7 @@ end
 function fillInCurrentUpgrades ( vehID )
 	if not tonumber(vehID) then return end
 	local upgrades = modshop_upgrades[tostring(vehID)]
-	
+
 	-- Paintjob
 	local paintjob_id = tonumber(upgrades.slot17)
 	if paintjob_id and ((0 <= paintjob_id and paintjob_id <= 2) or 4 <= paintjob_id) then
@@ -233,19 +233,19 @@ function fillInCurrentUpgrades ( vehID )
 	else
 		guiGridListSetSelectedItem(modshop_gui["tabelPaintjob"], 0, modshop_gui["tabelPaintjob_col0"])
 	end
-	
+
 	-- Vehicle colors
 	guiSetText(modshop_gui["editCol1"], tonumber(upgrades.slot18) and '' or tostring(upgrades.slot18 or ''))
 	guiSetText(modshop_gui["editCol2"], tonumber(upgrades.slot19) and '' or tostring(upgrades.slot19 or ''))
 	guiSetText(modshop_gui["editCol3"], tonumber(upgrades.slot20) and '' or tostring(upgrades.slot20 or ''))
 	guiSetText(modshop_gui["editLight"], tonumber(upgrades.slot22) and upgrades.slot22..','..upgrades.slot23..','..upgrades.slot24 or '')
-	
+
 	local t1, t2, t3 = split(tostring(upgrades.slot18), ','), split(tostring(upgrades.slot19), ','), split(tostring(upgrades.slot20), ',')
 	tempColors["veh_color1"] = #t1 == 3 and {r = t1[1], g = t1[2], b = t1[3]} or {}
 	tempColors["veh_color2"] = #t2 == 3 and {r = t2[1], g = t2[2], b = t2[3]} or {}
 	tempColors["veh_color3"] = #t3 == 3 and {r = t3[1], g = t3[2], b = t3[3]} or {}
 	tempColors["light_color"] = tonumber(upgrades.slot22) and {r = tonumber(upgrades.slot22), g = tonumber(upgrades.slot23), b = tonumber(upgrades.slot24)} or {}
-	
+
 	local col1 = rgbaToHex(tonumber(t1[1]), tonumber(t1[2]), tonumber(t1[3]), 255)
 	guiSetProperty(modshop_gui["squareCol1"], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col1), tostring(col1), tostring(col1), tostring(col1)))
 	local col2 = rgbaToHex(tonumber(t2[1]), tonumber(t2[2]), tonumber(t2[3]), 255)
@@ -350,7 +350,7 @@ function updateColor()
 	local r3, g3, b3 = tempColors.veh_color3.r, tempColors.veh_color3.g, tempColors.veh_color3.b
 	local rl, gl, bl = tempColors.light_color.r, tempColors.light_color.g, tempColors.light_color.b
 	guiSetText(modshop_gui[gui[editing]], tempColors[editing].r ..','.. tempColors[editing].g ..','.. tempColors[editing].b)
-	
+
 	local col = rgbaToHex(tempColors[editing].r, tempColors[editing].g, tempColors[editing].b, 255)
 	guiSetProperty(modshop_gui[gui_square[editing]], "ImageColours", string.format("tl:%s tr:%s bl:%s br:%s", tostring(col), tostring(col), tostring(col), tostring(col)))
 	local editingVehicle = getPedOccupiedVehicle(localPlayer)
@@ -364,7 +364,7 @@ end
 
 function closedColorPicker()
 	removeEventHandler("onClientRender", root, updateColor)
-	
+
 	editing = ''
 	guiSetVisible(shop_GUI._root, true)
 end
@@ -424,7 +424,7 @@ function paintjobSelected(button, state, absoluteX, absoluteY)
 	previewPJ();
 end
 
-function previewPJ() 
+function previewPJ()
 	local row, col = guiGridListGetSelectedItem(modshop_gui["tabelPaintjob"])
 	if row >= 4 then
 		local filename = 'items/paintjob/' .. forumID .. '-' .. row - 3 .. '.bmp';
@@ -452,7 +452,7 @@ function on_btnUploadPaintjob_clicked(button, state, absoluteX, absoluteY)
 	end
 	local row, col = guiGridListGetSelectedItem(modshop_gui["tabelPaintjob"])
 	if row < 4 then
-		outputChatBox('Choose a custom from the list!', 255, 0, 0);
+		outputChatBox(_('Choose a custom paintjob from the list!'), 255, 0, 0);
 	else
 		triggerServerEvent('setUpCustomPaintJob', resourceRoot, localPlayer, guiGetText(modshop_gui["editFilename"]), row - 3);
 	end
@@ -461,21 +461,21 @@ end
 function modshopLoadPJS(player_perks_)
 	player_perks = player_perks_
 	if not modshop_gui["tabelPaintjob"] then return end
-	
+
 	if player_perks and player_perks[4] and player_perks[4].options.amount >= 1 and guiGridListGetRowCount(modshop_gui["tabelPaintjob"]) ~= player_perks[4].options.amount + 4 then
 		guiGridListClear(modshop_gui["tabelPaintjob"]);
-		
+
 		previewPJ();
 
 		local tabelPaintjob_row = guiGridListAddRow(modshop_gui["tabelPaintjob"])
 		guiGridListSetItemText(modshop_gui["tabelPaintjob"], tabelPaintjob_row, modshop_gui["tabelPaintjob_col0"], "No paintjob", false, false )
-		
+
 		tabelPaintjob_row = guiGridListAddRow(modshop_gui["tabelPaintjob"])
 		guiGridListSetItemText(modshop_gui["tabelPaintjob"], tabelPaintjob_row, modshop_gui["tabelPaintjob_col0"], "Paintjob 1", false, false )
-		
+
 		tabelPaintjob_row = guiGridListAddRow(modshop_gui["tabelPaintjob"])
 		guiGridListSetItemText(modshop_gui["tabelPaintjob"], tabelPaintjob_row, modshop_gui["tabelPaintjob_col0"], "Paintjob 2", false, false )
-		
+
 		tabelPaintjob_row = guiGridListAddRow(modshop_gui["tabelPaintjob"])
 		guiGridListSetItemText(modshop_gui["tabelPaintjob"], tabelPaintjob_row, modshop_gui["tabelPaintjob_col0"], "Paintjob 3", false, false )
 
@@ -655,7 +655,7 @@ end)
 function installNeon ( data_neons )
     neons = data_neons
     for k,v in pairs(neons) do
-        local dff = engineLoadDFF( v[1], v[2]) 
+        local dff = engineLoadDFF( v[1], v[2])
         engineReplaceModel(dff, v[2])
     end
 end
@@ -758,7 +758,7 @@ function var_dump(...)
 	local noNames = false
 	local indentation = "\t\t\t\t\t\t"
 	local depth = nil
- 
+
 	local name = nil
 	local output = {}
 	for k,v in ipairs(arg) do
@@ -790,7 +790,7 @@ function var_dump(...)
 			else
 				name = ""
 			end
- 
+
 			local o = ""
 			if type(v) == "string" then
 				table.insert(output,name..type(v).."("..v:len()..") \""..v.."\"")
@@ -819,7 +819,7 @@ function var_dump(...)
 						end
 						local keyString, keyTable = var_dump(newModifiers,key)
 						local valueString, valueTable = var_dump(newModifiers,value)
- 
+
 						if #keyTable == 1 and #valueTable == 1 then
 							table.insert(output,indentation.."["..keyString.."]\t=>\t"..valueString)
 						elseif #keyTable == 1 then

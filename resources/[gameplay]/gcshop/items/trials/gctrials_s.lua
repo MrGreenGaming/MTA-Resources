@@ -21,12 +21,12 @@ end
 function setTrials ( player, cmd, on )
 	local value = true
 	if on == '1' then value = nil end
-	setPerkSetting(player, ID, 'dont_flip', value, value and 'GC Trials: Disabled flipping' or 'GC Trials: Enabled flipping!', 
-	function() 
-		getPerkSettings(player, ID, 
-		function(settings) 
+	setPerkSetting(player, ID, 'dont_flip', value, value and _.For(player, 'GC Trials: Disabled flipping') or _.For(player, 'GC Trials: Enabled flipping'),
+	function()
+		getPerkSettings(player, ID,
+		function(settings)
 			triggerClientEvent(player, 'settingGCTrials', player, settings)
-		end)	
+		end)
 	end)
 end
 

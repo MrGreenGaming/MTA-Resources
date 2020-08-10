@@ -1,14 +1,21 @@
 local teamGUI
 local mapList = {}
 local teamList = {}
+local teamsGUI
+local teamsDataSet = false
+local cachedTeamsData = {
+	teams = false,
+	player = false,
+	t = false
+}
 
 function onShopInit ( tabPanel )
-	local GUIEditor
-	teamTab = guiCreateTab("Teams", tabPanel)
-	
-	-- GUIEditor start --
 
-	GUIEditor = {
+	teamTab = guiCreateTab("Teams", tabPanel)
+
+	-- teamsGUI start --
+
+	teamsGUI = {
 		edit = {},
 		gridlist = {},
 		image = {},
@@ -18,99 +25,126 @@ function onShopInit ( tabPanel )
 		label = {},
 		window = {}
 	}
-	GUIEditor.tabpanel[1] = guiCreateTabPanel(5, 5, 715, 414, false, teamTab)
+	teamsGUI.tabpanel[1] = guiCreateTabPanel(5, 5, 715, 414, false, teamTab)
 
-	GUIEditor.tab[1] = guiCreateTab("Your team", GUIEditor.tabpanel[1])
+	teamsGUI.tab[1] = guiCreateTab("Your team", teamsGUI.tabpanel[1])
 
-	GUIEditor.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 20/40/60 days, but everyone in the team can refresh the team duration (Up to 60 days). Clan owners can transfer ownership with /makeowner PlayerName with color code.", false, GUIEditor.tab[1])
-	guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
-	GUIEditor.btnBuyTeam = guiCreateButton(46, 263, 165, 50, "Create team\n2750 GC / 20 days", false, GUIEditor.tab[1])
-	guiSetProperty(GUIEditor.btnBuyTeam, "Disabled", "True")
-	guiSetProperty(GUIEditor.btnBuyTeam, "NormalTextColour", "FFAAAAAA")
-	GUIEditor.btnUpdateTeam = guiCreateButton(212, 263, 165, 50, "Save changes\n100 GC", false, GUIEditor.tab[1])
-	guiSetVisible(GUIEditor.btnUpdateTeam, false)
-	GUIEditor.label[2] = guiCreateLabel(46, 111, 73, 28, "Team name", false, GUIEditor.tab[1])
-	guiLabelSetVerticalAlign(GUIEditor.label[2], "center")
-	GUIEditor.teamname = guiCreateEdit(145, 111, 228, 28, "", false, GUIEditor.tab[1])
-	guiSetProperty(GUIEditor.teamname, "Disabled", "True")
-	GUIEditor.label[3] = guiCreateLabel(46, 149, 73, 28, "Team tag", false, GUIEditor.tab[1])
-	guiLabelSetVerticalAlign(GUIEditor.label[3], "center")
-	GUIEditor.teamtag = guiCreateEdit(145, 149, 74, 28, "", false, GUIEditor.tab[1])
-	guiSetProperty(GUIEditor.teamtag, "Disabled", "True")
-	GUIEditor.label[4] = guiCreateLabel(46, 187, 73, 28, "Team colour", false, GUIEditor.tab[1])
-	guiLabelSetVerticalAlign(GUIEditor.label[4], "center")
-	GUIEditor.teamcolour = guiCreateEdit(145, 187, 74, 28, "#FFFFFF", false, GUIEditor.tab[1])
-	guiSetProperty(GUIEditor.teamcolour, "Disabled", "True")
-	GUIEditor.teammsg = guiCreateEdit(145, 225, 228, 28, "", false, GUIEditor.tab[1])
-	guiSetProperty(GUIEditor.teammsg, "Disabled", "True")
-	GUIEditor.chkIgnore = guiCreateCheckBox(46, 335, 204, 29, " Don't show me team invites", false, false, GUIEditor.tab[1])
-	guiSetProperty(GUIEditor.chkIgnore, "Disabled", "True")
-	GUIEditor.gridMembers = guiCreateGridList(419, 107, 261, 202, false, GUIEditor.tab[1])
-	guiGridListAddColumn(GUIEditor.gridMembers, "Members", 0.9)
-	guiSetProperty(GUIEditor.gridMembers, "SortSettingEnabled", "False")
-	GUIEditor.btnInvite = guiCreateButton(272, 332, 114, 32, "/Invite player", false, GUIEditor.tab[1])
-	guiSetVisible(GUIEditor.btnInvite, false)
-	guiSetProperty(GUIEditor.btnInvite, "NormalTextColour", "FFAAAAAA")
-	GUIEditor.btnKick = guiCreateButton(419, 332, 114, 32, "Kick player", false, GUIEditor.tab[1])
-	guiSetVisible(GUIEditor.btnKick, false)
-	guiSetProperty(GUIEditor.btnKick, "NormalTextColour", "FFAAAAAA")
-	GUIEditor.btnLeave = guiCreateButton(566, 332, 114, 32, "Leave team", false, GUIEditor.tab[1])
-	guiSetVisible(GUIEditor.btnLeave, false)
-	guiSetProperty(GUIEditor.btnLeave, "NormalTextColour", "FFAAAAAA")
-	GUIEditor.label[5] = guiCreateLabel(46, 225, 83, 28, "Welcome msg", false, GUIEditor.tab[1])
-	guiLabelSetVerticalAlign(GUIEditor.label[5], "center")
+	teamsGUI.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 20/40/60 days, but everyone in the team can refresh the team duration (Up to 60 days). Clan owners can transfer ownership with /makeowner PlayerName with color code.", false, teamsGUI.tab[1])
+	guiLabelSetHorizontalAlign(teamsGUI.label[1], "left", true)
+	teamsGUI.btnBuyTeam = guiCreateButton(46, 263, 165, 50, "Create team\n2750 GC / 20 days", false, teamsGUI.tab[1])
+	guiSetProperty(teamsGUI.btnBuyTeam, "Disabled", "True")
+	guiSetProperty(teamsGUI.btnBuyTeam, "NormalTextColour", "FFAAAAAA")
+	teamsGUI.btnUpdateTeam = guiCreateButton(212, 263, 165, 50, "Save changes\n100 GC", false, teamsGUI.tab[1])
+	guiSetVisible(teamsGUI.btnUpdateTeam, false)
+	teamsGUI.label[2] = guiCreateLabel(46, 111, 73, 28, "Team name", false, teamsGUI.tab[1])
+	guiLabelSetVerticalAlign(teamsGUI.label[2], "center")
+	teamsGUI.teamname = guiCreateEdit(145, 111, 228, 28, "", false, teamsGUI.tab[1])
+	guiSetProperty(teamsGUI.teamname, "Disabled", "True")
+	teamsGUI.label[3] = guiCreateLabel(46, 149, 73, 28, "Team tag", false, teamsGUI.tab[1])
+	guiLabelSetVerticalAlign(teamsGUI.label[3], "center")
+	teamsGUI.teamtag = guiCreateEdit(145, 149, 74, 28, "", false, teamsGUI.tab[1])
+	guiSetProperty(teamsGUI.teamtag, "Disabled", "True")
+	teamsGUI.label[4] = guiCreateLabel(46, 187, 73, 28, "Team colour", false, teamsGUI.tab[1])
+	guiLabelSetVerticalAlign(teamsGUI.label[4], "center")
+	teamsGUI.teamcolour = guiCreateEdit(145, 187, 74, 28, "#FFFFFF", false, teamsGUI.tab[1])
+	guiSetProperty(teamsGUI.teamcolour, "Disabled", "True")
+	teamsGUI.teammsg = guiCreateEdit(145, 225, 228, 28, "", false, teamsGUI.tab[1])
+	guiSetProperty(teamsGUI.teammsg, "Disabled", "True")
+	teamsGUI.chkIgnore = guiCreateCheckBox(46, 335, 204, 29, " Don't show me team invites", false, false, teamsGUI.tab[1])
+	guiSetProperty(teamsGUI.chkIgnore, "Disabled", "True")
+	teamsGUI.gridMembers = guiCreateGridList(419, 107, 261, 202, false, teamsGUI.tab[1])
+	guiGridListAddColumn(teamsGUI.gridMembers, "Members", 0.9)
+	guiSetProperty(teamsGUI.gridMembers, "SortSettingEnabled", "False")
+	teamsGUI.btnInvite = guiCreateButton(272, 332, 114, 32, "/Invite player", false, teamsGUI.tab[1])
+	guiSetVisible(teamsGUI.btnInvite, false)
+	guiSetProperty(teamsGUI.btnInvite, "NormalTextColour", "FFAAAAAA")
+	teamsGUI.btnKick = guiCreateButton(419, 332, 114, 32, "Kick player", false, teamsGUI.tab[1])
+	guiSetVisible(teamsGUI.btnKick, false)
+	guiSetProperty(teamsGUI.btnKick, "NormalTextColour", "FFAAAAAA")
+	teamsGUI.btnLeave = guiCreateButton(566, 332, 114, 32, "Leave team", false, teamsGUI.tab[1])
+	guiSetVisible(teamsGUI.btnLeave, false)
+	guiSetProperty(teamsGUI.btnLeave, "NormalTextColour", "FFAAAAAA")
+	teamsGUI.label[5] = guiCreateLabel(46, 225, 83, 28, "Welcome msg", false, teamsGUI.tab[1])
+	guiLabelSetVerticalAlign(teamsGUI.label[5], "center")
 
-	GUIEditor.tab[2] = guiCreateTab("Teams", GUIEditor.tabpanel[1])
+	teamsGUI.tab[2] = guiCreateTab("Teams", teamsGUI.tabpanel[1])
 
-	GUIEditor.gridlist[1] = guiCreateGridList(48, 40, 608, 304, false, GUIEditor.tab[2])
-	guiGridListAddColumn(GUIEditor.gridlist[1], "Team", 0.5)
-	guiGridListAddColumn(GUIEditor.gridlist[1], "Member", 0.5)
-	
-	GUIEditor.tab[3] = guiCreateTab("Team Wars", GUIEditor.tabpanel[1])
-	
-	GUIEditor.label[6] = guiCreateLabel(46, 22, 128, 16, "Select maps, update 7", false, GUIEditor.tab[3])
-	guiSetFont(GUIEditor.label[6], "default-bold-small")
-	GUIEditor.label[7] = guiCreateLabel(46, 38, 256, 16, "Select maps to be played in a Team War: ", false, GUIEditor.tab[3])
-	GUIEditor.gridlist[2] = guiCreateGridList(48, 58, 256, 256, false, GUIEditor.tab[3])
-	guiGridListAddColumn(GUIEditor.gridlist[2], "Map", 0.5)
-	guiGridListAddColumn(GUIEditor.gridlist[2], "Author", 0.5)
-	guiGridListAddColumn(GUIEditor.gridlist[2], "resname", 0.5)
-	guiGridListSetSortingEnabled(GUIEditor.gridlist[2], false)
-	GUIEditor.gridlist[3] = guiCreateGridList(406, 58, 256, 256, false, GUIEditor.tab[3])
-	guiGridListAddColumn(GUIEditor.gridlist[3], "Map", 0.5)
-	guiGridListAddColumn(GUIEditor.gridlist[3], "Author", 0.5)
-	guiGridListAddColumn(GUIEditor.gridlist[3], "resname", 0.5)
-	guiGridListSetSortingEnabled(GUIEditor.gridlist[3], false)
-	GUIEditor.btnTWAdd = guiCreateButton(312, 154, 64, 24, "Add >", false, GUIEditor.tab[3])
-	guiSetProperty(GUIEditor.btnTWAdd, "NormalTextColour", "FFAAAAAA")
-	GUIEditor.btnTWRemove = guiCreateButton(334, 194, 64, 24, "< Remove", false, GUIEditor.tab[3])
-	guiSetProperty(GUIEditor.btnTWRemove, "NormalTextColour", "FFAAAAAA")
-	GUIEditor.label[8] = guiCreateLabel(56, 328, 40, 16, "Search:", false, GUIEditor.tab[3])
-	GUIEditor.edit[1] = guiCreateEdit(104, 324, 192, 24, "", false, GUIEditor.tab[3])
-	GUIEditor.btnTWSelect = guiCreateButton(128, 174, 96, 24, "Select maps", false, GUIEditor.tab[3])
-	guiSetProperty(GUIEditor.btnTWSelect, "NormalTextColour", "FFAAAAAA")
-	guiSetVisible(GUIEditor.gridlist[2], false)
-	guiSetVisible(GUIEditor.btnTWAdd, false)
-	guiSetVisible(GUIEditor.btnTWRemove, false)
-	guiSetVisible(GUIEditor.label[8], false)
-	guiSetVisible(GUIEditor.edit[1], false)
-	
-	-- GUIEditor end --
-	
-	guiSetVisible(GUIEditor.chkIgnore, false)
-	teamGUI = GUIEditor
-	addEventHandler('onClientGUIClick', GUIEditor.btnBuyTeam, buyTeam, false)
-	addEventHandler('onClientGUIClick', GUIEditor.btnUpdateTeam, updateTeam, false)
-	addEventHandler('onClientGUIClick', GUIEditor.btnKick, kickTeam, false)
-	addEventHandler('onClientGUIClick', GUIEditor.btnLeave, leaveTeam, false)
-	addEventHandler('onClientGUIClick', GUIEditor.btnInvite, inviteTeam, false)
-	addEventHandler("onClientGUIClick", GUIEditor.btnTWAdd, addMaps, false)
-	addEventHandler("onClientGUIClick", GUIEditor.btnTWRemove, removeMaps, false)
-	addEventHandler("onClientGUIClick", GUIEditor.btnTWSelect, selectMaps, false)
-	addEventHandler("onClientGUIChanged", GUIEditor.edit[1], handleSearches)
+	teamsGUI.gridlist[1] = guiCreateGridList(48, 40, 608, 304, false, teamsGUI.tab[2])
+	teamsGUI.teamCol = guiGridListAddColumn(teamsGUI.gridlist[1], "Team", 0.5)
+	teamsGUI.meemberCol = guiGridListAddColumn(teamsGUI.gridlist[1], "Member", 0.5)
+
+	teamsGUI.tab[3] = guiCreateTab("Team Wars", teamsGUI.tabpanel[1])
+
+	teamsGUI.label[6] = guiCreateLabel(46, 22, 128, 16, "Select maps, update 7", false, teamsGUI.tab[3])
+	guiSetFont(teamsGUI.label[6], "default-bold-small")
+	teamsGUI.label[7] = guiCreateLabel(46, 38, 256, 16, "Select maps to be played in a Team War: ", false, teamsGUI.tab[3])
+	teamsGUI.gridlist[2] = guiCreateGridList(48, 58, 256, 256, false, teamsGUI.tab[3])
+	guiGridListAddColumn(teamsGUI.gridlist[2], "Map", 0.5)
+	guiGridListAddColumn(teamsGUI.gridlist[2], "Author", 0.5)
+	guiGridListAddColumn(teamsGUI.gridlist[2], "resname", 0.5)
+	guiGridListSetSortingEnabled(teamsGUI.gridlist[2], false)
+	teamsGUI.gridlist[3] = guiCreateGridList(406, 58, 256, 256, false, teamsGUI.tab[3])
+	guiGridListAddColumn(teamsGUI.gridlist[3], "Map", 0.5)
+	guiGridListAddColumn(teamsGUI.gridlist[3], "Author", 0.5)
+	guiGridListAddColumn(teamsGUI.gridlist[3], "resname", 0.5)
+	guiGridListSetSortingEnabled(teamsGUI.gridlist[3], false)
+	teamsGUI.btnTWAdd = guiCreateButton(312, 154, 64, 24, "Add >", false, teamsGUI.tab[3])
+	guiSetProperty(teamsGUI.btnTWAdd, "NormalTextColour", "FFAAAAAA")
+	teamsGUI.btnTWRemove = guiCreateButton(334, 194, 64, 24, "< Remove", false, teamsGUI.tab[3])
+	guiSetProperty(teamsGUI.btnTWRemove, "NormalTextColour", "FFAAAAAA")
+	teamsGUI.label[8] = guiCreateLabel(56, 328, 40, 16, "Search:", false, teamsGUI.tab[3])
+	teamsGUI.edit[1] = guiCreateEdit(104, 324, 192, 24, "", false, teamsGUI.tab[3])
+	teamsGUI.btnTWSelect = guiCreateButton(128, 174, 96, 24, "Select maps", false, teamsGUI.tab[3])
+	guiSetProperty(teamsGUI.btnTWSelect, "NormalTextColour", "FFAAAAAA")
+	guiSetVisible(teamsGUI.gridlist[2], false)
+	guiSetVisible(teamsGUI.btnTWAdd, false)
+	guiSetVisible(teamsGUI.btnTWRemove, false)
+	guiSetVisible(teamsGUI.label[8], false)
+	guiSetVisible(teamsGUI.edit[1], false)
+
+	-- teamsGUI end --
+
+	guiSetVisible(teamsGUI.chkIgnore, false)
+	teamGUI = teamsGUI
+	addEventHandler('onClientGUIClick', teamsGUI.btnBuyTeam, buyTeam, false)
+	addEventHandler('onClientGUIClick', teamsGUI.btnUpdateTeam, updateTeam, false)
+	addEventHandler('onClientGUIClick', teamsGUI.btnKick, kickTeam, false)
+	addEventHandler('onClientGUIClick', teamsGUI.btnLeave, leaveTeam, false)
+	addEventHandler('onClientGUIClick', teamsGUI.btnInvite, inviteTeam, false)
+	addEventHandler("onClientGUIClick", teamsGUI.btnTWAdd, addMaps, false)
+	addEventHandler("onClientGUIClick", teamsGUI.btnTWRemove, removeMaps, false)
+	addEventHandler("onClientGUIClick", teamsGUI.btnTWSelect, selectMaps, false)
+	addEventHandler("onClientGUIChanged", teamsGUI.edit[1], handleSearches)
+	translateTeamsGUI()
+	addEventHandler("onClientPlayerLocaleChange", root, translateTeamsGUI)
 end
 addEvent('onShopInit', true)
 addEventHandler('onShopInit', root, onShopInit )
+
+function translateTeamsGUI()
+	guiSetText(teamTab, _.context("GCshop Teams Tab", "Teams"))
+	guiSetText(teamsGUI.tab[1], _("Your Team"))
+	guiSetText(teamsGUI.label[1], _("Create your own team! You will be able to set a team name, tag, color, welcome message and invite players to your team. Teams expire after 20/40/60 days, but everyone in the team can refresh the team duration. Clan owners can transfer ownership with /makeowner PlayerName with color code."))
+	guiSetText(teamsGUI.btnBuyTeam, _("Create team\n%s GC / %s days"):format(2750, 20))
+	guiSetText(teamsGUI.btnUpdateTeam, _("Save changes\n%s GC"):format(100))
+	guiSetText(teamsGUI.label[2], _("Team Name"))
+	guiSetText(teamsGUI.label[3], _("Team Tag"))
+	guiSetText(teamsGUI.label[4], _("Team Color"))
+	guiSetText(teamsGUI.chkIgnore, _("Don't show team invites"))
+	guiSetText(teamsGUI.btnInvite, _("/Invite player"))
+	guiSetText(teamsGUI.btnKick, _("Kick player"))
+	guiSetText(teamsGUI.btnLeave, _("Leave team"))
+	guiSetText(teamsGUI.label[5], _("Welcome message"))
+	guiGridListSetColumnTitle(teamsGUI.gridlist[1], teamsGUI.teamCol, _("Team"))
+	guiGridListSetColumnTitle(teamsGUI.gridlist[1], teamsGUI.meemberCol, _("Member"))
+	guiSetText(teamsGUI.tab[3], _("Team Wars"))
+	guiSetText(teamsGUI.label[6], _("Select maps"))
+	guiSetText(teamsGUI.label[7], _("Select maps to be played in a Team War:"))
+	guiSetText(teamsGUI.btnTWAdd, _("Add >"))
+	guiSetText(teamsGUI.btnTWRemove, _("< Remove"))
+	guiSetText(teamsGUI.btnTWSelect, _("Select maps"))
+end
+
 
 addEvent("teamLogin", true)
 addEventHandler("teamLogin", root, function()
@@ -140,11 +174,18 @@ addEventHandler("teamLogout", root, function()
 	guiSetVisible(teamGUI.btnKick, false)
 	guiGridListClear(teamGUI.gridMembers)
 	guiGridListClear(teamGUI.gridlist[1])
+	if teamsDataSet then
+		handleTeamData(cachedTeamsData.teams, cachedTeamsData.player, cachedTeamsData.t)
+	end
 end)
 
-addEvent("teamsData", true)
-addEventHandler("teamsData", root, function(teams, player, t)
-	-- Update teamlists
+
+function handleTeamData(teams, player, t)
+	teamsDataSet = true
+	cachedTeamsData.teams = teams
+	cachedTeamsData.player = player
+	cachedTeamsData.t = t
+
 	local g = teamGUI.gridlist[1]
 	local g2 = teamGUI.gridMembers
 	guiGridListClear(g)
@@ -157,7 +198,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 		end
 		if z.status == 1 then
 			i = guiGridListAddRow(g)
-			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name or 'NO NAME',"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (' (Owner) (' .. tostring(z.age) .. '/60 days left') or ''), false, false)
+			guiGridListSetItemText(g, i, 2, string.gsub(z.mta_name or 'UNKNOWN',"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (_(' (Owner) (%s/%s days left'):format(z.age, 60)) or ''), false, false)
 		end
 	end
 	if not t or player ~= localPlayer then return end
@@ -165,18 +206,18 @@ addEventHandler("teamsData", root, function(teams, player, t)
 	for r, z in ipairs(teams) do
 		if t and t.teamid == z.teamid and z.status == 1 then
 			i = guiGridListAddRow(g2)
-			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name or 'NO NAME',"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (' (Owner) (' .. tostring(z.age) .. '/60 days left') or ''), false, false)
+			guiGridListSetItemText(g2, i, 1, string.gsub(z.mta_name or 'UNKNOWN',"#%x%x%x%x%x%x","") .. (z.forumid == z.owner and (_(' (Owner) (%s/%s days left'):format(z.age, 60)) or ''), false, false)
 			guiGridListSetItemData(g2, i, 1, z.forumid, false, false)
 		end
 	end
 	if t.status == 1 then
-		guiSetText(teamGUI.btnBuyTeam, "Renew team\n2750 GC / 20 days")
+		guiSetText(teamGUI.btnBuyTeam, _("Renew team\n%s GC / %s days"):format(2750, 20))
 		if tonumber(t.age) == 60 then
 			guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "True")
 		else
 			guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "False")
 		end
-		
+
 		guiSetVisible(teamGUI.btnUpdateTeam, t.forumid == t.owner)
 		guiSetEnabled(teamGUI.teamname, t.forumid == t.owner)
 		guiSetEnabled(teamGUI.teamtag, t.forumid == t.owner)
@@ -186,14 +227,14 @@ addEventHandler("teamsData", root, function(teams, player, t)
 		guiSetText(teamGUI.teamtag, t.tag)
 		guiSetText(teamGUI.teammsg, t.message or '')
 		guiSetText(teamGUI.teamcolour, t.colour)
-		
-		guiSetText(teamGUI.btnLeave, "Leave team")
+
+		guiSetText(teamGUI.btnLeave, _("Leave team"))
 		guiSetVisible(teamGUI.btnLeave, true)
 		guiSetVisible(teamGUI.btnInvite, t.forumid == t.owner)
 		guiSetVisible(teamGUI.btnKick, t.forumid == t.owner)
 	else
-		guiSetText(teamGUI.btnBuyTeam, "Buy team\n2750 GC / 20 days")
-		
+		guiSetText(teamGUI.btnBuyTeam, _("Buy team\n%s GC / %s days"):format(2750, 20))
+
 		guiSetVisible(teamGUI.btnUpdateTeam, false)
 		guiSetEnabled(teamGUI.teamname, true)
 		guiSetEnabled(teamGUI.teamtag, true)
@@ -203,17 +244,19 @@ addEventHandler("teamsData", root, function(teams, player, t)
 		guiSetText(teamGUI.teamtag, '')
 		guiSetText(teamGUI.teammsg, '')
 		guiSetText(teamGUI.teamcolour, '#FFFFFF')
-		
+
 		if t.status == 0 then
 			guiSetVisible(teamGUI.btnLeave, true)
-			guiSetText(teamGUI.btnLeave, "Rejoin team")
+			guiSetText(teamGUI.btnLeave, _("Rejoin team"))
 		else
 			guiSetVisible(teamGUI.btnLeave, false)
 		end
 		guiSetVisible(teamGUI.btnInvite, false)
 		guiSetVisible(teamGUI.btnKick, false)
 	end
-end)
+end
+addEvent("teamsData", true)
+addEventHandler("teamsData", root, handleTeamData)
 
 -- Buying/extending team --
 function buyTeam (btn)
@@ -237,19 +280,19 @@ end
 
 function inviteTeam (btn)
 	--Create the grid list element
-	local playerWindow = guiCreateWindow ( 0.80, 0.10, 0.15, 0.60, "Team invite", true )
+	local playerWindow = guiCreateWindow ( 0.80, 0.10, 0.15, 0.60, _("Team invite"), true )
 	local playerList = guiCreateGridList ( 0.05, 0.05, 0.9, 0.55, true, playerWindow )
-	local inviteBtn = guiCreateButton(0.05, 0.60, .9, .15, "Invite", true, playerWindow)
-	local closeBtn = guiCreateButton(0.05, 0.80, .9, .15, "Close", true, playerWindow)
+	local inviteBtn = guiCreateButton(0.05, 0.60, .9, .15, _("Invite"), true, playerWindow)
+	local closeBtn = guiCreateButton(0.05, 0.80, .9, .15, _("Close"), true, playerWindow)
 	--Create a players column in the list
-	local column = guiGridListAddColumn( playerList, "Invite", 0.85 )
+	local column = guiGridListAddColumn( playerList, _("Invite"), 0.85 )
 	if ( column ) then --If the column has been created, fill it with players
 		for id, player in ipairs(getElementsByType("player")) do
 			local row = guiGridListAddRow ( playerList )
 			guiGridListSetItemText ( playerList, row, column, string.gsub(getPlayerName ( player ),"#%x%x%x%x%x%x",""), false, false )
 		end
 	end
-	addEventHandler('onClientGUIClick', inviteBtn, function() 
+	addEventHandler('onClientGUIClick', inviteBtn, function()
 		local r, c = guiGridListGetSelectedItem(playerList)
 		if r == -1 or c == -1 then return end
 		local name = guiGridListGetItemText(playerList, r, c)
@@ -265,12 +308,12 @@ end
 --------------------
 
 function updateTWInfo()
-	triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer) 
+	triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer)
 end
 addEventHandler('onShopInit', root, updateTWInfo)
 
 function selectMaps()
-	triggerServerEvent("gcshop_teams_fetchMaps_s", resourceRoot, localPlayer) 
+	triggerServerEvent("gcshop_teams_fetchMaps_s", resourceRoot, localPlayer)
 end
 
 function fetchMaps(t)
@@ -280,7 +323,7 @@ function fetchMaps(t)
 	guiSetVisible(teamGUI.btnTWRemove, true)
 	guiSetVisible(teamGUI.label[8], true)
 	guiSetVisible(teamGUI.edit[1], true)
-	
+
 	mapList = t
 	updateMaps(t)
 end
@@ -289,7 +332,7 @@ addEventHandler("gcshop_teams_fetchMaps_c",root,fetchMaps)
 
 function updateMaps(t)
 	guiGridListClear(teamGUI.gridlist[2])
-	
+
 	for a,b in ipairs(t) do
 		local row = guiGridListAddRow(teamGUI.gridlist[2])
 		guiGridListSetItemText(teamGUI.gridlist[2],row,1,tostring(b[1]),false,false)
@@ -315,7 +358,7 @@ function addMaps()
 	local resname = guiGridListGetItemText(teamGUI.gridlist[2], guiGridListGetSelectedItem(teamGUI.gridlist[2]), 3)
 	if resname then
 		triggerServerEvent("gcshop_teams_addMaps_s", resourceRoot, localPlayer, resname)
-		triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer) 
+		triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer)
 	end
 end
 
@@ -323,7 +366,7 @@ function removeMaps()
 	local resname = guiGridListGetItemText(teamGUI.gridlist[3], guiGridListGetSelectedItem(teamGUI.gridlist[3]), 3)
 	if resname then
 		triggerServerEvent("gcshop_teams_removeMaps_s", resourceRoot, localPlayer, resname)
-		triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer) 
+		triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer)
 	end
 end
 
@@ -336,7 +379,7 @@ function handleSearches(element)
 		searchQuery = guiGetText(teamGUI.edit[1])
 	end
 	if not list or not searchQuery then return end
-	
+
 	if #searchQuery == 0 then
 		rebuildGridLists(element, list)
 	else
@@ -352,16 +395,16 @@ end
 function searchTable(searchQuery,t)
     searchQuery = string.lower(tostring(searchQuery))
     if #searchQuery == 0 then return t end
-	
+
     local results = {}
     for a,b in ipairs(t) do
         local match = false
-		
+
 		for i=1,#b do
 			local f = string.find(string.lower( tostring(b[i]) ),searchQuery)
 			if type(f) == "number" then match = true end
 		end
-		
+
         if match then table.insert(results,b) end
     end
     return results

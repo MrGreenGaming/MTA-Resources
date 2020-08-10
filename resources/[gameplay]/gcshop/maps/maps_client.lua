@@ -27,11 +27,11 @@ function createNextmapWindow(tabPanel)
     guiCreateStaticImage ( 0.34, 0.225, 0.035, 0.05, "nextmap/search.png", true, tab.maps )
     tab.MapList = guiCreateGridList ( 0.03, 0.30, 0.94, 0.55, true, tab.maps )
     guiGridListSetSortingEnabled(tab.MapList, false)
-					  guiGridListAddColumn( tab.MapList, "Map Name", 0.45)
-					  guiGridListAddColumn( tab.MapList, "Author", 0.4)
-					  guiGridListAddColumn( tab.MapList, "Price", 0.2)
-					  guiGridListAddColumn( tab.MapList, "Resource Name", 1)
-					  guiGridListAddColumn( tab.MapList, "Gamemode", 0.5)
+		tab.listColName = guiGridListAddColumn( tab.MapList, "Map Name", 0.45)
+		tab.listColAuthor = guiGridListAddColumn( tab.MapList, "Author", 0.4)
+		tab.listColPrice = guiGridListAddColumn( tab.MapList, "Price", 0.2)
+		tab.listColResname = guiGridListAddColumn( tab.MapList, "Resource Name", 1)
+		tab.listColGamemode = guiGridListAddColumn( tab.MapList, "Gamemode", 0.5)
 
     tab.NextMap = guiCreateButton ( 0.49, 0.91, 0.30, 0.04, "Buy selected map", true, tab.maps )
     tab.RefreshList = guiCreateButton ( 0.03, 0.91, 0.35, 0.04, "Refresh list", true, tab.maps )
@@ -41,17 +41,17 @@ function createNextmapWindow(tabPanel)
 
 	tab.QueueList = guiCreateGridList (0.02, 0.04, 0.97, 0.92, true, tab.qmaps )
 	guiGridListSetSortingEnabled(tab.QueueList, false)
-                guiGridListAddColumn( tab.QueueList, "Priority", 0.15)
-                guiGridListAddColumn( tab.QueueList, "Map Name", 2)
-				
+		tab.listQueueColPriority = guiGridListAddColumn( tab.QueueList, "Priority", 0.15)
+		tab.listQueueColMapName = guiGridListAddColumn( tab.QueueList, "Map Name", 2)
+
         tab.label1 = guiCreateLabel(0.40, 0.05, 0.50, 0.11, "This is the Maps-Center. Here you can buy maps.", true, tab.maps)
         tab.label2 = guiCreateLabel(0.40, 0.13, 0.50, 0.12, "Select a map you like and click \"Buy selected map\"", true, tab.maps)
         tab.label3 = guiCreateLabel(0.40, 0.18, 0.50, 0.17, "The map will be added to the Server Queue, where all bought maps are stored until they're played", true, tab.maps)
-		
+
         guiLabelSetHorizontalAlign(tab.label3, "left", true)
         -- tab.label4 = guiCreateLabel(0.40, 0.28, 0.50, 0.13, "The queued maps will have priority against the usual server map cycler!", true, tab.maps)
         -- guiLabelSetHorizontalAlign(tab.label4, "left", true)
-		
+
 		tab.label5 = guiCreateLabel(0.03, 0.03, 0.30, 0.12, "The winner of the last map played\ngets "..tostring(lastWinnerDiscount).."% off!", true, tab.maps)
         guiLabelSetColor( tab.label5, 255, 0, 0 )
         guiSetFont( tab.label5, "default-bold-small" )
@@ -60,11 +60,35 @@ function createNextmapWindow(tabPanel)
         guiLabelSetColor( tab.viplabel, 255, 0, 0 )
         guiSetFont( tab.viplabel, "default-bold-small" )
         guiSetFont( tab.viplabel, "default-bold-small" )
-
+		translateMapsCenterGUI()
 	triggerServerEvent('refreshServerMaps', localPlayer)
 end
-
 addEventHandler('onShopInit', getResourceRootElement(), createNextmapWindow )
+
+function translateMapsCenterGUI()
+	guiSetText(tab.mainBuyPanel,_("Maps-Center"))
+	guiSetText(tab.maps,_("All Maps"))
+	guiSetText(tab.qmaps,_("Queued Maps"))
+
+	guiGridListSetColumnTitle(tab.MapList, tab.listColName, _("Map Name"))
+	guiGridListSetColumnTitle(tab.MapList, tab.listColAuthor,_("Author"))
+	guiGridListSetColumnTitle(tab.MapList, tab.listColPrice,_("Price"))
+	guiGridListSetColumnTitle(tab.MapList, tab.listColResname,_("Resource Name"))
+	guiGridListSetColumnTitle(tab.MapList, tab.listColGamemode,_("Gamemode"))
+
+	guiSetText(tab.NextMap,_("Buy selected map"))
+	guiSetText(tab.RefreshList,_("Refresh list"))
+
+	guiGridListSetColumnTitle(tab.QueueList, tab.listQueueColPriority,_("Priority"))
+	guiGridListSetColumnTitle(tab.QueueList, tab.listQueueColMapName,_("Map Name"))
+
+	guiSetText(tab.label1,_("This is the Maps-Center. Here you can buy maps."))
+	guiSetText(tab.label2,_("Select a map you like and click \"Buy selected map\""))
+	guiSetText(tab.label3,_("The map will be added to the Server Queue, where all bought maps are stored until they're played"))
+	guiSetText(tab.label5,_("The winner of the last map played\ngets %s %% off!"):format(tostring(lastWinnerDiscount)))
+	guiSetText(tab.viplabel,_("Purchase VIP to get a free map every day!"))
+end
+addEventHandler("onClientPlayerLocaleChange")
 
 function getGamemodePrice(gamemode)
 	return prices[gamemode] or PRICE
@@ -91,9 +115,9 @@ function loadMaps(gamemodeMapTable, queuedList)
 					end
 
 					guiGridListSetItemText ( tab.MapList, row, 1, map.name, false, false )
-					
+
 					guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
-					
+
 					guiGridListSetItemText ( tab.MapList, row, 4, map.resname, false, false )
 					guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
 
@@ -233,10 +257,10 @@ addEvent('onGCShopWinnerDiscount', true)
 addEventHandler('onGCShopWinnerDiscount', root, function()
 	if source == localPlayer then
 		guiLabelSetColor( tab.label5, 0, 255, 0 )
-		guiSetText(tab.label5, "Every map is "..lastWinnerDiscount.."% off\nbecause you have won the last map!" )
+		guiSetText(tab.label5, _("Every map is %s%% off\nbecause you have won the last map!"):format(lastWinnerDiscount) )
 	else
 		guiLabelSetColor( tab.label5, 255, 0, 0 )
-		guiSetText(tab.label5, "The winner of the last map played\ngets "..lastWinnerDiscount.."% off!" )
+		guiSetText(tab.label5, _("The winner of the last map played\ngets %s%% off!"):format(lastWinnerDiscount))
 	end
 end)
 
@@ -245,25 +269,25 @@ local countdownTimer = false
 addEvent('onVipFreeMapInfo', true)
 addEventHandler('onVipFreeMapInfo', root, function(canUse)
 	if source ~= localPlayer then return end
-		
+
 	if canUse == true then
 		isVipMap = true
 		guiLabelSetColor( tab.viplabel, 0, 255, 0 )
-		guiSetText(tab.viplabel, "Your next map will be free! (VIP)" )
+		guiSetText(tab.viplabel, _("Your next map will be free! (VIP)") )
 	else
 		isVipMap = false
 		guiLabelSetColor( tab.viplabel, 255, 0, 0 )
-		guiSetText(tab.viplabel, "You have used your free VIP map. \nYou will get another one tomorrow! (00:00 CET)" )
+		guiSetText(tab.viplabel, _("You have used your free VIP map. \nYou will get another one tomorrow! (00:00 CET)") )
 	end
 end)
 
 addEvent('onVipFreeMapLogOut', true)
 addEventHandler('onVipFreeMapLogOut', root, function()
 	if source ~= localPlayer then return end
-		
+
 	isVipMap = false
 	guiLabelSetColor( tab.viplabel, 255, 0, 0 )
-	guiSetText(tab.viplabel, "Purchase VIP to get a free map every day!" )
+	guiSetText(tab.viplabel, _("Purchase VIP to get a free map every day!") )
 
 end)
 
@@ -282,7 +306,7 @@ function var_dump(...)
 	local noNames = false
 	local indentation = "\t\t\t\t\t\t"
 	local depth = nil
- 
+
 	local name = nil
 	local output = {}
 	for k,v in ipairs(arg) do
@@ -314,7 +338,7 @@ function var_dump(...)
 			else
 				name = ""
 			end
- 
+
 			local o = ""
 			if type(v) == "string" then
 				table.insert(output,name..type(v).."("..v:len()..") \""..v.."\"")
@@ -343,7 +367,7 @@ function var_dump(...)
 						end
 						local keyString, keyTable = var_dump(newModifiers,key)
 						local valueString, valueTable = var_dump(newModifiers,value)
- 
+
 						if #keyTable == 1 and #valueTable == 1 then
 							table.insert(output,indentation.."["..keyString.."]\t=>\t"..valueString)
 						elseif #keyTable == 1 then

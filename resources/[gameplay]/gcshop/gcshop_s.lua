@@ -27,9 +27,9 @@ addEventHandler('onShopInit', root, function()
 			triggerEvent( 'onGCShopLogout', source )
 		end
 		--addEventHandler("onPlayerLogin" , client, mtaLogin )
-		--addEventHandler("onPlayerLogout", client, mtaLogout)		
+		--addEventHandler("onPlayerLogout", client, mtaLogout)
 		addEventHandler("onGCLogin" , client, gcLogin )
-		addEventHandler("onGCLogout", client, gcLogout)		
+		addEventHandler("onGCLogout", client, gcLogout)
 end)
 
 
@@ -42,24 +42,24 @@ function gcshopBuyItem ( player, price, itemText )
 	price = tonumber(price)
 	itemText = itemText or ''
 	if not exports.gc:isPlayerLoggedInGC( player ) then
-		outputChatBox('You\'re not logged into a Green-Coins account!', player, 255, 0, 0 )
+		outputChatBox(_.For(player, "You're not logged in to a Green-Coins account!"), player, 255, 0, 0 )
 		return
 	elseif not exports.gc:getPlayerGreencoins( player ) then
-		outputChatBox('Your Green-Coins account is bugged! Please do a /reconnect and try again', player, 255, 0, 0 )
+		outputChatBox(_.For(player, "There's a problem with your Green-Coins account! Please /reconnect and try again"), player, 255, 0, 0 )
 		return
 	elseif (not price) or (exports.gc:getPlayerGreencoins( player ) - price) < 0 then
-		outputChatBox('You don\'t have enough Green-Coins to buy this!', player, 255, 0, 0 )
+		outputChatBox(_.For(player, "You don't have enough Green-Coins to buy this!"), player, 255, 0, 0 )
 		return
 	end
-	
+
 	local amount1 = exports.gc:getPlayerGreencoins( player )
 	local check = exports.gc:addPlayerGreencoins( player, - price )
 	local amount2 = exports.gc:getPlayerGreencoins( player )
 	local name, acc, forumid = getPlayerName(player), (isGuestAccount(getPlayerAccount(player)) and '') or getAccountName(getPlayerAccount(player)), tostring(exports.gc:getPlayerForumID( player ))
 	local serial, email = getPlayerSerial (player),  tostring(exports.gc:getPlayerGreencoinsLogin( player ) )
-	
+
 	pcall(addToLog, 'PURCHASE ' .. itemText .. ' : ' .. tostring(amount1) .. '-' .. tostring(price) .. '=' .. tostring(amount2) .. '(' .. tostring(check) .. ') - ' .. name ..'/'.. acc ..'/'.. forumid ..'/'.. serial ..'/'.. email)
-	
+
 	return check and ( (amount1 - price) == amount2), not ( (amount1 - price) == amount2)
 end
 
@@ -94,12 +94,6 @@ addCommandHandler ( "addToLog", function(p, c, text) outputChatBox(tostring(addT
 
 addEvent'shopStarted'
 function onStart()
-	if isTimer(adTimer) then killTimer(adTimer) end
-	adTimer = setTimer(function() 
-	exports.messages:outputGameMessage("Want some more GreenCoins?", root, 3, 255, 255, 255, true)
-	setTimer(function() exports.messages:outputGameMessage("Then visit: https://mrgreengaming.com/greencoins/donate", root, 2.4, 50, 205, 50, true) end, 1000, 1)
-	end, 2700000, 0)
-	
 	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 	addToLog ( "\r\n\r\n****** GCSHOP LOG OPENED - ".. getRealDateTimeString(getRealTime()) .." ******\r\n\r\n" )
 	if not handlerConnect then
@@ -109,7 +103,6 @@ function onStart()
 		-- startUpFetch()
 	end
 
-	
 	addToLog ( 'Shop started' )
 	triggerEvent('shopStarted', resourceRoot)
 end

@@ -16,7 +16,7 @@ addEventHandler("onGCShopLogin", root, function()
     local fid = exports.gc:getPlayerForumID(source)
     local player = source
 	dbQuery(
-        function(qh) 
+        function(qh)
             local result = dbPoll(qh, 0)
             local pName = getPlayerName(player)
             if #result == 0 then
@@ -27,11 +27,11 @@ addEventHandler("onGCShopLogin", root, function()
                     dbExec(handlerConnect, [[UPDATE gc_nickcache SET name=? WHERE forumid=?]], pName, fid)
                 end
             end
-            
+
             triggerClientEvent(player, "teamLogin", resourceRoot)
             checkPlayerTeam(player, true)
-        end, 
-    handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], fid)            
+        end,
+    handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], fid)
 end)
 
 addEventHandler("onGCShopLogout", root, function()
@@ -46,35 +46,35 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
     local forumID = tonumber(exports.gc:getPlayerForumID(player))
     local r = playerteams[player]
     if (not forumID) then
-        return outputChatBox('You\'re not logged into a Green-Coins account!', player, 255, 0, 0)
+        return outputChatBox(_.For(player, "You're not logged in!"), player, 255, 0, 0)
         -- Check if there are no previous teams in the last 30 days
     elseif r and r.status ~= 1 and (getRealTime().timestamp - r.join_timestamp) < duration then
-        return outputChatBox('[TEAMS] You were in a team less than 30 days ago. Wait before creating another team', player, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(player, 'You were in a team less than %s days ago. Wait before creating another team'):format(30), player, 0, 255, 0)
         -- Check if it's renewing a team
     elseif r and r.status == 1 then
         if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255 * 255 * 255)) end
         if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
 
         if type(teamname) ~= 'string' or #teamname < 3 then
-            outputChatBox('Not a valid teamname', player, 255, 0, 0)
+            outputChatBox(_.For(player, 'Not a valid team name'), player, 255, 0, 0)
             return
         elseif type(teamtag) ~= 'string' or #teamtag < 3 then
-            outputChatBox('Not a valid teamtag', player, 255, 0, 0)
+            outputChatBox(_.For(player, 'Not a valid team tag'), player, 255, 0, 0)
             return
         elseif type(teamcolour) ~= 'string' or not getColorFromString(teamcolour) then
-            outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
+            outputChatBox(_.For(player, 'Not a valid team color'), player, 255, 0, 0)
             return
         end
-				
+
 		-- Checking team name for illegal characters
 		for i=1,string.len(teamname) do
 			local char = string.sub(teamname, i, i)
 			if not string.find(team_allowedcharacters, char) then
-				outputChatBox('Team name contains illegal characters!', player, 255, 0, 0)
+				outputChatBox(_.For(player, 'Team name contains illegal characters!'), player, 255, 0, 0)
 				return
 			end
 		end
-		
+
         local result, error = gcshopBuyItem(player, team_price, 'Team renew: ' .. tostring(r.teamid))
         if result == true then
             local added
@@ -91,7 +91,7 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
             return
         end
         if error then
-            outputChatBox('An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0)
+            outputChatBox(_.For(player, 'An error occured, try reconnecting and notify staff if you lost GC!'), player, 255, 0, 0)
             addToLog('Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team renew: ' .. tostring(r.teamid) .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
         end
         -- Buying a new team
@@ -101,21 +101,21 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
         if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
 
         if type(teamname) ~= 'string' or #teamname < 3 then
-            outputChatBox('Not a valid teamname', player, 255, 0, 0)
+            outputChatBox(_.For(player, 'Not a valid team name'), player, 255, 0, 0)
             return
         elseif type(teamtag) ~= 'string' or #teamtag < 3 then
-            outputChatBox('Not a valid teamtag', player, 255, 0, 0)
+            outputChatBox(_.For(player, 'Not a valid team tag'), player, 255, 0, 0)
             return
         elseif type(teamcolour) ~= 'string' or not getColorFromString(teamcolour) then
-            outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
+            outputChatBox(_.For(player, 'Not a valid team color'), player, 255, 0, 0)
             return
         end
-		
+
 		-- Checking team name for illegal characters
 		for i=1,string.len(teamname) do
 			local char = string.sub(teamname, i, i)
 			if not string.find(team_allowedcharacters, char) then
-				outputChatBox('Team name contains illegal characters!', player, 255, 0, 0)
+				outputChatBox(_.For( player, 'Team name contains illegal characters!'), player, 255, 0, 0)
 				return
 			end
 		end
@@ -124,12 +124,12 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
         if result == true then
             local added = addTeamToDatabase(forumID, teamname, teamtag, teamcolour, teammsg)
             addToLog('"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team: ' .. table.concat({ teamname, teamtag, teamcolour, teammsg }, ', '))
-            outputChatBox('Team \"' .. teamname .. '\" (' .. tostring(teamtag) .. ') bought.', player, 0, 255, 0)
+            outputChatBox(_.For(player, 'Team "%s" (%s) bought.'):format(teamname, teamtag), player, 0, 255, 0)
             checkPlayerTeam(player)
             return
         end
         if error then
-            outputChatBox('An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0)
+            outputChatBox(_.For(player, 'An error occured, try reconnecting and notify staff if you lost GC!'), player, 255, 0, 0)
             addToLog('Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team: ' .. table.concat({ teamname, teamtag, teamcolour, teammsg }, ', ') .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
         end
     end
@@ -141,10 +141,10 @@ addEventHandler("updateTeam", resourceRoot, function(teamname, teamtag, teamcolo
     local forumID = tonumber(exports.gc:getPlayerForumID(player))
     local r = playerteams[player]
     if (not forumID) then
-        return outputChatBox('You\'re not logged into a Green-Coins account!', player, 255, 0, 0)
+        return outputChatBox(_.For(player, "You're not logged in!"), player, 255, 0, 0)
         -- Check if player is the owner
     elseif r and r.owner ~= forumID then
-        return outputChatBox('[TEAMS] Only the owner of the team can update it!', player, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(player, 'Only the owner of the team can update it!'), player, 0, 255, 0)
     else
         if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255 * 255 * 255)) end
         if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
@@ -159,30 +159,30 @@ addEventHandler("updateTeam", resourceRoot, function(teamname, teamtag, teamcolo
             outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
             return
         end
-				
+
 		-- Checking team name for illegal characters
 		for i=1,string.len(teamname) do
 			local char = string.sub(teamname, i, i)
 			if not string.find(team_allowedcharacters, char) then
-				outputChatBox('Team name contains illegal characters!', player, 255, 0, 0)
+				outputChatBox(_.For(player, 'Team name contains illegal characters!'), player, 255, 0, 0)
 				return
 			end
 		end
-		
+
         local result, error = gcshopBuyItem(player, team_update_price, 'Team update: ' .. tostring(r.teamid))
         if result == true then
             local added
 	    added = dbExec(handlerConnect, [[UPDATE `team` SET `name`=?, `tag`=?, `colour`=?, `message`=? WHERE `teamid`=?]], teamname, teamtag, teamcolour, teammsg, r.teamid)
 	    setTeamName(teams[r.teamid], teamtag .. ' ' .. teamname)
 	    setTeamColor(teams[r.teamid], getColorFromString(teamcolour))
-            
+
             addToLog('"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team update: ' .. tostring(r.teamid))
             outputChatBox('Team updated.', player, 0, 255, 0)
             checkPlayerTeam(player)
             return
         end
         if error then
-            outputChatBox('An error occured, try reconnecting and notify an admin if you lost GC!', player, 255, 0, 0)
+            outputChatBox(_.For(player, 'An error occured, try reconnecting and notify staff if you lost GC!'), player, 255, 0, 0)
             addToLog('Error: "' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team update: ' .. tostring(r.teamid) .. ' Result=' .. tostring(result) .. ' Error=' .. tostring(error))
         end
     end
@@ -213,7 +213,7 @@ function sendClientData(nicks, res, player, r)
 	local forumNameTable = {}
 	for i, row in ipairs(result) do
 		fid = row.forumid
-		
+
 		if nicks then
 			for j, ro in ipairs(nicks) do
 				if row.forumid == ro.forumid then
@@ -223,13 +223,13 @@ function sendClientData(nicks, res, player, r)
 				end
 			end
 		end
-		
+
 		if not c then
 			table.insert(forumNameTable, {userId=fid})
 		end
 		c = false
 	end
-	
+
 	if #forumNameTable > 0 then
 		exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, player, 'getForumDetails')
 	else
@@ -238,7 +238,7 @@ function sendClientData(nicks, res, player, r)
 end
 
 addEvent('getForumDetails')
-addEventHandler('getForumDetails', root, 
+addEventHandler('getForumDetails', root,
 function(resp, res, r, player)
 	local result = res
 	if not resp then
@@ -285,7 +285,7 @@ function checkPlayerTeam2(qh, player, bLogin)
         r.age = string.format("%.2f", age / (24 * 60 * 60))
         outputConsole('[TEAMS] Team days left: ' .. r.age, player)
     end
-	
+
 	dbQuery(
         function(qh)
             local nicks = dbPoll(qh, 0)
@@ -305,7 +305,7 @@ function checkPlayerTeam2(qh, player, bLogin)
             outputConsole('[TEAMS] Team days left: ' .. r.age, player)
             if age < 0 then
                 if bLogin then
-                    outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
+                    outputChatBox('[TEAMS] ' .. _.For(player, 'Your %s days team has expired, go to the gcshop to renew it'):format(30), player, 0, 255, 0)
                 end
                 return
             end
@@ -332,7 +332,7 @@ function checkPlayerTeam2(qh, player, bLogin)
             if r.message and bLogin then
                 outputChatBox('#00FF00[TEAMS] ' .. r.message, player, tr, tg, tb, true)
             end
-        end    
+        end
     ,handlerConnect, [[SELECT * FROM gc_nickcache]])
 end
 
@@ -383,21 +383,21 @@ function invite(sender, c, playername)
     -- Check if the player exists and is logged in
     local player = getPlayerFromName_(playername)
     if not player then
-        return outputChatBox('[TEAMS] Could not find ' .. tostring(playername) .. ', please type the full nickname', sender, 0, 255, 0)
+        return outputChatBox("[TEAMS] " .. _.For(sender, 'Could not find %s, please type the full nickname'):format(playername), sender, 0, 255, 0)
     elseif not tonumber(exports.gc:getPlayerForumID(player)) then
-        return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not logged in to GC', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, '%s is not logged in'):format(playername), sender, 0, 255, 0)
         -- Check if the sender is the owner and if the player can join the team
     elseif not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) then
-        return outputChatBox('[TEAMS] Only team owners can send invites!', sender, 255, 0, 0)
+        return outputChatBox("[TEAMS] "  .. _.For(sender, 'Only team owners can send invites!'), sender, 255, 0, 0)
     elseif playerteams[player] and playerteams[sender].status ~= 1 and playerteams[player].teamid == playerteams[sender].teamid then
-        return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is already in your team', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, '%s is already in your team'):format(playername), sender, 0, 255, 0)
     elseif playerteams[player] and playerteams[player].teamid ~= playerteams[sender].teamid and (getRealTime().timestamp - playerteams[player].join_timestamp) < duration then
-        return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is or has been in a team less than 30 days ago and can\'t join other teams', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' ..  _.For(sender, "%s is or has been in a team less than %s days ago and can't join other teams"):format(playername, 30), sender, 0, 255, 0)
     end
 
-    outputChatBox('[TEAMS] You invited ' .. getPlayerName(player), sender, 0, 255, 0)
-    outputChatBox('[TEAMS] ' .. getPlayerName(sender) .. ' has sent you an invite to join his team: ' .. tostring(playerteams[sender].name), player, 0, 255, 0)
-    outputChatBox('[TEAMS] Type /accept to join his team', player, 0, 255, 0)
+    outputChatBox('[TEAMS] ' .. _.For(sender, 'You invited %s'):format(getPlayerName(player)), sender, 0, 255, 0)
+    outputChatBox('[TEAMS] ' .. _.For(player, '%s has sent you an invite to join his team: %s'):format(getPlayerName(sender), playerteams[sender].name), player, 0, 255, 0)
+    outputChatBox('[TEAMS] ' .. _.For(player, 'Type /accept to join his team'), player, 0, 255, 0)
     invites[player] = { team = playerteams[sender], sender = sender }
 end
 
@@ -406,16 +406,16 @@ addCommandHandler('invite', invite)
 function accept(player)
     local forumID = tonumber(exports.gc:getPlayerForumID(player))
     if not invites[player] then
-        return outputChatBox('[TEAMS] You are not invited to any teams', player, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(player, 'You are not invited to any teams'), player, 0, 255, 0)
     elseif not forumID then
-        return outputChatBox('[TEAMS] You are not logged in to GreenCoins', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(player, 'You are not logged in!'), sender, 0, 255, 0)
         -- elseif playerteams[player] and (getRealTime().timestamp - playerteams[player].join_timestamp) < duration then
         -- return outputChatBox('[TEAMS] You were in a team less than 30 days ago. Wait before joining another team', sender, 0,255,0)
     end
 
-    outputChatBox('[TEAMS] You accepted the invite and joined the team ' .. tostring(invites[player].team.name), player, 202, 255, 112)
+    outputChatBox('[TEAMS] ' .. _.For(player, 'You accepted the invite and joined team: %s'):format(invites[player].team.name), player, 202, 255, 112)
     if isElement(invites[player].sender) then
-        outputChatBox('[TEAMS] ' .. getPlayerName(player) .. ' accepted the invite', invites[player].sender, 202, 255, 112)
+        outputChatBox('[TEAMS] ' .. _.For(invites[player].sender, '%s accepted the invite'):format(getPlayerName(player)), invites[player].sender, 202, 255, 112)
     end
     addPlayerToTeamDatabase(forumID, invites[player].team.teamid)
     checkPlayerTeam(player)
@@ -427,12 +427,12 @@ addCommandHandler('accept', accept)
 function leave(player)
     local forumID = tonumber(exports.gc:getPlayerForumID(player))
     if not forumID then
-        return outputChatBox('[TEAMS] You are not logged in to GC', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, 'You are not logged in!'), sender, 0, 255, 0)
     elseif playerteams[player].status ~= 1 then
-        return outputChatBox('[TEAMS] You are not logged in a team', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, 'You are not in a team'), sender, 0, 255, 0)
     end
 
-    outputChatBox('[TEAMS] You left your team', player, 0, 255, 0)
+    outputChatBox('[TEAMS] ' .. _.For(player, 'You left your team'), player, 0, 255, 0)
     dbExec(handlerConnect, [[UPDATE `team_members` SET `status`=0 WHERE `forumid`=?]], forumID)
     checkPlayerTeam(player)
 end
@@ -442,12 +442,12 @@ addCommandHandler('leave', leave)
 function rejoin(player)
     local forumID = tonumber(exports.gc:getPlayerForumID(player))
     if not forumID then
-        return outputChatBox('[TEAMS] You are not logged in to GC', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, 'You are not logged in!'), sender, 0, 255, 0)
     elseif playerteams[player].status ~= 0 then
-        return outputChatBox('[TEAMS] You can\' rejoin your team', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, 'You can\' rejoin your team'), sender, 0, 255, 0)
     end
 
-    outputChatBox('[TEAMS] You rejoined your team', player, 0, 255, 0)
+    outputChatBox('[TEAMS] ' .. _.For(player, 'You rejoined your team'), player, 0, 255, 0)
     dbExec(handlerConnect, [[UPDATE `team_members` SET `status`=1, `join_timestamp`=? WHERE `forumid`=? AND `status`=0]], getRealTime().timestamp, forumID)
     checkPlayerTeam(player)
 end
@@ -461,20 +461,20 @@ function makeowner(sender, c, playername)
     -- Check if the player exists and is logged in
     local player = getPlayerFromName_(playername)
     if not player then
-        return outputChatBox('[TEAMS] Could not find ' .. tostring(playername) .. ', please type the full nickname', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, 'Could not find %s, please type the full nickname'):format(playername), sender, 0, 255, 0)
     elseif not tonumber(exports.gc:getPlayerForumID(player)) then
-        return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not logged in to GC', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, '%s is not logged in'):format(playername), sender, 0, 255, 0)
         -- Check if the sender is the owner and if the player can join the team
     elseif not ((playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].owner == ownerid) or ((not isGuestAccount(getPlayerAccount(sender))) and isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(sender)), aclGetGroup("ServerManager")))) then
-        return outputChatBox('[TEAMS] Only team owners can do this!', sender, 255, 0, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, 'Only team owners can do this!'), sender, 255, 0, 0)
     elseif playerteams[player] and (playerteams[player].status ~= 1 or playerteams[player].teamid ~= playerteams[sender].teamid) then
-        return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not in your team', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, '%s is not in your team'):format(playername), sender, 0, 255, 0)
     end
 
     dbExec(handlerConnect, [[UPDATE `team` SET `owner`=? WHERE `teamid`=?]], exports.gc:getPlayerForumID(player), playerteams[sender].teamid)
     for k, r in pairs(playerteams) do
         if r.teamid == playerteams[sender].teamid then
-            outputChatBox('[TEAMS] ' .. getPlayerName(sender) .. ' made ' .. getPlayerName(player) .. ' the new team owner', k, 0, 255, 0)
+            outputChatBox('[TEAMS] ' .. _.For(k ,'%s made %s the new team owner'):format(getPlayerName(sender), getPlayerName(player)), k, 0, 255, 0)
             checkPlayerTeam(k)
         end
     end
@@ -489,13 +489,13 @@ function teamkick(sender, c, forumid)
 
     -- Check if the sender is the owner and if the player can join the team
     if not (playerteams[sender] and playerteams[sender].status == 1 and playerteams[sender].forumid == ownerid) then
-        return outputChatBox('[TEAMS] Only team owners can do this!', sender, 255, 0, 0)
+        return outputChatBox('[TEAMS] ' .. _.For(sender, 'Only team owners can do this!'), sender, 255, 0, 0)
     end
 
     dbExec(handlerConnect, [[UPDATE `team_members` SET `status`=-1 WHERE `forumid`=? AND `teamid`=?]], forumid, playerteams[sender].teamid)
     for k, r in pairs(playerteams) do
         if r.teamid == playerteams[sender].teamid then
-            outputChatBox('[TEAMS] ' .. getPlayerName(sender) .. ' kicked ' .. forumid .. ' from the team', k, 0, 255, 0)
+            outputChatBox('[TEAMS] ' .. _.For(k, '%s kicked %s from the team'):format(getPlayerName(sender), forumid), k, 0, 255, 0)
             checkPlayerTeam(k)
         end
     end

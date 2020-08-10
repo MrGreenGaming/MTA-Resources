@@ -8,8 +8,8 @@ function getLockedNicks(forumID)
 	local player = source
 	-- Get all locked nicks
 	local nameQuery = dbQuery(
-		function(nameQuery) 
-			local nameResult = dbPoll(nameQuery,0) 
+		function(nameQuery)
+			local nameResult = dbPoll(nameQuery,0)
 
 			local theNames = {}
 			if #nameResult > 0 then
@@ -20,7 +20,7 @@ function getLockedNicks(forumID)
 
 			-- Get amount of locknick slots
 			dbQuery(
-				function(amountQuery) 
+				function(amountQuery)
 					local amountResult = dbPoll(amountQuery,0)
 
 					local locknickAmount = 3
@@ -32,7 +32,7 @@ function getLockedNicks(forumID)
 						locknickAmount = tonumber(amountResult[1].amount)
 					end
 					triggerClientEvent(player,"serverSendLockedNickInfo",player,theNames,locknickAmount)
-				end, 
+				end,
 			handlerConnect,"SELECT amount FROM gc_nickprotection_amount WHERE forumID=?",forumID)
 		end,
 	handlerConnect,"SELECT pNick FROM gc_nickprotection WHERE forumID=?",theID)
@@ -49,12 +49,12 @@ function handleAddRemoveNicks(nick,addRemoveBool)
 	if addRemoveBool == true then -- ADD
 
 		local action = protectNick(theID, __safeString(nick))
-		if type(action) == "string" then 
-			outputChatBox(action, client, 255, 0, 0)			
+		if type(action) == "string" then
+			outputChatBox(action, client, 255, 0, 0)
 		elseif action == false then
-			outputChatBox('Failed to lock '..nick..'.', client, 255, 0, 0)
+			outputChatBox(_.For(client, 'Failed to lock name: %s.'):format(nick), client, 255, 0, 0)
 		elseif action == true then
-			outputChatBox(nick..' has succesfully been added to your locked nicks and is now protected.', client, 0, 255, 0)
+			outputChatBox(_.For(client, '%s has succesfully been added to your locked names and is now protected.'):format(nick), client, 0, 255, 0)
 			triggerClientEvent(client,"onServerSendLocknickResults",client,nick,"add")
 		end
 
@@ -62,11 +62,11 @@ function handleAddRemoveNicks(nick,addRemoveBool)
 	elseif addRemoveBool == false then -- REMOVE
 		local action = removeNick(theID,nick)
 
-		if action then 
-			outputChatBox(nick..' has succesfully been removed from your locked nicks.', client, 0, 255, 0)
+		if action then
+			outputChatBox(_.For(client, '%s has succesfully been removed from your locked names.'):format(nick), client, 0, 255, 0)
 			triggerClientEvent(client,"onServerSendLocknickResults",client,nick,"remove")
 		else
-			outputChatBox('Failed to unlock '..nick..'.', client, 255, 0, 0)
+			outputChatBox(_.For(client, 'Failed to unlock name: %s.'):format(nick), client, 255, 0, 0)
 		end
 	end
 end
@@ -83,19 +83,19 @@ end
 
 function isNickProtected(nick)
 	local cmd = ''
-	local query 
+	local query
 	if handlerConnect then
 		cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE LOWER(pNick) = ?"
 		query = dbQuery(handlerConnect, cmd, string.lower(nick))
 		if not query then return false end
 		local sql = dbPoll(query, -1)
 		if not sql then return false end
-		if #sql == 0 then 
+		if #sql == 0 then
 			return false
 		else
 			return true
 		end
-	end	
+	end
 end
 
 function protectNick(id, name)
@@ -104,7 +104,7 @@ function protectNick(id, name)
 	end
 	--local sql = executeSQLQuery("SELECT pNick, accountID FROM gcProtectedNames WHERE accountID = '"..id.."'")
 	local cmd = ''
-	local query 
+	local query
 	if handlerConnect then
 		cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE forumId = ?"
 		query = dbQuery(handlerConnect, cmd, id)
@@ -112,13 +112,13 @@ function protectNick(id, name)
 		if not query then return false end
 		local sql = dbPoll(query, -1)
 		if not sql then return false end
-		
+
 
 		cmd = "INSERT INTO gc_nickprotection VALUES(?,?)"
 		dbExec(handlerConnect, cmd, name, id)
-		return true	
+		return true
 
-	end	
+	end
 end
 
 function removeNick(id,nick)
@@ -127,7 +127,7 @@ function removeNick(id,nick)
 
 	local id = tostring(id)
 	local cmd = ''
-	local query 
+	local query
 	if handlerConnect then
 		cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE pNick = ? AND forumId = ?"
 		query = dbQuery(handlerConnect, cmd, nick,id)
@@ -139,7 +139,7 @@ function removeNick(id,nick)
 
 			cmd = "DELETE FROM gc_nickprotection WHERE pNick = ? AND forumId = ?"
 			dbExec(handlerConnect, cmd, nick,id)
-			return true	
+			return true
 		end
 	end
 
@@ -151,7 +151,7 @@ local pLockSlotPrice = 750
 function PlayerBuyLockedNickSlot()
 	local player = client
 	if getElementType(player) ~= "player" then return end
-	if not exports.gc:isPlayerLoggedInGC(player) then outputChatBox("Please log in to GC before buying",player,255,0,0) return end
+	if not exports.gc:isPlayerLoggedInGC(player) then outputChatBox(_.For(player, "Please log in before buying this perk"),player,255,0,0) return end
 
 	local gc = exports.gc:getPlayerGreencoins(player)
 	if gc > pLockSlotPrice then
