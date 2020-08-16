@@ -501,6 +501,26 @@ hornsTable = {
     [497] = "Dummy",
     [498] = "+18",
     [499] = "Taksim",
+    [500] = " Sönmez Beri bak beri beri",
+    [501] = " Sönmez Amıcık",
+    [502] = "Sönmez Dino dino dino gel",
+    [503] = "Sönmez Puh",
+    [504] = "Nokia Ringtone Arabic",
+    [505] = "Dino and Frog dancing",
+    [506] = "Evil seagul laugh",
+    [507] = "Fox laughing",
+    [508] = "Want free bucks?",
+    [509] = "GET OUTTA HERE MAN SHIET",
+    [510] = "ight imma fuhh witchu",
+    [511] = "Ooooooohh japanese chief",
+    [512] = "ORA ORA ORA ORA ORA",
+    [513] = "Taste the rainbow motherf",
+    [514] = "YOU EAT ALL MY BEANZ N?",
+    [515] = "Aww let me play a sad song",
+    [516] = "друг",
+    [517] = "OMAE WA MOU, SHINDEIRU",
+    [518] = "Nope TF2 Engineer",
+
     
     
  
