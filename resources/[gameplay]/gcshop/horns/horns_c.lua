@@ -501,8 +501,8 @@ hornsTable = {
     [497] = "Dummy",
     [498] = "+18",
     [499] = "Taksim",
-    [500] = " Sönmez Beri bak beri beri",
-    [501] = " Sönmez Amıcık",
+    [500] = "Sönmez Beri bak beri beri",
+    [501] = "Sönmez Amıcık",
     [502] = "Sönmez Dino dino dino gel",
     [503] = "Sönmez Puh",
     [504] = "Nokia Ringtone Arabic",
@@ -520,6 +520,16 @@ hornsTable = {
     [516] = "друг",
     [517] = "OMAE WA MOU, SHINDEIRU",
     [518] = "Nope TF2 Engineer",
+    [519] = " Aaaa kikikiki",
+    [520] = " Be gone THOT",
+    [521] = "CS Ok lets go",
+    [522] = "CS Enemy spotted",
+    [523] = "Kuzey Geri bas lan",
+    [524] = "Kuzey Bekle ecelin geliyo",
+    [525] = "Dınbıllan dayı",
+    [526] = "Neyi başaramadın amk",
+    [527] = "Todays episode of how f**ked up",
+    [528] = "Dj Dikkat Beni vurmak için",
 
     
     
