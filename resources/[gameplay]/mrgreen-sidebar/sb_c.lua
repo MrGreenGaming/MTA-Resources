@@ -5,7 +5,7 @@ scaleH = screenH/1080
 
 
 sidebarLeft = screenW * 0
-_sidebarLeft = sidebarLeft 
+_sidebarLeft = sidebarLeft
 
 
 sidebarTop = screenH * 0
@@ -17,7 +17,7 @@ sidebarEaseDuration = 80 -- MS of easing speed
 
 menuItemStartY = screenH * 0.2 --250
 menuItemHeight = screenH * 0.05--65
-menuItemTextScale = 1 * scaleW 
+menuItemTextScale = 1 * scaleW
 menuItemIconSpace = screenW * 0.032
 
 menuItemOddColor = tocolor(0,0,0,30)
@@ -66,19 +66,26 @@ usernameFont = "bankgothic"
 
 -- setPlayerHudComponentVisible( "all", false )
 -- Menu Items --
-MenuItems = { -- Name, Icon
-	{name = "Server Info", event = "sb_showServerInfo"},
-	{name = "My Account", event = "sb_showMyAccount"},
-	{name = "GC Shop", event = "sb_showGCShop"},
-	{name = "Transfer GCs", event = "sb_transferGC"},
-	{name = "Achievements", event = "sb_showAchievements"},
-	{name = "My Stats", event = "sb_showStats"},
-	{name = "Settings", event = "sb_showSettings"},
-	{name = "PM", event = "sb_showPM"},
-	{name = "Music Player", event = "sb_showMusicPlayer"},
-	{name = "Help", event = "sb_showHelp"}
-	
+-- name and nameLocale should be equal at decleration (for string extraction purposes)
+MenuItems = {
+	{name = "Server Info", nameLocale = _("Server Info"), event = "sb_showServerInfo"},
+	{name = "My Account", nameLocale = _("My Account"), event = "sb_showMyAccount"},
+	{name = "GC Shop", nameLocale = _("GC Shop"), event = "sb_showGCShop"},
+	{name = "Transfer GCs", nameLocale = _("Transfer GCs"), event = "sb_transferGC"},
+	{name = "Achievements", nameLocale = _("Achievements"), event = "sb_showAchievements"},
+	{name = "My Stats", nameLocale = _("My Stats"), event = "sb_showStats"},
+	{name = "Settings", nameLocale = _("Settings"), event = "sb_showSettings"},
+	{name = "Private Message", nameLocale = _("Private Message"), event = "sb_showPM"},
+	{name = "Music Player", nameLocale = _("Music Player"), event = "sb_showMusicPlayer"},
+	{name = "Help", nameLocale = _("Help"), event = "sb_showHelp"}
 }
+addEventHandler("onClientPlayerLocaleChange", root, function()
+    for _, item in ipairs(MenuItems) do
+        -- Make sure we fetched locale once in MenuItems decleration so that it is extracted
+        -- Otherwise we can not get it by variable
+        item.nameLocale = _(item.name)
+    end
+end)
 
 
 function setMenuTables()
@@ -103,7 +110,7 @@ _dxDrawRectangle = dxDrawRectangle
 function drawSidebarBG()
 	-- Draw Sidebar BG
 	dxDrawRectangle(_sidebarLeft, sidebarTop, sidebarWidth, sidebarHeight, tocolor(0, 0, 0, BGAlpha), true)
-	
+
 	-- Draw Shadow Background
 	local fadeAlpha = 150
 	for i =0 , fadeAlpha do -- BG
@@ -112,7 +119,7 @@ function drawSidebarBG()
 			dxDrawRectangle( _sidebarLeft+sidebarWidth+i, 0, 1*scaleW, screenH * 1,tocolor(0,0,0,fadeAlpha),true )
 		end
 	end
-	
+
 
 end
 
@@ -129,34 +136,34 @@ function drawMenuItems()
 		local mencol = menuItemEvenColor
 		if mouseHover then
 			mencol = menuItemHoverColor
-			hoverTextScale = 0.3 * scaleW 
+			hoverTextScale = 0.3 * scaleW
 		elseif i % 2 == 0 then
 			mencol = menuItemEvenColor
 		else
 			mencol = menuItemOddColor
 		end
 
-		
+
 
 		-- Draw menu item BG
 		dxDrawRectangle(_sidebarLeft,sidebarTop+menuCountPos,sidebarWidth,menuItemHeight,mencol,true)
 
 		-- Draw Text
-		dxDrawText(item.name,_sidebarLeft+menuItemIconSpace,sidebarTop+menuCountPos,_sidebarLeft+sidebarWidth,sidebarTop+menuCountPos+menuItemHeight,tocolor(255,255,255,255),menuItemTextScale+hoverTextScale,menuItemFont,"left","center",true,false,true)
+		dxDrawText(item.nameLocale,_sidebarLeft+menuItemIconSpace,sidebarTop+menuCountPos,_sidebarLeft+sidebarWidth,sidebarTop+menuCountPos+menuItemHeight,0xFFFFFF,menuItemTextScale+hoverTextScale,menuItemFont,"left","center",true,false,true)
 	end
 end
 
 
 local gcLastWidth = 0
 function drawAccountInfo()
-	
+
 
 	-- Draw name getPlayerName(localPlayer):gsub("#%x%x%x%x%x%x","")
 	local pName = getPlayerName(localPlayer):gsub("#%x%x%x%x%x%x","")
-	
+
 	-- Draw name
-	
-	dxDrawText(pName,_sidebarLeft,sidebarTop+ accountInfoStartHeight,_sidebarLeft+sidebarWidth,sidebarTop+menuItemHeight+ accountInfoStartHeight,tocolor(255,255,255,255),usernameTextScale,usernameFont,"center","center",true,false,true)
+
+	dxDrawText(pName,_sidebarLeft,sidebarTop+ accountInfoStartHeight,_sidebarLeft+sidebarWidth,sidebarTop+menuItemHeight+ accountInfoStartHeight,0xFFFFFF,usernameTextScale,usernameFont,"center","center",true,false,true)
 
 
 	-- Draw GC info
@@ -166,7 +173,7 @@ function drawAccountInfo()
 	local gcString = tostring(totalGC).." GC"
 	local gcWidth = dxGetTextWidth( gcString, _gcFontScale, gcFont )
 	if gcLastWidth < gcWidth and gcWidth > sidebarWidth - usernameTextMarge then
-		for i = _gcFontScale, 0.1*scaleW, -0.1*scaleW do -- Check for width in 0.1 increments 
+		for i = _gcFontScale, 0.1*scaleW, -0.1*scaleW do -- Check for width in 0.1 increments
 			local textW = dxGetTextWidth( pName, i, gcFont )
 			if textW < sidebarWidth - usernameTextMarge then
 				_gcFontScale = i
@@ -174,24 +181,28 @@ function drawAccountInfo()
 			end
 		end
 	end
-	
+
 	if _gcFontScale < 0.4 then
 		_gcFontScale = 0.4
 	end
-	
-	dxDrawText(gcString,_sidebarLeft,sidebarTop + gcTopStart+ accountInfoStartHeight,_sidebarLeft+sidebarWidth,sidebarTop+menuItemHeight+gcTopStart+ accountInfoStartHeight,tocolor(255,255,255,255),_gcFontScale,gcFont,"center","center",true,false,true,true)
+
+	dxDrawText(gcString,_sidebarLeft,sidebarTop + gcTopStart+ accountInfoStartHeight,_sidebarLeft+sidebarWidth,sidebarTop+menuItemHeight+gcTopStart+ accountInfoStartHeight,0xFFFFFF,_gcFontScale,gcFont,"center","center",true,false,true,true)
 end
 
-
+local dateString = os.date("%X\n%A, %x")
+local dateStringRefresh = os.clock()
 function drawDateTime()
-	local timestring = FormatDate("h:i\nd/m/Y" )
-
-	dxDrawText(timestring,_sidebarLeft,dateTimeTop,_sidebarLeft+sidebarWidth,sidebarTop+menuItemHeight,tocolor(255,255,255,255),timeDateTextScale,timeDateFont,"center","top",true,false,true)
+    local now = os.clock()
+    if now - dateStringRefresh >= 1 then
+        dateString = os.date("%X\n%A, %x")
+        dateStringRefresh = now
+    end
+	dxDrawText(dateString,_sidebarLeft,dateTimeTop,_sidebarLeft+sidebarWidth,sidebarTop+menuItemHeight,0xFFFFFF,timeDateTextScale,timeDateFont,"center","top",true,false,true)
 end
 
 function drawRoomName()
 	-- outputDebugString(_sidebarLeft.." "..serverNameStartY/screenH)
-	dxDrawText(serverName,_sidebarLeft, serverNameStartY, _sidebarLeft + sidebarWidth,serverNameStartY + serverNameHeight,tocolor(255,255,255,255),serverNameTextScale,serverNameFont,"center","bottom",false,false,true )
+	dxDrawText(serverName,_sidebarLeft, serverNameStartY, _sidebarLeft + sidebarWidth,serverNameStartY + serverNameHeight,0xFFFFFF,serverNameTextScale,serverNameFont,"center","bottom",false,false,true )
 end
 
 sidebarShowing = false
@@ -208,9 +219,6 @@ addEventHandler("onClientRender",root,Draw)
 function showSidebar()
 	local nme = getPlayerName(localPlayer):gsub("#%x%x%x%x%x%x","")
 
-	-- if nme == "KaliBwoy" or nme == "warp." or nme == "SDK" or nme == "Goldberg" then 
-	
-
 	if not sidebarShowing then
 		sidebarShowing = true
 		showCursor(true)
@@ -219,7 +227,7 @@ function showSidebar()
 		showCursor(false)
 	end
 
-	
+
 	start = getTickCount
 
 
@@ -253,14 +261,14 @@ function sidebarEaseOpen()
 	local elapsedTime = now - start
 	local duration = fullduration - start
 	local progress = elapsedTime / duration
- 
-	local width, height, _ = interpolateBetween ( 
-		startPosition, 0, 0, 
-		endPosition, 0, 0, 
+
+	local width, height, _ = interpolateBetween (
+		startPosition, 0, 0,
+		endPosition, 0, 0,
 		progress, "InQuad")
 
 	_sidebarLeft = width
- 
+
 
 	if now >= fullduration then
 
@@ -271,22 +279,22 @@ function sidebarEaseOpen()
 
 	end
 end
- 
+
 function sidebarEaseClose()
 	local now = getTickCount()
 	local elapsedTime = now - start
 	local duration = fullduration - start
 	local progress = elapsedTime / duration
- 
-	local width, height, _ = interpolateBetween ( 
-		startPosition, 0, 0, 
-		endPosition, 0, 0, 
+
+	local width, height, _ = interpolateBetween (
+		startPosition, 0, 0,
+		endPosition, 0, 0,
 		progress, "OutQuad")
- 
 
- 
 
- 
+
+
+
 	_sidebarLeft = width
 
 
@@ -328,14 +336,14 @@ function isMouseHovering(x,y,w,h)
 	local cursorx = cursorx*screenW
 	local cursory = cursory*screenH
 	-- outputDebugString(x.." "..y.." "..w.." "..h.." CURSOR: "..cursorx.." "..cursory)
-	return cursorx>x and cursorx<x+w and cursory>y and cursory<y+h 
+	return cursorx>x and cursorx<x+w and cursory>y and cursory<y+h
 end
-	
+
 function calculateNicknameWidth()
 	local pName = getPlayerName(localPlayer):gsub("#%x%x%x%x%x%x","")
 	local usernameWidth = dxGetTextWidth( pName, usernameTextScale, usernameFont )
 
-	for i = _usernameTextScale, 0.1*scaleW, -0.1*scaleW do -- Check for width in 0.1 increments 
+	for i = _usernameTextScale, 0.1*scaleW, -0.1*scaleW do -- Check for width in 0.1 increments
 		local textW = dxGetTextWidth( pName, i, usernameFont )
 		if textW < sidebarWidth - usernameTextMarge then
 			usernameTextScale = i
@@ -361,7 +369,7 @@ addEventHandler("receiveServerName",resourceRoot,
 			nm = nm.."Race"
 		end
 
-		for i = _serverNameTextScale, 0.1*scaleW, -0.1*scaleW do -- Check for width in 0.1 increments 
+		for i = _serverNameTextScale, 0.1*scaleW, -0.1*scaleW do -- Check for width in 0.1 increments
 			local textW = dxGetTextWidth( nm, i, serverNameFont )
 			if textW < sidebarWidth - usernameTextMarge then
 				serverNameTextScale = i
@@ -379,21 +387,21 @@ addEventHandler("receiveServerName",resourceRoot,
 -- UTILS
 function Check(funcname, ...)
     local arg = {...}
- 
+
     if (type(funcname) ~= "string") then
         error("Argument type mismatch at 'Check' ('funcname'). Expected 'string', got '"..type(funcname).."'.", 2)
     end
     if (#arg % 3 > 0) then
         error("Argument number mismatch at 'Check'. Expected #arg % 3 to be 0, but it is "..(#arg % 3)..".", 2)
     end
- 
+
     for i=1, #arg-2, 3 do
         if (type(arg[i]) ~= "string" and type(arg[i]) ~= "table") then
             error("Argument type mismatch at 'Check' (arg #"..i.."). Expected 'string' or 'table', got '"..type(arg[i]).."'.", 2)
         elseif (type(arg[i+2]) ~= "string") then
             error("Argument type mismatch at 'Check' (arg #"..(i+2).."). Expected 'string', got '"..type(arg[i+2]).."'.", 2)
         end
- 
+
         if (type(arg[i]) == "table") then
             local aType = type(arg[i+1])
             for _, pType in next, arg[i] do
@@ -414,21 +422,21 @@ end
 local gWeekDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" }
 function FormatDate(format, escaper, timestamp)
 	Check("FormatDate", "string", format, "format", {"nil","string"}, escaper, "escaper", {"nil","string"}, timestamp, "timestamp")
- 
+
 	escaper = (escaper or "'"):sub(1, 1)
 	local time = getRealTime(timestamp)
 	local formattedDate = ""
 	local escaped = false
- 
+
 	time.year = time.year + 1900
 	time.month = time.month + 1
- 
+
 	local datetime = { d = ("%02d"):format(time.monthday), h = ("%02d"):format(time.hour), i = ("%02d"):format(time.minute), m = ("%02d"):format(time.month), s = ("%02d"):format(time.second), w = gWeekDays[time.weekday+1]:sub(1, 2), W = gWeekDays[time.weekday+1], y = tostring(time.year):sub(-2), Y = time.year }
- 
+
 	for char in format:gmatch(".") do
 		if (char == escaper) then escaped = not escaped
 		else formattedDate = formattedDate..(not escaped and datetime[char] or char) end
 	end
- 
+
 	return formattedDate
 end
