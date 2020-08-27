@@ -257,11 +257,18 @@ end
 
 -----------------------------------------------------------------
 -- Register possible quit types to locale
+
+-- translators: quit type: user has left the server (TYPE)
 _.register("unknown")
+-- translators: quit type: user has left the server (TYPE)
 _.register("quit")
+-- translators: quit type: user has left the server (TYPE)
 _.register("kicked")
+-- translators: quit type: user has left the server (TYPE)
 _.register("banned")
+-- translators: quit type: user has left the server (TYPE)
 _.register("bad connection")
+-- translators: quit type: user has left the server (TYPE)
 _.register("timed out")
 
 function outputJoinForPlayers(player)
