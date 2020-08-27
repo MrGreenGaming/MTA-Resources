@@ -1,4 +1,7 @@
 <meta>
+    <info  i18n-project="mta-racemix" i18n-component="joinquit" />
+    <include resource="i18n" />
+    <script src="i18n.lua" type="shared" />
     <include resource="geoloc" />
 	<script src="joinquit_gi.lua" type="client" />
     <script src="joinquit_server.lua" />
