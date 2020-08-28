@@ -1,8 +1,9 @@
 <meta>
-	<info author="Mihoje" type="script" name="Player record" version="1.1" descriprion="A script that gives green coins to all online players when a new peak record occurs"/>
-	
+	<info author="Mihoje" type="script" name="Player record" version="1.1" i18n-project="mta-racemix" i18n-component="playerrecord" descriprion="A script that gives green coins to all online players when a new peak record occurs"/>
+	<include resource="i18n" />
+    <script src="i18n.lua" type="shared" />
 	<script src="playerrecord.lua" type="server" />
-	
+
 	<settings>
 		<setting name="#greencoinsamount" value="50" friendlyname="Green coins amount" desc="The amount of green coins that the players are given when a new peak record occurs" />
 		<setting name="#resettime" value="2592000" friendlyname="Time to reset the record" desc="The amount of time to reset the record in seconds" />
