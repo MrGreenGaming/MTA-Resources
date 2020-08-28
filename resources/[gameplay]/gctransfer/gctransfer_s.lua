@@ -14,7 +14,7 @@ function getPlayersTable()
 		table.insert(temp, logged)
 		table.insert(players, temp)
 	end
-	
+
 	return players
 end
 
@@ -33,7 +33,7 @@ function getPlayersTableByTeam(team)
 			table.insert(players, temp)
 		end
 	end
-	
+
 	return players
 end
 
@@ -43,7 +43,7 @@ end
 
 function success(player, transferedTo, amount)
 	--outputChatBox("[GC Transfer] " .. tostring(amount) .. " GCs have been successfully sent to " .. getPlayerName(transferedTo) .. "#00FF00!", player, 0, 255, 0, true)
-	outputChatBox("[GC Transfer] " .. tostring(amount) .. " GCs have been sent to your account by " .. getPlayerName(player) .. "#00FF00!", transferedTo, 0, 255, 0, true)
+	outputChatBox("[GC Transfer] " .. _.For(transferedTo, "${amount} GCs have been sent to your account by ${player} #00FF00!") % {amount=amount, player=getPlayerName(player)}, transferedTo, 0, 255, 0, true)
 end
 
 function getTeammates(player)
@@ -60,30 +60,30 @@ function filterSearch(tbl, search)
 			table.insert(retTable, p)
 		end
 	end
-	
+
 	return retTable
 end
 
-addEventHandler("onPlayerJoin", getRootElement(), 
+addEventHandler("onPlayerJoin", getRootElement(),
 function()
 	triggerClientEvent(getRootElement(), "GCTransfer.UpdatePlayerData", source)
 end)
 
 addEvent("GCTransfer.RequestPlayerData", true)
-addEventHandler("GCTransfer.RequestPlayerData", root, 
+addEventHandler("GCTransfer.RequestPlayerData", root,
 function(team, search)
 	local tbl = {}
-	
+
 	if team then
 		tbl = getTeammates(source)
 	else
 		tbl = getPlayersTable()
 	end
-	
+
 	if search then
 		tbl = filterSearch(tbl, search)
 	end
-	
+
 	triggerClientEvent(source, "GCTransfer.PlayerDataResponse", source, tbl)
 end)
 
@@ -92,56 +92,56 @@ addEventHandler("GCTransfer.SendTransferRequest", root,
 function(pName, amount)
 	--Do all kinds of checks
 	if not pName or not amount then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You didn't enter a player name or amount!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "You didn't enter a player name or amount!"))
 		return
 	end
-	
+
 	local logged = exports.gc:isPlayerLoggedInGC(source)
 	if not logged then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You are not logged in!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "You are not logged in!"))
 		return
 	end
-	
+
 	local forumid = tostring(exports.gc:getPlayerForumID( source ))
-	
+
 	local currentTime = getTimestamp()
-	
+
 	if transfers[forumid] and transfers[forumid] + cooldown > currentTime then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You need to wait "..tostring(transfers[forumid] + cooldown - currentTime).." more second(s) to be able to transfer greencoins again!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "You need to wait ${time} more second(s) to be able to transfer greencoins again!") % {time=transfers[forumid] + cooldown - currentTime})
 		return
 	end
-		
+
 	if amount ~= math.floor(amount) then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "The amount must be a whole number!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "The amount must be a whole number!"))
 		return
 	end
-	
+
 	if amount < 1 or amount > 10000 then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "The amount must be between 1 and 10000!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "The amount must be between 1 and 10000!"))
 		return
 	end
-	
+
 	local transferTo = getPlayerFromPartialName(pName)
 	if not transferTo then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "Player could not be found!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "Player could not be found!"))
 		return
 	end
-	
+
 	if source == transferTo then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You cannot send GCs to yourself!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "You cannot send GCs to yourself!"))
 		return
 	end
-	
+
 	logged = exports.gc:isPlayerLoggedInGC(transferTo)
 	if not logged then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "The player you want to transfer GCs to is not logged in!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "The player you want to transfer GCs to is not logged in!"))
 		return
 	end
-	
+
 	local fid = tostring(exports.gc:getPlayerForumID( transferTo ))
-	
+
 	if fid == forumid then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You cannot send GCs to yourself!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "You cannot send GCs to yourself!"))
 		return
 	end
 
@@ -149,53 +149,53 @@ function(pName, amount)
 	local minPlayTime = 100 -- hours
 	local playTime = exports['mrgreen-stats']:getPlayerStat(source, 'General', 'Playtime')
 	if not playTime or not tonumber(playTime) or playTime/3600 < minPlayTime then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You must have a minimum of "..minPlayTime.." hours to transfer greencoins!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "You must have a minimum of ${time} hours to transfer greencoins!") % {time=minPlayTime})
 		return
 	end
 
 	-- Player to transfer logged in
-	
+
 	local playerMoney = exports.gc:getPlayerGreencoins(source)
-	
+
 	if playerMoney < amount then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "You don't have enough GCs!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source, "You don't have enough GCs!"))
 		return
 	end
-	
+
 	local success = doTransfer(source, pName, amount)
-	
+
 	if not success then
-		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, "An unknown error happened!")
+		triggerClientEvent(source, "GCTransfer.TransferResponse", source, false, _.For(source,"An unknown error happened!"))
 		return
 	end
-	
-	triggerClientEvent(source, "GCTransfer.TransferResponse", source, true, "You have successfully sent " .. tostring(amount) .. " GCs to " .. getPlayerName(transferTo) .. "#00FF00!")
+
+	triggerClientEvent(source, "GCTransfer.TransferResponse", source, true, _.For(source,"You have successfully sent ${amount} GCs to ${player} #00FF00!") % {amount = amount, player = transferTo})
 end)
 
-function doTransfer(player, argTransferTo, argAmount)	
+function doTransfer(player, argTransferTo, argAmount)
 	if not argAmount or not argTransferTo then
 		return false
 	end
-	
+
 	-- Args are sent
-	
+
 	local logged = exports.gc:isPlayerLoggedInGC(player)
 	if not logged then
 		return false
 	end
-	
+
 	-- Player is logged in
-	
+
 	local forumid = tostring(exports.gc:getPlayerForumID( player ))
-	
+
 	if transfers[forumid] and transfers[forumid] + cooldown > getTimestamp() then
 		return false
 	end
-	
+
 	-- Player doesn't have cooldown
-	
+
 	local amount = tonumber(argAmount)
-	
+
 	if not amount then
 		return false
 	elseif amount ~= math.floor(amount) then
@@ -203,46 +203,46 @@ function doTransfer(player, argTransferTo, argAmount)
 	elseif amount < 1 or amount > 10000 then
 		return false
 	end
-	
+
 	-- Amount is valid
-	
+
 	local transferTo = getPlayerFromPartialName(argTransferTo)
-	
+
 	if not transferTo then
 		return false
 	end
-	
+
 	if player == transferTo then
 		return false
 	end
-	
+
 	-- Player to transfer found
-	
+
 	logged = exports.gc:isPlayerLoggedInGC(transferTo)
 	if not logged then
 		return false
 	end
-	
+
 	local fid = tostring(exports.gc:getPlayerForumID( transferTo ))
-	
+
 	if fid == forumid then
 		return false
 	end
-	
+
 	-- Player to transfer logged in
-	
+
 	local playerMoney = exports.gc:getPlayerGreencoins(player)
-	
+
 	if playerMoney < amount then
 		return false
 	end
-	
+
 	-- Player has enough GCs; ready for transaction
-	
+
 	local check1 = exports.gc:addPlayerGreencoins(player, amount * -1)
 	local check2 = exports.gc:addPlayerGreencoins(transferTo, amount)
-	
-	
+
+
 	-- Refunds
 	if not check1 and check2 then -- failed to take GCs
 		exports.gc:addPlayerGreencoins(transferTo, -amount) --take the GCs
@@ -254,11 +254,11 @@ function doTransfer(player, argTransferTo, argAmount)
 		success(player, transferTo, amount)
 		transfers[forumid] = getTimestamp()
 	end
-	
+
 	local name, acc = getPlayerName(player), (isGuestAccount(getPlayerAccount(player)) and '') or getAccountName(getPlayerAccount(player))
 	local serial, email = getPlayerSerial (player),  tostring(exports.gc:getPlayerGreencoinsLogin( player ) )
-	
-	
+
+
 	pcall(addToLog, 'GC TRANSFER - TRANSFER - ' .. amount .. ' GCS TO FORUM ID: ' .. fid .. ' (TAKEN GCS: ' .. tostring(check1) .. ' | GIVEN GCS: ' .. tostring(check2) .. ') - ' .. name ..'/'.. acc ..'/'.. forumid ..'/'.. serial ..'/'.. email)
 	return (check1 and check2)
 end
@@ -301,15 +301,15 @@ function getTimestamp(year, month, day, hour, minute, second) -- https://wiki.mu
     local datetime = getRealTime()
     year, month, day = year or datetime.year + 1900, month or datetime.month + 1, day or datetime.monthday
     hour, minute, second = hour or datetime.hour, minute or datetime.minute, second or datetime.second
-    
+
     -- calculate timestamp
     for i=1970, year-1 do timestamp = timestamp + (isLeapYear(i) and 31622400 or 31536000) end
     for i=1, month-1 do timestamp = timestamp + ((isLeapYear(year) and i == 2) and 2505600 or monthseconds[i]) end
     timestamp = timestamp + 86400 * (day - 1) + 3600 * hour + 60 * minute + second
-    
+
     timestamp = timestamp - 3600 --GMT+1 compensation
     if datetime.isdst then timestamp = timestamp - 3600 end
-    
+
     return timestamp
 end
 

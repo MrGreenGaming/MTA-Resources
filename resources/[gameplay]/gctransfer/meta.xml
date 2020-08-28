@@ -1,7 +1,9 @@
 <meta>
-	<info author="Mihoje" version="2.1" name="Greencoin transfer" description="A small script that gives the players the ability to transfer greencoins to other players." type="script" />
-	<script src="gctransfer_s.lua" type="server" />
+	<info author="Mihoje" version="2.1" name="Greencoin transfer" i18n-project="mta-racemix" i18n-component="gctransfer" description="A small script that gives the players the ability to transfer greencoins to other players." type="script" />
+	<include resource="i18n" />
+    <script src="i18n.lua" type="shared" />
+    <script src="gctransfer_s.lua" type="server" />
 	<script src="gctransfer_c.lua" type="client" />
-	
+
 	<include resource="gc" />
 </meta>
