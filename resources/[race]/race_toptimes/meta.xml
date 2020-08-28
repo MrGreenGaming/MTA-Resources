@@ -1,13 +1,16 @@
 <meta>
-	<info name="Toptimes" description="Toptimes addon for Race" author="SDK" type="script" addon="race" version="1.0"/>
+	<info name="Toptimes" description="Toptimes addon for Race" author="SDK" type="script" addon="race" version="1.0" i18n-project="mta-racemix" i18n-component="race_toptimes"/>
+
+    <include resource="i18n" />
+    <script src="i18n.lua" type="shared" />
 
 	<script src="tops.lua" type="server"/>
 	<script src="tops_c.lua" type="client"/>
 	<file src="backg1a.png"/>
-	
+
 	<min_mta_version server="1.4" client="1.4" />
-	
-	
+
+
 	<script src="_common_tt.lua" type="server"/>
 	<script src="util_tt_server.lua" type="server"/>
 	<script src="databasetable_server.lua" type="server"/>
