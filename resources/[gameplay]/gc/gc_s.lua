@@ -310,6 +310,7 @@ function getPlayerVip(player)
 end
 
 local holidays = {
+    { day = 4, month = 9, hour = 19 }, -- map and double gcs event
     { day = 16, month = 9 }, -- anniversary
     { day = 24, month = 12, hour = 18 }, -- christmas evening
     { day = 25, month = 12 }, -- first christmas day
