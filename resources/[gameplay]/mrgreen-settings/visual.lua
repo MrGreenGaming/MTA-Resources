@@ -1,12 +1,12 @@
--- Bloom = triggerEvent( "switchBloom", root, boolean ) 
--- CarPaint1 = triggerEvent( "switchCarPaint", root, boolean ) 
--- CarPaint2 = triggerEvent( "switchCarPaintReflect", root, boolean ) 
--- RoadShine = triggerEvent( "switchRoadshine3", root, boolean ) 
--- Dynamic sky(skybox1) = triggerEvent( "ToggleDynamicSky", root, boolean ) 
--- Skybox 2 = triggerEvent( "switchSkyAlt", root, boolean ) 
--- WaterShine = triggerEvent( "switchWaterShine", root, boolean ) 
--- Depth of Field = triggerEvent( "switchDoF", root, boolean ) 
--- Radial Blur = triggerEvent( "switchRadialBlur", root, boolean ) 
+-- Bloom = triggerEvent( "switchBloom", root, boolean )
+-- CarPaint1 = triggerEvent( "switchCarPaint", root, boolean )
+-- CarPaint2 = triggerEvent( "switchCarPaintReflect", root, boolean )
+-- RoadShine = triggerEvent( "switchRoadshine3", root, boolean )
+-- Dynamic sky(skybox1) = triggerEvent( "ToggleDynamicSky", root, boolean )
+-- Skybox 2 = triggerEvent( "switchSkyAlt", root, boolean )
+-- WaterShine = triggerEvent( "switchWaterShine", root, boolean )
+-- Depth of Field = triggerEvent( "switchDoF", root, boolean )
+-- Radial Blur = triggerEvent( "switchRadialBlur", root, boolean )
 -- Chrome Wheels = replaceWheels(boolean)
 -- bt Wheels = loadBTWheels(false)
 -- Contrast = triggerEvent( "switchContrast", root, boolean )
@@ -48,7 +48,7 @@ visual = { -- Standard Settings, 0 = off --
 	["customHornIcons"] = 1
 }
 
-	
+
 -- Reapply settings when one of these resources (re)starts
 local VSL_reApplyTimer = false
 -- Add resource name here when used
@@ -108,11 +108,11 @@ function visualCheckBoxHandler()
 		--water shader--
 	elseif source == GUIEditor.checkbox["water"] then
 		if guiCheckBoxGetSelected( GUIEditor.checkbox["water"] ) then
-			triggerEvent( "switchWaterShine", root, true ) 
+			triggerEvent( "switchWaterShine", root, true )
 			visual["water"] = 1
 			v_setSaveTimer()
 		else
-			triggerEvent( "switchWaterShine", root, false ) 
+			triggerEvent( "switchWaterShine", root, false )
 			visual["water"] = 0
 			v_setSaveTimer()
 		end
@@ -140,7 +140,7 @@ function visualCheckBoxHandler()
 			guiCheckBoxSetSelected(GUIEditor.checkbox["chromewheels"],false)
 			replaceWheels(false)
 			loadBTWheels(true)
-			
+
 			visual["btwheels"] = 1
 			visual["chromewheels"] = 0
 			v_setSaveTimer()
@@ -153,11 +153,11 @@ function visualCheckBoxHandler()
 		--RoadShine--
 	elseif source == GUIEditor.checkbox["palette"] then
 		if guiCheckBoxGetSelected( GUIEditor.checkbox["palette"] ) then
-			triggerEvent( "switchPalette", root, true ) 
+			triggerEvent( "switchPalette", root, true )
 			visual["enb"] = 1
 			v_setSaveTimer()
 		else
-			triggerEvent( "switchPalette", root, false ) 
+			triggerEvent( "switchPalette", root, false )
 			visual["enb"] = 0
 			v_setSaveTimer()
 		end
@@ -165,12 +165,12 @@ function visualCheckBoxHandler()
 		--Depth of Field--
 	elseif source == GUIEditor.checkbox["dof"] then
 		if guiCheckBoxGetSelected( GUIEditor.checkbox["dof"] ) then
-			triggerEvent( "switchDoF", root, true ) 
+			triggerEvent( "switchDoF", root, true )
 			visual["dof"] = 1
 			v_setSaveTimer()
 		else
 			triggerEvent( "switchDoF", root, false )
-			visual["dof"] = 0 
+			visual["dof"] = 0
 			v_setSaveTimer()
 		end
 
@@ -181,7 +181,7 @@ function visualCheckBoxHandler()
 			visual["radial"] = 1
 			v_setSaveTimer()
 		else
-			triggerEvent( "switchRadialBlur", root, false ) 
+			triggerEvent( "switchRadialBlur", root, false )
 			visual["radial"] = 0
 			v_setSaveTimer()
 		end
@@ -251,7 +251,7 @@ function visualCheckBoxHandler()
 			visual["nitro"] = 0
 		end
 
-	
+
 	elseif source == GUIEditor.checkbox["customHornIcons"] then
 		if guiCheckBoxGetSelected( GUIEditor.checkbox["customHornIcons"] ) then
 			setCustomHornsIconsEnabled(true)
@@ -275,45 +275,45 @@ function visual_ButtonHandler()
 	elseif source == GUIEditor.button["lodrange"] then
 		local nr = tonumber(guiGetText( GUIEditor.edit["lodrange"] ))
 
-		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
-		if nr > 300 or nr < 0 then outputChatBox("[SETTINGS] LOD range must be inbetween 1 and 300. Set to 0 to disable.",255) return end
+		if not nr then outputChatBox("[SETTINGS] " .. _("Insert a number before clicking ok."),255) return end
+		if nr > 300 or nr < 0 then outputChatBox("[SETTINGS] " .. _("LOD range must be inbetween 1 and 300. Set to 0 to disable."),255) return end
 		if nr == 0 then
-			outputChatBox("[SETTINGS] LOD range disabled",0,255)
+			outputChatBox("[SETTINGS] " .. _("LOD range disabled"),0,255)
 		else
-			outputChatBox("[SETTINGS] LOD range set to "..nr,0,255)
+			outputChatBox("[SETTINGS] " .. _("LOD range set to ${number}") % {number = nr},0,255)
 		end
-		
+
 		setLODRange(nr)
 		v_setSaveTimer()
-		
+
 	-- Draw Distance --
 	elseif source == GUIEditor.button["drawdistance"] then
 
 		local nr = tonumber(guiGetText( GUIEditor.edit["drawdistance"] ))
 
-		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
-		if nr > 10000 or nr < 100 then outputChatBox("[SETTINGS] Draw Distance must be inbetween 100 and 10000.",0,255) return end
+		if not nr then outputChatBox("[SETTINGS] " .. _("Insert a number before clicking ok."),255) return end
+		if nr > 10000 or nr < 100 then outputChatBox("[SETTINGS] " .. _("Draw Distance must be between ${min} and ${max}.") % {min=100, max=10000},0,255) return end
 
 		setDrawDistance(nr)
 		v_setSaveTimer()
-		outputChatBox("[SETTINGS] Draw Distance set to "..nr,0,255)
-		
+		outputChatBox("[SETTINGS] " .. _("Draw Distance set to ${number}") % {number=nr},0,255)
+
 	elseif source == GUIEditor.button["fpslimit"] then
 		local nr = tonumber(guiGetText( GUIEditor.edit["fpslimit"] ))
 
-		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
-		if nr > 100 or nr < 25 then outputChatBox("[SETTINGS] FPS limit must be inbetween 25 and 100.",255) return end
+		if not nr then outputChatBox("[SETTINGS] " .. _("Insert a number before clicking ok."),255) return end
+		if nr > 100 or nr < 25 then outputChatBox("[SETTINGS] " .. _("FPS limit must be inbetween ${min} and ${max}.") % {min=25, max=100},255) return end
 
 		setFPSLimit(nr)
 		visual["fpslimit"] = nr
 		v_setSaveTimer()
-	
+
 	elseif source == GUIEditor.button["fpslimitboats"] then
 		local nr = tonumber(guiGetText( GUIEditor.edit["fpslimitboats"] ))
-		
-		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
-		if nr > 100 or nr < 25 then outputChatBox("[SETTINGS] FPS limit must be inbetween 25 and 100.",255) return end
-		
+
+		if not nr then outputChatBox("[SETTINGS] " .. _("Insert a number before clicking ok."),255) return end
+		if nr > 100 or nr < 25 then outputChatBox("[SETTINGS] " .. _("FPS limit must be inbetween ${min} and ${max}.") % {min=25, max=100},255) return end
+
 		setElementData(localPlayer, "fpslimitboats", nr)
 		visual["fpslimitboats"] = nr
 		v_setSaveTimer()
@@ -353,12 +353,12 @@ function toggleSkyBox(bln)
 		local theComboBoxNum = guiComboBoxGetSelected( GUIEditor.combobox["skybox"] )
 		local theSelectedSkyBox = guiComboBoxGetItemText( GUIEditor.combobox["skybox"], theComboBoxNum )
 		if theSelectedSkyBox == "Dynamic Sky" then
-			triggerEvent( "ToggleDynamicSky", root, true ) 
+			triggerEvent( "ToggleDynamicSky", root, true )
 			currentSkybox = theSelectedSkyBox
 			visual["sky"] = 1
 			v_setSaveTimer()
 		elseif theSelectedSkyBox == "SkyBox 2" then
-			triggerEvent( "switchSkyAlt", root, true ) 
+			triggerEvent( "switchSkyAlt", root, true )
 			currentSkybox = theSelectedSkyBox
 			visual["sky"] = 2
 			v_setSaveTimer()
@@ -368,7 +368,7 @@ function toggleSkyBox(bln)
 		visual["sky"] = 0
 		v_setSaveTimer()
 	end
-end 		
+end
 
 function resetSkyBox()
 	if currentSkybox == "Dynamic Sky" then
@@ -391,12 +391,12 @@ function toggleCarPaint(bln)
 		local theComboBoxNum = guiComboBoxGetSelected( GUIEditor.combobox["carpaint"] )
 		local theSelectedCarPaint = guiComboBoxGetItemText( GUIEditor.combobox["carpaint"], theComboBoxNum )
 		if theSelectedCarPaint == "Car Paint 1" then
-			triggerEvent( "switchCarPaint", root, true ) 
+			triggerEvent( "switchCarPaint", root, true )
 			currentCarPaint = theSelectedCarPaint
 			visual["carpaint"] = 1
 			v_setSaveTimer()
 		elseif theSelectedCarPaint == "Car Paint 2" then
-			triggerEvent( "switchCarPaintReflect", root, true ) 
+			triggerEvent( "switchCarPaintReflect", root, true )
 			currentCarPaint = theSelectedCarPaint
 			visual["carpaint"] = 2
 			v_setSaveTimer()
@@ -406,7 +406,7 @@ function toggleCarPaint(bln)
 		visual["carpaint"] = 0
 		v_setSaveTimer()
 	end
-end 		
+end
 
 function resetCarPaint()
 	if currentCarPaint == "Car Paint 1" then
@@ -419,7 +419,7 @@ end
 
 function NitroColorHandler(id, color, alpha)
 	if id == 100 then -- if it's the nitro colorpicker
-		outputChatBox( "[SETTINGS] Nitro color is now: "..color.."COLOR", 255, 255, 255, true )
+		outputChatBox( "[SETTINGS] " .. _("Nitro color is now: ${color}") % {color = color.."COLOR"}, 255, 255, 255, true )
 		guiSetProperty(NitroColorImage, "ImageColours", setIMGcolor(color))
 		color = color:gsub("#","")
 		visual["nitrocolor"] = color
@@ -429,7 +429,7 @@ function NitroColorHandler(id, color, alpha)
 			triggerEvent("e_ToggleNitroColor", root, true, "#FF"..visual["nitrocolor"])
 		end
 
-		
+
 	end
 end
 addEventHandler("onColorPickerOK", resourceRoot, NitroColorHandler)
@@ -451,8 +451,8 @@ end
 function setLODRange(nr)
 	if not nr then nr = getLODRange() end
 	if nr >=1 and nr <= 300 then
-		for k,v in ipairs(getElementsByType'object') do 
-			engineSetModelLODDistance(getElementModel(v), tonumber(nr)) 
+		for k,v in ipairs(getElementsByType'object') do
+			engineSetModelLODDistance(getElementModel(v), tonumber(nr))
 		end
 		visual["lodrange"] = nr
 	end
@@ -522,7 +522,7 @@ function visual_SaveSettings()
 		end
 		xmlSaveFile( v_saveXML )
 		xmlUnloadFile( v_saveXML )
-		outputChatBox("[SETTINGS] Settings Saved.",0,255)
+		outputChatBox("[SETTINGS] " .. _("Settings Saved."),0,255)
 	end
 end
 
@@ -554,7 +554,7 @@ function setVisualGUI()
 		elseif f == "water" then
 			if u == 1 then
 				guiCheckBoxSetSelected( GUIEditor.checkbox["water"], true )
-				triggerEvent( "switchWaterShine", root, true ) 
+				triggerEvent( "switchWaterShine", root, true )
 
 			end
 
@@ -675,7 +675,7 @@ function setVisualGUI()
 					guiSetText(GUIEditor.edit["fpslimitboats"], fpslimit)
 				end
 			end
-			
+
 		elseif f == "contrast" then
 			if u == 1 then
 				guiCheckBoxSetSelected( GUIEditor.checkbox["contrast"], true )
@@ -696,12 +696,12 @@ function setVisualGUI()
 			end
 
 		elseif f == "NOSMode" then
-			
+
 			guiComboBoxSetSelected( GUIEditor.combobox["NOSMode"], u )
 			local t = getNOSModeName(u)
-			
+
 			setTimer(function() triggerEvent("setNitroType", root, t) end,10000,1 )
-		
+
 		elseif f == "customHornIcons" then
 			if u == 1 then
 				setCustomHornsIconsEnabled(true)

@@ -39,7 +39,7 @@ local screenW, screenH = guiGetScreenSize()
         guiSetProperty(GUIEditor.edit["drawdistance"], "ValidationString", "^[0-9]*$")
         GUIEditor.button["drawdistance"] = guiCreateButton(36+85, 256+85, 33, 25, "OK", false, GUIEditor.tab[1])
         guiSetProperty(GUIEditor.button["drawdistance"], "NormalTextColour", "FFAAAAAA")
-  
+
 
 
         GUIEditor.label["lodrange"] = guiCreateLabel(36, 237+133, 222, 15, "Set LOD range (1 - 300), 0 to disable", false, GUIEditor.tab[1])
@@ -49,7 +49,7 @@ local screenW, screenH = guiGetScreenSize()
         guiSetProperty(GUIEditor.edit["lodrange"], "ValidationString", "^[0-9]*$")
         GUIEditor.button["lodrange"] = guiCreateButton(36+85, 256+133, 33, 25, "OK", false, GUIEditor.tab[1])
         guiSetProperty(GUIEditor.button["lodrange"], "NormalTextColour", "FFAAAAAA")
-      
+
 
         GUIEditor.label["bloom"] = guiCreateLabel(72, 75, 209, 14, "Enable Bloom", false, GUIEditor.tab[1])
 
@@ -60,7 +60,7 @@ local screenW, screenH = guiGetScreenSize()
 
         GUIEditor.button["fpslimit"] = guiCreateButton(292+85, 272+19, 33, 25, "OK", false, GUIEditor.tab[1])
         guiSetProperty(GUIEditor.button["fpslimit"], "NormalTextColour", "FFAAAAAA")
-		
+
 		GUIEditor.label["fpslimitboats"] = guiCreateLabel(292, 290+30, 222, 15, "Set client FPS Limit for boats (25 - 100)", false, GUIEditor.tab[1])
 		setTooltip(GUIEditor.label["fpslimitboats"], "Boats may slide or swim badly with FPS >50!")
         GUIEditor.edit["fpslimitboats"] = guiCreateEdit(292, 310+30, 81, 24, "", false, GUIEditor.tab[1])
@@ -133,7 +133,7 @@ local screenW, screenH = guiGetScreenSize()
 
         GUIEditor.checkbox["nitro"] = guiCreateCheckBox(292, 223, 15, 15, "", false, false, GUIEditor.tab[1])
         GUIEditor.label["nitro"] = guiCreateLabel(324, 223, 209, 14, "Enable Nitro Color", false, GUIEditor.tab[1])
-        GUIEditor.button["nitro"] = guiCreateButton(292, 223+19, 150, 25, "Set Nitro Color", false, GUIEditor.tab[1]) 
+        GUIEditor.button["nitro"] = guiCreateButton(292, 223+19, 150, 25, "Set Nitro Color", false, GUIEditor.tab[1])
 
         NitroColorImage = guiCreateStaticImage(469, 223, 26, 17, "img/dot_white.png", false, GUIEditor.tab[1])
         guiSetProperty(NitroColorImage, "ImageColours", "tl:FF0078FF tr:FF0078FF bl:FF0078FF br:FF0078FF")
@@ -147,7 +147,7 @@ local screenW, screenH = guiGetScreenSize()
 
         GUIEditor.label[9] = guiCreateLabel(66, 90, 126, 15, "Map Music Volume:", false, GUIEditor.tab[2])
         setTooltip(GUIEditor.label[9],"Sets the volume of the music that mapmakers put in their maps. Beware: toggling the mapmusic off and on will reset it's volume on most maps.")
-        
+
         GUIEditor.scrollbar[1] = guiCreateScrollBar(202, 90, 255, 18, true, false, GUIEditor.tab[2])
 
         GUIEditor.label[10] = guiCreateLabel(467, 93, 47, 15, "100%", false, GUIEditor.tab[2])
@@ -205,11 +205,11 @@ local screenW, screenH = guiGetScreenSize()
 
 
         GUIEditor.staticimage[1] = guiCreateStaticImage(152, 48+70, 34, 32, "/img/reset.png", false, GUIEditor.tab[3])
-        
+
         GUIEditor.checkbox[5] = guiCreateCheckBox(64, 26+70, 15, 15, "Enable Rank Board", false, false, GUIEditor.tab[3])
         GUIEditor.label[23] = guiCreateLabel(104, 27+70, 113, 15, "Enable Rank Board", false, GUIEditor.tab[3])
         GUIEditor.button[5] = guiCreateButton(216, 25+70, 60, 22, "Settings", false, GUIEditor.tab[3])
-        
+
 
         GUIEditor.label[24] = guiCreateLabel(104, 52+70, 123, 15, "Enable Traffic Sensor", false, GUIEditor.tab[3])
         GUIEditor.checkbox[7] = guiCreateCheckBox(64, 51+70, 15, 15, "Enable Traffic Sensor", false, false, GUIEditor.tab[3])
@@ -268,7 +268,7 @@ local screenW, screenH = guiGetScreenSize()
 
         customNameTagsCheckBox = guiCreateCheckBox(309, 245, 15, 15, "", false, false, GUIEditor.tab[3])
         customNameTagsLabel = guiCreateLabel(346, 245, 141, 15, "Enable Custom NameTags", false, GUIEditor.tab[3])
-        
+
 
 
         GUIEditor.button[3] = guiCreateButton(505, 475, 71, 23, "Close", false, GUIEditor.window[1])
@@ -325,8 +325,8 @@ local screenW, screenH = guiGetScreenSize()
 -- end gameplay Tab
 
 
-        guiSetVisible( GUIEditor.window[1], false )  
-        -- showCursor( true ) 
+        guiSetVisible( GUIEditor.window[1], false )
+        -- showCursor( true )
         triggerEvent('guiShaderCreated', GUIEditor.window[1])
     end
 )
@@ -365,7 +365,7 @@ addEventHandler("sb_showSettings",root,function()
 
 addEventHandler("onClientGUIClick", resourceRoot, function()
     if source == GUIEditor.button[3] then
-        executeCommandHandler("settings") 
+        executeCommandHandler("settings")
     end
 end)
 
@@ -397,5 +397,107 @@ function showIgnorePlayerlist()
     guiBringToFront( ignorePlayerWindow )
 end
 
-
-
+local function translateGUI()
+    guiSetText(ignorePlayerWindow, _("Ignored Players"))
+    guiGridListSetColumnTitle(ignorePlayerGridlist, ignoredplayerColumn, _("Player Name"))
+    guiSetText(ignoreLabelExpl, _("You can manage your ignored playerlist, ignore players with the command ${command}") % {command = "\n/ignore [playername]"})
+    guiSetText(removePlayerButton, _("Remove Player"))
+    guiSetText(ignorePlayerCloseButton, _("Close"))
+    guiSetText(GUIEditor.window[1], _("Visual Settings"))
+    guiSetText(GUIEditor.label[1], _("Changing these options can reduce your FPS or even crash your game. You should only enable these options if your computer can handle powerful graphics."))
+    guiSetText(GUIEditor.label[2], _("Set Draw Distance") .. " (100 - 10000)")
+    setTooltip(GUIEditor.label[2], _("This number represents how far out you can look into the game world. Increasing it may cause low FPS!"))
+    guiSetText(GUIEditor.label["lodrange"], _("Set LOD range") .. " (1 - 300), " .. _("0 to disable"))
+    setTooltip(GUIEditor.label["lodrange"], _("This number represents how far out you can look into the game world. Increasing it may cause low FPS!"))
+    guiSetText(GUIEditor.label["bloom"], _("Enable Bloom"))
+    guiSetText(GUIEditor.label["fpslimit"], _("Set client FPS Limit") .. " (25 - 100)")
+    guiSetText(GUIEditor.label["fpslimitboats"], _("Set client FPS Limit for boats") .. "(25 - 100)")
+    setTooltip(GUIEditor.label["fpslimitboats"], _("Boats may slide or swim badly with FPS >50!"))
+    guiSetText(GUIEditor.label["hdr"], _("Enable Contrast HDR"))
+    setTooltip(GUIEditor.label["hdr"],_("This applies a 'High Dynamic Range' contrast effect."))
+    guiSetText(GUIEditor.label["radar"], _("Enable Radar Shader"))
+    setTooltip(GUIEditor.label["radar"], _("This shader only works with the old radar."))
+    guiSetText(GUIEditor.label["water"], _("Enable Water Shader"))
+    guiSetText(GUIEditor.label["chromewheels"], _("Enable Chrome Wheels"))
+    guiSetText(GUIEditor.label[8], _("Visual Settings"))
+    guiSetText(GUIEditor.label["palette"], _("Enable ENB Palette"))
+    setTooltip(GUIEditor.label["palette"],_("This enables an ENB effect."))
+    guiSetText(GUIEditor.label["btwheels"], _("Enable BT Wheels"))
+    setTooltip(GUIEditor.label["btwheels"], _("This enables Bob_Taylor's wheels mods (and will disable any other wheel mods)."))
+    guiSetText(GUIEditor.label["recordghost"], _("Enable Ghost Recording"))
+    setTooltip(GUIEditor.label["recordghost"], _("This enables the recording of your cars, so that it can be viewed later on."))
+    guiSetText(GUIEditor.label["localghost"], _("Enable Local Ghost"))
+    setTooltip(GUIEditor.label["localghost"], _("This makes a ghost car appear, driving your best time on the map."))
+    guiSetText(GUIEditor.label["bestghost"], _("Enable Best Ghost"))
+    setTooltip(GUIEditor.label["bestghost"], _("This makes a ghost car appear, driving the top 1 time on the map."))
+    guiSetText(GUIEditor.label["dof"], _("Enable Depth of Field"))
+    setTooltip(GUIEditor.label["dof"], _("Makes MTA have depth. (blurs far away objects)"))
+    guiSetText(GUIEditor.label["radialblur"], _("Enable Radial Blur"))
+    setTooltip(GUIEditor.label["radialblur"], _("Makes the screen blurry when moving."))
+    guiSetText(GUIEditor.label["skybox"], _("Enable Sky Box"))
+    guiSetText(GUIEditor.label["carpaint"], _("Enable Car Paint Shader"))
+    guiSetText(GUIEditor.label["nitro"], _("Enable Nitro Color"))
+    guiSetText(GUIEditor.button["nitro"], _("Set Nitro Color"))
+    guiSetText(GUIEditor.label["customHornIcons"], _("Enable custom horn icons"))
+    setTooltip(GUIEditor.label["customHornIcons"],_("Toggle custom horn icons"))
+    guiSetText(GUIEditor.tab[2], _("Sound Settings"))
+    guiSetText(GUIEditor.label[9], _( "Map Music Volume:"))
+    setTooltip(GUIEditor.label[9], _("Sets the volume of the music that mapmakers put in their maps. Beware: toggling the mapmusic off and on will reset it's volume on most maps."))
+    guiSetText(GUIEditor.label[11], _("Custom Horns Volume:"))
+    setTooltip(GUIEditor.label[11], _("Sets the volume of custom horns from the GC shop."))
+    guiSetText(GUIEditor.label[13], _("Announcer Volume:"))
+    setTooltip(GUIEditor.label[13], _("Sets the volume of the announcer (e.g. the 'Time's up, pal' voice.)"))
+    guiSetText(GUIEditor.label[15], _("Music Player Volume:"))
+    setTooltip(GUIEditor.label[15], _("Sets the volume of the music player."))
+    guiSetText(GUIEditor.label[17], _("In this tab you can set the individual volume of sounds. For GTA SA sounds, please go into the MTA settings (esc > Settings >Sound Settings)"))
+    guiSetText(GUIEditor.label[18], _("Miscellaneous Volume:"))
+    setTooltip(GUIEditor.label[18], _("Sets the volume of every other custom sound that does not have it's own slider."))
+    guiSetText(GUIEditor.label[20], _("Sound Settings"))
+    setTooltip(SoundsOffLabel, _("With /soundsoff you can quickly mute all sounds. It won't be saved on reconnect, so its always better to set your volumes in this GUI instead."))
+    guiSetText(GUIEditor.tab[3], _("UI Settings"))
+    guiSetText(GUIEditor.label[21], _("In this tab you can toggle UI settings on or off. Settings will be saved, so you won't have to set it again."))
+    guiSetText(GUIEditor.label[22], _("User Interface Settings"))
+    guiSetText(GUIEditor.checkbox[5], _("Enable Rank Board"))
+    guiSetText(GUIEditor.label[23], _("Enable Rank Board"))
+    guiSetText(GUIEditor.button[5], _("Settings"))
+    guiSetText(GUIEditor.label[24], _("Enable Traffic Sensor"))
+    guiSetText(GUIEditor.checkbox[7], _("Enable Traffic Sensor"))
+    setTooltip(GUIEditor.label[24], _("The Traffic Sensor are the arrows that you see when other players are near you."))
+    guiSetText(GUIEditor.label[25], _("Enable GreenCoins Counter"))
+    guiSetText(GUIEditor.checkbox[8], _( "Enable GreenCoins Counter"))
+    guiSetText(GUIEditor.label[26], _("Enable Next Map Window"))
+    guiSetText(GUIEditor.checkbox[9], _("Enable Next Map Window"))
+    guiSetText(GUIEditor.checkbox[10], _("Enable Checkpoint Delay"))
+    guiSetText(GUIEditor.label[27], _("Enable CheckPoint Delay"))
+    setTooltip(GUIEditor.label[27], _("Checkpoint Delay gives you information on your time, when reaching a checkpoint."))
+    guiSetText(GUIEditor.checkbox[11], _("Enable Chat Bubbles"))
+    guiSetText(GUIEditor.label[28], _("Enable Chat Bubbles"))
+    setTooltip(GUIEditor.label[28], _("A chat bubble is the image that you see when a player is typing."))
+    guiSetText(GUIEditor.label[29], _("Enable Floating Messages"))
+    guiSetText(GUIEditor.checkbox[12], _("Enable Floating Messages"))
+    setTooltip(GUIEditor.label[29], _("Floating messages are the messages that float on the screen, giving you information. If disabled, the information will be in the chatbox instead."))
+    guiSetText(GUIEditor.button[2], _("Go to Progress Bar Settings"))
+    setTooltip(GUIEditor.button[2], _("Here you can find all settings related to the progress bar, including an option to disable it."))
+    guiSetText(GUIEditor.label[31], _("Speed-o-meter Mode"))
+    guiSetText(GUIEditor.label[32], _("HUD Mode"))
+    guiSetText(GUIEditor.label[34], _("Enable New Radar"))
+    guiSetText(GUIEditor.label[35], _("Enable FPS Counter"))
+    guiSetText(GUIEditor.label[36], _("Enable Countdown Timer"))
+    guiSetText(customNameTagsLabel, _("Enable Custom NameTags"))
+    guiSetText(GUIEditor.button[3], _("Close"))
+    guiSetText(GUIEditor.label[33], _("Settings for the Mr. Green Servers."))
+    guiSetText(GUIEditor.tab[4], _("Social"))
+    guiSetText(GUIEditor.label[37], _("Social Settings"))
+    guiSetText(GUIEditor.label[38], _("In this tab you can set all your social settings. Settings will be saved so you do not have to set it again."))
+    guiSetText(GUIEditor.label[39], _("Block Private Messages"))
+    setTooltip(GUIEditor.label[39], _("If you enable this, you will not get any private messages (f3)"))
+    guiSetText(GUIEditor.label[40], _("Block Chatbox Messages"))
+    setTooltip(GUIEditor.label[40], _("If you enable this, you will not get any chatbox messages, except for admin messages."))
+    guiSetText(GUIEditor.button[4], _("Manage Ignored Players"))
+    setTooltip(GUIEditor.button[4],_("Click to see all the players you ignored. Ignore people with the command /ignore [playername], you can not ignore an admin."))
+    guiSetText(GUIEditor.tab[5], _("Gameplay Setting"))
+    guiSetText(GUIEditor.label["gameplay"], _("Gameplay Settings"))
+    guiSetText(GUIEditor.label["gameplayText"], _("In this tab you can set all your gameplay settings. Settings will be saved so you do not have to set it again."))
+    guiSetText(GUIEditor.label["NOSMode"], _("NOS Mode"))
+end
+addEventHandler("onClientPlayerLocaleChange", root, translateGUI)

@@ -16,7 +16,7 @@ function socialCheckBoxHandler()
 			end
 			saveSocialTimer = setTimer(saveSocial,2000,1)
 
-			
+
 		elseif not guiCheckBoxGetSelected( source ) then
 			triggerServerEvent( "client_TogglePM", getResourceRootElement( getResourceFromName( "privateMessaging" )), true, false )
 			socialSettings["pm"] = false
@@ -28,7 +28,7 @@ function socialCheckBoxHandler()
 		end
 	elseif source == GUIEditor.checkbox[18] then
 		if guiCheckBoxGetSelected(source) then
-			outputChatBox("Chatbox messages turned off!",255,0,0)
+			outputChatBox(_("Chatbox messages turned off!"),255,0,0)
 			receiveChatMessages = false
 			socialSettings["chatbox"] = true
 
@@ -39,7 +39,7 @@ function socialCheckBoxHandler()
 		else
 			socialSettings["chatbox"] = false
 			receiveChatMessages = true
-			outputChatBox("Chatbox Messages turned on!",0,255,0)
+			outputChatBox(_("Chatbox Messages turned on!"),0,255,0)
 
 			if isTimer( saveSocialTimer ) then
 				killTimer( saveSocialTimer )
@@ -83,9 +83,9 @@ function socialButtonHandler()
 			local theSerial = guiGridListGetItemData( ignorePlayerGridlist, theSelected, ignoredplayerColumn )
 			removePlayerfromIgnoreList(theSerial)
 
-			outputChatBox("Removed "..tostring(theName).." from the ignore list.")
+			outputChatBox(_("Removed ${player} from the ignore list.") % {player = tostring(theName)})
 		else
-			outputChatBox("Please select a player before removing it from the list.",255,0,0)
+			outputChatBox(_("Please select a player before removing it from the list."),255,0,0)
 		end
 
 	end
@@ -166,7 +166,7 @@ function setSocialSettings()
 			end
 		elseif f == "chatbox" then
 			if u then
-				
+
 				setTimer(setDisableChatMessages,2000,1)
 			else
 				-- setTimer(function() receiveChatMessages = true end,2000,1)
@@ -176,7 +176,7 @@ function setSocialSettings()
 end
 
 function setDisableChatMessages()
-	outputChatBox("Chatbox Messages Disabled (you can still see admin messages), go to the /settings menu to enable it again.",255,0,0)
+	outputChatBox(_("Chatbox Messages Disabled (you can still see admin messages), go to the /settings menu to enable it again."),255,0,0)
 	receiveChatMessages = false
 end
 
@@ -246,12 +246,12 @@ function findPlayerByName(playerPart)
 function ignorePlayer(cmd, playername)
 	local player = findPlayerByName(playername)
 	if player == localPlayer then
-		outputChatBox ( "You can't ignore yourself!", 255, 0, 0 )
+		outputChatBox ( _("You can't ignore yourself!"), 255, 0, 0 )
 	elseif not player then
-		outputChatBox ( '/ignore: Could not find \'' .. (playername or '') .. '\'', 255, 0, 0 )
+		outputChatBox ( "/ignore: " .. _("Could not find '${name}'") % {name = playername or ''}, 255, 0, 0 )
 	else
 		if getElementData(player, "pser") ~= "admin" then -- if player is not admin
-			outputChatBox ( '/ignore: ignoring player ' .. getPlayerName(player), 255, 0, 0 )
+			outputChatBox ( _('/ignore: ' .. 'ignoring player ${name}') % {name=getPlayerName(player)}, 255, 0, 0 )
 
 			local theName = getPlayerName(player)
 			local theSer = getElementData( player, "pser")
@@ -261,7 +261,7 @@ function ignorePlayer(cmd, playername)
 			saveIgnoredPlayers()
 			reloadIgnoreGridList()
 		else
-			outputChatBox("You can't ignore an admin.")
+			outputChatBox(_("You can't ignore an admin!"))
 		end
 
 	end

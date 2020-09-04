@@ -80,7 +80,7 @@ function getSoundSettings()
 
 
 	xmlUnloadFile( soundXML )
-	
+
 	setScrollBars()
 end
 addEventHandler("onClientResourceStart", resourceRoot, getSoundSettings)
@@ -128,7 +128,7 @@ function soundHandling(reason)
     elseif theResource == theResources["musicplayer"] then
         setElementData( theSound, "soundSource", "musicplayer", false ) -- Mark sound for source
     	setVol("musicplayer", source)
-    
+
 
     else
         setVol("miscellaneous", source)
@@ -145,16 +145,16 @@ function setVol(reason,theSound)
 
 
         	setSoundVolume(u, tonumber(Volumes["map"]))
-        	setTimer(function() 
-                if isElement(u) then 
+        	setTimer(function()
+                if isElement(u) then
                     setSoundVolume(u, tonumber(Volumes["map"]))
-                    if Volumes["map"] == 0 then 
-                        setSoundPaused( u, true ) 
+                    if Volumes["map"] == 0 then
+                        setSoundPaused( u, true )
                     end
-                else u = nil 
+                else u = nil
                 end
         	 end, 50, 2) -- timer to set volume after map script has set volume --
-        	
+
         end
         -- outputDebugString("Set volume for "..reason.." "..Volumes["map"])
     elseif reason == "announcer" then
@@ -164,20 +164,20 @@ function setVol(reason,theSound)
         setTimer(setSoundVolume,50,2,theSound, tonumber(Volumes["announcer"]))
     	-- outputDebugString("Set volume for "..reason)
     elseif reason == "horn" then
-        
+
 
     	setSoundVolume( theSound, tonumber(Volumes["horn"] ))
         setTimer(setSoundVolume,50,2,theSound, tonumber(Volumes["horn"]))
     	-- outputDebugString("Set volume for "..reason)
     elseif reason == "musicplayer" then
-        
+
 
     	setSoundVolume( theSound, tonumber(Volumes["musicplayer"] ))
         setTimer(setSoundVolume,50,2,theSound, tonumber(Volumes["musicplayer"]))
     	-- outputDebugString("Set volume for "..reason)
 
     elseif reason == "miscellaneous" then
-        
+
 
     	setSoundVolume( theSound, tonumber(Volumes["miscellaneous"] ))
         setTimer(setSoundVolume,50,2,theSound, tonumber(Volumes["miscellaneous"]))
@@ -190,7 +190,7 @@ end
 function updateVolume(givenSource)
     local allSounds = getElementsByType( "sound" )
     for f, u in pairs(allSounds) do
-        local theSource = getElementData( u, "soundSource" ) 
+        local theSource = getElementData( u, "soundSource" )
         if not theSource then
             theSource = "miscellaneous"
         end
@@ -220,7 +220,7 @@ function saveSoundVolumes()
         local theChild = xmlFindChild(soundXML, f, 0)
         if theChild then
             xmlNodeSetValue( theChild, u )
-        else 
+        else
             local theNewChild = xmlCreateChild( soundXML, f )
             xmlNodeSetValue( theNewChild, u )
         end
@@ -233,7 +233,7 @@ end
 
 -- utils --
 function isMap(resourceElement)
-    if #getElementsByType('spawnpoint', resourceElement) > 0 then return true 
+    if #getElementsByType('spawnpoint', resourceElement) > 0 then return true
         else return false end
 end
 
@@ -382,8 +382,8 @@ addCommandHandler("soundson", soundsCommandHandler)
 
 function soundson()
     if soundsoff then
-        outputChatBox("Custom Sounds disabled. (You can set individual sound volumes in the /settings menu, this command is not saved on reconnect.)",255,0,0)
-        
+        outputChatBox(_("Custom Sounds disabled. (You can set individual sound volumes in the /settings menu, this command is not saved on reconnect.)"),255,0,0)
+
         guiSetText( SoundsOffLabel, "/soundsoff is enabled." )
         guiLabelSetColor(SoundsOffLabel, 255, 0, 0)
         guiLabelSetColor( GUIEditor.label[9], 255, 0, 0 )
@@ -407,7 +407,7 @@ function soundson()
 
 
     elseif not soundsoff then
-        outputChatBox("Custom Sounds enabled again. (You can set individual sound volumes in the /settings menu, this command is not saved on reconnect.)",0,255,0)
+        outputChatBox(_("Custom Sounds enabled again. (You can set individual sound volumes in the /settings menu, this command is not saved on reconnect.)"),0,255,0)
 
         guiSetText( SoundsOffLabel, "/soundsoff is disabled." )
         guiLabelSetColor(SoundsOffLabel, 255, 255, 255)
