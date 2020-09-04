@@ -88,14 +88,15 @@ function updateList(newEntry, newStatus)
 end
 
 function toggleIcon()
-	outputChatBox ( "Your icon is: " )
+    local onStr = _.context("Toggled on/off", "on")
+    local offStr = _.context("Toggled on/off", "off")
+
 	if( showMyIcon ) then
 		showMyIcon = false
-		outputChatBox ( "off", 255, 0, 0)
 	else
 		showMyIcon = true
-		outputChatBox ( "on", 0, 255, 0)
-	end
+    end
+    outputChatBox ( _("Chat icons are turned ${onOff}") % {onOff = showMyIcon and onStr or offStr} )
 end
 
 function resizeIcon( command, newSize )
@@ -104,14 +105,14 @@ function resizeIcon( command, newSize )
 		local percent = resize/100
 		globalscale = percent
 	end
-	outputChatBox("Chat icons are "..(globalscale * 100).."% normal size")
+	outputChatBox(_("Chat icons are ${scale}% from normal size") % {scale = globalscale * 100})
 end
 
 function setIconAlpha( command, newSize )
 	if(newSize) then
 		globalalpha = tonumber( newSize ) / 100
 	end
-	outputChatBox("Chat icons are "..(globalalpha * 100).."% visible")
+	outputChatBox(_("Chat icons are ${opacity}% visible") % {opacity = globalalpha * 100})
 end
 
 addEventHandler ( "updateChatList", root, updateList )

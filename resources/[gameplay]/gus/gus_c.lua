@@ -11,14 +11,14 @@ function freecam()
     if getResourceFromName('freecam') and exports.freecam then
         fCam = not fCam
         if fCam then
-            outputChatBox("[FREECAM] Free camera movement is now enabled", 0, 255, 0)
+            outputChatBox("[FREECAM] " .. _("Free camera movement is now enabled"), 0, 255, 0)
             exports.freecam:setFreecamEnabled()
 			local veh = getPedOccupiedVehicle(localPlayer)
 			if veh then
 				setElementFrozen(veh, true)
 			end
         else
-            outputChatBox("[FREECAM] Free camera movement is now disabled", 0, 255, 0)
+            outputChatBox("[FREECAM]" .. _("Free camera movement is now disabled"), 0, 255, 0)
 			setElementHealth(localPlayer,0)
             exports.freecam:setFreecamDisabled()
             if getElementData(localPlayer, 'state') == 'alive' then
@@ -94,9 +94,9 @@ addCommandHandler("autologin",
 addCommandHandler("mapflash", function()
 	dontMapFlash = not exports.settingsmanager:loadSetting("dontMapFlash")
 	if dontMapFlash then
-		outputChatBox("#ffffff* Taskbar flashing on map change was #ff0000DISABLED", 255, 0, 0, true)
+		outputChatBox("#ffffff* " .. _("Taskbar flashing on map change was #ff0000${action}") % {action = "DISABLED"}, 255, 0, 0, true)
 	else
-		outputChatBox("#ffffff* Taskbar flashing on map change was #00FF00ENABLED", 0, 255, 0, true)
+		outputChatBox("#ffffff* " .. _("Taskbar flashing on map change was #ff0000${action}") % {action = "ENABLED"}, 0, 255, 0, true)
 	end
 	exports.settingsmanager:saveSetting("dontMapFlash", dontMapFlash)
 end)
@@ -133,7 +133,7 @@ addEventHandler("onMapGather", getRootElement(),
     function(mapName,likes,dislikes,timesPlayed, author, description, lastTimePlayed, playerTime, nextmap)
         local nextmap = nextmap or '-not set-'
         if isTrayNotificationEnabled() then
-            createTrayNotification("[MrGreenGaming] ".. mapName .." just started. (".. nextmap  or '-not set-' ..").", "default" )
+            createTrayNotification("[MrGreenGaming] ".. _("${mapname} just started. (${nextmap}).") % {mapname = mapName, nextmap = nextmap  or '-not set-'}, "default" )
         end
     end
 )
@@ -141,7 +141,7 @@ addEventHandler("onMapGather", getRootElement(),
 function checkGear()
     local theVehicle = getPedOccupiedVehicle(localPlayer)
     if ( getElementModel(theVehicle) == 520 and getVehicleLandingGearDown( theVehicle ) == true) then
-      setVehicleLandingGearDown(theVehicle,false) 
+      setVehicleLandingGearDown(theVehicle,false)
       outputChatBox( "[Hydra] Landing gear is ready!", 0, 255, 0)
         if ( getAnalogControlState( "special_control_up" ) == 0 ) then
             setAnalogControlState( "special_control_up", 1 )
@@ -225,13 +225,13 @@ function Daylight.toggleDaylight()
     Daylight.enabled = not Daylight.enabled
     if Daylight.enabled then
         local allowed = Daylight.isAllowed()
-        outputChatBox("Daylight enabled." .. (allowed and "" or " It will only be applied in allowed modes."), 0, 200, 0)
+        outputChatBox(_("Daylight enabled. ") .. (allowed and "" or _("It will only be applied in allowed modes.")), 0, 200, 0)
         if allowed then
             Daylight.apply()
         end
     else
         Daylight.apply(true)
-        outputChatBox("Daylight disabled.", 200, 0, 0)
+        outputChatBox(_("Daylight disabled."), 200, 0, 0)
     end
 end
 addCommandHandler("daylight", Daylight.toggleDaylight)

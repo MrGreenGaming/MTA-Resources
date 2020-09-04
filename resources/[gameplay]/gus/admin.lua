@@ -155,9 +155,12 @@ function blowUp(player, commandName, ...)
 			end
 			local car = getPedOccupiedVehicle(blowPlayer)
 			if not isPedDead(blowPlayer) and car and not isElementFrozen(car) then
-				blowVehicle(car, false)
-				outputChatBox(remcol(getPlayerName(player)).." has killed "..remcol(getPlayerName(blowPlayer)).. ". Reason: "..table.concat(arg, " ", 2), root, 255, 0, 0)
-				if useIRC() then
+                blowVehicle(car, false)
+                local itplTable = {killer=remcol(getPlayerName(player)), victim=remcol(getPlayerName(blowPlayer)), reason=table.concat(arg, " ", 2)}
+                for _, p in ipairs(getElementsByType("player")) do
+				    outputChatBox(_.For(p, "${killer} has killed ${victim}. Reason: ${reason}" ) % itplTable, p, 255, 0, 0)
+                end
+                if useIRC() then
                     exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has killed "..remcol(getPlayerName(blowPlayer)).. ". Reason: "..table.concat(arg, " ", 2))
                     logKillAction(player, blowPlayer, table.concat(arg, " ", 2))
 				end
@@ -204,7 +207,10 @@ function(player,cmd,...)
 		theBan = addBan(theIP, nil, theSerial, player, reason, 0)
 		if not theBan then outputChatBox("An error has occured. Can't ban player.", player)
 		else outputChatBox("Successfully banned.", player)
-			 outputChatBox(remcol(banPlayerName).." has been banned by "..remcol(getPlayerName(player)),root, 255,0,0)
+            local itplTable = {victim=remcol(banPlayerName), admin=remcol(getPlayerName(player))}
+            for _, p in ipairs(getElementsByType("player")) do
+                outputChatBox(_.For(p, "${victim} has been banned by ${admin}" ) % itplTable, p, 255, 0, 0)
+            end
 		end
 	else outputChatBox("No player match. Try again.", player)
 	end
@@ -220,7 +226,9 @@ function disableChat(p)
 	end
 	addEventHandler('onPlayerChat', root, chatIsOff)
 	chat_is_disabled = true
-	outputChatBox('Chatbox is disabled by ' .. remcol(getPlayerName(p)) .. '!', root, 238,201,0)
+    for _, _p in ipairs(getElementsByType('player')) do
+        outputChatBox(_.For(_p,'Chatbox has been disabled by ${admin}!') % {admin=remcol(getPlayerName(p))}, _p, 238,201,0)
+    end
 	playerResponsible = p
 end
 addCommandHandler('chatoff', disableChat)
@@ -229,10 +237,10 @@ function clearChat(p)
 	if not (hasObjectPermissionTo(p, "function.banPlayer", false)) then
 		return
 	end
-	for i=1,200 do
-		outputChatBox(" ", root)
-	end
-	outputChatBox('Chatbox cleared by ' .. remcol(getPlayerName(p)) .. '!', root, 238,201,0)
+    clearChatBox()
+    for _, _p in ipairs("player") do
+        outputChatBox(_.For(_p, "Chatbox has been cleared by ${admin}!") % {admin=remcol(getPlayerName(p))}, _p, 238,201,0)
+    end
 end
 addCommandHandler('clearchat', clearChat)
 
@@ -241,8 +249,10 @@ function enableChat(p)
 		return
 	end
 	removeEventHandler('onPlayerChat', root, chatIsOff)
-	chat_is_disabled = false
-	outputChatBox('Chatbox is enabled again by ' .. remcol(getPlayerName(p)) .. '!', root, 238,201,0)
+    chat_is_disabled = false
+    for _, _p in ipairs("player") do
+        outputChatBox(_.For(_p, "Chatbox enabled again by ${admin}!") % {admin=remcol(getPlayerName(p))}, _p, 238,201,0)
+    end
 	playerResponsible = nil
 end
 addCommandHandler('chaton', enableChat)
@@ -251,7 +261,7 @@ function chatIsOff()
 	if (hasObjectPermissionTo(source, "function.banPlayer", false)) then
 		return
 	end
-	outputChatBox('Chatbox is currently disabled.', source, 0, 255, 0)
+	outputChatBox(_.For(source, 'Chatbox is currently disabled.'), source, 0, 255, 0)
 	cancelEvent()
 end
 
@@ -264,7 +274,9 @@ function()
     if playerResponsible and source == playerResponsible then
         removeEventHandler('onPlayerChat', root, chatIsOff)
         chat_is_disabled = false
-        outputChatBox('Chatbox is enabled again!', root, 238,201,0)
+        for _, _p in ipairs("player") do
+            outputChatBox(_.For(_p, 'Chatbox is enabled again!'), _p, 238,201,0)
+        end
         playerResponsible = nil
     end
 end

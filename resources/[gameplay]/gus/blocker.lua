@@ -29,8 +29,10 @@ function blocker(player, _, nick, duration)
 			if added then
 				setElementData(blockPlayer , 'markedblocker', t)
 
+                for _, _p in ipairs(getElementsByType("player")) do
+                    outputChatBox(_.For(_p, "${admin} has marked ${victim} as a blocker.") % {admin=remcol(getPlayerName(player)),victim=remcol(getPlayerName(blockPlayer))}, _p, 255, 0, 0)
+                end
 
-				outputChatBox(remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
 				logBlockAction(player, blockPlayer,"marked",duration)
 				if useIRC() then
 					exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
@@ -42,9 +44,11 @@ function blocker(player, _, nick, duration)
 			if not hasObjectPermissionTo ( player, "function.banPlayer", false ) and getElementData(blockPlayer,"markedblocker").canmodsoverride == "false" then
 				outputChatBox("Only admins can unmark /blocker's marked by admins",player)
 				return false
-			end
-			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
-			setElementData(blockPlayer , 'markedblocker', nil)
+            end
+            for _, _p in ipairs(getElementsByType("player")) do
+			    outputChatBox(_.For(_p, "${admin} has unmarked ${victim} as a blocker.") % {admin=remcol(getPlayerName(player)), victim=remcol(getPlayerName(blockPlayer))}, _p, 255, 0, 0)
+            end
+            setElementData(blockPlayer , 'markedblocker', nil)
 
 			removeBlockerFromDB(getPlayerSerial(blockPlayer))
 			logBlockAction(player, blockPlayer,"unmarked")
@@ -67,9 +71,10 @@ function unblocker(player, _, nick)
 		end
 
 		local serial = getPlayerSerial(blockPlayer)
-		if getElementData(blockPlayer,"markedblocker") then
-			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
-
+        if getElementData(blockPlayer,"markedblocker") then
+            for _, _p in ipairs(getElementsByType("player")) do
+			    outputChatBox(_.For(_p, "${admin} has unmarked ${victim} as a blocker.") % {admin=remcol(getPlayerName(player)),victim=remcol(getPlayerName(blockPlayer))}, _p, 255, 0, 0)
+            end
 			setElementData(blockPlayer , 'markedblocker', nil)
 			removeBlockerFromDB(serial)
 			logBlockAction(player, blockPlayer,"unmarked")
@@ -137,7 +142,7 @@ function dispBlockers(source)
 		end
 	end
 	if #t < 1 then
-		outputChatBox('No blockers online at the moment!', source, 255, 0, 0)
+		outputChatBox(_.For(source, 'No blockers online at the moment!'), source, 255, 0, 0)
 	else
 		local chatboxLines = splitStringforChatBox('Blockers online: ' .. table.concat(t, ', '))
 		for _,line in ipairs(chatboxLines) do
@@ -173,10 +178,7 @@ function checkBlockerJoin(thePlayer)
 
 						local t = sql[1]
 						setElementData(player,"markedblocker",t)
-
-
-
-						outputChatBox("You have been marked as a blocker by "..t.byAdmin..", you will be unmarked in "..expireReadable,player,255,0,0)
+						outputChatBox(_.For(player, "You have been marked as a blocker by ${admin}, you will be unmarked in ${time}") % {admin=t.byAdmin, time=expireReadable},player,255,0,0)
 					else
 						removeBlockerFromDB(getPlayerSerial(player))
 					end
@@ -217,7 +219,7 @@ function checkBlockerExpire()
 			if timeleft < 1 then
 				removeBlockerFromDB(getPlayerSerial(player))
 				setElementData(player,"markedblocker",nil)
-				outputChatBox("You are no longer marked as a blocker.",player,255,0,0)
+				outputChatBox(_.For(player, "You are no longer marked as a blocker."),player,255,0,0)
 			end
 		end
 	end

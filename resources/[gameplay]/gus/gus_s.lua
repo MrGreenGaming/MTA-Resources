@@ -37,10 +37,10 @@ function(user,pass)
 		b = logIn(client,getAccount(user),pass)
 	end
 	if b then
-		outputChatBox("You have been automatically logged in to #FFFFFF"..user.."'s#00FF00 account!",client,0,255,0,true)
-		outputChatBox("To disable AutoLogin, use /autologin!",client,0,255,0,true)
+		outputChatBox(_.For(client, "You have been automatically logged in to #FFFFFF${user}'s#00FF00 account!") % {user=user},client,0,255,0,true)
+		outputChatBox(_.For(client, "To disable AutoLogin, use /autologin!"),client,0,255,0,true)
 	else
-		outputChatBox('/autologin: wrong login/password', client, 255,0,0)
+		outputChatBox(_.For(client, '/autologin: wrong login/password'), client, 255,0,0)
 	end
 end )
 addEventHandler('onPlayerLogin', root, function(_, acc) if acc then setAccountData(acc, 'lastLogin', getRealTime().timestamp) end end)
@@ -69,8 +69,9 @@ end
 
 
 addCommandHandler('admins',
-	function(player)
-		local awayString = " (away)"
+    function(player)
+        local awayLocale = _.For.context(player, "player state / afk", "away")
+		local awayString = " (" .. awayLocale .. ")"
         local admins = {}
         for k, v in ipairs (getElementsByType("player")) do
             if hasObjectPermissionTo ( v, "general.adminpanel", false ) then
@@ -101,7 +102,7 @@ addCommandHandler('admins',
         end
 
         if #admins == 0 then
-            outputChatBox('No admins online at the moment.', player, 0, 255, 0)
+            outputChatBox(_.For(player, 'No admins online at the moment.'), player, 0, 255, 0)
         else
             local adminstring = admins[1]
             if #admins > 1 then
@@ -111,11 +112,11 @@ addCommandHandler('admins',
                 end
             end
 			adminstring = string.gsub (adminstring, '#%x%x%x%x%x%x', '' )
-            outputChatBox('Online admins: ' .. adminstring, player, 0, 255, 0)
+            outputChatBox(_.For(player, 'Online admins: ${list}') % {list=adminstring}, player, 0, 255, 0)
         end
 
         if #moderators == 0 then
-            outputChatBox('No moderators online at the moment.', player, 0, 255, 0)
+            outputChatBox(_.For(player, 'No moderators online at the moment.'), player, 0, 255, 0)
         else
             local killerstring = moderators[1]
             if #moderators > 1 then
@@ -125,11 +126,11 @@ addCommandHandler('admins',
                 end
             end
 			killerstring = string.gsub (killerstring, '#%x%x%x%x%x%x', '' )
-            outputChatBox('Online moderators: ' .. killerstring, player, 0, 255, 0)
+            outputChatBox(_.For(player, 'Online moderators: ${list}') % {list = killerstring}, player, 0, 255, 0)
         end
 
         if #applicants > 0 then
-            outputChatBox('Online admin applicants: ' .. string.gsub(table.concat(applicants, ', '),'#%x%x%x%x%x%x', ''), player, 0, 255, 0)
+            outputChatBox(_.For(player, 'Online admin applicants: ${list}') % {list = string.gsub(table.concat(applicants, ', '),'#%x%x%x%x%x%x', '')}, player, 0, 255, 0)
         end
 	end
 )
@@ -168,34 +169,23 @@ addCommandHandler('author',
 function(player)
 	local map = exports.mapmanager:getRunningGamemodeMap()
 	if map then
-		local author = getResourceInfo(map, 'author') or 'N/A'
-		outputChatBox('\''..(getResourceInfo(map, 'name') or getResourceName(map)) .. '\' has been created by '..author, player, 0, 255, 0)
+        local author = getResourceInfo(map, 'author') or 'N/A'
+		outputChatBox(_.For(player, "'${map}' has been created by '${author}'") % {map=getResourceInfo(map, 'name') or getResourceName(map), author=author}, player, 0, 255, 0)
 	end
 end
 )
-
-addCommandHandler('mapupload',
-	function(player)
-		outputChatBox("Upload your maps at our forums: www.mrgreengaming.com/mta/mapupload", player, 0, 255, 0)
-	end
-)
-
-addCommandHandler('upload',
-	function(player)
-		outputChatBox("Upload your maps at our forums: www.mrgreengaming.com/mta/mapupload", player, 0, 255, 0)
-	end
-)
-
-addCommandHandler('uploadmap',
-	function(player)
-		outputChatBox("Upload your maps at our forums: www.mrgreengaming.com/mta/mapupload", player, 0, 255, 0)
-	end
-)
+local function outputMapUploadInfo(player)
+    local url = "www.mrgreengaming.com/mta/mapupload"
+    outputChatBox(_.For(player, "Upload your maps at: ${url}") % {url=url}, player, 0, 255, 0)
+end
+addCommandHandler('mapupload',outputMapUploadInfo)
+addCommandHandler('upload',outputMapUploadInfo)
+addCommandHandler('uploadmap',outputMapUploadInfo)
 
 addCommandHandler('discord',
 	function(player)
-		outputChatBox("Join our Discord! If you need admin support, join the server and ask for an admin", player, 0, 255, 0)
-		outputChatBox("Discord invite: https://discord.gg/SjbzC9Z", player, 0, 255, 0)
+		outputChatBox(_.For(player, "Join our Discord! If you need admin support, join the server and ask for an admin"), player, 0, 255, 0)
+		outputChatBox(_.For(player, "Discord invite: ${url}") % {url = "mrgreengaming.com/discord"}, player, 0, 255, 0)
 	end
 )
 
@@ -203,7 +193,7 @@ addCommandHandler('discord',
 
 addCommandHandler('pm',
 	function(player)
-		outputChatBox("Use /msg [nick] [text]", player, 255, 0, 0)
+		outputChatBox(_.For(player, "Use /msg [nick] [text]"), player, 255, 0, 0)
 	end
 )
 
@@ -213,21 +203,26 @@ addCommandHandler("lol",
 		if g_lolPlayers[player] and getTickCount() - g_lolPlayers[player] < 5000 then return end
 		if isPlayerMuted(player) or chat_is_disabled then outputChatBox('You\'re muted.', player) return end
 		local nick = getElementData(player, "vip.colorNick") or getPlayerName(player)
-		if not arg then
-			outputChatBox(nick.."#FFD700 is laughing out loud.", root, 255, 215, 0, true)
+        if not arg then
+            for _, _p in ipairs(getElementsByType("player")) do
+                outputChatBox(_.For(_p, "${player}#FFD700 is laughing out loud.") % {player=nick}, _p, 255, 215, 0, true)
+            end
 			exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud." )
 			g_lolPlayers[player] = getTickCount()
 		else
 			local who = findPlayerByName(arg)
-			if not who then outputChatBox("No player found", player)
+			if not who then outputChatBox(_.For(player, "No player found"), player)
 			else
 				local whoName = getElementData(who, "vip.colorNick") or getPlayerName(who)
-				local lolString = nick.."#FFD700 is laughing out loud at "..whoName
-				if string.len(lolString) > 256 then
-					outputChatBox(nick.."#FFD700 is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ), root, 255, 215, 0, true)
-				else
-					outputChatBox(lolString, root, 255, 215, 0, true)
-				end
+                for _, _p in ipairs(getElementsByType("player")) do
+                    local lolString = _.For(_p, "${player1}#FFD700 is laughing out loud at ${player2}")
+                    local outputString = lolString % {player1=nick, player2=whoName}
+                    if string.len(outputString) > 256 then
+                        outputChatBox(lolString % {player1= nick, player2=string.gsub(whoName, '#%x%x%x%x%x%x', '' )}, _p, 255, 215, 0, true)
+                    else
+                        outputChatBox(outputString, _p, 255, 215, 0, true)
+                    end
+                end
 
 				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
 				g_lolPlayers[player] = getTickCount()
@@ -245,8 +240,8 @@ function(playerName, commandName)
 	local map = exports.mapmanager:getRunningGamemodeMap()
 	if map then
 		local name = getResourceName(map)
-		outputChatBox('If this map has a song, it has been downloaded into your computer. You can find it in:', playerName, 255,255,255)
-		outputChatBox('Multi Theft Auto/mods/deathmatch/resources/'..name..'/ folder.',playerName, 255, 0, 0)
+		outputChatBox(_.For(playerName, 'If this map has a song, it has been downloaded into your computer. You can find it in:'), playerName, 255,255,255)
+		outputChatBox('Multi Theft Auto/mods/deathmatch/resources/'..name..'/',playerName, 255, 0, 0)
 	end
 end
 )
@@ -255,9 +250,9 @@ function gclogin( message, messageType )
 	if messageType == 0 then
 		if (string.find(message, "gclogin", 1, true) == 1) or (string.find(message, "gclogin", 1, true) == 2) or (string.find(message, "gclogin", 1, true) == 3) or (string.find(message, "login", 1, true) == 1) then
 			cancelEvent()
-			outputChatBox("The correct command is /gclogin, do not misspell it",source,255,255,0)
+			outputChatBox(_.For(source, "The correct command is /gclogin, do not misspell it"),source,255,255,0)
 		end
-	end	
+	end
 end
 
 --DD Ghost car testing
@@ -296,7 +291,7 @@ addEventHandler("onRaceStateChanging", root,
 		elseif state == "LoadingMap" then
 			-- handleRoundCount(exports.mapmanager:getRunningGamemodeMap())
 		else
-			if isTimer(GhostCarCleanupTimer) then 
+			if isTimer(GhostCarCleanupTimer) then
 				killTimer(GhostCarCleanupTimer)
 			end
 		end
@@ -321,13 +316,16 @@ addEvent("onRoundCountChange",true)
 function handleRoundCount(round,max)
 	local max = max+1 -- max plus 1st round
 	if round >= max then -- Round can get bigger then max because of /redo and map restarting.
-		roundCount = "Currently playing round: #FF0000"..tostring(max).."/"..tostring(max)
+		roundCount = " #FF0000"..tostring(max).."/"..tostring(max)
 	else
-		roundCount = "Currently playing round: #00CD00"..tostring(round).."/"..tostring(max)
+		roundCount = " #00CD00"..tostring(round).."/"..tostring(max)
 	end
 
+    for _, _p in ipairs(getElementsByType("player")) do
+        local roundString = _.For(_p, "Currently playing round:")
+        outputChatBox(roundCount .. roundCount,_p,255,255,255,true)
+    end
 
-	outputChatBox(roundCount,root,255,255,255,true)
 
 end
 addEventHandler("onRoundCountChange",root,handleRoundCount)
@@ -344,7 +342,7 @@ end
 -- Remove /me chat
 addEventHandler ( "onPlayerChat", root, function ( _, tp )
     if ( tp == 1 ) then
-    	outputChatBox("/me messages are disabled in this server", source, 255, 0, 0)
+    	outputChatBox(_.For(source, "/me messages are disabled in this server"), source, 255, 0, 0)
         cancelEvent ( )
     end
 end )
@@ -353,13 +351,13 @@ end )
 local corruptedChars = {"̍", "̎", "̄", "̅", "̑", "̆", "̐", "͒", "͗", "͑", "̇", "̈", "͂", "̓", "̈́", "͋", "͌", "̂", "̌", "͐", "̋", "̏", "̒", "̓", "̔", "̽", "ͣ", "ͤ", "ͦ", "ͧ", "ͨ", "ͪ", "ͫ", "ͬ", "ͭ", "ͮ", "ͯ", "̾", "͛", "͆", "̚", "̖", "̗", "̘", "̙", "̜", "̝", "̞", "̟", "̠", "̤", "̥", "̦", "̩", "̪", "̫", "̬", "̭", "̮", "̯", "̰", "̱", "̲", "̳", "̹", "̺", "̻", "̼", "ͅ", "͇", "͈", "͉", "͍", "͎", "͓", "͔", "͕", "͖", "͙", "͚"}
 
 addEventHandler("onPlayerChat",root,
-	function(message) 
-		for _,char in ipairs(corruptedChars) do 
-			if string.find(message,char) then 
-				cancelEvent() 
+	function(message)
+		for _,char in ipairs(corruptedChars) do
+			if string.find(message,char) then
+				cancelEvent()
 				outputChatBox("You used a corrupted character (      "..char..char..char..char..char..char..char..char..char..char..char..char..char..char..char..char..char..char.."      ) , please stop!",source,255,0,0) -- Multiplied to show character
-				break 
-			end 
+				break
+			end
 		end
 	end)
 
@@ -388,8 +386,8 @@ addCommandHandler('dice',
 -- Ghostmode at finish
 --------------------------------
 addEvent('onPlayerFinish')
-addEventHandler( 'onPlayerFinish', root, 
-function() 
+addEventHandler( 'onPlayerFinish', root,
+function()
 	if getElementType(source) == 'player' then
 		setElementData(source, 'overrideCollide.finishghostmode', 0, false)
 		-- Element data will automatically be removed
@@ -434,8 +432,8 @@ function getGreenCoinsAmountForStreak()
 	end
 end
 
-addEventHandler('onPlayerFinish', root, 
-	function(rank) 
+addEventHandler('onPlayerFinish', root,
+	function(rank)
 		if (getPlayerCount() >= requiredPlayersToRecordAStreak) then
 			if (rank == 1) then
 				if (currentStreakPlayer ~= source) then
@@ -444,14 +442,18 @@ addEventHandler('onPlayerFinish', root,
 				else
 					if (currentStreakPlayer) then
 						currentPlayerStreakCount = currentPlayerStreakCount+1;
-						exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
-						outputChatBox("[Streak]"..getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00) (earned "..getGreenCoinsAmountForStreak().."GC)", root, 0, 255, 0, true)
-					end
+                        exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
+                        local itplTable = {player=getPlayerName(currentStreakPlayer), streak=currentPlayerStreakCount, reward=getGreenCoinsAmountForStreak()}
+                        for _, _p in ipairs(getElementsByType("player")) do
+                            outputChatBox("[Streak]".. _.For(_p, "${player} #00ff00has made a streak! (#FFFFFFX${streak}#00ff00) (earned ${reward}GC)") % itplTable, _p, 0, 255, 0, true)
+                        end
+                    end
 				end
 			end
 		else
-			if (rank == 1) then
-				outputChatBox("There aren't enough players online to record this streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
+            if (rank == 1) then
+                -- This should not be displayed to everyone in the server
+				-- outputChatBox("There aren't enough players online to record this streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
 			end
 		end
     end
@@ -465,12 +467,17 @@ function triggerStreakForOtherGamemodes()
 		else
 			if (currentStreakPlayer) then
 				currentPlayerStreakCount = currentPlayerStreakCount+1;
-				exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
-				outputChatBox("[Streak]"..getPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00) (earned "..getGreenCoinsAmountForStreak().."GC)", root, 0, 255, 0, true)
+                exports.gc:addPlayerGreencoins(source, getGreenCoinsAmountForStreak())
+
+                local itplTable = {player=getPlayerName(currentStreakPlayer), streak=currentPlayerStreakCount, reward=getGreenCoinsAmountForStreak()}
+                for _, _p in ipairs(getElementsByType("player")) do
+                    outputChatBox("[Streak]".. _.For(_p, "${player} #00ff00has made a streak! (#FFFFFFX${streak}#00ff00) (earned ${reward}GC)") % itplTable, _p, 0, 255, 0, true)
+                end
 			end
 		end
-	else
-		outputChatBox("There aren't enough players online to record this streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
+    else
+        -- This should not be displayed to everyone in the server
+		-- outputChatBox("There aren't enough players online to record this streak. ("..getPlayerCount().."/"..requiredPlayersToRecordAStreak..")", root, 0, 255, 0)
 	end
 end
 addEventHandler("onPlayerWinDD", root, triggerStreakForOtherGamemodes)

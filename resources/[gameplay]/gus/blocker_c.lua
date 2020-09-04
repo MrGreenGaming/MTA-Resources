@@ -1,3 +1,6 @@
+local markedBlockerString = _("You are marked as a blocker for: ${time}")
+addEventHandler("onClientPlayerLocaleChange", root, function() markedBlockerString = _("You are marked as a blocker for: ${time}") end)
+
 blockerTable = {}
 addEventHandler("onClientElementDataChange",root,
 	function(name)
@@ -83,9 +86,9 @@ function displayBlockerTimer()
 	-- local minutes = math.floor((timeLeft/1000) / 60)
 	-- local seconds = math.floor((timeLeft/1000) % 60)
 
-
-    dxDrawText("You are marked as a blocker for: "..readableTime, screenW * 0.727 + 1, screenH * 0.971 + 1, screenW * 0.981 + 1, screenH * 0.996 + 1, tocolor(0, 0, 0, 255), 1.00, "default-bold", "left", "center", false, false, false, false, false)
-    dxDrawText("You are marked as a blocker for: "..readableTime, screenW * 0.727, screenH * 0.971, screenW * 0.981, screenH * 0.996, tocolor(255, 0, 5, 255), 1.00, "default-bold", "left", "center", false, false, false, false, false)
+    local itplTable = {time=readableTime}
+    dxDrawText(markedBlockerString % itplTable, screenW * 0.727 + 1, screenH * 0.971 + 1, screenW * 0.981 + 1, screenH * 0.996 + 1, tocolor(0, 0, 0, 255), 1.00, "default-bold", "left", "center", false, false, false, false, false)
+    dxDrawText(markedBlockerString % itplTable, screenW * 0.727, screenH * 0.971, screenW * 0.981, screenH * 0.996, tocolor(255, 0, 5, 255), 1.00, "default-bold", "left", "center", false, false, false, false, false)
 
 end
 addEventHandler("onClientRender",root,displayBlockerTimer)
