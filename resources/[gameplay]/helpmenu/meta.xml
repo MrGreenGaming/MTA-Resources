@@ -1,16 +1,18 @@
-<meta>		
-	<info name="MrGreenGaming Welcome/Help/Settings Menu" author="warp., SDK, KaliBwoy, AleksCore" version="0.0.5" />
-	
-	<script src="helpmenu_s.lua" type="server" />	
-	<script src="helpmenu.lua" type="client" />	
-	<script src="admins.lua" type="shared" />	
-	
+<meta>
+	<info name="MrGreenGaming Welcome/Help/Settings Menu" author="warp., SDK, KaliBwoy, AleksCore" version="0.0.5" i18n-project="mta-racemix" i18n-component="helpmenu" />
+    <script src="i18n" type="shared"></script>
+    <include resource="i18n" />
+
+	<script src="helpmenu_s.lua" type="server" />
+	<script src="helpmenu.lua" type="client" />
+	<script src="admins.lua" type="shared" />
+
 	<file src="img/logo.png" />
 	<file src="img/dot.jpg" />
 	<file src="commands.txt"/>
-	
+
 	<include resource="mrgreen-settings" />
 	<include resource="blur_box" />
-	
+
 	<min_mta_version client="1.5.2" server="1.5.2" />
 </meta>
