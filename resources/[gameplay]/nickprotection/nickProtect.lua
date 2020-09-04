@@ -11,7 +11,7 @@
 --TO DO:
 
 --add admin /unlocknick <nick>
---add player /unlocknick 
+--add player /unlocknick
 
 bAllowCommands = {}
 
@@ -76,7 +76,7 @@ function deleteNick(p, c, nick)
     if not nick then return end
     local cmd = "DELETE FROM gc_nickprotection WHERE pNick = ?"
     dbExec(handlerConnect, cmd, nick)
-    outputChatBox("[NICK] Removed \"" .. nick .. "\" nickprotection", p)
+    outputChatBox("[NICK] " .. _.For(p, 'Removed "${nickname}" nickprotection') % {nickname = nick}, p)
 end
 
 addCommandHandler('deletenick', deleteNick, true)
@@ -90,7 +90,7 @@ function warnPlayer(player, oldNick)
     end
     -- Remove VIP supernick when name is locked
     removeElementData(player, "vip.colorNick")
-    outputChatBox('[NICK] Your nickname has been changed because your previous nickname has been locked.', player, 255, 0, 0)
+    outputChatBox('[NICK] ' .. _.For(player, 'Your nickname has been changed because your previous nickname has been locked.'), player, 255, 0, 0)
 end
 
 g_JoinHandler = {}
@@ -133,7 +133,7 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
         if byUser then
             nickChangeSpamProtection(source)
         end
-        
+
         if not getResourceFromName('gc') or getResourceState(getResourceFromName('gc')) ~= "running" then
             return
         end
@@ -150,15 +150,15 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
         if not isCurrentNickProtected then
             return
         end
-        
+
         local isLogged = exports.gc:isPlayerLoggedInGC(player)
         if not isLogged then
             cancelEvent()
-            outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-            setTimer(function(oldNick, newNick) 
-                if getPlayerName(player) == newNick then 
-                    warnPlayer(player, oldNick) 
-                end 
+            outputChatBox('[NICK] ' .. _.For(player, "This nick is protected. If it's your name, please log into GCs or use another name."), player, 255, 0, 0)
+            setTimer(function(oldNick, newNick)
+                if getPlayerName(player) == newNick then
+                    warnPlayer(player, oldNick)
+                end
             end, 10000, 1, oldNick, newNick)
             return
         end
@@ -166,10 +166,10 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
         local id = exports.gc:getPlayerGreencoinsID(player)
         if not doesPlayerMatchNick(safeString(nick), id) then
             cancelEvent()
-            outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-            setTimer(function(oldNick, newNick) 
-                if getPlayerName(player) == newNick then 
-                    warnPlayer(player, oldNick) 
+            outputChatBox('[NICK] ' .. _.For(player, "This nick is protected. If it's your name, please log into GCs or use another name."), player, 255, 0, 0)
+            setTimer(function(oldNick, newNick)
+                if getPlayerName(player) == newNick then
+                    warnPlayer(player, oldNick)
                 end
             end, 500, 1, oldNick, newNick)
         end
@@ -219,7 +219,7 @@ function nickChangeSpamProtection(player)
     -- if count is too high, cancel changing of nick
     if count[player] > 2 then
         cancelEvent()
-        outputChatBox("Please wait some time before changing your nick again.", player, 255, 100, 100)
+        outputChatBox(_.For(player, "Please wait some time before changing your nick again."), player, 255, 100, 100)
     else
         last[player] = getTickCount()
     end
