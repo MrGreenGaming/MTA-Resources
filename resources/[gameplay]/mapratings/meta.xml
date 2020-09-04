@@ -1,10 +1,11 @@
 <meta>
-	<info name="Map Ratings" description="ratingsystem for maps" author="Flobu" type="script" version="1.0"/>
-
+	<info name="Map Ratings" description="ratingsystem for maps" author="Flobu" type="script" version="1.0" i18n-project="mta-racemix" i18n-component="mapratings"/>
+    <include resource="i18n" />
+    <script src="i18n" type="shared"></script>
 	<script src="mapratings_server.lua" type="server"/>
 	<script src="mapratings_sql.lua" type="server"/>
 	<script src="client.lua" type="client"/>
-	
+
 	<export function="getMapRating" type="server"/>
 	<export function="getPlayerRating" type="server"/>
 	<export function="getRatingColor" type="server"/>
@@ -13,5 +14,5 @@
 	<!-- Exports for settings resource  KaliBwoy -->
 	<export function="showNextMapWindow" type="client"/>
 	<export function="hideNextMapWindow" type="client"/>
-	
+
 </meta>

@@ -21,14 +21,26 @@ function rate (player, cmd)
 
 	if #sql > 0 then
 		 dbExec( theCon, "UPDATE mapratings SET rating=?, forumid=? WHERE mapresourcename=? AND (forumid=? OR serial=? OR playername=?)", rating, forumid, mapresourcename, forumid, serial, _getPlayerName(player) )
-		 if sql[1].rating == rating then
-			outputChatBox("You already "..cmd.."d this map.", player, 255, 0, 0, true)
-		else
-			outputChatBox("Changed from "..(rating==1 and "dislike" or "like").." to "..cmd..".", player, 225, 170, 90, true)
+         if sql[1].rating == rating then
+            if cmd == "dislike" then
+                outputChatBox(_.For(player, "You already disliked this map"), player, 255, 0, 0, true)
+            else
+                outputChatBox(_.For(player, "You already liked this map"), player, 255, 0, 0, true)
+            end
+        else
+            if rating == 1 then
+                outputChatBox(_.For(player, "Changed from dislike to like."), player, 225, 170, 90, true)
+            else
+                outputChatBox(_.For(player, "Changed from like to dislike."), player, 225, 170, 90, true)
+            end
 		end
 	else
 		if dbExec( theCon, "INSERT INTO mapratings (forumid, mapresourcename,rating) VALUES (?,?,?)", forumid, mapresourcename, rating) then
-			outputChatBox("You "..cmd.."d the map: "..mapname, player, 225, 170, 90, true)
+            if cmd == "like" then
+                outputChatBox(_.For(player, "You liked the map: ${mapname}") % {mapname=mapname}, player, 225, 170, 90, true)
+            else
+                outputChatBox(_.For(player, "You disliked the map: ${mapname}") % {mapname=mapname}, player, 225, 170, 90, true)
+            end
 		end
 	end
 	triggerEvent("onSendMapRating", root, getMapRating(mapresourcename, true) or "unrated")
@@ -44,7 +56,7 @@ function getMapRating(mapresourcename, forceUpdate)
 
 		local sql_hate_query = dbQuery(theCon,"SELECT COUNT(rating) AS count FROM mapratings WHERE rating=? AND mapresourcename=?",0,mapresourcename)
 		local sql_hate = dbPoll(sql_hate_query,-1)
-		
+
 		ratingCache[mapresourcename] = {likes = sql_like[1].count , hates = sql_hate[1].count}
 	end
 	return ratingCache[mapresourcename] or {false}
@@ -55,7 +67,7 @@ function getTableOfRatedMaps()
 	local query = dbQuery(theCon,"SELECT * FROM mapratings")
 	local sql = dbPoll(query,-1)
 	if #sql > 0 then
-		for i, j in ipairs(sql) do 
+		for i, j in ipairs(sql) do
 			if not mapTable[sql[i].mapresourcename] then
 				mapTable[sql[i].mapresourcename] = {}
 				mapTable[sql[i].mapresourcename].likes = 0
@@ -88,7 +100,7 @@ addCommandHandler('convertratingsfromsqlitetomysql', function()
 	local resources = getResources()
 	local link = {}
 	local inserts = {}
-	
+
 	if #sql > 0 then
 		for _, j in ipairs(sql) do
 			if not link[j.mapname] then

@@ -5,7 +5,22 @@
 
 alpha = 255
 backgroundAlpha = 150
-	
+screenX, screenY = guiGetScreenSize()
+
+local localeText = {
+    likes = {original = "Likes:", locale = _("Likes:")},
+    dislikes = {original = "Dislikes:", locale = _("Dislikes:")},
+    author = {original = "Author:", locale = _("Author:")},
+    timesplayed = {original = "Times played:", locale = _("Times played:")},
+    lasttimeplayed = {original = "Last time played:", locale = _("Last time played:")},
+    description = {original = "Description:", locale = _("Description:")},
+}
+addEventHandler("onClientPlayerLocaleChange", root, function()
+    for _, v in pairs(localeText) do
+        v.locale = _(v.original)
+    end
+end)
+
 function sendMapReq(arg)
 	triggerServerEvent('requestMapInfo', localPlayer,arg)
 end
@@ -31,20 +46,18 @@ function(map,likes,dislikes,timesPlayed, author, description, lastTimePlayed, pl
 	mapLastTimePlayed = lastTimePlayed
 		if mapLastTimePlayed ~= "-not set-" then info.mapLastTimePlayed = true end
 	nextmap = string.sub((nextmap_ or ''), 1, 155)
-	
+
 	mapName = string.sub(mapName, 1, 35)
 	mapAuthor = string.sub(mapAuthor, 1, 48)
 	mapDescription = string.sub(mapDescription, 1, 106)
 	tWidth = dxGetTextWidth(mapName, 1.75, "default-bold")
-	lWidth = dxGetTextWidth("Likes: "..mapLikes,1.3, "default-bold")
-	dWidth = dxGetTextWidth("Dislikes: "..mapDislikes,1.3, "default-bold")
-	--info = true 
+	lWidth = dxGetTextWidth(localeText.likes.locale .. " "..mapLikes,1.3, "default-bold")
+	dWidth = dxGetTextWidth(localeText.dislikes.locale .. " "..mapDislikes,1.3, "default-bold")
+	--info = true
 end
 )
 
 
-screenX, screenY = guiGetScreenSize()
---x,y,width,height = screenX/4, screenY*3/3.8, screenX/2, screenY-(screenY*3/3.8)-30
 x,y,width,height = (screenX-500)/2, screenY*3/4, 500, 220
 function show()
 	if info then
@@ -57,66 +70,66 @@ function show()
 			dxDrawText(mapName, x+24, y+6, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
 			dxDrawText(mapName, x+20, y+10, x+width-24, y+34, tocolor(0, 0, 0, alpha), 1.75, "default-bold", "center", "center", true, false, false)
 			dxDrawText(mapName, x+24, y+10, x+width-24, y+34, tocolor(255, 255, 255,alpha), 1.75, "default-bold", "center", "center", true, false, false)
-		end	
-		if info.mapLikes then
-			dxDrawText("Likes: "..mapLikes, x+26, y+65, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
-			dxDrawText("Likes: "..mapLikes, x+26, y+63, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
-			dxDrawText("Likes: "..mapLikes, x+25, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
-			dxDrawText("Likes: "..mapLikes, x+27, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
-			dxDrawText("Likes: "..mapLikes, x+26, y+64, x+width-28, y+80, tocolor(144, 238, 144,alpha), 1.3, "default-bold", "left", "center", true, false, false)
 		end
-		if info.mapDislikes then	
-			dxDrawText("Dislikes: "..mapDislikes, x+26, y+83, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+26, y+85, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+25, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+27, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
-			dxDrawText("Dislikes: "..mapDislikes, x+26, y+84, x+width-28, y+100, tocolor(255, 160, 122, alpha), 1.3, "default-bold", "left", "center", true, false, false)
-		end	
-		if info.mapAuthor then	
-			dxDrawText("Author: "..mapAuthor, x+20, y+40, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
-			dxDrawText("Author: "..mapAuthor, x+20, y+44, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
-			dxDrawText("Author: "..mapAuthor, x+22, y+42, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
-			dxDrawText("Author: "..mapAuthor, x+18, y+42, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
-			dxDrawText("Author: "..mapAuthor, x+20, y+42, x+width-20, y+55, tocolor(255, 255, 255, alpha), 1.3, "default-bold", "center", "center", true, false, false)
-		end	
-		if info.mapTimesPlayed then	
-			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+63, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
-			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+65, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
-			dxDrawText("Times played: "..mapTimesPlayed, x+8+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
-			dxDrawText("Times played: "..mapTimesPlayed, x+12+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
-			dxDrawText("Times played: "..mapTimesPlayed, x+10+lWidth, y+64, x+width-23, y+80, tocolor(255, 255, 255, alpha), 1.3, "default-bold", "right", "center", true, false, false)
-		end	
-			
-		if info.mapLastTimePlayed then	
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-19, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-21, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+9, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+11, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
-			dxDrawText("Last time played: "..mapLastTimePlayed, x+10, y+height-20, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "default-bold", "center", "center", true, false, false)
-		end	
-		-- if info.mapDescription then	
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+110, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+112, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+25, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+27, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
-			dxDrawText("Description: "..mapDescription..'\n'..nextmap, x+26, y+111, x+width-23, y+height, tocolor(255, 255, 255, alpha), 1.3, "default-bold", "left", "top", true, true, false)
+		if info.mapLikes then
+			dxDrawText(localeText.likes.locale .. " "..mapLikes, x+26, y+65, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText(localeText.likes.locale .. " "..mapLikes, x+26, y+63, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText(localeText.likes.locale .. " "..mapLikes, x+25, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText(localeText.likes.locale .. " "..mapLikes, x+27, y+64, x+width-28, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText(localeText.likes.locale .. " "..mapLikes, x+26, y+64, x+width-28, y+80, tocolor(144, 238, 144,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+		end
+		if info.mapDislikes then
+			dxDrawText(localeText.dislikes.locale .. " "..mapDislikes, x+26, y+83, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText(localeText.dislikes.locale .. " "..mapDislikes, x+26, y+85, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText(localeText.dislikes.locale .. " "..mapDislikes, x+25, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText(localeText.dislikes.locale .. " "..mapDislikes, x+27, y+84, x+width-28, y+100, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "center", true, false, false)
+			dxDrawText(localeText.dislikes.locale .. " "..mapDislikes, x+26, y+84, x+width-28, y+100, tocolor(255, 160, 122, alpha), 1.3, "default-bold", "left", "center", true, false, false)
+		end
+		if info.mapAuthor then
+			dxDrawText(localeText.author.locale .. " "..mapAuthor, x+20, y+40, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
+			dxDrawText(localeText.author.locale .. " "..mapAuthor, x+20, y+44, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
+			dxDrawText(localeText.author.locale .. " "..mapAuthor, x+22, y+42, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
+			dxDrawText(localeText.author.locale .. " "..mapAuthor, x+18, y+42, x+width-20, y+55, tocolor(0,0,0,alpha), 1.3, "default-bold", "center", "center", true, false, false)
+			dxDrawText(localeText.author.locale .. " "..mapAuthor, x+20, y+42, x+width-20, y+55, tocolor(255, 255, 255, alpha), 1.3, "default-bold", "center", "center", true, false, false)
+		end
+		if info.mapTimesPlayed then
+			dxDrawText(localeText.timesplayed.locale .. " "..mapTimesPlayed, x+10+lWidth, y+63, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
+			dxDrawText(localeText.timesplayed.locale .. " "..mapTimesPlayed, x+10+lWidth, y+65, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
+			dxDrawText(localeText.timesplayed.locale .. " "..mapTimesPlayed, x+8+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
+			dxDrawText(localeText.timesplayed.locale .. " "..mapTimesPlayed, x+12+lWidth, y+64, x+width-23, y+80, tocolor(0,0,0,alpha), 1.3, "default-bold", "right", "center", true, false, false)
+			dxDrawText(localeText.timesplayed.locale .. " "..mapTimesPlayed, x+10+lWidth, y+64, x+width-23, y+80, tocolor(255, 255, 255, alpha), 1.3, "default-bold", "right", "center", true, false, false)
+		end
+
+		if info.mapLastTimePlayed then
+			dxDrawText(localeText.lasttimeplayed.locale .. " "..mapLastTimePlayed, x+10, y+height-19, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
+			dxDrawText(localeText.lasttimeplayed.locale .. " "..mapLastTimePlayed, x+10, y+height-21, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
+			dxDrawText(localeText.lasttimeplayed.locale .. " "..mapLastTimePlayed, x+9, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
+			dxDrawText(localeText.lasttimeplayed.locale .. " "..mapLastTimePlayed, x+11, y+height-20, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "center", "center", true, false, false)
+			dxDrawText(localeText.lasttimeplayed.locale .. " "..mapLastTimePlayed, x+10, y+height-20, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "default-bold", "center", "center", true, false, false)
+		end
+		-- if info.mapDescription then
+			dxDrawText(localeText.description.locale .. " "..mapDescription..'\n'..nextmap, x+26, y+110, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
+			dxDrawText(localeText.description.locale .. " "..mapDescription..'\n'..nextmap, x+26, y+112, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
+			dxDrawText(localeText.description.locale .. " "..mapDescription..'\n'..nextmap, x+25, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
+			dxDrawText(localeText.description.locale .. " "..mapDescription..'\n'..nextmap, x+27, y+111, x+width-23, y+height, tocolor(0,0,0,alpha), 1.3, "default-bold", "left", "top", true, true, false)
+			dxDrawText(localeText.description.locale .. " "..mapDescription..'\n'..nextmap, x+26, y+111, x+width-23, y+height, tocolor(255, 255, 255, alpha), 1.3, "default-bold", "left", "top", true, true, false)
 		-- end
-		-- if info.mapPlayerTime then	
+		-- if info.mapPlayerTime then
 			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-21-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "left", "center", true, false, false)
 			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-19-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "left", "center", true, false, false)
 			-- dxDrawText("Personal best time: "..mapPlayerTime, x+9, y+height-20-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "left", "center", true, false, false)
 			-- dxDrawText("Personal best time: "..mapPlayerTime, x+11, y+height-20-23, x+width-10, y+height-5, tocolor(0,0,0,alpha), 1.2, "default-bold", "left", "center", true, false, false)
 			-- dxDrawText("Personal best time: "..mapPlayerTime, x+10, y+height-20-23, x+width-10, y+height-5, tocolor(255, 255, 255, alpha), 1.2, "default-bold", "left", "center", true, false, false)
-		-- end	
+		-- end
 		if info.mapName then
 			dxDrawLine(x+((width-tWidth)/2), y+34, ((x+(width-tWidth)/2)+tWidth), y+34, tocolor(104, 232, 44, 70), 3)
-		end	
-	end	
+		end
+	end
 end
 
 function stopShowing()
 	isShow = false
-	removeEventHandler('onClientRender', root, show) 
+	removeEventHandler('onClientRender', root, show)
 	if isTimer(timerAlpha) then killTimer(timerAlpha) end
 end
 
@@ -125,14 +138,14 @@ function showmapinfo(commandname, ...)
 	if #{...}>0 then
 		arg = table.concat({...},' ')
 	else arg = nil
-	end	
+	end
 	if not isShow then
 		isShow = true
 		--info = false
 		sendMapReq(arg)
 		timerAlpha = setTimer(stopShowing, 15000, 1)
 		addEventHandler('onClientRender', root, show)
-	else removeEventHandler('onClientRender', root, show) 
+	else removeEventHandler('onClientRender', root, show)
 		isShow = false
 		if isTimer(timerAlpha) then killTimer(timerAlpha) end
 	end
