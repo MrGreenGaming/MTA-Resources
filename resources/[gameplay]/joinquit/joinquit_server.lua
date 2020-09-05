@@ -316,7 +316,7 @@ addEventHandler('onPlayerQuit', root,
                 rstr = ' ('..reason..')'
             end
             for _, _p in ipairs(getElementsByType("player")) do
-                outputChatBox("* " .. _.For(_p, "Quit: ${player}#FF6464 has been ${kickBan} %{reason}") % {player=getPlayerName(source), kickBan=_.For(_p, string.lower(quittype)), reason=rstr }, _p, 255, 100, 100, true)
+                outputChatBox("* " .. _.For(_p, "Quit: ${player}#FF6464 has been ${kickBan} ${reason}") % {player=getPlayerName(source), kickBan=_.For(_p, string.lower(quittype)), reason=rstr }, _p, 255, 100, 100, true)
             end
         else
             for _, _p in ipairs(getElementsByType("player")) do
