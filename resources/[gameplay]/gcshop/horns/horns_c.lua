@@ -520,8 +520,8 @@ hornsTable = {
     [516] = "друг",
     [517] = "OMAE WA MOU, SHINDEIRU",
     [518] = "Nope TF2 Engineer",
-    [519] = " Aaaa kikikiki",
-    [520] = " Be gone THOT",
+    [519] = "Aaaa kikikiki",
+    [520] = "Be gone THOT",
     [521] = "CS Ok lets go",
     [522] = "CS Enemy spotted",
     [523] = "Kuzey Geri bas lan",
@@ -530,6 +530,13 @@ hornsTable = {
     [526] = "Neyi başaramadın amk",
     [527] = "Todays episode of how f**ked up",
     [528] = "Dj Dikkat Beni vurmak için",
+    [529] = "Only english",
+    [530] = "Nissan 350Z twin turbo",
+    [531] = "Serdar remix 2",
+    [532] = "Lamborghini Huracan twin turbo",
+    [533] = "Vice City Beginning",
+    [534] = "Hmm nice bike VC",
+    
 
     
     
