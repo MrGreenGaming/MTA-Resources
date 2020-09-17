@@ -98,7 +98,7 @@ function discordmuteid(p, c, id)
 	if not id then
 		outputChatBox('usage: /discordmuteid <discordid>', p, 255,0,0)
 	else
-		outputChatBox('Discord user ' .. id .. ' by muted ' .. getPlayerName(p), root, 255,0,0)
+        outputChatBox('Discord user ' .. id .. ' muted by ' .. getPlayerName(p), root, 255,0,0)
 		mutes[id] = getPlayerName(p)
 	end
 end
