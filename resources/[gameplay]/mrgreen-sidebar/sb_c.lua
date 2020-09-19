@@ -184,7 +184,7 @@ end
 
 
 function drawDateTime()
-	local timestring = FormatDate("h:i\nd/m/Y" )
+	local timestring = FormatDate("h:i\nd.m.Y" )
 
 	dxDrawText(timestring,_sidebarLeft,dateTimeTop,_sidebarLeft+sidebarWidth,sidebarTop+menuItemHeight,tocolor(255,255,255,255),timeDateTextScale,timeDateFont,"center","top",true,false,true)
 end
