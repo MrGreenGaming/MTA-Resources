@@ -10,7 +10,6 @@ MapData.currentMapRatings = {
     name = "",
     likes = 0,
     dislikes = 0,
-    description = ""
 }
 
 MapData.currentMapUserRate = false -- false OR 0 OR 1
@@ -32,7 +31,7 @@ MapData.mapRoundsInfo = {
 
 local function changeNextMapRatings(data)
     iprint("mapratings.nextmap", data)
-    if data and table.keysExists(data, "name", "likes", "dislikes", "description") then
+    if data and table.keysExists(data, "name", "likes", "dislikes") then
         MapData.currentMapRatings = data
     else
         MapData.nextMapRatings = {
@@ -45,14 +44,13 @@ end
 
 local function changeCurrentMapRatings(data)
     iprint("mapratings.currentmap", data)
-    if data and table.keysExists(data, "name", "likes", "dislikes", "description") then
+    if data and table.keysExists(data, "name", "likes", "dislikes") then
         MapData.currentMapRatings = data
     else
         MapData.currentMapRatings = {
             name = "",
             likes = 0,
             dislikes = 0,
-            description = ""
         }
     end
 end
@@ -87,7 +85,7 @@ end
 local function changeMapRounds(current, max)
     MapData.mapRoundsInfo = {
         current = tonumber(current) or 1,
-        maximum = tonumber(max) or 3
+        maximum = tonumber(max) + 1 or 3
     }
 end
 addEvent("onClientRoundCountChange", true)
