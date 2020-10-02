@@ -2,7 +2,7 @@ RatingsFetcher = {}
 
 function RatingsFetcher.requestAll()
     dbQuery(function(qh)
-        local res = dbPoll(qh)
+        local res = dbPoll(qh, 0)
         if res then
             AllMapsRatings.receiveRatingsFromDatabase(res)
         end

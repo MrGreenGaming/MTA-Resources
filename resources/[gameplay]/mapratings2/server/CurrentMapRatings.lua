@@ -16,6 +16,10 @@ local function parseRecievedRatings(toParse)
     mapRatings = parsed
 end
 
+local function broadcastRateChange()
+    triggerEvent("onCurrentMapRateChange", root, {likes = mapLikes, dislikes = mapDislikes})
+end
+
 local function countLikesAndDislikes()
     local l, d = 0, 0
     for _, rate in ipairs(mapRatings) do
@@ -28,10 +32,6 @@ local function countLikesAndDislikes()
     mapLikes = l
     mapDislikes = d
     broadcastRateChange()
-end
-
-local function broadcastRateChange()
-    triggerEvent("onCurrentMapRateChange", root, {likes = mapLikes, dislikes = mapDislikes})
 end
 
 function CurrentMapRatings.clear()
