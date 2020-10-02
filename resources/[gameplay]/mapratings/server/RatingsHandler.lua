@@ -3,7 +3,6 @@ RatingsHandler = {}
 local MESSAGE_PREFIX = "[Map Ratings] "
 
 function RatingsHandler.handlePlayerRate (player, cmd)
-    iprint(player, cmd)
     local forumid = exports.gc:getPlayerForumID(player)
 	if not forumid then outputChatBox(MESSAGE_PREFIX .. "You have to be logged in to a Green-Coins account to rate a map.", player, 255,0,0) return end
 
@@ -12,11 +11,14 @@ function RatingsHandler.handlePlayerRate (player, cmd)
         outputChatBox(MESSAGE_PREFIX .. "Please wait ".. playerCooldownSeconds .. " seconds before rating a map.", player, 255,0,0)
         return
     end
-
+    local connection = Database.getConnection()
     local mapresourcename = getResourceName( exports.mapmanager:getRunningGamemodeMap() )
     local rating = cmd == "like" and 1 or 0
     local mapname = getResourceInfo(exports.mapmanager:getRunningGamemodeMap() , "name") or mapresourcename
-    if not (forumid and mapresourcename and Database.connection) then return end
+    if not connection then
+        outputChatBox(MESSAGE_PREFIX .. "Could not make connection to database. Please try again later.", player, 255,0,0)
+        return
+    end
 
     local currentRating = CurrentMapRatings.getByForumID(forumid)
     if currentRating == cmd then
@@ -28,7 +30,7 @@ function RatingsHandler.handlePlayerRate (player, cmd)
         return
     end
 
-    local save = dbExec(Database.connection,"INSERT INTO mapratings (forumid, mapresourcename, rating) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE rating = ?", forumid, mapresourcename, rating, rating)
+    local save = dbExec(connection,"INSERT INTO mapratings (forumid, mapresourcename, rating) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE rating = ?", forumid, mapresourcename, rating, rating)
     if save then
         if currentRating == "neutral" then
             if cmd == "like" then
