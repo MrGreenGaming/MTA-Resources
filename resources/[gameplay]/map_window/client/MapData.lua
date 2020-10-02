@@ -61,13 +61,21 @@ local function changeCurrentMapInfo(data)
         if MapData.currentMapInfo.lastTimePlayed then
             MapData.currentMapInfo.lastTimePlayed = os.date("%d %b %Y", MapData.currentMapInfo.lastTimePlayed) or false
         end
+
+        if not MapData.currentMapInfo.author or MapData.currentMapInfo.author == "" then
+            MapData.currentMapInfo.author = "Author not set"
+        end
+
+        if not MapData.currentMapInfo.description or MapData.currentMapInfo.description == "" then
+            MapData.currentMapInfo.author = "Description not set"
+        end
     else
         MapData.currentMapInfo = {
             name = "",
             resourceName = "",
             timesPlayed = 0,
-            author = "",
-            description = "",
+            author = "Author not set",
+            description = "Description not set",
             lastTimePlayed = false,
         }
     end
