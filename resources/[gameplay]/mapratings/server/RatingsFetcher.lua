@@ -11,7 +11,6 @@ end
 
 function RatingsFetcher.request()
     local resname = getResourceName(exports.mapmanager:getRunningGamemodeMap())
-    iprint("requesting current map", resname)
     if not resname then outputDebugString("No running map to fetch") return end
     dbQuery(function(qh)
         local res = dbPoll(qh, 0)

@@ -6,10 +6,8 @@ local cooldowns = {
 }
 
 function RatingsCooldown.isPlayerInCooldown(player)
-    if cooldowns[player] then
-        if getTickCount() - cooldowns[player] > RATE_COOLDOWN_MS then
-            return true
-        end
+    if cooldowns[player] and getTickCount() - cooldowns[player] < RATE_COOLDOWN_MS then
+        return true
     end
     return false
 end
