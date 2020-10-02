@@ -13,10 +13,13 @@ function NextMapWindow.draw()
 end
 
 function showNextMapWindow()
-	hidenext = false
+    hidenext = false
+    removeEventHandler("onClientRender", root, NextMapWindow.draw)
+    addEventHandler("onClientRender", root, NextMapWindow.draw)
 end
 
 function hideNextMapWindow()
-	hidenext = true
+    hidenext = true
+    removeEventHandler("onClientRender", root, NextMapWindow.draw)
 end
 
