@@ -49,7 +49,7 @@ function CurrentMapRatings.receiveRatingsFromDatabase(resname, ratings)
     mapRatings = parseRecievedRatings(ratings)
     countLikesAndDislikes()
     CurrentMapRatings.isCurrentMapFetched = true
-    Broadcaster.broadcastCurrentMapInfo()
+    Broadcaster.broadcastCurrentMap()
 end
 
 function CurrentMapRatings.getRating(forceRecount)
