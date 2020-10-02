@@ -26,7 +26,7 @@ function Broadcaster.broadcastCurrentMap()
 
         local mapInfo = {
             name = getResourceInfo(map, "name") or getResourceName(map),
-            resource = getResourceName(nmap),
+            resource = getResourceName(map),
             likes = rating.likes or 0,
             dislikes = rating.dislikes or 0
         }
