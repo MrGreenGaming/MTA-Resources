@@ -1,17 +1,19 @@
 <meta>
-	<info name="Map Ratings" description="ratingsystem for maps" author="Flobu" type="script" version="1.0"/>
+	<info name="Mapratings" description="" author="AfuSensi" type="script" version="1.0"/>
 
-	<script src="mapratings_server.lua" type="server"/>
-	<script src="mapratings_sql.lua" type="server"/>
-	<script src="client.lua" type="client"/>
-	
-	<export function="getMapRating" type="server"/>
-	<export function="getPlayerRating" type="server"/>
-	<export function="getRatingColor" type="server"/>
-	<export function="getRatingColorAsHex" type="server"/>
-	<export function="getTableOfRatedMaps" type="server"/>
-	<!-- Exports for settings resource  KaliBwoy -->
-	<export function="showNextMapWindow" type="client"/>
-	<export function="hideNextMapWindow" type="client"/>
-	
+    <script src="shared/Utils.lua" type="shared"/>
+
+    <script src="server/Main.lua" type="server"/>
+    <script src="server/AllMapsRatings.lua" type="server"/>
+    <script src="server/Broadcaster.lua" type="server"/>
+    <script src="server/CurrentMapRatings.lua" type="server"/>
+    <script src="server/Database.lua" type="server"/>
+    <script src="server/Exports.lua" type="server"/>
+    <script src="server/RatingsCooldown.lua" type="server"/>
+    <script src="server/RatingsFetcher.lua" type="server"/>
+    <script src="server/RatingsHandler.lua" type="server"/>
+
+
+    <export function="getMapRating" type="server"/>
+	<export function="getCurrentMapRating" type="server"/>
 </meta>

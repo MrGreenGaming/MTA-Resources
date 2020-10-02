@@ -28,6 +28,7 @@
 	<resource priority="0">radio</resource>
 	<resource priority="0">runcode</resource>
 	<resource priority="0">mapratings</resource>
+    <resource priority="0">map_window</resource>
 	<resource priority="0">helpmenu</resource>
 	<resource priority="1">mrgreen-sidebar</resource>
 	<resource priority="1">mrgreen-settings</resource>
