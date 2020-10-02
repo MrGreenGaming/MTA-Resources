@@ -349,17 +349,10 @@ math.randomseed( getTickCount() % 50000 )
 currentmode = math.random(#modes)
 
 function calculateNextmap()
-	-- local chance = math.random(1,6)
+
 	local compatibleMaps
-	-- if chance == 2 or chance == 4 then
-		-- compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0 )
-	-- else
-		-- if getResourceFromName('race_mapratings') and getResourceState(getResourceFromName('race_mapratings')) == 'running' and exports.race_mapratings then
-			-- compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )   --add a new parametr to specify we want the best rated maps
-		-- else
-			compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )
-		-- end
-	-- end
+	compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )
+
 	if compatibleMaps then
 		triggerEvent('onNextmapSettingChange', root, compatibleMaps)
 		return compatibleMaps
@@ -670,10 +663,7 @@ function getRandomMapCompatibleWithGamemode( gamemode, oldestPercentage, minSpaw
 		compatibleMaps = compatibleMaps_
 		-- outputDebugString('Found ' .. #compatibleMaps_ .. ' maps for mode ' .. nextmode)
 	end
-	local allMaps
-	if bestRated then
-		allMaps = exports.race_mapratings:getTableOfRatedMaps()
-	end
+
 	-- Sort maps by time since played
 	local sortList = {}
 	for i,map in ipairs(compatibleMaps) do
@@ -706,17 +696,13 @@ function getRandomMapCompatibleWithGamemode( gamemode, oldestPercentage, minSpaw
 		if map ~= exports.mapmanager:getRunningGamemodeMap() then
 		if not bestRated then
 			if not minSpawnCount or minSpawnCount <= getMapSpawnPointCount( map ) then
-				if bintest and getPlayerFromName('BinSlayer') then
-					outputChatBox('chose a random map from ALL maps: '.. sortList[idx].lastTimePlayedText, getPlayerFromName('BinSlayer'))
-				end
 				return map
 			end
-		else
-			if (not minSpawnCount or minSpawnCount <= getMapSpawnPointCount( map )) and (getTickCount() - savedCount < 4500 ) and (allMaps[getResourceInfo(map, 'name')])
-		      and (allMaps[getResourceInfo(map, 'name')].likes >= (allMaps[getResourceInfo(map, 'name')].dislikes) ) then
-				if bintest and getPlayerFromName('BinSlayer') then
-					outputChatBox('chose a random map from the GOOD maps: '..sortList[idx].lastTimePlayedText, getPlayerFromName('BinSlayer'))
-				end
+        else
+            local mapName = getResourceName(map)
+            local rating = exports.mapratings:getMapRating(mapName) or {likes=0,dislikes=0}
+			if (not minSpawnCount or minSpawnCount <= getMapSpawnPointCount( map )) and (getTickCount() - savedCount < 4500 ) and (rating)
+		      and (rating.likes >= (rating.dislikes) ) then
 				return map
 			elseif (getTickCount() - savedCount >= 4500 ) then
 				outputChatBox('attempt chose a random map from the GOOD maps but takes too long', getPlayerFromName('BinSlayer'))
