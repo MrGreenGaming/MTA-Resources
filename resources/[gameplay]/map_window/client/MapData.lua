@@ -107,3 +107,11 @@ addEvent("receiveUserMapRate", true)
 addEventHandler("receiveUserMapRate", localPlayer, function(rate)
     MapData.currentMapUserRate = (rate == 0 or rate == 1) and rate or false
 end)
+
+function MapData.init()
+    -- Init element data on resource start
+    for key, func in pairs(dataChangeActions) do
+        func(nil, nil, getElementData(root, key))
+    end
+end
+addEventHandler("onClientResourceStart", resourceRoot, MapData.init)
