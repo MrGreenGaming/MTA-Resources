@@ -223,7 +223,7 @@ function MapInfoWindow.render()
         tocolor(255, 0, 0, 255 * alphaFade)
     }
     dxDrawImage(x + dims.rounds.iconX, y + dims.rounds.iconY, dims.icons.height, dims.icons.width, "/icons/repeat.png")
-    dxDrawText(MapData.mapRoundsInfo.current.." / "..MapData.mapRoundsInfo.maximum, x + dims.rounds.startX, y + dims.rounds.startY, x + dims.rounds.endX, y + dims.rounds.endY, roundsColor[MapData.rounds.current or #roundsColor], dims.rounds.fontSize, "default-bold", "left", "center", false, false, false)
+    dxDrawText(MapData.mapRoundsInfo.current.." / "..MapData.mapRoundsInfo.maximum, x + dims.rounds.startX, y + dims.rounds.startY, x + dims.rounds.endX, y + dims.rounds.endY, roundsColor[MapData.mapRoundsInfo.current or #roundsColor], dims.rounds.fontSize, "default-bold", "left", "center", false, false, false)
 
     -- Times Played
     dxDrawImage(x + dims.timesPlayed.iconX, y + dims.timesPlayed.iconY, dims.icons.height, dims.icons.width, "/icons/play.png")
