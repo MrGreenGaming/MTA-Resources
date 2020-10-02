@@ -79,7 +79,7 @@ function startMidMapVoteForRandomMap(player)
 	if (not stateAllowsRandomMapVote()) or (not isPlayerInACLGroup(player, g_GameOptions.admingroup)) then
 		if player then
 			outputRace( "I'm afraid I can't let you do that, " .. getPlayerName(player) .. ".", player )
-		end 
+		end
 		return
 	end
 
@@ -218,7 +218,7 @@ addCommandHandler('debugracevote',
 function(player)
 	if getPlayerName(player) == 'BinSlayer' then
 		bintest = not bintest
-	end	
+	end
 end
 )
 
@@ -232,7 +232,7 @@ function startNextMapVote()
 		return
 	end
 
-	
+
 	local poll = {
 		title="Next or Play again?",
 		visibleTo=getRootElement(),
@@ -240,7 +240,7 @@ function startNextMapVote()
 		timeout=7,
 		allowchange=true;
 		}
-	
+
 	local setEventMapQueue = false
 	local usedGcMapQueue = false
 
@@ -278,8 +278,8 @@ function startNextMapVote()
 		local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 	end
-	
-	
+
+
 	local currentMap = exports.mapmanager:getRunningGamemodeMap()
 	local currentRes = currentMap
 	if currentMap then
@@ -287,7 +287,7 @@ function startNextMapVote()
 			table.insert(poll, {"Play again", 'nextMapVoteResult', getRootElement(), currentMap})
 		elseif setEventMapQueue then -- Start event manager map
 			outputChatBox('Maximum \'Play Again\' times('..maxPlayAgain..') has been reached. Changing to next event map ..')
-			
+
 			local map = exports.eventmanager:getCurrentMapQueued()
 			if not exports.mapmanager:changeGamemodeMap ( getResourceFromName(map[1]), nil, true ) then
 				outputWarning( 'Forced next map failed' )
@@ -299,7 +299,7 @@ function startNextMapVote()
 			return
 		elseif usedGcMapQueue then -- Start GC mapcenter map
 			outputChatBox('Maximum \'Play Again\' times('..maxPlayAgain..') has been reached. Changing to next map in Maps-Center queue ..')
-			
+
 			local map = exports.gcshop:getCurrentMapQueued()
 			if not exports.mapmanager:changeGamemodeMap ( getResourceFromName(map[2]), nil, true ) then
 				outputWarning( 'Forced next map failed' )
@@ -314,7 +314,7 @@ function startNextMapVote()
 			outputChatBox('Maximum \'Play Again\' times('..maxPlayAgain..') has been reached. Changing to random ..')
 			startRandomMap()
 			return
-		end	
+		end
 	end
 
 	-- Allow addons to modify the poll
@@ -338,7 +338,7 @@ end
 
 -- Change gamemode order here
 
-modes = {	
+modes = {
 	'nts',
 	'ctf',
 	'shooter',
@@ -352,13 +352,13 @@ function calculateNextmap()
 	-- local chance = math.random(1,6)
 	local compatibleMaps
 	-- if chance == 2 or chance == 4 then
-		-- compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0 ) 
+		-- compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0 )
 	-- else
 		-- if getResourceFromName('race_mapratings') and getResourceState(getResourceFromName('race_mapratings')) == 'running' and exports.race_mapratings then
 			-- compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )   --add a new parametr to specify we want the best rated maps
 		-- else
-			compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] ) 
-		-- end	
+			compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )
+		-- end
 	-- end
 	if compatibleMaps then
 		triggerEvent('onNextmapSettingChange', root, compatibleMaps)
@@ -377,7 +377,7 @@ addEvent('onNextmapSettingChange', true)
 
 
 times = {}
-local lastPlayed 
+local lastPlayed
 addEvent('onMapStarting', true)
 addEventHandler('onMapStarting', getRootElement(),
 function()
@@ -396,9 +396,10 @@ function()
 		times[currentMap] = 0
 	end
 	_nextMap = calculateNextmap()
-	times[currentMap] = times[currentMap] + 1
+    times[currentMap] = times[currentMap] + 1
 
-	triggerEvent("onRoundCountChange",root,times[currentMap],maxPlayAgain)
+    triggerEvent("onRoundCountChange",root,times[currentMap],maxPlayAgain)
+    triggerClientEvent(root, "onClientRoundCountChange", root, times[currentMap], maxPlayAgain)
 end
 )
 
@@ -407,7 +408,7 @@ end
 --[[ debugging purposes
 addCommandHandler('view',
 function()
-	for _, k in pairs(times) do 
+	for _, k in pairs(times) do
 		outputChatBox(tostring(_)..' '..tostring(k))
 	end
 end
@@ -442,7 +443,7 @@ addEvent('nextMapVoteResult')
 addEventHandler('nextMapVoteResult', getRootElement(),
 	function( map, category, var )
 		if stateAllowsNextMapVoteResult() then
-			if not category then 
+			if not category then
 				if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
 					problemChangingMap()
 				elseif lastPlayed ~= map then
@@ -452,7 +453,7 @@ addEventHandler('nextMapVoteResult', getRootElement(),
 				end
 			elseif category == "eventmanager" then -- var = Event name
 				exports.eventmanager:getCurrentMapQueued()
-				
+
 				if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
 					problemChangingMap()
 				else
@@ -488,7 +489,7 @@ function startMidMapVoteForRestartMap(player)
 	if (not stateAllowsRestartMapVote()) or (not isPlayerInACLGroup(player, g_GameOptions.admingroup)) then
 		if player then
 			outputRace( "I'm afraid I can't let you do that, " .. getPlayerName(player) .. ".", player )
-		end 
+		end
 		return
 	end
 
@@ -563,7 +564,7 @@ addCommandHandler('random',
 			local choice = {'curtailed', 'cut short', 'terminated', 'given the heave ho', 'dropkicked', 'expunged', 'put out of our misery', 'got rid of'}
 			outputChatBox('Current map ' .. choice[math.random( 1, #choice )] .. ' by ' .. getPlayerName(player), g_Root, 0, 240, 0)
 			startRandomMap()
-		
+
 		end
 	end
 )
@@ -617,7 +618,7 @@ addCommandHandler('forcevote',
 
 ---------------------------------------------------------------------------
 --
--- getRandomMapCompatibleWithGamemode 
+-- getRandomMapCompatibleWithGamemode
 --
 -- This should go in mapmanager, but ACL needs doing
 --
@@ -646,7 +647,7 @@ addEventHandler('onResourceStop', getRootElement(),
 
 function getRandomMapCompatibleWithGamemode( gamemode, oldestPercentage, minSpawnCount, bestRated, nextmode )
 	oldestPercentage = 4   --TEST to get more maps @ cutoff
-	-- Get all relevant maps	
+	-- Get all relevant maps
 	local compatibleMaps = exports.mapmanager:getMapsCompatibleWithGamemode( gamemode )
 	if #compatibleMaps == 0 then
 		outputDebugString( 'getRandomMapCompatibleWithGamemode: No maps.', 1 )
@@ -724,11 +725,11 @@ function getRandomMapCompatibleWithGamemode( gamemode, oldestPercentage, minSpaw
 		end
 		end
 		-- Remember best match incase we cant find any with enough spawn points
-	
+
 		if not fallbackMap or getMapSpawnPointCount( fallbackMap ) < getMapSpawnPointCount( map ) then
 			fallbackMap = map
 		end
-		
+
 		outputDebug( 'RANDMAP', ''
 				.. ' skip:' .. tostring( getResourceName( map ) )
 				.. ' spawns:' .. tostring( getMapSpawnPointCount( map ) )
@@ -826,7 +827,7 @@ function loadMapInfoAll()
 	for i,row in ipairs(rows) do
 		local map = getResourceFromName( row.resName )
 		if map then
-			g_MapInfoList[map] = {}  
+			g_MapInfoList[map] = {}
 			g_MapInfoList[map].playedCount = row.playedCount
 			g_MapInfoList[map].lastTimePlayed = row.lastTimePlayed
 			g_MapInfoList[map].lastTimePlayedText = row.lastTimePlayedText
@@ -860,7 +861,7 @@ function saveMapInfoItem( map )
 			.. ' WHERE '
 					.. 'lower(resName)='				.. string.lower(sqlString( getResourceName( map ) ))
 			 )
-	g_MapInfoList[map].lastTimePlayedText = getRealDateTimeString(getRealTime(g_MapInfoList[map].lastTimePlayed)) or '-'		 
+	g_MapInfoList[map].lastTimePlayedText = getRealDateTimeString(getRealTime(g_MapInfoList[map].lastTimePlayed)) or '-'
 	executeSQLQuery( cmd )
 
 	executeSQLQuery( 'END TRANSACTION' )
