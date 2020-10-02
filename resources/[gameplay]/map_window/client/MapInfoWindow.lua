@@ -267,6 +267,7 @@ function MapInfoWindow.render()
     dxDrawImage(x + dims.nextmap.dislikeIconX, y + dims.nextmap.iconY, dims.icons.width, dims.icons.height, "/icons/thumbs-down.png", 0, 0, 0, nextmapColor)
     dxDrawText(formatLongNumber(MapData.nextMapRatings.dislikes), x + dims.nextmap.dislikeStartX, y + dims.nextmap.startY, x + dims.nextmap.dislikeEndX, y + dims.nextmap.endY, nextmapColor, dims.nextmap.fontSize, "default", "left", "center", true, false, false)
 end
+local isShow = false
 
 function stopShowing()
 	isShow = false
@@ -274,7 +275,6 @@ function stopShowing()
 	if isTimer(timerAlpha) then killTimer(timerAlpha) end
 end
 
-local isShow = false
 function showmapinfo(commandname, ...)
 	if #{...}>0 then
 		arg = table.concat({...},' ')
