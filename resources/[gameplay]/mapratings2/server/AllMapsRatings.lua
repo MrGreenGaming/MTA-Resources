@@ -8,6 +8,7 @@ local function parseReceivedRatings(received)
     for _, v in ipairs(received) do
         allRatings[v.mapresourcename] = {likes = v.likes or 0, dislikes = v.dislikes or 0}
     end
+    return allRatings
 end
 
 function AllMapsRatings.getRating(resourceName)
