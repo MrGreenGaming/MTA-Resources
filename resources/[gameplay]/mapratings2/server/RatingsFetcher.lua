@@ -1,4 +1,4 @@
-RatingFetcher = {}
+RatingsFetcher = {}
 
 function RatingsFetcher.requestAll()
     dbQuery(Database.getConnection(), function(qh)

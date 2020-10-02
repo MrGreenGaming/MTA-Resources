@@ -1,4 +1,4 @@
-RatingHandler = {}
+RatingsHandler = {}
 
 local MESSAGE_PREFIX = "[Map Ratings] "
 
