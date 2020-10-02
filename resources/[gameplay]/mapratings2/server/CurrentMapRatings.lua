@@ -42,11 +42,13 @@ function CurrentMapRatings.clear()
 end
 
 function CurrentMapRatings.receiveRatingsFromDatabase(resname, ratings)
-    if resname == getResourceName(exports.mapmanager:getRunningGamemodeMap()) then
-        ratings = parseRecievedRatings(ratings)
-        countLikesAndDislikes()
-        CurrentMapRatings.isCurrentMapFetched = true
+    if resname ~= getResourceName(exports.mapmanager:getRunningGamemodeMap()) then
+        outputDebugString("Resource name does not match current map")
+        return
     end
+    ratings = parseRecievedRatings(ratings)
+    countLikesAndDislikes()
+    CurrentMapRatings.isCurrentMapFetched = true
 end
 
 function CurrentMapRatings.getRating(forceRecount)
