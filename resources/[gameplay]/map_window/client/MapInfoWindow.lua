@@ -195,8 +195,8 @@ function MapInfoWindow.render()
     -----------------
     -----RATINGS-----
     -----------------
-    local likeColor = MapData.currentMapRatings.userRating == 1 and tocolor(12, 180, 24, 255 * alphaFade) or tocolor(255,255,255, 255 * alphaFade)
-    local dislikeColor = MapData.currentMapRatings.userRating == 0 and tocolor(255,0,0, 255 * alphaFade) or tocolor(255,255,255, 255 * alphaFade)
+    local likeColor = MapData.currentMapUserRate == 1 and tocolor(12, 180, 24, 255 * alphaFade) or tocolor(255,255,255, 255 * alphaFade)
+    local dislikeColor = MapData.currentMapUserRate == 0 and tocolor(255,0,0, 255 * alphaFade) or tocolor(255,255,255, 255 * alphaFade)
     -- Like
     dxDrawImage(x + dims.likes.iconX, y + dims.likes.iconY, dims.icons.height, dims.icons.width, "/icons/thumbs-up.png", 0, 0, 0, likeColor)
     dxDrawText(formatLongNumber(MapData.currentMapRatings.likes), x + dims.likes.startX, y + dims.likes.startY, x + dims.likes.endX, y + dims.likes.endY, likeColor, dims.likes.fontSize,  "default-bold", "left", "center", true, false, false)
