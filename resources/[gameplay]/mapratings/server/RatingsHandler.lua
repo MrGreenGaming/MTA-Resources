@@ -3,6 +3,7 @@ RatingsHandler = {}
 local MESSAGE_PREFIX = "[Map Ratings] "
 
 function RatingsHandler.handlePlayerRate (player, cmd)
+    iprint(player, cmd)
     local forumid = exports.gc:getPlayerForumID(player)
 	if not forumid then outputChatBox(MESSAGE_PREFIX .. "You have to be logged in to a Green-Coins account to rate a map.", player, 255,0,0) return end
 
