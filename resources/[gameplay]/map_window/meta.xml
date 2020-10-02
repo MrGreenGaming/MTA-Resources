@@ -1,0 +1,26 @@
+<meta>
+	<info name="Map Window" description="Map window GUI" author="AfuSensi" type="script" version="1.0"/>
+
+    <script src="shared/utils.lua" type="shared"/>
+
+	<script src="client/MapData.lua" type="client"/>
+    <script src="client/MapInfoWindow.lua" type="client"/>
+    <script src="client/NextMapWindow.lua" type="client"/>
+
+    <script src="server/Broadcaster.lua" type="server"/>
+
+
+    <!-- Icons from https://github.com/encharm/Font-Awesome-SVG-PNG -->
+    <file src="icons/info.png" />
+    <file src="icons/thumbs-down.png" />
+    <file src="icons/thumbs-up.png" />
+    <file src="icons/history.png" />
+    <file src="icons/play.png" />
+    <file src="icons/user.png" />
+    <file src="icons/repeat.png" />
+    <file src="icons/arrow-right.png" />
+	<min_mta_version client="1.5.7"/>
+
+    <export function="showNextMapWindow" type="client"/>
+	<export function="hideNextMapWindow" type="client"/>
+</meta>
