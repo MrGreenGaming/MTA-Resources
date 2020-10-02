@@ -20,6 +20,6 @@ function AllMapsRatings.receiveRatingsFromDatabase(ratings)
     mapRatings = parseReceivedRatings(ratings)
 end
 
-function AllMapsRatings.requestRatings()
+function AllMapsRatings.request()
     RatingsFetcher.requestAll()
 end

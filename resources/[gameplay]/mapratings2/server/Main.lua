@@ -7,14 +7,14 @@ function init()
         return
     end
 
-
     addEvent("onRaceStateChanging")
     addEventHandler("onRaceStateChanging", root, function(state) if state == "NoMap" then CurrentMapRatings.clear() end end)
 
     addEvent("onMapStarting")
-    addEventHandler("onMapStarting", root, RatingsFetcher.requestCurrent)
+    addEventHandler("onMapStarting", root, RatingsFetcher.request)
+    RatingsFetcher.request()
 
-    AllMapsRatings.requestRatings()
-    setTimer(AllMapsRatings.requestRatings, ALL_MAPS_RATINGS_REFETCH_TIME, 0)
+    AllMapsRatings.request()
+    setTimer(AllMapsRatings.request, ALL_MAPS_RATINGS_REFETCH_TIME, 0)
 end
 addEventHandler("onResourceStart", resourceRoot, init)
