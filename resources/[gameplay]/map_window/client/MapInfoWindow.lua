@@ -294,4 +294,12 @@ addCommandHandler('mapinfo',showmapinfo)
 bindKey('f5', 'down', function() showmapinfo() end)
 
 addEvent('onClientMapStarting', true)
-addEventHandler('onClientMapStarting', root, function() showmapinfo() end)
+addEventHandler('onClientMapStarting', root, function()
+    -- Quick fix for resetting when already open at map starting
+    if isShow then
+        showmapinfo()
+    end
+
+    showmapinfo()
+
+end)
