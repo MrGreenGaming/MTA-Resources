@@ -413,7 +413,7 @@ function fetchMaps(player)
 
         local t = {name = name, author = author, resname = resname, likes = "-", dislikes = "-"}
 
-        local rating = exports.mapratings:getMapRating(resname)
+        local rating = mapratingsIsRunning and exports.mapratings:getMapRating(resname) or false
 		if rating then
 			t.likes = rating.likes
 			t.dislikes = rating.dislikes
