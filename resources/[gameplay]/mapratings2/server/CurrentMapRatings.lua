@@ -22,8 +22,8 @@ end
 
 local function countLikesAndDislikes()
     local l, d = 0, 0
-    iprint("mapratings", mapRatings)
-    for _, rate in ipairs(mapRatings) do
+
+    for _, rate in pairs(mapRatings) do
         if rate == 0 then
             d = d + 1
         else
