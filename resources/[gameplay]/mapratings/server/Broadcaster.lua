@@ -46,8 +46,8 @@ function Broadcaster.broadcastCurrentMap()
 end
 addEvent("onCurrentMapRateChange")
 addEventHandler("onCurrentMapRateChange", root, Broadcaster.broadcastCurrentMap)
-addEvent("onMapStarting")
-addEventHandler("onMapStarting", root, Broadcaster.broadcastCurrentMap)
+-- addEvent("onMapStarting")
+-- addEventHandler("onMapStarting", root, Broadcaster.broadcastCurrentMap)
 
 local function protectElementData(key, old, new)
     if ( key == "mapratings.currentmap" or key == "mapratings.nextmap") and sourceResource ~= getThisResource() then

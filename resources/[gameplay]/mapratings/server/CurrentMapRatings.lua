@@ -61,6 +61,7 @@ end
 -- Returns "liked" OR "disliked" OR false
 function CurrentMapRatings.getByForumID(id)
     assert(type(id) == "number", "Invalid argument supplied. Expected number, got " .. type(id))
+    iprint(mapRatings[id])
     return mapRatings[id] ~= nil and (mapRatings[id] == 1 and "like" or "dislike") or false
 end
 
