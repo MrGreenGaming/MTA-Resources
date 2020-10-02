@@ -14,7 +14,7 @@ end
 
 function RatingsCooldown.getPlayerCooldownSeconds(player)
     if not RatingsCooldown.isPlayerInCooldown(player) then return false end
-    return math.ceil(getTickCount() - cooldowns[player] * 1000)
+    return math.ceil(getTickCount() - cooldowns[player] / 1000)
 end
 
 function RatingsCooldown.setPlayerInCooldown(player)
