@@ -5,7 +5,7 @@ function Broadcaster.broadcastCurrentMapInfo(map)
     local mapRes = getResourceFromName(resName)
 
     local mapInfo = {
-        name = "",
+        name = getResourceInfo(mapRes, "name"),
         resourceName = resName,
         timesPlayed = 0,
         author = getResourceInfo(mapRes, "author") or "",
@@ -17,8 +17,8 @@ function Broadcaster.broadcastCurrentMapInfo(map)
     local mapQuery = executeSQLQuery("SELECT infoName, playedCount, resName, lastTimePlayed FROM race_mapmanager_maps WHERE lower(resName) = ?", string.lower(resName))
 
     if #mapQuery >= 1 then
-        mapInfo.timesPlayed = mapQuery[1].playedCount
-        mapInfo.lastTimePlayed = mapQuery[1].lastTimePlayedText
+        mapInfo.timesPlayed = mapQuery[1].playedCount or 0
+        mapInfo.lastTimePlayed = mapQuery[1].lastTimePlayed or false
     end
 
     setElementData(root, "map_window.currentMapInfo", mapInfo)
