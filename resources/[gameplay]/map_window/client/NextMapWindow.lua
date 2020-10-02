@@ -9,7 +9,7 @@ function NextMapWindow.draw()
     local width = dxGetTextWidth(windowString, 0.45, 'bankgothic')
 
     dxDrawRectangle((g__sW-100)-(width+20), 4, width+20, height+5, tocolor(0,0,0,100),false)
-    dxDrawText(drawNextText, (g__sW-100)-(width+20)+5, 5, (g__sW-100)-(width+20)+width+15, 5+height+5, tocolor(0, 255, 0, 255), 0.45, 'bankgothic', 'center', 'center', true)
+    dxDrawText(windowString, (g__sW-100)-(width+20)+5, 5, (g__sW-100)-(width+20)+width+15, 5+height+5, tocolor(0, 255, 0, 255), 0.45, 'bankgothic', 'center', 'center', true)
 end
 
 function showNextMapWindow()
