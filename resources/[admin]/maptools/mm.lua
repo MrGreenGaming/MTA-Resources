@@ -50,7 +50,7 @@ function newMap(map, forumid, mta_name, mapComment)
 		outputConsole('loading failed ' .. mapname)
 		return 'MTA: Could not load ' .. tostring(map)
 	end
-	
+
 	local s = getResourceLoadFailureReason(res)
     setResourceInfo(res, "newupload", "true")
     setResourceInfo(res, "forumid", tostring(forumid))
@@ -116,7 +116,7 @@ function handlemap(p, c, resname, ...)
 	deleteResource(mapname)
 	local query = "INSERT INTO uploaded_maps (resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?)"
 	local theExec = dbExec ( handlerConnect, query, resname, mta_name, comment, manager, status)
-	
+
 	outputChatBox(c..': done ' .. resname, p)
 	fetchMaps(p)
 end
@@ -151,7 +151,7 @@ function outputUploaderComment(mapInfo)
 			outputChatBox(' ')
 		end
 
-		
+
 	end
 end
 addEventHandler('onMapStarting', root, outputUploaderComment)
@@ -179,7 +179,7 @@ function connectToDB()
 		return outputDebugString('maptools: could not connect to the mysql db')
 	end
 	moveMapDeletionCache() -- Map deletion entries are stored locally if the mysql database does not work, if it works again move them to mysql
-	
+
 end
 addEventHandler('onResourceStart', resourceRoot, connectToDB)
 
@@ -200,8 +200,8 @@ function onNewMapStart()
 
     local resname = getResourceName(map)
 
-    -- set 
-    
+    -- set
+
     setResourceInfo(map,"gamemodes","race_deleted")
     setResourceInfo(map,"deleted","true")
     setResourceInfo(map,"deleteReason",g_Reason)
@@ -234,7 +234,7 @@ function onNewMapStart()
 
     refreshResources()
     canUseCommand = true
-    
+
 
     g_Map = nil
     g_P = nil
@@ -376,11 +376,11 @@ function moveMapDeletionCache() -- Moves from cache xml to mysql db
 		dbExec( handlerConnect, toptimesDeletedQuery, 'Map Deletion', adminName or '', resname)
 		-- Delete from toptimes
 		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE mapname = ? ', resname)
-		
+
 		if theExec then
 			xmlDestroyNode(child)
 		end
-		
+
 		xmlSaveFile(theXML)
 		xmlUnloadFile(theXML)
 	end
@@ -399,9 +399,9 @@ function fetchMaps(player)
 
     -- Get race and uploaded maps
     local raceMps = exports.mapmanager:getMapsCompatibleWithGamemode(getResourceFromName("race"))
-	local mapRatings = exports.mapratings:getTableOfRatedMaps()
-    if not raceMps or not mapRatings then return false end
 
+    if not raceMps then return false end
+    local mapratingsIsRunning = getResourceState(getResourceFromName("mapratings")) == "running"
     for _,map in ipairs(raceMps) do
         local name = getResourceInfo(map,"name")
 
@@ -412,12 +412,13 @@ function fetchMaps(player)
         if not author then author = "N/A" end
 
         local t = {name = name, author = author, resname = resname, likes = "-", dislikes = "-"}
-		
-		local rating = mapRatings[resname]
+
+        local rating = exports.mapratings:getMapRating(resname)
 		if rating then
 			t.likes = rating.likes
 			t.dislikes = rating.dislikes
-		end
+        end
+
         table.insert(mapList,t)
     end
 
@@ -512,10 +513,10 @@ function savefile(mapname, src, text)
 	-- create a backup
 	local backup = fileCopy(':' .. mapname .. '/' .. src, ':' .. mapname .. '/' .. src .. '.' .. getRealTime().timestamp .. '.bak', true)
 	if not backup then return outputChatBox("Could not create backup. Changes aren't saved.", player) end
-	
+
 	local deletefile = fileDelete(':' .. mapname .. '/' .. src)
 	if not deletefile then return outputChatBox("Could not overwrite:" .. mapname .. '/' ..src, player) end
-	
+
 	local file = fileCreate(':' .. mapname .. '/' .. src)
 	if not file then return outputChatBox("Could not overwrite:" .. mapname .. '/' ..src, player) end
 	fileWrite(file, text)
@@ -534,7 +535,7 @@ function restoreMap(map)
         if not theRes then outputChatBox("Error: map can not be restored (can't find map resource)",client,255,0,0) return end
 
         local properName = string.gsub(map.resname,"_deleted","")
-        
+
         local raceMode = getResourceInfo(theRes,"racemode")
         if not raceMode then raceMode = "[maps]/[dd]" else raceMode = "[maps]/["..raceMode.."]" end
 
@@ -581,10 +582,10 @@ function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
         if not theRes then
             outputChatBox("error: Can't find map resource!",client,255,0,0)
         end
-        
+
         local adminAccName = getAccountName(getPlayerAccount(client))
         if not adminAccName then outputChatBox("Error: Unable to retrieve account name, contact a developer if this keeps happening.", client,255,0,0) return end
-        
+
 
         setResourceInfo(theRes,"gamemodes","race_deleted")
         setResourceInfo(theRes,"deleted","true")
@@ -611,7 +612,7 @@ function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
         addMapDeletionRecord(map.name,map.author,reason,adminAccName,map.resname,authorForumId)
 
 
-        
+
         refreshResources()
         fetchMaps(client)
     end
@@ -729,7 +730,7 @@ function var_dump(...)
 						end
 						local keyString, keyTable = var_dump(newModifiers,key)
 						local valueString, valueTable = var_dump(newModifiers,value)
-						
+
 						if #keyTable == 1 and #valueTable == 1 then
 							table.insert(output,indentation.."["..keyString.."]\t=>\t"..valueString)
 						elseif #keyTable == 1 then
