@@ -30,5 +30,5 @@ setTimer(function()
             cooldowns[player] = nil
         end
     end
-end, 1 * 60 * 1000)
+end, 1 * 60 * 1000, 0)
 addEventHandler("onPlayerQuit", root, function() cooldowns[source] = nil end)
