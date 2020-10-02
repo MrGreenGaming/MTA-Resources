@@ -70,7 +70,7 @@ local function changeCurrentMapInfo(data)
         end
 
         if not MapData.currentMapInfo.description or MapData.currentMapInfo.description == "" then
-            MapData.currentMapInfo.author = "Description not set"
+            MapData.currentMapInfo.description = "Description not set"
         end
     else
         MapData.currentMapInfo = {
