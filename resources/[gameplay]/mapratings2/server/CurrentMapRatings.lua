@@ -46,7 +46,7 @@ function CurrentMapRatings.receiveRatingsFromDatabase(resname, ratings)
         outputDebugString("Resource name does not match current map")
         return
     end
-    ratings = parseRecievedRatings(ratings)
+    mapRatings = parseRecievedRatings(ratings)
     countLikesAndDislikes()
     CurrentMapRatings.isCurrentMapFetched = true
 end
