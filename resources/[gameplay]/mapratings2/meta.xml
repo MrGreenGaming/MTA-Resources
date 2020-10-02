@@ -1,0 +1,16 @@
+<meta>
+	<info name="Mapratings 2" description="" author="AfuSensi" type="script" version="1.0"/>
+
+    <script src="shared/Utils.lua" type="shared"/>
+
+    <script src="server/Main.lua" type="server"/>
+    <script src="server/AllMapsRatings.lua" type="server"/>
+    <script src="server/Broadcaster.lua" type="server"/>
+    <script src="server/CurrentMapRatings.lua" type="server"/>
+    <script src="server/Database.lua" type="server"/>
+    <script src="server/Exports.lua" type="server"/>
+    <script src="server/RatingsCooldown.lua" type="server"/>
+    <script src="server/RatingsFetcher.lua" type="server"/>
+    <script src="server/RatingsHandler.lua" type="server"/>
+
+</meta>
