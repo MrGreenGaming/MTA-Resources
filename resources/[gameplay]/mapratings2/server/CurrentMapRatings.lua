@@ -31,7 +31,6 @@ local function countLikesAndDislikes()
     end
     mapLikes = l
     mapDislikes = d
-    broadcastRateChange()
 end
 
 function CurrentMapRatings.clear()
