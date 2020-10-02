@@ -49,6 +49,7 @@ function RatingsHandler.handlePlayerRate (player, cmd)
         -- Update ratings, recount and trigger updates
         CurrentMapRatings.setByForumID(forumid, rating)
         Broadcaster.broadcastCurrentMap()
+        RatingsCooldown.setPlayerInCooldown(player)
     else
         outputChatBox(MESSAGE_PREFIX .. "Something went wrong while saving your map rating. Please try again or inform a developer.", player, 255, 0, 0, true)
         return
