@@ -101,7 +101,7 @@ local dataChangeActions = {
     ["map_window.currentMapInfo"] = function(_,_,new) return changeCurrentMapInfo(new) end,
 }
 
-addEventHandler("onElementDataChange", root,
+addEventHandler("onClientElementDataChange", root,
 function(theKey, oldValue, newValue)
     if dataChangeActions[theKey] then
         dataChangeActions[theKey](theKey, oldValue, newValue)
