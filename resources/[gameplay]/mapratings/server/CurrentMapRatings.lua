@@ -76,11 +76,11 @@ function CurrentMapRatings.setByForumID(id, rate)
     assert(type(id) == "number", "Invalid argument supplied. Expected number, got " .. type(id))
     if type(rate) == "number" then
         -- If type is number, it must be 0 for dislike or 1 for like
-        assert(rate ~= 0 and rate ~= 1, "Invalid rate for ID " .. id .. ". When supplying a number, it should be 0 for dislike or 1 for like. Got: " .. tostring(rate))
+        assert(rate == 0 or rate == 1, "Invalid rate for ID " .. id .. ". When supplying a number, it should be 0 for dislike or 1 for like. Got: " .. tostring(rate))
         mapRatings[id] = rate
     elseif type(rate) == "string" then
         -- If type is string, it must be "like" or "dislike"
-        assert(rate ~= "like" and rate ~= "dislike", "Invalid rate for ID " .. id .. ". When supplying a string, it should be 'dislike' for dislike or 'like' for like. Got: " .. rate)
+        assert(rate == "like" or rate == "dislike", "Invalid rate for ID " .. id .. ". When supplying a string, it should be 'dislike' for dislike or 'like' for like. Got: " .. rate)
         mapRatings[id] = rate == "like" and 1 or 0
     else
         error("Invalid rate argument. Should be either 'like', 'dislike' or 1, 0. Got " .. tostring(rate))
