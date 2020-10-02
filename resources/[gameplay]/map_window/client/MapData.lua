@@ -32,7 +32,9 @@ MapData.mapRoundsInfo = {
 local function changeNextMapRatings(data)
     iprint("mapratings.nextmap", data)
     if data and table.keysExists(data, "name", "likes", "dislikes") then
-        MapData.currentMapRatings = data
+        MapData.nextMapRatings = data
+        MapData.nextMapRatings.likes = tonumber(MapData.nextMapRatings.likes) or 0
+        MapData.nextMapRatings.dislikes = tonumber(MapData.nextMapRatings.dislikes) or 0
     else
         MapData.nextMapRatings = {
             name = "",
@@ -46,6 +48,8 @@ local function changeCurrentMapRatings(data)
     iprint("mapratings.currentmap", data)
     if data and table.keysExists(data, "name", "likes", "dislikes") then
         MapData.currentMapRatings = data
+        MapData.currentMapRatings.likes = tonumber(MapData.currentMapRatings.likes) or 0
+        MapData.currentMapRatings.dislikes = tonumber(MapData.currentMapRatings.dislikes) or 0
     else
         MapData.currentMapRatings = {
             name = "",
