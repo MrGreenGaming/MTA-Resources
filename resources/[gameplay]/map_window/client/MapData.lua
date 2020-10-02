@@ -31,6 +31,7 @@ MapData.mapRoundsInfo = {
 
 
 local function changeNextMapRatings(data)
+    iprint("mapratings.nextmap", data)
     if data and table.keysExists(data, "name", "likes", "dislikes", "description") then
         MapData.currentMapRatings = data
     else
@@ -43,6 +44,7 @@ local function changeNextMapRatings(data)
 end
 
 local function changeCurrentMapRatings(data)
+    iprint("mapratings.currentmap", data)
     if data and table.keysExists(data, "name", "likes", "dislikes", "description") then
         MapData.currentMapRatings = data
     else
@@ -56,6 +58,7 @@ local function changeCurrentMapRatings(data)
 end
 
 local function changeCurrentMapInfo(data)
+    iprint("map_window.currentMapInfo", data)
     if data and table.keysExists(data, "name", "resourceName", "timesPlayed", "author", "description", "lastTimePlayed") then
         MapData.currentMapInfo = data
         if MapData.currentMapInfo.lastTimePlayed then
