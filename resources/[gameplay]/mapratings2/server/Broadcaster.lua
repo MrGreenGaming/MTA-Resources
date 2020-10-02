@@ -3,7 +3,7 @@ Broadcaster = {}
 function Broadcaster.broadcastNextMap(nmap)
     -- Next Map
 	local mapName = getResourceInfo(nmap, "name") or getResourceName(nmap)
-	local rating = exports.mapratings:getMapRating(getResourceName(nmap)) or {}
+	local rating = AllMapsRatings.getRating(getResourceName(nmap)) or {}
 
     local mapInfo = {
         name = getResourceInfo(nmap, "name") or getResourceName(nmap),
