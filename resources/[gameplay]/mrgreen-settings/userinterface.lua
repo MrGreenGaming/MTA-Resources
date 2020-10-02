@@ -18,8 +18,8 @@ Exp_Funct = { -- Exported functions
 
 	["nextmapwindow"] = {
 		res = "mapratings",
-		["true"] = 'exports["mapratings"].showNextMapWindow()',
-		["false"] = 'exports["mapratings"].hideNextMapWindow()'},
+		["true"] = 'exports["map_window"].showNextMapWindow()',
+		["false"] = 'exports["map_window"].hideNextMapWindow()'},
 
 	["checkpointdelay"] = {
 		res = "race_delay_indicator",
@@ -44,7 +44,7 @@ Exp_Funct = { -- Exported functions
 	["timeleft"] = {
 		["true"] = 'timeleft_on()',
 		["false"] = 'timeleft_off()'},
-	
+
 	["fpscounter"] = {
 		res = "fps",
 		["true"] = 'exports["fps"].e_showFPS()',
@@ -156,19 +156,19 @@ function ui_ClickHandler()
 			exports["gc"].e_hideGC()
 			UI["gccounter"] = false
 
-		end		
+		end
 	-- toggle nextmapwindow
 	elseif source == GUIEditor.checkbox[9] then
 		saveTime()
 		if guiCheckBoxGetSelected( source ) then
-			exports["mapratings"].showNextMapWindow()
+			exports["map_window"].showNextMapWindow()
 
 			UI["nextmapwindow"] = true
 		else
-			exports["mapratings"].hideNextMapWindow()
+			exports["map_window"].hideNextMapWindow()
 
 			UI["nextmapwindow"] = false
-		end	
+		end
 
 	-- Toggle CP Delays
 	elseif source == GUIEditor.checkbox[10] then
@@ -194,7 +194,7 @@ function ui_ClickHandler()
 			exports["gus"].hideChaticon()
 
 			UI["chatbubbles"] = false
-		end	
+		end
 
 	-- Toggle Float messages
 	elseif source == GUIEditor.checkbox[12] then
@@ -207,7 +207,7 @@ function ui_ClickHandler()
 			exports["messages"].hideFloatMessages()
 
 			UI["floatingmessages"] = false
-		end	
+		end
 
 	-- Toggle Radar
 	elseif source == GUIEditor.checkbox[14] then
@@ -220,7 +220,7 @@ function ui_ClickHandler()
 			exports["race_sphud"].e_hideRadar()
 
 			UI["radar"] = false
-		end	
+		end
 
 	-- Toggle Custon NameTags
 	elseif source == customNameTagsCheckBox then
@@ -233,7 +233,7 @@ function ui_ClickHandler()
 			triggerEvent("toggleNameTags",root,false)
 
 			UI["customnametags"] = false
-		end	
+		end
 
 	-- Toggle FPS Counter
 	elseif source == GUIEditor.checkbox[15] then
@@ -246,7 +246,7 @@ function ui_ClickHandler()
 			exports["fps"].e_hideFPS()
 
 			UI["fpscounter"] = false
-		end	
+		end
 	-- Toggle TimeLeft --
 	elseif source == GUIEditor.checkbox[16] then
 		saveTime()
@@ -258,7 +258,7 @@ function ui_ClickHandler()
 			timeleft_off()
 
 			UI["timeleft"] = false
-		end	
+		end
 
 	end
 end
@@ -332,7 +332,7 @@ addEventHandler("onClientGUIComboBoxAccepted", resourceRoot, ui_ComboBoxHandler)
 function sphudOverride() -- sphud overrides toggleGCInfo and enableFPS
 	for f, u in pairs(Exp_Funct) do
 		if UI[f] then
-			if Exp_Funct[f]["true"] then 
+			if Exp_Funct[f]["true"] then
 
 				local executeFunction = loadstring(Exp_Funct[f]["true"])
 				executeFunction()
