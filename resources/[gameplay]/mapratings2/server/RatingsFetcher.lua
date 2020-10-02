@@ -15,6 +15,7 @@ function RatingsFetcher.request()
     if not resname then outputDebugString("No running map to fetch") return end
     dbQuery(function(qh)
         local res = dbPoll(qh, 0)
+        iprint("Request res", res)
         if res then
             CurrentMapRatings.receiveRatingsFromDatabase(resname, res)
         end
