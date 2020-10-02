@@ -8,8 +8,8 @@ function Broadcaster.broadcastCurrentMapInfo(map)
         name = "",
         resourceName = resName,
         timesPlayed = 0,
-        author = getResourceInfo(getResourceFromName(mapRes), "author") or "",
-        description = getResourceInfo(getResourceFromName(mapRes), "description") or "",
+        author = getResourceInfo(mapRes, "author") or "",
+        description = getResourceInfo(mapRes, "description") or "",
         lastTimePlayed = false,
     }
 
