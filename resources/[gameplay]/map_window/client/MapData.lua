@@ -110,6 +110,7 @@ end)
 
 addEvent("receiveUserMapRate", true)
 addEventHandler("receiveUserMapRate", localPlayer, function(rate)
+    iprint("personal rate", rate)
     MapData.currentMapUserRate = (rate == 0 or rate == 1) and rate or false
 end)
 
