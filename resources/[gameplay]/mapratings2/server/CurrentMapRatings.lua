@@ -13,7 +13,7 @@ local function parseRecievedRatings(toParse)
             parsed[row.forumid] = row.rating
         end
     end
-    mapRatings = parsed
+    return parsed
 end
 
 local function broadcastRateChange()
