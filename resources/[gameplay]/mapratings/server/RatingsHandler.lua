@@ -32,7 +32,7 @@ function RatingsHandler.handlePlayerRate (player, cmd)
 
     local save = dbExec(connection,"INSERT INTO mapratings (forumid, mapresourcename, rating) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE rating = ?", forumid, mapresourcename, rating, rating)
     if save then
-        if currentRating == "neutral" then
+        if currentRating == false then
             if cmd == "like" then
                 outputChatBox(MESSAGE_PREFIX .. "You liked the map: "..mapname, player, 225, 170, 90, true)
             else
