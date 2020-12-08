@@ -57,10 +57,8 @@ achievementListRace = {
     { s = "Finish the map *Tour de San Andreas*",               	   	id = 35,		reward = 100 },
 	{ s = "Win the map *I Wanna Find My Destiny*",               	   	id = 36,		reward = 300 },
 	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	id = 38,		reward = 300 },
-	{ s = "Win the map *I Wanna Find My Destiny 3*",               	   	id = 66,		reward = 300 },
 	{ s = "Finish the map *I Wanna Find My Destiny*",               	id = 37,		reward = 100 },
 	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	id = 39,		reward = 100 },
-	{ s = "Finish the map *I Wanna Find My Destiny 3*",               	id = 65,		reward = 100 },
 	{ s = "Finish the map *Race Climb Up*",               	id = 67,		reward = 100 },
 	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 100 },
 	{ s = "Finish the map *ChrML Hard*",               	id = 57,		reward = 100 },
@@ -225,11 +223,6 @@ function(rank, time)
 	if mapResName == "race-Pachanga_TheShortMap" and time <= 72500 then
 		addPlayerAchievementRace(source, 69)
   end
-
-	if mapResName == "race-IWFMD3easy" then
-		addPlayerAchievementRace(source, 65)
- 		if rank == 1 then addPlayerAchievementRace(source, 66) end
-	end
 
 	if mapResName == "race-climbup" then
 		addPlayerAchievementRace(source, 67)
