@@ -1,6 +1,6 @@
 <def name="Race">
 	<setting name="respawn" friendlyname="Respawn type" type="selection:timelimit,none" description="Whether respawn is enabled or not.  If enabled, a timelimit must be specified" default="timelimit" required="true"/>
-	<setting name="duration" friendlyname="Race duration" type="natural" description="The length of the race, in seconds.  Default is 30 minutes." default="1800" required="true"/>
+	<setting name="duration" friendlyname="Race duration" type="natural" description="The length of the race, in seconds.  Default is 30 minutes." default="3600" required="true"/>
 	<setting name="vehicleweapons" friendlyname="Enabled vehicle weapons" type="selection:true,false" description="Whether vehicle weapons are enabled or not.  Vehicles weapons include Hunter/Hydra/Tank rockets" default="false" required="true"/>
 	<setting name="ghostmode" friendlyname="Ghost mode" type="selection:true,false" description="Whether Ghost Mode is enabled.  This mode allows vehicles to drive through each other during the race." default="false" required="true"/>
 	<setting name="skins" friendlyname="Driver skins" type="selection:cj,random" description="What kind of skins players will spawn as.  CJ means that players will spawn as CJ, with varying motor clothes on.  Random means that random ped skins will be used." default="cj" required="true"/>
