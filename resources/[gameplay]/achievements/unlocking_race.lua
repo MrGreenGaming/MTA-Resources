@@ -55,13 +55,8 @@ achievementListRace = {
 	{ s = "Finish the map *Epic Sandking*",               	   		    id = 33,		reward = 100 },
     { s = "Finish the map *San Andreas Run Puma*",               	   	id = 34,		reward = 100 },
     { s = "Finish the map *Tour de San Andreas*",               	   	id = 35,		reward = 100 },
-	{ s = "Win the map *I Wanna Find My Destiny*",               	   	id = 36,		reward = 300 },
-	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	id = 38,		reward = 300 },
-	{ s = "Finish the map *I Wanna Find My Destiny*",               	id = 37,		reward = 100 },
-	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	id = 39,		reward = 100 },
 	{ s = "Finish the map *Race Climb Up*",               	id = 67,		reward = 100 },
 	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 100 },
-	{ s = "Finish the map *ChrML Hard*",               	id = 57,		reward = 100 },
 	{ s = "Finish the map *Long Venturas Trip, Jumps and Fun*",               	id = 63,		reward = 100 },
 	{ s = "Finish the map *Whirlwind Journey in less than 7:40 minutes*",               	id = 64,		reward = 100 },
 	{ s = "Finish the map *Hydratastic!*",               	id = 58,		reward = 100 },
@@ -70,7 +65,6 @@ achievementListRace = {
         { s = "Finish the map *be4TH!! SpeedWay in 4th*",               	id = 60,		reward = 44},
 	{ s = "Finish the map *Racing_Countryside*",               	id = 61,		reward = 100 },
 	{ s = "Finish the map *Long Way Round*",               	id = 62,		reward = 100 },
-	{ s = "Finish the map *TryHarder*",                     id = 68,		reward = 70 },
 }
 
 
