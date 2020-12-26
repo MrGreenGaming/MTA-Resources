@@ -162,18 +162,6 @@ function(rank, time)
 	if (mapResName == "race-andreas-fix") then
 		addPlayerAchievementRace(source, 35)
 	end
-	if (mapResName == "race-IWFMD") and (rank == 1) then
-		addPlayerAchievementRace(source, 36)
-	end
-	if (mapResName == "race-IWFMD") then
-		addPlayerAchievementRace(source, 37)
-	end
-	if (mapResName == "race-iwfmd2") and (rank == 1) then
-		addPlayerAchievementRace(source, 38)
-	end
-	if (mapResName == "race-iwfmd2") then
-		addPlayerAchievementRace(source, 39)
-	end
 	if (mapResName == "race-chasethecheckpoints") and (rank == 1) and (playerCount > 29) then
 		addPlayerAchievementRace(source, 40)
 	end
@@ -185,9 +173,6 @@ function(rank, time)
 	end
 	if mapResName == "race-chrmleasy" then
 		addPlayerAchievementRace(source, 56)
-	end
-	if mapResName == "race-chrmlhard" then
-		addPlayerAchievementRace(source, 57)
 	end
 	if mapResName == "race-hydratastic" then
 		addPlayerAchievementRace(source, 58)
@@ -209,10 +194,6 @@ function(rank, time)
 	end
 	if mapResName == "race-whirlwindjourney" and time <= 444000 then
 		addPlayerAchievementRace(source, 64)
-	end
-
-	if mapResName == "race-tryharder" then
-		addPlayerAchievementRace(source, 68)
 	end
 	if mapResName == "race-Pachanga_TheShortMap" and time <= 72500 then
 		addPlayerAchievementRace(source, 69)
