@@ -8,7 +8,7 @@ prices["deadline"] = 500
 
 local PRICE = 1000
 local mp_maxBuyAmount = 3 -- Daily map buy amount
-local mp_cooldownTime = 360*60 -- Minutes of cooldown
+local mp_cooldownTime = 12*60*60 -- Minutes of cooldown - 12 hours
 local mp_staffMapFree = false -- Is map free for staff in ACL below
 local mp_staffACLNames = {
     'ServerManager',
