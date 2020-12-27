@@ -55,15 +55,8 @@ achievementListRace = {
 	{ s = "Finish the map *Epic Sandking*",               	   		    id = 33,		reward = 100 },
     { s = "Finish the map *San Andreas Run Puma*",               	   	id = 34,		reward = 100 },
     { s = "Finish the map *Tour de San Andreas*",               	   	id = 35,		reward = 100 },
-	{ s = "Win the map *I Wanna Find My Destiny*",               	   	id = 36,		reward = 300 },
-	{ s = "Win the map *I Wanna Find My Destiny 2*",               	   	id = 38,		reward = 300 },
-	{ s = "Win the map *I Wanna Find My Destiny 3*",               	   	id = 66,		reward = 300 },
-	{ s = "Finish the map *I Wanna Find My Destiny*",               	id = 37,		reward = 100 },
-	{ s = "Finish the map *I Wanna Find My Destiny 2*",               	id = 39,		reward = 100 },
-	{ s = "Finish the map *I Wanna Find My Destiny 3*",               	id = 65,		reward = 100 },
 	{ s = "Finish the map *Race Climb Up*",               	id = 67,		reward = 100 },
 	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 100 },
-	{ s = "Finish the map *ChrML Hard*",               	id = 57,		reward = 100 },
 	{ s = "Finish the map *Long Venturas Trip, Jumps and Fun*",               	id = 63,		reward = 100 },
 	{ s = "Finish the map *Whirlwind Journey in less than 7:40 minutes*",               	id = 64,		reward = 100 },
 	{ s = "Finish the map *Hydratastic!*",               	id = 58,		reward = 100 },
@@ -72,7 +65,6 @@ achievementListRace = {
         { s = "Finish the map *be4TH!! SpeedWay in 4th*",               	id = 60,		reward = 44},
 	{ s = "Finish the map *Racing_Countryside*",               	id = 61,		reward = 100 },
 	{ s = "Finish the map *Long Way Round*",               	id = 62,		reward = 100 },
-	{ s = "Finish the map *TryHarder*",                     id = 68,		reward = 70 },
 }
 
 
@@ -170,18 +162,6 @@ function(rank, time)
 	if (mapResName == "race-andreas-fix") then
 		addPlayerAchievementRace(source, 35)
 	end
-	if (mapResName == "race-IWFMD") and (rank == 1) then
-		addPlayerAchievementRace(source, 36)
-	end
-	if (mapResName == "race-IWFMD") then
-		addPlayerAchievementRace(source, 37)
-	end
-	if (mapResName == "race-iwfmd2") and (rank == 1) then
-		addPlayerAchievementRace(source, 38)
-	end
-	if (mapResName == "race-iwfmd2") then
-		addPlayerAchievementRace(source, 39)
-	end
 	if (mapResName == "race-chasethecheckpoints") and (rank == 1) and (playerCount > 29) then
 		addPlayerAchievementRace(source, 40)
 	end
@@ -193,9 +173,6 @@ function(rank, time)
 	end
 	if mapResName == "race-chrmleasy" then
 		addPlayerAchievementRace(source, 56)
-	end
-	if mapResName == "race-chrmlhard" then
-		addPlayerAchievementRace(source, 57)
 	end
 	if mapResName == "race-hydratastic" then
 		addPlayerAchievementRace(source, 58)
@@ -218,18 +195,9 @@ function(rank, time)
 	if mapResName == "race-whirlwindjourney" and time <= 444000 then
 		addPlayerAchievementRace(source, 64)
 	end
-
-	if mapResName == "race-tryharder" then
-		addPlayerAchievementRace(source, 68)
-	end
 	if mapResName == "race-Pachanga_TheShortMap" and time <= 72500 then
 		addPlayerAchievementRace(source, 69)
   end
-
-	if mapResName == "race-IWFMD3easy" then
-		addPlayerAchievementRace(source, 65)
- 		if rank == 1 then addPlayerAchievementRace(source, 66) end
-	end
 
 	if mapResName == "race-climbup" then
 		addPlayerAchievementRace(source, 67)

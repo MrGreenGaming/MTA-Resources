@@ -187,7 +187,7 @@ function receiveStats(stats, player)
         -- Send player info to browser
         local playerObj = {}
         playerObj.name = safeString(stats.name)
-        playerObj.gc = stats.gc
+        playerObj.gc = comma_value(tonumber(stats.gc))
         playerObj.vip = stats.vip
         
         local countryCode = isElement(player) and getElementData(player, 'country') or false
@@ -292,3 +292,15 @@ function scoreboardClick ( row, x, y, columnName )
 	end
 end
 addEventHandler ( "onClientPlayerScoreboardClick", root, scoreboardClick )
+
+--http://lua-users.org/wiki/FormattingNumbers
+function comma_value(amount)
+    local formatted = amount
+    while true do
+        formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1 %2')
+        if k == 0 then
+            break
+        end
+    end
+    return formatted
+end
