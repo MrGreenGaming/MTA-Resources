@@ -183,7 +183,7 @@ function finish(rank)
 		rewarded_Players[player].rank = rank
 		if isHoliday() then rewarded_Players[player].finishReward = rewarded_Players[player].finishReward * 2 end
 		
-		if rewarded_Players[player].finishReward > 1 then
+		if rewarded_Players[player].finishReward > 1 and getResourceState(getResourceFromName("race_point_system")) ~= "running" then
 			addPlayerGreencoins(player, rewarded_Players[player].finishReward)
 			if modename == 'Sprint' then
 				exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0, false, false, true)
