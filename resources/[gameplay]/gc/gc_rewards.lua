@@ -184,8 +184,8 @@ function finish(rank)
 		if isHoliday() then rewarded_Players[player].finishReward = rewarded_Players[player].finishReward * 2 end
 		
 		if rewarded_Players[player].finishReward > 1 then
-			addPlayerGreencoins(player, rewarded_Players[player].finishReward)
-			if getResourceState(getResourceFromName("race_point_system")) ~= "running" then
+			-- addPlayerGreencoins(player, rewarded_Players[player].finishReward)
+			if not getResourceFromName('race_point_system') or getResourceState(getResourceFromName('race_point_system')) ~= 'running' then
 				if modename == 'Sprint' then
 					exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0, false, false, true)
 					outputChatBox(prefix .."You earned ".. rewarded_Players[player].finishReward .." GC for finishing ".. tostring(rank) .. suffix ..". You now have ".. comma_value(getPlayerGreencoins(player)) .." GC.", player, 0, 255, 0, true)
