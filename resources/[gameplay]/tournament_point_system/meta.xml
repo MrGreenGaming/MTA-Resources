@@ -1,0 +1,8 @@
+<meta>
+	<info name="Tournament Point System" description="Tournament System for the mode race, allows a person to earn points by finishing higher on the rankingboard" author="Nick_026" type="script" addon="race" version="1.0" />
+	<script src="system_s.lua" type="server" />
+
+	<settings>
+		<setting name="*lastPositionToReward" value="5" friendlyname="The minimal rank to start earning points" examples="5" />
+	</settings>
+</meta>
