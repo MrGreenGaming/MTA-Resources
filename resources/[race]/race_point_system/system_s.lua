@@ -8,10 +8,12 @@ playerPoints = {
 	
 }
 
+
 local isLogged = false;
 function logStartEvent() 
 	if isLogged == false then
 		isLogged = true
+		exports.messages:outputGameMessage("Tournament Points System", root, 2.5, 255, 255, 255)
 		outputChatBox(chatPrefix .. "Tournament Points System | Developed by #40FF29Nick_026#FFFFFF | BETA", root, 255, 255, 255, true)
 		outputChatBox(chatPrefix .. "To earn points finish in " .. nPlaceToGivePoints .. getSuffix(nPlaceToGivePoints) .. " place or better!", root, 255, 255, 255, true)
 	end
@@ -30,7 +32,7 @@ function calculatePoints(rank)
 		local playerName =getElementData( source, "vip.colorNick" ) or getPlayerName( source )
 		local playerFound = false
 		outputChatBox(chatPrefix .. "You earned " .. pointsEarned .. " point(s) by placing " .. rank .. getSuffix(rank) .. "!", source, 255, 255, 255, true)
-
+		exports.messages:outputGameMessage(playerName .. " has earned " .. pointsEarned .. " points by placing " .. rank .. getSuffix(rank), root, 2.5, 255,255,255)
 		for i,line in ipairs(playerPoints) do
 			if line["serial"] == getPlayerSerial(source) then
 				line["nickname"] = playerName
@@ -38,7 +40,7 @@ function calculatePoints(rank)
 				setElementData(source, "TourPoints", line["points"])
 				playerFound = true
 			end
-			if i > 5 then break end
+			
 		end
 		if playerFound == false then
 			table.insert(playerPoints, {serial=getPlayerSerial(source), nickname = playerName, points = pointsEarned})
@@ -55,7 +57,7 @@ function playerJoin()
 		local points = 0
 		if line["serial"] == getPlayerSerial(source) then
 			points = line["points"]
-			setElementData(source, "TourPoints", points)
+			setElementData(source, "TourPoints", points, true)
 			outputChatBox(chatPrefix .. "You currently have " .. points .. " point(s)!", source, 255, 255, 255, true)
 		else
 			setElementData(source, "TourPoints", 0)
@@ -87,6 +89,7 @@ function logPoints()
 	outputChatBox(chatPrefix .. "The scoring is as follows:", root, 255, 255, 255, true)
 	table.sort(playerPoints, function(a, b) return a["points"] > b["points"] end)
 	for i,line in ipairs(playerPoints) do
+		if i > 5 then break end
 		local player = line["nickname"]
 		local points = line["points"]
 		outputChatBox(i .. getSuffix(i) .. ": " .. player .. "#FFFFFF with " .. points .. " points", root, 255, 255, 255, true)
