@@ -56,8 +56,8 @@ function getCurrentMapQueued(noRemove)
         if #eventQueue > 0 then
             triggerEvent('onNextmapSettingChange', root, getResourceFromName(eventQueue[1][1]))
         end
-		if choice[3] then
-			triggerEvent(choice[3], root, choice)
+		if choice[1] then
+			triggerEvent(choice[1], root, choice)
 		end
     end
     return choice
