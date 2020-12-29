@@ -1283,6 +1283,8 @@ function scoreboardDoubleClick()
 		if column.name == "name" then
 			local playerName = nickName
 			if playerName then
+				local localPlayer = getLocalPlayer()
+				if playerName == getPlayerName(localPlayer) then return end
 				executeCommandHandler("spectate", playerName)
 			end
 		end
