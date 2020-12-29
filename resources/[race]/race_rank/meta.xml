@@ -9,6 +9,7 @@
 	<file src="fonts/StateIcons.ttf" type="client" /> 
 	<file src="fonts/TitilliumWeb-Regular.ttf" type="client" /> 
 	<file src="fonts/TitilliumWeb-SemiBold.ttf" type="client" />
+	<file src="flags.png" type="client" />
 	
 	<!-- Exports for settings resource  KaliBwoy -->
     <export function="showBoard" type="client"/>

@@ -19,12 +19,270 @@ splitsBehind = 1
 animationsEnabled = true
 showIntervals = false
 liveIntervals = false
+showFlags = false
 lightenDarkColors = false
 
 y = 200
 w = 190
 itemHeight = 20
 itemPadding = 2
+
+local flagImage = dxCreateTexture("flags.png")
+local flagMap = {}
+flagMap["ad"] = {0, 0}
+flagMap["ae"] = {60, 0}
+flagMap["af"] = {120, 0}
+flagMap["ag"] = {180, 0}
+flagMap["ai"] = {240, 0}
+flagMap["al"] = {300, 0}
+flagMap["am"] = {360, 0}
+flagMap["ao"] = {420, 0}
+flagMap["aq"] = {480, 0}
+flagMap["ar"] = {540, 0}
+flagMap["as"] = {0, 40}
+flagMap["at"] = {60, 40}
+flagMap["au"] = {120, 40}
+flagMap["aw"] = {180, 40}
+flagMap["ax"] = {240, 40}
+flagMap["az"] = {300, 40}
+flagMap["ba"] = {360, 40}
+flagMap["bb"] = {420, 40}
+flagMap["bd"] = {480, 40}
+flagMap["be"] = {540, 40}
+flagMap["bf"] = {0, 80}
+flagMap["bg"] = {60, 80}
+flagMap["bh"] = {120, 80}
+flagMap["bi"] = {180, 80}
+flagMap["bj"] = {240, 80}
+flagMap["bl"] = {300, 80}
+flagMap["bm"] = {360, 80}
+flagMap["bn"] = {420, 80}
+flagMap["bo"] = {480, 80}
+flagMap["bq"] = {540, 80}
+flagMap["br"] = {0, 120}
+flagMap["bs"] = {60, 120}
+flagMap["bt"] = {120, 120}
+flagMap["bv"] = {180, 120}
+flagMap["bw"] = {240, 120}
+flagMap["by"] = {300, 120}
+flagMap["bz"] = {360, 120}
+flagMap["ca"] = {420, 120}
+flagMap["cc"] = {480, 120}
+flagMap["cd"] = {540, 120}
+flagMap["cf"] = {0, 160}
+flagMap["cg"] = {60, 160}
+flagMap["ch"] = {120, 160}
+flagMap["ci"] = {180, 160}
+flagMap["ck"] = {240, 160}
+flagMap["cl"] = {300, 160}
+flagMap["cm"] = {360, 160}
+flagMap["cn"] = {420, 160}
+flagMap["co"] = {480, 160}
+flagMap["cr"] = {540, 160}
+flagMap["cu"] = {0, 200}
+flagMap["cv"] = {60, 200}
+flagMap["cw"] = {120, 200}
+flagMap["cx"] = {180, 200}
+flagMap["cy"] = {240, 200}
+flagMap["cz"] = {300, 200}
+flagMap["de"] = {360, 200}
+flagMap["dj"] = {420, 200}
+flagMap["dk"] = {480, 200}
+flagMap["dm"] = {540, 200}
+flagMap["do"] = {0, 240}
+flagMap["dz"] = {60, 240}
+flagMap["ec"] = {120, 240}
+flagMap["ee"] = {180, 240}
+flagMap["eg"] = {240, 240}
+flagMap["eh"] = {300, 240}
+flagMap["er"] = {360, 240}
+flagMap["es"] = {420, 240}
+flagMap["et"] = {480, 240}
+flagMap["fi"] = {540, 240}
+flagMap["fj"] = {0, 280}
+flagMap["fk"] = {60, 280}
+flagMap["fm"] = {120, 280}
+flagMap["fo"] = {180, 280}
+flagMap["fr"] = {240, 280}
+flagMap["ga"] = {300, 280}
+flagMap["gb"] = {360, 280}
+flagMap["gd"] = {420, 280}
+flagMap["ge"] = {480, 280}
+flagMap["gf"] = {540, 280}
+flagMap["gg"] = {0, 320}
+flagMap["gh"] = {60, 320}
+flagMap["gi"] = {120, 320}
+flagMap["gl"] = {180, 320}
+flagMap["gm"] = {240, 320}
+flagMap["gn"] = {300, 320}
+flagMap["gp"] = {360, 320}
+flagMap["gq"] = {420, 320}
+flagMap["gr"] = {480, 320}
+flagMap["gs"] = {540, 320}
+flagMap["gt"] = {0, 360}
+flagMap["gu"] = {60, 360}
+flagMap["gw"] = {120, 360}
+flagMap["gy"] = {180, 360}
+flagMap["hk"] = {240, 360}
+flagMap["hm"] = {300, 360}
+flagMap["hn"] = {360, 360}
+flagMap["hr"] = {420, 360}
+flagMap["ht"] = {480, 360}
+flagMap["hu"] = {540, 360}
+flagMap["id"] = {0, 400}
+flagMap["ie"] = {60, 400}
+flagMap["il"] = {120, 400}
+flagMap["im"] = {180, 400}
+flagMap["in"] = {240, 400}
+flagMap["io"] = {300, 400}
+flagMap["iq"] = {360, 400}
+flagMap["ir"] = {420, 400}
+flagMap["is"] = {480, 400}
+flagMap["it"] = {540, 400}
+flagMap["je"] = {0, 440}
+flagMap["jm"] = {60, 440}
+flagMap["jo"] = {120, 440}
+flagMap["jp"] = {180, 440}
+flagMap["ke"] = {240, 440}
+flagMap["kg"] = {300, 440}
+flagMap["kh"] = {360, 440}
+flagMap["ki"] = {420, 440}
+flagMap["km"] = {480, 440}
+flagMap["kn"] = {540, 440}
+flagMap["kp"] = {0, 480}
+flagMap["kr"] = {60, 480}
+flagMap["kw"] = {120, 480}
+flagMap["ky"] = {180, 480}
+flagMap["kz"] = {240, 480}
+flagMap["la"] = {300, 480}
+flagMap["lb"] = {360, 480}
+flagMap["lc"] = {420, 480}
+flagMap["li"] = {480, 480}
+flagMap["lk"] = {540, 480}
+flagMap["lr"] = {0, 520}
+flagMap["ls"] = {60, 520}
+flagMap["lt"] = {120, 520}
+flagMap["lu"] = {180, 520}
+flagMap["lv"] = {240, 520}
+flagMap["ly"] = {300, 520}
+flagMap["ma"] = {360, 520}
+flagMap["mc"] = {420, 520}
+flagMap["md"] = {480, 520}
+flagMap["me"] = {540, 520}
+flagMap["mf"] = {0, 560}
+flagMap["mg"] = {60, 560}
+flagMap["mh"] = {120, 560}
+flagMap["mk"] = {180, 560}
+flagMap["ml"] = {240, 560}
+flagMap["mm"] = {300, 560}
+flagMap["mn"] = {360, 560}
+flagMap["mo"] = {420, 560}
+flagMap["mp"] = {480, 560}
+flagMap["mq"] = {540, 560}
+flagMap["mr"] = {0, 600}
+flagMap["ms"] = {60, 600}
+flagMap["mt"] = {120, 600}
+flagMap["mu"] = {180, 600}
+flagMap["mv"] = {240, 600}
+flagMap["mw"] = {300, 600}
+flagMap["mx"] = {360, 600}
+flagMap["my"] = {420, 600}
+flagMap["mz"] = {480, 600}
+flagMap["na"] = {540, 600}
+flagMap["nc"] = {0, 640}
+flagMap["ne"] = {60, 640}
+flagMap["nf"] = {120, 640}
+flagMap["ng"] = {180, 640}
+flagMap["ni"] = {240, 640}
+flagMap["nl"] = {300, 640}
+flagMap["no"] = {360, 640}
+flagMap["np"] = {420, 640}
+flagMap["nr"] = {480, 640}
+flagMap["nu"] = {540, 640}
+flagMap["nz"] = {0, 680}
+flagMap["om"] = {60, 680}
+flagMap["pa"] = {120, 680}
+flagMap["pe"] = {180, 680}
+flagMap["pf"] = {240, 680}
+flagMap["pg"] = {300, 680}
+flagMap["ph"] = {360, 680}
+flagMap["pk"] = {420, 680}
+flagMap["pl"] = {480, 680}
+flagMap["pm"] = {540, 680}
+flagMap["pn"] = {0, 720}
+flagMap["pr"] = {60, 720}
+flagMap["ps"] = {120, 720}
+flagMap["pt"] = {180, 720}
+flagMap["pw"] = {240, 720}
+flagMap["py"] = {300, 720}
+flagMap["qa"] = {360, 720}
+flagMap["re"] = {420, 720}
+flagMap["ro"] = {480, 720}
+flagMap["rs"] = {540, 720}
+flagMap["ru"] = {0, 760}
+flagMap["rw"] = {60, 760}
+flagMap["sa"] = {120, 760}
+flagMap["sb"] = {180, 760}
+flagMap["sc"] = {240, 760}
+flagMap["sd"] = {300, 760}
+flagMap["se"] = {360, 760}
+flagMap["sg"] = {420, 760}
+flagMap["sh"] = {480, 760}
+flagMap["si"] = {540, 760}
+flagMap["sj"] = {0, 800}
+flagMap["sk"] = {60, 800}
+flagMap["sl"] = {120, 800}
+flagMap["sm"] = {180, 800}
+flagMap["sn"] = {240, 800}
+flagMap["so"] = {300, 800}
+flagMap["sr"] = {360, 800}
+flagMap["ss"] = {420, 800}
+flagMap["st"] = {480, 800}
+flagMap["sv"] = {540, 800}
+flagMap["sx"] = {0, 840}
+flagMap["sy"] = {60, 840}
+flagMap["sz"] = {120, 840}
+flagMap["tc"] = {180, 840}
+flagMap["td"] = {240, 840}
+flagMap["tf"] = {300, 840}
+flagMap["tg"] = {360, 840}
+flagMap["th"] = {420, 840}
+flagMap["tj"] = {480, 840}
+flagMap["tk"] = {540, 840}
+flagMap["tl"] = {0, 880}
+flagMap["tm"] = {60, 880}
+flagMap["tn"] = {120, 880}
+flagMap["to"] = {180, 880}
+flagMap["tr"] = {240, 880}
+flagMap["tt"] = {300, 880}
+flagMap["tv"] = {360, 880}
+flagMap["tw"] = {420, 880}
+flagMap["tz"] = {480, 880}
+flagMap["ua"] = {540, 880}
+flagMap["ug"] = {0, 920}
+flagMap["um"] = {60, 920}
+flagMap["us"] = {120, 920}
+flagMap["uy"] = {180, 920}
+flagMap["uz"] = {240, 920}
+flagMap["va"] = {300, 920}
+flagMap["vc"] = {360, 920}
+flagMap["ve"] = {420, 920}
+flagMap["vg"] = {480, 920}
+flagMap["vi"] = {540, 920}
+flagMap["vn"] = {0, 960}
+flagMap["vu"] = {60, 960}
+flagMap["wf"] = {120, 960}
+flagMap["ws"] = {180, 960}
+flagMap["xk"] = {240, 960}
+flagMap["ye"] = {300, 960}
+flagMap["yt"] = {360, 960}
+flagMap["za"] = {420, 960}
+flagMap["zm"] = {480, 960}
+flagMap["zw"] = {540, 960}
+flagMap["pride"] = {0, 1000}
+
+local isAdminResourceRunning = getResourceFromName("admin")
+isAdminResourceRunning = isAdminResourceRunning and getResourceState(isAdminResourceRunning) == "running"
 
 local screenX, screenY = guiGetScreenSize()
 
@@ -47,7 +305,7 @@ RankBoard.padding = round(itemPadding * scale)
 RankBoard.font = dxCreateFont("fonts/TitilliumWeb-SemiBold.ttf", round(11 * scale)) or "default-bold"
 RankBoard.fontSmall = dxCreateFont("fonts/TitilliumWeb-Regular.ttf", round(11 * scale)) or "default"
 RankBoard.fontState = dxCreateFont("fonts/StateIcons.ttf", round(9 * scale)) or "default"
-RankBoard.timeW = round((dxGetTextWidth("+00:00:00", 1, RankBoard.fontSmall) + itemPadding*2) * scale)
+RankBoard.timeW = round((dxGetTextWidth(" +00:00:00", 1, RankBoard.fontSmall) + itemPadding*2))
 RankBoard.x = screenX - round((w+40) * scale) - (showIntervals and RankBoard.timeW or 0)
 RankBoard.y = y
 RankBoard.w = round(w * scale);
@@ -55,6 +313,7 @@ RankBoard.linePosition = 0
 RankBoard.lineY = 0
 RankBoard.showIntervals = showIntervals
 RankBoard.liveIntervals = liveIntervals
+RankBoard.showFlags = showFlags
 RankBoard.backgroundOpacity = 0.65
 RankBoard.animations = {}
 RankBoard.sorted = {}
@@ -68,6 +327,7 @@ function RankBoard:create(player, name, color)
         localPlayer = player == getLocalPlayer(),
         rank = 0,
         name = name or (getElementData(player, 'vip.colorNick') or getPlayerName(player)),
+        country = getElementData(player, 'specialCountry') or getElementData(player, 'country') or "",
         hidden = true,
         willHide = false,
         willShow = false,
@@ -96,6 +356,7 @@ function RankBoard:create(player, name, color)
     	RankBoard.items[player].color = tocolor(r,g,b)
     	RankBoard.items[player].name = RGBToHex(r,g,b) .. RankBoard.items[player].name
     end
+    RankBoard.items[player].country = string.lower(RankBoard.items[player].country)
     return RankBoard.items[player]
 end
 
@@ -247,7 +508,13 @@ function RankBoard:draw()
 		dxDrawText(time, x + w + p, y + p, x + w + RankBoard.timeW - p, y + h - p , tocolor(200,200,200, 200*alpha), 1, RankBoard.fontSmall,"right", "center",true) 
 	end
 	
+	if RankBoard.showFlags and self.country ~= "" and flagMap[self.country] ~= nil then
+		local flag = flagMap[self.country]
+		dxDrawImageSection(x + w - p - (h - p*2)/40*60, y + p, (h - p*2)/40*60, h - p*2, tonumber(flag[1]), tonumber(flag[2]), 60, 40, flagImage)
+	end
+	
 	dxDrawColorText(self.name, x + h + p*5, y + p, x + w - p*5, y + h - p, tocolor(255,255,255, 255*alpha), 1, RankBoard.font,"left", "center",true, alpha)
+	
 	
 	local stateText = ""
 	
@@ -336,9 +603,11 @@ function RankBoard.reset()
 		RankBoard.bestCPTimes[p] = nil
 	end
 	RankBoard.bestCPTimes = {}
+	RankBoard.linePosition = 0;
 end
 
-function RankBoard.render() 
+function RankBoard.render()
+	if #RankBoard.sorted == 0 then return end
 	for i, player in pairs (RankBoard.sorted) do
 		local item = RankBoard.items[player] or nil
 		if item ~= nil then item:draw() end
@@ -577,6 +846,20 @@ addEventHandler ( "onClientPlayerChangeNick", getRootElement(),
     	RankBoard.items[source].name = (getElementData(source, 'vip.colorNick') or getPlayerName(source))
     end
 )
+
+addEvent('onClientPlayerSetSpecialCountry', true)
+addEventHandler("onClientPlayerSetSpecialCountry", getRootElement(),
+    function(country)
+    	if not RankBoard.items[source] then return end
+    	if country ~= "" then
+    		RankBoard.items[source].country = country
+    	else
+    		country = getElementData(source, 'country') or ""
+    		RankBoard.items[source].country = string.lower(country)
+    	end
+    end
+)
+
 
 
 --
@@ -872,6 +1155,15 @@ function setShowIntervals(enabled, live)
 	RankBoard.x = screenX - round((w+40) * scale) - (showIntervals and RankBoard.timeW or 0)
 end
 
+function setShowFlags(enabled)
+	showFlags = enabled and true or false
+	RankBoard.showFlags = showFlags
+end
+
+function setCustomFlag(flag)
+	 triggerServerEvent("onPlayerSetSpecialCountry", localPlayer, flag or "")
+end
+
 function setLightenDarkColors(enabled)
 	lightenDarkColors = enabled and true or false
 end
@@ -894,7 +1186,7 @@ function setBoardScale(value)
 	RankBoard.font = dxCreateFont("fonts/TitilliumWeb-SemiBold.ttf", round(11 * scale)) or "default-bold"
 	RankBoard.fontSmall = dxCreateFont("fonts/TitilliumWeb-Regular.ttf", round(11 * scale)) or "default"
 	RankBoard.fontState = dxCreateFont("fonts/StateIcons.ttf", round(9 * scale)) or "default"
-	RankBoard.timeW = round((dxGetTextWidth("+00:00:00", 1, RankBoard.fontSmall) + itemPadding*2) * scale)
+	RankBoard.timeW = round((dxGetTextWidth(" +00:00:00", 1, RankBoard.fontSmall) + itemPadding*2))
 	RankBoard.x = screenX - round((w+40) * scale) - (showIntervals and RankBoard.timeW or 0)
 	RankBoard.w = round(w * scale);
 end
