@@ -57,6 +57,7 @@ addEventHandler( "onClientResourceStart", getResourceRootElement( getThisResourc
 	function ( resource )
 		cScoreboardBackground = tocolor( defaultSettings.bg_color.r, defaultSettings.bg_color.g, defaultSettings.bg_color.b, defaultSettings.bg_color.a )
 		cSelection = tocolor( defaultSettings.selection_color.r, defaultSettings.selection_color.g, defaultSettings.selection_color.b, defaultSettings.selection_color.a )
+		cSpectate = tocolor(255, 255, 255, 100)
 		cHighlight = tocolor( defaultSettings.highlight_color.r, defaultSettings.highlight_color.g, defaultSettings.highlight_color.b, defaultSettings.highlight_color.a )
 		cHeader = tocolor( defaultSettings.header_color.r, defaultSettings.header_color.g, defaultSettings.header_color.b, defaultSettings.header_color.a )
 		cTeam = tocolor( defaultSettings.team_color.r, defaultSettings.team_color.g, defaultSettings.team_color.b, defaultSettings.team_color.a )
@@ -671,6 +672,18 @@ function doDrawScoreboard( rtPass, onlyAnim, sX, sY )
 					if checkCursorOverRow( rtPass, topX+s(5), topX+scoreboardDimensions.width-s(5), y, y+dxGetFontHeight( fontscale(contentFont, scoreboardScale), contentFont ) ) then
 						dxDrawRectangle( topX+s(5), y, scoreboardDimensions.width-s(10), dxGetFontHeight( fontscale(contentFont, scoreboardScale), contentFont ), cHighlight, drawOverGUI )
 					end
+					-- Highlight spectating player's name
+					local target = getCameraTarget()
+					if target and getElementType(target) == "player" then
+						if element == target and target ~= localPlayer then
+							dxDrawRectangle(topX+s(5), y, scoreboardDimensions.width-s(10), dxGetFontHeight( fontscale(contentFont, scoreboardScale), contentFont ), cSpectate, drawOverGUI)
+						end
+					elseif target and getElementType(target) == "vehicle" then
+						local player = getVehicleOccupant(target, 0)
+						if element == player and player ~= localPlayer then
+							dxDrawRectangle(topX+s(5), y, scoreboardDimensions.width-s(10), dxGetFontHeight( fontscale(contentFont, scoreboardScale), contentFont ), cSpectate, drawOverGUI)
+						end
+					end
 					-- Highlight selected row
 					if selectedRows[element] then
 						dxDrawRectangle( topX+s(5), y, scoreboardDimensions.width-s(10), dxGetFontHeight( fontscale(contentFont, scoreboardScale), contentFont ), cHighlight, drawOverGUI )
@@ -1253,3 +1266,38 @@ function scoreboardForceUpdate ()
 	bForceUpdate = true
 	return true
 end
+
+-- Double-Click nickname in scoreboard to spectate the selected player
+local nickName = false
+function scoreboardClick()
+	for key, column in ipairs(scoreboardColumns) do
+		if getElementType(source) == "player" and column.name == "name" then
+			nickName = getPlayerName(source)
+		end
+	end
+end
+addEventHandler("onClientPlayerScoreboardClick", root, scoreboardClick)
+
+function scoreboardDoubleClick()
+	for key, column in ipairs(scoreboardColumns) do
+		if column.name == "name" then
+			local playerName = nickName
+			if playerName then
+				executeCommandHandler("spectate", playerName)
+			end
+		end
+	end
+end
+
+function startDrawing()
+	addEventHandler("onClientDoubleClick", root, scoreboardDoubleClick)
+	scoreboardShowing = true
+end
+bindKey("tab", "down", startDrawing)
+
+function stopDrawing()
+	removeEventHandler("onClientDoubleClick", root, scoreboardDoubleClick)
+	showCursor(false)
+	scoreboardShowing = false
+end
+bindKey("tab", "up", stopDrawing)
