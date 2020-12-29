@@ -198,7 +198,9 @@ function finish(rank)
 		end
 	end
 	
-	exports.messages:outputGameMessage(getPlayerName(player) .." finished ".. tostring(rank) .. suffix, getRootElement(), nil, nil, nil, nil, false, false, true)
+	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+		exports.messages:outputGameMessage(getPlayerName(player) .." finished ".. tostring(rank) .. suffix, getRootElement(), nil, nil, nil, nil, false, false, true)
+	end
 end
 addEventHandler("onPlayerFinish", root, finish)
 
