@@ -24,3 +24,15 @@ addEventHandler('onPlayerFinish', root,
 		triggerClientEvent('onClientPlayerReachCheckpoint', source, 0, time)
 	end
 )
+
+addEvent('onPlayerSetSpecialCountry', true)
+addEventHandler('onPlayerSetSpecialCountry', root,
+	function(country)
+		if country == "" then
+			removeElementData(source, "specialCountry")
+		else
+			setElementData(source, 'specialCountry', country) 
+		end	
+		triggerClientEvent('onClientPlayerSetSpecialCountry', source, country)
+	end
+)

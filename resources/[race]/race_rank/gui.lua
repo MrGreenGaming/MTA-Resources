@@ -1,15 +1,22 @@
 
 GUIEditor = {
     checkbox = {},
+    combobox = {},
     edit = {},
     button = {},
     window = {},
     label = {}
 }
+
+customFlags = {
+	{ name = "-", value = "" }, 
+	{ name = "Pride", value = "pride" }
+}
+
 addEventHandler("onClientResourceStart", resourceRoot,
     function()
 	local screenW, screenH = guiGetScreenSize()
-        GUIEditor.window[1] = guiCreateWindow((screenW - 500) / 2, (screenH - 220) / 2, 500, 220, "Ranking board settings", false)
+        GUIEditor.window[1] = guiCreateWindow((screenW - 500) / 2, (screenH - 250) / 2, 500, 250, "Ranking board settings", false)
         guiWindowSetSizable(GUIEditor.window[1], false)
 
         GUIEditor.label[1] = guiCreateLabel(46, 28, 200, 18, "Enable animations", false, GUIEditor.window[1])
@@ -24,22 +31,33 @@ addEventHandler("onClientResourceStart", resourceRoot,
 	GUIEditor.label[4] = guiCreateLabel(46, 112, 200, 18, "Make dark names lighter", false, GUIEditor.window[1])
         GUIEditor.checkbox["fixdark"] = guiCreateCheckBox(14, 112, 15, 15, "", false, false, GUIEditor.window[1])
         
-        GUIEditor.label[5] = guiCreateLabel(250, 28, 240, 18, "Number of positions to show (5 - 20)", false, GUIEditor.window[1])
+        GUIEditor.label[5] = guiCreateLabel(46, 140, 200, 18, "Show country flags", false, GUIEditor.window[1])
+        GUIEditor.checkbox["flags"] = guiCreateCheckBox(14, 140, 17, 18, "", true, false, GUIEditor.window[1])
+        
+        GUIEditor.label[6] = guiCreateLabel(14, 174, 200, 18, "Set custom flag", false, GUIEditor.window[1])
+        GUIEditor.combobox["customFlag"] = guiCreateComboBox(114, 172, 95, 100, "", false, GUIEditor.window[1])
+        for index, customF in ipairs(customFlags) do
+        	guiComboBoxAddItem(GUIEditor.combobox["customFlag"], customF["name"])
+        end
+        
+        guiComboBoxAdjustHeight(GUIEditor.combobox["customFlag"], #customFlags);
+        
+        GUIEditor.label[7] = guiCreateLabel(250, 28, 240, 18, "Number of positions to show (5 - 20)", false, GUIEditor.window[1])
         GUIEditor.edit["lines"] = guiCreateEdit(250, 50, 80, 22, "8", false, GUIEditor.window[1])
         GUIEditor.button["lines"] = guiCreateButton(250+80, 50, 33, 25, "OK", false, GUIEditor.window[1])
         
-        GUIEditor.label[6] = guiCreateLabel(14, 140, 240, 18, "Background opacity (0.0 - 1.0)", false, GUIEditor.window[1])
-        GUIEditor.edit["opacity"] = guiCreateEdit(14, 162, 80, 22, "0.65", false, GUIEditor.window[1])
-        GUIEditor.button["opacity"] = guiCreateButton(14+80, 162, 33, 25, "OK", false, GUIEditor.window[1])
-        
-        GUIEditor.label[7] = guiCreateLabel(250, 84, 240, 18, "Board scale (0.5 - 3.0 or 0 for automatic)", false, GUIEditor.window[1])
+        GUIEditor.label[8] = guiCreateLabel(250, 84, 240, 18, "Board scale (0.5 - 3.0 or 0 for automatic)", false, GUIEditor.window[1])
         GUIEditor.edit["scale"] = guiCreateEdit(250, 106, 80, 22, "0", false, GUIEditor.window[1])
         GUIEditor.button["scale"] = guiCreateButton(250+80, 106, 33, 25, "OK", false, GUIEditor.window[1])
         local scale = math.floor((screenH/800)*10 + 0.5) / 10 
         local scaleInfoLabel = guiCreateLabel(250, 132, 240, 18, "Your automatic scale value is: " .. tostring(scale), false, GUIEditor.window[1])
         guiSetAlpha(scaleInfoLabel, 0.5)
         
-        GUIEditor.button[1] = guiCreateButton(415, 182, 65, 28, "Close", false, GUIEditor.window[1])
+        GUIEditor.label[9] = guiCreateLabel(250, 150, 240, 18, "Background opacity (0.0 - 1.0)", false, GUIEditor.window[1])
+        GUIEditor.edit["opacity"] = guiCreateEdit(250, 172, 80, 22, "0.65", false, GUIEditor.window[1])
+        GUIEditor.button["opacity"] = guiCreateButton(250+80, 172, 33, 25, "OK", false, GUIEditor.window[1])
+        
+        GUIEditor.button[1] = guiCreateButton(415, 202, 65, 28, "Close", false, GUIEditor.window[1])
         guiSetProperty(GUIEditor.button[1], "NormalTextColour", "FFAAAAAA")
         
         guiSetVisible(GUIEditor.window[1], false)
@@ -71,6 +89,8 @@ UI = { -- Default settings--
 	["intervals"] = false,
 	["live"] = false,
 	["fixdark"] = false,
+	["flags"] = true,
+	["customFlag"] = 1,
 	["lines"] = 8,
 	["opacity"] = 0.65,
 	["scale"] = 0
@@ -127,6 +147,16 @@ function ui_ClickHandler()
 			setLightenDarkColors(false)
 			UI["fixdark"] = false
 		end
+	-- Toggle showing flags
+	elseif source == GUIEditor.checkbox["flags"] then
+		saveTime()
+		if guiCheckBoxGetSelected( source ) then
+			setShowFlags(true)
+			UI["flags"] = true
+		else
+			setShowFlags(false)
+			UI["flags"] = false
+		end
 	elseif source == GUIEditor.button["lines"] then
 		saveTime()
 		local nr = tonumber(guiGetText( GUIEditor.edit["lines"] ))
@@ -154,6 +184,19 @@ function ui_ClickHandler()
 	end
 end
 addEventHandler("onClientGUIClick", resourceRoot, ui_ClickHandler)
+
+function ui_ComboBoxHandler(comboBox)
+	if comboBox == GUIEditor.combobox["customFlag"] then
+		saveTime()
+		local theID = guiComboBoxGetSelected( comboBox ) + 1
+		UI['customFlag'] = theID;
+		if customFlags[theID] ~= nil then
+			setCustomFlag(customFlags[theID]["value"])
+		end
+		
+	end
+end
+addEventHandler("onClientGUIComboBoxAccepted", resourceRoot, ui_ComboBoxHandler)
 
 
 function updateUIgui() -- Updates the GUI to the settings that loaded --
@@ -186,6 +229,15 @@ function updateUIgui() -- Updates the GUI to the settings that loaded --
 			else
 				guiCheckBoxSetSelected( GUIEditor.checkbox["fixdark"], false )
 			end
+		elseif f == "flags" then
+			if u then
+				guiCheckBoxSetSelected( GUIEditor.checkbox["flags"], true )
+			else
+				guiCheckBoxSetSelected( GUIEditor.checkbox["flags"], false )
+			end
+		elseif f == "customFlag" then
+			if u == 0 then u = 1 end
+			guiComboBoxSetSelected( GUIEditor.combobox["customFlag"], tonumber(u)-1 )
 		elseif f == "lines" then
 			if u then
 				guiSetText( GUIEditor.edit["lines"], u )
@@ -208,6 +260,11 @@ function executeUISettings()
 			setAnimationsEnabled(u)
 		elseif f == "intervals" then
 			setShowIntervals(u, UI['live'])
+		elseif f == "flags" then
+			setShowFlags(u)
+		elseif f == "customFlag" then
+			if u == 0 then u = 1 end
+			setCustomFlag(customFlags[u] and customFlags[u]["value"] or "")
 		elseif f == "lines" then
 			setNumberOfPositions(u)
 		elseif f == "opacity" then
@@ -291,4 +348,10 @@ function isBoolean(str)
 	if str == "true" then return true end
 	if str == false then return true end
 	if str == true then return true end
+end
+
+function guiComboBoxAdjustHeight ( combobox, itemcount )
+    if getElementType ( combobox ) ~= "gui-combobox" or type ( itemcount ) ~= "number" then error ( "Invalid arguments @ 'guiComboBoxAdjustHeight'", 2 ) end
+    local width = guiGetSize ( combobox, false )
+    return guiSetSize ( combobox, width, ( itemcount * 20 ) + 20, false )
 end
