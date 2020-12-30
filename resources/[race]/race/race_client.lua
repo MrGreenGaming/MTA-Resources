@@ -1128,7 +1128,6 @@ function Spectate.getCameraTargetPlayer()
 end
 
 function Spectate.disableLock()
-	if Spectate.lockPlayer then outputChatBox('Stopped spectating ' .. tostring(getPlayerName(Spectate.lockPlayer))) end
 	Spectate.lockPlayer = false
 end
 g_SavedPos = {}
@@ -1564,10 +1563,26 @@ function spectate(command, playername)
 	Spectate.disableLock()
 	if type(playername) == 'string' and #playername >= 3 then 
 		Spectate.lockPlayer = findPlayerByName(playername)
+		local otherState = false
+		if Spectate.lockPlayer then
+			otherState = getElementData(Spectate.lockPlayer, "state")
+		end
+		local localState = getElementData(localPlayer, "state")
+
+		if localState ~= "alive" and localState ~= "spectating" and localState ~= "away" and localState ~= "finished" then
+			outputChatBox("You cannot spectate players right now!", 255, 255, 255, true)
+			return
+		end
+
 		if not Spectate.lockPlayer then 
-			return outputChatBox("Player \"".. playername .. "\"not found!",255,255,255) 
+			return outputChatBox("#FFFFFFPlayer: #00FFFF"..playername.."#FFFFFF not found!", 255, 255, 255, true)
 		else
-			outputChatBox("Locking spectator on player \"".. getPlayerName(Spectate.lockPlayer) .. "\", press the arrows to unlock.",255,255,255) 
+			local target = getCameraTarget()
+			if target and getElementType(target) == "vehicle" then
+				target = getVehicleOccupant(target)
+			elseif target and getElementType(target) == "player" then
+				target = target
+			end
 		end
 	end
 	if Spectate.active then
