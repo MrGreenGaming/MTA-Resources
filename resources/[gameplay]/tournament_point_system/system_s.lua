@@ -82,8 +82,8 @@ function calculatePoints(rank)
 			setElementData(source, "TourPoints", pointsEarned)
 		end
 	else 
-		outputChatBox(chatprefix .. "You need to be at least " .. nPlaceToGivePoints .. getSuffix(nPlaceToGivePoints) .. " to earn points!", source, 255, 255, 255, true)
-		exports.messages:outputGameMessage(playername .. " finished " .. rank .. getSuffix(rank), root, 2.5, 255, 255, 255, false, false, true)
+		outputChatBox(chatPrefix .. "You need to be at least " .. nPlaceToGivePoints .. getSuffix(nPlaceToGivePoints) .. " to earn points!", source, 255, 255, 255, true)
+		exports.messages:outputGameMessage(playerName .. " finished " .. rank .. getSuffix(rank), root, 2.5, 255, 255, 255, false, false, true)
 	end
 end
 addEventHandler("onPlayerFinish", getRootElement(), calculatePoints)
