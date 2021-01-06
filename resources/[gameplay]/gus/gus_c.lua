@@ -209,85 +209,114 @@ function ToggleUI.render()
 end
 
 -- Daylight
-local Daylight = {}
-Daylight.allowedModes = {
+local light = {}
+light.allowedModes = {
     ["never the same"] = true,
     sprint = true,
     ["reach the flag"] = true
 }
-Daylight.timer = false
-Daylight.timeCache = {getTime()}
-Daylight.durationCache = getMinuteDuration()
-Daylight.currentMode = false
-Daylight.enabled = false
+light.timer = false
+light.timeCache = {getTime()}
+light.durationCache = getMinuteDuration()
+light.currentMode = false
+light.mode = ""
 
-function Daylight.toggleDaylight()
-    Daylight.enabled = not Daylight.enabled
-    if Daylight.enabled then
-        local allowed = Daylight.isAllowed()
+function light.toggleDaylight()
+    if light.mode ~= "day" then
+        local allowed = light.isAllowed()
+        if light.mode == "night" then outputChatBox("Nightlight disabled.", 200, 0, 0) end
         outputChatBox("Daylight enabled." .. (allowed and "" or " It will only be applied in allowed modes."), 0, 200, 0)
         if allowed then
-            Daylight.apply()
+            light.apply()
         end
+        light.mode = "day"
     else
-        Daylight.apply(true)
+        light.apply(true)
+        light.mode = ""
         outputChatBox("Daylight disabled.", 200, 0, 0)
     end
 end
-addCommandHandler("daylight", Daylight.toggleDaylight)
+addCommandHandler("daylight", light.toggleDaylight)
 
-function Daylight.apply(fromCache)
+function light.toggleNightlight()
+    if light.mode ~= "night" then
+        local allowed = light.isAllowed()
+        if light.mode == "day" then outputChatBox("Daylight disabled.", 200, 0, 0) end
+        outputChatBox("Nightlight enabled." .. (allowed and "" or " It will only be applied in allowed modes."), 0, 200, 0)
+        if allowed then
+            light.apply()
+        end
+        light.mode = "night"
+    else
+        light.apply(true)
+        light.mode = ""
+        outputChatBox("Nightlight disabled.", 200, 0, 0)
+    end
+end
+addCommandHandler("nightlight", light.toggleNightlight)
+
+function light.apply(fromCache)
     if not fromCache then
-        setTime(12,0)
+        if (light.mode == "day") then
+            setTime(12,0)
+        elseif (light.mode == "night") then
+            setTime(0,0)
+        end
         setMinuteDuration(2147483647)
-        if not isTimer(Daylight.timer) then
-            Daylight.timer = setTimer(
+        if not isTimer(light.timer) then
+            light.timer = setTimer(
                 function()
-                    if getTime() ~= 12 then
+                    setMinuteDuration(2147483647)
+                    if getTime() ~= 12 and light.mode == "day" then
                         setTime(12,0)
-                        setMinuteDuration(2147483647)
+                    elseif getTime() ~= 0 and light.mode == "night" then
+                        setTime(0,0)
                     end
                 end,
             200, 0)
         end
     else
-        if isTimer(Daylight.timer) then
-            killTimer(Daylight.timer)
+        if isTimer(light.timer) then
+            killTimer(light.timer)
         end
-        setTime(Daylight.timeCache[1], Daylight.timeCache[2])
-        setMinuteDuration(Daylight.durationCache)
+        setTime(light.timeCache[1], light.timeCache[2])
+        setMinuteDuration(light.durationCache)
     end
 end
 
-function Daylight.onMapStart(info)
-    Daylight.currentMode = info.modename:lower()
-    Daylight.setCache()
-    if Daylight.enabled and Daylight.isAllowed() then
-        Daylight.apply(false)
+function light.onMapStart(info)
+    light.currentMode = info.modename:lower()
+    light.setCache()
+    if (light.mode == "day" or light.mode == "night") and light.isAllowed() then
+        light.apply(false)
     end
 end
 addEvent("onClientMapStarting")
-addEventHandler("onClientMapStarting", root, Daylight.onMapStart)
+addEventHandler("onClientMapStarting", root, light.onMapStart)
 
-function Daylight.onMapStop()
-    if isTimer(Daylight.timer) then
-        killTimer(Daylight.timer)
+function light.onMapStop()
+    if isTimer(light.timer) then
+        killTimer(light.timer)
     end
-    Daylight.setCache(true)
+    light.setCache(true)
 end
 addEvent("onClientMapStopping")
-addEventHandler("onClientMapStopping", root, Daylight.onMapStop)
+addEventHandler("onClientMapStopping", root, light.onMapStop)
 
-function Daylight.setCache(reset)
+function light.setCache(reset)
     if reset then
-        Daylight.timeCache = {12, 0}
-        Daylight.durationCache = 1000
+        if (light.mode == "day") then
+            light.timeCache = {12, 0}
+        elseif (light.mode == "night") then
+            light.timeCache = {0, 0}
+        end
+        light.durationCache = 1000
         return
     end
-    Daylight.timeCache = {getTime()}
-    Daylight.durationCache = getMinuteDuration()
+    light.timeCache = {getTime()}
+    light.durationCache = getMinuteDuration()
 end
 
-function Daylight.isAllowed()
-    return Daylight.allowedModes[Daylight.currentMode] and true or false
+function light.isAllowed()
+    return light.allowedModes[light.currentMode] and true or false
 end
