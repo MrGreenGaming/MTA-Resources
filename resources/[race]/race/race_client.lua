@@ -1560,42 +1560,53 @@ bindKey ( next(getBoundKeys"enter_exit"), "down", "Commit suicide" )
 
 
 function spectate(command, playername)
-	Spectate.disableLock()
-	if type(playername) == 'string' and #playername >= 3 then 
-		Spectate.lockPlayer = findPlayerByName(playername)
+	local lockedPlayer = false
+
+	if type(playername) == "string" and #playername >= 3 then
+		lockedPlayer = findPlayerByName(playername)
+
+		-- Tries fetching the state of the otherPerson. if no state gets returned the player is not found -- END
 		local otherState = false
-		if Spectate.lockPlayer then
-			otherState = getElementData(Spectate.lockPlayer, "state")
-		end
-		local localState = getElementData(localPlayer, "state")
-
-		if localState ~= "alive" and localState ~= "spectating" and localState ~= "away" and localState ~= "finished" then
-			outputChatBox("You cannot spectate players right now!", 255, 255, 255, true)
-			return
-		end
-
-		if not Spectate.lockPlayer then 
-			return outputChatBox("#FFFFFFPlayer: #00FFFF"..playername.."#FFFFFF not found!", 255, 255, 255, true)
+		if lockedPlayer then
+			otherState = getElementData(lockedPlayer, "state")
 		else
-			local target = getCameraTarget()
-			if target and getElementType(target) == "vehicle" then
-				target = getVehicleOccupant(target)
-			elseif target and getElementType(target) == "player" then
-				target = target
-			end
+			return outputChatBox("#FFFFFFPlayer: #FF0000"..playername.."#FFFFFF not found!", 255, 255, 255, true)
+		end
+
+		-- In some local state the person is not allowed to spectate, this throws that. -- END
+		local localState = getElementData(localPlayer, "state")
+		if localState ~= "alive" and localState ~= "spectating" and localState ~= "away" and localState ~= "finished" then
+			return outputChatBox("You cannot spectate players right now!", 255, 255, 255, true)
+		end
+
+		-- Sets target on the occupant of the vehicle
+		local target = getCameraTarget()
+		if target and getElementType(target) == "vehicle" then
+			target = getVehicleOccupant(target)
+		end
+
+		-- if lockedPlayer equals the target, then the player is already spectating this person. -- END
+		if lockedPlayer == target then
+			return outputChatBox("#FFFFFFYou are already spectating " .. getPlayerName(lockedPlayer) .."#FFFFFF!", 255, 255, 255, true)
+		end
+
+		-- if the other person is not alive, then this person cannot be spectated -- END
+		if otherState ~= "alive" then
+			return outputChatBox("#FFFFFFPlayer: " .. getPlayerName(lockedPlayer) .."#FFFFFF cannot be spectated right now!", 255, 255, 255, true)
 		end
 	end
+
 	if Spectate.active then
 		if type(playername) == 'string' then
-			if Spectate.lockPlayer and Spectate.isValidTarget ( Spectate.lockPlayer ) then
-				Spectate.setTarget( Spectate.lockPlayer )
+			if lockedPlayer and Spectate.isValidTarget(lockedPlayer) then
+				Spectate.setTarget(lockedPlayer)
 			end
 		elseif Spectate.savePos and not Spectate.blockLeaveManual then
-			triggerServerEvent('onClientRequestSpectate', g_Me, false )
+			triggerServerEvent('onClientRequestSpectate', g_Me, false)
 		end
 	else
 		if not Spectate.blockManual then
-			triggerServerEvent('onClientRequestSpectate', g_Me, true )
+			triggerServerEvent('onClientRequestSpectate', g_Me, true)
 		end
 	end
 end
