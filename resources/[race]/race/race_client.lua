@@ -1574,7 +1574,7 @@ function spectate(command, playername)
 
 		-- In some local state the person is not allowed to spectate, this throws that. -- END
 		local localState = getElementData(localPlayer, "state")
-		if localState ~= "alive" and localState ~= "spectating" and localState ~= "away" and localState ~= "finished" then
+		if localState ~= "alive" and localState ~= "spectating" and localState ~= "away" and localState ~= "finished" and localState ~= "dead" then
 			return outputChatBox("You cannot spectate players right now!", 255, 255, 255, true)
 		end
 
