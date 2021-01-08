@@ -1560,15 +1560,14 @@ bindKey ( next(getBoundKeys"enter_exit"), "down", "Commit suicide" )
 
 
 function spectate(command, playername)
-	local lockedPlayer = false
-
+	Spectate.disableLock()
 	if type(playername) == "string" and #playername >= 3 then
-		lockedPlayer = findPlayerByName(playername)
+		Spectate.lockPlayer = findPlayerByName(playername)
 
 		-- Tries fetching the state of the otherPerson. if no state gets returned the player is not found -- END
 		local otherState = false
-		if lockedPlayer then
-			otherState = getElementData(lockedPlayer, "state")
+		if Spectate.lockPlayer then
+			otherState = getElementData(Spectate.lockPlayer, "state")
 		else
 			return outputChatBox("#FFFFFFPlayer: #FF0000"..playername.."#FFFFFF not found!", 255, 255, 255, true)
 		end
@@ -1585,30 +1584,39 @@ function spectate(command, playername)
 			target = getVehicleOccupant(target)
 		end
 
-		-- if lockedPlayer equals the target, then the player is already spectating this person. -- END
-		if lockedPlayer == target then
-			return outputChatBox("#FFFFFFYou are already spectating " .. getPlayerName(lockedPlayer) .."#FFFFFF!", 255, 255, 255, true)
+		-- if Spectate.lockPlayer equals the target, then the player is already spectating this person. -- END
+		if Spectate.lockPlayer == target then
+			return outputChatBox("#FFFFFFYou are already spectating " .. getPlayerName(Spectate.lockPlayer) .."#FFFFFF!", 255, 255, 255, true)
 		end
 
 		-- if the other person is not alive, then this person cannot be spectated -- END
 		if otherState ~= "alive" then
-			return outputChatBox("#FFFFFFPlayer: " .. getPlayerName(lockedPlayer) .."#FFFFFF cannot be spectated right now!", 255, 255, 255, true)
+			return outputChatBox("#FFFFFFPlayer: " .. getPlayerName(Spectate.lockPlayer) .."#FFFFFF cannot be spectated right now!", 255, 255, 255, true)
 		end
+
 	end
 
 	if Spectate.active then
 		if type(playername) == 'string' then
-			if lockedPlayer and Spectate.isValidTarget(lockedPlayer) then
-				Spectate.setTarget(lockedPlayer)
+			if Spectate.lockPlayer and Spectate.isValidTarget ( Spectate.lockPlayer ) then
+				Spectate.setTarget( Spectate.lockPlayer )
 			end
 		elseif Spectate.savePos and not Spectate.blockLeaveManual then
-			triggerServerEvent('onClientRequestSpectate', g_Me, false)
+			triggerServerEvent('onClientRequestSpectate', g_Me, false )
 		end
 	else
 		if not Spectate.blockManual then
-			triggerServerEvent('onClientRequestSpectate', g_Me, true)
+			triggerServerEvent('onClientRequestSpectate', g_Me, true )
 		end
 	end
+	
+	-- There's a bug when a spectated player goes afk/spectator you'll see him floating in the air, this solves it
+	-- After 200ms the specate lock will be disabled after you start spectating someone
+	setTimer(
+		function()
+			Spectate.disableLock()
+		end
+	, 200, 1)
 end
 addCommandHandler('s',spectate)
 addCommandHandler('spec',spectate)
