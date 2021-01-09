@@ -1,3 +1,19 @@
 <events>
-    <event name="Bierbuikje Event"></event>
+    <event name="Top 15 Tournament">
+        <map>race-justrace2013</map>
+        <map>race-around-the-world-by-stb</map>
+        <map>race-waterskating</map>
+        <map>race-stroth-gta-v-trevor</map>
+        <map>race-Etiqueta-Negra-race</map>
+        <map>race-always</map>
+        <map>race-stroth-ameno</map>
+        <map>race-stroth-bus-simulator</map>
+        <map>race-brazilv2</map>
+        <map>race-stroth-gta-iv-niko</map>
+        <map>race-stroth-power</map>
+        <map>race-timber-by-nitro</map>
+        <map>race-lap-final-by-nitro</map>
+        <map>race-neverthesame</map>
+        <map>race-hell-chose-infinity-by-stb</map>
+    </event>
 </events>
