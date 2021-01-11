@@ -13,9 +13,14 @@ function blocker(player, _, nick, duration)
 
 		if not getElementData(blockPlayer,"markedblocker") then
 			duration = tonumber(duration)
-			if not duration or not hasObjectPermissionTo ( player, "command.serialblocker", false ) then
+			if not duration then
 				duration = 1
 			end
+
+			if duration > 24 and not hasObjectPermissionTo ( player, "command.serialblocker", false ) then
+				duration = 24
+			end
+
 			local t = {
 				serial = getPlayerSerial(blockPlayer),
 				name = getPlayerName(blockPlayer):gsub("#%x%x%x%x%x%x",""),
