@@ -1,7 +1,7 @@
 --UPDATE 6th December 2011
 --NEW SETTING--
 --Number of play agains allowed consecutively!
-local maxPlayAgain = 2
+local maxPlayAgain = tonumber(get("*nReplay"))
 ---
 ---------------
 g_MapInfoList = {}
