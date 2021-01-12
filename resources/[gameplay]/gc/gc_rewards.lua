@@ -184,7 +184,7 @@ function finish(rank)
 		if isHoliday() then rewarded_Players[player].finishReward = rewarded_Players[player].finishReward * 2 end
 		
 		if rewarded_Players[player].finishReward > 1 then
-			addPlayerGreencoins(player, rewarded_Players[player].finishReward)
+			-- addPlayerGreencoins(player, rewarded_Players[player].finishReward)
 			if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
 				if modename == 'Sprint' then
 					exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0, false, false, true)
@@ -197,7 +197,6 @@ function finish(rank)
 			return
 		end
 	end
-	
 	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
 		exports.messages:outputGameMessage(getPlayerName(player) .." finished ".. tostring(rank) .. suffix, getRootElement(), nil, nil, nil, nil, false, false, true)
 	end
@@ -398,7 +397,9 @@ function shooterFinish(rank)
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
 	addPlayerGreencoins(source, reward)
-	outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
+	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+		outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
+	end
 end
 addEvent('onPlayerFinishShooter')
 addEventHandler('onPlayerFinishShooter', root, shooterFinish)
@@ -415,7 +416,9 @@ function onShooterPlayerKill()
 	local reward = rewardKill
 	if isHoliday() then reward = reward * 2 end
 	addPlayerGreencoins(player, reward)
-	outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
+	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
+	end
 end
 addEvent('onShooterPlayerKill')
 addEventHandler('onShooterPlayerKill', root, onShooterPlayerKill)
@@ -482,7 +485,9 @@ function ddFinish(rank)
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
 	addPlayerGreencoins(source, reward)
-	outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
+	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+		outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
+	end
 end
 addEvent('onPlayerFinishDD')
 addEventHandler('onPlayerFinishDD', root, ddFinish)
@@ -499,8 +504,9 @@ function onDDPlayerKill()
 	local reward = rewardKill
 	if isHoliday() then reward = reward * 2 end
 	addPlayerGreencoins(player, reward)
-	outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
-	
+	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
+	end
 end
 addEvent('onDDPlayerKill')
 addEventHandler('onDDPlayerKill', root, onDDPlayerKill)
@@ -519,7 +525,9 @@ function RTFfinish( rank, time )
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
 	addPlayerGreencoins(player, reward)
-	outputChatBox(prefix..getPlayerName(player)..'#00FF00 has earned '.. reward .. ' GC for reaching the flag first! ', root, 0, 255, 0, true)
+	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+		outputChatBox(prefix..getPlayerName(player)..'#00FF00 has earned '.. reward .. ' GC for reaching the flag first! ', root, 0, 255, 0, true)
+	end
 end
 addEventHandler("onPlayerFinish", root, RTFfinish)
 
