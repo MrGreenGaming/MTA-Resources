@@ -14,4 +14,5 @@ admins = {
 	{ name = "BlueYoshi", title = "AdminYoshi", accountName = "BlueYoshi97" },
 	{ name = "Jap", title = "Admin", accountName = "jap3" },
 	{ name = "Koolaid", title = "Admin", accountName = "koolaidkarlis" },
+	{ name = "Nick_026", title = "Gaymin", accountName= "Nick_026" },
 }
