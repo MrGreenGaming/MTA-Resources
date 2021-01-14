@@ -22,7 +22,7 @@ function logStartEvent(resource)
 	if getResourceName(resource) ~= "tournament_point_system" then return end
 
 	exports.messages:outputGameMessage("Tournament has started!", root, 2.5, 255, 0, 0)
-	outputChatBox(Tournament.chatPrefix .. "Tournament Points System | Developed by #40FF29Nick_026#FFFFFF | BETA MIX Update", root, 255, 255, 255, true)
+	outputChatBox(Tournament.chatPrefix .. "Tournament Points System | Developed by #40FF29Nick_026#FFFFFF | BETA MIX 1.1", root, 255, 255, 255, true)
 	onMapChange()
 end
 addEventHandler("onResourceStart", getRootElement(), logStartEvent)
@@ -45,7 +45,7 @@ function onMapChange()
 	elseif Tournament.currentGamemode == "Reach the flag" then
 		outputChatBox(Tournament.chatPrefix .. "Reach the flag and earn " .. Tournament.rtfPoints .. " points.", root, 255, 255, 255, true)
 	else
-		outputChatBox(Tournament.chatPrefix .. "The gamemode '" .. Tournament.currentGamemode .. "' has not been implemented", root, 255, 255, 255, true)
+		outputChatBox(Tournament.chatPrefix .. "The gamemode '" .. Tournament.currentGamemode .. "' has not been implemented. No points will be earned!", root, 255, 255, 255, true)
 	end
 
 end
@@ -59,13 +59,13 @@ function logStopEvent(resource)
 	outputChatBox(Tournament.chatPrefix .. "Thank you for using the Tournament Points System", root, 255, 255, 255, true)
 	table.sort(Tournament.playerPoints, function(a, b) return a["points"] > b["points"] end)
 	if Tournament.playerPoints[1] then
-		outputChatBox("#FFD700In 1st place with " .. Tournament.playerPoints[1].points .. " points: " .. Tournament.playerPoints[1].teamColor ..Tournament.playerPoints[1].nickname, root, 255, 255, 255, true)
+		outputChatBox("#FFD700In 1st place with " .. Tournament.playerPoints[1].points .. " points: " .. Tournament.playerPoints[1].nickname, root, 255, 255, 255, true)
 	end
 	if Tournament.playerPoints[2] then
-		outputChatBox("#C0C0C0In 2nd place with " .. Tournament.playerPoints[2].points .. " points: " .. Tournament.playerPoints[2].teamColor.. Tournament.playerPoints[2].nickname, root, 255, 255, 255, true)
+		outputChatBox("#C0C0C0In 2nd place with " .. Tournament.playerPoints[2].points .. " points: " .. Tournament.playerPoints[2].nickname, root, 255, 255, 255, true)
 	end
 	if Tournament.playerPoints[3] then
-		outputChatBox("#CD7F32In 3rd place with " .. Tournament.playerPoints[3].points .. " points: " .. Tournament.playerPoints[3].teamColor .. Tournament.playerPoints[3].nickname, root, 255, 255, 255, true)
+		outputChatBox("#CD7F32In 3rd place with " .. Tournament.playerPoints[3].points .. " points: " .. Tournament.playerPoints[3].nickname, root, 255, 255, 255, true)
 	end
 
 	for k, player in ipairs(getElementsByType("player")) do
@@ -81,19 +81,13 @@ end
 addEventHandler("onResourceStop", getRootElement(), logStopEvent)
 
 function incrementPoints(player, points)
-	local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
-	local teamColor = "#FFFFFF"
-	local team = getPlayerTeam(player)
-	if (team) then
-		r,g,b = getTeamColor(team)
-		teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
-	end
+
+	local playerName = getFullPlayerName(player)
 
 	local playerFound = false
 	for i,line in ipairs(Tournament.playerPoints) do
 		if line["serial"] == getPlayerSerial(source) then
 			line["nickname"] = playerName
-			line["teamColor"] = teamColor
 			line["points"] = line["points"] + points
 			setElementData(source, "TourPoints", line["points"])
 			playerFound = true
@@ -101,7 +95,7 @@ function incrementPoints(player, points)
 
 	end
 	if playerFound == false then
-		table.insert(Tournament.playerPoints, {serial=getPlayerSerial(source), nickname = playerName, points = points, teamColor = teamColor})
+		table.insert(Tournament.playerPoints, {serial=getPlayerSerial(source), nickname = playerName, points = points})
 		setElementData(source, "TourPoints", points)
 	end
 
@@ -111,7 +105,7 @@ end
 
 function onSprintFinish(rank)
 	if Tournament.currentGamemode ~= "Sprint" then return end
-	local playerName = getElementData( source, "vip.colorNick" ) or getPlayerName( source )
+	local playerName = getFullPlayerName(source)
 
 	if (rank <= Tournament.sprintRank) then
 		local pointsEarned = (Tournament.sprintRank - rank + 1) * 2
@@ -131,7 +125,7 @@ addEventHandler("onPlayerFinish", getRootElement(), onSprintFinish)
 
 function onNtsFinish(rank)
 	if Tournament.currentGamemode ~= "Never the same" then return end
-	local playerName = getElementData( source, "vip.colorNick" ) or getPlayerName( source )
+	local playerName = getFullPlayerName(source)
 
 	if (rank <= Tournament.ntsRank) then
 		local pointsEarned = (Tournament.ntsRank - rank + 1) * 2
@@ -152,7 +146,7 @@ function onShooterFinish(rank)
 	if Tournament.currentGamemode ~= "Shooter" then return end
 	if exports.anti:isPlayerAFK(source) then return end
 
-	local playerName = getElementData( source, "vip.colorNick" ) or getPlayerName( source )
+	local playerName = getFullPlayerName(source)
 
 	if (rank <= Tournament.shooterRank) then
 		local pointsEarned = (Tournament.shooterRank - rank + 1) * 2
@@ -164,6 +158,11 @@ function onShooterFinish(rank)
 	end
 end
 addEventHandler("onPlayerFinishShooter", getRootElement(), onShooterFinish)
+
+function onShooterWin()
+	onShooterFinish(1)
+end
+addEventHandler("onPlayerWinShooter", getRootElement(), onShooterFinish)
 
 function onShooterKill()
 	if Tournament.currentGamemode ~= "Shooter" then return end
@@ -178,18 +177,23 @@ function onDerbyFinish(rank)
 	if Tournament.currentGamemode ~= "Destruction derby" then return end
 	if exports.anti:isPlayerAFK(source) then return end
 
-	local playerName = getElementData( source, "vip.colorNick" ) or getPlayerName( source )
+	local playerName = getFullPlayerName(source)
 
 	if (rank <= Tournament.ddRank) then
 		local pointsEarned = (Tournament.ddRank - rank + 1) * 2
 
-		outputChatBox(Tournament.chatPrefix .. playerName .. "#FFFFFF has earned " .. pointsEarned .. " for finishing " .. rank .. getSuffix(rank), root, 255, 255, 255, true)
+		outputChatBox(Tournament.chatPrefix .. playerName .. "#FFFFFF has earned " .. pointsEarned .. " points for finishing " .. rank .. getSuffix(rank), root, 255, 255, 255, true)
 		incrementPoints(source, pointsEarned)
 	else
 		outputChatBox(Tournament.chatPrefix .. "You need to be at least " .. Tournament.ddRank .. getSuffix(Tournament.ddRank) " to earn points!", source, 255, 255, 255, true) 
 	end
 end
 addEventHandler("onPlayerFinishDD", getRootElement(), onDerbyFinish)
+
+function onDerbyWin()
+	onDerbyFinish(1)
+end
+addEventHandler("onPlayerWinDD", getRootElement(), onDerbyWin)
 
 function onDerbyKill() 
 	if Tournament.currentGamemode ~= "Destruction derby" then return end
@@ -203,7 +207,7 @@ addEventHandler("onDDPlayerKill", getRootElement(), onDerbyKill)
 function onRTFFinish(rank, time)
 	if Tournament.currentGamemode ~= "Reach the flag" then return end
 
-	local playerName = getElementData( source, "vip.colorNick" ) or getPlayerName( source )
+	local playerName = getFullPlayerName(source)
 	incrementPoints(source, Tournament.rtfPoints)
 	outputChatBox(Tournament.chatPrefix .. playerName .. "#FFFFFF has earned " .. Tournament.rtfPoints .. " points for reaching the flag first!", root, 255, 255, 255, true)
 end
@@ -256,9 +260,8 @@ function logPoints()
 	for i,line in ipairs(Tournament.playerPoints) do
 		if i > 5 then break end
 		local player = line["nickname"]
-		local teamColor = line["teamColor"]
 		local points = line["points"]
-		outputChatBox(i .. getSuffix(i) .. ": " .. teamColor .. player .. "#FFFFFF with " .. points .. " points", root, 255, 255, 255, true)
+		outputChatBox(i .. getSuffix(i) .. ": " .. player .. "#FFFFFF with " .. points .. " points", root, 255, 255, 255, true)
 	end
 
 	for k, player in ipairs(getElementsByType("player")) do
@@ -273,3 +276,14 @@ function logPoints()
 end
 addEventHandler("onPostFinish",getRootElement(), logPoints)
 addCommandHandler("logTournamentPoints", logPoints, true)
+
+function getFullPlayerName(player)
+	local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
+	local teamColor = "#FFFFFF"
+	local team = getPlayerTeam(player)
+	if (team) then
+		r,g,b = getTeamColor(team)
+		teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
+	end
+	return "" .. teamColor .. playerName
+end
