@@ -1,4 +1,9 @@
-
+--UPDATE 6th December 2011
+--NEW SETTING--
+--Number of play agains allowed consecutively!
+local maxPlayAgain = 2
+---
+---------------
 g_MapInfoList = {}
 
 
@@ -220,8 +225,6 @@ end
 
 function startNextMapVote()
 
-	local maxPlayAgain = getNumber("race.nReplay", 2)
-
 	exports.votemanager:stopPoll()
 
 	-- Handle forced nextmap setting
@@ -371,7 +374,6 @@ local lastPlayed
 addEvent('onMapStarting', true)
 addEventHandler('onMapStarting', getRootElement(),
 function()
-	local maxPlayAgain = getNumber("race.nReplay", 2)
 	g_ForcedNextMap = nil
 	local currentMap = exports.mapmanager:getRunningGamemodeMap()
 	if lastPlayed ~= currentMap then
