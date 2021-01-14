@@ -155,6 +155,8 @@
 
         <setting name="*color" value="#D27350" friendlyname="Message color" group="Display" accept="*" examples="#FF0000,#776655" desc="Color of the Race chat box messages." />
 
+        <setting name="*nReplay" value="2" friendlyname="Amount of replays" accept="0-9" group="Gameplay" desc="The amount of times a map can be replayed" />
+        
         <setting name="*hurrytime" value="15" friendlyname="Hurry time" accept="0-120" group="Gameplay" desc="Display HURRY! message this many seconds before the time runs out." />
 
         <setting name="*timeafterfirstfinish" value="30" friendlyname="Finish race time" accept="0-120" group="Gameplay" desc="The number of seconds the race continues for after someone wins." />
