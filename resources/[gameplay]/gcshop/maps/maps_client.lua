@@ -1,11 +1,11 @@
 ﻿prices = {}
 
-prices["race"] = 1000
-prices["rtf"] = 800
-prices["ctf"] = 800
-prices["nts"] = 1000
-prices["shooter"] = 1200
-prices["deadline"] = 500
+prices["race"] = 700
+prices["rtf"] = 550
+prices["ctf"] = 550
+prices["nts"] = 700
+prices["shooter"] = 850
+prices["deadline"] = 350
 
 lastWinnerDiscount = 50
 isVipMap = false
