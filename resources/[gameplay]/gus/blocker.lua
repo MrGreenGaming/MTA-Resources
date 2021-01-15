@@ -5,7 +5,7 @@ local _blockerCache = {}
 local blockerDuration = 1000 * 60 * 60 * 1
 
 
-function blocker(player, _, nick, duration)
+function blocker(player, _, nick, duration, timeType)
 	local blockPlayer = findPlayerByName(nick)
 	if not blockPlayer then
 		outputChatBox("No player found", player, 0, 255,0)
@@ -15,9 +15,25 @@ function blocker(player, _, nick, duration)
 			duration = tonumber(duration)
 			if not duration then
 				duration = 1
+			elseif not timeType or timeType == "h" or timeType == "hour" or timeType == "hours" then
+				duration = duration
+			elseif timeType == "d" or timeType == "day" or timeType == "days" then
+				duration = duration * 24
+			elseif timeType == "w" or timeType == "week" or timeType == "weeks" then
+				duration = duration * 24 * 7
+			elseif timeType == "M" or timeType == "month" or timeType == "months" then
+				duration = duration * 24 * 31
+			elseif timeType == "y" or timeType == "year" or timeType == "years" then
+				duration = duration * 24 * 365
+			else
+				return outputChatBox("Invalid timetype", player, 255, 0, 0, true)
 			end
-
+			
+			outputChatBox("Marking " .. getPlayerName(blockPlayer) .. "#FF0000 as blocker for " .. (duration or "1") .. " " .. (timeType or "hours"), player, 255, 0, 0 , true)
+			
+			-- Mods can mark someone as blocker for up to 24 hours
 			if duration > 24 and not hasObjectPermissionTo ( player, "command.serialblocker", false ) then
+				outputChatBox("As a moderator you can mark someone for up to 24 hours", player, 255, 0, 0, true)
 				duration = 24
 			end
 
