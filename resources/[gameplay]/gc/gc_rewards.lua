@@ -10,6 +10,8 @@ local compareToTopPos = 5
 local fetchToptimesTimer = false
 local fetchToptimeRetries = 5
 
+local isTournamentActive = false
+
 function resetMap(mapInfo, mapOptions, gameOptions)
 	rewarded_Players = {}
 	topTime, modename, mapname = nil, nil, nil
@@ -185,7 +187,7 @@ function finish(rank)
 		
 		if rewarded_Players[player].finishReward > 1 then
 			addPlayerGreencoins(player, rewarded_Players[player].finishReward)
-			if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+			if not isTournamentActive then
 				if modename == 'Sprint' then
 					exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0, false, false, true)
 					outputChatBox(prefix .."You earned ".. rewarded_Players[player].finishReward .." GC for finishing ".. tostring(rank) .. suffix ..". You now have ".. comma_value(getPlayerGreencoins(player)) .." GC.", player, 0, 255, 0, true)
@@ -197,7 +199,7 @@ function finish(rank)
 			return
 		end
 	end
-	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+	if not isTournamentActive then
 		exports.messages:outputGameMessage(getPlayerName(player) .." finished ".. tostring(rank) .. suffix, getRootElement(), nil, nil, nil, nil, false, false, true)
 	end
 end
@@ -397,7 +399,7 @@ function shooterFinish(rank)
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
 	addPlayerGreencoins(source, reward)
-	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+	if not isTournamentActive then
 		outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	end
 end
@@ -416,7 +418,7 @@ function onShooterPlayerKill()
 	local reward = rewardKill
 	if isHoliday() then reward = reward * 2 end
 	addPlayerGreencoins(player, reward)
-	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+	if not isTournamentActive then
 		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
 	end
 end
@@ -485,7 +487,7 @@ function ddFinish(rank)
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
 	addPlayerGreencoins(source, reward)
-	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+	if not isTournamentActive then
 		outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	end
 end
@@ -504,7 +506,7 @@ function onDDPlayerKill()
 	local reward = rewardKill
 	if isHoliday() then reward = reward * 2 end
 	addPlayerGreencoins(player, reward)
-	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+	if not isTournamentActive then
 		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
 	end
 end
@@ -525,7 +527,7 @@ function RTFfinish( rank, time )
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
 	addPlayerGreencoins(player, reward)
-	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+	if not isTournamentActive then
 		outputChatBox(prefix..getPlayerName(player)..'#00FF00 has earned '.. reward .. ' GC for reaching the flag first! ', root, 0, 255, 0, true)
 	end
 end
@@ -663,3 +665,23 @@ function vipRewardMult(player, theReward)
 	end
 	return theReward
 end
+
+
+function onTournamentStart(resource)
+	if getResourceName(resource) ~= "tournament_point_system" then return end
+	isTournamentActive = true
+end
+addEventHandler("onResourceStart", getRootElement(), onTournamentStart)
+
+function onTournamentStop(resource)
+	if getResourceName(resource) ~= "tournament_point_system" then return end
+	isTournamentActive = false
+end
+addEventHandler("onResourceStop", getRootElement(), onTournamentStop)
+
+function onTournamentMapChange()
+	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+		isTournamentActive = false
+	end
+end
+addEventHandler("onMapStarting", getRootElement(), onTournamentMapChange)
