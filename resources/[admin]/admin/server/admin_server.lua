@@ -1,4 +1,4 @@
-﻿--[[**********************************
+--[[**********************************
 *
 *	Multi Theft Auto - Admin Panel
 *
@@ -883,10 +883,44 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 		elseif ( action == "mute" )  then
 			if ( isPlayerMuted ( player ) ) then action = "un"..action end
 			local reason = data or ""
-			local seconds = tonumber(additional) and tonumber(additional) > 0 and tonumber(additional)
+			local duration = tonumber(additional) and tonumber(additional) > 0 and tonumber(additional)
+			local timeType = additional2
+
+			if action ~= "unmute" then
+				outputChatBox("Muting " .. getPlayerName(player) .. "#FF0000 for " .. (duration or "unlimited") .. " " .. (timeType or "seconds"),source, 255, 0, 0, true)
+			end
+
+			if duration then
+				if not timeType or timeType == "s" or timeType == "second" or timeType == "seconds" then
+					duration = duration
+				elseif timeType == "m" or timeType == "minute" or timeType == "minutes" then
+					duration = duration * 60
+				elseif timeType == "h" or timeType == "hour" or timeType == "hours" then
+					duration = duration * 60 * 60
+				elseif timeType == "d" or timeType == "day" or timeType == "days" then
+					duration = duration * 60 * 60 * 24
+				elseif timeType == "w" or timeType == "week" or timeType == "weeks" then
+					duration = duration * 60 * 60 * 24 * 7
+				elseif timeType == "M" or timeType == "month" or timeType == "months" then
+					duration = duration * 60 * 60 * 24 * 31
+				elseif timeType == "y" or timeType == "year" or timeType == "years" then
+					duration = duration * 60 * 60 * 24 * 365
+				else
+					return outputChatBox("Invalid timetype", source, 255, 0, 0)
+				end
+			end
+
+
+			if isObjectInACLGroup( aclGetAccount ( source ), aclGetGroup ("Killers") ) and not isObjectInACLGroup( aclGetAccount ( source ), aclGetGroup ("Admin") ) then
+				if duration and duration > 86400 or not duration then
+					duration = 86400
+					outputChatBox("As a moderator you can mute someone for up to 24 hours", source, 255, 0, 0, true)
+				end
+			end
+
 			mdata = reason~="" and ( "(" .. reason .. ")" ) or ""
-			more = seconds and ( "(" .. secondsToTimeDesc(seconds) .. ")" ) or ""
-			aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds, source )
+			more = duration and ( "(" .. secondsToTimeDesc(duration) .. ")" ) or ""
+			aSetPlayerMuted ( player, not isPlayerMuted ( player ), duration, source )
 		elseif ( action == "freeze" )  then
 			if ( isPlayerFrozen ( player ) ) then action = "un"..action end
 			aSetPlayerFrozen ( player, not isPlayerFrozen ( player ) )
