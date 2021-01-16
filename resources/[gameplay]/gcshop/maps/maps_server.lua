@@ -1,10 +1,11 @@
-﻿local prices = {}
+local prices = {}
 prices["race"] = 700
 prices["rtf"] = 550
 prices["ctf"] = 550
 prices["nts"] = 700
 prices["shooter"] = 850
 prices["deadline"] = 350
+
 
 local PRICE = 1000
 local mp_maxBuyAmount = 3 -- Daily map buy amount
@@ -136,7 +137,8 @@ function(choice)
             local vipIsRunning = getResourceState( getResourceFromName( "mrgreen-vip" ) ) == "running"
 			if vipIsRunning and exports['mrgreen-vip']:isPlayerVIP(source) then
 				mapprice = (mapprice / 100) * 90
-			end
+            end
+            mapprice = math.round(mapprice)
 
             if vipIsRunning and exports['mrgreen-vip']:canBuyVipMap(source) then
                 mapprice = 0
@@ -287,6 +289,8 @@ function playerHasBoughtMap(player, choice)
         isVipBuy = true
         mapprice = 0
     end
+
+    mapprice = math.round(mapprice)
 
 	local money = exports.gc:getPlayerGreencoins(player)
     if not isVipBuy and money < mapprice then return false end
