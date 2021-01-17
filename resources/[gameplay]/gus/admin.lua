@@ -7,12 +7,39 @@ function adsay(player, c, ...) 			-- Admin chat
 
 	for k, v in ipairs (getElementsByType("player")) do
 		if hasObjectPermissionTo ( v, "general.adminpanel", false ) then
-			outputChatBox ( "ADMIN> "..string.gsub ( (getPlayerName(player)), '#%x%x%x%x%x%x', '' )..": "..message, v, 255, 0, 0,true )
+			outputChatBox ( "ADMIN> ".. getFullPlayerName(player).."#FF4242: "..message, v, 255, 66, 66 ,true )
 			triggerClientEvent(v, 'flash', resourceRoot)
 		end
 	end
 end
 addCommandHandler('adsay', adsay)
+
+function modsay(player, c, ...)
+	if not (hasObjectPermissionTo(player, "command.blocker", false)) then
+		return
+	end
+
+	local message = table.concat({...}, ' ')
+
+	for k, v in ipairs (getElementsByType("player")) do
+		if hasObjectPermissionTo ( v, "command.blocker", false ) then
+			outputChatBox ( "MOD+ADMIN> " .. getFullPlayerName(player) .. "#FF99CC: "..message, v, 255, 153, 204,true )
+			triggerClientEvent(v, 'flash', resourceRoot)
+		end
+	end
+end
+addCommandHandler('modsay', modsay)
+
+function getFullPlayerName(player)
+	local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
+	local teamColor = "#FFFFFF"
+	local team = getPlayerTeam(player)
+	if (team) then
+		r,g,b = getTeamColor(team)
+		teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
+	end
+	return "" .. teamColor .. playerName
+end
 
 addCommandHandler('achat',
 function(player, cmd, ...)
