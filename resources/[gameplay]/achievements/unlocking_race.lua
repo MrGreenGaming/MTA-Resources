@@ -52,7 +52,6 @@ achievementListRace = {
 	{ s = "Win the map *Chase The Checkpoints* against 30+ players",		    		id = 40,		reward = 200 },
 	{ s = "Win the map *Sprinten* against 30+ players",		    		id = 31,		reward = 100 },
 	{ s = "Finish the map *Pirates Of Andreas*",               	   		id = 32,		reward = 100 },
-	{ s = "Finish the map *Epic Sandking*",               	   		    id = 33,		reward = 100 },
     { s = "Finish the map *San Andreas Run Puma*",               	   	id = 34,		reward = 100 },
     { s = "Finish the map *Tour de San Andreas*",               	   	id = 35,		reward = 100 },
 	{ s = "Finish the map *ChrML Easy*",               	id = 56,		reward = 100 },
@@ -151,9 +150,6 @@ function(rank, time)
 	end
 	if (mapResName == "race-PiratesPro") then
 		addPlayerAchievementRace(source, 32)
-	end
-	if (mapResName == "race-Epic-Sandking") then
-		addPlayerAchievementRace(source, 33)
 	end
 	if (mapResName == "race-sanandreasrun_puma") then
 		addPlayerAchievementRace(source, 34)
