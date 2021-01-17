@@ -97,7 +97,7 @@ function updateTexture()
 	for k, r in ipairs(times) do
 		local textColor = r.player == localPlayer and selfTextColor or textColor
 		-- Name handling
-		local playerName = r.name or r.mta_name
+		local playerName = r.name or r.mta_name or "Unknown Player"
 		if r.supernick and type(r.supernick) == "string" then
 			local sn = fromJSON( r.supernick )
 			if sn.supernick then
