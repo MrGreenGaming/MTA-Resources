@@ -254,3 +254,14 @@ else
 end
 return false
 end
+
+function getFullPlayerName(player)
+    local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
+    local teamColor = "#FFFFFF"
+    local team = getPlayerTeam(player)
+    if (team) then
+        r,g,b = getTeamColor(team)
+        teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
+    end
+    return "" .. teamColor .. playerName
+end

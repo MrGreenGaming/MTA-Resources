@@ -583,18 +583,16 @@ addEventHandler("kamikazeMode", resourceRoot,
                 createExplosion(x+9, y+3, z, 10)
 				createExplosion(x-9, y-3, z, 10)
                 createExplosion(x+9, y-3, z, 10)
-				local a = string.gsub (getElementData(thePlayer, 'vip.colorNick') or getPlayerName(thePlayer), '#%x%x%x%x%x%x', '' )
-				for _, player in ipairs(getAlivePlayers()) do
-					if getElementData(player, "state") == "alive" then
-						local x2, y2, z2 = getElementPosition(player)
+				for _, victim in ipairs(getAlivePlayers()) do
+					if getElementData(victim, "state") == "alive" then
+						local x2, y2, z2 = getElementPosition(victim)
 						local distance = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
 						if distance <= 35 then 
-							setElementHealth(getPedOccupiedVehicle(player), 0)
-							local b = string.gsub (getElementData(player, 'vip.colorNick') or getPlayerName(player), '#%x%x%x%x%x%x', '' )
-							if player ~= thePlayer then
-								sendClientMessage(b .. " was killed by " .. a .. " (Kamikaze)", root, 255, 255, 255, "bottom")
+							setElementHealth(getPedOccupiedVehicle(victim), 0)
+							if victim ~= thePlayer then
+								sendClientMessage(getFullPlayerName(victim) .. " #ffffffwas killed by " .. getFullPlayerName(thePlayer) .. " (Kamikaze)", root, 255, 255, 255, "bottom")
 							else
-								sendClientMessage(a .. " killed himself (Kamikaze)", root, 255, 255, 255, "bottom")
+								sendClientMessage(getFullPlayerName(thePlayer) .. " #ffffffkilled himself (Kamikaze)", root, 255, 255, 255, "bottom")
 							end
 						end
 					end
@@ -662,7 +660,8 @@ addEventHandler("flyMode", resourceRoot,
 addEvent("doMagnet", true)
 addEventHandler("doMagnet", resourceRoot, 
 	function()
-		local killer_rank = getElementData(client, "race rank")
+		local killer = client
+		local killer_rank = getElementData(killer, "race rank")
 		local victim = nil
 		if type(killer_rank) == "number" and killer_rank >= 2 then
 			for i=1, killer_rank-1 do
@@ -680,7 +679,7 @@ addEventHandler("doMagnet", resourceRoot,
 			setElementData(victim, "coremarkers_isPlayerSlowedDown", true, true)
 			triggerClientEvent(victim, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
 			attachMarker(getPedOccupiedVehicle(victim), magnetSlowDownTime, 0, 0, 255, 80)
-			sendClientMessage('#FFFFFF'..getPlayerName(client)..'#00DDFF slows down #FFFFFF'..getPlayerName(victim)..'.', root, 255, 255, 255, "bottom")
+			sendClientMessage('#FFFFFF'..getFullPlayerName(killer)..'#00DDFF slows down #FFFFFF'..getFullPlayerName(victim)..'.', root, 255, 255, 255, "bottom")
 			if speedMarkerColorTimer and isTimer(speedMarkerColorTimer[victim]) then killTimer(speedMarkerColorTimer[victim]) end
 			triggerClientEvent(root, "stop3DSound", resourceRoot, getPedOccupiedVehicle(victim))
 		end
@@ -818,9 +817,7 @@ addEventHandler("Kill", root,
 			end
 		end
 		local victim = client
-		local a = string.gsub (getElementData(victim, 'vip.colorNick') or getPlayerName(victim), '#%x%x%x%x%x%x', '' )
-		local b = string.gsub (getElementData(killer, 'vip.colorNick') or getPlayerName(killer), '#%x%x%x%x%x%x', '' )
-		sendClientMessage(a .. " was killed by " .. b, root, 255, 255, 255, "bottom")
+		sendClientMessage(getFullPlayerName(victim) .. " #ffffffwas killed by " .. getFullPlayerName(killer), root, 255, 255, 255, "bottom")
 	end
 )
 

@@ -1,5 +1,5 @@
 <meta>
-	<info author="AleksCore" name="Core Markers" description="Pickups with random power-ups by AleksCore" version="0.9.5" type="script" edf:definition="coremarkers.edf" />
+	<info author="AleksCore" name="Core Markers" description="Pickups with random power-ups by AleksCore" version="0.9.6" type="script" edf:definition="coremarkers.edf" />
 	
 	<file src="marker.mp3"></file>
 	<file src="kmz.mp3"></file>
