@@ -136,7 +136,6 @@ function givePower(powerType)
 end
 
 
-
 function removePower(powerType, delay)
 	unbindKey("mouse1", "down", onPlayerUsePower)
 	unbindKey("lctrl", "down", onPlayerUsePower)
@@ -169,6 +168,7 @@ addEvent('onClientPlayerFinish', true)
 addEventHandler('onClientPlayerFinish', root, removePower)
 
 
+
 function onPlayerUsePower(key, keyState, powerType)
 	if getElementData(localPlayer, "coremarkers_powerType") == false then return end
 	
@@ -185,6 +185,9 @@ function onPlayerUsePower(key, keyState, powerType)
 	elseif powerType == "boost" then
 		local currentSpeed = getElementSpeed(theVehicle, "kmh")
 		setElementSpeed(theVehicle, "kmh", currentSpeed+150)
+		local blur = getBlurLevel(localPlayer)
+		setBlurLevel(36)
+		local blurTimer = setTimer(function() if blurTimer and isTimer(blurTimer) then killTimer(blurTimer) end setBlurLevel(blur) end, 1000, 1)
 		triggerServerEvent("startSound3D", resourceRoot, "boost.mp3")
 		triggerServerEvent("attachMarker", resourceRoot, nil, 1000, 0, 255, 0, 80)
 	elseif powerType == "oil" then 
@@ -238,13 +241,15 @@ function onPlayerUsePower(key, keyState, powerType)
 		if isTimer(screenColorTimer) then
 			killTimer(screenColorTimer)
 		end
-		if isTimer(slowDownTimer) then
-			killTimer(slowDownTimer)
+		--if isTimer(slowDownTimer) then
+			--killTimer(slowDownTimer)
+		--end
+		--setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false)
+		local speed = 2
+		if getElementData(localPlayer, "coremarkers_isPlayerSlowedDown") == true then
+			speed = 1.4
 		end
-		setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false)
-		
-		setGameSpeed(2.0)
-		
+		setGameSpeed(speed)
 		--stop radio and pause all other music
 		radioChannel = getRadioChannel()
 		setRadioChannel(0)
@@ -265,9 +270,14 @@ function onPlayerUsePower(key, keyState, powerType)
 		triggerServerEvent("startSound3D", resourceRoot, "speed.mp3")
 		triggerServerEvent("speedMode", resourceRoot, speedItemTime)
 		
+		--//speed turn off timer
 		speedTimer = setTimer(
 			function() 
-				setGameSpeed(tonumber(1.0)) 
+				local speed = 1
+				if getElementData(localPlayer, "coremarkers_isPlayerSlowedDown") == true then
+					speed = 0.8
+				end
+				setGameSpeed(speed) 
 				for sound,volume in pairs(tRestoreAllSounds) do
 					if isElement(sound) and getElementType(sound) == "sound" and tonumber(volume) then
 						setSoundVolume(sound, volume)
@@ -281,9 +291,71 @@ function onPlayerUsePower(key, keyState, powerType)
 			end
 		, speedItemTime, 1)
 		removePower(nil, speedItemTime)
+		--\\
 		return
 	elseif powerType == "fly" then
+		--//
+		local function stopFlying() 
+			unbindKey("mouse1", "down", stopFlying)
+			unbindKey("lctrl", "down", stopFlying)
+			if isTimer(flyTimer) then killTimer(flyTimer) end
+			if isTimer(gravityTimer) then killTimer(gravityTimer) end
+			removePower()
+			--stopFly()
+			stopSound(sounds[theVehicle])
+			for sound,volume in pairs(tRestoreAllSounds) do
+				if isElement(sound) and getElementType(sound) == "sound" and tonumber(volume) then
+					setSoundVolume(sound, volume)
+				end
+			end
+			setRadioChannel(radioChannel)
+			
+			if isElement(theVehicle) then
+				local x, y, z = getElementPosition(theVehicle)
+				local groundZ = getGroundPosition(x, y, z)
+				--outputChatBox(z.." - "..groundZ)
+				setWorldSpecialPropertyEnabled("aircars", false)
+				if not lastModel then lastModel = vehicleModel end
+				if math.abs(z-groundZ) >= 7 and getVehicleType(lastModel) ~= "Helicopter" and getVehicleType(lastModel) ~= "Plane" and getVehicleType(lastModel) ~= "Boat" then
+					setElementModel(theVehicle, 539)
+					gravityTimer = setTimer(
+						function()
+							if not isElement(theVehicle) then return end
+								local x, y, z = getElementPosition(theVehicle)
+								local groundZ = getGroundPosition(x, y, z)
+								local z = (z+vehicleBoundingBox[lastModel][3])-1
+								--outputChatBox("vehicle min z: "..z.." - groundZ: "..groundZ)
+							if z <= groundZ or isVehicleOnGround(theVehicle) then
+								local x, y, z = getElementVelocity(theVehicle)
+								setElementVelocity(theVehicle, x, y, z+0.1)
+								setElementModel(theVehicle, lastModel)
+								if nitro then
+									addVehicleUpgrade(theVehicle, 1010)
+									setVehicleNitroCount(theVehicle, nitroCount)
+									setVehicleNitroLevel(theVehicle, nitroLevel)
+								end
+								if isTimer(gravityTimer) then killTimer(gravityTimer) end
+							end
+						end
+					, 50, 0)
+				else
+					setElementModel(theVehicle, lastModel)
+				end					
+			end 
+		end
+		--\\
+		bindKey("mouse1", "down", stopFlying)
+		bindKey("lctrl", "down", stopFlying)
 		vehicleModel = getElementModel(theVehicle)
+		local nitro = getVehicleUpgradeOnSlot(theVehicle, 8)
+		local nitroCount
+		local nitroLevel
+		if nitro == 1010 then
+			nitroCount = getVehicleNitroCount(theVehicle)
+			nitroLevel = getVehicleNitroLevel(theVehicle)
+		elseif nitro == 0 then
+			nitro = false
+		end
 		local x, y, z = getElementVelocity(theVehicle)
 		setElementVelocity(theVehicle, x, y, z+0.2)
 		local speed = getElementSpeed(theVehicle, "kmh")
@@ -307,44 +379,7 @@ function onPlayerUsePower(key, keyState, powerType)
 		end
 		
 		if isTimer(flyTimer) then killTimer(flyTimer) end
-		flyTimer = setTimer(
-			function() 
-				for sound,volume in pairs(tRestoreAllSounds) do
-					if isElement(sound) and getElementType(sound) == "sound" and tonumber(volume) then
-						setSoundVolume(sound, volume)
-					end
-				end
-				setRadioChannel(radioChannel)
-				
-				if isElement(theVehicle) then
-					local x, y, z = getElementPosition(theVehicle)
-					local groundZ = getGroundPosition(x, y, z)
-					--outputChatBox(z.." - "..groundZ)
-					setWorldSpecialPropertyEnabled("aircars", false)
-					if not lastModel then lastModel = vehicleModel end
-					if math.abs(z-groundZ) >= 7 and getVehicleType(lastModel) ~= "Helicopter" and getVehicleType(lastModel) ~= "Plane" and getVehicleType(lastModel) ~= "Boat" then
-						setElementModel(theVehicle, 539)
-						gravityTimer = setTimer(
-							function()
-								if not isElement(theVehicle) then return end
-									local x, y, z = getElementPosition(theVehicle)
-									local groundZ = getGroundPosition(x, y, z)
-									local z = (z+vehicleBoundingBox[lastModel][3])-1
-									--outputChatBox("vehicle min z: "..z.." - groundZ: "..groundZ)
-								if z <= groundZ or isVehicleOnGround(theVehicle) then
-									local x, y, z = getElementVelocity(theVehicle)
-									setElementVelocity(theVehicle, x, y, z+0.1)
-									setElementModel(theVehicle, lastModel)
-									if isTimer(gravityTimer) then killTimer(gravityTimer) end
-								end
-							end
-						, 50, 0)
-					else
-						setElementModel(theVehicle, lastModel)
-					end					
-				end 
-			end
-		, flyItemTime, 1)
+		flyTimer = setTimer(stopFlying, flyItemTime, 1)
 		setWorldSpecialPropertyEnabled("aircars", true)
 		removePower(nil, flyItemTime)
 		return
@@ -358,14 +393,9 @@ function onPlayerUsePower(key, keyState, powerType)
 	
 	removePower()
 end
---[[
-function testtest()
-	local theVehicle = getPedOccupiedVehicle(localPlayer)
-	local currentSpeed = getElementSpeed(theVehicle, "kmh")
-	setElementSpeed(theVehicle, "kmh", currentSpeed+250)
-end
-bindKey("mouse4", "down", testtest)
-]]
+
+
+
 function DrawLaser(player)
 	local theVehicle = getPedOccupiedVehicle(player)
 	if isElement(theVehicle) then
@@ -379,14 +409,27 @@ end
 addEvent("slowDownPlayer", true)
 addEventHandler("slowDownPlayer", resourceRoot, 
 	function (magnetSlowDownTime)
-		stopSpeed()
+		--stopSpeed()
+		local speed = 0.8
+		if isTimer(speedTimer) then
+			speed = 1.4
+		end
 		if isTimer(slowDownTimer) then
 			killTimer(slowDownTimer)
 		end
 		
-		setGameSpeed(0.8)
+		setGameSpeed(speed)
 		setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", true)
-		slowDownTimer = setTimer(function() setGameSpeed(tonumber(1.0)) setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false, true) end, magnetSlowDownTime, 1)
+		--//
+		slowDownTimer = setTimer(function() 
+									local speed = 1
+									if isTimer(speedTimer) then
+										speed = 2
+									end
+									setGameSpeed(speed) 
+									setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false, true) 
+								end, magnetSlowDownTime, 1)
+		--\\
 	end
 )
 
@@ -403,17 +446,17 @@ addEventHandler("giveMinigun", resourceRoot,
 		
 		local minigun1 = createWeapon("minigun", x, y, z)
 		setWeaponAmmo(minigun1, 100)
-		--setWeaponClipAmmo(minigun1, 10)
-		--setWeaponState(minigun1, "firing")
 		setWeaponProperty(minigun1, "fire_rotation", 0, -30, 0)
+		setWeaponProperty(minigun1, "damage", 10)
+		setWeaponFiringRate(minigun1, 130)
 		attachElements(minigun1, theVehicle, maxX, maxY-1, 0, 0, 30, 90)
 		minigun[minigun1] = thePlayer
 
 		local minigun2 = createWeapon("minigun", x, y, z)
 		setWeaponAmmo(minigun2, 100)
-		--setWeaponClipAmmo(minigun2, 10)
-		--setWeaponState(minigun2, "firing")
 		setWeaponProperty(minigun2, "fire_rotation", 0, -30, 0)
+		setWeaponProperty(minigun2, "damage", 10)
+		setWeaponFiringRate(minigun2, 130)
 		attachElements(minigun2, theVehicle, minX, maxY-1, 0, 0, 30, 90)
 		minigun[minigun2] = thePlayer
 		
@@ -550,7 +593,11 @@ end
 
 
 function stopSpeed()
-	setGameSpeed(1)
+	local speed = 1
+	if getElementData(localPlayer, "coremarkers_isPlayerSlowedDown") == true then
+		speed = 0.8
+	end
+	setGameSpeed(speed)
 	if tRestoreAllSounds then
 		for sound,volume in pairs(tRestoreAllSounds) do
 			if isElement(sound) and getElementType(sound) == "sound" and tonumber(volume) then
@@ -568,9 +615,8 @@ end
 addEvent("stopSpeed", true)
 addEventHandler("stopSpeed", resourceRoot, stopSpeed)
 
-addEvent("stopFly", true)
-addEventHandler("stopFly", resourceRoot, 
-function ()
+
+function stopFly()
 	if tRestoreAllSounds then
 		for sound,volume in pairs(tRestoreAllSounds) do
 			if isElement(sound) and getElementType(sound) == "sound" and tonumber(volume) then
@@ -584,7 +630,8 @@ function ()
 	if isTimer(flyTimer) then killTimer(flyTimer) end
 	setWorldSpecialPropertyEnabled("aircars", false)
 end
-)
+addEvent("stopFly", true)
+addEventHandler("stopFly", resourceRoot, stopFly)
 
 sounds = {}
 soundTimer = {}
