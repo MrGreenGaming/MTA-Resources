@@ -1,0 +1,5 @@
+<meta>
+	<info author="=x=|DoN|=x= Edit: Nick_026" name="Language Chat" version="1.0.0" type="script" />
+	<script src="Client.lua" type="client" />
+	<script src="Server.lua" type="server" />
+</meta>
