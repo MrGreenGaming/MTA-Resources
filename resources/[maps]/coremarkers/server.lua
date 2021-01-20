@@ -83,7 +83,7 @@ addEventHandler('onMapStarting', resourceRoot,
 					"ramp",
 					"rocket",
 					"magnet",
-					--"jump",
+					-- "jump",
 					"rock",
 					"smoke",
 					"nitro",
@@ -325,11 +325,11 @@ function getRandomPower(thePlayer) --onColShapeHit
 		end
 	end
 end
---[[For tests only
-for k,v in pairs(getElementsByType("player")) do
-	bindKey(v, "mouse5", "down", getRandomPower)
-end
-]]
+--For tests only
+-- for k,v in pairs(getElementsByType("player")) do
+	-- bindKey(v, "mouse5", "down", getRandomPower)
+-- end
+
 
 
 -----------------------
@@ -535,7 +535,7 @@ addEventHandler("dropOil", resourceRoot,
 	end
 )
 
-
+	
 --------------------
 -- Kamikaze Event --
 --------------------
@@ -551,21 +551,52 @@ addEventHandler("kamikazeMode", resourceRoot,
 		kamikazeTimer[client] = setTimer(
 			function(theVehicle, thePlayer)
 				if not isElement(theVehicle) then return end
-				setElementData(thePlayer, "kamikaze", true, true)
 				local x, y, z = getElementPosition(theVehicle)
-				createExplosion(x, y, z, 10, thePlayer)
-				createExplosion(x+3, y, z, 10, thePlayer)
-				createExplosion(x-3, y, z, 10, thePlayer)
-				createExplosion(x, y+3, z, 10, thePlayer)
-				createExplosion(x, y-3, z, 10, thePlayer)
-				blowVehicle(theVehicle, true)
-				----
-				setTimer(
-					function(thePlayer)
-						setElementData(thePlayer, "kamikaze", false, true)
+				createExplosion(x, y, z, 10)
+                createExplosion(x+3, y, z, 10)
+                createExplosion(x-3, y, z, 10)
+                createExplosion(x, y+3, z, 10)
+                createExplosion(x, y-3, z, 10)
+                createExplosion(x+3, y+3, z, 10)
+                createExplosion(x-3, y-3, z, 10)
+                createExplosion(x+3, y-3, z, 10)
+                createExplosion(x-3, y+3, z, 10)
+                createExplosion(x+6, y, z, 10)
+                createExplosion(x-6, y, z, 10)
+                createExplosion(x, y+6, z, 10)
+                createExplosion(x, y-6, z, 10)
+                createExplosion(x+6, y+6, z, 10)
+                createExplosion(x-6, y-6, z, 10)
+                createExplosion(x-6, y+6, z, 10)
+                createExplosion(x+6, y-6, z, 10)
+                createExplosion(x-3, y+6, z, 10)
+                createExplosion(x+3, y+6, z, 10)
+                createExplosion(x-3, y-6, z, 10)
+                createExplosion(x+3, y-6, z, 10)
+                createExplosion(x+6, y+3, z, 10)
+                createExplosion(x-6, y-3, z, 10)
+                createExplosion(x-6, y+3, z, 10)
+                createExplosion(x+6, y-3, z, 10)
+                createExplosion(x-6, y, z, 10)
+                createExplosion(x+6, y, z, 10)
+				createExplosion(x-9, y+3, z, 10)
+                createExplosion(x+9, y+3, z, 10)
+				createExplosion(x-9, y-3, z, 10)
+                createExplosion(x+9, y-3, z, 10)
+				for _, victim in ipairs(getAlivePlayers()) do
+					if getElementData(victim, "state") == "alive" then
+						local x2, y2, z2 = getElementPosition(victim)
+						local distance = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
+						if distance <= 35 then 
+							setElementHealth(getPedOccupiedVehicle(victim), 0)
+							if victim ~= thePlayer then
+								sendClientMessage(getFullPlayerName(victim) .. " #ffffffwas killed by " .. getFullPlayerName(thePlayer) .. " (Kamikaze)", root, 255, 255, 255, "bottom")
+							else
+								sendClientMessage(getFullPlayerName(thePlayer) .. " #ffffffkilled himself (Kamikaze)", root, 255, 255, 255, "bottom")
+							end
+						end
 					end
-				, 5000, 1, thePlayer)
-				----
+				end
 			end
 		, kmzItemTime, 1, theVehicle, client)
 		if isElement(preKamikazeTimer[client]) then killTimer(preKamikazeTimer[client]) end
@@ -576,7 +607,7 @@ addEventHandler("kamikazeMode", resourceRoot,
 						if isElement(marker) then
 							setMarkerColor(marker, 255, 255, 255, 255)
 							local size = getMarkerSize(marker)
-							setMarkerSize(marker, size+0.5)
+							setMarkerSize(marker, size+2)
 						end
 					end
 				, 50, 20, marker)
@@ -629,34 +660,48 @@ addEventHandler("flyMode", resourceRoot,
 addEvent("doMagnet", true)
 addEventHandler("doMagnet", resourceRoot, 
 	function()
-	-----------for tests
-		--[[for k, victim in ipairs(getElementsByType("player")) do
-						setElementData(victim, "coremarkers_isPlayerSlowedDown", true, true)
-						triggerClientEvent(victim, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
-						attachMarker(getPedOccupiedVehicle(victim), magnetSlowDownTime, 0, 0, 255, 80)
-						sendClientMessage('#FFFFFF'..getPlayerName(client)..'#00DDFF slows down #FFFFFF'..getPlayerName(victim)..'.', root, 255, 255, 255, "bottom")
-		end]]
-	----------------------------------
-		local killer_rank = getElementData(client, "race rank")
+		local killer = client
+		local killer_rank = getElementData(killer, "race rank")
+		local victim = nil
 		if type(killer_rank) == "number" and killer_rank >= 2 then
-			for k, victim in ipairs(getElementsByType("player")) do
-				local rank = getElementData(victim, "race rank")
-				if type(rank) == "number" then
-					if rank == 1 and getElementData(victim, "state") == "alive" then
-						setElementData(victim, "coremarkers_isPlayerSlowedDown", true, true)
-						triggerClientEvent(victim, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
-						attachMarker(getPedOccupiedVehicle(victim), magnetSlowDownTime, 0, 0, 255, 80)
-						sendClientMessage('#FFFFFF'..getPlayerName(client)..'#00DDFF slows down #FFFFFF'..getPlayerName(victim)..'.', root, 255, 255, 255, "bottom")
-						if speedMarkerColorTimer and isTimer(speedMarkerColorTimer[victim]) then killTimer(speedMarkerColorTimer[victim]) end
-						triggerClientEvent(root, "stop3DSound", resourceRoot, getPedOccupiedVehicle(victim))
-					end
-				end
+			for i=1, killer_rank-1 do
+				victim = getPlayerByRank(i)
+				if victim then break end
 			end
-		elseif killer_rank == 1 then
-			sendClientMessage("Magnet slows down only 1st player, you can't use it against yourself", client, 255, 0, 0, "bottom")
+		elseif type(killer_rank) == "number" and killer_rank == 1 then
+			for i=2, #getElementsByType("player") do
+				victim = getPlayerByRank(i)
+				if victim then break end
+			end
+		end
+		
+		if victim then
+			setElementData(victim, "coremarkers_isPlayerSlowedDown", true, true)
+			triggerClientEvent(victim, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
+			attachMarker(getPedOccupiedVehicle(victim), magnetSlowDownTime, 0, 0, 255, 80)
+			sendClientMessage('#FFFFFF'..getFullPlayerName(killer)..'#00DDFF slows down #FFFFFF'..getFullPlayerName(victim)..'.', root, 255, 255, 255, "bottom")
+			if speedMarkerColorTimer and isTimer(speedMarkerColorTimer[victim]) then killTimer(speedMarkerColorTimer[victim]) end
+			triggerClientEvent(root, "stop3DSound", resourceRoot, getPedOccupiedVehicle(victim))
 		end
 	end
 )
+
+
+------------------------------
+-- Get alive player by rank --
+------------------------------
+function getPlayerByRank(number)
+	local playerWithRank = {}
+	for _, player in ipairs(getElementsByType("player")) do
+		if getElementData(player, "state") == "alive" then
+			local rank = getElementData(player, "race rank")
+			if type(rank) == "number" then
+				playerWithRank[rank] = player
+			end
+		end
+	end
+	return playerWithRank[number]
+end
 
 
 ---------------------------------------
@@ -685,6 +730,8 @@ end
 addEvent("onPlayerRaceWasted", true)
 addEventHandler("onPlayerRaceWasted", root, resetAllTheStuff)
 addEventHandler ("onVehicleEnter", root, resetAllTheStuff)
+
+
 
 addEventHandler("onElementDataChange", root, 
 	function(dataName,oldValue)
@@ -770,9 +817,7 @@ addEventHandler("Kill", root,
 			end
 		end
 		local victim = client
-		local a = string.gsub (getElementData(victim, 'vip.colorNick') or getPlayerName(victim), '#%x%x%x%x%x%x', '' )
-		local b = string.gsub (getElementData(killer, 'vip.colorNick') or getPlayerName(killer), '#%x%x%x%x%x%x', '' )
-		sendClientMessage(a .. " was killed by " .. b, root, 255, 255, 255, "bottom")
+		sendClientMessage(getFullPlayerName(victim) .. " #ffffffwas killed by " .. getFullPlayerName(killer), root, 255, 255, 255, "bottom")
 	end
 )
 
