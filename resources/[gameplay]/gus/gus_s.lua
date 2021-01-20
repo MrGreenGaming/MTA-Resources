@@ -212,7 +212,7 @@ addCommandHandler("lol",
     function(player, cmd, arg)
 		if g_lolPlayers[player] and getTickCount() - g_lolPlayers[player] < 5000 then return end
 		if isPlayerMuted(player) or chat_is_disabled then outputChatBox('You\'re muted.', player) return end
-		local nick = getElementData(player, "vip.colorNick") or getPlayerName(player)
+		local nick = getFullPlayerName(player)
 		if not arg then
 			outputChatBox(nick.."#FFD700 is laughing out loud.", root, 255, 215, 0, true)
 			exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " is laughing out loud." )
@@ -221,7 +221,7 @@ addCommandHandler("lol",
 			local who = findPlayerByName(arg)
 			if not who then outputChatBox("No player found", player)
 			else
-				local whoName = getElementData(who, "vip.colorNick") or getPlayerName(who)
+				local whoName = getFullPlayerName(who)
 				local lolString = nick.."#FFD700 is laughing out loud at "..whoName
 				if string.len(lolString) > 256 then
 					outputChatBox(nick.."#FFD700 is laughing out loud at "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ), root, 255, 215, 0, true)
@@ -238,7 +238,47 @@ addCommandHandler("lol",
 
 addEventHandler('onPlayerQuit', root, function() g_lolPlayers[source] = nil end)
 
+g_fPlayers = {}
+addCommandHandler("f",
+    function(player, cmd, arg)
+		if g_fPlayers[player] and getTickCount() - g_fPlayers[player] < 5000 then return end
+		if isPlayerMuted(player) or chat_is_disabled then outputChatBox('You\'re muted.', player) return end
+		local nick = getFullPlayerName(player)
+		if not arg then
+			outputChatBox(nick.."#FFD700 pressed F to pay their respects.", root, 255, 215, 0, true)
+			exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " pressed F to pay their respects." )
+			g_fPlayers[player] = getTickCount()
+		else
+			local who = findPlayerByName(arg)
+			if not who then outputChatBox("No player found", player)
+			else
+				local whoName = getFullPlayerName(who)
+				local lolString = nick.."#FFD700 pressed F to pay their respects to "..whoName
+				if string.len(lolString) > 256 then
+					outputChatBox(nick.."#FFD700 pressed F to pay their respects to "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ), root, 255, 215, 0, true)
+				else
+					outputChatBox(lolString, root, 255, 215, 0, true)
+				end
 
+				exports.irc:outputIRC("7* " .. string.gsub(getPlayerName(player), '#%x%x%x%x%x%x', '' ) .. " pressed F to pay their respects to "..string.gsub(whoName, '#%x%x%x%x%x%x', '' ) )
+				g_fPlayers[player] = getTickCount()
+			end
+		end
+    end
+)
+
+addEventHandler('onPlayerQuit', root, function() g_fPlayers[source] = nil end)
+
+function getFullPlayerName(player)
+    local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
+    local teamColor = "#FFFFFF"
+    local team = getPlayerTeam(player)
+    if (team) then
+        r,g,b = getTeamColor(team)
+        teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
+    end
+    return "" .. teamColor .. playerName
+end
 
 addCommandHandler('song',
 function(playerName, commandName)
