@@ -294,10 +294,45 @@ function onPlayerUsePower(key, keyState, powerType)
 		--\\
 		return
 	elseif powerType == "fly" then
+		outputChatBox(">#00ff00CoreMarkers: #ffffffYou can press LAlt button to cancel Fly", 255, 255, 255, true)
+		vehicleModel = getElementModel(theVehicle)
+		local nitro = getVehicleUpgradeOnSlot(theVehicle, 8)
+		local nitroCount
+		local nitroLevel
+		if nitro == 1010 then
+			nitroCount = getVehicleNitroCount(theVehicle)
+			nitroLevel = getVehicleNitroLevel(theVehicle)
+		elseif nitro == 0 then
+			nitro = false
+		end
+		local x, y, z = getElementVelocity(theVehicle)
+		setElementVelocity(theVehicle, x, y, z+0.2)
+		local speed = getElementSpeed(theVehicle, "kmh")
+		setElementSpeed(theVehicle, "kmh", speed+100)
+		setElementModel(theVehicle, 411)
+		triggerServerEvent("startSound3D", resourceRoot, "fly.mp3")
+		triggerServerEvent("flyMode", resourceRoot, flyItemTime)
+		
+		--stop radio and pause all other music
+		radioChannel = getRadioChannel()
+		setRadioChannel(0)
+		
+		tRestoreAllSounds = {}
+		for _,sound in pairs(getElementsByType("sound")) do
+			if getElementData(sound, "isCoreMarkersSound") then
+				--skip
+			else
+				tRestoreAllSounds[sound] = getSoundVolume(sound)
+				setSoundVolume(sound, 0)
+			end
+		end
+		
+		if isTimer(flyTimer) then killTimer(flyTimer) end
+		setWorldSpecialPropertyEnabled("aircars", true)
+		removePower(nil, flyItemTime)
 		--//
 		local function stopFlying() 
-			unbindKey("mouse1", "down", stopFlying)
-			unbindKey("lctrl", "down", stopFlying)
+			unbindKey("lalt", "down", stopFlying)
 			if isTimer(flyTimer) then killTimer(flyTimer) end
 			if isTimer(gravityTimer) then killTimer(gravityTimer) end
 			removePower()
@@ -344,44 +379,8 @@ function onPlayerUsePower(key, keyState, powerType)
 			end 
 		end
 		--\\
-		bindKey("mouse1", "down", stopFlying)
-		bindKey("lctrl", "down", stopFlying)
-		vehicleModel = getElementModel(theVehicle)
-		local nitro = getVehicleUpgradeOnSlot(theVehicle, 8)
-		local nitroCount
-		local nitroLevel
-		if nitro == 1010 then
-			nitroCount = getVehicleNitroCount(theVehicle)
-			nitroLevel = getVehicleNitroLevel(theVehicle)
-		elseif nitro == 0 then
-			nitro = false
-		end
-		local x, y, z = getElementVelocity(theVehicle)
-		setElementVelocity(theVehicle, x, y, z+0.2)
-		local speed = getElementSpeed(theVehicle, "kmh")
-		setElementSpeed(theVehicle, "kmh", speed+100)
-		setElementModel(theVehicle, 411)
-		triggerServerEvent("startSound3D", resourceRoot, "fly.mp3")
-		triggerServerEvent("flyMode", resourceRoot, flyItemTime)
-		
-		--stop radio and pause all other music
-		radioChannel = getRadioChannel()
-		setRadioChannel(0)
-		
-		tRestoreAllSounds = {}
-		for _,sound in pairs(getElementsByType("sound")) do
-			if getElementData(sound, "isCoreMarkersSound") then
-				--skip
-			else
-				tRestoreAllSounds[sound] = getSoundVolume(sound)
-				setSoundVolume(sound, 0)
-			end
-		end
-		
-		if isTimer(flyTimer) then killTimer(flyTimer) end
 		flyTimer = setTimer(stopFlying, flyItemTime, 1)
-		setWorldSpecialPropertyEnabled("aircars", true)
-		removePower(nil, flyItemTime)
+		bindKey("lalt", "down", stopFlying)
 		return
 	elseif powerType == "kmz" then
 		triggerServerEvent("kamikazeMode", resourceRoot)
@@ -448,7 +447,7 @@ addEventHandler("giveMinigun", resourceRoot,
 		setWeaponAmmo(minigun1, 100)
 		setWeaponProperty(minigun1, "fire_rotation", 0, -30, 0)
 		setWeaponProperty(minigun1, "damage", 10)
-		setWeaponFiringRate(minigun1, 130)
+		setWeaponFiringRate(minigun1, 60)
 		attachElements(minigun1, theVehicle, maxX, maxY-1, 0, 0, 30, 90)
 		minigun[minigun1] = thePlayer
 
@@ -456,7 +455,7 @@ addEventHandler("giveMinigun", resourceRoot,
 		setWeaponAmmo(minigun2, 100)
 		setWeaponProperty(minigun2, "fire_rotation", 0, -30, 0)
 		setWeaponProperty(minigun2, "damage", 10)
-		setWeaponFiringRate(minigun2, 130)
+		setWeaponFiringRate(minigun2, 60)
 		attachElements(minigun2, theVehicle, minX, maxY-1, 0, 0, 30, 90)
 		minigun[minigun2] = thePlayer
 		
