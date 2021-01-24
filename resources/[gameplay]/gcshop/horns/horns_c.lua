@@ -914,6 +914,13 @@ function createSoundForCar(car, horn)
     icon[car] = guiCreateStaticImage(0, 0, guix, guiy, "horns/icon.png", false)
     guiSetVisible(icon[car], false)
     local x, y, z = getElementPosition(car)
+    
+    local localVeh = getPedOccupiedVehicle(localPlayer)
+    if localVeh and car ~= localVeh then
+        if getElementData(localPlayer, "carhide") then
+            return
+        end
+    end
 
     soundElements[car] = playSound3D(horn, x, y, z, false) -- Horn argument is passed as path
     setSoundMaxDistance(soundElements[car], 50)
