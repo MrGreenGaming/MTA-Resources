@@ -268,7 +268,7 @@ addEventHandler("onPlayerJoin", root,
 		end
 		
 		-- local joinstr = '* Joins: ' .. getPlayerName(source) .. ' #FF6464'.. country .. redirect
-		local joinstr = '✶ Joined: ' .. getPlayerName(source) .. '#FF6464'.. country ..' joined the server'.. redirect
+		local joinstr = '✶ Joined: ' .. getFullPlayerName(source) .. '#FF6464'.. country ..' joined the server'.. redirect
 		for k,v in ipairs(getElementsByType"player")do
 			if v ~= source then
 				outputChatBox(joinstr, v, 255, 100, 100, true)
@@ -286,17 +286,17 @@ addEventHandler('onPlayerQuit', root,
                 rstr = ' ('..reason..')'
             end
             -- outputChatBox('* ' .. quittype .. ': ' .. getPlayerName(source) .. '#FF6464 '..rstr, g_Root, 255, 100, 100, true)
-            outputChatBox('✶ Quit: ' .. getPlayerName(source) .. '#FF6464 has been ' .. string.lower(quittype) .. ''..rstr, g_Root, 255, 100, 100, true)
+            outputChatBox('✶ Quit: ' .. getFullPlayerName(source) .. '#FF6464 has been ' .. string.lower(quittype) .. ''..rstr, g_Root, 255, 100, 100, true)
 		else
 			if getElementData(source, 'gotomix') then
 				quittype = 'switched to ' .. string.lower(get('interchat.other_server')) .. ' server'
 			end
 			if (quittype == 'Quit') then
 				-- outputChatBox('* Quits: ' .. getPlayerName(source),root,  255, 100, 100, true)
-				outputChatBox('✶ Quit: ' .. getPlayerName(source)..'#FF6464 left the server.',root,  255, 100, 100, true)
+				outputChatBox('✶ Quit: #FFFFFF' .. getFullPlayerName(source)..'#FF6464 left the server.',root,  255, 100, 100, true)
 			else
 				-- outputChatBox('* Quits: ' .. getPlayerName(source) .. '#FF6464 [' .. quittype .. ']',root,  255, 100, 100, true)
-				outputChatBox('✶ Quit: ' .. getPlayerName(source) .. '#FF6464 ' .. quittype ,root,  255, 100, 100, true)
+				outputChatBox('✶ Quit: #FFFFFF' .. getFullPlayerName(source) .. '#FF6464 ' .. quittype ,root,  255, 100, 100, true)
 			end
         end
 	end
@@ -333,3 +333,15 @@ addEventHandler("onPlayerJoin", root, function()
     getCasesInformation(getCountry)
 end)
 ]]
+
+
+function getFullPlayerName(player)
+	local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
+	local teamColor = "#FFFFFF"
+	local team = getPlayerTeam(player)
+	if (team) then
+		r,g,b = getTeamColor(team)
+		teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
+	end
+	return "" .. teamColor .. playerName
+end
