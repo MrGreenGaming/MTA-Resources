@@ -244,6 +244,13 @@ function carHideState ( state )
 	end
 	
 	if state == "GridCountdown" then	
+		local coreMarkersState = getResourceState( getResourceFromName"coremarkers" )
+		if coreMarkersState == "running" then
+			carHideAllowed = false
+			triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
+			return 
+		end
+		
 		carHideAllowed = true
 		for _,p in ipairs(getElementsByType("player")) do
 			removeElementData(p,'carhide')
