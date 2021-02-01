@@ -233,13 +233,16 @@ local screenW, screenH = guiGetScreenSize()
         GUIEditor.checkbox[12] = guiCreateCheckBox(64, 176+70, 15, 15, "Enable Floating Messages", false, false, GUIEditor.tab[3])
         setTooltip(GUIEditor.label[29],"Floating messages are the messages that float on the screen, giving you information. If disabled, the information will be in the chatbox instead.")
 
+        
+        
         -- GUIEditor.label[30] = guiCreateLabel(104, 201+70, 141, 15, "Enable Progress Bar", false, GUIEditor.tab[3])
         -- GUIEditor.checkbox[13] = guiCreateCheckBox(64, 201+70, 15, 15, "Enable Progress Bar", true, false, GUIEditor.tab[3])
-
+        
         GUIEditor.staticimage[2] = guiCreateStaticImage(284, 19+70, 1, 207, "/img/dot_white.png", false, GUIEditor.tab[3])
         GUIEditor.button[2] = guiCreateButton(60, 230+50, 185, 24, "Go to Progress Bar Settings", false, GUIEditor.tab[3])
+        
         setTooltip(GUIEditor.button[2],"Here you can find all settings related to the progress bar, including an option to disable it.")
-
+        
         guiSetProperty(GUIEditor.button[2], "NormalTextColour", "FFAAAAAA")
         GUIEditor.combobox[1] = guiCreateComboBox(311, 62+70, 95, 78, "", false, GUIEditor.tab[3])
         guiSetFont(GUIEditor.combobox[1], "default-bold-small")
@@ -247,30 +250,32 @@ local screenW, screenH = guiGetScreenSize()
         guiComboBoxAddItem(GUIEditor.combobox[1], "SP Hud")
         guiComboBoxAddItem(GUIEditor.combobox[1], "Old Hud")
         GUIEditor.label[31] = guiCreateLabel(413, 28+70, 141, 15, "Speed-o-meter Mode", false, GUIEditor.tab[3])
-
+        
         GUIEditor.combobox[2] = guiCreateComboBox(311, 28+70, 95, 78, "", false, GUIEditor.tab[3])
         guiSetFont(GUIEditor.combobox[2], "default-bold-small")
         guiComboBoxAddItem(GUIEditor.combobox[2], "km/h")
         guiComboBoxAddItem(GUIEditor.combobox[2], "mph")
         guiComboBoxAddItem(GUIEditor.combobox[2], "None")
-
+        
         GUIEditor.label[32] = guiCreateLabel(413, 62+70, 141, 15, "HUD Mode", false, GUIEditor.tab[3])
-
+        
         GUIEditor.checkbox[14] = guiCreateCheckBox(309, 170, 15, 15, "", false, false, GUIEditor.tab[3])
         GUIEditor.label[34] = guiCreateLabel(346, 170, 141, 15, "Enable New Radar", false, GUIEditor.tab[3])
-
+        
         GUIEditor.checkbox[15] = guiCreateCheckBox(309, 195, 15, 15, "", false, false, GUIEditor.tab[3])
         GUIEditor.label[35] = guiCreateLabel(346, 195, 141, 15, "Enable FPS Counter", false, GUIEditor.tab[3])
 
 
         GUIEditor.checkbox[16] = guiCreateCheckBox(309, 220, 15, 15, "", false, false, GUIEditor.tab[3])
         GUIEditor.label[36] = guiCreateLabel(346, 220, 141, 15, "Enable Countdown Timer", false, GUIEditor.tab[3])
-
+        
         customNameTagsCheckBox = guiCreateCheckBox(309, 245, 15, 15, "", false, false, GUIEditor.tab[3])
         customNameTagsLabel = guiCreateLabel(346, 245, 141, 15, "Enable Custom NameTags", false, GUIEditor.tab[3])
         
-
-
+        GUIEditor.label["vehicleChange"] = guiCreateLabel(346, 270, 141, 15, "Enable Vehicle Change Icons", false, GUIEditor.tab[3])
+        GUIEditor.checkbox["vehicleChange"] = guiCreateCheckBox(309, 270, 15, 15, "", false, false, GUIEditor.tab[3])
+        
+        
         GUIEditor.button[3] = guiCreateButton(505, 475, 71, 23, "Close", false, GUIEditor.window[1])
         guiSetProperty(GUIEditor.button[3], "NormalTextColour", "FFAAAAAA")
         GUIEditor.label[33] = guiCreateLabel(9, 467, 262, 21, "Settings for the Mr. Green Servers.", false, GUIEditor.window[1])
