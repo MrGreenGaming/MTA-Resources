@@ -65,6 +65,11 @@ Exp_Funct = { -- Exported functions
 		[1] = 'exports["race_sphud"].e_showNewhud()',
 		[2] = 'exports["race_sphud"].e_showSPhud()',
 		[3] = 'exports["race_sphud"].e_showOldhud()'},
+	["vehicleChange"] = {
+		res = "icons-vehicle-change",
+		["true"] = 'exports["icons-vehicle-change"].enable()',
+		["false"] = 'exports["icons-vehicle-change"].disable()'
+	}
 
 
 }
@@ -101,7 +106,8 @@ UI = { -- Default settings--
 	["speed-o-metermode"] = 3 ,
 	["hudmode"] = 1 ,
 	["radar"] = true,
-	["timeleft"] = true
+	["timeleft"] = true,
+	["vehicleChange"] = true
 
 }
 
@@ -246,6 +252,17 @@ function ui_ClickHandler()
 			exports["fps"].e_hideFPS()
 
 			UI["fpscounter"] = false
+		end
+
+	--  Toggle Vehicle Change Icons
+	elseif source == GUIEditor.checkbox["vehicleChange"] then
+		saveTime()
+		if guiCheckBoxGetSelected(source) then
+			exports["icons-vehicle-change"]:enable()
+			UI["vehicleChange"] = true
+		else
+			exports["icons-vehicle-change"]:disable()
+			UI["vehicleChange"] = false
 		end
 	-- Toggle TimeLeft --
 	elseif source == GUIEditor.checkbox[16] then
@@ -528,7 +545,12 @@ function updateUIgui() -- Updates the GUI to the settings that loaded --
 		elseif f == "hudmode" then
 			guiComboBoxSetSelected( GUIEditor.combobox[1], tonumber(u)-1 )
 
-
+		elseif f == "vehicleChange" then
+			if u then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["vehicleChange"], true)
+			else
+				guiCheckBoxSetSelected(GUIEditor.checkbox["vehicleChange"], false) 
+			end
 		end
 	end
 end
