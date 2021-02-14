@@ -209,7 +209,7 @@ function MapInfoWindow.render()
     dxDrawRectangle(x + dims.ratingsBar.x, y + dims.ratingsBar.y, dims.ratingsBar.width, 1, tocolor(255, 255, 255, 255 * alphaFade), false, true)
 
     -- Rating bar fill
-    local likePercentage = dims.ratingsBar.width / 100 * (( MapData.currentMapRatings.likes + 1 ) / (MapData.currentMapRatings.likes + MapData.currentMapRatings.dislikes) * 100)
+    local likePercentage = dims.ratingsBar.width / 100 * (( MapData.currentMapRatings.likes + mapData.currentMapRatings.dislikes ) / (MapData.currentMapRatings.likes) * 100)
     likePercentage = likePercentage <= 0 and 0 or (likePercentage >= dims.ratingsBar.width and dims.ratingsBar.width or likePercentage)
     dxDrawRectangle(x + dims.ratingsBar.x, y + dims.ratingsBar.y, likePercentage , 1, tocolor(12, 180, 24, 255 * alphaFade), false, true)
 
