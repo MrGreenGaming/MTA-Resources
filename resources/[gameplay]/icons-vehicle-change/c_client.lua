@@ -58,13 +58,11 @@ function setSigns(index, position, type, name)
 	if index <= 1 then signs[index].showSign = true
 	else signs[index].showSign = false
 	end
-	outputDebugString("Sign set: " .. index)
 end
 addEvent("setSign", true)
 addEventHandler("setSign", root, setSigns)
 
 function showSign(index)
-	outputDebugString("Show sign"..index)
 	if signs[index] then
 		signs[index].showSign = true
 	end
