@@ -18,7 +18,6 @@ function onMapStart(mapInfo, mapOptions, gameOptions)
 	for i, checkpoint in ipairs(checkpoints) do
 		-- This checkpoint has a vehicle change
 		if checkpoint.vehicle then
-			outputDebugString("Vehicle change at " .. i .. ". Changing to " .. getVehicleType(checkpoint.vehicle))
 			for j, player in ipairs(getElementsByType("player")) do
 				triggerClientEvent(player, "setSign",root, i , checkpoint.position, getVehicleType(checkpoint.vehicle), getVehicleNameFromModel(checkpoint.vehicle))
 			end
@@ -31,8 +30,7 @@ addEventHandler("onMapStarting", getRootElement(), onMapStart)
 
 function onPlayerJoin()
 	if not modes[exports.race:getRaceMode()] then return false end
-
-	-- TODO set players local signs
+	
 	for i, checkpoint in ipairs(checkpoints) do
 		if checkpoint.vehicle then
 			triggerClientEvent(source, "setSign", root, i, checkpoint.position, getVehicleType(checkpoint.vehicle), getVehicleNameFromModel(checkpoint.vehicle))
@@ -48,3 +46,11 @@ function onPlayerReachCheckpoint(cp)
 
 end
 addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)
+
+function enable()
+
+end
+
+function disable()
+
+end
