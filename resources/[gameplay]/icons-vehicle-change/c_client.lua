@@ -24,7 +24,7 @@ function renderIcons()
 					local relx, rely = scaled * globalscale, scaled * globalscale
 					guiSetAlpha(signs[cpId].guiImage, globalalpha)
 					guiSetSize(signs[cpId].guiImage, relx, rely, false)
-					guiSetPosition(signs[cpId].guiImage, screenX, screenY, false)
+					guiSetPosition(signs[cpId].guiImage, screenX - (relx / 2), screenY, false)
 					guiSetVisible(signs[cpId].guiImage, true)
 
 					dxDrawTextOnElement(signs[cpId], signs[cpId].name)
@@ -58,11 +58,13 @@ function setSigns(index, position, type, name)
 	if index <= 1 then signs[index].showSign = true
 	else signs[index].showSign = false
 	end
+	outputDebugString("Sign set: " .. index)
 end
 addEvent("setSign", true)
 addEventHandler("setSign", root, setSigns)
 
 function showSign(index)
+	outputDebugString("Show sign"..index)
 	if signs[index] then
 		signs[index].showSign = true
 	end
@@ -102,7 +104,7 @@ function dxDrawTextOnElement(TheElement,text,height,distance,R,G,B,alpha,size,fo
 		if(sx) and (sy) then
 			local distanceBetweenPoints = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
 			if(distanceBetweenPoints < distance) then
-				dxDrawText(text, sx+2, sy+2, sx, sy, tocolor(R or 255, G or 255, B or 255, alpha or 255 * 0.5), (size or 2.5)-(distanceBetweenPoints / distance), font or "arial", "center", "center")
+				dxDrawText(text, sx+2, sy+2, sx, sy, tocolor(R or 255, G or 255, B or 255, alpha or (255 * 0.65)), (size or 1.5)-(distanceBetweenPoints / distance), font or "pricedown", "center", "center")
 			end
 		end
 	end
