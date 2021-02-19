@@ -43,7 +43,7 @@ function showIcon()
 				local relx, rely = scaled * globalscale, scaled * globalscale
 				guiSetAlpha(ghostIcon, globalalpha)
 				guiSetSize(ghostIcon, relx, rely, false)
-				guiSetPosition(ghostIcon, screenX, screenY, false)
+				guiSetPosition(ghostIcon, screenX - (relx / 2), screenY, false)
 				guiSetVisible(ghostIcon, true)
 			else
 				guiSetVisible(ghostIcon, false)

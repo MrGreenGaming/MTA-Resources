@@ -1,0 +1,20 @@
+<meta>
+	<info name="Vehicle Change Icons" description="Shows icons on a checkpoint when a vehicle changes" author="Nick_026" type="script" addon="race" version="1.0" />
+	<file src="icons/Automobile.png" />
+	<file src="icons/bike.png" />
+	<file src="icons/bmx.png" />
+	<file src="icons/boat.png" />
+	<file src="icons/helicopter.png" />
+	<file src="icons/hovercraft.png" />
+	<file src="icons/hydra.png" />
+	<file src="icons/MonsterTruck.png" />
+	<file src="icons/plane.png" />
+	<file src="icons/quad.png" />
+	<file src="icons/sanchez.png" />
+	<file src="icons/trailer.png" />
+	<file src="icons/train.png" />
+	<script src="c_client.lua" type="client" />
+	<script src="s_server.lua" type="server" />
+	<export function="enableClient" type="client" />
+	<export function="disableClient" type="client" />
+</meta>
