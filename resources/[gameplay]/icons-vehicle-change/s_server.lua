@@ -46,11 +46,3 @@ function onPlayerReachCheckpoint(cp)
 
 end
 addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)
-
-function enable()
-
-end
-
-function disable()
-
-end
