@@ -93,7 +93,6 @@ function dxDrawTextOnElement(TheElement,text,height,distance,R,G,B,alpha,size,fo
 	local x = TheElement.x
 	local y = TheElement.y
 	local z = TheElement.z + 1
-	outputDebugString(z)
 	local x2, y2, z2 = getCameraMatrix()
 	local distance = distance or drawDistance
 	local height = height or -1
