@@ -10,7 +10,7 @@ local screenSizex, screenSizey = guiGetScreenSize()
 local guix = screenSizex * 0.1
 local guiy = screenSizex * 0.1
 local globalscale = 5
-local globalalpha = .25
+local globalalpha = .50
 
 function renderIcons()
 	for i, cpId in ipairs(cpIds) do
@@ -20,7 +20,7 @@ function renderIcons()
 			if dist < drawDistance and (isLineOfSightClear(signs[cpId].x, signs[cpId].y, signs[cpId].z+2.5, playerx, playery, playerz, true, false, false, false)) then
 				local screenX, screenY = getScreenFromWorldPosition(signs[cpId].x, signs[cpId].y, signs[cpId].z+2.5)
 				if (screenX and screenY) then
-					local scaled = screenSizex * (1/(2*(dist+5))) *.85
+					local scaled = screenSizex * (1/(2*(dist+5))) *.60
 					local relx, rely = scaled * globalscale, scaled * globalscale
 					guiSetAlpha(signs[cpId].guiImage, globalalpha)
 					guiSetSize(signs[cpId].guiImage, relx, rely, false)
@@ -92,7 +92,8 @@ addEventHandler("deleteSigns", root, deleteSigns)
 function dxDrawTextOnElement(TheElement,text,height,distance,R,G,B,alpha,size,font,...)
 	local x = TheElement.x
 	local y = TheElement.y
-	local z = TheElement.z
+	local z = TheElement.z + 1
+	outputDebugString(z)
 	local x2, y2, z2 = getCameraMatrix()
 	local distance = distance or drawDistance
 	local height = height or -1
@@ -102,7 +103,7 @@ function dxDrawTextOnElement(TheElement,text,height,distance,R,G,B,alpha,size,fo
 		if(sx) and (sy) then
 			local distanceBetweenPoints = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
 			if(distanceBetweenPoints < distance) then
-				dxDrawText(text, sx+2, sy+2, sx, sy, tocolor(R or 255, G or 255, B or 255, alpha or (255 * 0.65)), (size or 1.5)-(distanceBetweenPoints / distance), font or "pricedown", "center", "center")
+				dxDrawText(text, sx+2, sy+2, sx, sy, tocolor(R or 255, G or 255, B or 255, alpha or (255 * 0.65)), (size or 1)-(distanceBetweenPoints / distance), font or "pricedown", "center", "center")
 			end
 		end
 	end
