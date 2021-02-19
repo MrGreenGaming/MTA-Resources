@@ -6,11 +6,11 @@ local enabled = true
 
 local drawDistance = 150
 
-local screenSizex, screenSizey = guiGetScreenSize()
-local guix = screenSizex * 0.1
-local guiy = screenSizex * 0.1
-local globalscale = 5
-local globalalpha = .50
+local screenSizeX, screenSizeY = guiGetScreenSize()
+local guiX = screenSizeX * 0.1
+local guiY = screenSizeX * 0.1
+local globalScale = 5
+local globalAlpha = .50
 
 function renderIcons()
 	for i, cpId in ipairs(cpIds) do
@@ -20,9 +20,9 @@ function renderIcons()
 			if dist < drawDistance and (isLineOfSightClear(signs[cpId].x, signs[cpId].y, signs[cpId].z+2.5, playerx, playery, playerz, true, false, false, false)) then
 				local screenX, screenY = getScreenFromWorldPosition(signs[cpId].x, signs[cpId].y, signs[cpId].z+2.5)
 				if (screenX and screenY) then
-					local scaled = screenSizex * (1/(2*(dist+5))) *.60
-					local relx, rely = scaled * globalscale, scaled * globalscale
-					guiSetAlpha(signs[cpId].guiImage, globalalpha)
+					local scaled = screenSizeX * (1/(2*(dist+5))) *.60
+					local relx, rely = scaled * globalScale, scaled * globalScale
+					guiSetAlpha(signs[cpId].guiImage, globalAlpha)
 					guiSetSize(signs[cpId].guiImage, relx, rely, false)
 					guiSetPosition(signs[cpId].guiImage, screenX - (relx / 2), screenY, false)
 					guiSetVisible(signs[cpId].guiImage, true)
@@ -52,7 +52,7 @@ function setSigns(index, position, type, name)
 	signs[index].x = position[1]
 	signs[index].y = position[2]
 	signs[index].z = position[3]
-	signs[index].guiImage = guiCreateStaticImage(0, 0, guix, guiy, "./icons/" .. type ..".png", false)
+	signs[index].guiImage = guiCreateStaticImage(0, 0, guiX, guiY, "./icons/" .. type ..".png", false)
 	guiSetVisible(signs[index].guiImage, false)
 
 	if index <= 1 then signs[index].showSign = true
