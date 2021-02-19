@@ -67,8 +67,8 @@ Exp_Funct = { -- Exported functions
 		[3] = 'exports["race_sphud"].e_showOldhud()'},
 	["vehicleChange"] = {
 		res = "icons-vehicle-change",
-		["true"] = 'exports["icons-vehicle-change"].enableClient()',
-		["false"] = 'exports["icons-vehicle-change"].disableClient()'
+		["true"] = 'exports["icons-vehicle-change"].enableCPNextVehicleInfoUI()',
+		["false"] = 'exports["icons-vehicle-change"].disableCPNextVehicleInfoUI()'
 	}
 
 
@@ -258,10 +258,10 @@ function ui_ClickHandler()
 	elseif source == GUIEditor.checkbox["vehicleChange"] then
 		saveTime()
 		if guiCheckBoxGetSelected(source) then
-			exports["icons-vehicle-change"]:enableClient()
+			exports["icons-vehicle-change"]:enableCPNextVehicleInfoUI()
 			UI["vehicleChange"] = true
 		else
-			exports["icons-vehicle-change"]:disableClient()
+			exports["icons-vehicle-change"]:disableCPNextVehicleInfoUI()
 			UI["vehicleChange"] = false
 		end
 	-- Toggle TimeLeft --

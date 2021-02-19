@@ -108,10 +108,10 @@ function dxDrawTextOnElement(TheElement,text,height,distance,R,G,B,alpha,size,fo
 	end
 end
 
-function enableClient()
+function enableCPNextVehicleInfoUI()
 	enabled = true
 end
 
-function disableClient()
+function disableCPNextVehicleInfoUI()
 	enabled = false
 end
