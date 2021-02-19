@@ -108,10 +108,10 @@ function dxDrawTextOnElement(TheElement,text,height,distance,R,G,B,alpha,size,fo
 	end
 end
 
-function enable()
+function enableClient()
 	enabled = true
 end
 
-function disable()
+function disableClient()
 	enabled = false
 end
