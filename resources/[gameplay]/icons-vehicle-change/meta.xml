@@ -15,6 +15,6 @@
 	<file src="icons/train.png" />
 	<script src="c_client.lua" type="client" />
 	<script src="s_server.lua" type="server" />
-	<export function="enable" type="client" />
-	<export function="disable" type="client" />
+	<export function="enableClient" type="client" />
+	<export function="disableClient" type="client" />
 </meta>
