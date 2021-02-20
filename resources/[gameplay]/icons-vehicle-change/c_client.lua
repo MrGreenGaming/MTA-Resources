@@ -1,10 +1,11 @@
 local signs = {
-	-- checkpoint { type: String, showSign: boolean, x, y, z: int, guiImage}
+	-- checkpoint { vehType: String, cpType: String showSign: boolean, x, y, z: int, guiImage}
 }
 local cpIds = {}
 local enabled = true
 
-local drawDistance = 150
+local drawDistance = 300
+
 
 local screenSizeX, screenSizeY = guiGetScreenSize()
 local guiX = screenSizeX * 0.1
@@ -17,17 +18,27 @@ function renderIcons()
 		if signs[cpId].showSign and signs[cpId].z and enabled then
 			local playerx, playery, playerz = getCameraMatrix()
 			local dist = getDistanceBetweenPoints3D(signs[cpId].x, signs[cpId].y, signs[cpId].z, playerx, playery, playerz)
-			if dist < drawDistance and (isLineOfSightClear(signs[cpId].x, signs[cpId].y, signs[cpId].z+2.5, playerx, playery, playerz, true, false, false, false)) then
-				local screenX, screenY = getScreenFromWorldPosition(signs[cpId].x, signs[cpId].y, signs[cpId].z+2.5)
+			if dist < drawDistance and (isLineOfSightClear(signs[cpId].x, signs[cpId].y, signs[cpId].z+3, playerx, playery, playerz, true, false, false, false)) then
+				local screenX, screenY;
+
+				if (signs[cpId].cpType == false or signs[cpId].cpType == "checkpoint") then
+					-- Checkpoint is a default checkpoint in which the height doesn't matter. The icon is relative to the player's height
+					local playerX, playerY, playerZ = getElementPosition(localPlayer)
+					screenX, screenY = getScreenFromWorldPosition(signs[cpId].x, signs[cpId].y, playerZ + 3)
+					dxDrawTextOnElement(signs[cpId].x, signs[cpId].y, playerZ, signs[cpId].name)
+				else
+					-- This is a checkpoint in which the height does matter. The icon is relative to the checkpoint's position
+					screenX, screenY = getScreenFromWorldPosition(signs[cpId].x, signs[cpId].y, signs[cpId].z+3)
+					dxDrawTextOnElement(signs[cpId].x, signs[cpId].y, signs[cpId].z, signs[cpId].name)
+				end
+
 				if (screenX and screenY) then
-					local scaled = screenSizeX * (1/(2*(dist+5))) *.60
+					local scaled = screenSizeX * (1/(2*(dist+5))) * 0.6
 					local relx, rely = scaled * globalScale, scaled * globalScale
 					guiSetAlpha(signs[cpId].guiImage, globalAlpha)
 					guiSetSize(signs[cpId].guiImage, relx, rely, false)
 					guiSetPosition(signs[cpId].guiImage, screenX - (relx / 2), screenY, false)
 					guiSetVisible(signs[cpId].guiImage, true)
-
-					dxDrawTextOnElement(signs[cpId], signs[cpId].name)
 
 				else
 					guiSetVisible(signs[cpId].guiImage, false)
@@ -42,17 +53,18 @@ function renderIcons()
 end
 addEventHandler("onClientRender", root, renderIcons)
 
-function setSigns(index, position, type, name)
-	if type == "Monster Truck" then type = "MonsterTruck" end
+function setSigns(index, position, vehType, name, cpType)
+	if vehType == "Monster Truck" then vehType = "MonsterTruck" end
 
 	table.insert(cpIds, index)
 	signs[index] = {}
-	signs[index].type = type
+	signs[index].vehType = vehType
+	signs[index].cpType = cpType
 	signs[index].name = name
 	signs[index].x = position[1]
 	signs[index].y = position[2]
 	signs[index].z = position[3]
-	signs[index].guiImage = guiCreateStaticImage(0, 0, guiX, guiY, "./icons/" .. type ..".png", false)
+	signs[index].guiImage = guiCreateStaticImage(0, 0, guiX, guiY, "./icons/" .. vehType ..".png", false)
 	guiSetVisible(signs[index].guiImage, false)
 
 	if index <= 1 then signs[index].showSign = true
@@ -89,11 +101,9 @@ addEvent("deleteSigns", true)
 addEventHandler("deleteSigns", root, deleteSigns)
 
 
-function dxDrawTextOnElement(TheElement,text,height,distance,R,G,B,alpha,size,font,...)
-	local x = TheElement.x
-	local y = TheElement.y
-	local z = TheElement.z + 1
+function dxDrawTextOnElement(x, y, z,text,size,height,distance,R,G,B,alpha,font,...)
 	local x2, y2, z2 = getCameraMatrix()
+	z = z + 1
 	local distance = distance or drawDistance
 	local height = height or -1
 
