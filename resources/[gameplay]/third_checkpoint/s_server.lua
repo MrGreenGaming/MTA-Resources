@@ -32,6 +32,8 @@ end
 addEventHandler("onPlayerJoin", root, onPlayerJoin)
 
 function onPlayerReachCheckpoint(cp)
+	if not modes[exports.race:getRaceMode()] then return false end
+
 	if checkpoints[cp + 3] then
 		triggerClientEvent(source, "setThirdCheckpoint", root, checkpoints[cp + 3], not checkpoints[cp + 4])
 	else
@@ -41,6 +43,7 @@ end
 addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)
 
 function onPlayerWasted()
+	if not modes[exports.race:getRaceMode()] then return false end
 	-- cpId is the checkpoint number the player is heading to when dying
 	-- The player will be thrown 1 cp back (except when cpId is 1)
 	-- So the third checkpoint is cpId + 1
