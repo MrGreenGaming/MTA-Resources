@@ -19,7 +19,7 @@ function onMapStart(mapInfo, mapOptions, gameOptions)
 		-- This checkpoint has a vehicle change
 		if checkpoint.vehicle then
 			for j, player in ipairs(getElementsByType("player")) do
-				triggerClientEvent(player, "setSign",root, i , checkpoint.position, getVehicleType(checkpoint.vehicle), getVehicleNameFromModel(checkpoint.vehicle))
+				triggerClientEvent(player, "setSign",root, i , checkpoint.position, getVehicleType(checkpoint.vehicle), getVehicleNameFromModel(checkpoint.vehicle), checkpoint.type)
 			end
 
 		end
@@ -33,7 +33,7 @@ function onPlayerJoin()
 	
 	for i, checkpoint in ipairs(checkpoints) do
 		if checkpoint.vehicle then
-			triggerClientEvent(source, "setSign", root, i, checkpoint.position, getVehicleType(checkpoint.vehicle), getVehicleNameFromModel(checkpoint.vehicle))
+			triggerClientEvent(source, "setSign", root, i, checkpoint.position, getVehicleType(checkpoint.vehicle), getVehicleNameFromModel(checkpoint.vehicle), checkpoint.type)
 		end
 	end
 end
