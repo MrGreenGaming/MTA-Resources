@@ -46,3 +46,16 @@ function onPlayerReachCheckpoint(cp)
 
 end
 addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)
+
+function onPlayerSpawn()
+    setTimer(function(player)
+        local cp = getElementData(player, "race.checkpoint")
+        if cp then
+            for i, checkpoint in ipairs(checkpoints) do
+                triggerClientEvent(player, "hideSign", root, i)
+            end
+            triggerClientEvent(player, "showSign", root, cp)
+        end
+    end, 100, 1, source)
+end
+addEventHandler("onPlayerSpawn", root, onPlayerSpawn)
