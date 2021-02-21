@@ -10,6 +10,11 @@ function clearThirdCheckpoint()
 end
 addEvent("clearThirdCheckpoint", true)
 addEventHandler("clearThirdCheckpoint", root, clearThirdCheckpoint)
+addCommandHandler("s", clearThirdCheckpoint)
+addCommandHandler("spec", clearThirdCheckpoint)
+addCommandHandler("spectate", clearThirdCheckpoint)
+addCommandHandler("Toggle spectator", clearThirdCheckpoint)
+addCommandHandler("afk", clearThirdCheckpoint)
 
 function setThirdCheckpoint(checkpoint, isFinish)
 	if marker then destroyElement(marker) end
@@ -38,4 +43,3 @@ function setThirdCheckpoint(checkpoint, isFinish)
 end
 addEvent("setThirdCheckpoint", true)
 addEventHandler("setThirdCheckpoint", root, setThirdCheckpoint)
-
