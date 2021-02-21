@@ -33,7 +33,7 @@ function setThirdCheckpoint(checkpoint, isFinish, facing)
 
 	marker = createMarker(checkpoint.position[1], checkpoint.position[2], checkpoint.position[3], checkpoint.type or "checkpoint", checkpoint.size, checkpoint.color[1], checkpoint.color[2], checkpoint.color[3] , 255)
 	
-	if facing then
+	if facing and checkpoint.type == "ring" then
 		setMarkerTarget(marker, facing[1], facing[2], facing[3])
 	end
 
