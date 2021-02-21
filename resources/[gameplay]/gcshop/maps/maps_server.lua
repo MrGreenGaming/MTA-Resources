@@ -1,9 +1,9 @@
 local prices = {}
-prices["race"] = 700
-prices["rtf"] = 550
-prices["ctf"] = 550
-prices["nts"] = 700
-prices["shooter"] = 850
+prices["race"] = 1100
+prices["rtf"] = 850
+prices["ctf"] = 850
+prices["nts"] = 1100
+prices["shooter"] = 1300
 prices["deadline"] = 350
 
 
