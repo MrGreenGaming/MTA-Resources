@@ -1,59 +1,49 @@
-local modes = {}
-modes["Sprint"] = true
-modes["Never the same"] = true
+local marker
+local blip
 
-local checkpoints
+function clearThirdCheckpoint()
+	if marker then destroyElement(marker) end
+	marker = nil
+	
+	if blip then destroyElement(blip) end
+	blip = nil
+end
+addEvent("clearThirdCheckpoint", true)
+addEventHandler("clearThirdCheckpoint", root, clearThirdCheckpoint)
+addCommandHandler("s", clearThirdCheckpoint)
+addCommandHandler("spec", clearThirdCheckpoint)
+addCommandHandler("spectate", clearThirdCheckpoint)
+addCommandHandler("Toggle spectator", clearThirdCheckpoint)
+addCommandHandler("afk", clearThirdCheckpoint)
 
-function onMapStart(mapInfo, mapOptions, gameOptions)
-	for i, player in ipairs(getElementsByType("player")) do
-		triggerClientEvent(player, "clearThirdCheckpoint", root)
+function setThirdCheckpoint(checkpoint, isFinish, facing)
+	if marker then destroyElement(marker) end
+	if blip then destroyElement(blip) end
+
+	-- checkpoint object:
+	-- { position={x, y, z}, size=size, color={r, g, b}, type=type, vehicle=vehicleID, paintjob=paintjob, upgrades={...} } 
+	
+	-- For some reason older maps have a color boolean, changing it to default blue
+	if checkpoint.color == false then
+		checkpoint.color = {}
+		checkpoint.color[1] = 0;
+		checkpoint.color[2] = 0;
+		checkpoint.color[3] = 255;
 	end
 
-	if not modes[exports.race:getRaceMode()] then return false end
-
-	checkpoints = exports.race:getCheckPoints()
-
-	if checkpoints[3] then
-		for i, player in ipairs(getElementsByType("player")) do
-			triggerClientEvent(player, "setThirdCheckpoint", root, checkpoints[3])
-		end
+	marker = createMarker(checkpoint.position[1], checkpoint.position[2], checkpoint.position[3], checkpoint.type or "checkpoint", checkpoint.size, checkpoint.color[1], checkpoint.color[2], checkpoint.color[3] , 255)
+	
+	if facing then
+		setMarkerTarget(marker, facing[1], facing[2], facing[3])
 	end
 
+	local icon;
+	if (isFinish) then
+		-- Finish icon
+		icon = 53
+	else icon = 0 end
+
+	blip = createBlip(checkpoint.position[1], checkpoint.position[2], checkpoint.position[3], icon, 1, checkpoint.color[1], checkpoint.color[2], checkpoint.color[3])
 end
-addEventHandler("onMapStarting", getRootElement(), onMapStart)
-
-function onPlayerJoin()
-	if not modes[exports.race:getRaceMode()] then return false end
-
-	if checkpoints[3] then
-		triggerClientEvent(source, "setThirdCheckpoint", root, checkpoints[3])
-	end
-end
-addEventHandler("onPlayerJoin", root, onPlayerJoin)
-
-function onPlayerReachCheckpoint(cp)
-	if not modes[exports.race:getRaceMode()] then return false end
-
-	if checkpoints[cp + 3] then
-		triggerClientEvent(source, "setThirdCheckpoint", root, checkpoints[cp + 3], not checkpoints[cp + 4])
-	else
-		triggerClientEvent(source, "clearThirdCheckpoint", root)
-	end
-end
-addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)
-
-function onPlayerSpawn()
-	if not modes[exports.race:getRaceMode()] then return false end
-	setTimer(function(player)
-		local cpId = getElementData(player, "race.checkpoint")
-
-		if not cpId then return false end
-		
-		if checkpoints[cpId + 2] then
-			triggerClientEvent(player, "setThirdCheckpoint", root, checkpoints[cpId + 2], not checkpoints[cpId + 3])
-		else
-			triggerClientEvent(player, "clearThirdCheckpoint", root)
-		end
-	end, 100, 1, source)
-end
-addEventHandler("onPlayerSpawn", root, onPlayerSpawn)
+addEvent("setThirdCheckpoint", true)
+addEventHandler("setThirdCheckpoint", root, setThirdCheckpoint)
