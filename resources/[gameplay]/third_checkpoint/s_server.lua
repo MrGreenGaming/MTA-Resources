@@ -42,19 +42,16 @@ function onPlayerReachCheckpoint(cp)
 end
 addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)
 
-function onPlayerWasted()
+function onPlayerSpawn()
 	if not modes[exports.race:getRaceMode()] then return false end
-	-- cpId is the checkpoint number the player is heading to when dying
-	-- The player will be thrown 1 cp back (except when cpId is 1)
-	-- So the third checkpoint is cpId + 1
-	local cpId = getElementData(source, "race.checkpoint")
-
-	if cpId == 1 then return end
-
-	if checkpoints[cpId + 1] then
-		triggerClientEvent(source, "setThirdCheckpoint", root, checkpoints[cpId + 1])
-	else 
-		triggerClientEvent(source, "clearThirdCheckpoint", root)
-	end
+	setTimer(function(player)
+		local cpId = getElementData(player, "race.checkpoint")
+            
+		if checkpoints[cpId + 2] then
+			triggerClientEvent(player, "setThirdCheckpoint", root, checkpoints[cpId + 2], not checkpoints[cpId + 3])
+		else
+			triggerClientEvent(player, "clearThirdCheckpoint", root)
+		end
+	end, 100, 1, source)
 end
-addEventHandler("onPlayerWasted", root, onPlayerWasted)
+addEventHandler("onPlayerSpawn", root, onPlayerSpawn)
