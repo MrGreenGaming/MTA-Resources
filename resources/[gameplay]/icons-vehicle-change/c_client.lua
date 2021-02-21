@@ -24,8 +24,8 @@ function renderIcons()
 				if (signs[cpId].cpType == false or signs[cpId].cpType == "checkpoint") then
 					-- Checkpoint is a default checkpoint in which the height doesn't matter. The icon is relative to the player's height
 					local playerX, playerY, playerZ = getElementPosition(localPlayer)
-					screenX, screenY = getScreenFromWorldPosition(signs[cpId].x, signs[cpId].y, playerZ + 3)
-					dxDrawTextOnElement(signs[cpId].x, signs[cpId].y, playerZ, signs[cpId].name)
+					screenX, screenY = getScreenFromWorldPosition(signs[cpId].x, signs[cpId].y, playerZ + 1)
+					dxDrawTextOnElement(signs[cpId].x, signs[cpId].y, playerZ - 2, signs[cpId].name)
 				else
 					-- This is a checkpoint in which the height does matter. The icon is relative to the checkpoint's position
 					screenX, screenY = getScreenFromWorldPosition(signs[cpId].x, signs[cpId].y, signs[cpId].z+3)
