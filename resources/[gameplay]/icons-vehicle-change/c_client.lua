@@ -12,6 +12,8 @@ local guiX = screenSizeX * 0.1
 local guiY = screenSizeX * 0.1
 local globalScale = 5
 local globalAlpha = .50
+local checkpoints
+local playerZCoord
 
 function renderIcons()
 	for i, cpId in ipairs(cpIds) do
@@ -24,6 +26,9 @@ function renderIcons()
 				if (signs[cpId].cpType == false or signs[cpId].cpType == "checkpoint") then
 					-- Checkpoint is a default checkpoint in which the height doesn't matter. The icon is relative to the player's height
 					local playerX, playerY, playerZ = getElementPosition(localPlayer)
+                    if playerZCoord then
+						playerZ = playerZCoord
+					end
 					screenX, screenY = getScreenFromWorldPosition(signs[cpId].x, signs[cpId].y, playerZ + 1)
 					dxDrawTextOnElement(signs[cpId].x, signs[cpId].y, playerZ - 2, signs[cpId].name)
 				else
@@ -125,3 +130,58 @@ end
 function disableCPNextVehicleInfoUI()
 	enabled = false
 end
+
+addEvent("onClientMapStarting", true)
+function onClientMapStarting()
+	checkpoints = exports.race:getCheckPoints()
+	playerZCoord = nil
+end
+addEventHandler("onClientMapStarting", root, onClientMapStarting)
+
+addEvent("showVehChangeIcon", true)
+function showVehChangeIcon()
+	setTimer(function()
+		local player = false
+		local target = getCameraTarget(localPlayer)
+		if target and getElementType(target) == "vehicle" then
+			player = getVehicleOccupant(target)
+		elseif target and getElementType(target) == "player" then
+			player = target
+		end
+		if player and player ~= localPlayer then
+			local cp = getElementData(player, "race.checkpoint")
+			if cp then
+				checkpoints = exports.race:getCheckPoints()
+				for i, checkpoint in ipairs(checkpoints) do
+					triggerEvent("hideSign", root, i)
+				end
+				local x, y, z = getElementPosition(player)
+				playerZCoord = z
+				triggerEvent("showSign", root, cp)
+			end
+			unbindKey("arrow_l", "down", showVehChangeIcon)
+			unbindKey("arrow_r", "down", showVehChangeIcon)
+			bindKey("arrow_l", "down", showVehChangeIcon)
+			bindKey("arrow_r", "down", showVehChangeIcon)
+		else
+			playerZCoord = nil
+			unbindKey("arrow_l", "down", showVehChangeIcon)
+			unbindKey("arrow_r", "down", showVehChangeIcon)
+		end
+	end, 100, 1)
+end
+addEventHandler("showVehChangeIcon", root, showVehChangeIcon)
+addCommandHandler("s", showVehChangeIcon)
+addCommandHandler("spec", showVehChangeIcon)
+addCommandHandler("spectate", showVehChangeIcon)
+addCommandHandler("Toggle spectator", showVehChangeIcon)
+addCommandHandler("afk", showVehChangeIcon)
+bindKey("enter", "down", showVehChangeIcon)
+
+addEvent("updateIconsPosition", true)
+function updateIconsPosition(zPos)
+	if zPos then
+		playerZCoord = zPos
+	end
+end
+addEventHandler("updateIconsPosition", root, updateIconsPosition)
