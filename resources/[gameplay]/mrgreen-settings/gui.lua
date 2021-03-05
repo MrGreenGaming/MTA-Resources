@@ -272,7 +272,7 @@ local screenW, screenH = guiGetScreenSize()
         customNameTagsCheckBox = guiCreateCheckBox(309, 245, 15, 15, "", false, false, GUIEditor.tab[3])
         customNameTagsLabel = guiCreateLabel(346, 245, 141, 15, "Enable Custom NameTags", false, GUIEditor.tab[3])
         
-        GUIEditor.label["vehicleChange"] = guiCreateLabel(346, 270, 141, 15, "Enable Vehicle Change Icons", false, GUIEditor.tab[3])
+        GUIEditor.label["vehicleChange"] = guiCreateLabel(346, 270, 141, 15, "Enable Vehicle CP Icons", false, GUIEditor.tab[3])
         GUIEditor.checkbox["vehicleChange"] = guiCreateCheckBox(309, 270, 15, 15, "", false, false, GUIEditor.tab[3])
         
         

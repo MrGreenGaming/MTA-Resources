@@ -816,6 +816,7 @@ function raceTimeout()
 		TimerManager.destroyTimersFor("raceend")
 		g_CurrentRaceMode:timeout()
 		g_CurrentRaceMode:endMap()
+        triggerEvent("removeIconsOnTimeUp", root)
 	end
 end
 
