@@ -22,10 +22,10 @@ function renderIcons()
 			local dist = getDistanceBetweenPoints3D(signs[cpId].x, signs[cpId].y, signs[cpId].z, playerx, playery, playerz)
 			if dist < drawDistance and (isLineOfSightClear(signs[cpId].x, signs[cpId].y, signs[cpId].z+3, playerx, playery, playerz, true, false, false, false)) then
 				local screenX, screenY;
-
-				if (signs[cpId].cpType == false or signs[cpId].cpType == "checkpoint") then
+                
+				local playerX, playerY, playerZ = getElementPosition(localPlayer)
+				if ((signs[cpId].cpType == false or signs[cpId].cpType == "checkpoint") and playerZ > signs[cpId].z) then
 					-- Checkpoint is a default checkpoint in which the height doesn't matter. The icon is relative to the player's height
-					local playerX, playerY, playerZ = getElementPosition(localPlayer)
                     if playerZCoord then
 						playerZ = playerZCoord
 					end
@@ -112,13 +112,11 @@ function dxDrawTextOnElement(x, y, z,text,size,height,distance,R,G,B,alpha,font,
 	local distance = distance or drawDistance
 	local height = height or -1
 
-	if (isLineOfSightClear(x, y, z+2, x2, y2, z2, ...)) then
-		local sx, sy = getScreenFromWorldPosition(x, y, z+height)
-		if(sx) and (sy) then
-			local distanceBetweenPoints = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
-			if(distanceBetweenPoints < distance) then
-				dxDrawText(text, sx+2, sy+2, sx, sy, tocolor(R or 255, G or 255, B or 255, alpha or (255 * 0.65)), (size or 1)-(distanceBetweenPoints / distance), font or "pricedown", "center", "center")
-			end
+	local sx, sy = getScreenFromWorldPosition(x, y, z+height)
+	if(sx) and (sy) then
+		local distanceBetweenPoints = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
+		if(distanceBetweenPoints < distance) then
+			dxDrawText(text, sx+2, sy+2, sx, sy, tocolor(R or 255, G or 255, B or 255, alpha or (255 * 0.65)), (size or 1)-(distanceBetweenPoints / distance), font or "pricedown", "center", "center")
 		end
 	end
 end
