@@ -60,7 +60,7 @@ function (player, cmd, ...)
 	-- Prefix like [VIP] or [Dev]
 	for _, v in ipairs(tags) do
 		if v[1] == "VIP" then
-			if exports["mrgreen-vip"]:isPlayerVip(player) then
+			if exports["mrgreen-vip"]:isPlayerVIP(player) then
 				prefixTag = v[2]
 			end
 		elseif isObjectInACLGroup('user.' .. account, aclGetGroup(v[1])) then
