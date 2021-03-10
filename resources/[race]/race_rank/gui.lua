@@ -10,7 +10,8 @@ GUIEditor = {
 
 customFlags = {
 	{ name = "-", value = "" }, 
-	{ name = "Pride", value = "pride" }
+	{ name = "Pride", value = "pride" },
+	{ name = "Trans. pride", value = "trans" }
 }
 
 addEventHandler("onClientResourceStart", resourceRoot,

@@ -280,6 +280,7 @@ flagMap["za"] = {420, 960}
 flagMap["zm"] = {480, 960}
 flagMap["zw"] = {540, 960}
 flagMap["pride"] = {0, 1000}
+flagMap["trans"] = {60, 1000}
 
 local isAdminResourceRunning = getResourceFromName("admin")
 isAdminResourceRunning = isAdminResourceRunning and getResourceState(isAdminResourceRunning) == "running"
