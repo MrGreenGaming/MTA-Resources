@@ -11,7 +11,6 @@ addEvent('playerMessage')
 addEventHandler('playerMessage', root, 
 	function( message, fullMessage, logMessage, teamChat )
 		local sendMsg = true
-		outputDebugString(teamChat)
 		if not gPlayerSpams[ source ] then
 			setElementData(source, "spam", 0)
 			gPlayerSpams[ source ] = true
