@@ -1734,6 +1734,11 @@ function serialunmute(pAdmin, _, serial)
 		outputChatBox('Wrong serial. Syntax: /serialunmute [serial]', pAdmin, 255, 0,0)
 		return
 	end
+
+	local playerToUnmute = getPlayerFromSerial(serial)
+	if playerToUnmute then -- if player online -> unmute local player as well
+		setPlayerMuted( playerToUnmute, false)
+	end
 	
 	removeMuteFromDB(serial)
 	outputChatBox("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x",""), root, 255, 100, 0)

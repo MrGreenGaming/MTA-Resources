@@ -55,6 +55,8 @@
   <!--Exported Functions-->
   <export function="getPlayerCountry"/>
   <export function="aAddSerialUnmuteTimer"/>
+  <export function="serialmute" />
+  <export function="serialunmute" />
 
   <!--Required XML configs kept in /conf/ folder-->
   <config src="conf/interiors.xml" type="client" />

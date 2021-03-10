@@ -238,6 +238,45 @@ function(player,cmd,...)
 end
 )
 
+addCommandHandler('addmute',
+function(player, cmd, ...)
+	if not (hasObjectPermissionTo(player, "function.banPlayer", false)) then
+		return
+	end
+
+	if not (arg[1]) then outputChatBox("State the player's full name (no color codes).", player) return end
+	if not (arg[2]) then outputChatBox("Wrong syntax. Use /addmute [name] [days]", player) return end
+
+	local days = arg[2]
+
+	local mutePlayerName = string.gsub(arg[1], '#%x%x%x%x%x%x', '' )
+	local theInfo = getSerial(mutePlayerName)
+	if theInfo then
+		local theSerial = theInfo.serial
+		exports.admin:serialmute(player, "", theSerial, days)
+	else outputChatBox("No player match. Try again", player)
+	end
+end
+)
+
+addCommandHandler('removemute',
+function(player, cmd, ...)
+	if not (hasObjectPermissionTo(player, "function.banPlayer", false)) then
+		return
+	end
+
+	if not (arg[1]) then outputChatBox("Wrong syntax. use /removemute [name]", player) return end
+
+	local mutePlayerName = string.gsub(arg[1], '#%x%x%x%x%x%x', '' )
+	local theInfo = getSerial(mutePlayerName)
+	if theInfo then
+		local theSerial = theInfo.serial
+		exports.admin:serialunmute(player, "", theSerial)
+	else outputChatBox("No player match. Try again", player)
+	end
+end
+)
+
 chat_is_disabled = false
 playerResponsible = nil
 
