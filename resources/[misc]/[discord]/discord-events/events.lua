@@ -167,7 +167,7 @@ addEventHandler("onGamemodeMapStart", root,
 addEvent("onPlayerFinish")
 addEventHandler("onPlayerFinish", root,
     function (rank, time)
-        if rank > 3 then
+        if rank > 10 then
             return
         end
 
