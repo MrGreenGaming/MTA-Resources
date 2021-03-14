@@ -60,6 +60,8 @@ addEventHandler("onClientRender", root, renderIcons)
 
 function setSigns(index, position, vehType, name, cpType)
 	if vehType == "Monster Truck" then vehType = "MonsterTruck" end
+    
+    if name == "Vortex" then vehType="hovercraft" end
 
 	table.insert(cpIds, index)
 	signs[index] = {}
