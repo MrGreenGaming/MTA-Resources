@@ -17,7 +17,8 @@ local playerZCoord
 
 function renderIcons()
 	for i, cpId in ipairs(cpIds) do
-		if signs[cpId].showSign and signs[cpId].z and enabled then
+       
+        if signs[cpId].showSign and signs[cpId].z and enabled and signs[cpId].guiImage then
 			local playerx, playery, playerz = getCameraMatrix()
 			local dist = getDistanceBetweenPoints3D(signs[cpId].x, signs[cpId].y, signs[cpId].z, playerx, playery, playerz)
 			if dist < drawDistance and (isLineOfSightClear(signs[cpId].x, signs[cpId].y, signs[cpId].z+3, playerx, playery, playerz, true, false, false, false)) then
@@ -52,7 +53,9 @@ function renderIcons()
 				guiSetVisible(signs[cpId].guiImage, false)
 			end
 		else
-			guiSetVisible(signs[cpId].guiImage, false)
+            if signs[cpId].guiImage then
+			    guiSetVisible(signs[cpId].guiImage, false)
+            end
 		end
 	end
 end
@@ -99,7 +102,9 @@ addEventHandler("hideSign", root, hideSign)
 
 function deleteSigns()
 	for i, cpId in ipairs(cpIds) do
-		guiSetVisible(signs[cpId].guiImage, false)
+        if sings[cpId.guiImage] then
+		    guiSetVisible(signs[cpId].guiImage, false)
+        end
 	end
 	signs = {}
 	cpIds = {}
