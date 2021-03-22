@@ -154,6 +154,17 @@ function buildGUI()
     guiMemoSetReadOnly(RulesMemo, true)
     guiMemoSetReadOnly(FaqsMemo, true)
 	languageTabs.PL = RulesFaqsTab
+    
+    -- Russian / Military
+    
+    RulesFaqsTab = guiCreateTab("Русский", TabPanel)
+    
+    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                          ______ Rules ______ \n\n\n  1.  Запрещено использовать читы или любые другие  программы для получения преимущества. \n\n  2. Не оскорбляйте и не провоцируйте игроков или администраторов. \n\n  3. Не блокируйте других игроков. Запрещено избегать других игроков (кэмперить, прятаться) в режимах DD и SH\n\n  4. Флуд и спам в основном чате запрещены. \n\n  5. Реклама других серверов запрещена. \n\n  6. Не убивайте своих тиммейтов в режиме CTF\n\n  7. Использование чужого PaintJob (винила для машины) без его разрешения запрещено и наказуемо.\n\n  8. Намеренная блокировка чужого никнейма (Locked Nicks) запрещена.  \n\n 9. В основной чат можно писать только на английском языке. Используйте /language для выбора языка. Для написания в языковой чат нажмите R.  \ n \ n Нарушение любого из этих правил может привести к бану.\n\n", false, RulesFaqsTab)
+    FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n      ______Часто задаваемые вопросы______  \n \n \n Q: Что такое GreenCoins? \n \n A: GreenCoins - это валюта нашего сообщества, вы можете использовать её на всех наших серверах. \n \n Q: Где взять GreenCoins? \n \n A: Вы выигрываете GreenCoins, просто играя на наших серверах, можете задонатить, чтобы получить GreenCoins взамен. \n \n В: Что я могу купить на этом сервере с помощью GreenCoins? \n \n A: Вы можете купить Перки, Карты, Пользовательские Сигналы, Скины, также вы можете изменить свой автомобиль в нашем Магазине GC - F6 \n \n Если у вас есть другие вопросы, обратитесь к администрации или просто спросите в чате. ", false, RulesFaqsTab)
+    guiMemoSetReadOnly(RulesMemo, true)
+    guiMemoSetReadOnly(FaqsMemo, true)
+    langaugeTabs.RU = RulesFaqsTab
+    
 	-- Spanish / Anthony
 
 	RulesFaqsTab = guiCreateTab("Español", TabPanel)
@@ -448,6 +459,7 @@ local countryLanguages = {
 	['TN'] = 'AR',
 	['AE'] = 'AR',
 	['YE'] = 'AR',
+    ['RU'] = 'RU',
 }
 
 function setPlayerLanguageTab()
