@@ -163,7 +163,7 @@ function buildGUI()
     FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n      ______Часто задаваемые вопросы______  \n \n \n Q: Что такое GreenCoins? \n \n A: GreenCoins - это валюта нашего сообщества, вы можете использовать её на всех наших серверах. \n \n Q: Где взять GreenCoins? \n \n A: Вы выигрываете GreenCoins, просто играя на наших серверах, можете задонатить, чтобы получить GreenCoins взамен. \n \n В: Что я могу купить на этом сервере с помощью GreenCoins? \n \n A: Вы можете купить Перки, Карты, Пользовательские Сигналы, Скины, также вы можете изменить свой автомобиль в нашем Магазине GC - F6 \n \n Если у вас есть другие вопросы, обратитесь к администрации или просто спросите в чате. ", false, RulesFaqsTab)
     guiMemoSetReadOnly(RulesMemo, true)
     guiMemoSetReadOnly(FaqsMemo, true)
-    langaugeTabs.RU = RulesFaqsTab
+    languageTabs.RU = RulesFaqsTab
     
 	-- Spanish / Anthony
 
