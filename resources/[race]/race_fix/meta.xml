@@ -5,6 +5,7 @@
 	<script src='newCamera.lua' type='client' />
 	<script src="onClientVehicleExplode.lua" type="client" />
 	<script src="onVehicleExplode.lua" type="server" />
+    <script src="bridgefix.lua" type="client" />
 	
 	<!-- <file src="fixedvehicles/admiral.dff" />
 	<file src="fixedvehicles/ambulan.dff" />
