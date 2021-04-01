@@ -256,10 +256,10 @@ local function draw()
 	dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight, tocolor(0, 0, 0, 200), isPostGUI,false)
 
 	--Title
-	dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, title_height, tocolor(11, 138, 25, 255), isPostGUI,false)
+	dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, title_height, tocolor(25, 81, 61, 255), isPostGUI,false)
 
 	--Title glass (?)
-	dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, 17.5, tocolor(11, 180, 25, 255), isPostGUI,false)
+	dxDrawRectangle(backgroundX, backgroundY, backgroundWidth, 17.5, tocolor(30, 86, 66, 255), isPostGUI,false)
 
 	--Title
 	dxDrawText("Vote" .. titleSuffix, backgroundX, backgroundY, backgroundX + backgroundWidth, backgroundY+title_height, tocolor(255, 255, 255, 255), 1, bigFont, "center", "center", false, false, isPostGUI, false, false)
