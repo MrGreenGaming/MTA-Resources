@@ -40,6 +40,8 @@ end
 addEventHandler("onPlayerJoin", root, onPlayerJoin)
 
 function onPlayerReachCheckpoint(cp)
+    if not modes[exports.race:getRaceMode()] then return false end
+    
 	triggerClientEvent(source, "hideSign", root, cp)
 	triggerClientEvent(source, "showSign", root, cp + 1)
 	for k, v in ipairs(getElementsByType("player")) do
@@ -69,6 +71,8 @@ addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)
 
 addEvent("onPlayerFinish", true)
 function onPlayerFinish()
+    if not modes[exports.race:getRaceMode()] then return false end
+    
 	for i, checkpoint in ipairs(checkpoints) do
 		triggerClientEvent(source, "hideSign", root, i)
 	end
