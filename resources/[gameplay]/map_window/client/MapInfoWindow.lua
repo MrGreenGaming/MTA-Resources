@@ -175,9 +175,9 @@ function MapInfoWindow.render()
     ------ HEADER ------
     --------------------
     -- Header Dark background
-    dxDrawRectangle(x, y, dims.window.width, dims.darkHeader.height, tocolor(12, 180, 24, 255 * alphaFade))
+    dxDrawRectangle(x, y, dims.window.width, dims.darkHeader.height, tocolor(25, 81, 61, 255 * alphaFade))
     -- Header Light background
-    dxDrawRectangle(x, y, dims.window.width, dims.lightHeader.height, tocolor(78, 200, 87, 255 * alphaFade))
+    dxDrawRectangle(x, y, dims.window.width, dims.lightHeader.height, tocolor(30, 86, 66, 255 * alphaFade))
 
     ----------------------
     ------ MAP NAME ------
@@ -195,7 +195,7 @@ function MapInfoWindow.render()
     -----------------
     -----RATINGS-----
     -----------------
-    local likeColor = MapData.currentMapUserRate == 1 and tocolor(12, 180, 24, 255 * alphaFade) or tocolor(255,255,255, 255 * alphaFade)
+    local likeColor = MapData.currentMapUserRate == 1 and tocolor(25, 81, 61, 255 * alphaFade) or tocolor(255,255,255, 255 * alphaFade)
     local dislikeColor = MapData.currentMapUserRate == 0 and tocolor(255,0,0, 255 * alphaFade) or tocolor(255,255,255, 255 * alphaFade)
     -- Like
     dxDrawImage(x + dims.likes.iconX, y + dims.likes.iconY, dims.icons.height, dims.icons.width, "/icons/thumbs-up.png", 0, 0, 0, likeColor)
@@ -211,14 +211,14 @@ function MapInfoWindow.render()
     -- Rating bar fill
     local likePercentage = dims.ratingsBar.width / 100 * (( MapData.currentMapRatings.likes + 1 ) / (MapData.currentMapRatings.likes + MapData.currentMapRatings.dislikes) * 100)
     likePercentage = likePercentage <= 0 and 0 or (likePercentage >= dims.ratingsBar.width and dims.ratingsBar.width or likePercentage)
-    dxDrawRectangle(x + dims.ratingsBar.x, y + dims.ratingsBar.y, likePercentage , 1, tocolor(12, 180, 24, 255 * alphaFade), false, true)
+    dxDrawRectangle(x + dims.ratingsBar.x, y + dims.ratingsBar.y, likePercentage , 1, tocolor(90, 189, 117, 255 * alphaFade), false, true)
 
     ---------------
     -- PLAY INFO --
     ---------------
     -- Rounds
     local roundsColor = {
-        tocolor(12, 180, 24, 255 * alphaFade),
+        tocolor(90, 189, 117, 255 * alphaFade),
         tocolor(255, 246, 69, 255 * alphaFade),
         tocolor(255, 0, 0, 255 * alphaFade)
     }
@@ -238,7 +238,7 @@ function MapInfoWindow.render()
     -- AUTHOR --
     ------------
     dxDrawImage(x + dims.author.iconX, y + dims.author.iconY, dims.icons.width, dims.icons.height, "/icons/user.png")
-    dxDrawText(MapData.currentMapInfo.author, x + dims.author.startX, y + dims.author.startY, x + dims.author.endX, y + dims.author.endY, tocolor(12, 180, 24, 255 * alphaFade), dims.author.fontSize, "default-bold", "left", "center", true, false, false)
+    dxDrawText(MapData.currentMapInfo.author, x + dims.author.startX, y + dims.author.startY, x + dims.author.endX, y + dims.author.endY, tocolor(90, 189, 117, 255 * alphaFade), dims.author.fontSize, "default-bold", "left", "center", true, false, false)
 
     ---------------
     --DESCRIPTION--
