@@ -93,14 +93,16 @@ local languageXML = xmlLoadFile("/settings/language.xml")
 if not languageXML then
 	languageXML = xmlCreateFile("/settings/language.xml", "settings")
 	xmlSaveFile(languageXML)
+    OpenWindow()
 else
 	local theChild = xmlFindChild(languageXML, "language", 0)
 	if theChild then
 		local language = xmlNodeGetValue(theChild)
-
 		if isLanguageInTable(language) then
 			setElementData(localPlayer, "Language", language, true)
 			triggerServerEvent ( "setNewLanguageBindKey",resourceRoot )
+        else
+            OpenWindow()
 		end
 	end
 end

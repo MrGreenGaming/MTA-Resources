@@ -130,7 +130,7 @@ function buildGUI()
 	guiMemoSetReadOnly(LogBindsMemoText, true)
 
 	RulesFaqsTab = guiCreateTab("English", TabPanel)
-    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ Rules _____\n\n\n  1. Do not cheat, hack or exploit to get any advantage\n\n  2. Do not insult or provoke any players or admins\n\n  3. Do not block other players or camp in DD and SH\n\n  4. Do not flood or spam the main chat\n\n  5. Do not advertise other servers\n\n  6. Do not TeamKill in CTF\n\n  7.Using someone's else PaintJob without his permission isn't allowed and punishable\n\n  8. Do not deliberately lock other people's name\n\n  Breaking any of these rules may result in ban.\n\n", false, RulesFaqsTab)
+    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ Rules _____\n\n\n  1. Do not cheat, hack or exploit to get any advantage\n\n  2. Do not insult or provoke any players or admins\n\n  3. Do not block other players or camp in DD and SH\n\n  4. Do not flood or spam the main chat\n\n  5. Do not advertise other servers\n\n  6. Do not TeamKill in CTF\n\n  7. Using someone's else PaintJob without their permission isn't allowed and punishable\n\n  8. Do not deliberately lock other people's name\n\n 9. The Main Chat is English only. Use /Language & R to use other languages \n\n Breaking any of these rules may result in ban.\n\n", false, RulesFaqsTab)
     FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ Frequently Asked Questions _____\n\n\n  Q: What are GreenCoins?\n  \n  A: GreenCoins are our community currency, you can         use them on all of our servers.\n\n  Q: How do win GreenCoins?\n\n  A: You win GreenCoins by simply playing on our servers     you can also donate to get GreenCoins in return.\n\n  Q: What can I buy on this server with GreenCoins?\n\n  A: You can buy Perks, Maps, Custom Horns, Skins             and you can modify your vehicle on our GC Shop - F6\n\n If you have any other questions refer them to our staff", false, RulesFaqsTab)
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
@@ -149,17 +149,28 @@ function buildGUI()
 
 	RulesFaqsTab = guiCreateTab("Polski", TabPanel)
 
-    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ Regulamin _____\n\n\n  1. Nie używaj cheatów, hacków ani nie wykorzystuj błędów gry w celu zdobycia przewagi.\n\n  2. Nie wyzywaj ani nie prowokuj innych graczy albo adminów\n\n  3. Nie blokuj innych graczy ani nie camp na SH i DD\n\n  4. Nie spam na czacie\n\n  5. Nie reklamuj innych serwerów\n\n  6. Nie zabijaj swojej drużyny na CTF\n\n  7. Nie blokuj celowo nicków innych graczy\n\n  Złamanie jakiejkolwiek z tych zasad może być ukarane banem.\n\n", false, RulesFaqsTab)
+    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ Regulamin _____\n\n\n  1. Nie używaj cheatów, hacków ani nie wykorzystuj błędów gry w celu zdobycia przewagi.\n\n  2. Nie wyzywaj ani nie prowokuj innych graczy albo adminów\n\n  3. Nie blokuj innych graczy ani nie camp na SH i DD\n\n  4. Nie spam na czacie\n\n  5. Nie reklamuj innych serwerów\n\n  6. Nie zabijaj swojej drużyny na CTF\n\n 7. Używanie malowania innej osoby bez jej zgody jest niedozwolone i karalne\n\n 8. Nie blokuj celowo nicków innych graczy\n\n  9. Czat główny jest dostępny tylko w języku angielskim. Użyj /Language & R, aby używać innych języków\n\n Złamanie jakiejkolwiek z tych zasad może być ukarane banem.\n\n", false, RulesFaqsTab)
     FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ Najczęściej Zadawane Pytania _____\n\n\n  P: Co to są GreenCoinsy?\n  \n  O: GreenCoinsy są naszą walutą, możesz ich używać na każdym z naszych serwerów.\n\n  P: Jak mogę zdobyć GreenCoinsy?\n\n  O: GreenCoinsy zdobywasz poprostu grając na naszych serwerach,    możesz także wpłacić dotacje aby dostać w zamian GreenCoinsy.\n\n  P: Co mogę kupić za GreenCoinsy?\n\n  O: Możesz kupic Perki, Mapy, Niestandardowe klaksony, Skiny             a także modyfikowac pojazdy w naszym Sklepie GC - F6\n\n Jeśli masz jakiekolwiek dodatkowe pytania, kieruj je do adminstracji albo moderatorów", false, RulesFaqsTab)
     guiMemoSetReadOnly(RulesMemo, true)
     guiMemoSetReadOnly(FaqsMemo, true)
 	languageTabs.PL = RulesFaqsTab
+    
+    -- Russian / Military
+    
+    RulesFaqsTab = guiCreateTab("Русский", TabPanel)
+    
+    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                          ______ Rules ______ \n\n\n  1.  Запрещено использовать читы или любые другие  программы для получения преимущества. \n\n  2. Не оскорбляйте и не провоцируйте игроков или администраторов. \n\n  3. Не блокируйте других игроков. Запрещено избегать других игроков (кэмперить, прятаться) в режимах DD и SH\n\n  4. Флуд и спам в основном чате запрещены. \n\n  5. Реклама других серверов запрещена. \n\n  6. Не убивайте своих тиммейтов в режиме CTF\n\n  7. Использование чужого PaintJob (винила для машины) без его разрешения запрещено и наказуемо.\n\n  8. Намеренная блокировка чужого никнейма (Locked Nicks) запрещена.  \n\n 9. В основной чат можно писать только на английском языке. Используйте /language для выбора языка. Для написания в языковой чат нажмите R.  \ n \ n Нарушение любого из этих правил может привести к бану.\n\n", false, RulesFaqsTab)
+    FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n      ______Часто задаваемые вопросы______  \n \n \n Q: Что такое GreenCoins? \n \n A: GreenCoins - это валюта нашего сообщества, вы можете использовать её на всех наших серверах. \n \n Q: Где взять GreenCoins? \n \n A: Вы выигрываете GreenCoins, просто играя на наших серверах, можете задонатить, чтобы получить GreenCoins взамен. \n \n В: Что я могу купить на этом сервере с помощью GreenCoins? \n \n A: Вы можете купить Перки, Карты, Пользовательские Сигналы, Скины, также вы можете изменить свой автомобиль в нашем Магазине GC - F6 \n \n Если у вас есть другие вопросы, обратитесь к администрации или просто спросите в чате. ", false, RulesFaqsTab)
+    guiMemoSetReadOnly(RulesMemo, true)
+    guiMemoSetReadOnly(FaqsMemo, true)
+    languageTabs.RU = RulesFaqsTab
+    
 	-- Spanish / Anthony
 
 	RulesFaqsTab = guiCreateTab("Español", TabPanel)
 	
 
-    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         __ Reglas __\n\n\n  1. No hacer trampas, hackear o abusar de bugs para obtener ventajas.\n\n  2. No insultar o provocar a ningun admin y/o jugador.\n\n 3. No bloquear a otros jugadores (NTS) y no campear (DD y SH).\n\n  4. No hacer flood ni spam en el chat principal.\n\n 5. No anunciar cualquier contenido de otros servidores.\n\n 6. No matar compañeros de equipo en CTF.\n\n  7. No bloquear el nombre de otros jugadores\n\n Romper cualquiera de estas reglas puede resultar en un ban.\n\n", false, RulesFaqsTab)
+    RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         __ Reglas __\n\n\n  1. No hacer trampas, hackear o abusar de bugs para obtener ventajas.\n\n  2. No insultar o provocar a ningun admin y/o jugador.\n\n 3. No bloquear a otros jugadores (NTS) y no campear (DD y SH).\n\n  4. No hacer flood ni spam en el chat principal.\n\n 5. No anunciar cualquier contenido de otros servidores.\n\n 6. No matar compañeros de equipo en CTF.\n\n 7.Usar el PaintJob de otra persona sin su permiso no está permitido y es punible\n\n 8. No bloquear el nombre de otros jugadores\n\n 9. El chat principal es solo en inglés. Use /Language & R para usar otros idiomas\n\nRomper cualquiera de estas reglas puede resultar en un ban.\n\n", false, RulesFaqsTab)
     FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          __ Preguntas frecuentes: __\n\n\n  Q: ¿Que son los Greencoins?\n \n R: Los Greencoins son la moneda de la comunidad MrGreen, puedes hacer uso de estos en todos nuestros servidores.\n\n  Q: ¿Como puedo obtener Greencoins?\n\n R: Fácil, puedes conseguirlos jugando en nuestros servidores. Además puedes hacer donaciones monetarias y recibir Greencoins a cambio.\n\n  Q: ¿Que puedo comprar en este servidor con Greencoins?\n\n R: Puedes comprar Perks, Mapas, Silbatos únicos (Horns) y skins , además de poder modificar tus coches en nuestra tienda GC (F6)\n\n ¿Dudas?, Puedes preguntarle a cualquier miembro del staff.", false, RulesFaqsTab)
     guiMemoSetReadOnly(RulesMemo, true)
     guiMemoSetReadOnly(FaqsMemo, true)
@@ -176,7 +187,7 @@ function buildGUI()
 
 	RulesFaqsTab = guiCreateTab("Português BR", TabPanel)
 
-	RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         __ Regras __\n\n\n  1. Não tente enganar, hackear ou abusar de bugs para obter benefícios.\n\n  2. Não insultar ou provocar os Administradores e/ou Jogadores.\n\n 3. Não bloqueie outros jogadores (NTS) e não campere (DD e SH).\n\n  4. Sem flood ou spam no bate-papo principal.\n\n 5. Não anuncie outros servidores/IPs.\n\n 6. Não mate companheiros de equipe no CTF.\n\n  7. Não bloqueie nomes de outros jogadores\n\n Quebrar qualquer uma dessas regras pode resultar em uma punição ou Banimento.\n\n", false, RulesFaqsTab)
+	RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         __ Regras __\n\n\n  1. Não tente enganar, hackear ou abusar de bugs para obter benefícios.\n\n  2. Não insultar ou provocar os Administradores e/ou Jogadores.\n\n 3. Não bloqueie outros jogadores (NTS) e não campere (DD e SH).\n\n  4. Sem flood ou spam no bate-papo principal.\n\n 5. Não anuncie outros servidores/IPs.\n\n 6. Não mate companheiros de equipe no CTF.\n\n 7. Usar o PaintJob de outra pessoa sem a permissão dela não é permitido e passível de punição \n\n  8. Não bloqueie nomes de outros jogadores\n\n9. O chat principal é apenas em inglês. Use /Language e R para usar outros idiomas \n\n Quebrar qualquer uma dessas regras pode resultar em uma punição ou Banimento.\n\n", false, RulesFaqsTab)
 	FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          __ Perguntas Frequentes __\n\n\n  Q: O que são os Greencoins?\n \n A: Os Greencoins são a moeda da Comunidade MrGreen, você pode fazer uso deslas em todos os nossos servidores.\n\n  Q: Como posso obter Greencoins?\n\n A: Fácil, você pode obtê-los jogando em nossos servidores. Você também pode fazer doações em dinheiro e receber Greencoins em troca.\n\n  Q: O que posso comprar neste servidor com Greencoins?\n\n A: Você pode comprar Perks, Mapas, Assobios personalizados (Horns) e Skins, e também poderá personalizar seus carros em nossa loja GC (F6)\n\n Duvidas?, Você pode pedir auxilio a qualquer membro da equipe (Staff).", false, RulesFaqsTab)
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
@@ -184,13 +195,13 @@ function buildGUI()
 	
 	-- Arabic / Haxardous
 
-	RulesFaqsTab = guiCreateTab("العربية", TabPanel)
+-- 	RulesFaqsTab = guiCreateTab("العربية", TabPanel)
 
-	RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ القوانين _____\n\n\n  1. لا تغش او تستخدم اي اداة تمنحك الافضلية عن الاخرين\n\n  2. يمنع السب او الشتم او التعرض للاعبين او الاداريين\n\n  3. لا تعيق طريق اللاعبين او تعيق اللاعبين وقت اللعب\n\n  4. يمنع منعا باتا السبام واعاقة الشات العام\n\n  5. يمنع النشر او الترويج للسيرفرات الاخرى\n\n  6. لا تقوم باعاقة اعضاء فريقك في كابتشر ذا فلاج\n\n  7. لا تحاول استخدام اسماء الاخرين وتغلقها لصالحك\n\n  كسر اياً من القوانين قد يعرضك للحظر.\n\n", false, RulesFaqsTab)
-  	FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ الاسئلة الشاعة _____\n\n\n  س: ماهو الجرين كوين؟?\n  \n  ج: الجرين كوين هي العملة التي تستخدم هنا, تستعمل في جميع سيرفراتنا.\n\n  س: كيف اربع الجرين كوينز؟\n\n  ج: تستطيع ان تربع الجرين كوينز فقط عن طريق اللعب داخل سيرفراتنا بكل سهولة.\n\n  س: ماذا استطيع ان اشتري بأستخادم الجرين كوينز؟\n\n  ج: تستطيع ان تشتري بعض الخواص, المابات, الابواق, الشخصيات و ايضاً تستطيع ان تضيف تعديلات على سياراتك من خلال  متجر الجرين كوين.\n\n اذ هناك اي اسئلة اخرى يرجى التواصل مع الفريق الاداري.", false, RulesFaqsTab)
-	guiMemoSetReadOnly(RulesMemo, true)
-	guiMemoSetReadOnly(FaqsMemo, true)
-	languageTabs.AR = RulesFaqsTab
+-- 	RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ القوانين _____\n\n\n  1. لا تغش او تستخدم اي اداة تمنحك الافضلية عن الاخرين\n\n  2. يمنع السب او الشتم او التعرض للاعبين او الاداريين\n\n  3. لا تعيق طريق اللاعبين او تعيق اللاعبين وقت اللعب\n\n  4. يمنع منعا باتا السبام واعاقة الشات العام\n\n  5. يمنع النشر او الترويج للسيرفرات الاخرى\n\n  6. لا تقوم باعاقة اعضاء فريقك في كابتشر ذا فلاج\n\n  ٧. إستخدام "سكن" الآخرين بدون إذن منهم ممنوع منعاً باتاً وسيتم فرض عقوبة. \n\n ٨. يمنع منعاً باتاً إستخدام أو اقفال أسماء الأخرين. \n\n ٩. يرجى إستخدام اللغة الإنجليزية فقط في الشات العام، اذ اردت التحدث بلغتك فقم بإستخدام آمر language/ ثم قم بإستخدام زر R \n\n  كسر اياً من القوانين قد يعرضك للحظر.\n\n", false, RulesFaqsTab)
+--   	FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ الاسئلة الشاعة _____\n\n\n  س: ماهو الجرين كوين؟?\n  \n  ج: الجرين كوين هي العملة التي تستخدم هنا, تستعمل في جميع سيرفراتنا.\n\n  س: كيف اربع الجرين كوينز؟\n\n  ج: تستطيع ان تربع الجرين كوينز فقط عن طريق اللعب داخل سيرفراتنا بكل سهولة.\n\n  س: ماذا استطيع ان اشتري بأستخادم الجرين كوينز؟\n\n  ج: تستطيع ان تشتري بعض الخواص, المابات, الابواق, الشخصيات و ايضاً تستطيع ان تضيف تعديلات على سياراتك من خلال  متجر الجرين كوين.\n\n اذ هناك اي اسئلة اخرى يرجى التواصل مع الفريق الاداري.", false, RulesFaqsTab)
+-- 	guiMemoSetReadOnly(RulesMemo, true)
+-- 	guiMemoSetReadOnly(FaqsMemo, true)
+-- 	languageTabs.AR = RulesFaqsTab
 
 	-- close button 
 
@@ -448,6 +459,7 @@ local countryLanguages = {
 	['TN'] = 'AR',
 	['AE'] = 'AR',
 	['YE'] = 'AR',
+    ['RU'] = 'RU',
 }
 
 function setPlayerLanguageTab()
