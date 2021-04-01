@@ -7,6 +7,9 @@
     <include resource="customblips" />
     <include resource="custom_coronas" />
     <include resource="stats" />
+    <include resource="language-chat"/>
+    <include resource="third_checkpoint"/>
+    <include resource="icons-vehicle-change"/>
 
 
     <script src="_common.lua" type="server" />
