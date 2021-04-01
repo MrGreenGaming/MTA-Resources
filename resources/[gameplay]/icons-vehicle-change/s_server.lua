@@ -93,6 +93,7 @@ end
 addEventHandler("removeIconsOnTimeUp", root, onTimeIsUp)
 
 function onPlayerSpawn()
+    if not modes[exports.race:getRaceMode()] then return false end
     setTimer(function(player)
         local cp = getElementData(player, "race.checkpoint")
         if cp then
