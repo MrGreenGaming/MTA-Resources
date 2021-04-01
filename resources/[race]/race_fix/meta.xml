@@ -99,5 +99,9 @@
 	<!-- <info name="object_light_fix" version="0.0.1" author="Ren712" type="script" /> -->
 	<script src="c_light_disable.lua" type="client" />
 	<file src="light_disable.fx" type="client" />
+    
+    <!-- <info author="FloW" name="Bridge Fix" description="http://clan-mgc.com/" version="1.0.0" type="misc"/> -->
+    <script src="bridgefix.lua" type="client" />
+    <file src="countrye_3.col" />
 
 </meta>
