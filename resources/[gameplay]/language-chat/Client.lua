@@ -53,7 +53,7 @@ local Group = guiGridListGetItemText(GridlistLanguage,row,1 )
 	if source == setNewLanguage then
 		if ( row and col and row ~= -1 and col ~= -1 ) then
 			setElementData(localPlayer,"Language",Group,true)
-			outputChatBox("Your new Language chat is "..getElementData(localPlayer,"Language").."",0,255,0)
+			outputChatBox("Your new Language chat is "..getElementData(localPlayer,"Language")..". Press R to talk in Language Chat",0,255,0)
 			triggerServerEvent ( "setNewLanguageBindKey",resourceRoot )
 
 			-- Saves selected language locally in a XML file
