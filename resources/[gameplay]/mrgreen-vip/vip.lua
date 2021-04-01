@@ -105,8 +105,9 @@ addEventHandler('onClientRequestsVip',resourceRoot,
 function loadVipSettings(player)
 	local theID = exports.gc:getPlayerForumID(player)
 	if not theID then return false end
-
+    local x = os.clock()
 	local query = dbQuery(handlerConnect, "SELECT * FROM vip_items WHERE forumid=?", theID)
+    outputDebugString("Loading VIP Settings took: " .. string.format("elapsed time: %.2f\n", os.clock() - x))
 	local result = dbPoll(query,-1)
 	-- local options = fromJSON(result[1].options)
 	
@@ -139,8 +140,9 @@ function saveVipSetting(player, itemId, key, value)
 	local jsonOptions = toJSON( vipPlayers[player]['options'][itemId] )
 
 	-- Save to db
+    local x = os.clock()
 	local saved = dbExec(handlerConnect, "INSERT INTO vip_items (forumid, item, options) VALUES (?,?,?) ON DUPLICATE KEY UPDATE options=?",forumId,itemId,jsonOptions,jsonOptions)
-	
+	outputDebugString("Saving VIP Settings took: " .. string.format("elapsed time: %.2f\n", os.clock() - x))
 	triggerClientEvent( player, 'onServerChangedPlayerVipOptions', resourceRoot,  vipPlayers[player])
 
 	return true
