@@ -102,7 +102,7 @@ addEventHandler("hideSign", root, hideSign)
 
 function deleteSigns()
 	for i, cpId in ipairs(cpIds) do
-        if sings[cpId.guiImage] then
+        if sings[cpId].guiImage then
 		    guiSetVisible(signs[cpId].guiImage, false)
         end
 	end
