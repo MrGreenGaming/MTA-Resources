@@ -88,8 +88,8 @@ function updateTexture()
 	dxSetRenderTarget(target, true)
 	--dxDrawImage(0,0,sizex,sizey,texture,0,0,0,imageColor)
 	dxDrawRectangle(0, 0, 446, 334, tocolor(0, 0, 0, 200), isPostGUI,false) --background
-	dxDrawRectangle(0, 0, 446, 23, tocolor(11, 138, 25, 255), isPostGUI,false) --title
-	dxDrawRectangle(0, 0, 446, 12.5, tocolor(11, 180, 25, 255), isPostGUI,false) --title glass effect
+	dxDrawRectangle(0, 0, 446, 23, tocolor(25, 81, 61, 255), isPostGUI,false) --title
+	dxDrawRectangle(0, 0, 446, 12.5, tocolor(30, 86, 66, 255), isPostGUI,false) --title glass effect
 	dxDrawRectangle(0, 167, 446, 1, tocolor(255, 255, 255, 100), isPostGUI,false) --line1
 	dxDrawRectangle(0, 188, 446, 1, tocolor(255, 255, 255, 100), isPostGUI,false) --line2
 	dxDrawText('Top Times - ' .. string.sub((times.mapname or ''), 1, 35), 0, 0, w*sw, titleHeight*sh, textColor, scaleX, scaleY, font, 'center', 'center', true)
