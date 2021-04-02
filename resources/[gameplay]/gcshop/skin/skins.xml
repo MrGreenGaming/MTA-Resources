@@ -89,7 +89,7 @@
 		<skin id="232" name="Grouchy lady" keywords="plaid,old,fat,dress,ugly,bitch,white,girl,woman"/>
 		<skin id="233" name="Hoop Earrings 2" keywords="belt,white,girl,woman,jewelry"/>
 		<!-- <skin id="234" name="Buzzcut" keywords="army,vet,glasses,shades,old,elderly,white,guy,male"/> -->
-		<skin id="236" name="Happy Old Man" keywords="plaid,checker,mustache,bald,elderly,guy,male"/>
+<!-- 		<skin id="236" name="Happy Old Man" keywords="plaid,checker,mustache,bald,elderly,guy,male"/> -->
 		<!-- <skin id="250" name="Green Tshirt" keywords="white,guy,male,pubestache"/> -->
 		<skin id="262" name="Pajama Man 2 b" keywords="guy,male,pajamas,PJs,sleep,old,bald,cross,crucifix,christ,jesus,religious,religion,stripes,mustache,beard,black"/>
 	</group>	
@@ -127,7 +127,7 @@
 		<skin id="200" name="Hairy Redneck" keywords="overalls,shorts,shirtless,topless,hair,cigarette,smoke,white,guy,male,dirty,manbearpig"/>
 		<skin id="201" name="Trucker Girl" keywords="bra,plaid,hat,baseball,white,girl,woman,redneck"/>
 		<skin id="202" name="Beer Trucker" keywords="fleischberg,alchohol,hat,baseball,andreas,mustache,beard,guy,male,white"/>
-		<skin id="236" name="Happy Old Man" keywords="plaid,checker,mustache,bald,elderly,guy,male"/>
+<!-- 		<skin id="236" name="Happy Old Man" keywords="plaid,checker,mustache,bald,elderly,guy,male"/> -->
 		<skin id="261" name="Southerner" keywords="redneck,goatee,spinach,hat,racist,baseball,beard,white,guy,male,plaid"/>
 	</group>
 	<group name="Duplicates">
