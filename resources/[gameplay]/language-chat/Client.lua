@@ -21,6 +21,7 @@ local LanguageTableList = {
     {"Swedish"},
     {"Latvian"},
     {"Balkan"},
+    {"Italian"},
 }
 
 function isLanguageInTable(language) 
