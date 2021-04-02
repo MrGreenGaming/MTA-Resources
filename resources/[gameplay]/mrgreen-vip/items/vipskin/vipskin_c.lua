@@ -26,7 +26,8 @@ local vipSkins = {
 	[19] = {name = "Bugs Bunny", file = "bugsbunny", customVoice = false},
 	[20] = {name = "Lifeguard Female", file = "femalelifeguard", customVoice = {'woman1.mp3', 'woman2.mp3'}},
 	[21] = {name = "Crysis", file = "crysis", customVoice = false},
-	[21] = {name = "Random Guy 2", file = "randomguy2", customVoice = false}
+	[21] = {name = "Random Guy 2", file = "randomguy2", customVoice = false},
+	[22] = {name = "Sean Diaz", file = "SeanEp3", customVoice = false}
 }
 
 -- Reserved skin ID's for VIP skin. If more are needed, please check unbought GC shop skins via database and remove them from there
