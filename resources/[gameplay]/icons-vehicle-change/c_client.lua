@@ -22,6 +22,15 @@ function renderIcons()
 			local playerx, playery, playerz = getCameraMatrix()
 			local dist = getDistanceBetweenPoints3D(signs[cpId].x, signs[cpId].y, signs[cpId].z, playerx, playery, playerz)
 			if dist < drawDistance and (isLineOfSightClear(signs[cpId].x, signs[cpId].y, signs[cpId].z+3, playerx, playery, playerz, true, false, false, false)) then
+                
+                -- If the checkpoint changes into the vehicle the player is already in, the icon will not show
+                local clientVehicle = getPedOccupiedVehicle(localPlayer)
+				if clientVehicle then 
+					local vehicleName = getVehicleName(clientVehicle)
+					
+					if signs[cpId].name == vehicleName then return guiSetVisible(signs[cpId].guiImage, false) end
+				end
+                
 				local screenX, screenY;
                 
 				local playerX, playerY, playerZ = getElementPosition(localPlayer)
