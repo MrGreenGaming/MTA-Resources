@@ -554,6 +554,11 @@ function restoreMap(map)
         setResourceInfo(theCopy,"deleted","false")
 		if handlerConnect then -- if there is db connection, else save in local db file
 			local query = "INSERT INTO uploaded_maps (mapname, uploadername, manager, resname, status) VALUES (?,?,?,?,'Restored')"
+			local toptimesQuery = "INSERT IGNORE INTO toptimes (`forumid`, `mapname`, `pos`, `value`, `date`, `racemode`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode FROM toptimes_deleted a WHERE a.mapname = ? AND a.delete_reason = ?"
+			local toptimesDeleteQuery  = "DELETE FROM toptimes_deleted WHERE mapname = ? AND delete_reason = ?"
+
+			dbExec ( handlerConnect, toptimesQuery, properName, "Map Deletion")
+			dbExec ( handlerConnect, toptimesDeleteQuery, properName, "Map Deletion")
 			dbExec ( handlerConnect, query,getResourceInfo(theCopy, "name") or properName,getResourceInfo(theCopy,"author") or "N/A",tostring(getAccountName(getPlayerAccount(client))),properName)
 		end
 
