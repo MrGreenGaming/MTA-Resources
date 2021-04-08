@@ -557,8 +557,8 @@ function restoreMap(map)
 			local toptimesQuery = "INSERT INTO toptimes (`forumid`, `mapname`, `pos`, `value`, `date`, `racemode`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode FROM toptimes_deleted a WHERE a.mapname = ? AND a.delete_reason = ?"
 			local toptimesDeleteQuery  = "DELETE FROM toptimes_deleted WHERE mapname = ? AND delete_reason = ?"
 
-			dbExec ( handlerConnect, toptimesQuery, getResourceInfo(theCopy, "name") or properName, "Map Deletion")
-			dbExec ( handlerConnect, toptimesDeleteQuery, getResourceInfo(theCopy, "name") or properName, "Map Deletion")
+			dbExec ( handlerConnect, toptimesQuery, properName, "Map Deletion")
+			dbExec ( handlerConnect, toptimesDeleteQuery, properName, "Map Deletion")
 			dbExec ( handlerConnect, query,getResourceInfo(theCopy, "name") or properName,getResourceInfo(theCopy,"author") or "N/A",tostring(getAccountName(getPlayerAccount(client))),properName)
 		end
 
