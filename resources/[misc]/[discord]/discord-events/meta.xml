@@ -1,6 +1,8 @@
 <meta>
     <oop>true</oop>
     <info name="Discord: Events" author="Necktrox" version="1.0.0" type="script" description="Event handler for Discord message transmission"/>
-    <setting name="*server" value="race" friendlyname="Server type: race / mix"  accept="race-mix" examples="race" desc="The type of the server, can be 'race' or 'mix'" />
+    <settings>
+        <setting name="*server" value="race" friendlyname="Server type: race / mix"  accept="race-mix" examples="race" desc="The type of the server, can be 'race' or 'mix'" />
+    </settings>
     <script src="events.lua"/>
 </meta>
