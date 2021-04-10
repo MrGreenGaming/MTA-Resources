@@ -129,6 +129,7 @@ addCommandHandler('discordmutes', discordmutes)
 addEvent("onDiscordPacket")
 addEventHandler("onDiscordPacket", root,
     function (packet, payload)
+        outputDebugString("Received Discord message of type: " .. packet)
 		if mutes[payload.author.id] then return end
         if packet == "text.message" then
 			lastchatid, lastchatnick = tostring(payload.author.id), payload.author.name
