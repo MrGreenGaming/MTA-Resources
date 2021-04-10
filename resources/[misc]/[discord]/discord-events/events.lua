@@ -15,10 +15,17 @@ end
 
 
 function sendPlayerCount(correction)
+    serverType = get("server")
+    outputDebugString(serverType)
     correction = correction or 0
     local player_count = getPlayerCount() + correction
     local max_players = getMaxPlayers()
-    exports.discord:send("server.player_count", { player_count = player_count, max_players = max_players })
+    if (serverType == "race") then
+        exports.discord:send("server.player_count_race", { player_count = player_count, max_players = max_players })
+    elseif (serverType == "mix") then
+        exports.discord:send("server.player_count_mix", { player_count = player_count, max_players = max_players })
+    end
+    
 end
 addEventHandler("onDiscordChannelBound", root, sendPlayerCount)
 
