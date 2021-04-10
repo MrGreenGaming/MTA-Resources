@@ -16,7 +16,6 @@ end
 
 function sendPlayerCount(correction)
     serverType = get("server")
-    outputDebugString(serverType)
     correction = correction or 0
     local player_count = getPlayerCount() + correction
     local max_players = getMaxPlayers()
