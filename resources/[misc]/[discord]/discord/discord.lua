@@ -33,7 +33,7 @@ function createDiscordPipe(hostname, port, passphrase, channel)
 
     socket:on("ready",
         function (socket)
-            outputDebugString("[Discord] Connected to ".. hostname .." on port ".. port)
+            outputDebugString("[Discord] Connected to ".. hostname .." on port ".. port .. " and on channel " .. channel)
             sendAuthPacket(socket)
         end
     )
