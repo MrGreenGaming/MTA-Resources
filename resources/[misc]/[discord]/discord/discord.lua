@@ -116,7 +116,6 @@ function handleDisconnectPacket(socket)
 end
 
 function handleDiscordPacket(socket, packet, payload)
-    outputDebugString("[Discord] Packet type: " .. packet)
     if packet == "ping" then
         return handlePingPacket(socket)
     elseif packet == "auth" then
