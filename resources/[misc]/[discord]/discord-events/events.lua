@@ -146,7 +146,7 @@ addCommandHandler('discordmutes', discordmutes)
 addEvent("onDiscordPacket")
 addEventHandler("onDiscordPacket", root,
     function (packet, payload)
-		if mutes[payload.author.id] then exports.discord:send("chat.message.text", { author = "", text = "Sorry <@" .. payload.author.id .. ">. You're muted and can't use this bot to communicate"})return end
+		if mutes[payload.author.id] then exports.discord:send("chat.message.text", { author = "* >", text = "Sorry <@" .. payload.author.id .. ">. You're muted and can't use this bot to communicate"})return end
         if packet == "text.message" then
 			lastchatid, lastchatnick = tostring(payload.author.id), payload.author.name
             outputServerLog(("DISCORD: %s: %s"):format(payload.author.name, payload.message.text))
