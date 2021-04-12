@@ -15,3 +15,7 @@
 
 # Web settings
 www/mta/mtasettings.php
+
+# IDE Settings
+.vscode
+.ionide
