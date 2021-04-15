@@ -396,8 +396,10 @@ function calculateNextmap()
 
 	local compatibleMaps
 	if respectCycle then
+		outputDebugString("Respecting Cycle")
 		compatibleMaps = getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )
 	else
+		outputDebugString("Not respecting cycle")
 		compatibleMaps = getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[math.random(#modes)])
 	end
 
