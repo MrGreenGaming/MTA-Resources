@@ -221,7 +221,7 @@ end
 function startNextMapVote()
 
 	local maxPlayAgain = getNumber("race.nReplay", 2)
-	local nMapsVote = getNumber("race.votemap_nMaps", 1)
+	local nMapsVote = getNumber("race.votemap_nMaps", 1) - 1
 	outputDebugString(nMapsVote)
 
 	exports.votemanager:stopPoll()
@@ -233,7 +233,7 @@ function startNextMapVote()
 
 
 	local poll = {
-		title="Next or Play again?",
+		title="Different Map or Play again?",
 		visibleTo=getRootElement(),
 		percentage=51,
 		timeout=7,
@@ -270,10 +270,8 @@ function startNextMapVote()
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 			for index, value in ipairs(otherMaps) do
-				local map = otherMaps[index]
-				local mapRes = getResourceFromName(map[1])
-				local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
-				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), mapRes, mapRes; default=false})
+				local mapName = getResourceInfo(value, "name") or getResourceName(value)
+				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 			end
 		end
 	elseif getResourceFromName('gcshop') and getResourceState(getResourceFromName('gcshop')) == 'running' and exports.gcshop:isAnyMapQueued(true) and skipMapQueue ~= exports.mapmanager:getRunningGamemodeMap() then
@@ -291,10 +289,8 @@ function startNextMapVote()
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 			for index, value in ipairs(otherMaps) do
-				local map = otherMaps[index]
-				local mapRes = getResourceFromName(map[1])
-				local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
-				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), mapRes, mapRes; default=false})
+				local mapName = getResourceInfo(value, "name") or getResourceName(value)
+				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 			end
 		end
 	else -- Normal next map
