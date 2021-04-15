@@ -234,7 +234,7 @@ function startNextMapVote()
 	local poll = {
 		title="Different Map or Play again?",
 		visibleTo=getRootElement(),
-		percentage=100,
+		percentage=76,
 		timeout=10,
 		allowchange=true;
 		}
