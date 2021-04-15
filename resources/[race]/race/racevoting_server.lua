@@ -234,7 +234,7 @@ function startNextMapVote()
 	local poll = {
 		title="Different Map or Play again?",
 		visibleTo=getRootElement(),
-		percentage=100,
+		percentage=76,
 		timeout=10,
 		allowchange=true;
 		}
@@ -354,8 +354,8 @@ function startNextMapVote()
 			return
 		else
 			outputChatBox('Maximum \'Play Again\' times ('..maxPlayAgain..') has been reached. Starting vote without "Play Again" option...')
-			startRandomMap()
-			return
+			-- startRandomMap()
+			-- return
 		end
 	end
 
