@@ -289,7 +289,7 @@ function endPoll(chosenOption)
 			--if the next nomination exceeds the max or doesn't reduce option count, make a casting vote using super-computer heuristic algorithms
 			if activePoll.nomination+1 > activePoll.maxnominations or #winningIndices == #activePoll then
 				outputServerLogMaybe( "Vote using CPU casting vote" )
-				outputChatBox("Still a tie! Selecting randomly...", source, 0, 255, 0)
+				outputChatBox("A tie! Selecting randomly...", source, 0, 255, 0)
 				return applyPollResults( winningIndices[ math.random( 1, #winningIndices ) ] )
 			else
 				--copy the poll settings and increase nomination number
