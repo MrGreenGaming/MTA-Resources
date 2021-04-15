@@ -245,13 +245,19 @@ function startNextMapVote()
 
 	local otherMaps = {}
 	for i = 1, nMapsVote, 1 do
-		local map = calculateNextmap()
-		local isMapInList = false
-		for index, value in ipairs(otherMaps) do
-			if value == map then isMapInList = true end
-		end
-		if (isMapInList == false and map ~= _nextMap) then
-			table.insert(otherMaps, i, map)
+		local isInserted = false
+		local nTry = 0
+		while (isInserted == false or nTry <= 3) do
+			local map = calculateNextmap()
+			local isMapInList = false
+			for index, value in ipairs(otherMaps) do
+				if value == map then isMapInList = true end
+			end
+			if (isMapInList == false and map ~= _nextMap) then
+				table.insert(otherMaps, i, map)
+				isInserted = true
+			end
+			nTry = nTry + 1
 		end
 	end
 
