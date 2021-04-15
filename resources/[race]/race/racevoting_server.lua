@@ -252,6 +252,8 @@ function startNextMapVote()
 		end
 		if (isMapInList == false and map ~= _nextMap) then
 			table.insert(otherMaps, i, map)
+		else
+			table.insert(otherMaps, i, "null")
 		end
 	end
 
@@ -270,8 +272,10 @@ function startNextMapVote()
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 			for index, value in ipairs(otherMaps) do
-				local mapName = getResourceInfo(value, "name") or getResourceName(value)
-				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+				if value ~= "null" then
+					local mapName = getResourceInfo(value, "name") or getResourceName(value)
+					table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+				end
 			end
 		end
 	elseif getResourceFromName('gcshop') and getResourceState(getResourceFromName('gcshop')) == 'running' and exports.gcshop:isAnyMapQueued(true) and skipMapQueue ~= exports.mapmanager:getRunningGamemodeMap() then
@@ -289,16 +293,20 @@ function startNextMapVote()
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 			for index, value in ipairs(otherMaps) do
-				local mapName = getResourceInfo(value, "name") or getResourceName(value)
-				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+				if value ~= "null" then
+					local mapName = getResourceInfo(value, "name") or getResourceName(value)
+					table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+				end
 			end
 		end
 	else -- Normal next map
 		local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 		table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 		for index, value in ipairs(otherMaps) do
-			local mapName = getResourceInfo(value, "name") or getResourceName(value)
-			table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+			if value ~= "null" then
+				local mapName = getResourceInfo(value, "name") or getResourceName(value)
+				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+			end
 		end
 	end
 
