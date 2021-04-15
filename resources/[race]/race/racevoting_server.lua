@@ -392,7 +392,7 @@ currentmode = math.random(#modes)
 
 function calculateNextmap()
 
-	local respectCycle = getBool("race.respectCycle", true)
+	local respectCycle = getBool("race.respect_cycle", true)
 
 	local compatibleMaps
 	if respectCycle then
