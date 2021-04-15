@@ -245,7 +245,10 @@ function startNextMapVote()
 
 	local otherMaps = {}
 	for i = 1, nMapsVote, 1 do
-		otherMaps[i] = calculateNextmap()
+		local map = calculateNextMap()
+		outputDebugString(map)
+		outputDebugString(map[1])
+		table.insert(otherMaps, i, map)
 	end
 
 	if getResourceFromName('eventmanager') and getResourceState(getResourceFromName('eventmanager')) == 'running' and exports.eventmanager:isAnyMapQueued(true) then
