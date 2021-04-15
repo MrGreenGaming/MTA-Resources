@@ -221,7 +221,7 @@ end
 function startNextMapVote()
 
 	local maxPlayAgain = getNumber("race.nReplay", 2)
-	local nMapsVote = getNumber("race.votemap_nMaps", 1) - 1
+	local nMapsVote = getNumber("race.votemap_nMaps", 1)
 	outputDebugString(nMapsVote)
 
 	exports.votemanager:stopPoll()
@@ -246,7 +246,13 @@ function startNextMapVote()
 	local otherMaps = {}
 	for i = 1, nMapsVote, 1 do
 		local map = calculateNextmap()
-		table.insert(otherMaps, i, map)
+		local isMapInList = false
+		for index, value in ipairs(otherMaps) do
+			if value == map then isMapInList = true end
+		end
+		if (~isMapInList and map ~= _nextMap) then
+			table.insert(otherMaps, i, map)
+		end
 	end
 
 	if getResourceFromName('eventmanager') and getResourceState(getResourceFromName('eventmanager')) == 'running' and exports.eventmanager:isAnyMapQueued(true) then
@@ -293,11 +299,11 @@ function startNextMapVote()
 		end
 	else -- Normal next map
 		local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
-			for index, value in ipairs(otherMaps) do
-				local mapName = getResourceInfo(value, "name") or getResourceName(value)
-				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
-			end
+		table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
+		for index, value in ipairs(otherMaps) do
+			local mapName = getResourceInfo(value, "name") or getResourceName(value)
+			table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+		end
 	end
 
 
