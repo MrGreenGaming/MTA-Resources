@@ -250,7 +250,7 @@ function startNextMapVote()
 		for index, value in ipairs(otherMaps) do
 			if value == map then isMapInList = true end
 		end
-		if (~isMapInList and map ~= _nextMap) then
+		if (isMapInList == false and map ~= _nextMap) then
 			table.insert(otherMaps, i, map)
 		end
 	end
