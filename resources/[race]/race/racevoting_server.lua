@@ -245,7 +245,6 @@ function startNextMapVote()
 
 	local otherMaps = {}
 	for i = 1, nMapsVote, 1 do
-		local isInserted = false
 		local map = calculateNextmap()
 		local isMapInList = false
 		for index, value in ipairs(otherMaps) do
@@ -253,7 +252,6 @@ function startNextMapVote()
 		end
 		if (isMapInList == false and map ~= _nextMap) then
 			table.insert(otherMaps, i, map)
-			isInserted = true
 		end
 	end
 
