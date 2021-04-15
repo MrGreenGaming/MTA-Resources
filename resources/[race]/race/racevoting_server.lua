@@ -283,7 +283,7 @@ function startNextMapVote()
 		if not times[currentMap] or times[currentMap] < maxPlayAgain+1 then
 			table.insert(poll, {"Play again", 'nextMapVoteResult', getRootElement(), currentMap})
 		elseif setEventMapQueue then -- Start event manager map
-			outputChatBox('Maximum \'Play Again\' times('..maxPlayAgain..') has been reached. Changing to next event map ..')
+			outputChatBox('Maximum \'Play Again\' times ('..maxPlayAgain..') has been reached. Changing to next event map...')
 
 			local map = exports.eventmanager:getCurrentMapQueued()
 			if not exports.mapmanager:changeGamemodeMap ( getResourceFromName(map[1]), nil, true ) then
@@ -295,7 +295,7 @@ function startNextMapVote()
 			end
 			return
 		elseif usedGcMapQueue then -- Start GC mapcenter map
-			outputChatBox('Maximum \'Play Again\' times('..maxPlayAgain..') has been reached. Changing to next map in Maps-Center queue ..')
+			outputChatBox('Maximum \'Play Again\' times ('..maxPlayAgain..') has been reached. Changing to next map in Maps-Center queue...')
 
 			local map = exports.gcshop:getCurrentMapQueued()
 			if not exports.mapmanager:changeGamemodeMap ( getResourceFromName(map[2]), nil, true ) then
@@ -308,8 +308,8 @@ function startNextMapVote()
 			skipMapQueue = getResourceFromName(map[2])
 			return
 		else
-			outputChatBox('Maximum \'Play Again\' times('..maxPlayAgain..') has been reached. Changing to random ..')
-			startRandomMap()
+			outputChatBox('Maximum \'Play Again\' times ('..maxPlayAgain..') has been reached. Starting vote without "Play Again" option...')
+			-- startRandomMap()
 			return
 		end
 	end
