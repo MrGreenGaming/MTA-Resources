@@ -245,7 +245,7 @@ function startNextMapVote()
 
 	local otherMaps = {}
 	for i = 1, nMapsVote, 1 do
-		otherMaps[i] = getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )
+		otherMaps[i] = calculateNextmap()
 	end
 
 	if getResourceFromName('eventmanager') and getResourceState(getResourceFromName('eventmanager')) == 'running' and exports.eventmanager:isAnyMapQueued(true) then
