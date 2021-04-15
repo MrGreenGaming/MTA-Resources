@@ -246,8 +246,6 @@ function startNextMapVote()
 	local otherMaps = {}
 	for i = 1, nMapsVote, 1 do
 		local map = calculateNextmap()
-		outputDebugString(map)
-		outputDebugString(map[1])
 		table.insert(otherMaps, i, map)
 	end
 
@@ -297,11 +295,8 @@ function startNextMapVote()
 		local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 			for index, value in ipairs(otherMaps) do
-				local map = value
-				outputDebugString(map)
-				local mapRes = getResourceFromName(map[1])
-				local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
-				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), mapRes, mapRes; default=false})
+				local mapName = getResourceInfo(value, "name") or getResourceName(value)
+				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 			end
 	end
 
