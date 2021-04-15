@@ -221,6 +221,7 @@ end
 function startNextMapVote()
 
 	local maxPlayAgain = getNumber("race.nReplay", 2)
+	local nMapsVote = getNumber("race.votemap_nMaps", 1) - 1
 
 	exports.votemanager:stopPoll()
 
@@ -231,15 +232,41 @@ function startNextMapVote()
 
 
 	local poll = {
-		title="Next or Play again?",
+		title="Different Map or Play again?",
 		visibleTo=getRootElement(),
-		percentage=51,
-		timeout=7,
+		percentage=100,
+		timeout=10,
 		allowchange=true;
 		}
 
 	local setEventMapQueue = false
 	local usedGcMapQueue = false
+
+	local otherMaps = {}
+	for i = 1, nMapsVote, 1 do
+		local nTry = 0
+		local endWhile = false
+
+		-- Tries finding a non-duplicated map 3 times.
+		while endWhile == false and nTry <= 3 do
+			nTry = nTry + 1
+			local map = calculateNextmap()
+			local isMapInList = false
+			for index, value in ipairs(otherMaps) do
+				if value == map then isMapInList = true end
+			end
+			if (isMapInList == false and map ~= _nextMap) then
+				table.insert(otherMaps, i, map)
+				endWhile = true
+			end
+		end
+
+		-- Couldn't find a non-duplicate map
+		if endWhile == false then
+			table.insert(otherMaps, i, "null")
+		end
+
+	end
 
 	if getResourceFromName('eventmanager') and getResourceState(getResourceFromName('eventmanager')) == 'running' and exports.eventmanager:isAnyMapQueued(true) then
 		-- Event next queued map
@@ -250,11 +277,17 @@ function startNextMapVote()
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local mapName = "["..map[2].."] "..mapName
 
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes, "eventmanager", map[2];default=true})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes, "eventmanager", map[2];default=false})
 			setEventMapQueue = true
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=false})
+			for index, value in ipairs(otherMaps) do
+				if value ~= "null" then
+					local mapName = getResourceInfo(value, "name") or getResourceName(value)
+					table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+				end
+			end
 		end
 	elseif getResourceFromName('gcshop') and getResourceState(getResourceFromName('gcshop')) == 'running' and exports.gcshop:isAnyMapQueued(true) and skipMapQueue ~= exports.mapmanager:getRunningGamemodeMap() then
 		-- GCshop next queued map
@@ -265,15 +298,27 @@ function startNextMapVote()
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local mapName = "[Maps-Center] "..mapName
 
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes,"gcshop",map[4];default=true})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes,"gcshop",map[4];default=false})
 			usedGcMapQueue = true
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
+			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=false})
+			for index, value in ipairs(otherMaps) do
+				if value ~= "null" then
+					local mapName = getResourceInfo(value, "name") or getResourceName(value)
+					table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+				end
+			end
 		end
 	else -- Normal next map
 		local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
-			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
+		table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=false})
+		for index, value in ipairs(otherMaps) do
+			if value ~= "null" then
+				local mapName = getResourceInfo(value, "name") or getResourceName(value)
+				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
+			end
+		end
 	end
 
 
