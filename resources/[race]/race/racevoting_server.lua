@@ -222,7 +222,7 @@ function startNextMapVote()
 
 	local maxPlayAgain = getNumber("race.nReplay", 2)
 	local nMapsVote = getNumber("votemanager.votemap_nMaps", 1)
-	outputDebugScript(nMapsVote)
+	outputDebugString(nMapsVote)
 
 	exports.votemanager:stopPoll()
 
