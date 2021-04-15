@@ -222,7 +222,6 @@ function startNextMapVote()
 
 	local maxPlayAgain = getNumber("race.nReplay", 2)
 	local nMapsVote = getNumber("race.votemap_nMaps", 1) - 1
-	outputDebugString(nMapsVote)
 
 	exports.votemanager:stopPoll()
 
@@ -235,8 +234,8 @@ function startNextMapVote()
 	local poll = {
 		title="Different Map or Play again?",
 		visibleTo=getRootElement(),
-		percentage=51,
-		timeout=7,
+		percentage=0,
+		timeout=10,
 		allowchange=true;
 		}
 

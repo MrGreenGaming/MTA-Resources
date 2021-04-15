@@ -246,7 +246,6 @@ function endPoll(chosenOption)
 		return applyPollResults(chosenOption)
 	else
 		-- No option has enough percent using votes/totalplayers - See if any option will win using votes/totalvoters
-
 		-- Make a list of the highest scoring options
 		local winningIndices = {}
 		local highestVotes = 0
