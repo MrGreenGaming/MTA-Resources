@@ -73,6 +73,8 @@ function vote.map.handler(source,cmd,...)
 	end
     local resource1Name = #{...}>0 and table.concat({...},' ',1,1) or nil
     local resource2Name = #{...}>1 and table.concat({...},' ',2)   or nil
+	outputDebugString(resource1Name)
+	outputDebugString(resource2Name)
 	source = source or serverConsole
 	
 	if isDisabled(cmd, source) then

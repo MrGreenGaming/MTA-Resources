@@ -248,6 +248,7 @@ function startNextMapVote()
 		local nTry = 0
 		local endWhile = false
 
+		-- Tries finding a non-duplicated map 3 times.
 		while endWhile == false and nTry <= 3 do
 			nTry = nTry + 1
 			local map = calculateNextmap()
