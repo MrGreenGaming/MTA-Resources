@@ -245,7 +245,7 @@ function startNextMapVote()
 
 	local otherMaps = {}
 	for i = 1, nMapsVote, 1 do
-		local map = calculateNextMap()
+		local map = calculateNextmap()
 		outputDebugString(map)
 		outputDebugString(map[1])
 		table.insert(otherMaps, i, map)
