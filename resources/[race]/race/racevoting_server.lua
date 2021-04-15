@@ -264,7 +264,7 @@ function startNextMapVote()
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 			for index, value in ipairs(otherMaps) do
 				local map = otherMaps[index]
-				local mapRes = getResourceFromName(value[1])
+				local mapRes = getResourceFromName(map[1])
 				local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), mapRes, mapRes; default=false})
 			end
@@ -285,7 +285,7 @@ function startNextMapVote()
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 			for index, value in ipairs(otherMaps) do
 				local map = otherMaps[index]
-				local mapRes = getResourceFromName(value[1])
+				local mapRes = getResourceFromName(map[1])
 				local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), mapRes, mapRes; default=false})
 			end
@@ -295,7 +295,7 @@ function startNextMapVote()
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
 			for index, value in ipairs(otherMaps) do
 				local map = otherMaps[index]
-				local mapRes = getResourceFromName(value[1])
+				local mapRes = getResourceFromName(map[1])
 				local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), mapRes, mapRes; default=false})
 			end
