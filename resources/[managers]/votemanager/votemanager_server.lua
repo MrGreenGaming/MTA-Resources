@@ -246,7 +246,6 @@ function endPoll(chosenOption)
 		return applyPollResults(chosenOption)
 	else
 		-- No option has enough percent using votes/totalplayers - See if any option will win using votes/totalvoters
-
 		-- Make a list of the highest scoring options
 		local winningIndices = {}
 		local highestVotes = 0
@@ -290,11 +289,12 @@ function endPoll(chosenOption)
 			--if the next nomination exceeds the max or doesn't reduce option count, make a casting vote using super-computer heuristic algorithms
 			if activePoll.nomination+1 > activePoll.maxnominations or #winningIndices == #activePoll then
 				outputServerLogMaybe( "Vote using CPU casting vote" )
+				outputChatBox("A Tie! Selecting randomly...", source, 0, 255, 0)
 				return applyPollResults( winningIndices[ math.random( 1, #winningIndices ) ] )
 			else
 				--copy the poll settings and increase nomination number
 				local drawPoll = {
-					title=activePoll.title,
+					title="A TIE! Please vote again!",
 					timeout=activePoll.timeout,
 					percentage=activePoll.percentage,
 					allowchange=activePoll.allowchange,
@@ -308,8 +308,11 @@ function endPoll(chosenOption)
 				end
 				--delete the current active poll
 				activePoll = nil
-				--start the new nomination
-				startPoll(drawPoll)
+				--start the new nomination with a small delay
+				outputChatBox("A Tie! Starting new vote with tied options...", source, 0, 255, 0)
+				setTimer(function ()
+					startPoll(drawPoll)
+				end, 750, 1, source)
 			end
 		end
 	end

@@ -21,7 +21,7 @@ function getPlayerLoginInfo(email, pw, callback)
         -- /gclogin <choose a forumID> <admin>
         if pw == 'admin' then
             local forumID = math.floor(math.abs(tonumber(email))) or 1337
-            callback(forumID)
+            callback(forumID, "Dev", "", "", 0, 9999, getRealTime().timestamp + 1000, false) 
         else
             callback(false)
         end

@@ -1,81 +1,80 @@
 <meta>
 	<info author="jbeta/KaliBwoy(gui)" description="Vote manager resource" type="script" version="1.1.0" />
-	
-	<script src="votemanager_errorcodes.lua" type="server"/>
-	<script src="votemanager_server.lua" type="server"/>
-		<export function="startPoll"/>
-		<export function="stopPoll"/>
-		<export function="finishPoll"/>
-	<script src="votemanager_polls.lua" type="server"/>
-		<export function="voteMap"/>
-		<export function="voteKick"/>
-		<export function="voteBan"/>
-		<export function="voteBetweenMaps"/>
-		<export function="voteBetweenModes"/>
-	<script src="votemanager_client.lua" type="client"/>
+
+	<script src="votemanager_errorcodes.lua" type="server" />
+	<script src="votemanager_server.lua" type="server" />
+	<export function="startPoll" />
+	<export function="stopPoll" />
+	<export function="finishPoll" />
+	<script src="votemanager_polls.lua" type="server" />
+	<export function="voteMap" />
+	<export function="voteKick" />
+	<export function="voteBan" />
+	<export function="voteBetweenMaps" />
+	<export function="voteBetweenModes" />
+	<script src="votemanager_client.lua" type="client" />
 
 
-		<file src="fonts/Roboto-Black.ttf"/>
-		<file src="fonts/Roboto-BlackItalic.ttf"/>
-		<file src="fonts/Roboto-Bold.ttf"/>
-		<file src="fonts/Roboto-BoldItalic.ttf"/>
-		<file src="fonts/RobotoCondensed-Bold.ttf"/>
-		<file src="fonts/RobotoCondensed-BoldItalic.ttf"/>
-		<file src="fonts/RobotoCondensed-Italic.ttf"/>
-		<file src="fonts/RobotoCondensed-Light.ttf"/>
-		<file src="fonts/RobotoCondensed-LightItalic.ttf"/>
-		<file src="fonts/RobotoCondensed-Regular.ttf"/>
-		<file src="fonts/Roboto-Italic.ttf"/>
-		<file src="fonts/Roboto-Light.ttf"/>
-		<file src="fonts/Roboto-LightItalic.ttf"/>
-		<file src="fonts/Roboto-Medium.ttf"/>
-		<file src="fonts/Roboto-MediumItalic.ttf"/>
-		<file src="fonts/Roboto-Regular.ttf"/>
-		<file src="fonts/Roboto-Thin.ttf"/>
-		<file src="fonts/Roboto-ThinItalic.ttf"/>
+	<file src="fonts/Roboto-Black.ttf" />
+	<file src="fonts/Roboto-BlackItalic.ttf" />
+	<file src="fonts/Roboto-Bold.ttf" />
+	<file src="fonts/Roboto-BoldItalic.ttf" />
+	<file src="fonts/RobotoCondensed-Bold.ttf" />
+	<file src="fonts/RobotoCondensed-BoldItalic.ttf" />
+	<file src="fonts/RobotoCondensed-Italic.ttf" />
+	<file src="fonts/RobotoCondensed-Light.ttf" />
+	<file src="fonts/RobotoCondensed-LightItalic.ttf" />
+	<file src="fonts/RobotoCondensed-Regular.ttf" />
+	<file src="fonts/Roboto-Italic.ttf" />
+	<file src="fonts/Roboto-Light.ttf" />
+	<file src="fonts/Roboto-LightItalic.ttf" />
+	<file src="fonts/Roboto-Medium.ttf" />
+	<file src="fonts/Roboto-MediumItalic.ttf" />
+	<file src="fonts/Roboto-Regular.ttf" />
+	<file src="fonts/Roboto-Thin.ttf" />
+	<file src="fonts/Roboto-ThinItalic.ttf" />
 
-	
-	
+
 	<settings>
 		<setting name="*color" value="#DF6464" />
 		<setting name="*log_votes" value="[true]" />
-	
-		<setting name="*default_timeout" value="[15]"/>
-		<setting name="*default_allowchange" value="[false]"/>
-		<setting name="*default_percentage" value="[65]"/>
-		<setting name="*default_maxnominations" value="[3]"/>
 
-		<setting name="*votemap_enabled" value="[true]"/>
-		<setting name="*votemap_timeout" value="[15]"/>
-		<setting name="*votemap_locktime" value="[120]"/>
-		<setting name="*votemap_percentage" value="[70]"/>
-		<setting name="*votemap_allowchange" value="[true]"/>
-		
-		<setting name="*votemode_enabled" value="[true]"/>
-		<setting name="*votemode_timeout" value="[15]"/>
-		<setting name="*votemode_locktime" value="[120]"/>
-		<setting name="*votemode_percentage" value="[70]"/>
-		<setting name="*votemode_allowchange" value="[true]"/>
-		
-		<setting name="*votekick_enabled" value="[true]"/>
-		<setting name="*votekick_timeout" value="[15]"/>
-		<setting name="*votekick_locktime" value="[120]"/>
-		<setting name="*votekick_percentage" value="[70]"/>
-		<setting name="*votekick_allowchange" value="[true]"/>
-		
-		<setting name="*voteban_enabled" value="[false]"/>
-		<setting name="*voteban_timeout" value="[15]"/>
-		<setting name="*voteban_locktime" value="[120]"/>
-		<setting name="*voteban_percentage" value="[75]"/>
-		<setting name="*voteban_allowchange" value="[true]"/>
-		
-		<setting name="*votekill_enabled" value="[false]"/>
-		<setting name="*votekill_timeout" value="[15]"/>
-		<setting name="*votekill_locktime" value="[120]"/>
-		<setting name="*votekill_percentage" value="[70]"/>
-		<setting name="*votekill_allowchange" value="[true]"/>
+		<setting name="*default_timeout" value="[15]" />
+		<setting name="*default_allowchange" value="[false]" />
+		<setting name="*default_percentage" value="[65]" />
+		<setting name="*default_maxnominations" value="[3]" />
 
-		<setting name="*guestvotes" value="[false]"/>
+		<setting name="*votemap_enabled" value="[true]" />
+		<setting name="*votemap_timeout" value="[15]" />
+		<setting name="*votemap_locktime" value="[120]" />
+		<setting name="*votemap_percentage" value="[70]" />
+		<setting name="*votemap_allowchange" value="[true]" />
+
+		<setting name="*votemode_enabled" value="[true]" />
+		<setting name="*votemode_timeout" value="[15]" />
+		<setting name="*votemode_locktime" value="[120]" />
+		<setting name="*votemode_percentage" value="[70]" />
+		<setting name="*votemode_allowchange" value="[true]" />
+
+		<setting name="*votekick_enabled" value="[true]" />
+		<setting name="*votekick_timeout" value="[15]" />
+		<setting name="*votekick_locktime" value="[120]" />
+		<setting name="*votekick_percentage" value="[70]" />
+		<setting name="*votekick_allowchange" value="[true]" />
+
+		<setting name="*voteban_enabled" value="[false]" />
+		<setting name="*voteban_timeout" value="[15]" />
+		<setting name="*voteban_locktime" value="[120]" />
+		<setting name="*voteban_percentage" value="[75]" />
+		<setting name="*voteban_allowchange" value="[true]" />
+
+		<setting name="*votekill_enabled" value="[false]" />
+		<setting name="*votekill_timeout" value="[15]" />
+		<setting name="*votekill_locktime" value="[120]" />
+		<setting name="*votekill_percentage" value="[70]" />
+		<setting name="*votekill_allowchange" value="[true]" />
+
+		<setting name="*guestvotes" value="[false]" />
 
 
 	</settings>
