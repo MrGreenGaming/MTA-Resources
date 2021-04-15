@@ -354,8 +354,8 @@ function startNextMapVote()
 			return
 		else
 			outputChatBox('Maximum \'Play Again\' times ('..maxPlayAgain..') has been reached. Starting vote without "Play Again" option...')
-			startRandomMap()
-			return
+			-- startRandomMap()
+			-- return
 		end
 	end
 
