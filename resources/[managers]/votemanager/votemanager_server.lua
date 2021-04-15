@@ -291,8 +291,6 @@ function endPoll(chosenOption)
 				outputServerLogMaybe( "Vote using CPU casting vote" )
 				return applyPollResults( winningIndices[ math.random( 1, #winningIndices ) ] )
 			else
-				--delete the current active poll
-				activePoll = nil
 				--copy the poll settings and increase nomination number
 				local drawPoll = {
 					title=activePoll.title,
@@ -307,8 +305,12 @@ function endPoll(chosenOption)
 				for _,indici in ipairs(winningIndices) do
 					table.insert(drawPoll,activePoll[indici])
 				end
-				--start the new nomination
-				startPoll(drawPoll)
+				--delete the current active poll
+				activePoll = nil
+				--start the new nomination with a small delay
+				setTimer(function ()
+					startPoll(drawPoll)
+				end, 500, 1, source)
 			end
 		end
 	end
