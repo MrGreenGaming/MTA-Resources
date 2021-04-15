@@ -245,16 +245,27 @@ function startNextMapVote()
 
 	local otherMaps = {}
 	for i = 1, nMapsVote, 1 do
-		local map = calculateNextmap()
-		local isMapInList = false
-		for index, value in ipairs(otherMaps) do
-			if value == map then isMapInList = true end
+		local nTry = 0
+		local endWhile = false
+
+		while endWhile == false and nTry <= 3 do
+			nTry = nTry + 1
+			local map = calculateNextmap()
+			local isMapInList = false
+			for index, value in ipairs(otherMaps) do
+				if value == map then isMapInList = true end
+			end
+			if (isMapInList == false and map ~= _nextMap) then
+				table.insert(otherMaps, i, map)
+				endWhile = true
+			end
 		end
-		if (isMapInList == false and map ~= _nextMap) then
-			table.insert(otherMaps, i, map)
-		else
+
+		-- Couldn't find a non-duplicate map
+		if endWhile == false then
 			table.insert(otherMaps, i, "null")
 		end
+
 	end
 
 	if getResourceFromName('eventmanager') and getResourceState(getResourceFromName('eventmanager')) == 'running' and exports.eventmanager:isAnyMapQueued(true) then
