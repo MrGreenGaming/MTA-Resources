@@ -392,8 +392,14 @@ currentmode = math.random(#modes)
 
 function calculateNextmap()
 
+	local respectCycle = getBool("race.respectCycle", true)
+
 	local compatibleMaps
-	compatibleMaps =  getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )
+	if respectCycle then
+		compatibleMaps = getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )
+	else
+		compatibleMaps = getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[math.random(#modes)])
+	end
 
 	if compatibleMaps then
 		triggerEvent('onNextmapSettingChange', root, compatibleMaps)
