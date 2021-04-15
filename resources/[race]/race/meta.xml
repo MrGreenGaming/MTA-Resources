@@ -1,15 +1,15 @@
 <meta>
     <info name="Race" description="arc_&apos;s MTA Race implementation" author="arc_" type="gamemode" version="0.8.3" build="r926 MrGreen version" edf:definition="edf/race.edf" />
-    <download_priority_group>-10</download_priority_group>    <!-- should be low so that the player joins race after everything is downloaded -->
+    <download_priority_group>-10</download_priority_group> <!-- should be low so that the player joins race after everything is downloaded -->
 
     <include resource="scoreboard" />
     <include resource="votemanager" />
     <include resource="customblips" />
     <include resource="custom_coronas" />
     <include resource="stats" />
-    <include resource="language-chat"/>
-    <include resource="third_checkpoint"/>
-    <include resource="icons-vehicle-change"/>
+    <include resource="language-chat" />
+    <include resource="third_checkpoint" />
+    <include resource="icons-vehicle-change" />
 
 
     <script src="_common.lua" type="server" />
@@ -20,9 +20,9 @@
     <script src="rankingboard.lua" type="server" />
     <script src="customcountdown/customcountdown_s.lua" type="server" />
 
-    <file src="audio/mission_accomplished.mp3"/>
-    <file src="audio/123.mp3"/>
-    <file src="audio/go.mp3"/>
+    <file src="audio/mission_accomplished.mp3" />
+    <file src="audio/123.mp3" />
+    <file src="audio/go.mp3" />
 
     <script src="modes/base.lua" type="server" />
     <script src="modes/destructionderby.lua" type="server" />
@@ -106,7 +106,7 @@
 
     <!-- <file src="modes/cargamefiles/Roboto-Black.ttf" /> -->
     <!-- SHADERS -->
-    <file src="shaders/paintjob.fx"/>
+    <file src="shaders/paintjob.fx" />
 
 
     <file src="model/nitro.dff" />
@@ -145,7 +145,7 @@
     <export function="getShooterMode" type="server" />
     <export function="export_setPlayerVehicle" type="server" />
 
-    <export function="disableNTSModeForDD" type="server"/>
+    <export function="disableNTSModeForDD" type="server" />
 
     <settings>
         <!-- *****************************************************
@@ -159,7 +159,9 @@
         <setting name="*color" value="#D27350" friendlyname="Message color" group="Display" accept="*" examples="#FF0000,#776655" desc="Color of the Race chat box messages." />
 
         <setting name="*nReplay" value="2" friendlyname="Amount of replays" accept="0-9" group="Gameplay" desc="The amount of times a map can be replayed" />
-        
+
+        <setting name="*votemap_nMaps" value="1" friendlyName="nMaps on vote" accept="1-5" group="Gameplay" desc="The amount of maps that players can vote on if the map ended" />
+
         <setting name="*hurrytime" value="15" friendlyname="Hurry time" accept="0-120" group="Gameplay" desc="Display HURRY! message this many seconds before the time runs out." />
 
         <setting name="*timeafterfirstfinish" value="30" friendlyname="Finish race time" accept="0-120" group="Gameplay" desc="The number of seconds the race continues for after someone wins." />
