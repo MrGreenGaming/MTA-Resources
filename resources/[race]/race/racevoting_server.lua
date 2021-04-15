@@ -221,7 +221,7 @@ end
 function startNextMapVote()
 
 	local maxPlayAgain = getNumber("race.nReplay", 2)
-	local nMapsVote = getNumber("race.votemap_nMaps", 1)
+	local nMapsVote = getNumber("race.votemap_nMaps", 1) - 1
 	outputDebugString(nMapsVote)
 
 	exports.votemanager:stopPoll()
@@ -243,6 +243,11 @@ function startNextMapVote()
 	local setEventMapQueue = false
 	local usedGcMapQueue = false
 
+	local otherMaps = {}
+	for i = 1, nMapsVote, 1 do
+		otherMaps[i] = getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, modes[currentmode] )
+	end
+
 	if getResourceFromName('eventmanager') and getResourceState(getResourceFromName('eventmanager')) == 'running' and exports.eventmanager:isAnyMapQueued(true) then
 		-- Event next queued map
 		-- [1] = mapResName, [2] = eventname
@@ -257,6 +262,12 @@ function startNextMapVote()
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
+			for index, value in ipairs(otherMaps) do
+				local map = otherMaps[index]
+				local mapRes = getResourceFromName(value[1])
+				local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
+				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), mapRes, mapRes; default=false})
+			end
 		end
 	elseif getResourceFromName('gcshop') and getResourceState(getResourceFromName('gcshop')) == 'running' and exports.gcshop:isAnyMapQueued(true) and skipMapQueue ~= exports.mapmanager:getRunningGamemodeMap() then
 		-- GCshop next queued map
@@ -272,10 +283,22 @@ function startNextMapVote()
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
+			for index, value in ipairs(otherMaps) do
+				local map = otherMaps[index]
+				local mapRes = getResourceFromName(value[1])
+				local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
+				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), mapRes, mapRes; default=false})
+			end
 		end
 	else -- Normal next map
 		local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=true})
+			for index, value in ipairs(otherMaps) do
+				local map = otherMaps[index]
+				local mapRes = getResourceFromName(value[1])
+				local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
+				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), mapRes, mapRes; default=false})
+			end
 	end
 
 
