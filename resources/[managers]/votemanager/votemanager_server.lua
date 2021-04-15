@@ -289,12 +289,12 @@ function endPoll(chosenOption)
 			--if the next nomination exceeds the max or doesn't reduce option count, make a casting vote using super-computer heuristic algorithms
 			if activePoll.nomination+1 > activePoll.maxnominations or #winningIndices == #activePoll then
 				outputServerLogMaybe( "Vote using CPU casting vote" )
-				outputChatBox("Still a tie! Selecting random option", source, 0, 255, 0)
+				outputChatBox("Still a tie! Selecting randomly...", source, 0, 255, 0)
 				return applyPollResults( winningIndices[ math.random( 1, #winningIndices ) ] )
 			else
 				--copy the poll settings and increase nomination number
 				local drawPoll = {
-					title="A TIE! Please vote again",
+					title="A TIE! Please vote again!",
 					timeout=activePoll.timeout,
 					percentage=activePoll.percentage,
 					allowchange=activePoll.allowchange,
@@ -309,9 +309,10 @@ function endPoll(chosenOption)
 				--delete the current active poll
 				activePoll = nil
 				--start the new nomination with a small delay
+				outputChatBox("A Tie! Starting new vote with tied options...", source, 0, 255, 0)
 				setTimer(function ()
 					startPoll(drawPoll)
-				end, 500, 1, source)
+				end, 750, 1, source)
 			end
 		end
 	end
