@@ -50,6 +50,7 @@
 		<setting name="*votemap_locktime" value="[120]"/>
 		<setting name="*votemap_percentage" value="[70]"/>
 		<setting name="*votemap_allowchange" value="[true]"/>
+		<setting name="*votemap_nMaps" value="[1]" />
 		
 		<setting name="*votemode_enabled" value="[true]"/>
 		<setting name="*votemode_timeout" value="[15]"/>
