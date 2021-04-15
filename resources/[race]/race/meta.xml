@@ -160,7 +160,7 @@
 
         <setting name="*nReplay" value="2" friendlyname="Amount of replays" accept="0-9" group="Gameplay" desc="The amount of times a map can be replayed" />
 
-        <setting name="*votemap_nMaps" value="1" friendlyName="nMaps on vote" accept="1-5" group="Gameplay" desc="The amount of maps that players can vote on if the map ended" />
+        <setting name="*votemap_nMaps" value="1" friendlyame="Amount of Vote Maps" accept="1-5" group="Gameplay" desc="The amount of maps that players can vote on if the map ended" />
 
         <setting name="*hurrytime" value="15" friendlyname="Hurry time" accept="0-120" group="Gameplay" desc="Display HURRY! message this many seconds before the time runs out." />
 
