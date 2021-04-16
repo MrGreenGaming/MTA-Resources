@@ -95,6 +95,21 @@ languageStrings = {
         ["notification.login.success"] = "Вход выполнен успешно",
         ["notification.login.wronguser"] = "Такое имя пользователя не существует или Вы ввели неверную информацию",
         ["notification.login.ban"] = "Вы были забанены"
+	},
+	cz = {
+		["render.input.username"] = "Uživatelské jméno",
+        ["render.input.password"] = "Heslo",
+        ["render.input.password2"] = "Heslo znovu",
+        ["render.input.email"] = "Email",
+        ["render.input.rememberme"] = "Zapamatuj si mě",
+
+        ["render.button.login"] = "Přihlášení",
+        ["render.button.register"] = "Registrace",
+        ["render.button.guest"] = "Hrát jako host",
+
+        ["notification.login.success"] = "Jste úspěšné přihlášení",
+        ["notification.login.wronguser"] = "Užívatel neexistuje, nebo jste zadali nesprávné údaje",
+        ["notification.login.ban"] = "Máte zakázaný vstup na server"
 	}
 }
 
