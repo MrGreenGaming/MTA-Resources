@@ -58,7 +58,7 @@ local buttonW, buttonH = 250, 30
 local buttonX, buttonY = logoX + (logoW - buttonW) * 0.5, logoY + (logoH - buttonH) * 0.5
 
 local flagW, flagH = 48, 48
-local flagX, flagY = 10, screenY - flagH - 50
+local flagX, flagY = 10, screenY - flagH - 10
 
 local checkboxW, checkboxH = 15, 15
 
