@@ -130,15 +130,13 @@ function showLogin(state)
 
 					animStage = 3
 
-					loadLoginData() 
+					loadLoginData()
 				end)
 
 				initAnimation("showLogoRotation", false, {0, 0, 0}, {720, 0, 0}, 1499, "InOutQuad")
 				
 				animStage = 2
 			end)
-
-			renderLogin()
 
 			addEventHandler("onClientRender", root, renderLogin)
 			addEventHandler("onClientClick", root, onClientClick)
