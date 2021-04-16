@@ -107,7 +107,7 @@ function showLogin(state)
 
 		addEventHandler("onClientBrowserCreated", videoPlayer,
 			function ()
-				loadBrowserURL(videoPlayer, "http://mta/local/files/bg.html")
+				loadBrowserURL(videoPlayer, "http://mta/gc_login/files/bg.html")
 				outputDebugString("Loaded videoplayer")
 
 				if isElement(musicPlayer) then
