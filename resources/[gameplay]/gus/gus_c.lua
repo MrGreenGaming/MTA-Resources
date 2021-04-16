@@ -182,10 +182,7 @@ ToggleUI.screenSize = { guiGetScreenSize() }
 ToggleUI.visible = true
 ToggleUI.screenSource = false
 
-function ToggleUI.toggleUIVisibility(bool)
-    if isBoolean(bool) then
-        ToggleUI.visible = bool
-    end
+function ToggleUI.toggleUIVisibility()
     ToggleUI.visible = not ToggleUI.visible
     removeEventHandler("onClientPreRender", root, ToggleUI.render)
     if ToggleUI.visible and isElement(ToggleUI.screenSource) then
@@ -199,8 +196,6 @@ function ToggleUI.toggleUIVisibility(bool)
     end
 end
 addCommandHandler("toggleui", ToggleUI.toggleUIVisibility)
-addEvent("toggleui", true)
-addEventHandler("toggleui", root, ToggleUI.toggleUIVisibility)
 
 function ToggleUI.render()
     if not ToggleUI.screenSource then
