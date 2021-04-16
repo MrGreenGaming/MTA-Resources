@@ -3,16 +3,14 @@ function doLogin(player, username, password)
 	outputDebugString(username);
 	outputDebugString(password);
 
-	exports.gc:getPlayerLoginInfo(username, password, doLoginCallback)
+	exports.gc:getPlayerLoginInfo(username, password, function(userId)
+		outputDebugString(userId)
+	end)
 
 end
 addEvent("doLoginS", true)
 addEventHandler("doLoginS", root, doLogin)
 
-
-function doLoginCallback(userId)
-	outputDebugString(userId)
-end
 
 -- 	triggerClientEvent(player, "hideLogin", player)
 
