@@ -67,13 +67,19 @@ languageStrings = {
 		["notification.login.ban"] = "A felhasználód ki van tiltva"
     },
     tr = {
-        ["render.input.username"] = "Kullanıcı Adı",
+        ["render.input.username"] = "Kullanıcı adı",
         ["render.input.password"] = "Şifre",
-        ["render.input.password2"] = "Tekrar Şifre",
-        ["render.input.email"] = "E-Posta",
-        ["render.input.rememberme"] = "Beni Hatırla",
-        ["render.button.login"] = "Giriş Yap",
-        ["render.button.register"] = "Kayıt Ol",
+        ["render.input.password2"] = "Tekrardan şifre",
+        ["render.input.email"] = "E-posta",
+        ["render.input.rememberme"] = "Beni hatırla",
+
+        ["render.button.login"] = "Giriş yap",
+        ["render.button.register"] = "Kaydol",
+        ["render.button.guest"] = "Misafir olarak oyna",
+
+        ["notification.login.success"] = "Başarıyla giriş yaptınız.",
+        ["notification.login.wronguser"] = "Böyle bir kullanıcı yok ya da yanlış bilgi girdiniz",
+        ["notification.login.ban"] = "Sunucudan yasaklandınız"
     }
 }
 
