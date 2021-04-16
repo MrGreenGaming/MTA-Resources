@@ -1,8 +1,8 @@
 function doLogin(player, username, password) 
 	outputDebugString("User tried logging in")
-	exports["gc"].getPlayerLoginInfo(username, password, function(data)
+	exports["gc"].getPlayerLoginInfo(username, password, function(userId, name, emailAdress, profile, joinTimestamp, coinsBalance, banned)
 		
-		outputDebugString(data)
+		outputDebugString(userId)
 
 	end)
 end
