@@ -1,4 +1,4 @@
-function doLoginS(player, username, password) 
+function doLogin(player, username, password) 
 	outputDebugString("User tried logging in")
 
 end
