@@ -17,7 +17,6 @@
     <export function="isHoliday" type="server" />
     <export function="isPlayerLoggedInGC" type="server" />
     <export function="getForumAccountDetailsMultiple" type="server" />
-    <export function="getPlayerLoginInfo" type="server" />
     <export function="getPlayerForumID" type="server" />
     <export function="getPlayerForumJoinTimestamp" type="server" />
     <export function="getPlayerForumProfileData" type="server" />
@@ -29,6 +28,7 @@
     <export function="addPlayerGreencoins" type="server" />
     <export function="toggleGCInfo" type="client" />
     <export function="GCTextPopUp" type="shared" />
+    <export function="LoginExport" type="server" />
 
     <!-- Exports for settings resource  KaliBwoy -->
     <export function="e_showGC" type="client" />

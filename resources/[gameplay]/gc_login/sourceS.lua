@@ -3,7 +3,7 @@ function doLogin(player, username, password)
 	outputDebugString(username);
 	outputDebugString(password);
 
-	exports.gc:getPlayerLoginInfo(username, password, function(userId)
+	exports.gc:LoginExport(username, password, player, function(userId, name, emailAdress, profile, joinTimestamp, coinsBalance, vip, banned)
 		outputDebugString(userId)
 	end)
 
