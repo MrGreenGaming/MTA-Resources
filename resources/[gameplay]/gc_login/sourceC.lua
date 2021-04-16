@@ -95,15 +95,12 @@ function showLogin(state)
 		end
 		videoPlayer = createBrowser(screenX, screenY, true, false)
 
-		outputDebugString("Created VideoPlayer")
-
 		-- showChat(not state)
     	-- setPlayerHudComponentVisible("all", false)
 
 		addEventHandler("onClientBrowserCreated", videoPlayer,
 			function ()
 				loadBrowserURL(videoPlayer, "http://mta/local/files/bg.html")
-				outputDebugString("Loaded videoplayer")
 
 				if isElement(musicPlayer) then
 					destroyElement(musicPlayer)
@@ -176,7 +173,6 @@ function renderLogin()
 	if not isAssetsReady then
 		return
 	end
-	outputDebugString("Rendering login")
     for k, v in pairs(animations) do
         if not v.completed then
             local currentTick = getTickCount()
