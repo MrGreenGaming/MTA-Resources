@@ -129,7 +129,7 @@ function showLogin(state)
 					end)
 
 					animStage = 3
-
+					isAssetsReady = true
 					loadLoginData()
 				end)
 
