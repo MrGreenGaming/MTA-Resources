@@ -230,14 +230,14 @@ function renderLogin()
 			logoX, logoY = getAnimationValue("showLogoPosition")[1], logoY
 		end
 
-		dxDrawImage(logoX, logoY, logoW, logoH, "files/logo.png", getAnimationValue("showLogoRotation")[1] or 0, 0, 0, tocolor(255, 255, 255, 255 * alpha))
+		dxDrawImage(logoX, logoY, logoW, logoH, "files/logo.png", getAnimationValue("showLogoRotation")[1] or 0, 0, 0, tocolor(255, 255, 255, 255 * alpha), true)
 	end
 
 	local i = 0
 	for k, v in pairs(availableLanguages) do
 		local x = flagX + (flagW + 10) * i
 		
-		dxDrawImage(x, flagY, flagW, flagH, "files/flags/" .. v[1] .. ".png", 0, 0, 0, tocolor(255, 255, 255, 255 * getAnimationValue("inputAlphaMul")[1]))
+		dxDrawImage(x, flagY, flagW, flagH, "files/flags/" .. v[1] .. ".png", 0, 0, 0, tocolor(255, 255, 255, 255 * getAnimationValue("inputAlphaMul")[1]), true)
 		buttons["lang:" .. k] = {x, flagY, flagW, flagH}
 
 		i = i + 1
@@ -251,19 +251,19 @@ function renderLogin()
 			drawFakeInput("username", localizedStrings["render.input.username"], "files/icons/username.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 0, inputW, inputH)
 			drawFakeInput("password", localizedStrings["render.input.password"], "files/icons/password.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 1, inputW, inputH)
 			
-			dxDrawRectangle(inputX, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH, tocolor(52, 110, 68, 200 * inputAlphaMul))
+			dxDrawRectangle(inputX, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH, tocolor(52, 110, 68, 200 * inputAlphaMul), true)
 			
 			if rememberMe then
-				dxDrawRectangle(inputX + 2, inputY + (inputH + 10) * 1 + inputH + 10 + 2, checkboxW - 4, checkboxH - 4, tocolor(11, 180, 25, 255 * inputAlphaMul))
+				dxDrawRectangle(inputX + 2, inputY + (inputH + 10) * 1 + inputH + 10 + 2, checkboxW - 4, checkboxH - 4, tocolor(11, 180, 25, 255 * inputAlphaMul), true)
 			end
 
 			buttons["checkbox:rememberMe"] = {inputX, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH}
 
 			if isLoginFailed then
-				dxDrawText(localizedStrings["notification.login.wronguser"], inputX, inputY + (inputH + 10) * 1 + inputH + 25, checkboxW, checkboxH, tocolor(255, 0, 0, 255 * inputAlphaMul), 0.7, assets.fonts.RobotoRegular )
+				dxDrawText(localizedStrings["notification.login.wronguser"], inputX, inputY + (inputH + 10) * 1 + inputH + 25, checkboxW, checkboxH, tocolor(255, 0, 0, 255 * inputAlphaMul), 0.7, assets.fonts.RobotoRegular, "left", "top", false, false, true )
 			end
 
-			dxDrawText(localizedStrings["render.input.rememberme"], inputX + checkboxW + 10, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH, tocolor(255, 255, 255, 255 * inputAlphaMul), 0.7, assets.fonts.RobotoRegular)
+			dxDrawText(localizedStrings["render.input.rememberme"], inputX + checkboxW + 10, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH, tocolor(255, 255, 255, 255 * inputAlphaMul), 0.7, assets.fonts.RobotoRegular, "left", "top", false, false, true)
 
 			drawButton("login", localizedStrings["render.button.login"], inputX, inputY + (inputH + 10) * 3, inputW, inputH, tocolor(255, 255, 255, 255 * inputAlphaMul), tocolor(52, 110, 68, 255 * inputAlphaMul), tocolor(11, 180, 25, 255 * inputAlphaMul), assets.images.circle, 0.7, assets.fonts.RobotoRegular)
 			drawButton("guest", localizedStrings["render.button.guest"], inputX, inputY + (inputH + 10) * 4, inputW, inputH, tocolor(255, 255, 255, 255 * inputAlphaMul), tocolor(52, 110, 68, 255 * inputAlphaMul), tocolor(11, 180, 25, 255 * inputAlphaMul), assets.images.circle, 0.7, assets.fonts.RobotoRegular)
@@ -506,7 +506,7 @@ function drawButton(id, text, x, y, w, h, textColor, btnColor, highlightColor, c
 	local font = font or "default" 
 
 	dxDrawRoundedRectangle("horizontal", x, y, w, h, cornerImage, activeButton == "button:" .. id and highlightColor or btnColor)
-	dxDrawText(text, x, y, w + x, h + y, textColor, fontSize, font, "center", "center")
+	dxDrawText(text, x, y, w + x, h + y, textColor, fontSize, font, "center", "center", false, false, true)
 
 	buttons["button:" .. id] = {x, y, w, h}
 end
