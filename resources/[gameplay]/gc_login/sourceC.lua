@@ -260,7 +260,7 @@ function renderLogin()
 			buttons["checkbox:rememberMe"] = {inputX, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH}
 
 			if isLoginFailed then
-				dxDrawText(localizedStrings["notification.login.wronguser"], inputX + checkboxH + 20, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH, tocolor(255, 255, 255, 255 * inputAlphaMul), 0.7, assets.fonts.RobotoRegular )
+				dxDrawText(localizedStrings["notification.login.wronguser"], inputX, inputY + (inputH + 10) * 1 + inputH + 20, checkboxW, checkboxH, tocolor(255, 255, 255, 255 * inputAlphaMul), 0.7, assets.fonts.RobotoRegular )
 			end
 
 			dxDrawText(localizedStrings["render.input.rememberme"], inputX + checkboxW + 10, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH, tocolor(255, 255, 255, 255 * inputAlphaMul), 0.7, assets.fonts.RobotoRegular)
