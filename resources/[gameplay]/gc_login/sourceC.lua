@@ -114,14 +114,12 @@ function showLogin(state)
 					destroyElement(musicPlayer)
 				end
 				musicPlayer = playSound("files/bgmusic.mp3", true)
-				outputDebugString("Playing Audio")
 
 				addEventHandler("onClientRender", root, renderLogin)
 				addEventHandler("onClientClick", root, onClientClick)
 				addEventHandler("onClientCharacter", root, onClientCharacter)
 				addEventHandler("onClientKey", root, onClientKey)
 				isAssetsReady = true
-
 
 				initAnimation("alphaMul", true, {0, 0, 0}, {1, 0, 0}, 1000, "Linear", function()
 				logoW, logoH = 1024 * 0.3, 1024 * 0.3
