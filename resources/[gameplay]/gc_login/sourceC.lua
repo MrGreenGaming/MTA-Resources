@@ -357,15 +357,15 @@ function onClientClick(button, state)
 	end
 end
 
-function onLoginSuccessfull()
-	outputDebugString("Login Successfull")
-end
-addEventHandler("onLoginSuccess", source, onLoginSuccessfull)
+addEvent("onLoginSuccess", true)
+addEventHandler("onLoginSuccess", source, function ()
+	outputDebugString("Login Success")
+end)
 
-function onLoginFailed()
+addEvent("onLoginFail", true)
+addEventHandler("onLoginFail", source, function ()
 	outputDebugString("Login Failed")
-end
-addEventHandler("onLoginFail", source, onLoginFailed)
+end)
 
 function saveLoginData(state) 
 	if state then
