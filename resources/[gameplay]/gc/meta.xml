@@ -28,7 +28,7 @@
     <export function="addPlayerGreencoins" type="server" />
     <export function="toggleGCInfo" type="client" />
     <export function="GCTextPopUp" type="shared" />
-    <export function="OnLogin" type="server" />
+    <export function="onLogin" type="server" />
 
     <!-- Exports for settings resource  KaliBwoy -->
     <export function="e_showGC" type="client" />

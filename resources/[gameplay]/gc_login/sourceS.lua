@@ -3,7 +3,7 @@ function doLogin(player, username, password)
 	outputDebugString(username);
 	outputDebugString(password);
 
-	exports.gc:OnLogin(username, password)
+	exports.gc:onLogin(username, password)
 
 end
 addEvent("doLoginS", true)
