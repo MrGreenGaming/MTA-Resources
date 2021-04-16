@@ -1,6 +1,6 @@
 function doLogin(player, username, password) 
 	outputDebugString("User tried logging in")
-	getPlayerLoginInfo(username, password, function(data)
+	exports.gc:getPlayerLoginInfo(username, password, function(data)
 		
 		outputDebugString(data)
 
