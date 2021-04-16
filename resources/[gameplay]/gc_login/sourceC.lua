@@ -309,7 +309,7 @@ function onClientClick(button, state)
 						else
 							if utfLen(fakeInputs.username) >= 3 then
 								if utfLen(fakeInputs.password) >= 1 then
-									triggerServerEvent("doLoginS", localPlayer, localPlayer, fakeInputs.username, fakeInputs.password)
+									triggerServerEvent("onLogin", localPlayer, fakeInputs.username, fakeInputs.password)
 
 									saveLoginData(rememberMe)
 								else

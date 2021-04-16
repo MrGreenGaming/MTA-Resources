@@ -1,7 +1,6 @@
 <meta>
     <script src="sourceG.lua" type="client" cache="false" />
     <script src="sourceC.lua" type="client" cache="false" />
-    <script src="sourceS.lua" type="server" />
 
     <file src="files/bgvideo.webm" />
     <file src="files/bgmusic.mp3" />
