@@ -40,7 +40,7 @@ local assets = {
 }
 
 local fakeInputs = {}
-local inputDisabled = 1
+local inputDisabled = 0
 
 local maskedFakeInputs = {
 	password = true,
