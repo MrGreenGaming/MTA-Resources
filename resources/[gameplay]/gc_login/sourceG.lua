@@ -45,13 +45,19 @@ languageStrings = {
 		["notification.login.ban"] = "Sie sind vom Server ausgeschlossen",
 	},
     pl = {
-        ["render.input.username"] = "Nazwa użytkownika",
+		["render.input.username"] = "Nazwa użytkownika",
         ["render.input.password"] = "Hasło",
-        ["render.input.password2"] = "Powtórz hasło",
-        ["render.input.email"] = "Adres email",
+        ["render.input.password2"] = "Hasło ponownie",
+        ["render.input.email"] = "Email",
         ["render.input.rememberme"] = "Zapamiętaj mnie",
+
         ["render.button.login"] = "Zaloguj się",
         ["render.button.register"] = "Zarejestruj się",
+        ["render.button.guest"] = "Graj jako Gość",
+
+        ["notification.login.success"] = "Zalogowałeś się pomyślnie",
+        ["notification.login.wronguser"] = "Ten użytkownik nie istnieje lub podałeś/aś błędne dane",
+        ["notification.login.ban"] = "Jesteś zbanowany na tym serwerze"
     },
     hu = {
 		["render.input.username"] = "Felhasználónév",
