@@ -131,6 +131,21 @@ languageStrings = {
 		["notification.login.success"] = "Sikeresen bejelentkeztél",
 		["notification.login.wronguser"] = "A felhasználó nem létezik, vagy hibásan adtad meg az adatokat",
 		["notification.login.ban"] = "Ki vagy tiltva a szerverről"
+	},
+	es = {
+		["render.input.username"] = "Usuario",
+        ["render.input.password"] = "Contraseña",
+        ["render.input.password2"] = "Repetir Contraseña",
+        ["render.input.email"] = "Email",
+        ["render.input.rememberme"] = "Recordarme",
+
+        ["render.button.login"] = "Entrar",
+        ["render.button.register"] = "Registrarse",
+        ["render.button.guest"] = "Jugar como invitado",
+
+        ["notification.login.success"] = "Has iniciado sesión correctamente",
+        ["notification.login.wronguser"] = "El usuario no existe o ha introducido información incorrecta",
+        ["notification.login.ban"] = "Estás prohibido del servidor"
 	}
 }
 
