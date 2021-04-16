@@ -122,7 +122,7 @@ function showLogin(state)
 				addEventHandler("onClientKey", root, onClientKey)
 				isAssetsReady = true
 
-				
+
 				initAnimation("alphaMul", true, {0, 0, 0}, {1, 0, 0}, 1000, "Linear", function()
 				logoW, logoH = 1024 * 0.3, 1024 * 0.3
 
@@ -237,14 +237,14 @@ function renderLogin()
 			logoX, logoY = getAnimationValue("showLogoPosition")[1], logoY
 		end
 
-		dxDrawImage(logoX, logoY, logoW, logoH, ":gc_assets/images/logo.png", getAnimationValue("showLogoRotation")[1] or 0, 0, 0, tocolor(255, 255, 255, 255 * alpha))
+		dxDrawImage(logoX, logoY, logoW, logoH, "files/logo.png", getAnimationValue("showLogoRotation")[1] or 0, 0, 0, tocolor(255, 255, 255, 255 * alpha))
 	end
 
 	local i = 0
 	for k, v in pairs(availableLanguages) do
 		local x = flagX + (flagW + 10) * i
 		
-		dxDrawImage(x, flagY, flagW, flagH, ":gc_assets/images/flags/" .. v[1] .. ".png", 0, 0, 0, tocolor(255, 255, 255, 255 * getAnimationValue("inputAlphaMul")[1]))
+		dxDrawImage(x, flagY, flagW, flagH, "files/flags/" .. v[1] .. ".png", 0, 0, 0, tocolor(255, 255, 255, 255 * getAnimationValue("inputAlphaMul")[1]))
 		buttons["lang:" .. k] = {x, flagY, flagW, flagH}
 
 		i = i + 1
@@ -255,8 +255,8 @@ function renderLogin()
 			local inputAlphaMul = getAnimationValue("inputAlphaMul")[1]
 			--print(inputAlphaMul, animStage)
 
-			drawFakeInput("username", localizedStrings["render.input.username"], ":gc_assets/images/icons/username.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 0, inputW, inputH)
-			drawFakeInput("password", localizedStrings["render.input.password"], ":gc_assets/images/icons/password.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 1, inputW, inputH)
+			drawFakeInput("username", localizedStrings["render.input.username"], "files/icons/username.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 0, inputW, inputH)
+			drawFakeInput("password", localizedStrings["render.input.password"], "files/icons/password.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 1, inputW, inputH)
 			
 			dxDrawRectangle(inputX, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH, tocolor(52, 110, 68, 200 * inputAlphaMul))
 			
@@ -276,10 +276,10 @@ function renderLogin()
 	elseif activePage == "register" then
 		local inputAlphaMul = getAnimationValue("inputAlphaMul")[1]
 
-		drawFakeInput("username", localizedStrings["render.input.username"], ":gc_assets/images/icons/username.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 0, inputW, inputH)
-		drawFakeInput("password", localizedStrings["render.input.password"], ":gc_assets/images/icons/password.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 1, inputW, inputH)
-		drawFakeInput("password2", localizedStrings["render.input.password2"], ":gc_assets/images/icons/password.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 2, inputW, inputH)
-		drawFakeInput("email", localizedStrings["render.input.email"], ":gc_assets/images/icons/email.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 3, inputW, inputH)
+		drawFakeInput("username", localizedStrings["render.input.username"], "files/icons/username.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 0, inputW, inputH)
+		drawFakeInput("password", localizedStrings["render.input.password"], "files/icons/password.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 1, inputW, inputH)
+		drawFakeInput("password2", localizedStrings["render.input.password2"], "files/icons/password.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 2, inputW, inputH)
+		drawFakeInput("email", localizedStrings["render.input.email"], "files/icons/email.png", assets.fonts.RobotoRegular, 0.75, inputX, inputY + (inputH + 10) * 3, inputW, inputH)
 
 		drawButton("register", localizedStrings["render.button.register"], inputX, inputY + (inputH + 10) * 4, inputW, inputH, tocolor(255, 255, 255, 255 * inputAlphaMul), tocolor(52, 110, 68, 255 * inputAlphaMul), tocolor(11, 180, 25, 255 * inputAlphaMul), assets.images.circle, 0.7, assets.fonts.RobotoRegular)
 		drawButton("login", localizedStrings["render.button.login"], inputX, inputY + (inputH + 10) * 5, inputW, inputH, tocolor(255, 255, 255, 255 * inputAlphaMul), tocolor(52, 110, 68, 255 * inputAlphaMul), tocolor(11, 180, 25, 255 * inputAlphaMul), assets.images.circle, 0.7, assets.fonts.RobotoRegular)
