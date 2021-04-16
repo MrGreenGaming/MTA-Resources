@@ -80,7 +80,22 @@ languageStrings = {
         ["notification.login.success"] = "Başarıyla giriş yaptınız.",
         ["notification.login.wronguser"] = "Böyle bir kullanıcı yok ya da yanlış bilgi girdiniz",
         ["notification.login.ban"] = "Sunucudan yasaklandınız"
-    }
+    },
+	ru = {
+		["render.input.username"] = "Имя пользователя",
+        ["render.input.password"] = "Пароль",
+        ["render.input.password2"] = "Повторите пароль",
+        ["render.input.email"] = "Электронная почта",
+        ["render.input.rememberme"] = "Запомнить меня",
+
+        ["render.button.login"] = "Войти",
+        ["render.button.register"] = "Зарегистрироваться",
+        ["render.button.guest"] = "Продолжить как гость",
+
+        ["notification.login.success"] = "Вход выполнен успешно",
+        ["notification.login.wronguser"] = "Такое имя пользователя не существует или Вы ввели неверную информацию",
+        ["notification.login.ban"] = "Вы были забанены"
+	}
 }
 
 if localPlayer then
