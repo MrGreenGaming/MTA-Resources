@@ -7,10 +7,6 @@ SAccount.__index = SAccount
 SAccount.instances = {}
 
 
-function LoginExport(username, pw, player, callback)
-    SAccount:login(username, pw, player, callback)
-end
-
 ---------------------------------------------------------------------------
 --
 -- SAccount:create()
