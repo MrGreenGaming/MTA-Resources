@@ -5,13 +5,30 @@ languageStrings = {
         ["render.input.password2"] = "Password again",
         ["render.input.email"] = "Email",
         ["render.input.rememberme"] = "Remember me",
+
         ["render.button.login"] = "Login",
 		["render.button.register"] = "Register",
+		["render.button.guest"] = "Play as Guest",
 
 		["notification.login.success"] = "You have successfully logged in",
 		["notification.login.wronguser"] = "The user does not exist or you have entered incorrect information",
 		["notification.login.ban"] = "You are banned from the server"
     },
+	nl = {
+		["render.input.username"] = "Gebruikersnaam",
+		["render.input.password"] = "Wachtwoord",
+		["render.input.password2"] = "Herhaal wachtwoord",
+		["render.input.email"] = "Email",
+		["render.input.rememberme"] = "Onthoudt mij",
+
+		["render.button.login"] = "Inloggen",
+		["render.button.register"] = "Registreer",
+		["render.button.guest"] = "Speel als gast",
+
+		["notification.login.success"] = "Je bent succesvol ingelogd",
+		["notification.login.wronguser"] = "Gebruiker bestaat niet of je hebt onjuiste gegevens ingevuld",
+		["notification.login.ban"] = "Jij bent verbannen van de server",
+	},
     pl = {
         ["render.input.username"] = "Nazwa użytkownika",
         ["render.input.password"] = "Hasło",
