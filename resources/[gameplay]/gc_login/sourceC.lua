@@ -66,6 +66,8 @@ local animStage = 0
 
 local activePage = "login"
 
+local isLoginFailed = false
+
 local videoPlayer = nil
 local musicPlayer = nil
 
@@ -257,6 +259,10 @@ function renderLogin()
 
 			buttons["checkbox:rememberMe"] = {inputX, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH}
 
+			if isLoginFailed then
+				dxDrawText(localizedStrings["render.notification.wronguser"], inputX + checkboxH + 20, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH, toColor(255, 255, 255, 255 * inputAlphaMul), 0.7, assets.fonts.RobotoRegular )
+			end
+
 			dxDrawText(localizedStrings["render.input.rememberme"], inputX + checkboxW + 10, inputY + (inputH + 10) * 1 + inputH + 10, checkboxW, checkboxH, tocolor(255, 255, 255, 255 * inputAlphaMul), 0.7, assets.fonts.RobotoRegular)
 
 			drawButton("login", localizedStrings["render.button.login"], inputX, inputY + (inputH + 10) * 3, inputW, inputH, tocolor(255, 255, 255, 255 * inputAlphaMul), tocolor(52, 110, 68, 255 * inputAlphaMul), tocolor(11, 180, 25, 255 * inputAlphaMul), assets.images.circle, 0.7, assets.fonts.RobotoRegular)
@@ -359,12 +365,13 @@ end
 
 addEvent("onLoginSuccess", true)
 addEventHandler("onLoginSuccess", root, function ()
+	isLoginFailed = false
 	triggerEvent("hideLogin", source)
 end)
 
 addEvent("onLoginFail", true)
 addEventHandler("onLoginFail", root, function ()
-	outputDebugString("Login Failed")
+	isLoginFailed = true
 end)
 
 function saveLoginData(state) 
