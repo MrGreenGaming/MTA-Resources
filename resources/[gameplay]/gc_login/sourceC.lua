@@ -31,7 +31,8 @@ local availableLanguages = {
 	tr = {"tr", "Turkish"},
 	ru = {"ru", "Russian"},
 	nl = {"nl", "Dutch"},
-	de = {"de", "German"}
+	de = {"de", "German"},
+	hu = {"hu", "Hungarian"}
 }
 
 local assets = {
