@@ -199,7 +199,7 @@ function ToggleUI.toggleUIVisibility(bool)
     end
 end
 addCommandHandler("toggleui", ToggleUI.toggleUIVisibility)
-addEvent("toggleui", root)
+addEvent("toggleui", true)
 addEventHandler("toggleui", root, ToggleUI.toggleUIVisibility)
 
 function ToggleUI.render()

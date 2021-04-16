@@ -20,6 +20,7 @@ addEvent("hideLogin", true)
 addEventHandler("hideLogin", root, function()
 	showLogin(false)
 	fadeCamera(true)
+	triggerEvent("toggleui", root, true)
 end)
 
 local animations = {}
@@ -99,6 +100,7 @@ function showLogin(state)
 
 		showChat(not state)
     	setPlayerHudComponentVisible("all", false)
+		triggerEvent("toggleui", root, false)
 
 		addEventHandler("onClientBrowserCreated", videoPlayer,
 			function ()
