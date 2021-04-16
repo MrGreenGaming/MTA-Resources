@@ -2,6 +2,9 @@ function doLoginS(player, username, password)
 	outputDebugString("User tried logging in")
 
 end
+addEvent("doLoginS", true)
+addEventHandler("doLoginS", root, doLogin)
+
 
 
 
