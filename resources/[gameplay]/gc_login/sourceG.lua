@@ -29,6 +29,21 @@ languageStrings = {
 		["notification.login.wronguser"] = "Gebruiker bestaat niet of je hebt onjuiste gegevens ingevuld",
 		["notification.login.ban"] = "Jij bent verbannen van de server",
 	},
+	de = {
+		["render.input.username"] = "Nutzername",
+		["render.input.password"] = "Passwort",
+		["render.input.password2"] = "Passwort nochmal",
+		["render.input.email"] = "Email",
+		["render.input.rememberme"] = "Mich erinnern",
+
+		["render.button.login"] = "Anmeldung",
+		["render.button.register"] = "registrieren",
+		["render.button.guest"] = "Spiele as Gast",
+
+		["notification.login.success"] = "Sie haben sich erfolgreich angemeldet",
+		["notification.login.wronguser"] = "Der Benutzer existiert nicht oder Sie haben falsche Informationen eingegeben",
+		["notification.login.ban"] = "Sie sind vom Server ausgeschlossen",
+	},
     pl = {
         ["render.input.username"] = "Nazwa użytkownika",
         ["render.input.password"] = "Hasło",
