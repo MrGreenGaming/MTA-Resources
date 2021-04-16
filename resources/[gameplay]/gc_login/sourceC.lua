@@ -361,6 +361,16 @@ function onClientClick(button, state)
 	end
 end
 
+function onLoginSuccessfull()
+	outputDebugString("Login Successfull")
+end
+addEventHandler("onLoginSuccess", source, onLoginSuccessfull)
+
+function onLoginFailed()
+	outputDebugString("Login Failed")
+end
+addEventHandler("onLoginFail", source, onLoginFailed)
+
 function saveLoginData(state) 
 	if state then
 		if fileExists("login.dat") then

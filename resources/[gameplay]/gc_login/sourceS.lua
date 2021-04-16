@@ -3,9 +3,7 @@ function doLogin(player, username, password)
 	outputDebugString(username);
 	outputDebugString(password);
 
-	exports.gc:LoginExport(username, password, player, function(userId, name, emailAdress, profile, joinTimestamp, coinsBalance, vip, banned)
-		outputDebugString(userId)
-	end)
+	exports.gc:OnLogin(username, password)
 
 end
 addEvent("doLoginS", true)
