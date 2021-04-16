@@ -17,6 +17,10 @@ function getPlayerLoginInfo(email, pw, callback)
         return
     end
 
+    outputDebugString(email)
+    outputDebugString(pw)
+    outputDebugString(callback)
+
     if devMode then
         -- /gclogin <choose a forumID> <admin>
         if pw == 'admin' then
