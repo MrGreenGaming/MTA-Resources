@@ -4,8 +4,7 @@ function doLogin(player, username, password)
 end
 addEvent("doLoginS", true)
 addEventHandler("doLoginS", root, doLogin)
-
-
+-- 	triggerClientEvent(player, "hideLogin", player)
 
 
 -- local connection = false

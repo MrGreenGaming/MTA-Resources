@@ -343,6 +343,8 @@ function onClientClick(button, state)
 								print("Túl rövid a felhasznáálónév")
 							end
 						end
+					elseif details[2] == "guest" then
+						triggerEvent("hideLogin", source)
 					end
 				elseif details[1] == "lang" then
 					print(details[2])
