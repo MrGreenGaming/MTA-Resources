@@ -217,7 +217,7 @@ function renderLogin()
 	local alpha = getAnimationValue("alphaMul")[1]
 	
 	if isElement(videoPlayer) then
-		dxDrawImage(0, 0, screenX, screenY, videoPlayer, 0, 0, 0, tocolor(255, 255, 255, 255 * alpha), true)
+		dxDrawImage(0, 0, screenX, screenY, videoPlayer, 0, 0, 0, tocolor(180, 180, 180, 255 * alpha), true)
 	end
 
 	if isElement(musicPlayer) then
