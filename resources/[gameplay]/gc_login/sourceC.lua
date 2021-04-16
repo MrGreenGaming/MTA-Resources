@@ -6,7 +6,7 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
 
 	--if not getElementData(localPlayer, "player.loggedIn") then
 		showLogin(true)
-		fadeCamera(false)
+		-- fadeCamera(false)
 	--end
 end)
 
@@ -19,7 +19,7 @@ end)
 addEvent("hideLogin", true)
 addEventHandler("hideLogin", root, function()
 	showLogin(false)
-	fadeCamera(true)
+	-- fadeCamera(true)
 end)
 
 local animations = {}
