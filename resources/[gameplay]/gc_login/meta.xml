@@ -1,0 +1,11 @@
+<meta>
+    <script src="sourceG.lua" type="client" cache="false"/>
+    <script src="sourceC.lua" type="client" cache="false"/>
+    <script src="sourceS.lua" type="server"/>
+
+	<file src="files/bgvideo.webm" />
+	<file src="files/bgmusic.mp3" />
+	<file src="files/bg.html" />
+
+    <min_mta_version client="1.5.7" server="1.5.7" />
+</meta>
