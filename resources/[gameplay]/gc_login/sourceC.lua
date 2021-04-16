@@ -108,7 +108,6 @@ function showLogin(state)
 		addEventHandler("onClientBrowserCreated", videoPlayer,
 			function ()
 				loadBrowserURL(videoPlayer, "http://mta/local/files/bg.html")
-				dxDrawImage(0,0, screenWidth, screenHeight, videoPlayer)
 				outputDebugString("Loaded videoplayer")
 
 				if isElement(musicPlayer) then
@@ -180,7 +179,7 @@ function renderLogin()
 	if not isAssetsReady then
 		return
 	end
-
+	outputDebugString("Rendering login")
     for k, v in pairs(animations) do
         if not v.completed then
             local currentTick = getTickCount()
