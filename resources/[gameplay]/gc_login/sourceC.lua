@@ -312,10 +312,10 @@ function onClientClick(button, state)
 							end)
 						else
 							if utfLen(fakeInputs.username) >= 3 then
-								if utfLen(fakeInputs.password) >= 8 then
+								if utfLen(fakeInputs.password) >= 1 then
 									triggerServerEvent("doLoginS", localPlayer, localPlayer, fakeInputs.username, fakeInputs.password)
 
-									saveLoginData(rememberMe) 
+									saveLoginData(rememberMe)
 								else
 									print("Túl rövid a jelszó")
 								end
