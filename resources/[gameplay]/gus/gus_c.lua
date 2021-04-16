@@ -320,3 +320,11 @@ end
 function light.isAllowed()
     return light.allowedModes[light.currentMode] and true or false
 end
+
+function isBoolean(str)
+	if str == nil then return false end
+	if str == "false" then return true end
+	if str == "true" then return true end
+	if str == false then return true end
+	if str == true then return true end
+end

@@ -6,6 +6,7 @@ SAccount = {}
 SAccount.__index = SAccount
 SAccount.instances = {}
 
+
 ---------------------------------------------------------------------------
 --
 -- SAccount:create()

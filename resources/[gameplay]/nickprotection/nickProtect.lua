@@ -123,7 +123,7 @@ addEventHandler('nickProtectionLoaded', getRootElement(),
             if not doesPlayerMatchNick(safeString(getPlayerName(player)), id) then
                 warnPlayer(player)
             end
-        end, 15000, 1, source)
+        end, 120000, 1, source)
     end)
 
 g_NickHandler = {}
