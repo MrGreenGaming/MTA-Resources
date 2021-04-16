@@ -97,8 +97,8 @@ function showLogin(state)
 		end
 		videoPlayer = createBrowser(screenX, screenY, true, false)
 
-		-- showChat(not state)
-    	-- setPlayerHudComponentVisible("all", false)
+		showChat(not state)
+    	setPlayerHudComponentVisible("all", false)
 
 		addEventHandler("onClientBrowserCreated", videoPlayer,
 			function ()
@@ -162,8 +162,8 @@ function showLogin(state)
 					destroyElement(videoPlayer)
 				end
 
-				-- showChat(not state)
-    			-- setPlayerHudComponentVisible("all", false)
+				showChat(not state)
+    			setPlayerHudComponentVisible("all", false)
 			end)
 		end)
 	end
