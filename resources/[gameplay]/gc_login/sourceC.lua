@@ -359,7 +359,7 @@ end
 
 addEvent("onLoginSuccess", true)
 addEventHandler("onLoginSuccess", root, function ()
-	outputDebugString("Login Success")
+	triggerEvent("hideLogin", source)
 end)
 
 addEvent("onLoginFail", true)
