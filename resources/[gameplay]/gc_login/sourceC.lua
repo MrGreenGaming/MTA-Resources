@@ -26,7 +26,8 @@ local animations = {}
 
 local availableLanguages = {
 	en = {"gb", "English"},
-	nl = {"nl", "Dutch"}
+	nl = {"nl", "Dutch"},
+	de = {"de", "German"}
 }
 
 local assets = {
