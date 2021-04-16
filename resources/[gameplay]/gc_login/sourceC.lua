@@ -576,17 +576,17 @@ function drawFakeInput(inputName, placeholder, icon, font, scale, x, y, sx, sy)
 	local fitScale = getFitFontScale(inputText, scale, font, sx - inputPaddingX - inputIconSize * 2)
 	local x2 = x + inputPaddingX
 
-	dxDrawImage(math.floor(x2), math.floor(y + (sy - inputIconSize) / 2), inputIconSize, inputIconSize, icon, 0, 0, 0, iconColor)
+	dxDrawImage(math.floor(x2), math.floor(y + (sy - inputIconSize) / 2), inputIconSize, inputIconSize, icon, 0, 0, 0, iconColor, true)
 
 	x2 = x2 + inputPaddingX + inputIconSize
 
-	dxDrawText(inputText, x2, y, 0, y + sy, textColor, fitScale, font, "left", "center")
+	dxDrawText(inputText, x2, y, 0, y + sy, textColor, fitScale, font, "left", "center", false, false, true)
 
 	if caretVisible then
 		local textWidth = dxGetTextWidth(inputText, fitScale, font)
 		local caretHeight = sy * 0.5
 
-		dxDrawRectangle(math.min(x2 + textWidth, x2 + sx) + 1, y + (sy - caretHeight) / 2, 1, caretHeight, textColor)
+		dxDrawRectangle(math.min(x2 + textWidth, x2 + sx) + 1, y + (sy - caretHeight) / 2, 1, caretHeight, textColor, true)
 	end
 
 	buttons["fakeInput:" .. inputName] = {x, y, sx, sy}
