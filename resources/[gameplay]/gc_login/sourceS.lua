@@ -2,10 +2,9 @@ function doLogin(player, username, password)
 	outputDebugString("User tried logging in")
 	outputDebugString(username);
 	outputDebugString(password);
-	exports["gc"].getPlayerLoginInfo(username, password, function(userId, name, emailAdress, profile, joinTimestamp, coinsBalance, banned)
-		
-		outputDebugString(userId)
 
+	exports.gc:getPlayerLoginInfo(username, password, function (userId)
+		outputDebugString(userId)
 	end)
 end
 addEvent("doLoginS", true)
