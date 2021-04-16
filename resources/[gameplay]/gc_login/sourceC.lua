@@ -116,6 +116,13 @@ function showLogin(state)
 				musicPlayer = playSound("files/bgmusic.mp3", true)
 				outputDebugString("Playing Audio")
 
+				addEventHandler("onClientRender", root, renderLogin)
+				addEventHandler("onClientClick", root, onClientClick)
+				addEventHandler("onClientCharacter", root, onClientCharacter)
+				addEventHandler("onClientKey", root, onClientKey)
+				isAssetsReady = true
+
+				
 				initAnimation("alphaMul", true, {0, 0, 0}, {1, 0, 0}, 1000, "Linear", function()
 				logoW, logoH = 1024 * 0.3, 1024 * 0.3
 
@@ -129,7 +136,6 @@ function showLogin(state)
 					end)
 
 					animStage = 3
-					isAssetsReady = true
 					loadLoginData()
 				end)
 
@@ -138,10 +144,6 @@ function showLogin(state)
 				animStage = 2
 			end)
 
-			addEventHandler("onClientRender", root, renderLogin)
-			addEventHandler("onClientClick", root, onClientClick)
-			addEventHandler("onClientCharacter", root, onClientCharacter)
-			addEventHandler("onClientKey", root, onClientKey)
 			end
 		)
 	else
