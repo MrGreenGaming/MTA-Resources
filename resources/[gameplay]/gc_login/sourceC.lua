@@ -100,17 +100,21 @@ function showLogin(state)
 		end
 		videoPlayer = createBrowser(screenX, screenY, true, false)
 
+		outputDebugString("Created VideoPlayer")
+
 		-- showChat(not state)
-    	setPlayerHudComponentVisible("all", false)
+    	-- setPlayerHudComponentVisible("all", false)
 
 		addEventHandler("onClientBrowserCreated", videoPlayer,
 			function ()
 				loadBrowserURL(videoPlayer, "http://mta/local/files/bg.html")
+				outputDebugString("Loaded videoplayer")
 
 				if isElement(musicPlayer) then
 					destroyElement(musicPlayer)
 				end
 				musicPlayer = playSound("files/bgmusic.mp3", true)
+				outputDebugString("Playing Audio")
 
 				initAnimation("alphaMul", true, {0, 0, 0}, {1, 0, 0}, 1000, "Linear", function()
 				logoW, logoH = 1024 * 0.3, 1024 * 0.3
@@ -163,7 +167,7 @@ function showLogin(state)
 				end
 
 				-- showChat(not state)
-    			setPlayerHudComponentVisible("all", false)
+    			-- setPlayerHudComponentVisible("all", false)
 			end)
 		end)
 	end
