@@ -138,6 +138,8 @@ function showLogin(state)
 				animStage = 2
 			end)
 
+			renderLogin()
+
 			addEventHandler("onClientRender", root, renderLogin)
 			addEventHandler("onClientClick", root, onClientClick)
 			addEventHandler("onClientCharacter", root, onClientCharacter)
