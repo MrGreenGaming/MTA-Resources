@@ -83,10 +83,10 @@ function loadAssets()
 		end
 	end
 
-	assets.fonts.RobotoRegular = dxCreateFont(":gc_assets/fonts/Roboto-Regular.ttf", 14, false, "cleartype_natural")
+	assets.fonts.RobotoRegular = dxCreateFont("files/Roboto-Regular.ttf", 14, false, "cleartype_natural")
 
-	assets.images.circle = dxCreateTexture(":gc_assets/images/circle.png", "argb", true, "clamp")
-	assets.images.roundedcorner = dxCreateTexture(":gc_assets/images/roundedcorner.png", "argb", true, "clamp")
+	assets.images.circle = dxCreateTexture("files/circle.png", "argb", true, "clamp")
+	assets.images.roundedcorner = dxCreateTexture("files/roundedcorner.png", "argb", true, "clamp")
 end
 
 function showLogin(state)
