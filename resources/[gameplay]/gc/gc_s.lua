@@ -133,7 +133,7 @@ function onLogout(playerElement)
         outputChatBox("[GC] Successfully logged out.", player, 0, 255, 0)
         triggerClientEvent(player, "onLogoutSuccess", root)
         triggerEvent('onGCLogout', player, forumID)
-        deleteAutologin(forumID)
+        -- deleteAutologin(forumID)
     else
         outputChatBox("[GC] Unable to logout. You're not logged in.", player, 255, 0, 0)
     end
