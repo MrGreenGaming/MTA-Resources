@@ -6,7 +6,7 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
 
 	--if not getElementData(localPlayer, "player.loggedIn") then
 		showLogin(true)
-		-- fadeCamera(false)
+		fadeCamera(false)
 	--end
 end)
 
@@ -19,7 +19,7 @@ end)
 addEvent("hideLogin", true)
 addEventHandler("hideLogin", root, function()
 	showLogin(false)
-	-- fadeCamera(true)
+	fadeCamera(true)
 end)
 
 local animations = {}
@@ -107,7 +107,8 @@ function showLogin(state)
 
 		addEventHandler("onClientBrowserCreated", videoPlayer,
 			function ()
-				loadBrowserURL(videoPlayer, "http://mta/gc_login/files/bg.html")
+				loadBrowserURL(videoPlayer, "http://mta/local/files/bg.html")
+				dxDrawImage(0,0, screenWidth, screenHeight, videoPlayer)
 				outputDebugString("Loaded videoplayer")
 
 				if isElement(musicPlayer) then
