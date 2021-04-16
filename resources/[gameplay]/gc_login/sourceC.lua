@@ -358,12 +358,12 @@ function onClientClick(button, state)
 end
 
 addEvent("onLoginSuccess", true)
-addEventHandler("onLoginSuccess", source, function ()
+addEventHandler("onLoginSuccess", root, function ()
 	outputDebugString("Login Success")
 end)
 
 addEvent("onLoginFail", true)
-addEventHandler("onLoginFail", source, function ()
+addEventHandler("onLoginFail", root, function ()
 	outputDebugString("Login Failed")
 end)
 
