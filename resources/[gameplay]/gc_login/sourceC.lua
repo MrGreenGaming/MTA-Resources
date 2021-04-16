@@ -505,7 +505,7 @@ function drawButton(id, text, x, y, w, h, textColor, btnColor, highlightColor, c
 	local cornerImage = cornerImage or assets.images.circle
 	local font = font or "default" 
 
-	dxDrawRoundedRectangle("horizontal", x, y, w, h, cornerImage, activeButton == "button:" .. id and highlightColor or btnColor)
+	dxDrawRoundedRectangle("horizontal", x, y, w, h, cornerImage, activeButton == "button:" .. id and highlightColor or btnColor, true)
 	dxDrawText(text, x, y, w + x, h + y, textColor, fontSize, font, "center", "center", false, false, true)
 
 	buttons["button:" .. id] = {x, y, w, h}
@@ -571,7 +571,7 @@ function drawFakeInput(inputName, placeholder, icon, font, scale, x, y, sx, sy)
 		end
 	end
 
-	dxDrawRoundedRectangle("horizontal", x, y, sx, sy, assets.images.circle, inputColor)
+	dxDrawRoundedRectangle("horizontal", x, y, sx, sy, assets.images.circle, inputColor, true)
 
 	local fitScale = getFitFontScale(inputText, scale, font, sx - inputPaddingX - inputIconSize * 2)
 	local x2 = x + inputPaddingX
