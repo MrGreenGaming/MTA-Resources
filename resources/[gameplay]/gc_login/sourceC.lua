@@ -110,10 +110,10 @@ function showLogin(state)
 			function ()
 				loadBrowserURL(videoPlayer, "http://mta/local/files/bg.html")
 
-				if isElement(musicPlayer) then
-					destroyElement(musicPlayer)
-				end
-				musicPlayer = playSound("files/bgmusic.mp3", true)
+				-- if isElement(musicPlayer) then
+				-- 	destroyElement(musicPlayer)
+				-- end
+				-- musicPlayer = playSound("files/bgmusic.mp3", true)
 
 				addEventHandler("onClientRender", root, renderLogin)
 				addEventHandler("onClientClick", root, onClientClick)
@@ -158,9 +158,9 @@ function showLogin(state)
 				removeEventHandler("onClientCharacter", root, onClientCharacter)
 				removeEventHandler("onClientKey", root, onClientKey)
 
-				if isElement(musicPlayer) then
-					stopSound(musicPlayer)
-				end
+				-- if isElement(musicPlayer) then
+				-- 	stopSound(musicPlayer)
+				-- end
 
 				if isElement(videoPlayer) then
 					destroyElement(videoPlayer)
@@ -220,9 +220,9 @@ function renderLogin()
 		dxDrawImage(0, 0, screenX, screenY, videoPlayer, 0, 0, 0, tocolor(180, 180, 180, 255 * alpha), true)
 	end
 
-	if isElement(musicPlayer) then
-		setSoundVolume(musicPlayer, alpha)
-	end
+	-- if isElement(musicPlayer) then
+	-- 	setSoundVolume(musicPlayer, alpha)
+	-- end
 
 	if animStage >= 2 then
 		logoW, logoH = getAnimationValue("showLogoSize")[1], getAnimationValue("showLogoSize")[2]
