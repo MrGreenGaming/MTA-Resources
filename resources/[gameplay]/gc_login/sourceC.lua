@@ -461,7 +461,7 @@ function onClientKey(key, press)
 				end
 			end
 		elseif key == "enter" then
-			print("Login with:")
+			triggerServerEvent("onLogin", localPlayer, fakeInputs.username, fakeInputs.password)
 		end
 	end
 end
