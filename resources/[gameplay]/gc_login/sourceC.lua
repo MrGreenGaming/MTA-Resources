@@ -429,17 +429,17 @@ function onClientCharacter(character)
 		if not isInputDisabled() then
 			-- if string.find(character, "[a-zA-Z0-9.-_@]") or character == "-" or character == "*" or character == "!" then
 				if activeFakeInput == "username" then
-					if utfLen(fakeInputs.username) <= 20 then
+					if utfLen(fakeInputs.username) <= 150 then
 						fakeInputs.username = fakeInputs.username .. character
 					end
 				elseif activeFakeInput == "password" or activeFakeInput == "password2" then
-					if utfLen(fakeInputs[activeFakeInput]) <= 25 then
+					if utfLen(fakeInputs[activeFakeInput]) <= 150 then
 						fakeInputs[activeFakeInput] = fakeInputs[activeFakeInput] .. character
 					end
 				elseif activeFakeInput == "email" then
-					if utfLen(fakeInputs.email) <= 48 then
+					-- if utfLen(fakeInputs.email) <= 48 then
 						fakeInputs.email = fakeInputs.email .. character
-					end
+					-- end
 				end
 			-- end
 		end
