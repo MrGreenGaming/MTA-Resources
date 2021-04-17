@@ -5,8 +5,14 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
 	triggerEvent("onClientCheckAssets", resourceRoot)
 
 	--if not getElementData(localPlayer, "player.loggedIn") then
+
+	if screenX < 1280 or screenY < 720 then
+		-- Screen is to small, skipping login screen
+		outputChatBox("Skipping login because your resolution is too small. Minimum required: 1280x720. Please use /gclogin [user] [password] to login")
+	else
 		showLogin(true)
 		fadeCamera(false)
+	end
 	--end
 end)
 
