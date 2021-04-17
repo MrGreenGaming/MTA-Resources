@@ -143,14 +143,12 @@ function onGCShopLogin (forumID)
 		end
 		getPerkExpire(forumID, perkIdTable, 
 		function(expired)
-			for index, perk in pairs(prks) do
+			for _, perk in pairs(prks) do
 				if tonumber(perk.exp) and (not expired[perk.ID] or expired[perk.ID] < getTimestamp()) then
 					outputChatBox ( 'GC: ' .. perk.description .. ' has expired!', theSource, 255, 0, 0)
 					removePerkFromDatabase(forumID, perk.ID)
 				else
-					setTimer(function ()
-						loadPerk(theSource, perk.ID)
-					end, index * 1000, 1)
+					loadPerk(theSource, perk.ID)
 				end
 			end
 			getPerks(forumID, 
