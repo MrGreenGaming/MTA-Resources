@@ -382,7 +382,6 @@ end
 
 modes = {
 	'nts',
-	'ctf',
 	'shooter',
 	'race',
 	'rtf',
