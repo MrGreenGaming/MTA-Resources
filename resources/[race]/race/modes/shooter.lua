@@ -510,7 +510,7 @@ function Shooter:handleFinishActivePlayer(player)
 		local timeToReduce = 60 * 1000
 		local reduceWhenNPlayers = 3
 		if #activePlayers == reduceWhenNPlayers then
-			RaceMode.setTimeLeft(timeToReduce)
+			RaceMode.setTimeLeft(self, timeToReduce)
 		end
 
 		if #activePlayers == 1 then
