@@ -509,7 +509,7 @@ function Shooter:handleFinishActivePlayer(player)
 		-- Reduces amount of time when 3 players are left to 1 minute
 		local timeToReduce = 60 * 1000
 		local reduceWhenNPlayers = 3
-		if #activePlayers == reduceWhenNPlayers and RaceMode.getTimeRemaining() > timeToReduce then
+		if #activePlayers == reduceWhenNPlayers then
 			RaceMode.setTimeLeft(timeToReduce)
 		end
 
