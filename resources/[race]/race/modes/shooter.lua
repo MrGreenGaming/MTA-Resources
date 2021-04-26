@@ -505,6 +505,14 @@ function Shooter:handleFinishActivePlayer(player)
 		end
 		-- Update ranking board if one player left
 		local activePlayers = getActivePlayers()
+
+		-- Reduces amount of time when 3 players are left to 1 minute
+		local timeToReduce = 60 * 1000
+		local reduceWhenNPlayers = 3
+		if #activePlayers == reduceWhenNPlayers and RaceMode.getTimeRemaining() > timeToReduce then
+			RaceMode.setTimeLeft(timeToReduce)
+		end
+
 		if #activePlayers == 1 then
 			-- self.rankingBoard:add(activePlayers[1], timePassed)
 			showMessage((string.gsub((getElementData(activePlayers[1], 'vip.colorNick') or getPlayerName(activePlayers[1])), '#%x%x%x%x%x%x', '')) .. ' is the final survivor!', 0, 255, 0)
