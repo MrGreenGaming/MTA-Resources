@@ -34,7 +34,7 @@ function SetNodeValue(file, node, value)
 	local child = xmlFindChild(file, node, 0)
 
 	if child then
-		xmlNodeSetValue(node, value)
+		xmlNodeSetValue(child, value)
 	else
 		local newChild = xmlCreateChild(file, node)
 		xmlNodeSetValue(newChild, value)
