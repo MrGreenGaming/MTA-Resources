@@ -73,7 +73,7 @@ addEventHandler("onPlayerWinDeadline", root, TriggerStreakForOtherGamemodes)
 function IsRecordBroken()
 	local record = GetRecordHolder()
 	
-	if not record[1] or currentPlayerStreakCount > record[1] then
+	if not record[1] or currentPlayerStreakCount > tonumber(record[1]) then
 		local streakPlayerName = getFullPlayerName(currentStreakPlayer)
 		
 		if record[0] then
