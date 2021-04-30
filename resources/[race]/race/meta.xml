@@ -10,6 +10,7 @@
     <include resource="language-chat" />
     <include resource="third_checkpoint" />
     <include resource="icons-vehicle-change" />
+    <include resource="streaks" />
 
 
     <script src="_common.lua" type="server" />
