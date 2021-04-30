@@ -17,7 +17,7 @@ function GetRecordHolder()
 end
 
 function SaveRecordHolder(playername, streak)
-	local streakXML = xmlLoadFile("streak.xml")
+	local streakXML = xmlLoadFile("streaks.xml")
 
 	SetNodeValue(streakXML, "recordName", playername)
 	SetNodeValue(streakXML, "recordAmount", streak)
