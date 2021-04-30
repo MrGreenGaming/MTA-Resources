@@ -10,6 +10,9 @@ function GetRecordHolder()
 			local recordNameValue = xmlNodeGetValue(recordNameChild)
 			local recordAmountValue = xmlNodeGetValue(recordAmountChild)
 
+			outputDebugString(recordNameValue)
+			outputDebugString(recordAmountValue)
+
 			return { recordNameValue, recordAmountValue}
 		end
 	end
