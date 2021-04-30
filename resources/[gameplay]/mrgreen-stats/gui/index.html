@@ -300,8 +300,8 @@
                 },
                 formatGC(amt) {
                     if (typeof amt !== 'number') return 0
-                    return amt.toLocaleString('en-UK')
-
+                    let gc = amt.toLocaleString('en-UK')
+                    return gc.replace(",", " ")
                 },
                 scrollToTop() {
                     document.getElementById('statsContent').scrollTop = 0
