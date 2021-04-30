@@ -439,6 +439,20 @@ end
 
 addCommandHandler('leave', leave)
 
+
+function forceleave(player)
+    local forumID = tonumber(exports.gc:getPlayerForumID(player))
+    if not forumID then
+        return outputChatBox('[TEAMS] You are not logged in to GC', sender, 0, 255, 0)
+    -- elseif playerteams[player].status ~= 1 then
+    --     return outputChatBox('[TEAMS] You are not logged in a team', sender, 0, 255, 0)
+    end
+    outputChatBox('[TEAMS] You left your team', player, 0, 255, 0)
+    dbExec(handlerConnect, [[UPDATE `team_members` SET `status`=0 WHERE `forumid`=?]], forumID)
+    checkPlayerTeam(player)
+end
+addCommandHandler('forceleave', forceleave)
+
 function rejoin(player)
     local forumID = tonumber(exports.gc:getPlayerForumID(player))
     if not forumID then
