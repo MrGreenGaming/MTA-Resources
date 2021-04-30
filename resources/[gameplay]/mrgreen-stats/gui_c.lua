@@ -187,7 +187,7 @@ function receiveStats(stats, player)
         -- Send player info to browser
         local playerObj = {}
         playerObj.name = safeString(stats.name)
-        playerObj.gc = string.gsub(stats.gc, ",", " ")
+        playerObj.gc = string.gsub(stats.gc, "%,", " ")
         playerObj.vip = stats.vip
         
         local countryCode = isElement(player) and getElementData(player, 'country') or false
