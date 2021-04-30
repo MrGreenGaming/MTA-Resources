@@ -56,7 +56,7 @@ function TriggerStreakForOtherGamemodes()
 			if (currentStreakPlayer) then
 				currentPlayerStreakCount = currentPlayerStreakCount+1;
 				exports.gc:addPlayerGreencoins(source, GetGreenCoinsAmountForStreak())
-				outputChatBox("[Streak]"..getFullPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00) (earned "..GetGreenCoinsAmountForStreak().."GC)", root, 0, 255, 0, true)
+				outputChatBox("[Streak] "..getFullPlayerName(currentStreakPlayer).." #00ff00has made a streak! (#FFFFFFX".. currentPlayerStreakCount.."#00ff00) (earned "..GetGreenCoinsAmountForStreak().."GC)", root, 0, 255, 0, true)
 				if IsRecordBroken() then
 					SaveRecordHolder(getFullPlayerName(currentStreakPlayer), currentPlayerStreakCount)
 				end
@@ -72,10 +72,24 @@ addEventHandler("onPlayerWinDeadline", root, TriggerStreakForOtherGamemodes)
 
 function IsRecordBroken()
 	local record = GetRecordHolder()
-
-	if not record[0] then return false end
-
-	return currentPlayerStreakCount > record[1]
+	
+	if not record[1] or currentPlayerStreakCount > record[1] then
+		local streakPlayerName = getFullPlayerName(currentPlayerStreakCount)
+		
+		if record[0] then
+			if streakPlayerName == record[0] then
+				-- Player has broken his own record
+				outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has broken their own record of " .. record[1] .. "!", root, 0, 255, 0, true)
+			else
+				-- Player has broken somebody else's record
+				outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has broken " .. record[0] .. "#00FF00's record of " .. record[1] .. "!", root, 0, 255, 0, true)
+			end
+		else
+			outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has a new record of " .. record[1], root, 0, 255, 0, true)
+		end
+		return true
+	end
+	return false
 end
 
 function StreakRecordCommand(source)
@@ -84,7 +98,7 @@ function StreakRecordCommand(source)
 	if record[0] then
 		outputChatBox("[Streak] " .. record[0] .. " #00FF00is the current streak record holder with a streak of " .. record[1], source, 0, 255, 0, true)
 	else
-		outputChatBox("[Streak] Currently there is no streak holder.")
+		outputChatBox("[Streak] Currently there is no streak holder.", root, 0, 255, 0, true)
 	end
 end
 addCommandHandler("streak", StreakRecordCommand, false)
