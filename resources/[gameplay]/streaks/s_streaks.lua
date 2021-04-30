@@ -85,7 +85,7 @@ function IsRecordBroken()
 				outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has broken " .. record[0] .. "#00FF00's record of " .. record[1] .. "!", root, 0, 255, 0, true)
 			end
 		else
-			outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has a new record of " .. record[1], root, 0, 255, 0, true)
+			outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has a new record of " .. currentPlayerStreakCount, root, 0, 255, 0, true)
 		end
 		return true
 	end
