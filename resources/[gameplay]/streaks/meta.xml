@@ -1,0 +1,5 @@
+<meta>
+	<info author="Initial: Haxardous | Updated: Nick_026" type="script" name="streaks" version="2.0" />
+	<script src="xml_helper.lua" type="server" />
+	<script src="s_streaks.lua" type="server" />
+</meta>
