@@ -95,6 +95,8 @@ end
 function StreakRecordCommand(source)
 	local record = GetRecordHolder()
 
+	outputDebugString(record[0])
+
 	if record[0] then
 		outputChatBox("[Streak] " .. record[0] .. " #00FF00is the current streak record holder with a streak of " .. record[1], source, 0, 255, 0, true)
 	else
