@@ -427,9 +427,9 @@ addCommandHandler('accept', accept)
 function leave(player)
     local forumID = tonumber(exports.gc:getPlayerForumID(player))
     if not forumID then
-        return outputChatBox('[TEAMS] You are not logged in to GC', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] You are not logged in to GC', player, 0, 255, 0)
     elseif playerteams[player].status ~= 1 then
-        return outputChatBox('[TEAMS] You are not logged in a team', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] You are not logged in a team', player, 0, 255, 0)
     end
 
     outputChatBox('[TEAMS] You left your team', player, 0, 255, 0)
@@ -442,9 +442,9 @@ addCommandHandler('leave', leave)
 function rejoin(player)
     local forumID = tonumber(exports.gc:getPlayerForumID(player))
     if not forumID then
-        return outputChatBox('[TEAMS] You are not logged in to GC', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] You are not logged in to GC', player, 0, 255, 0)
     elseif playerteams[player].status ~= 0 then
-        return outputChatBox('[TEAMS] You can\' rejoin your team', sender, 0, 255, 0)
+        return outputChatBox('[TEAMS] You can\' rejoin your team', player, 0, 255, 0)
     end
 
     outputChatBox('[TEAMS] You rejoined your team', player, 0, 255, 0)
