@@ -79,13 +79,13 @@ function IsRecordBroken()
 		if record[0] then
 			if streakPlayerName == record[0] then
 				-- Player has broken his own record
-				outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has broken their own record of " .. record[1] .. "!", root, 0, 255, 0, true)
+				outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has broken their own record of #FFFFFF" .. record[1] .. "#00FF00!", root, 0, 255, 0, true)
 			else
 				-- Player has broken somebody else's record
-				outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has broken " .. record[0] .. "#00FF00's record of " .. record[1] .. "!", root, 0, 255, 0, true)
+				outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has broken " .. record[0] .. "#00FF00's record of #FFFFFF" .. record[1] .. "#00FF00!", root, 0, 255, 0, true)
 			end
 		else
-			outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has a new record of " .. currentPlayerStreakCount, root, 0, 255, 0, true)
+			outputChatBox("[Streak] " .. streakPlayerName .. "#00FF00 has made a new streak record of #FFFFFF" .. currentPlayerStreakCount .. "#00FF00!", root, 0, 255, 0, true)
 		end
 		return true
 	end
@@ -98,9 +98,9 @@ function StreakRecordCommand(source)
 	outputDebugString(record[0])
 
 	if record[0] then
-		outputChatBox("[Streak] " .. record[0] .. " #00FF00is the current streak record holder with a streak of " .. record[1], source, 0, 255, 0, true)
+		outputChatBox("[Streak] " .. record[0] .. " #00FF00is the current streak record holder with a streak of #FFFFFF" .. record[1] .. "#00FF00!", source, 0, 255, 0, true)
 	else
-		outputChatBox("[Streak] Currently there is no streak holder.", root, 0, 255, 0, true)
+		outputChatBox("[Streak] Currently there is no streak record holder.", root, 0, 255, 0, true)
 	end
 end
 addCommandHandler("streak", StreakRecordCommand, false)
