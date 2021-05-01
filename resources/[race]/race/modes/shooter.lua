@@ -506,10 +506,15 @@ function Shooter:handleFinishActivePlayer(player)
 		-- Update ranking board if one player left
 		local activePlayers = getActivePlayers()
 
-		-- Reduces amount of time when 3 players are left to 1 minute
+		--? Reduces amount of time when 3 players are left to 1 minute (if 10 players are online)
+
+		-- Amount of players required to be online to reduce the time
+		local nRequiredPlayers = 10
+		-- Time to reduce to in milliseconds
 		local timeToReduce = 60 * 1000
+		-- Amount of players left when to reduce
 		local reduceWhenNPlayers = 3
-		if #activePlayers == reduceWhenNPlayers then
+		if #activePlayers == reduceWhenNPlayers and getPlayerCount() >= nRequiredPlayers then
 			RaceMode.setTimeLeft(self, timeToReduce)
 		end
 
