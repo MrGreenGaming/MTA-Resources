@@ -252,10 +252,10 @@ function MapInfoWindow.render()
     ------ NEXT MAP ------
     ----------------------
     --! Disabled next map UI since it's obsolete with more choices
-    -- local nextmapColor = tocolor(255,255,255, 150 * alphaFade)
+    local nextmapColor = tocolor(255,255,255, 150 * alphaFade)
     -- background
-    -- dxDrawRectangle(x + dims.nextmap.bgX, y + dims.nextmap.bgY, dims.nextmap.bgWidth, dims.nextmap.bgHeight, tocolor(0,0,0,100 * alphaFade))
-    -- dxDrawLine(x + dims.nextmap.bgX, y + dims.nextmap.bgY, x + dims.nextmap.bgX + dims.window.width, y + dims.nextmap.bgY, tocolor(255, 255, 255, 100 * alphaFade), 1)
+    dxDrawRectangle(x + dims.nextmap.bgX, y + dims.nextmap.bgY, dims.nextmap.bgWidth, dims.nextmap.bgHeight, tocolor(0,0,0,100 * alphaFade))
+    dxDrawLine(x + dims.nextmap.bgX, y + dims.nextmap.bgY, x + dims.nextmap.bgX + dims.window.width, y + dims.nextmap.bgY, tocolor(255, 255, 255, 100 * alphaFade), 1)
 
     -- -- Next map name
     -- dxDrawImage(x + dims.nextmap.iconX, y + dims.nextmap.iconY, dims.icons.width, dims.icons.height, "/icons/arrow-right.png", 0, 0, 0, nextmapColor)
