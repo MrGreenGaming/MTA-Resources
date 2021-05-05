@@ -10,10 +10,6 @@
     <script src='database.lua' />
     <file src='img/dot.png' />
 
-    <include resource="gc_login" />
-
-    <config src="help.xml" type="client" />
-
     <export function="isHoliday" type="server" />
     <export function="isPlayerLoggedInGC" type="server" />
     <export function="getForumAccountDetailsMultiple" type="server" />

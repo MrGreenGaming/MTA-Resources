@@ -4,7 +4,7 @@ accounts = {}
 --- Logging in and out  ---
 ----------------------------
 local function onLoginSuccessfull(player)
-    -- updateAutologin(player, accounts[player]:getForumID())
+    updateAutologin(player, accounts[player]:getForumID())
     triggerClientEvent(player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getForumName(), accounts[player]:getLoginEmail())
     triggerEvent('onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getForumName())
     local serialGreencoins = getSerialGreencoins(player)
@@ -133,7 +133,7 @@ function onLogout(playerElement)
         outputChatBox("[GC] Successfully logged out.", player, 0, 255, 0)
         triggerClientEvent(player, "onLogoutSuccess", root)
         triggerEvent('onGCLogout', player, forumID)
-        -- deleteAutologin(forumID)
+        deleteAutologin(forumID)
     else
         outputChatBox("[GC] Unable to logout. You're not logged in.", player, 255, 0, 0)
     end
