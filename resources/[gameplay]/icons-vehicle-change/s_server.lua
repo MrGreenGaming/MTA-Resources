@@ -84,6 +84,7 @@ addEventHandler("onPlayerFinish", root, onPlayerFinish)
 
 addEvent("removeIconsOnTimeUp", true)
 function onTimeIsUp()
+	if not modes[exports.race:getRaceMode()] then return false end
 	for k, v in ipairs(getElementsByType("player")) do
 		for i, checkpoint in ipairs(checkpoints) do
 			triggerClientEvent(v, "hideSign", root, i)
