@@ -362,6 +362,7 @@ function launchRace(duration)
 	g_Players = getElementsByType('player')
 
 	if type(duration) == 'number' then
+		-- Added 1ms delay to show timeleft ui to avoid a render bug
 		setTimer(function()
 			showGUIComponents('timeleftbg', 'timeleft')
 		end, 1, 1, source)
