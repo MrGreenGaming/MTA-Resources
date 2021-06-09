@@ -360,9 +360,13 @@ end
 
 function launchRace(duration)
 	g_Players = getElementsByType('player')
-	
+
 	if type(duration) == 'number' then
-		showGUIComponents('timeleftbg', 'timeleft')
+		-- Added 1ms delay to show timeleft ui to avoid a render bug
+		setTimer(function()
+			showGUIComponents('timeleftbg', 'timeleft')
+		end, 1, 1, source)
+
 		guiLabelSetColor(g_GUI.timeleft, 255, 255, 255)
 		g_Duration = duration
 		addEventHandler('onClientRender', g_Root, updateTime)
