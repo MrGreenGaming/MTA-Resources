@@ -365,7 +365,11 @@ function launchRace(duration)
 
 	if type(duration) == 'number' then
 		outputDebugString(duration)
-		showGUIComponents('timeleftbg', 'timeleft')
+
+		setTimer(function()
+			showGUIComponents('timeleftbg', 'timeleft')
+		end, 500, 1, source)
+		
 		guiLabelSetColor(g_GUI.timeleft, 255, 255, 255)
 		g_Duration = duration
 		addEventHandler('onClientRender', g_Root, updateTime)
