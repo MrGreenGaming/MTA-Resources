@@ -368,8 +368,8 @@ function launchRace(duration)
 
 		setTimer(function()
 			showGUIComponents('timeleftbg', 'timeleft')
-		end, 500, 1, source)
-		
+		end, 50, 1, source)
+
 		guiLabelSetColor(g_GUI.timeleft, 255, 255, 255)
 		g_Duration = duration
 		addEventHandler('onClientRender', g_Root, updateTime)
