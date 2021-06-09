@@ -361,7 +361,10 @@ end
 function launchRace(duration)
 	g_Players = getElementsByType('player')
 	
+	outputDebugString("Launching race")
+
 	if type(duration) == 'number' then
+		outputDebugString(duration)
 		showGUIComponents('timeleftbg', 'timeleft')
 		guiLabelSetColor(g_GUI.timeleft, 255, 255, 255)
 		g_Duration = duration
