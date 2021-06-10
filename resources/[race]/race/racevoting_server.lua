@@ -1006,10 +1006,8 @@ end
 
 function GetRoundLimit()
 	if getResourceFromName("coremarkers") and getResourceState(getResourceFromName("coremarkers")) == "running" then
-		outputDebugString("Returned CM Value")
 		return getNumber("race.nReplay_CM", 1)
 	end
-	outputDebugString("Returned regular value")
 	return getNumber("race.nReplay", 2)
 end
 
