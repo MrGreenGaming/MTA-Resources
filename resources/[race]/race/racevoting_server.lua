@@ -220,7 +220,7 @@ end
 
 function startNextMapVote()
 
-	local maxPlayAgain = getNumber("race.nReplay", 2)
+	local maxPlayAgain = GetRoundLimit()
 	local nMapsVote = getNumber("race.votemap_nMaps", 1) - 1
 
 	exports.votemanager:stopPoll()
@@ -421,7 +421,7 @@ local lastPlayed
 addEvent('onMapStarting', true)
 addEventHandler('onMapStarting', getRootElement(),
 function()
-	local maxPlayAgain = getNumber("race.nReplay", 2)
+	local maxPlayAgain = GetRoundLimit()
 	g_ForcedNextMap = nil
 	local currentMap = exports.mapmanager:getRunningGamemodeMap()
 	if lastPlayed ~= currentMap then
@@ -1004,6 +1004,12 @@ function getMapName( map )
 	return getResourceInfo( map, "name" ) or getResourceName( map ) or "unknown"
 end
 
+function GetRoundLimit()
+	if getResourceFromName("coremakers") and getResourceState(getResourceFromName("coremarkers")) == "running" then
+		return getNumber("race.nReplay_CM", 1)
+	end
+	return getNumber("race.nReplay", 2)
+end
 
 _nextMap = calculateNextmap()
 

@@ -161,6 +161,8 @@
 
         <setting name="*nReplay" value="2" friendlyname="Amount of replays" accept="0-9" group="Gameplay" desc="The amount of times a map can be replayed" />
 
+        <setting name="*nReplay_CM" value="1" friendlyname="Amount of replays in Coremarkers" accept="0-9" group="Gameplay" desc="The amount of times a coremarkers map can be replayed" />
+
         <setting name="*votemap_nMaps" value="1" friendlyname="Amount of Vote Maps" accept="1-8" group="Voting" desc="The amount of maps that show up in the vote panel" />
 
         <setting name="*respect_cycle" value="true" friendlyname="Respect gamemodecycle?" accept="false,true" group="Voting" desc="Must the votemanager respect the gamemode cycle?" />
