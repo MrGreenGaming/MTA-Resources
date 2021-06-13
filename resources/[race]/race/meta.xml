@@ -157,6 +157,10 @@
 				4. double click on 'race'
 			 ***************************************************** -->
 
+        <setting name="*killDzinyShooter" value="true" friendlyname="Kill Dziny in Shooter?" accept="false,true" group="DzinyMaster" desc="Should the server kill DzinyMaster in shooter gamemode?" />
+        <setting name="*killDzinyDerby" value="true" friendlyname="Kill Dziny in Derby?" accept="false, true" group="DzinyMaster" desc="Should the server kill DzinyMaster in Derby gamemode?" />
+        <setting name="*serialDziny" value="null" friendlyname="Dziny's Serial" group="DzinyMaster" desc="Dziny's Serial" />
+
         <setting name="*color" value="#D27350" friendlyname="Message color" group="Display" accept="*" examples="#FF0000,#776655" desc="Color of the Race chat box messages." />
 
         <setting name="*nReplay" value="2" friendlyname="Amount of replays" accept="0-9" group="Gameplay" desc="The amount of times a map can be replayed" />

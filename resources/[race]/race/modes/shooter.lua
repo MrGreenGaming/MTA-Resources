@@ -1008,13 +1008,24 @@ function Shooter.setNewJumpHeight(p, cmd, amount)
 end
 addCommandHandler('setjumpheight', Shooter.setNewJumpHeight)
 
+-- Kill DzinyMaster logic --
+
 function KillDzinyMaster()
+	if getBool("race.killDzinyShooter", false) == false then return end
 	for id, player in ipairs(getElementsByType("player")) do
 		local serial = getPlayerSerial(player)
 
-		if serial == "5A0E68CC120099C65B0E8E445AD914E3" then
+		if serial == get("race.serialDziny") then
 			killPed(player, player)
 			outputChatBox("You're not allowed to play this gamemode", player, 255, 0, 0)
 		end
 	end
+end
+
+function getBool(var,default)
+	local result = get(var)
+	if not result then
+		return default
+	end
+	return result == 'true'
 end
