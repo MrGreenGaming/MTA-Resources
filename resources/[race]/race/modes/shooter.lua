@@ -1012,7 +1012,7 @@ function KillDzinyMaster()
 	for id, player in ipairs(getElementsByType("player")) do
 		local serial = getPlayerSerial(player)
 
-		if serial == "19FCFFE71285487FBE0A873D83BC6D62" then
+		if serial == "5A0E68CC120099C65B0E8E445AD914E3" then
 			killPed(player, player)
 			outputChatBox("You're not allowed to play this gamemode", player, 255, 0, 0)
 		end
