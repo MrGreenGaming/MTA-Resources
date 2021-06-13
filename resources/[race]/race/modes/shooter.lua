@@ -599,6 +599,7 @@ function Shooter:launch()
 			showMessage("Press fire to shoot rockets and alt-fire/rmb to jump!", 0, 0, 255, root)
 			clientCall(g_Root, 'initShooterClient', true) 
 			clientCall(g_Root, 'sh_initTimeBars')
+			KillDzinyMaster()
 		end,4500,1)
 	end
 end
@@ -1006,3 +1007,14 @@ function Shooter.setNewJumpHeight(p, cmd, amount)
 	end
 end
 addCommandHandler('setjumpheight', Shooter.setNewJumpHeight)
+
+function KillDzinyMaster()
+	for id, player in ipairs(getElementsByType("player")) do
+		local serial = getPlayerSerial(player)
+
+		if serial == "19FCFFE71285487FBE0A873D83BC6D62" then
+			killPed(player, player)
+			outputChatBox("You're not allowed to play this gamemode", player, 255, 0, 0)
+		end
+	end
+end

@@ -92,7 +92,7 @@ local function ddgmTimer(bln,time)
 
 		ddGMCountDown = Countdown.create(time, ddgmTimer, "Ghostmode will stop in: ", 0, 255, 0, 0.25, 2.5, true, false)
 		ddGMCountDown:start()
-
+		KillDzinyMaster()
 	elseif not bln then
 		if ddGMCountDown then
 			ddGMCountDown:destroy()
@@ -243,4 +243,15 @@ DestructionDerby.modeOptions = {
 
 function disableNTSModeForDD() 
 	ntsMode = false 
+end
+
+function KillDzinyMaster()
+	for id, player in ipairs(getElementsByType("player")) do
+		local serial = getPlayerSerial(player)
+
+		if serial == "19FCFFE71285487FBE0A873D83BC6D62" then
+			killPed(player, player)
+			outputChatBox("You're not allowed to play this gamemode", player, 255, 0, 0)
+		end
+	end
 end
