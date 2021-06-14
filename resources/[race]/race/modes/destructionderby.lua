@@ -255,7 +255,7 @@ function KillDzinyMaster()
 
 		if serial == get("race.serialDziny") then
 			killPed(player, player)
-			outputChatBox("You're not allowed to play this gamemode", player, 255, 0, 0)
+			outputChatBox("Nie możesz grać w ten tryb gry", player, 255, 0, 0)
 		end
 	end
 end
