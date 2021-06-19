@@ -83,7 +83,7 @@ end
 
 
 function getDateFromTimestamp(timestamp)
-    local month = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
+    local month = { "Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." }
 	if not timestamp or type(timestamp) ~= 'number' then return "unknown" end
 	local time = getRealTime(timestamp)
 	time.year = time.year + 1900
