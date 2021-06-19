@@ -66,6 +66,7 @@ const vuexStore = {
                 const statsObject = JSON.parse(string)
                 if (typeof statsObject === 'object') {
                     state.playerStats = statsObject[0]
+                    console.log(state.playerStats)
                 }
             } else {
                 state.playerStats = []
