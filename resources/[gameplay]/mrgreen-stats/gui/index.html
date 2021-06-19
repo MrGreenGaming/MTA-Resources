@@ -301,7 +301,7 @@
                 formatGC(amt) {
                     if (typeof amt !== 'number') return 0
                     let gc = amt.toLocaleString('en-UK')
-                    return gc.replace(",", " ")
+                    return gc.replaceAll(",", " ")
                 },
                 scrollToTop() {
                     document.getElementById('statsContent').scrollTop = 0
