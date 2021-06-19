@@ -144,7 +144,7 @@
                                                                 <v-list color="grey darken-4" dense>
                                                                     <v-list-item :link="true" v-for="stat in item.items" :key="stat.name">
                                                                         <v-list-item-content class="statName">{{stat.name}}</v-list-item-content>
-                                                                        <v-list-item-content class="statValue">{{ stat.value }}</v-list-item-content>
+                                                                        <v-list-item-content class="statValue">{{ formatGC(stat.value) || stat.value}}</v-list-item-content>
                                                                     </v-list-item>
                                                                 </v-list>
                                                             </v-card>

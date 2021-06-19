@@ -428,6 +428,8 @@ addEventHandler('onClientRequestsStats', resourceRoot, sendStatsToClient)
 -----------
 function setJoinDate(id)
     if not getStat(id, 'General', 'Join Date') and forumidPlayerMap[id] then
+        local date = exports.gc:getPlayerForumJoinTimestamp(forumidPlayerMap[id])
+        outputDebugString(date)
         saveStat(id, 'General', 'Join Date', exports.gc:getPlayerForumJoinTimestamp(forumidPlayerMap[id]))
     end
 end
