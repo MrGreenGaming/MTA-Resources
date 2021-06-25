@@ -889,5 +889,5 @@ function getPlayerNameWithTeamColor(player)
 		r,g,b = getTeamColor(team)
 		teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
 	end
-	return "" .. teamColor .. playerName
+	return "" .. teamColor .. getPlayerName(player)
 end
