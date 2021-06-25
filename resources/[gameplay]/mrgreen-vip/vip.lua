@@ -138,7 +138,7 @@ function saveVipSetting(player, itemId, key, value)
 	vipPlayers[player]['options'][itemId][key] = value
 	local jsonOptions = toJSON( vipPlayers[player]['options'][itemId] )
 
-	outputDebugString(vipPlayers[player['options'][itemId]])
+	outputDebugString(vipPlayers[player]['options'][itemId])
 
 	-- Save to db
 	local saved = dbExec(handlerConnect, "INSERT INTO vip_items (forumid, item, options) VALUES (?,?,?) ON DUPLICATE KEY UPDATE options=?",forumId,itemId,jsonOptions,jsonOptions)
