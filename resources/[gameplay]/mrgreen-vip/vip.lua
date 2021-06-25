@@ -138,6 +138,8 @@ function saveVipSetting(player, itemId, key, value)
 	vipPlayers[player]['options'][itemId][key] = value
 	local jsonOptions = toJSON( vipPlayers[player]['options'][itemId] )
 
+	outputDebugString(jsonOptions)
+
 	-- Save to db
 	local saved = dbExec(handlerConnect, "INSERT INTO vip_items (forumid, item, options) VALUES (?,?,?) ON DUPLICATE KEY UPDATE options=?",forumId,itemId,jsonOptions,jsonOptions)
 	
@@ -183,6 +185,14 @@ addEvent( 'onGCLogin', true )
 addEventHandler('onGCLogin', root, function()
 	if isElement(source) and getElementType(source) == "player" and not vipPlayers[source] and isPlayerVIP(source) then
 		setPlayerVIP(source,true, "from onGCLogin")
+	end
+
+	if isElement(source) and getElementType(source) == "player" and not isPlayerVip(source) then
+		-- VIP Has expired. Should clear supernick from database to reset toptimes to default nickname
+		local forumId = exports.gc:getPlayerForumID(player)
+		if not forumId then return false end
+
+		local jsonOptions = toJSON()
 	end
 end)
 addEvent( 'onGCLogout', true )
