@@ -40,8 +40,8 @@
     <script src="items/viphorns/viphorns_s.lua" type="server" />
     
     <!-- Dynamic Overlay -->
-    <!-- <script src="items/dynamicoverlay/files/dvoid_controller_c.lua" type="client" />
-    <script src="items/dynamicoverlay/dynamicOverlay_s.lua" type="server" /> -->
+    <script src="items/dynamicoverlay/files/dvoid_controller_c.lua" type="client" />
+    <script src="items/dynamicoverlay/dynamicOverlay_s.lua" type="server" />
 
     <!-- Free VIP map -->
     <script src="items/freeVipMap/freeVipMap.lua" type="server" />
@@ -135,7 +135,7 @@
 
     <!-- Dynamic Vehicle Overlay Files -->
     <!-- Dynamic overlay by: ~ Shadow ~ -->
-    <!-- <file src="items/dynamicoverlay/files/shaders/mta-helper.fx" />
+    <file src="items/dynamicoverlay/files/shaders/mta-helper.fx" />
     <file src="items/dynamicoverlay/files/shaders/type1.fx" />
     <file src="items/dynamicoverlay/files/shaders/type2.fx" />
     <file src="items/dynamicoverlay/files/shaders/type3.fx" />
@@ -187,5 +187,5 @@
     <file src="items/dynamicoverlay/files/shaders/type48.fx" />   
     <file src="items/dynamicoverlay/files/shaders/type49.fx" />   
     <file src="items/dynamicoverlay/files/shaders/type50.fx" />
-    <file src="items/dynamicoverlay/files/shaders/type51.fx" />          -->
+    <file src="items/dynamicoverlay/files/shaders/type51.fx" />         
 </meta>

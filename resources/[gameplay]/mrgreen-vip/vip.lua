@@ -187,18 +187,13 @@ addEventHandler('onGCLogin', root, function()
 	end
 
 	if isElement(source) and getElementType(source) == "player" and not isPlayerVIP(source) then
-		outputDebugString("VIP EXPIRED. Clearing supernick")
 		-- VIP Has expired. Should clear supernick from database to reset toptimes to default nickname
 		local forumId = exports.gc:getPlayerForumID(source)
 		if not forumId then return false end
 
 		local jsonOptions = toJSON({supernick = false})
 
-		outputDebugString(jsonOptions)
-
 		local saved = dbExec(handlerConnect, "INSERT INTO vip_items (forumid, item, options) VALUES (?,?,?) ON DUPLICATE KEY UPDATE options=?", forumId, 2, jsonOptions, jsonOptions)
-
-		outputDebugString(saved)
 	end
 end)
 addEvent( 'onGCLogout', true )
