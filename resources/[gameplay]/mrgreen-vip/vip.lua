@@ -187,6 +187,7 @@ addEventHandler('onGCLogin', root, function()
 	end
 
 	if isElement(source) and getElementType(source) == "player" and not isPlayerVIP(source) then
+		outputDebugString("VIP EXPIRED. Clearing supernick")
 		-- VIP Has expired. Should clear supernick from database to reset toptimes to default nickname
 		local forumId = exports.gc:getPlayerForumID(player)
 		if not forumId then return false end
