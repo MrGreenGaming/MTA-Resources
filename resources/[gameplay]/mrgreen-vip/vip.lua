@@ -193,7 +193,11 @@ addEventHandler('onGCLogin', root, function()
 
 		local jsonOptions = toJSON({supernick = false})
 
-		dbExec(handlerConnect, "INSERT INTO vip_items (forumid, item, options) VALUES (?,?,?) ON DUPLICATE KEY UPDATE options=?", forumId, 2, jsonOptions, jsonOptions)
+		outputDebugString(jsonOptions)
+
+		local saved = dbExec(handlerConnect, "INSERT INTO vip_items (forumid, item, options) VALUES (?,?,?) ON DUPLICATE KEY UPDATE options=?", forumId, 2, jsonOptions, jsonOptions)
+
+		outputDebugString(saved)
 	end
 end)
 addEvent( 'onGCLogout', true )
