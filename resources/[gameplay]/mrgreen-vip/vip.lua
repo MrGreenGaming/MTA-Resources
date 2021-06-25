@@ -192,7 +192,7 @@ addEventHandler('onGCLogin', root, function()
 		local forumId = exports.gc:getPlayerForumID(player)
 		if not forumId then return false end
 
-		local jsonOptions = toJSON()
+		-- local jsonOptions = toJSON()
 	end
 end)
 addEvent( 'onGCLogout', true )
