@@ -18,7 +18,7 @@ addEventHandler("onGCShopLogin", root, function()
 	dbQuery(
         function(qh) 
             local result = dbPoll(qh, 0)
-            local pName = getPlayerName(player)
+            local pName = getPlayerNameWithTeamColor(player)
             if #result == 0 then
                 dbExec(handlerConnect, [[INSERT INTO gc_nickcache(forumid, name) VALUES (?,?)]], fid, pName)
             else
@@ -880,4 +880,14 @@ function cleanupTW(p1, p2)
         end
         i = i - 1
     end
+end
+
+function getPlayerNameWithTeamColor(player)
+	local teamColor = "#FFFFFF"
+	local team = getPlayerTeam(player)
+	if (team) then
+		r,g,b = getTeamColor(team)
+		teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
+	end
+	return "" .. teamColor .. playerName
 end
