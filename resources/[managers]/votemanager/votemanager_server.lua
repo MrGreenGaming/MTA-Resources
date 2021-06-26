@@ -151,6 +151,9 @@ function startPoll(pollData)
 
 	--prepare to end the poll
 	pollTimer = setTimer(endPoll, activePoll.timeout * 1000, 1)
+
+	-- Recheck votes to reset amount of votes for client to avoid visual bug
+	recheckVotes()
 	return true
 end
 
