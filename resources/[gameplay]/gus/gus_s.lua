@@ -195,7 +195,7 @@ addCommandHandler('uploadmap',
 addCommandHandler('discord',
 	function(player)
 		outputChatBox("Join our Discord! If you need admin support, join the server and ask for an admin", player, 0, 255, 0)
-		outputChatBox("Discord invite: https://discord.gg/SjbzC9Z", player, 0, 255, 0)
+		outputChatBox("Discord invite: https://discord.com/invite/cPhvsyVK", player, 0, 255, 0)
 	end
 )
 
