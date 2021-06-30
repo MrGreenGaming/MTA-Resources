@@ -297,7 +297,7 @@ function endPoll(chosenOption)
 			else
 				--copy the poll settings and increase nomination number
 				local drawPoll = {
-					title="A TIE! Please vote again!",
+					title=activePoll.timeout,
 					timeout=activePoll.timeout,
 					percentage=activePoll.percentage,
 					allowchange=activePoll.allowchange,
@@ -305,6 +305,10 @@ function endPoll(chosenOption)
 					maxnominations=activePoll.maxnominations,
 					nomination=activePoll.nomination+1,
 				}
+
+				if drawPoll.title == "Different Map?" then
+					drawPoll.timeout = 5
+				end
 				--insert the options with equal number of votes
 				for _,indici in ipairs(winningIndices) do
 					table.insert(drawPoll,activePoll[indici])
