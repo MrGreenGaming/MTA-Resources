@@ -297,7 +297,7 @@ function endPoll(chosenOption)
 			else
 				--copy the poll settings and increase nomination number
 				local drawPoll = {
-					title=activePoll.timeout,
+					title=activePoll.title,
 					timeout=activePoll.timeout,
 					percentage=activePoll.percentage,
 					allowchange=activePoll.allowchange,
