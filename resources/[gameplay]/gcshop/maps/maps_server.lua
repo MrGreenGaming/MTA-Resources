@@ -222,11 +222,10 @@ end
 function queue(choice, player)
 	choice.forumID = exports.gc:getPlayerForumID(player)
     table.insert(myQueue, choice)
-    outputChatBox("[Maps-Center] "..getPlayerName(player):gsub( '#%x%x%x%x%x%x', '' ).." has queued the map \"".. choice[1] .."\"!", root, 0, 255, 0)
+    outputChatBox("[Maps-Center] "..getPlayerName(player):gsub( '#%x%x%x%x%x%x', '' ).." has queued the map \"".. choice[1] .."\"! Queued position: " .. #myQueue .. "!", root, 0, 255, 0)
     if getResourceState( getResourceFromName('irc') ) == 'running' then
         exports.irc:outputIRC("12*** Map queued by " .. getPlayerName(source):gsub( '#%x%x%x%x%x%x', '' ) .. ": 1" .. choice[1] )
     end
-    outputChatBox("[Maps-Center] Your next map current queue number: "..#myQueue, player, 0, 255, 0)
     triggerClientEvent('onTellClientPlayerBoughtMap', player, choice[1], #myQueue)
     triggerEvent('onNextmapSettingChange', root, getResourceFromName(myQueue[1][2]))
 	addToLog ( '"' .. getPlayerName(player) .. '" bought map=' .. tostring(choice[1]))
