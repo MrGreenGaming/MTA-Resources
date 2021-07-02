@@ -187,7 +187,7 @@ function(rank, time)
 	if mapResName == "race-VenturasTwistsAndTurns" then
 		addPlayerAchievementRace(source, 63)
 	end
-	if mapResName == "race-whirlwindjourney" and time <= 444000 then
+	if mapResName == "race-whirlwindjourney" and time <= 460000 then
 		addPlayerAchievementRace(source, 64)
 	end
 	if mapResName == "race-Pachanga_TheShortMap" and time <= 72500 then
