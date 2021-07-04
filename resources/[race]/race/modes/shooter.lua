@@ -211,6 +211,9 @@ function Shooter:onPlayerWasted(player)
 		if isKeyBound(player, 'mouse2', 'down', self.jump) then
 			unbindKey(player, 'mouse2', 'both', self.jump)
 		end
+		if isKeyBound(player, 'lshift', 'down', self.jump) then
+			unbindKey(player, 'lshift', 'both', self.jump)
+		end
 
 
 	else
@@ -292,6 +295,7 @@ function Shooter:onPlayerJoin(player, spawnpoint)
 		bindKey(player, "vehicle_fire", "down", self.shoot)
 		bindKey(player, "vehicle_secondary_fire", "down", self.jump)
 		bindKey(player, "mouse2", "down", self.jump)
+		bindKey(player, 'lshift', 'down', self.jump)
 		self.cooldowns[player] = {shoot = tick, jump = tick}
 		self.spawnProtection[player] = false
 
@@ -317,6 +321,7 @@ function Shooter:restorePlayer(id, player, bNoFade, bDontFix)
 		bindKey(player, "vehicle_fire", "down", self.shoot)
 		bindKey(player, "vehicle_secondary_fire", "down", self.jump)
 		bindKey(player, "mouse2", "down", self.jump)
+		bindKye(player, "lshift", "down", self.jump)
 
 		local bkp = {}
 		local spawnpoint = self:pickFreeSpawnpoint(player)
@@ -591,12 +596,13 @@ function Shooter:launch()
 			-- bindKey(player, "vehicle_fire", "down", self.shoot)
 			-- bindKey(player, "vehicle_secondary_fire", "down", self.jump)
 			-- bindKey(player, "mouse2", "down", self.jump)
+			-- bindKey(player, 'lshift', 'down', self.jump)
 			self.cooldowns[player] = {shoot = tick, jump = tick}
 		end
 
 		if isTimer(launchTimer) then killTimer(launchTimer) end
 		launchTimer = setTimer(function()
-			showMessage("Press fire to shoot rockets and alt-fire/rmb to jump!", 0, 0, 255, root)
+			showMessage("Press fire to shoot rockets and alt-fire/rmb/lshift to jump!", 0, 0, 255, root)
 			clientCall(g_Root, 'initShooterClient', true) 
 			clientCall(g_Root, 'sh_initTimeBars')
 			KillDzinyMaster()
@@ -868,6 +874,9 @@ function Shooter:cleanup()
 			if isKeyBound(v, 'mouse2', 'down', self.jump) then
 				unbindKey(v, 'mouse2', 'both', self.jump)
 			end
+			if isKeyBound(v, 'lshift', 'down', self.jump) then
+				unbindKey(v, 'lshift', 'both', self.jump)
+			end
 
 			if isKeyBound(v,"accelerate", "down", startSpawnProtectionCountdown) then
 				unbindKey(v,"accelerate", "down", startSpawnProtectionCountdown)
@@ -905,6 +914,9 @@ function Shooter:destroy()
 			end
 			if isKeyBound(v, 'mouse2', 'down', self.jump) then
 				unbindKey(v, 'mouse2', 'both', self.jump)
+			end
+			if isKeyBound(v, 'lshift', 'down', self.jump) then
+				unbindKey(v, 'lshift', 'both', self.jump)
 			end
 
 			if isKeyBound(v,"accelerate", "down", startSpawnProtectionCountdown) then

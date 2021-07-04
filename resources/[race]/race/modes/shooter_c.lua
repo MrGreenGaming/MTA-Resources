@@ -56,6 +56,7 @@ end
 -- Keep bind on function, clientsided unbindKey may cause issues with NOS, further investigation needed
 bindKey("vehicle_secondary_fire", "down", shooterJump)
 bindKey("mouse2", "down", shooterJump)
+bindKey("lshift", "down", shooterJump)
 
 function shooterAutoRepair(attacker, weapon, loss)
 	if source ~= getPedOccupiedVehicle(localPlayer) then return end
