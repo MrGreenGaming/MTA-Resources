@@ -125,6 +125,24 @@ function serialblocker(player, _, serial, duration)
 end
 addCommandHandler('serialblocker', serialblocker, true, true)
 
+-- Marks offline player as blocker
+function addBlocker(admin, _, playername, duration)
+	local theInfo = getSerial(playername)
+
+	if not theInfo then return outputChatBox("Invalid player, no serial found", admin, 0, 255, 0) end
+	if not duration then return outputChatBox("Enter duration in hours", admin, 0, 255, 0) end
+
+	local serial = theInfo.serial
+
+	local expireTimestamp = getExpireTimestamp(duration)
+	if expireTimestamp then
+		addBlockerToDB(serial, playername, expireTimestamp, getPlayerName(admin):gsub("#%x%x%x%x%x%x",""),tostring( not hasObjectPermissionTo ( admin, "command.serialblocker", false ) ) )
+		logBlockAction(admin, serial, "marked", duration)
+		outputChatBox("Marked " .. playername .. "(".. serial .. ") as a blocker for " .. math.round(((tonumber(duration) or 24) * 1000 * 60 * 60 * 1) / (60*60*1000), 1, ceil) .. 'hr', admin, 255, 0,0)
+	end
+end
+addCommandHandler('addblocker', addBlocker, true, true)
+
 function unserialblocker(player, _, serial)
 	if not serial or #serial ~= 32 then
 		outputChatBox("Not a valid serial", player, 0, 255,0)
