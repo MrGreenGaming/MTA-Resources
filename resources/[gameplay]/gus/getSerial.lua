@@ -199,6 +199,17 @@ function getSerial(playername)
 	end
 end
 
+function getSerialCommand(admin, _, playername)
+	if not playername then return false end
+
+	local result = getSerial(playername)
+	
+	if not result then return outputChatBox("No serial found for " .. playername.. "!", admin, 255, 0, 0) end
+
+	outputChatBox("Serial found for " .. playername .. ": " .. result.serial, admin, 0, 255, 0)
+end
+addCommandHandler('getSerial', addBlocker, true, true)
+
 function getPlayerFromPartialName(name)
     local name = name and name:gsub("#%x%x%x%x%x%x", ""):lower() or nil
     if name then
