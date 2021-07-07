@@ -208,7 +208,7 @@ function getSerialCommand(admin, _, playername)
 
 	outputChatBox("Serial found for " .. playername .. ": " .. result.serial, admin, 0, 255, 0)
 end
-addCommandHandler('getSerial', getSerialCommand, true, true)
+addCommandHandler('getSerial', getSerialCommand, true, false)
 
 function getPlayerFromPartialName(name)
     local name = name and name:gsub("#%x%x%x%x%x%x", ""):lower() or nil
