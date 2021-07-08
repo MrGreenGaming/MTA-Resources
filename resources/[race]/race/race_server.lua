@@ -993,6 +993,7 @@ addEventHandler('onRequestKillPlayer', g_Root,
     function(reason)
 		if checkClient( false, source, 'onRequestKillPlayer' ) then return end
         local player = source
+		outputDebugString(exports.mapmanager:getRunningGamemode())
         if stateAllowsKillPlayer() then
         	if reason ~= "water" then
         		triggerEvent("onRacePlayerSuicide",source)
