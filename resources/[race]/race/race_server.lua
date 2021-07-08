@@ -993,8 +993,14 @@ addEventHandler('onRequestKillPlayer', g_Root,
     function(reason)
 		if checkClient( false, source, 'onRequestKillPlayer' ) then return end
         local player = source
-		outputDebugString(exports.mapmanager:getRunningGamemode())
+		
         if stateAllowsKillPlayer() then
+
+			local gamemode = getRunningGamemode()
+			if gamemode and gamemode == "Shooter" then
+				return outputChatBox("You're not allowed to kill yourself in this gamemode", source, 255, 0, 0)
+			end
+
         	if reason ~= "water" then
         		triggerEvent("onRacePlayerSuicide",source)
         	end
@@ -1004,6 +1010,16 @@ addEventHandler('onRequestKillPlayer', g_Root,
         end
     end
 )
+
+function getRunningGamemode() 
+	local raceResRoot = getResourceRootElement( getResourceFromName( "race" ) )
+	local raceInfo = raceResRoot and getElementData( raceResRoot, "info" )
+	local gamemode = false
+	if raceInfo then
+		gamemode = raceInfo.mapInfo.modename
+	end
+	return gamemode
+end
 
 function toggleServerGhostmode(player)
 	if not _TESTING and not isPlayerInACLGroup(player, g_GameOptions.admingroup) then
