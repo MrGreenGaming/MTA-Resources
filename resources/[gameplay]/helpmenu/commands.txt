@@ -1,18 +1,17 @@
 -------------------------------> Keys <-------------------------------
 
 
-
 GC Bike Trails  (Required perk)
 1, 2, 3, 4, 5 - Each of these do different animations when the bike is in the air.
 to turn off perk /trials or /trials 0 
 
-F1      - Sidebar options.
+F1      - Sidebar.
 F2      - To be redirected to the other server.
 F3      - Open Private Messaging.
 F4      - Show your achievements.
 F5      - View current map toptimes/Map info.
 F6      - Open GreenCoins Shop.
-F7      - Open/Close VIP window
+F7      - Open/Close VIP window.
 F8      - Brings up your console.
 F9      - Open/close help menu.
 F10     - Stats.
@@ -36,11 +35,11 @@ B       - Toggle spectator.
 
 
 
-/autologin name pass                                Auto login
+/autologin [name] [pass]                            Auto login.
 /admins                                             Show admins and mods on servers.
-/assist                                             Racing assist shows line on road where your ghost was recorded[must have ghost record on].
+/assist                                             Racing assist shows line on road where your ghost was recorded [must have ghost record on].
 /assist off                                         Turn off racing assist.
-/afk                                                away mode.
+/afk                                                Away mode.
 /author                                             Show current map author.
 /bind [key] [command] [arg]                         Binds a command to a key of your choice. 
 /bind [key] [say] [text]                            Binds text to say in chat.
@@ -49,7 +48,7 @@ B       - Toggle spectator.
 /checkmap [map]                                     See if map is on the server.
 /country [player]                                   Show country for player.
 /cpdelays                                           Toggle or hide the checkpoint splittime indicator.
- /setdelaypos [x y]                                 Move the split indicator (range 0 to 1).
+/setdelaypos [x y]                                  Move the split indicator (range 0 to 1).
 /currentrecord                                      Current monthly record of player to join server.
 /fpslimit [number]                                  Changes fps limit.
 /freecam                                            Go into freecam mode (currently for admins only).
@@ -63,35 +62,27 @@ B       - Toggle spectator.
 /hidemsg                                            Hide floating messages.
 /hidenext                                           Hide the current/next map window.
 /ignore [player]                                    Ignore a disturbing player.
-/irc                                                Show irc info.
-/leaderboards                                       To see the top time earners
 /like,/dislike                                      Like or dislike current map.
 /locknick,/unlocknick                               Protect or unprotect your nick abuse will not be tolerated.
-/lodrange 300                                       Loads slow loading objects.
+/lodrange [0-300]                                   Loads slow loading objects.
 /lol                                                Laugh. 
 /lol [player]                                       Laugh at player.
-/mm                                                 Show map upload window.
-/makeowner name                                     To change owner of team.
+/makeowner [name]                                   To change owner of team.
 /mapinfo [map]                                      Show map info window.
 /mapflash                                           To enable or disable flashing icon on taskbar when next map starts.
 /maps                                               List of the maps we have (in console = F8).
 /messages                                           Disable F3 messaging to you.
 /mode                                               Change the mode for speedo.
-/motd                                               Shows new changes to server.
-/nextmap                                            Check what the next map is.
 /nick [name]                                        Set player name.
 /oldcam                                             Switch to different camera.
 /players [mix/race]                                 Show players on other server.
 /radio                                              Play webradio.
-/recent                                             Show recent forum topics.
 /register [name] [pass]                             Register an account to use with /login features.
 /report                                             Report a problem to admins.
 /resizeicon [size]                                  Resize typing icon.
 /round                                              Shows round 1 2 or 3.
-/rules                                              Show the rules.
 /s /spec /spectate[name]                            Go into spectator mode or spectate a specific player. 
 /seen [fullName]                                    Displays last seen date and time of your friends in GMT time.
-/serialnicks [serial]                               Nick associated with serial.
 /seticonvis [alpha]                                 Alpha for typing icon.
 /settings                                           Show settings. 
 /showchat                                           To add or remove chat 
@@ -101,32 +92,82 @@ B       - Toggle spectator.
 /soundsoff                                          Mute map sounds on map start.
 /soundson                                           Disable /soundsoff.
 /sphud                                              Switch to a cool hud.
-/stats [player]                                     Show race/mix stats for player.
 /time                                               Time of server.
 /toggleicon                                         Toggle typing icon.
 /upload                                             Show upload address.
 /getpackets [player]                                Show's if a player is lagging (anything above %0.0 considered as a lag number).
+/language                                           Allows you to select your langauge.
+/f /f [player]                                      Pays your respects.
 
 
 -------------------------------> Mods <-------------------------------
 
 
-/blocker <name> <hours>
+/blocker [name] [time] -- Gives player a blocker mode.
+Allowed timeTypes: hours, days, weeks, months, years.
 For example the following command will mark me as blocker for 2 hours:
-/blocker Bierbuikje 2
+/blocker Bierbuikje 2 hours or /blocker Bierbuikje 2 h or /blocker Bierbuikje 2 hour
 
-/blockers
-Shows an overview of all players in blocker mode
+/blockers -- Shows an overview of all players in blocker mode.
 
-/k <name> <reason>
-Blow up another player who camps or is bugged in Shooter or DD mode.
+/k [name] [reason] -- Blow up another player who camps or is bugged in Shooter or DD mode.
 
-/mute <name> <reason> <seconds>
+/mute [name] [reason] [time] -- Mutes a player.
+Allowed timeTypes: seconds, minutes, hours, days, weeks, months, years.
 For example the following command mutes me for 30 minutes:
-/mute Bierbuikje reason 1800
+/mute Bierbuikje reason 30 minutes or /mute Bierbuikje reason 30 m or /mute Bierbuikje reason 30 minute
 
-/unmute <name>
-Unmutes a muted player.
+/unmute [name] -- Unmutes a muted player.
 
-/votekick <name> <reason>
-Starts a votekick against a player.
+/votekick [name] [reason] -- Starts a votekick against a player.
+
+/modsay -- Allows you to talk with other mods and admins privately (tip: /bind o chatbox modsay).
+
+
+-------------------------------> Admins <-------------------------------
+
+
+/admin -- Opens admin panel, use 'P' instead.
+/banip [IP] -- Bans the IP.
+/banserial [serial] -- Bans the serial.
+/unbanip [ip] -- Unbans the IP.
+/unbanserial [serial] -- Unbans the serial.
+/kick [playerName] -- Kicks the player.
+/shout [playerName] [message] -- Shouts the message accross the player's screen.
+/debuggc [player] -- Dump gc info.
+/adsay [text] -- Talk in private with other admins (tip: /bind i chatbox adsay).
+/sban [player] [reason] -- Serial ban a player for reason.
+/addban [nick] [reason] -- Ban an already disconnected player.
+/addmute [nick] [DuartionInDays] -- Mute an already disconnected player.
+/chatoff /chaton -- Disable/enable chatting.
+/clearchat --  Clear the current chat messages.
+/achat [text] -- Show a floating message.
+/editmotd --  Edit the motd message.
+/stopvote -- Stop the current running vote.
+/new --  Start vote for new map.
+/voteredo --   Start vote for again.
+/redo -- Restart the map.
+/random --   Change to a random map.
+/forcevote --   Start the vote like the map has finished.
+/nextmap [map] --  Set nextmap.
+/tops [player] # -- Show tops for player in chat and console.
+/getSerial [playername] -- Gives you the serial of a player who is offline.
+/restart [ResourceName] -- Restarts a resource.
+/update [ResourceName] -- Updates a resource.
+/serialnicks [serial] -- Nicks associated with serial.
+
+
+
+-------------------------------> Map Managers <-------------------------------
+
+
+/managetops -- Manage map tops.
+/mm -- Map Manager panel.
+/setjumpheight [2-11] -- Sets jump height setting of currently played shooter map.
+
+
+
+-------------------------------> Server Managers <-------------------------------
+
+
+/shutdown -- Restarts the server.
