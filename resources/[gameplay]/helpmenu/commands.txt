@@ -63,7 +63,7 @@ B       - Toggle spectator.
 /hidenext                                           Hide the current/next map window.
 /ignore [player]                                    Ignore a disturbing player.
 /like,/dislike                                      Like or dislike current map.
-/locknick,/unlocknick                               Protect or unprotect your nick abuse will not be tolerated.
+/locknick,/unlocknick                               Protect or unprotect your nick. Abuse will not be tolerated.
 /lodrange [0-300]                                   Loads slow loading objects.
 /lol                                                Laugh. 
 /lol [player]                                       Laugh at player.
@@ -139,6 +139,9 @@ For example the following command mutes me for 30 minutes:
 /sban [player] [reason] -- Serial ban a player for reason.
 /addban [nick] [reason] -- Ban an already disconnected player.
 /addmute [nick] [DuartionInDays] -- Mute an already disconnected player.
+/removemute [nick] -- Unmutes an already disconnected player.
+/serialblocker [serial] -- Marks an already disconnected player as blocker using a serial.
+/serialunblocker [serial] -- Unmarks an already disconnected player as blocker using a serial.
 /chatoff /chaton -- Disable/enable chatting.
 /clearchat --  Clear the current chat messages.
 /achat [text] -- Show a floating message.
@@ -171,3 +174,4 @@ For example the following command mutes me for 30 minutes:
 
 
 /shutdown -- Restarts the server.
+/deletenick [nick] -- Deletes a locked nick from the database. 
