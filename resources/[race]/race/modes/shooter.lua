@@ -587,7 +587,7 @@ function Shooter:launch()
 		setTimer(function() clientCall(g_Root, 'sh_initTimeBars') end,4500,1)
 	else
 		--if math.random(2) == 1 then clientCall(g_Root, 'showOnlyHealthBar', true) end -- Use this to hide names 50% of the time
-		clientCall(g_Root, 'showOnlyHealthBar', true) -- Use this to hide names 100% of the time
+		--clientCall(g_Root, 'showOnlyHealthBar', true) -- Use this to hide names 100% of the time
 		-- Add binds for rockets/jumps and cooldown at start
 		self.cooldowns = {}
 		local tick = getTickCount() + 5000
