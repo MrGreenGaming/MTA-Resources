@@ -103,7 +103,7 @@ local perks = {
 	[1] = { ID = 1, price =  3000 / 2, description = 'Bike trials', func = 'loadGCTrials'},
 	[2] = { ID = 2, price =  3250 / 2, description = 'Faster respawn for 60 days', func = 'loadGCRespawn', exp = 60},
 	[3] = { ID = 3, price =  2250 / 2, description = 'HP Regen for 30 days', func = 'loadGCRegenHP', exp = 30},
-	[4] = { ID = 4, price = 15000 / 2, description = 'Custom paintjob', func = 'loadGCCustomPaintjob', defaultAmount = 1, extraPrice = 15000, modes = {'Sprint', 'Never the same', 'Manhunt'}},
+	[4] = { ID = 4, price = 15000 / 2, description = 'Custom paintjob', func = 'loadGCCustomPaintjob', defaultAmount = 1, extraPrice = 15000 / 2, modes = {'Sprint', 'Never the same', 'Manhunt'}},
 	[5] = { ID = 5, price =  1500 / 2, description = 'Voice', func = 'loadGCVoice'},
 	[6] = { ID = 6, price =  2250 / 2, description = 'Longer burnup time', func = 'loadGCBurn', modes = {'Sprint', 'Never the same', 'Shooter', 'Deadline', 'Reach the flag', 'Capture the flag', 'Destruction derby'}},
 	[7] = { ID = 7, price =  3250 / 2, description = 'Extra long burnup time', func = 'loadGCBurnExtra', requires = {6}, exp = 30, modes = {'Sprint', 'Never the same', 'Shooter', 'Deadline', 'Reach the flag', 'Capture the flag', 'Destruction derby'}},
