@@ -1603,7 +1603,7 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 		fadeCamera(true)
 		setTimer(getPlayers, 1000, 1)
 		
-		bindKey('f1', 'down', toggleFRWindow)
+		bindKey('F5', 'down', toggleFRWindow)
 		createWindow(wndMain)
 		hideAllWindows()
 		guiCheckBoxSetSelected(getControl(wndMain, 'jetpack'), doesPedHaveJetPack(g_Me))

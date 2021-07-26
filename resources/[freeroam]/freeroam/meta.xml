@@ -5,8 +5,6 @@
 	<script src="greenzone.lua" type="server" />
     <map src="greenzones.map" dimension="0" />
 	
-	<script src="welcomemessage.lua" type="server" />
-	
 	<script src="zyky.lua" type="server" />
 	
 	<script src="util_server.lua" type="server" />

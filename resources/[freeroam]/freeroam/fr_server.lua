@@ -145,7 +145,7 @@ function joinHandler(player)
 	end
 	if getOption('welcometextonstart') then
 		outputChatBox('Welcome to Freeroam', player, 0, 255, 0)
-		outputChatBox('Press F1 to show/hide controls', player, 0, 255, 0)
+		outputChatBox('Press F5 to show/hide controls', player, 0, 255, 0)
 	end
 end
 addEventHandler('onPlayerJoin', g_Root, joinHandler)

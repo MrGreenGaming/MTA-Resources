@@ -243,7 +243,7 @@ function showSidebar()
 	end
 -- end
 end
-bindKey("f1","down",showSidebar )
+bindKey("F5","down",showSidebar )
 
 
 -- EASING
