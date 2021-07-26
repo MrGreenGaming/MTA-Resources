@@ -1168,7 +1168,8 @@ end
 
 
 function isVehColorAllowed()
-	return exports.race:getRaceMode() ~= "Capture the flag"
+	if getResourceFromName('race') and getResourceState(getResourceFromName('race')) == 'running' then return exports.race:getRacemode() ~= "Capture the flag" end
+	return true
 end
 
 -- idk if this already exists but im gonna make it anyways, lemme know if it already exists ~ Mihoje
