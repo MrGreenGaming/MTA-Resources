@@ -6,9 +6,6 @@
     <map src="greenzones.map" dimension="0" />
 	
 	<script src="welcomemessage.lua" type="server" />
-	  
-	<script src="admintag_server.lua" type="server" />
-    <script src="admintag_client.lua" type="client" />
 	
 	<script src="zyky.lua" type="server" />
 	
