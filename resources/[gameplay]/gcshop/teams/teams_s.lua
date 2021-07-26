@@ -318,7 +318,9 @@ function checkPlayerTeam2(qh, player, bLogin)
                 setElementData(teams[r.teamid], 'gcshop.owner', r.owner)
             end
             -- Don't use team elements in CTF
-            if exports.race:getRaceMode() ~= "Capture the flag" then
+            local mode = ""
+            if getResourceFromName('race') and getResourceState(getResourceFromName('race')) == 'running' then mode = exports.race:getRaceMode() end
+            if mode ~= "Capture the flag" then
                 setPlayerTeam(player, teams[r.teamid])
 				-- Colored blips for default radar by AleksCore
 				local blips = getElementsByType("blip")
