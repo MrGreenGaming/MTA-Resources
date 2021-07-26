@@ -36,6 +36,7 @@ local permissions = {
 		['Shooter'] = true,
 		['Deadline'] = true,
 		['Manhunt'] = true,
+		['Freeroam'] = true
 	},
 	preview = {								-- the rules for custom colours are the same for paintjobs, since they both change colours
 		['Sprint'] = true,
@@ -622,10 +623,12 @@ function upgradeVehicle(player, forumID)
 				addUpg[i][k] = tonumber(v)
 			end
 		end
+		local mode = "Freeroam"
+		if getResourceFromName('race') and getResourceState(getResourceFromName('race')) == 'running' then mode = exports.race:getRaceMode() end
 		if i <= 16 and addUpg[i] and (i ~= 8 and i ~= 9) then
 			addVehicleUpgrade(veh, addUpg[i])
 		elseif i == 17 and addUpg[i] then
-			if permissions.colour[exports.race:getRaceMode()] then
+			if permissions.colour[mode] then
 				local col1, col2, col3, col4 = getVehicleColor(veh)
 				if addUpg[17] < 4 then
 					--outputDebugString("s 1")
@@ -641,7 +644,7 @@ function upgradeVehicle(player, forumID)
 				end
 			end
 		elseif i == 21 and addUpg[18] then
-			if permissions.colour[exports.race:getRaceMode()] then
+			if permissions.colour[mode] then
 				if type(addUpg[18]) == 'number' then
 					local col1, col2, col3, col4 = getVehicleColor(veh)
 					if isVehColorAllowed() then
