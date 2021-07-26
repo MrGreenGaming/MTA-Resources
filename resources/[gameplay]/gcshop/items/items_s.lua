@@ -308,7 +308,8 @@ function removePerkFromDatabase( forumID, ID )
 end
 
 function isPerkAllowedInMode(perkID, mode)
-	mode = mode or exports.race:getRaceMode() or ""
+	if getResourceFromName('race') and getResourceState(getResourceFromName('race')) == 'running' then mode = exports.race:getRaceMode() end
+	outputDebugString(mode)
 	local p = perks[perkID]
 	if (not p.modes) then return true end
 	if type(p.modes) ~= 'table' then error('expected table ' .. perkID, 2) end
