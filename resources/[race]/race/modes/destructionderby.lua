@@ -92,8 +92,8 @@ local function ddgmTimer(bln,time)
 
 		ddGMCountDown = Countdown.create(time, ddgmTimer, "Ghostmode will stop in: ", 0, 255, 0, 0.25, 2.5, true, false)
 		ddGMCountDown:start()
-		KillDzinyMaster()
 	elseif not bln then
+		KillDzinyMaster()
 		if ddGMCountDown then
 			ddGMCountDown:destroy()
 			ddGMCountDown = nil
@@ -130,8 +130,8 @@ function DestructionDerby:startChangeTimer()
 	end, changeTime, 1)
 	
 	--[[self.changeFirstWarningTimer = setTimer(function()
-		outputGameMessageSmart("Vehicles change in 10 seconds")
-	end, changeTime - 10000, 1)]]
+	outputGameMessageSmart("Vehicles change in 10 seconds")
+end, changeTime - 10000, 1)]]
 	
 	self.changeSecondWarningTimer = setTimer(function()
 		outputGameMessageSmart("Vehicles change in 5 seconds")
