@@ -92,8 +92,8 @@ local function ddgmTimer(bln,time)
 
 		ddGMCountDown = Countdown.create(time, ddgmTimer, "Ghostmode will stop in: ", 0, 255, 0, 0.25, 2.5, true, false)
 		ddGMCountDown:start()
-		KillDzinyMaster()
 	elseif not bln then
+		KillDzinyMaster()
 		if ddGMCountDown then
 			ddGMCountDown:destroy()
 			ddGMCountDown = nil
