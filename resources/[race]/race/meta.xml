@@ -12,6 +12,13 @@
     <include resource="icons-vehicle-change" />
     <include resource="streaks" />
 
+    <include resource="race_delay_indicator"/>
+	<include resource="race_traffic_sensor"/>
+	<include resource="race_rank"/>
+	<include resource="race_progress"/>
+    <include resource="race_sphud"/>
+    <include resource="map-window" />
+
 
     <script src="_common.lua" type="server" />
     <script src="_joiner.lua" type="server" />

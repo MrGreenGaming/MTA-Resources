@@ -1,12 +1,14 @@
 <meta>
 	<!-- Include Resources -->
     <include resource="fonts"/>
+    <!-- <include resource="race"/> -->
     <include resource="freeroam"/>
 	<include resource="gc"/>
 	<include resource="fps"/>
 	<include resource="speed-o-meter"/>
 	<include resource="messages"/>
 	<include resource="gus"/>
+
     <!-- Include Shader Resources, all prefixed by -shaders- -->
     <include resource="-shaders-bloom_fix"/>
     <include resource="-shaders-car_paint_fix"/>
