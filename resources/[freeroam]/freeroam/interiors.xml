@@ -1,5 +1,5 @@
 <catalog type="interior">
-	<interior name="(Outside)" posX="0" posY="0" posZ="3" world="0"/>
+	<interior name="(Outside)" posX="0" posY="0" posZ="4" world="0"/>
 	<interior name="24/7 shop 1" posX="-30.95" posY="-91.71" posZ="1002.55" world="18"/>
 	<interior name="24/7 shop 2" posX="-26.69" posY="-57.81" posZ="1002.55" world="6"/>
 	<interior name="24/7 shop 3" posX="-27.31" posY="-31.38" posZ="1002.55" world="4"/>
