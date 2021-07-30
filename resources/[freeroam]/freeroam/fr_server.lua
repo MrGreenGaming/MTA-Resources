@@ -488,7 +488,7 @@ function setMyPos(x, y, z)
 	local veh = getPedOccupiedVehicle (client)
 	if veh then
 		if getVehicleController(veh) == client then
-			setElementPosition (veh, x, y, z - 1)
+			setElementPosition (veh, x, y, z)
 			setElementInterior (veh, getElementInterior (client))
 			for s = 1, getVehicleMaxPassengers (veh) do
 				local occ = getVehicleOccupant (veh, s)
@@ -500,7 +500,7 @@ function setMyPos(x, y, z)
 			removePedFromVehicle(source)
 		end
 	end
-	setElementPosition (client, x, y, z - 1)
+	setElementPosition (client, x, y, z)
 	fadeCamera (client, true)
 end
 
