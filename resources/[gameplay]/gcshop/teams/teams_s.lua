@@ -346,7 +346,9 @@ function leaveTeam(player)
         destroyElement(teams[teamid])
         teams[teamid] = nil
     end
-    if exports.race:getRaceMode() ~= "Capture the flag" then
+    local mode = ""
+    if getResourceFromName('race') and getResourceState(getResourceFromName('race')) == 'running' then mode = exports.race:getRaceMode() end
+    if mode ~= "Capture the flag" then
         setPlayerTeam(player, nil)
 		-- Colored blips for default radar by AleksCore
 		local blips = getElementsByType("blip")
