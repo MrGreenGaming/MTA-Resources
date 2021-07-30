@@ -17,7 +17,7 @@
 	<include resource="race_rank"/>
 	<include resource="race_progress"/>
     <include resource="race_sphud"/>
-    <include resource="map-window" />
+    <include resource="map_window" />
 
 
     <script src="_common.lua" type="server" />
