@@ -500,7 +500,7 @@ function setMyPos(x, y, z)
 			removePedFromVehicle(source)
 		end
 	end
-	setElementPosition (client, x, y, z)
+	setElementPosition (client, x, y, z - 1)
 	fadeCamera (client, true)
 end
 
