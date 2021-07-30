@@ -1,5 +1,7 @@
 <meta>
-	<info author="ReaZon" description="Gamemode/Freeroam mode" version="1" type="gamemode" />
+	<info author="ReaZon | Updated for Green by Nick_026" description="Gamemode/Freeroam mode" version="1" type="gamemode" />
+
+	<min_mta_version client="1.5.7"/>
 	
 	<script src="greenzoneC.lua" type="client" />
 	<script src="greenzone.lua" type="server" />
