@@ -1,17 +1,17 @@
 <meta>
 	<!-- Include Resources -->
     <include resource="fonts"/>
-    <include resource="race"/>
+    <!-- <include resource="race"/> -->
 	<include resource="gc"/>
 	<include resource="fps"/>
 	<include resource="speed-o-meter"/>
-	<include resource="race_sphud"/>
+	<!-- <include resource="race_sphud"/> -->
 	<include resource="messages"/>
 	<include resource="gus"/>
-	<include resource="race_delay_indicator"/>
+	<!-- <include resource="race_delay_indicator"/>
 	<include resource="race_traffic_sensor"/>
 	<include resource="race_rank"/>
-	<include resource="race_progress"/>
+	<include resource="race_progress"/> -->
 
     <!-- Include Shader Resources, all prefixed by -shaders- -->
     <include resource="-shaders-bloom_fix"/>
@@ -272,5 +272,3 @@
     <settings>
     </settings>
 </meta>
-
-
