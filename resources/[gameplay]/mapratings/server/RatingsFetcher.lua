@@ -6,7 +6,7 @@ function RatingsFetcher.requestAll()
         if res then
             AllMapsRatings.receiveRatingsFromDatabase(res)
         end
-    end, Database.getConnection(), 'SELECT `mapresourcename`, sum(case when `rating`= 1 then 1 else 0 end) AS likes, sum(case when `rating`= 0 then 1 else 0 end) AS dislikes FROM `mapratings` GROUP BY `mapresourcename')
+    end, Database.getConnection(), 'SELECT `mapresourcename`, sum(case when `rating`= 1 then 1 else 0 end) AS likes, sum(case when `rating`= 0 then 1 else 0 end) AS dislikes FROM `mapratings` GROUP BY `mapresourcename`')
 end
 
 function RatingsFetcher.request()
