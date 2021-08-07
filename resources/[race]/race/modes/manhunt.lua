@@ -83,7 +83,7 @@ function Manhunt:restorePlayer(id, player, bNoFade, bDontFix)
 	local vehicle = self.getPlayerVehicle(player)
 	if vehicle then
         setElementVelocity( vehicle, 0,0,0 )
-        setVehicleTurnVelocity( vehicle, 0,0,0 )
+        setElementAngularVelocity( vehicle, 0,0,0 )
 		setElementPosition(vehicle, unpack(bkp.position))
 		local rx, ry, rz = unpack(bkp.rotation)
 		setElementRotation(vehicle, rx or 0, ry or 0, rz or 0)
@@ -178,7 +178,7 @@ function Manhunt:setVictim(player, bInit, oldVictim)
 		bkp.geardown = true                 -- Fix landing gear state
 		bkp.vehicle = spawnpoint.vehicle    -- Fix spawn'n'blow
 		setElementVelocity( veh, 0,0,0 )
-		setVehicleTurnVelocity( veh, 0,0,0 )
+		setElementAngularVelocity( veh, 0,0,0 )
 		setElementPosition(veh, unpack(bkp.position))
 		local rx, ry, rz = unpack(bkp.rotation)
 		setElementRotation(veh, rx or 0, ry or 0, rz or 0)

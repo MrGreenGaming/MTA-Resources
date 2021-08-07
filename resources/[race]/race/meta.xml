@@ -259,5 +259,5 @@
         </settings>
     -->
 
-    <min_mta_version client="1.3.0-9.04491"></min_mta_version>
+    <min_mta_version server="1.5.5-9.14060" client="1.5.5-9.14060"></min_mta_version>
 </meta>

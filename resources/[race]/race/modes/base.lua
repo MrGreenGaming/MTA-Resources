@@ -265,7 +265,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum, nitroLevel, nit
 		-- Regular checkpoint
 		local vehicle = self.getPlayerVehicle(player)
 		-- Edit #1, data for shop perk
-		self.checkpointBackups[player][checkpointNum] = { vehicle = getElementModel(vehicle), position = { getElementPosition(vehicle) }, rotation = { getVehicleRotation(vehicle) }, velocity = { getElementVelocity(vehicle) }, turnvelocity = { getVehicleTurnVelocity(vehicle) }, health = getElementHealth(vehicle), healthtick = getTickCount(), geardown = getVehicleLandingGearDown(vehicle) or false, nitroLevel = nitroLevel, nitroActive = nitroActive}	
+		self.checkpointBackups[player][checkpointNum] = { vehicle = getElementModel(vehicle), position = { getElementPosition(vehicle) }, rotation = { getVehicleRotation(vehicle) }, velocity = { getElementVelocity(vehicle) }, turnvelocity = { getElementAngularVelocity(vehicle) }, health = getElementHealth(vehicle), healthtick = getTickCount(), geardown = getVehicleLandingGearDown(vehicle) or false, nitroLevel = nitroLevel, nitroActive = nitroActive}	
 		
 		self.checkpointBackups[player].goingback = true
 		TimerManager.destroyTimersFor("checkpointBackup",player)
@@ -469,7 +469,7 @@ function RaceMode:restorePlayer(id, player, bNoFade, bDontFix)
 	local vehicle = self.getPlayerVehicle(player)
 	if vehicle then
         setElementVelocity( vehicle, 0,0,0 )
-        setVehicleTurnVelocity( vehicle, 0,0,0 )
+        setElementAngularVelocity( vehicle, 0,0,0 )
 		setElementPosition(vehicle, unpack(bkp.position))
 		local rx, ry, rz = unpack(bkp.rotation)
 		setVehicleRotation(vehicle, rx or 0, ry or 0, rz or 0)
@@ -510,7 +510,7 @@ function RaceMode:restorePlayerUnfreeze(id, player, bDontFix, nitroLevel, nitroA
     outputDebug( 'MISC', 'restorePlayerUnfreeze: vehicle false for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
 	local bkp = self.checkpointBackups[player][getPlayerCurrentCheckpoint(player)-1]
 	setElementVelocity(vehicle, unpack(bkp.velocity))
-	setVehicleTurnVelocity(g_Vehicles[player], unpack(bkp.turnvelocity))
+	setElementAngularVelocity(g_Vehicles[player], unpack(bkp.turnvelocity))
 	if nitroLevel then
 		addVehicleUpgrade(vehicle, 1010)
 		clientCall(root, 'setVehicleNitroLevel', vehicle, nitroLevel)

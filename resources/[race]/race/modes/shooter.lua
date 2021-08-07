@@ -339,7 +339,7 @@ function Shooter:restorePlayer(id, player, bNoFade, bDontFix)
 		if vehicle then
 			setVehicleDamageProof(vehicle,true)
 	        setElementVelocity( vehicle, 0,0,0 )
-	        setVehicleTurnVelocity( vehicle, 0,0,0 )
+	        setElementAngularVelocity( vehicle, 0,0,0 )
 			setElementPosition(vehicle, unpack(bkp.position))
 			local rx, ry, rz = unpack(bkp.rotation)
 			setElementRotation(vehicle, rx or 0, ry or 0, rz or 0)
