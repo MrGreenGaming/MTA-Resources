@@ -1092,7 +1092,7 @@ addEventHandler('onClientRequestSpectate', g_Root,
 				Override.setCollideOthers( "ForSpectating", g_CurrentRaceMode.getPlayerVehicle( player ), 0 )
 				g_SavedVelocity[player] = {}
 				g_SavedVelocity[player].velocity = {getElementVelocity(g_Vehicles[player])}
-				g_SavedVelocity[player].turnvelocity = {getVehicleTurnVelocity(g_Vehicles[player])}
+				g_SavedVelocity[player].turnvelocity = {getElementAngularVelocity(g_Vehicles[player])}
 				g_CurrentRaceMode:playerSpectating(player)
 			elseif g_CurrentRaceMode:getTimeRemaining() > 500 then
 				clientCall(player, "Spectate.stop", 'manual' )

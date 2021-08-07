@@ -147,7 +147,7 @@ end
 function onClientPlayerDamage()
 	local vehicle = getPedOccupiedVehicle( localPlayer )
 	if isElement(vehicle) then
-		local vx, vy, vz = getVehicleTurnVelocity( vehicle )
+		local vx, vy, vz = getElementAngularVelocity( vehicle )
 		setElementAngularVelocity( vehicle, vx + 1, vy, 0.5 )
 		local evx, evy, evz = getElementVelocity( vehicle )
 		setElementVelocity( vehicle, evx, evy, evz + 0.5 )

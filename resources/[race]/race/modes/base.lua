@@ -265,7 +265,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum, nitroLevel, nit
 		-- Regular checkpoint
 		local vehicle = self.getPlayerVehicle(player)
 		-- Edit #1, data for shop perk
-		self.checkpointBackups[player][checkpointNum] = { vehicle = getElementModel(vehicle), position = { getElementPosition(vehicle) }, rotation = { getVehicleRotation(vehicle) }, velocity = { getElementVelocity(vehicle) }, turnvelocity = { getVehicleTurnVelocity(vehicle) }, health = getElementHealth(vehicle), healthtick = getTickCount(), geardown = getVehicleLandingGearDown(vehicle) or false, nitroLevel = nitroLevel, nitroActive = nitroActive}	
+		self.checkpointBackups[player][checkpointNum] = { vehicle = getElementModel(vehicle), position = { getElementPosition(vehicle) }, rotation = { getVehicleRotation(vehicle) }, velocity = { getElementVelocity(vehicle) }, turnvelocity = { getElementAngularVelocity(vehicle) }, health = getElementHealth(vehicle), healthtick = getTickCount(), geardown = getVehicleLandingGearDown(vehicle) or false, nitroLevel = nitroLevel, nitroActive = nitroActive}	
 		
 		self.checkpointBackups[player].goingback = true
 		TimerManager.destroyTimersFor("checkpointBackup",player)

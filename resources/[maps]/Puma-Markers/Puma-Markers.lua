@@ -250,7 +250,7 @@ function ColShapeHit(player,machdimension)
 										local stop = getElementData(p,"stop")
 										-- local tx,ty,tz = exports.edf:edfGetElementPosition(destmark)
 										local tx,ty,tz = getElementData(destmark, 'posX'), getElementData(destmark, 'posY'), getElementData(destmark, 'posZ')
-										local vrx,vry,vrz = getVehicleTurnVelocity(veh)
+										local vrx,vry,vrz = getElementAngularVelocity(veh)
 										setElementFrozen(veh,true)
 										if fade == "true" then fadeCamera ( false, 1) end
 										setTimer(function(veh,tx,ty,tz,fade,stop)
