@@ -621,7 +621,7 @@ function flipPlayer(player)
 		setTimer(
 			function()
 				setElementVelocity(veh,0,0,0)
-				setVehicleTurnVelocity(veh,0,0,0)
+				setElementAngularVelocity(veh,0,0,0)
 				setElementRotation(veh, rx, ry + 180, rz)
 				setElementHealth(veh, newHealth)
 				busy_with_player[player] = false

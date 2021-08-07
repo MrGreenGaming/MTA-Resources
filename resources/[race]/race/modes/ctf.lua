@@ -165,7 +165,7 @@ function CTF:restorePlayer(id, player, bNoFade, bDontFix)
 	local vehicle = self.getPlayerVehicle(player)
 	if vehicle then
         setElementVelocity( vehicle, 0,0,0 )
-        setVehicleTurnVelocity( vehicle, 0,0,0 )
+        setElementAngularVelocity( vehicle, 0,0,0 )
 		setElementPosition(vehicle, unpack(bkp.position))
 		local rx, ry, rz = unpack(bkp.rotation)
 		setElementRotation(vehicle, rx or 0, ry or 0, rz or 0)

@@ -1119,7 +1119,7 @@ function afterSpectatePlayerUnfreeze(player, bDontFix)
 	g_CurrentRaceMode:playerUnfreeze(player, bDontFix)
 	if g_SavedVelocity[player] then
 		setElementVelocity(g_Vehicles[player], unpack(g_SavedVelocity[player].velocity))
-		setVehicleTurnVelocity(g_Vehicles[player], unpack(g_SavedVelocity[player].turnvelocity))
+		setElementAngularVelocity(g_Vehicles[player], unpack(g_SavedVelocity[player].turnvelocity))
 		g_SavedVelocity[player] = nil
 	end
 end
@@ -1394,7 +1394,7 @@ function MoveAway.update ()
 			local vehicle = g_Vehicles[player]
 			if isElement(vehicle) then 
 				setElementVelocity(vehicle,0,0,0)
-				setVehicleTurnVelocity(vehicle,0,0,0)
+				setElementAngularVelocity(vehicle,0,0,0)
 				Override.setCollideOthers( "ForMoveAway", vehicle, 0 )
 				Override.setAlpha( "ForMoveAway", {player, vehicle}, 0 )
 			end

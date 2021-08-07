@@ -260,7 +260,7 @@ function ColShapeHit(player,machdimension)
 											if fade == "true" then fadeCamera ( true, 1) end
 											setTimer(function(stop)
 												setElementFrozen(veh,false)
-												if stop == "false" then setElementVelocity(veh,vx,vy,vz) setVehicleTurnVelocity(veh,vrx,vry,vrz) end
+												if stop == "false" then setElementVelocity(veh,vx,vy,vz) setElementAngularVelocity(veh,vrx,vry,vrz) end
 											end,1000,1,stop)
 										end,1000,1,veh,tx,ty,tz,fade,stop)
 									else
@@ -295,7 +295,7 @@ function ColShapeHit(player,machdimension)
 							setElementVelocity (veh,vx,vy,vz+(power/10))
 						elseif MT == 9 then
 							setElementRotation(veh,0,0,rz)
-							setVehicleTurnVelocity(veh,0,0,0)
+							setElementAngularVelocity(veh,0,0,0)
 						elseif MT == 10 then
 							setElementVelocity(veh, -vx,-vy,-vz)
 							setElementRotation(veh, -rx, -ry, rz+180)
