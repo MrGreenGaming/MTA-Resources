@@ -145,8 +145,6 @@ function onGCShopLogin (forumID)
 		function(expired)
 			local i = 1;
 			for _, perk in pairs(prks) do
-				outputDebugString("Iterator " .. i)
-
 				setTimer(function(theSource, perk)
 					if tonumber(perk.exp) and (not expired[perk.ID] or expired[perk.ID] < getTimestamp()) then
 						outputChatBox ( 'GC: ' .. perk.description .. ' has expired!', theSource, 255, 0, 0)
