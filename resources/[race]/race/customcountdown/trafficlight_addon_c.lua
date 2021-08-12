@@ -1,8 +1,13 @@
 -- Traffic Light Addon by Nick_026
 -- See for state references: https://wiki.multitheftauto.com/wiki/Traffic_light_states 
 
+local GoToOffTimer = nil
+local OffToVanillaTimer = nil
 
 function MapLoaded()
+	if isTimer(GoToOffTimer) then killTimer(goToOffTimer) end
+	if isTimer(OffToVanillaTimer) then killTimer(OffToVanillaTimer) end
+
 	outputDebugString("Map Loaded - Lights off")
 	setTrafficLightsLocked(true)
 	setTrafficLightState("disabled")
@@ -18,10 +23,10 @@ function ReceiveCountdownTimer(whatToDo)
 	elseif whatToDo == "go" then
 		outputDebugString("Map Started - lights green")
 		setTrafficLightState(5)
-		setTimer(function()
+		GoToOffTimer = setTimer(function()
 			outputDebugString("Temp. disabled lights")
 			setTrafficLightState("disabled")
-			setTimer(function()
+			OffToVanillaTimer = setTimer(function()
 				outputDebugString("Back to vanilla")
 				setTrafficLightState("auto")
 				setTrafficLightsLocked(false)
