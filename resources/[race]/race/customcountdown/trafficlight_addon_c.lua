@@ -4,9 +4,11 @@
 
 function MapLoaded()
 	outputDebugString("Map Loaded - Lights off")
+	setTrafficLightsLocked(true)
 	setTrafficLightState("disabled")
 end
-addEventHandler("OnMapStarting", root, MapLoaded)
+addEvent("triggerCountdownWait")
+addEventHandler("triggerCountdownWait", root, MapLoaded)
 
 function ReceiveCountdownTimer(whatToDo)
 	if whatToDo == 3 then
@@ -22,8 +24,9 @@ function ReceiveCountdownTimer(whatToDo)
 			setTimer(function()
 				outputDebugString("Back to vanilla")
 				setTrafficLightState("auto")
+				setTrafficLightsLocked(false)
 			end, 3000, 1)
-		end, 3000, 1)
+		end, 5000, 1)
 	end
 
 end

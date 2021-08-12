@@ -20,6 +20,7 @@
     <script src="countdown.lua" type="server" />
     <script src="rankingboard.lua" type="server" />
     <script src="customcountdown/customcountdown_s.lua" type="server" />
+    <script src="customcountdown/trafficlight_addon_s.lua" type="server" />
 
     <file src="audio/mission_accomplished.mp3" />
     <file src="audio/123.mp3" />
