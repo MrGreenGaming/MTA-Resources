@@ -4,6 +4,7 @@
 
 function MapLoaded()
 	outputDebugString("Map Loaded - Lights off")
+	setTrafficLightsLocked(true)
 	setTrafficLightState(9)
 end
 addEvent("onMapStarting")
@@ -23,6 +24,7 @@ function ReceiveCountdownTimer(whatToDo)
 			setTimer(function()
 				outputDebugString("Back to vanilla")
 				setTrafficLightState("auto")
+				setTrafficLightsLocked(false)
 			end, 3000, 1)
 		end, 3000, 1)
 	end
