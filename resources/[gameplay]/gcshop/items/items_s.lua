@@ -143,7 +143,8 @@ function onGCShopLogin (forumID)
 		end
 		getPerkExpire(forumID, perkIdTable, 
 		function(expired)
-			for i, perk in pairs(prks) do
+			local i = 1;
+			for _, perk in pairs(prks) do
 				outputDebugString("Iterator " .. i)
 
 				setTimer(function(theSource, perk)
@@ -155,7 +156,7 @@ function onGCShopLogin (forumID)
 					end
 				end,
 				i * 500, 1, theSource, perk)
-
+				i = i + 1
 			end
 			getPerks(forumID, 
 			function(newPerks)
