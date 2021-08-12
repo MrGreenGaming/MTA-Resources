@@ -1,4 +1,4 @@
 function onMapChange()
-	triggerClientEvent( root,"triggerCountdownWait", root)
+	triggerClientEvent( root,"onCountdownWait", root)
 end
 addEventHandler("onMapStarting", getRootElement(), onMapChange)

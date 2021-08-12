@@ -12,8 +12,8 @@ function MapLoaded()
 	setTrafficLightsLocked(true)
 	setTrafficLightState("disabled")
 end
-addEvent("triggerCountdownWait")
-addEventHandler("triggerCountdownWait", root, MapLoaded)
+addEvent("onCountdownWait", true)
+addEventHandler("onCountdownWait", root, MapLoaded)
 
 function ReceiveCountdownTimer(whatToDo)
 	if whatToDo == 3 then
