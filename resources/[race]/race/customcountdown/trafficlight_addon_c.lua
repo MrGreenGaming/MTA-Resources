@@ -5,7 +5,7 @@ local GoToOffTimer
 local OffToVanillaTimer
 
 function MapLoaded()
-	if isTimer(GoToOffTimer) then killTimer(goToOffTimer) end
+	if isTimer(GoToOffTimer) then killTimer(GoToOffTimer) end
 	if isTimer(OffToVanillaTimer) then killTimer(OffToVanillaTimer) end
 
 	outputDebugString("Map Loaded - Lights off")
