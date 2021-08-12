@@ -3,8 +3,10 @@
 
 
 function MapLoaded()
+	outputDebugString("Map Loaded - Lights off")
 	setTrafficLightState(9)
 end
+addEvent("onMapStarting")
 addEventHandler("OnMapStarting", root, MapLoaded)
 
 function ReceiveCountdownTimer(whatToDo)
@@ -13,12 +15,15 @@ function ReceiveCountdownTimer(whatToDo)
 	elseif whatToDo == 1 then
 		setTrafficLightState(6)
 	elseif whatToDo == "go" then
+		outputDebugString("Map Started - lights green")
 		setTrafficLightState(5)
 		setTimer(function()
+			outputDebugString("Temp. disabledl lights")
 			setTrafficLightState(9)
 			setTimer(function()
+				outputDebugString("Back to vanilla")
 				setTrafficLightState("auto")
-			end, 1000, 1)
+			end, 3000, 1)
 		end, 3000, 1)
 	end
 
