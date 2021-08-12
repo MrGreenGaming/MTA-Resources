@@ -1,8 +1,8 @@
 -- Traffic Light Addon by Nick_026
 -- See for state references: https://wiki.multitheftauto.com/wiki/Traffic_light_states 
 
-local GoToOffTimer = nil
-local OffToVanillaTimer = nil
+local GoToOffTimer
+local OffToVanillaTimer
 
 function MapLoaded()
 	if isTimer(GoToOffTimer) then killTimer(goToOffTimer) end
