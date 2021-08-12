@@ -143,19 +143,24 @@ function onGCShopLogin (forumID)
 		end
 		getPerkExpire(forumID, perkIdTable, 
 		function(expired)
+			local i = 1;
 			for _, perk in pairs(prks) do
-				if tonumber(perk.exp) and (not expired[perk.ID] or expired[perk.ID] < getTimestamp()) then
-					outputChatBox ( 'GC: ' .. perk.description .. ' has expired!', theSource, 255, 0, 0)
-					removePerkFromDatabase(forumID, perk.ID)
-				else
-					loadPerk(theSource, perk.ID)
-				end
+				setTimer(function(theSource, perk)
+					if tonumber(perk.exp) and (not expired[perk.ID] or expired[perk.ID] < getTimestamp()) then
+						outputChatBox ( 'GC: ' .. perk.description .. ' has expired!', theSource, 255, 0, 0)
+						removePerkFromDatabase(forumID, perk.ID)
+					else
+						loadPerk(theSource, perk.ID)
+					end
+				end,
+				i * 500, 1, theSource, perk)
+				i = i + 1
 			end
 			getPerks(forumID, 
 			function(newPerks)
 				triggerClientEvent( theSource, 'itemLogin', theSource, perks, newPerks )
 				-- Trigger the event once more with a delay
-				setTimer(triggerClientEvent, 5000, 1, theSource, 'itemLogin', theSource, perks, newPerks)
+				setTimer(triggerClientEvent, 7500, 1, theSource, 'itemLogin', theSource, perks, newPerks)
 				
 			end)
 		end)
