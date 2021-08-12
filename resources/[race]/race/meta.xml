@@ -60,6 +60,7 @@
     <script src="client_anim.lua" type="client" />
     <script src="countdown_client.lua" type="client" />
     <script src="customcountdown/customcountdown_c.lua" type="client" />
+    <script src="customcountdown/trafficlight_addon_c.lua" type="client" />
     <script src="rankingboard_client.lua" type="client" />
     <script src="race_client.lua" type="client" />
     <script src="textlib.lua" type="client" />
