@@ -8,19 +8,21 @@
 
 local GoToOffTimer
 local OffToVanillaTimer
+local FlashRedTimer
 
 function MapLoaded()
 	if isTimer(GoToOffTimer) then killTimer(GoToOffTimer) end
 	if isTimer(OffToVanillaTimer) then killTimer(OffToVanillaTimer) end
 
 	setTrafficLightsLocked(true)
-	setTrafficLightState("disabled")
+	FlashRedTimer = setTimer(FlashRedLights, 500, 0)
 end
 addEvent("onCountdownWait", true)
 addEventHandler("onCountdownWait", root, MapLoaded)
 
 function ReceiveCountdownTimer(whatToDo)
 	if whatToDo == 3 then
+		if isTimer(FlashRedTimer) then killTimer(FlashRedTimer) end
 		setTrafficLightState(2)
 	elseif whatToDo == 1 then
 		setTrafficLightState(6)
@@ -41,3 +43,13 @@ function ReceiveCountdownTimer(whatToDo)
 
 end
 addEventHandler("receiveServerCountdown",resourceRoot,ReceiveCountdownTimer)
+
+
+function FlashRedLights()
+    local lightsOff = getTrafficLightState() == 9
+    if lightsOff then
+        setTrafficLightState(2)
+    else
+        setTrafficLightState(9)
+    end
+end
