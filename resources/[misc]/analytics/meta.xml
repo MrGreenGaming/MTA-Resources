@@ -1,6 +1,5 @@
 <meta>
 	<info author="Afu Sensi" type="script" name="Gameserver Analytics" version="1.0" description="Tracks gameserver analytics via gameanalytics.com's REST API. API documentation: restapidocs.gameanalytics.com" />
-	<script src="c_analytics.lua" type="client" />
 	<script src="s_analytics.lua" type="server" />
 
 	<script src="hmac/sha2.lua" type="server" />
