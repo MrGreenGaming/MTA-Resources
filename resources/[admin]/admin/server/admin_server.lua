@@ -832,7 +832,7 @@ end )
 -- seconds to description i.e. "10 mins"
 function secondsToTimeDesc( seconds )
 	if seconds then
-		local tab = { {"day",60*60*24},  {"hour",60*60},  {"min",60},  {"sec",1} }
+		local tab = { {{"year", 60*60*24*365}}, {"day",60*60*24},  {"hour",60*60},  {"min",60},  {"sec",1} }
 		for i,item in ipairs(tab) do
 			local t = math.floor(seconds/item[2])
 			if t > 0 or i == #tab then
