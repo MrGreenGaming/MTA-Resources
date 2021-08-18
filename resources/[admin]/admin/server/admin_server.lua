@@ -829,16 +829,24 @@ addEventHandler ( "aAdmin", _root, function ( action, ... )
 end )
 
 
--- seconds to description i.e. "10 mins"
+-- seconds to description i.e. "1 month 15 days 3 hours"
 function secondsToTimeDesc( seconds )
+	local toReturn = ""
 	if seconds then
+		local nLoops = 0
 		local tab = { {"year", 60*60*24*365},{"month", 60*60*24*31}, {"day",60*60*24},  {"hour",60*60},  {"min",60},  {"sec",1} }
 		for i,item in ipairs(tab) do
 			local t = math.floor(seconds/item[2])
+			seconds = seconds - (t * item[2])
 			if t > 0 or i == #tab then
-				return tostring(t) .. " " .. item[1] .. (t~=1 and "s" or "")
+				toReturn = toReturn .. tostring(t) .. " " .. item[1] .. (t~=1 and "s " or " ")
+			end
+			nLoops = nLoops + 1
+			if nLoops == 3 then
+				return toReturn
 			end
 		end
+		return toReturn
 	end
 	return ""
 end
