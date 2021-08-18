@@ -840,8 +840,8 @@ function secondsToTimeDesc( seconds )
 			seconds = seconds - (t * item[2])
 			if t > 0 or i == #tab then
 				toReturn = toReturn .. tostring(t) .. " " .. item[1] .. (t~=1 and "s " or " ")
+				nLoops = nLoops + 1
 			end
-			nLoops = nLoops + 1
 			if nLoops == 3 then
 				return toReturn
 			end
