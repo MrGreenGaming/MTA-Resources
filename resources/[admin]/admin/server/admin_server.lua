@@ -292,7 +292,9 @@ function aSetPlayerMuted ( player, state, length, pAdmin)
 		if not state then
 			aRemoveUnmuteTimer( player )
 			removeMuteFromDB( getPlayerSerial(player) )
+			exports.voice:setPlayerVoiceMuted(player, false)
 		elseif state and length and length > 0 then
+			exports.voice:setPlayerVoiceMuted(player, true)
 			aAddUnmuteTimer( player, length )
 			if pAdmin then
 				addMuteToDB( getPlayerSerial(player), getPlayerName(player), length, getAccountName( getPlayerAccount(pAdmin) ), getPlayerIP(player) )
