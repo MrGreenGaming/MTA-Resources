@@ -17,25 +17,23 @@ function mph()
 			speednumber = math.floor(speednumber)
 			speed = tostring(speednumber.." Knots") 
 			x,y = guiGetScreenSize()
-		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-73.5, 151.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 Knots", x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-73.5 - offsetxSetting, 151.5 + offsetySetting, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 Knots", x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 		else
 		 xx,yy,zz = getElementVelocity(car)
 		 speednumber = getDistanceBetweenPoints3D(0,0,0,getElementVelocity(car))*100
 		 speednumber = math.floor(speednumber)
 		 speed = tostring(speednumber.." MPh") 
 		 x,y = guiGetScreenSize()
-		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-73.5, 151.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 MPH", x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-73.5 - offsetxSetting, 151.5 + offsetySetting, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 MPH", x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 		end
 	end	
 end
 
 function kmh()
-	outputDebugString("X: " .. offsetxSetting)
-	outputDebugString("Y: " .. offsetySetting)
 	local target = getCameraTarget()
 	car = getPedOccupiedVehicle(getLocalPlayer())
 	if target and getElementType(target) == "vehicle" then
@@ -49,18 +47,18 @@ function kmh()
 			speednumber = math.floor(speednumber)
 			speed = tostring(speednumber.." Knots") 
 			x,y = guiGetScreenSize()
-		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-73.5, 151.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 Knots", x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-73.5 - offsetxSetting, 151.5 + offsetySetting, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 Knots", x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 		else
 		 xx,yy,zz = getElementVelocity(car)
 		 speednumber = getDistanceBetweenPoints3D(0,0,0,getElementVelocity(car))*100*1.61
 		 speednumber = math.floor(speednumber)
 		 speed = tostring(speednumber.." KMh") 
 		 x,y = guiGetScreenSize()
-		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-73.5, 151.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 KMH", x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-73.5 - offsetxSetting, 151.5 + offsetySetting, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 KMH", x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 	end	
 	end
 end
@@ -107,7 +105,7 @@ function(commandName, offsetx)
 	xmlSaveFile(node)
 	xmlUnloadFile(node)
 end
-)
+, false, false)
 
 addCommandHandler('speedY',
 function(commandName, offsety)
@@ -122,7 +120,7 @@ function(commandName, offsety)
 	xmlSaveFile(node)
 	xmlUnloadFile(node)
 end
-)
+, false, false)
 
 
 
