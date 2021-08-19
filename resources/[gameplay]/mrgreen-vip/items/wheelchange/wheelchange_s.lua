@@ -52,7 +52,7 @@ function timer()
 		
 			vehicle = getPedOccupiedVehicle(p)
 			
-			if vehicle and exports.gcshop:doesPlayerOwnVehicle(p, getElementModel(vehicle)) then
+			if vehicle then
 				stateTable[p] = stateTable[p] + 1
 				if stateTable[p] > #wheelsTable then stateTable[p] = 1 end
 				addVehicleUpgrade(vehicle, wheelsTable[stateTable[p]])
