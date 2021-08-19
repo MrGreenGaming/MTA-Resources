@@ -34,6 +34,8 @@ function mph()
 end
 
 function kmh()
+	outputDebugString("X: " .. offsetxSetting)
+	outputDebugString("Y: " .. offsetySetting)
 	local target = getCameraTarget()
 	car = getPedOccupiedVehicle(getLocalPlayer())
 	if target and getElementType(target) == "vehicle" then
