@@ -103,7 +103,8 @@ local exceptions = {
  "admin",
  "Commit",
  "modsay",
- "adsay"
+ "adsay",
+ "teamsay"
 }
 --
  
