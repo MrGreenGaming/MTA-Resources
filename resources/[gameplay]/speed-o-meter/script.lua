@@ -59,7 +59,7 @@ function kmh()
 		 speed = tostring(speednumber.." KMh") 
 		 x,y = guiGetScreenSize()
 		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-73.5, 151.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( speed, x - offsetxSetting, y + offsetxSetting, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
 		dxDrawText( "000 KMH", x - offsetxSetting, y + offsetySetting, x-72, 150, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 	end	
 	end
