@@ -253,7 +253,7 @@ function build_mainVipWindow()
 	guiLabelSetVerticalAlign(gui["wheelchange_label"], "center")
 	guiSetFont( gui["wheelchange_label"], "default-bold-small")
 	
-	gui["wheelchange_toggle"] = guiCreateCheckBox(22, 1136, 631, 17, "Toggle wheel changing (Works only with vehicles that you own!)", false, false, gui["scrollAreaCosmetics"])
+	gui["wheelchange_toggle"] = guiCreateCheckBox(22, 1136, 631, 17, "Toggle wheel changing", false, false, gui["scrollAreaCosmetics"])
 	addEventHandler("onClientGUIClick", gui["wheelchange_toggle"], onWheelChangingToggle, false)
 	
 	gui["line7"] = guiCreateStaticImage( 0, 1186, 650, 1, "img/dot.jpg", false,  gui["scrollAreaCosmetics"])
