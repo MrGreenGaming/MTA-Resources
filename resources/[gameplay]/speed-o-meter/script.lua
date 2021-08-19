@@ -1,4 +1,8 @@
-	digital = dxCreateFont( "digital.ttf", 20 )
+digital = dxCreateFont( "digital.ttf", 20 )
+
+local offsetxSetting = 0
+local offsetySetting = 0
+
 function mph()
 	local target = getCameraTarget()
 	car = getPedOccupiedVehicle(getLocalPlayer())
@@ -13,18 +17,18 @@ function mph()
 			speednumber = math.floor(speednumber)
 			speed = tostring(speednumber.." Knots") 
 			x,y = guiGetScreenSize()
-		dxDrawText( speed, x, y, x-73.5, 151.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( speed, x, y, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 Knots", x, y, x-72, 150, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-73.5 - offsetxSetting, 151.5 + offsetySetting, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 Knots", x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 		else
 		 xx,yy,zz = getElementVelocity(car)
 		 speednumber = getDistanceBetweenPoints3D(0,0,0,getElementVelocity(car))*100
 		 speednumber = math.floor(speednumber)
 		 speed = tostring(speednumber.." MPh") 
 		 x,y = guiGetScreenSize()
-		dxDrawText( speed, x, y, x-73.5, 151.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( speed, x, y, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 MPH", x, y, x-72, 150, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-73.5 - offsetxSetting, 151.5 + offsetySetting, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 MPH", x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 		end
 	end	
 end
@@ -43,18 +47,18 @@ function kmh()
 			speednumber = math.floor(speednumber)
 			speed = tostring(speednumber.." Knots") 
 			x,y = guiGetScreenSize()
-		dxDrawText( speed, x, y, x-73.5, 151.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( speed, x, y, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 Knots", x, y, x-72, 150, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-73.5 - offsetxSetting, 151.5 + offsetySetting, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 Knots", x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 		else
 		 xx,yy,zz = getElementVelocity(car)
 		 speednumber = getDistanceBetweenPoints3D(0,0,0,getElementVelocity(car))*100*1.61
 		 speednumber = math.floor(speednumber)
 		 speed = tostring(speednumber.." KMh") 
 		 x,y = guiGetScreenSize()
-		dxDrawText( speed, x, y, x-73.5, 151.5, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( speed, x, y, x-72, 150, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
-		dxDrawText( "000 KMH", x, y, x-72, 150, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-73.5 - offsetxSetting, 151.5 + offsetySetting, tocolor ( 0, 0, 0, 150 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( speed, x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 255 ), 1, digital, "right", "bottom", false, false)
+		dxDrawText( "000 KMH", x, y, x-72 - offsetxSetting, 150 + offsetySetting, tocolor ( 255, 255, 255, 40 ), 1, digital, "right", "bottom", false, false)
 	end	
 	end
 end
@@ -88,6 +92,36 @@ function(commandName,par)
 end
 )
 
+addCommandHandler('speedX',
+function(commandName, offsetx)
+	node = xmlLoadFile("settings.xml")
+	if not node then
+		node = xmlCreateFile("settings.xml", "mynode")
+	end
+	if offsetx then
+		xmlNodeSetAttribute(node, "offsetx", offsetx)
+		offsetxSetting = offsetx
+	end
+	xmlSaveFile(node)
+	xmlUnloadFile(node)
+end
+, false, false)
+
+addCommandHandler('speedY',
+function(commandName, offsety)
+	node = xmlLoadFile("settings.xml")
+	if not node then
+		node = xmlCreateFile("settings.xml", "mynode")
+	end
+	if offsety then
+		xmlNodeSetAttribute(node, "offsety", offsety)
+		offsetySetting = offsety
+	end
+	xmlSaveFile(node)
+	xmlUnloadFile(node)
+end
+, false, false)
+
 
 
 addEventHandler('onClientResourceStart', getResourceRootElement(getThisResource()),
@@ -102,6 +136,13 @@ function()
 				elseif xmlNodeGetAttribute(node, "setting") == "none" then
 					removeEventHandler("onClientRender",getRootElement(), kmh)
 					removeEventHandler("onClientRender",getRootElement(), mph)
+				end
+
+				if xmlNodeGetAttribute(node, "offsety") then
+					offsetySetting = xmlNodeGetAttribute(node, "offsety")
+				end
+				if xmlNodeGetAttribute(node, "offsetx") then
+					offsetxSetting = xmlNodeGetAttribute(node, "offsetx")
 				end
 				xmlUnloadFile(node)
 		end		
