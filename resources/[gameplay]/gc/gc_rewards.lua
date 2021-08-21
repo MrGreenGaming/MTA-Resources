@@ -61,6 +61,7 @@ local gracePeriod = 5*60
 -- Instead of a timer for every player, compare playtime of all players
 local aMin = 60 -- minute
 local minuteTickAmount = 1 
+local timerInterval = aMin*1000*minuteTickAmount + 1500
 
 function updatePlaytimes()
 	rewardPerHour = tonumber(get("rewardPerHour"))
@@ -73,10 +74,17 @@ function updatePlaytimes()
 	for k, p in ipairs(getElementsByType'player') do
 		local jointick = getElementData(p, 'jointick')
 		local hoursPlayed = getElementData(p, 'hoursPlayed')
+		local isAFK = getElementData(p, 'player state') == "away" or getElementData(p, 'player state') == "spectating"
 		if not jointick or not hoursPlayed then
 			jointick, hoursPlayed = currentTick, 0
 			setElementData(p, 'jointick', currentTick)
 			setElementData(p, 'hoursPlayed', 0)
+		elseif isAFK then -- AFK Players can't earn playtime
+			jointick = jointick + (timerInterval / 1000)
+			if currentTick - jointick < 0 then
+				jointick = currentTick
+			end
+			setElementData(p, 'jointick', jointick)
 		elseif currentTick - jointick >= aMin * 60 then
 			hoursPlayed = hoursPlayed + 1
 			if isPlayerLoggedInGC(p) then
@@ -95,10 +103,14 @@ function updatePlaytimes()
 			setElementData(p, 'hoursPlayed', hoursPlayed)
 		end
 		local minutes = math.floor((currentTick - jointick)/60)
-		setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
+		if isAFK then
+			setElementData(p, 'playtime',getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes) .. "#808080 (AFK)")
+		else
+			setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
+		end
 	end
 end
-setTimer(updatePlaytimes, aMin*1000*minuteTickAmount + 1500, 0) -- minuteTickAmount loop
+setTimer(updatePlaytimes, timerInterval, 0) -- minuteTickAmount loop
 setTimer(updatePlaytimes, 50, 1)
 
 addEventHandler("onPlayerJoin", root, function()
