@@ -80,7 +80,7 @@ function updatePlaytimes()
 			setElementData(p, 'jointick', currentTick)
 			setElementData(p, 'hoursPlayed', 0)
 		elseif isAFK then -- AFK Players can't earn playtime
-			jointick = jointick + (timerInterval / 1000)
+			jointick = math.floor(jointick + (timerInterval / 1000))
 			setElementData(p, 'jointick', jointick)
 		elseif currentTick - jointick >= aMin * 5 then -- TODO Mark hour back to 1 hour
 			hoursPlayed = hoursPlayed + 1
@@ -101,11 +101,7 @@ function updatePlaytimes()
 		end
 		local minutes = math.floor((currentTick - jointick)/60)
 		outputDebugString("Playtime for " .. getPlayerName(p) .. " is " .. currentTick - jointick .. " ticks")
-		if isAFK then
-			setElementData(p, 'playtime', "#808080" .. getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
-		else
-			setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
-		end
+		setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
 	end
 end
 setTimer(updatePlaytimes, timerInterval, 0) -- minuteTickAmount loop
