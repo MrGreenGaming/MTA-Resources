@@ -80,7 +80,7 @@ function updatePlaytimes()
 			setElementData(p, 'jointick', currentTick)
 			setElementData(p, 'hoursPlayed', 0)
 		elseif isAFK then -- AFK Players can't earn playtime
-			jointick = math.floor(jointick + (timerInterval / 1000) - 1)
+			jointick = math.floor(jointick + (timerInterval / 1000) + 1)
 			if currentTick - jointick < 0 then
 				jointick = currentTick
 			end
