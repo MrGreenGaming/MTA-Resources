@@ -85,7 +85,7 @@ function updatePlaytimes()
 				jointick = currentTick
 			end
 			setElementData(p, 'jointick', jointick)
-		elseif currentTick - jointick >= aMin * 5 then -- TODO Mark hour back to 1 hour
+		elseif currentTick - jointick >= aMin * 60 then
 			hoursPlayed = hoursPlayed + 1
 			if isPlayerLoggedInGC(p) then
 				local hourstring, anotherString = " hours",  " another "
@@ -103,7 +103,6 @@ function updatePlaytimes()
 			setElementData(p, 'hoursPlayed', hoursPlayed)
 		end
 		local minutes = math.floor((currentTick - jointick)/60)
-		outputDebugString("Playtime for " .. getPlayerName(p) .. " is " .. currentTick - jointick .. " ticks")
 		if isAFK then
 			setElementData(p, 'playtime',getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes) .. "#808080 (AFK)")
 		else
