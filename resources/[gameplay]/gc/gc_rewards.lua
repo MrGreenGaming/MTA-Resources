@@ -104,7 +104,7 @@ function updatePlaytimes()
 		end
 		local minutes = math.floor((currentTick - jointick)/60)
 		if isAFK then
-			setElementData(p, 'playtime',getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes) .. "#808080 (AFK)")
+			setElementData(p, 'playtime',getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes) .. " #808080(AFK)")
 		else
 			setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
 		end
