@@ -101,7 +101,11 @@ function updatePlaytimes()
 		end
 		local minutes = math.floor((currentTick - jointick)/60)
 		outputDebugString("Playtime for " .. getPlayerName(p) .. " is " .. currentTick - jointick .. " ticks")
-		setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
+		if isAFK then
+			setElementData(p, 'playtime',getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes) .. "#808080(AFK)")
+		else
+			setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
+		end
 	end
 end
 setTimer(updatePlaytimes, timerInterval, 0) -- minuteTickAmount loop
