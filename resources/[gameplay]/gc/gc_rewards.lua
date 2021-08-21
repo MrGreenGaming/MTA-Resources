@@ -61,6 +61,7 @@ local gracePeriod = 5*60
 -- Instead of a timer for every player, compare playtime of all players
 local aMin = 60 -- minute
 local minuteTickAmount = 1 
+local timerInterval = aMin*1000*minuteTickAmount + 1500
 
 function updatePlaytimes()
 	rewardPerHour = tonumber(get("rewardPerHour"))
@@ -73,11 +74,15 @@ function updatePlaytimes()
 	for k, p in ipairs(getElementsByType'player') do
 		local jointick = getElementData(p, 'jointick')
 		local hoursPlayed = getElementData(p, 'hoursPlayed')
+		local isAFK = getElementData(p, 'player state') == "away" or getElementData(p, 'player state') == "spectating"
 		if not jointick or not hoursPlayed then
 			jointick, hoursPlayed = currentTick, 0
 			setElementData(p, 'jointick', currentTick)
 			setElementData(p, 'hoursPlayed', 0)
-		elseif currentTick - jointick >= aMin * 60 then
+		elseif isAFK then -- AFK Players can't earn playtime
+			jointick = jointick + timerInterval
+			setElementData(p, 'jointick', jointick)
+		elseif currentTick - jointick >= aMin * 5 then -- TODO Mark hour back to 1 hour
 			hoursPlayed = hoursPlayed + 1
 			if isPlayerLoggedInGC(p) then
 				local hourstring, anotherString = " hours",  " another "
@@ -95,10 +100,15 @@ function updatePlaytimes()
 			setElementData(p, 'hoursPlayed', hoursPlayed)
 		end
 		local minutes = math.floor((currentTick - jointick)/60)
-		setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
+		outputDebugString("Playtime for " .. getPlayerName(p) .. " is " .. jointick .. " ticks")
+		if isAFK then
+			setElementData(p, 'playtime', "#808080" .. getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
+		else
+			setElementData(p, 'playtime', getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
+		end
 	end
 end
-setTimer(updatePlaytimes, aMin*1000*minuteTickAmount + 1500, 0) -- minuteTickAmount loop
+setTimer(updatePlaytimes, timerInterval, 0) -- minuteTickAmount loop
 setTimer(updatePlaytimes, 50, 1)
 
 addEventHandler("onPlayerJoin", root, function()
