@@ -442,7 +442,6 @@ setTimer(function()
             if acc and acc.gcRecord[4] and acc.gcRecord[4] > 0 and playtime then
                 playtime = split(playtime, ':')
                 local minutes = split(playtime[2], ' ')
-                outputDebugString(playtime[1] .. " " .. minutes[1])
                 local gpm = acc.gcRecord[4] / (playtime[1] + minutes[1] / 60)
                 setElementData(player, 'gpm', math.ceil(gpm))
                 setElementData(player, 'sessiongc', acc.gcRecord[4])
