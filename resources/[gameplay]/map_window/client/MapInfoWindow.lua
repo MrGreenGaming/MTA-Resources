@@ -134,8 +134,8 @@ dims.description = {
 
 dims.nextmap = {
     bgX = 0,
-    bgY = 115,
-    bgHeight = dims.window.height - 115,
+    bgY = 155,
+    bgHeight = dims.window.height - 155,
     bgWidth = dims.window.width,
     iconX = dims.leftColumn.x,
     iconY = 117,
