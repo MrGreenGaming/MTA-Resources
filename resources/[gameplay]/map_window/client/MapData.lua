@@ -66,6 +66,7 @@ local function changeCurrentMapInfo(data)
         end
 
         if MapData.currentMapInfo.uploadDate then
+            outputDebugString(MapData.currentMapInfo.uploadDate)
             MapData.currentMapInfo.uploadDate = os.date("%d %b %Y", MapData.currentMapInfo.uploadDate) or false
         end
 
