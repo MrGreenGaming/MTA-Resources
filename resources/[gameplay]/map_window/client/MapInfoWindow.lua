@@ -126,10 +126,10 @@ dims.description = {
 dims.uploadDate = {
     iconX = dims.description.iconX,
     iconY = dims.leftColumn.thirdY,
-    startX = dims.description.startX,
+    startX = dims.description.startX + dims.icon.width + dims.icons.padding,
     startY = dims.leftColumn.thirdY,
     endX = dims.description.endX,
-    endY = dims.rightColumn.fourthY + dims.icons.height,
+    endY = dims.leftColumn.thirdY + dims.icons.height,
     fontSize = 1
 }
 
