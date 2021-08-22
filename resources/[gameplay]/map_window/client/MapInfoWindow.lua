@@ -28,14 +28,14 @@ dims.leftColumn = {
     x = 30,
     firstY = 35,
     secondY = 65,
-    thirdY = 90
+    thirdY = 105
 }
 
 dims.rightColumn = {
     x = 320,
     firstY = 35,
-    secondY = 65,
-    thirdY = 90,
+    secondY = 80,
+    thirdY = 105,
     fourthY = 115
 }
 
