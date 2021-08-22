@@ -246,7 +246,7 @@ function MapInfoWindow.render()
     dxDrawText(MapData.currentMapInfo.lastTimePlayed or "First time", x + dims.lastPlayed.startX, y + dims.lastPlayed.startY, x + dims.lastPlayed.endX, y + dims.lastPlayed.endY, tocolor(255,255,255 * alphaFade), dims.lastPlayed.fontSize, "default-bold", "left", "center", false, false, false)
 
     -- Upload date
-    dxDrawImage(x + dims.uploadDate.iconx, y + dims.uploadDate.iconY, dims.icons.height, dims.icons.width, "/icons/upload.png")
+    dxDrawImage(x + dims.uploadDate.iconX, y + dims.uploadDate.iconY, dims.icons.height, dims.icons.width, "/icons/upload.png")
     dxDrawText(MapData.currentMapInfo.uploadDate or "Unknown", x + dims.uploadDate.startX, y + dims.uploadDate.startY, x + dims.uploadDate.endX, y + dims.uploadDate.endY, tocolor(255,255,255 * alphaFade), dims.uploadDate.fontSize, "default-bold", "left", "center", false, false, false)
 
     ------------
