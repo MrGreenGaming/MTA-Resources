@@ -28,6 +28,7 @@ dims.leftColumn = {
     x = 30,
     firstY = 35,
     secondY = 65,
+    thirdY = 90
 }
 
 dims.rightColumn = {
@@ -103,11 +104,11 @@ dims.lastPlayed = {
 }
 
 dims.uploadDate = {
-    iconX = dims.lastPlayed.iconX,
-    iconY = dims.rightColumn.fourthY,
-    startX = dims.lastPlayed.startX,
-    startY = dims.rightColumn.fourthY,
-    endX = dims.lastPlayed.endX,
+    iconX = dims.description.iconX,
+    iconY = dims.leftColumn.thirdY,
+    startX = dims.description.startX,
+    startY = dims.leftColumn.thirdY,
+    endX = dims.description.endX,
     endY = dims.rightColumn.fourthY + dims.icons.height,
     fontSize = 1
 }
