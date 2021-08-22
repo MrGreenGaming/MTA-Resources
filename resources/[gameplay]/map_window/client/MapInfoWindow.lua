@@ -103,16 +103,6 @@ dims.lastPlayed = {
     fontSize = 1
 }
 
-dims.uploadDate = {
-    iconX = dims.description.iconX,
-    iconY = dims.leftColumn.thirdY,
-    startX = dims.description.startX,
-    startY = dims.leftColumn.thirdY,
-    endX = dims.description.endX,
-    endY = dims.rightColumn.fourthY + dims.icons.height,
-    fontSize = 1
-}
-
 dims.author = {
     iconX = dims.leftColumn.x,
     iconY = dims.leftColumn.firstY,
@@ -130,6 +120,16 @@ dims.description = {
     startY = dims.leftColumn.secondY,
     endX = dims.rightColumn.x - dims.icons.width,
     endY = dims.leftColumn.secondY + dims.icons.height + 25,
+    fontSize = 1
+}
+
+dims.uploadDate = {
+    iconX = dims.description.iconX,
+    iconY = dims.leftColumn.thirdY,
+    startX = dims.description.startX,
+    startY = dims.leftColumn.thirdY,
+    endX = dims.description.endX,
+    endY = dims.rightColumn.fourthY + dims.icons.height,
     fontSize = 1
 }
 
