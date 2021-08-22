@@ -7,7 +7,7 @@ local alphaFade = 1
 local dims = {}
 dims.window = {
     width = 500,
-    height = 140
+    height = 165
 }
 
 dims.icons = {
@@ -28,13 +28,14 @@ dims.leftColumn = {
     x = 30,
     firstY = 35,
     secondY = 65,
+    thirdY = 110
 }
 
 dims.rightColumn = {
     x = 320,
     firstY = 35,
-    secondY = 65,
-    thirdY = 90
+    secondY = 80,
+    thirdY = 110
 }
 
 dims.mapName = {
@@ -67,7 +68,7 @@ dims.dislikes = {
 
 dims.ratingsBar = {
     x = dims.likes.iconX,
-    y = dims.likes.iconY + 24,
+    y = dims.likes.iconY + 32,
     width = 150
 }
 
@@ -121,15 +122,25 @@ dims.description = {
     fontSize = 1
 }
 
+dims.uploadDate = {
+    iconX = dims.description.iconX,
+    iconY = dims.leftColumn.thirdY,
+    startX = dims.leftColumn.x + dims.icons.width + dims.icons.padding,
+    startY = dims.leftColumn.thirdY,
+    endX = dims.description.endX,
+    endY = dims.leftColumn.thirdY + dims.icons.height,
+    fontSize = 1
+}
+
 dims.nextmap = {
     bgX = 0,
-    bgY = 115,
-    bgHeight = dims.window.height - 115,
+    bgY = 140,
+    bgHeight = dims.window.height - 140,
     bgWidth = dims.window.width,
     iconX = dims.leftColumn.x,
-    iconY = 117,
+    iconY = 142,
     startX = dims.leftColumn.x + dims.icons.width + dims.icons.padding,
-    startY = 115,
+    startY = 140,
     endX = 365,
     endY = dims.window.height,
     fontSize = 1,
@@ -233,6 +244,10 @@ function MapInfoWindow.render()
     -- Last time played
     dxDrawImage(x + dims.lastPlayed.iconX, y + dims.lastPlayed.iconY, dims.icons.height, dims.icons.width, "/icons/history.png")
     dxDrawText(MapData.currentMapInfo.lastTimePlayed or "First time", x + dims.lastPlayed.startX, y + dims.lastPlayed.startY, x + dims.lastPlayed.endX, y + dims.lastPlayed.endY, tocolor(255,255,255 * alphaFade), dims.lastPlayed.fontSize, "default-bold", "left", "center", false, false, false)
+
+    -- Upload date
+    dxDrawImage(x + dims.uploadDate.iconX, y + dims.uploadDate.iconY, dims.icons.height, dims.icons.width, "/icons/upload.png")
+    dxDrawText(MapData.currentMapInfo.uploadDate or "Unknown", x + dims.uploadDate.startX, y + dims.uploadDate.startY, x + dims.uploadDate.endX, y + dims.uploadDate.endY, tocolor(255,255,255 * alphaFade), dims.uploadDate.fontSize, "default-bold", "left", "center", false, false, false)
 
     ------------
     -- AUTHOR --

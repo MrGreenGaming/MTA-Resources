@@ -21,6 +21,7 @@ MapData.currentMapInfo = {
     author = "",
     description = "",
     lastTimePlayed = false,
+    uploadDate = false,
 }
 
 MapData.mapRoundsInfo = {
@@ -64,6 +65,10 @@ local function changeCurrentMapInfo(data)
             MapData.currentMapInfo.lastTimePlayed = os.date("%d %b %Y", MapData.currentMapInfo.lastTimePlayed) or false
         end
 
+        if MapData.currentMapInfo.uploadDate then
+            MapData.currentMapInfo.uploadDate = os.date("%d %b %Y", MapData.currentMapInfo.uploadDate) or false
+        end
+
         if not MapData.currentMapInfo.author or MapData.currentMapInfo.author == "" then
             MapData.currentMapInfo.author = "Author not set"
         end
@@ -79,6 +84,7 @@ local function changeCurrentMapInfo(data)
             author = "Author not set",
             description = "Description not set",
             lastTimePlayed = false,
+            uploadDate = false,
         }
     end
 end
