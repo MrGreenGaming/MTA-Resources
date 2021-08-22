@@ -28,15 +28,14 @@ dims.leftColumn = {
     x = 30,
     firstY = 35,
     secondY = 65,
-    thirdY = 105
+    thirdY = 110
 }
 
 dims.rightColumn = {
     x = 320,
     firstY = 35,
     secondY = 80,
-    thirdY = 105,
-    fourthY = 115
+    thirdY = 110
 }
 
 dims.mapName = {
