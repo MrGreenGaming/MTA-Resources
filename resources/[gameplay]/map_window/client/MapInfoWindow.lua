@@ -7,7 +7,7 @@ local alphaFade = 1
 local dims = {}
 dims.window = {
     width = 500,
-    height = 170
+    height = 165
 }
 
 dims.icons = {
@@ -68,7 +68,7 @@ dims.dislikes = {
 
 dims.ratingsBar = {
     x = dims.likes.iconX,
-    y = dims.likes.iconY + 30,
+    y = dims.likes.iconY + 32,
     width = 150
 }
 
@@ -134,13 +134,13 @@ dims.uploadDate = {
 
 dims.nextmap = {
     bgX = 0,
-    bgY = 145,
-    bgHeight = dims.window.height - 145,
+    bgY = 140,
+    bgHeight = dims.window.height - 140,
     bgWidth = dims.window.width,
     iconX = dims.leftColumn.x,
-    iconY = 147,
+    iconY = 142,
     startX = dims.leftColumn.x + dims.icons.width + dims.icons.padding,
-    startY = 145,
+    startY = 140,
     endX = 365,
     endY = dims.window.height,
     fontSize = 1,
