@@ -34,7 +34,8 @@ dims.rightColumn = {
     x = 320,
     firstY = 35,
     secondY = 65,
-    thirdY = 90
+    thirdY = 90,
+    fourthY = 115
 }
 
 dims.mapName = {
@@ -98,6 +99,16 @@ dims.lastPlayed = {
     startY = dims.rightColumn.thirdY,
     endX = dims.likes.endX,
     endY = dims.rightColumn.thirdY + dims.icons.height,
+    fontSize = 1
+}
+
+dims.uploadDate = {
+    iconX = dims.lastPlayed.iconX,
+    iconY = dims.rightColumn.fourthY,
+    startX = dims.lastPlayed.startX,
+    startY = dims.rightColumn.fourthY,
+    endX = dims.lastPlayed.endx,
+    endY = dims.rightColumn.fourthY + dims.icons.height,
     fontSize = 1
 }
 
@@ -233,6 +244,10 @@ function MapInfoWindow.render()
     -- Last time played
     dxDrawImage(x + dims.lastPlayed.iconX, y + dims.lastPlayed.iconY, dims.icons.height, dims.icons.width, "/icons/history.png")
     dxDrawText(MapData.currentMapInfo.lastTimePlayed or "First time", x + dims.lastPlayed.startX, y + dims.lastPlayed.startY, x + dims.lastPlayed.endX, y + dims.lastPlayed.endY, tocolor(255,255,255 * alphaFade), dims.lastPlayed.fontSize, "default-bold", "left", "center", false, false, false)
+
+    -- Upload date
+    dxDrawImage(x + dims.uploadDate.iconx, y + dims.uploadDate.iconY, dims.icons.height, dims.icons.width, "/icons/upload.png")
+    dxDrawText(MapData.currentMapInfo.uploadDate or "Unknown", x + dims.uploadDate.startX, y + dims.uploadDate.startY, x + dims.uploadDate.endX, y + dims.uploadDate.endY, tocolor(255,255,255 * alphaFade), dims.uploadDate.fontSize, "default-bold", "left", "center", false, false, false)
 
     ------------
     -- AUTHOR --
