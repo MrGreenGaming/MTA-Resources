@@ -68,7 +68,7 @@ dims.dislikes = {
 
 dims.ratingsBar = {
     x = dims.likes.iconX,
-    y = dims.likes.iconY + 24,
+    y = dims.likes.iconY + 30,
     width = 150
 }
 
