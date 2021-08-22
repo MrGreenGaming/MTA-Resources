@@ -7,7 +7,7 @@ local alphaFade = 1
 local dims = {}
 dims.window = {
     width = 500,
-    height = 180
+    height = 170
 }
 
 dims.icons = {
@@ -134,13 +134,13 @@ dims.description = {
 
 dims.nextmap = {
     bgX = 0,
-    bgY = 155,
-    bgHeight = dims.window.height - 155,
+    bgY = 145,
+    bgHeight = dims.window.height - 145,
     bgWidth = dims.window.width,
     iconX = dims.leftColumn.x,
-    iconY = 117,
+    iconY = 147,
     startX = dims.leftColumn.x + dims.icons.width + dims.icons.padding,
-    startY = 155,
+    startY = 145,
     endX = 365,
     endY = dims.window.height,
     fontSize = 1,
