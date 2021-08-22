@@ -325,7 +325,7 @@ function startNextMapVote()
 	local currentMap = exports.mapmanager:getRunningGamemodeMap()
 	local currentRes = currentMap
 	if currentMap then
-		if not times[currentMap] or times[currentMap] < maxPlayAgain+1 then
+		if not times[currentMap] or times[currentMap] < maxPlayAgain+1 or not isMapTesting() then
 			table.insert(poll, {"Play again", 'nextMapVoteResult', getRootElement(), currentMap})
 		elseif setEventMapQueue then -- Start event manager map
 			outputChatBox('Maximum \'Play Again\' times ('..maxPlayAgain..') has been reached. Changing to next event map...')
@@ -353,7 +353,11 @@ function startNextMapVote()
 			skipMapQueue = getResourceFromName(map[2])
 			return
 		else
-			outputChatBox('Maximum \'Play Again\' times ('..maxPlayAgain..') has been reached. Starting vote without "Play Again" option...')
+			if isMapTesting() then
+				outputChatBox('Test Maps can\'t be played again. Starting vote without "Play Again" option...')
+			else
+				outputChatBox('Maximum \'Play Again\' times ('..maxPlayAgain..') has been reached. Starting vote without "Play Again" option...')
+			end
 			-- startRandomMap()
 			-- return
 		end
@@ -376,6 +380,10 @@ function startNextMapVote()
 	end
 
 	return pollDidStart
+end
+
+function isMapTesting()
+	return getResourceInfo(exports.mapmanager:getRunningGamemodeMap(), 'newupload') == "true"
 end
 
 -- Change gamemode order here
