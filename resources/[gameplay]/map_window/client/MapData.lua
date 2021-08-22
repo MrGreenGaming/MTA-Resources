@@ -65,7 +65,7 @@ local function changeCurrentMapInfo(data)
             MapData.currentMapInfo.lastTimePlayed = os.date("%d %b %Y", MapData.currentMapInfo.lastTimePlayed) or false
         end
 
-        if mapData.currentMapInfo.uploadDate then
+        if MapData.currentMapInfo.uploadDate then
             MapData.currentMapInfo.uploadDate = os.date("%d %b %Y", MapData.currentMapInfo.uploadDate) or false
         end
 

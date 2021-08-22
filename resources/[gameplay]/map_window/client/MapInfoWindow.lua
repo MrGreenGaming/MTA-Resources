@@ -107,7 +107,7 @@ dims.uploadDate = {
     iconY = dims.rightColumn.fourthY,
     startX = dims.lastPlayed.startX,
     startY = dims.rightColumn.fourthY,
-    endX = dims.lastPlayed.endx,
+    endX = dims.lastPlayed.endX,
     endY = dims.rightColumn.fourthY + dims.icons.height,
     fontSize = 1
 }
