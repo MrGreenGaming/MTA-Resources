@@ -7,7 +7,7 @@ local alphaFade = 1
 local dims = {}
 dims.window = {
     width = 500,
-    height = 140
+    height = 180
 }
 
 dims.icons = {
