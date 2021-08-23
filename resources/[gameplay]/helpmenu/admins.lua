@@ -12,4 +12,6 @@ admins = {
 	{ name = "AbueloEbrio", title = "Alcoholic Admin", accountName = "santiii733" },
 	{ name = "Jap", title = "Admin", accountName = "jap3" },
     { name = "Mekuar", title = "Admin", accountName = "Mekuar1" },
+	{ name = "Military", title ="Admin", accountName = "mili"},
+	{ name = "Mateoryt", title="Admin", accountName = "mateoryt"}
 }
