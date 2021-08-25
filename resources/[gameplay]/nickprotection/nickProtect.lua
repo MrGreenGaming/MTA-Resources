@@ -34,6 +34,24 @@ function doesPlayerMatchNick(nick, id)
     end
 end
 
+function DoesPlayerMatchNickAsync(player, nick, id, callback)
+    if handlerConnect then
+        local cmd = "SELECT pNick, forumId, FROM gc_nickprotection WHERE pNick = ?"
+        dbQuery(function (qh, player, nick, id, callback)
+            if not qh then callback(player, false) end
+            local sql = dbPoll(qh, 0)
+            if not sql then callback(player, false) end
+            if #sql >0 then
+                if sql[1].forumId == id then
+                    callback(player, true)
+                else
+                    callback(player, false)
+                end
+            end
+        end, {player, nick, id, callback}, handlerConnect, cmd, nick)
+    end
+end
+
 handlerConnect = nil
 canScriptWork = true
 addEventHandler('onResourceStart', getResourceRootElement(),
@@ -120,10 +138,15 @@ addEventHandler('nickProtectionLoaded', getRootElement(),
             end
 
             local id = exports.gc:getPlayerGreencoinsID(player)
-            if not doesPlayerMatchNick(safeString(getPlayerName(player)), id) then
-                warnPlayer(player)
-            end
-        end, 120000, 1, source)
+            -- if not doesPlayerMatchNick(safeString(getPlayerName(player)), id) then
+            --     warnPlayer(player)
+            -- end
+            DoesPlayerMatchNickAsync(player, safeString(getPlayerName(player)), id, function (player, result)
+                if not result then
+                    warnPlayer(player)
+                end
+            end)
+        end, 30000, 1, source)
     end)
 
 g_NickHandler = {}
@@ -164,15 +187,26 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
         end
 
         local id = exports.gc:getPlayerGreencoinsID(player)
-        if not doesPlayerMatchNick(safeString(nick), id) then
-            cancelEvent()
-            outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-            setTimer(function(oldNick, newNick) 
-                if getPlayerName(player) == newNick then 
-                    warnPlayer(player, oldNick) 
-                end
-            end, 500, 1, oldNick, newNick)
-        end
+        -- if not doesPlayerMatchNick(safeString(nick), id) then
+        --     cancelEvent()
+        --     outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
+        --     setTimer(function(oldNick, newNick) 
+        --         if getPlayerName(player) == newNick then 
+        --             warnPlayer(player, oldNick) 
+        --         end
+        --     end, 500, 1, oldNick, newNick)
+        -- end
+        DoesPlayerMatchNickAsync(player, safeString(nick), id, function (player, result)
+            if not result then
+                cancelEvent()
+                outputChatBox('[NICK] This nick is protection. If it\'s your name, please log into GCs or use antother name.', player, 255, 0, 0)
+                setTimer(function(oldNick, newNick)
+                    if getPlayerName(player) == newNick then
+                        warnPlayer(player, oldNick)
+                    end
+                end, 500, 1, oldNick, newNick)
+            end
+        end)
     end)
 
 
