@@ -100,7 +100,7 @@ function IsNickProtectedAsync(nick, callback)
             if not sql or #sql == 0 then callback(false) end
             callback(true)
             
-        end, {callback}, handlerConnect, cmd, nick)
+        end, callback, handlerConnect, cmd, nick)
     else
         callback(false)
     end
