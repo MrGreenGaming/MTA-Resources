@@ -214,7 +214,6 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
             DoesPlayerMatchNickAsync(player, safeString(nick), id, function (player, result)
                 outputDebugString("DoesPlayerMatchNick: " .. tostring(result))
                 if not result then
-                    cancelEvent()
                     outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
                     setTimer(function(oldNick, newNick) 
                         if getPlayerName(player) == newNick then 
