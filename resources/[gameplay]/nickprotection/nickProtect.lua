@@ -185,7 +185,6 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
         IsNickProtectedAsync(nick, function (result)
             outputDebugString("NickProtected: " .. tostring(result))
             if not result then
-                setPlayerName(player, newNick)
                 return
             end
             
