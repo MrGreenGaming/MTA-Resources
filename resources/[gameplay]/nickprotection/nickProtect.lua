@@ -143,7 +143,7 @@ addEventHandler('nickProtectionLoaded', getRootElement(),
             end
 
             IsNickProtectedAsync(safeString(getPlayerName(player)), function (result)
-                if not result then return end;
+                if result == false then return end
                 local isLogged = exports.gc:isPlayerLoggedInGC(player)
                 if not isLogged then
                     warnPlayer(player)
@@ -182,7 +182,7 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
         local nick = newNick
         IsNickProtectedAsync(nick, function (result)
             outputDebugString("NickProtected: " .. tostring(result))
-            if not result then return end;
+            if result == false then return end
             
             local isLogged = exports.gc:isPlayerLoggedInGC(player)
             if not isLogged then
