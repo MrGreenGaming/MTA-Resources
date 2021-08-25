@@ -156,8 +156,8 @@ addEventHandler('nickProtectionLoaded', getRootElement(),
                         warnPlayer(player)
                     end
                 end)
-            end, 30000, 1, source)
             end)
+        end, 30000, 1, source)
     end
 )
 
