@@ -181,6 +181,7 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
 
         local nick = newNick
         IsNickProtectedAsync(nick, function (result)
+            outputDebugString("NickProtected: " .. result)
             if not result then return end;
             
             local isLogged = exports.gc:isPlayerLoggedInGC(player)
@@ -204,6 +205,7 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
             --     end, 500, 1, oldNick, newNick)
             -- end
             DoesPlayerMatchNickAsync(player, safeString(nick), id, function (player, result)
+                outputDebugString("DoesPlayerMatchNick: " .. result)
                 if not result then
                     cancelEvent()
                     outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
