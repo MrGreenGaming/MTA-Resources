@@ -187,11 +187,9 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
             if not isLogged then
                 cancelEvent()
                 outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-                setTimer(function(oldNick, newNick) 
-                    if getPlayerName(player) == newNick then 
-                        warnPlayer(player, oldNick) 
-                    end 
-                end, 10000, 1, oldNick, newNick)
+                if getPlayerName(player) == newNick then
+                    warnPlayer(player, oldNick)
+                end
                 return
             end
     
@@ -209,11 +207,9 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
                 if not result then
                     cancelEvent()
                     outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-                    setTimer(function(oldNick, newNick)
-                        if getPlayerName(player) == newNick then
-                            warnPlayer(player, oldNick)
-                        end
-                    end, 500, 1, oldNick, newNick)
+                    if getPlayerName(player) == newNick then
+                     warnPlayer(player, oldNick)
+                    end
                 end
             end)
         end)
