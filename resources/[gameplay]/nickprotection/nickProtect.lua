@@ -37,7 +37,7 @@ end
 function DoesPlayerMatchNickAsync(player, nick, id, callback)
     if handlerConnect then
         local cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE pNick = ?"
-        dbQuery(function (qh, player, nick, id, callback)
+        dbQuery(function (qh)
             if not qh then callback(player, false) end
             local sql = dbPoll(qh, 0)
             if not sql then callback(player, false) end
@@ -48,7 +48,7 @@ function DoesPlayerMatchNickAsync(player, nick, id, callback)
                     callback(player, false)
                 end
             end
-        end, {player, nick, id, callback}, handlerConnect, cmd, nick)
+        end, {}, handlerConnect, cmd, nick)
     end
 end
 
@@ -93,14 +93,14 @@ end
 function IsNickProtectedAsync(nick, callback)
     if handlerConnect then
         local cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE LOWER(pNick) = ? LIMIT 0,1"
-        dbQuery(function(qh, callback)
+        dbQuery(function(qh)
             if not qh then callback(false) end
             local sql = dbPoll(qh, 0)
 
             if not sql or #sql == 0 then callback(false) end
             callback(true)
             
-        end, callback, handlerConnect, cmd, nick)
+        end, {}, handlerConnect, cmd, nick)
     else
         callback(false)
     end
