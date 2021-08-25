@@ -15,22 +15,21 @@
 
 bAllowCommands = {}
 
-function doesPlayerMatchNick(nick, id)
-    local cmd = ''
-    local query
+function DoesPlayerMatchNickAsync(player, nick, id, callback)
     if handlerConnect then
-        cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE pNick = ?"
-        query = dbQuery(handlerConnect, cmd, nick)
-        if not query then return false end
-        local sql = dbPoll(query, -1)
-        if not sql then return false end
-        if #sql > 0 then
-            if sql[1].forumId == id then
-                return true
-            else
-                return false
+        local cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE pNick = ?"
+        dbQuery(function (qh)
+            if not qh then return callback(player, false) end
+            local sql = dbPoll(qh, 0)
+            if not sql then return callback(player, false) end
+            if #sql >0 then
+                if sql[1].forumId == id then
+                    return callback(player, true)
+                else
+                    return callback(player, false)
+                end
             end
-        end
+        end, {}, handlerConnect, cmd, nick)
     end
 end
 
@@ -53,22 +52,19 @@ function safeString(playerName)
     return playerName
 end
 
-function isNickProtected(nick)
+function IsNickProtectedAsync(nick, callback)
     if handlerConnect then
         local cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE LOWER(pNick) = ? LIMIT 0,1"
-        local query = dbQuery(handlerConnect, cmd, string.lower(nick))
-        if not query then
-            return false
-        end
+        dbQuery(function(qh)
+            if not qh then return callback(false) end
+            local sql = dbPoll(qh, 0)
 
-        local sql = dbPoll(query, -1)
-        if not sql or #sql == 0 then
-            return false
-        end
-
-        return true
+            if not sql or #sql == 0 then return callback(false) end
+            return callback(true)
+            
+        end, {}, handlerConnect, cmd, nick)
     else
-        return false
+        return callback(false)
     end
 end
 
@@ -108,23 +104,26 @@ addEventHandler('nickProtectionLoaded', getRootElement(),
                 return
             end
 
-            local isCurrentNickProtected = isNickProtected(safeString(getPlayerName(player)))
-            if not isCurrentNickProtected then
-                return
-            end
-
-            local isLogged = exports.gc:isPlayerLoggedInGC(player)
-            if not isLogged then
-                warnPlayer(player)
-                return
-            end
-
-            local id = exports.gc:getPlayerGreencoinsID(player)
-            if not doesPlayerMatchNick(safeString(getPlayerName(player)), id) then
-                warnPlayer(player)
-            end
-        end, 120000, 1, source)
-    end)
+            IsNickProtectedAsync(safeString(getPlayerName(player)), function (result)
+                if not result then
+                    return
+                end
+                local isLogged = exports.gc:isPlayerLoggedInGC(player)
+                if not isLogged then
+                    warnPlayer(player)
+                    return
+                end
+    
+                local id = exports.gc:getPlayerGreencoinsID(player)
+                DoesPlayerMatchNickAsync(player, safeString(getPlayerName(player)), id, function (player, result)
+                    if not result then
+                        warnPlayer(player)
+                    end
+                end)
+            end)
+        end, 30000, 1, source)
+    end
+)
 
 g_NickHandler = {}
 addEventHandler('onPlayerChangeNick', getRootElement(),
@@ -145,35 +144,37 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
         end
 
         local nick = newNick
-
-        local isCurrentNickProtected = isNickProtected(safeString(nick))
-        if not isCurrentNickProtected then
-            return
-        end
-        
-        local isLogged = exports.gc:isPlayerLoggedInGC(player)
-        if not isLogged then
-            cancelEvent()
-            outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-            setTimer(function(oldNick, newNick) 
-                if getPlayerName(player) == newNick then 
-                    warnPlayer(player, oldNick) 
-                end 
-            end, 10000, 1, oldNick, newNick)
-            return
-        end
-
-        local id = exports.gc:getPlayerGreencoinsID(player)
-        if not doesPlayerMatchNick(safeString(nick), id) then
-            cancelEvent()
-            outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-            setTimer(function(oldNick, newNick) 
-                if getPlayerName(player) == newNick then 
-                    warnPlayer(player, oldNick) 
+        IsNickProtectedAsync(nick, function (result)
+            if not result then
+                return
+            end
+            
+            local isLogged = exports.gc:isPlayerLoggedInGC(player)
+            if not isLogged then
+                outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
+                setTimer(function(oldNick, newNick) 
+                    if getPlayerName(player) == newNick then 
+                        warnPlayer(player) 
+                    end 
+                end, 10000, 1, oldNick, newNick)
+                return
+            end
+    
+            local id = exports.gc:getPlayerGreencoinsID(player)
+            DoesPlayerMatchNickAsync(player, safeString(nick), id, function (player, result)
+                if not result then
+                    cancelEvent()
+                    outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
+                    setTimer(function(oldNick, newNick) 
+                        if getPlayerName(player) == newNick then 
+                            warnPlayer(player) 
+                        end
+                    end, 500, 1, oldNick, newNick)
                 end
-            end, 500, 1, oldNick, newNick)
-        end
-    end)
+            end)
+        end)
+    end
+)
 
 
 addEvent('onGreencoinsLogin', true)
