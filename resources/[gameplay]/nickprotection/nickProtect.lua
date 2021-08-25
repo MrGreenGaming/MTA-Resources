@@ -143,7 +143,9 @@ addEventHandler('nickProtectionLoaded', getRootElement(),
             end
 
             IsNickProtectedAsync(safeString(getPlayerName(player)), function (result)
-                if result == false then return end
+                if not result then
+                    return
+                end
                 local isLogged = exports.gc:isPlayerLoggedInGC(player)
                 if not isLogged then
                     warnPlayer(player)
@@ -182,15 +184,19 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
         local nick = newNick
         IsNickProtectedAsync(nick, function (result)
             outputDebugString("NickProtected: " .. tostring(result))
-            if result == false then return end
+            if not result then
+                return
+            end
             
             local isLogged = exports.gc:isPlayerLoggedInGC(player)
             if not isLogged then
                 cancelEvent()
                 outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-                if getPlayerName(player) == newNick then
-                    warnPlayer(player, oldNick)
-                end
+                setTimer(function(oldNick, newNick) 
+                    if getPlayerName(player) == newNick then 
+                        warnPlayer(player, oldNick) 
+                    end 
+                end, 10000, 1, oldNick, newNick)
                 return
             end
     
@@ -209,9 +215,11 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
                 if not result then
                     cancelEvent()
                     outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-                    if getPlayerName(player) == newNick then
-                     warnPlayer(player, oldNick)
-                    end
+                    setTimer(function(oldNick, newNick) 
+                        if getPlayerName(player) == newNick then 
+                            warnPlayer(player, oldNick) 
+                        end
+                    end, 500, 1, oldNick, newNick)
                 end
             end)
         end)
