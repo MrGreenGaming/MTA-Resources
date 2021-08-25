@@ -15,25 +15,6 @@
 
 bAllowCommands = {}
 
-function doesPlayerMatchNick(nick, id)
-    local cmd = ''
-    local query
-    if handlerConnect then
-        cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE pNick = ?"
-        query = dbQuery(handlerConnect, cmd, nick)
-        if not query then return false end
-        local sql = dbPoll(query, -1)
-        if not sql then return false end
-        if #sql > 0 then
-            if sql[1].forumId == id then
-                return true
-            else
-                return false
-            end
-        end
-    end
-end
-
 function DoesPlayerMatchNickAsync(player, nick, id, callback)
     if handlerConnect then
         local cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE pNick = ?"
@@ -69,25 +50,6 @@ function safeString(playerName)
     playerName = string.gsub(playerName, "'", "")
     playerName = string.gsub(playerName, "#%x%x%x%x%x%x", "")
     return playerName
-end
-
-function isNickProtected(nick)
-    if handlerConnect then
-        local cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE LOWER(pNick) = ? LIMIT 0,1"
-        local query = dbQuery(handlerConnect, cmd, string.lower(nick))
-        if not query then
-            return false
-        end
-
-        local sql = dbPoll(query, -1)
-        if not sql or #sql == 0 then
-            return false
-        end
-
-        return true
-    else
-        return false
-    end
 end
 
 function IsNickProtectedAsync(nick, callback)
@@ -199,15 +161,6 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
             end
     
             local id = exports.gc:getPlayerGreencoinsID(player)
-            -- if not doesPlayerMatchNick(safeString(nick), id) then
-            --     cancelEvent()
-            --     outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
-            --     setTimer(function(oldNick, newNick) 
-            --         if getPlayerName(player) == newNick then 
-            --             warnPlayer(player, oldNick) 
-            --         end
-            --     end, 500, 1, oldNick, newNick)
-            -- end
             DoesPlayerMatchNickAsync(player, safeString(nick), id, function (player, result)
                 if not result then
                     cancelEvent()
