@@ -183,7 +183,6 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
 
         local nick = newNick
         IsNickProtectedAsync(nick, function (result)
-            outputDebugString("NickProtected: " .. tostring(result))
             if not result then
                 return
             end
@@ -193,7 +192,7 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
                 outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
                 setTimer(function(oldNick, newNick) 
                     if getPlayerName(player) == newNick then 
-                        warnPlayer(player, oldNick) 
+                        warnPlayer(player) 
                     end 
                 end, 10000, 1, oldNick, newNick)
                 return
@@ -210,13 +209,12 @@ addEventHandler('onPlayerChangeNick', getRootElement(),
             --     end, 500, 1, oldNick, newNick)
             -- end
             DoesPlayerMatchNickAsync(player, safeString(nick), id, function (player, result)
-                outputDebugString("DoesPlayerMatchNick: " .. tostring(result))
                 if not result then
                     cancelEvent()
                     outputChatBox('[NICK] This nick is protected. If it\'s your name, please log into GCs or use another name.', player, 255, 0, 0)
                     setTimer(function(oldNick, newNick) 
                         if getPlayerName(player) == newNick then 
-                            warnPlayer(player, oldNick) 
+                            warnPlayer(player) 
                         end
                     end, 500, 1, oldNick, newNick)
                 end
