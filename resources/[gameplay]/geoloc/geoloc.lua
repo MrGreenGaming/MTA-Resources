@@ -14,9 +14,9 @@ function checkIP(player)
 			setElementData(player, 'fullCountryName', cache[IP].country)
 		elseif split(IP,'.')[1] == "192" or split(IP,'.')[1] == "172" or split(IP,'.')[1] == "10" or split(IP,'.')[1] == "127" then
 			-- fetch our own IP for local adresses
-			fetchRemote('http://www.geoplugin.net/json.gp', receiveIPdata, '', false, IP, getPlayerName(player))
+			fetchRemote('http://www.geoplugin.net/json.gp', "ip" , receiveIPdata, '', false, IP, getPlayerName(player))
 		else
-			fetchRemote('http://www.geoplugin.net/json.gp?ip=' .. IP, receiveIPdata, '', false, IP, getPlayerName(player))	
+			fetchRemote('http://www.geoplugin.net/json.gp?ip=' .. IP, "ip" ,  receiveIPdata, '', false, IP, getPlayerName(player))	
 		end
 -- 	else ignore
 	end
@@ -24,7 +24,7 @@ end
 
 function fetchip(p, cmd, IP)
 	if #split(IP,'.') == 4 then
-		fetchRemote('http://www.geoplugin.net/json.gp?ip=' .. IP, receiveIPdata, '', false, IP, '')
+		fetchRemote('http://www.geoplugin.net/json.gp?ip=' .. IP, "ip", receiveIPdata, '', false, IP, '')
 		--if p then
 			outputChatBox( "Fetching geoloc for " .. IP , p)
 		--end
