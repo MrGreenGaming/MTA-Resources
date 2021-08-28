@@ -76,7 +76,7 @@ function downloadAvatar(player)
     if accounts[player]:getProfileData() and accounts[player]:getProfileData()["photo"] then
         --outputDebugString("forumAvatar1 " .. accounts[player]:getForumName() .. " " .. accounts[player]:getForumID() .. " " .. toJSON(accounts[player].gcRecord[7]))
 
-        fetchRemote(accounts[player]:getProfileData()["photo"], function(data, err)
+        fetchRemote(accounts[player]:getProfileData()["photo"], "avatar",  function(data, err)
             -- outputDebugString("forumAvatar2 " .. accounts[player]:getForumName() .. " " .. tostring(err))
             if err == 0 then
                 -- outputDebugString("forumAvatar3 " .. accounts[player]:getForumName())
