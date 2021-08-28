@@ -175,7 +175,7 @@ addEventHandler("onResourceStop", resourceRoot, stopup)
 function addScoreboard(resource)
     if (resourceRoot == source or getResourceName(resource) == 'scoreboard') then
         exports.scoreboard:scoreboardAddColumn("greencoins", root, 77, "GreenCoins", 30)
-        -- exports.scoreboard:scoreboardAddColumn("forumAvatar", root, 12, "", 1.5)
+        exports.scoreboard:scoreboardAddColumn("forumAvatar", root, 12, "", 1.5)
     end
 end
 
