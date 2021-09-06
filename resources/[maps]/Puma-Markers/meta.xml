@@ -27,4 +27,6 @@
     <file src="Icons/Text.png"></file>
     <file src="Icons/AntiSC.png"></file>
     <file src="Icons/X.png"></file>
+
+    <min_mta_version client="1.5.5-9.14060"></min_mta_version>
 </meta>
