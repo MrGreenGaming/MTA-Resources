@@ -109,7 +109,7 @@ local perks = {
 	[7] = { ID = 7, price =  3250, description = 'Extra long burnup time', func = 'loadGCBurnExtra', requires = {6}, exp = 30, modes = {'Sprint', 'Never the same', 'Shooter', 'Deadline', 'Reach the flag', 'Capture the flag', 'Destruction derby'}},
 	[8] = { ID = 8, price =  3000, description = 'Health transfer', func = 'loadGCBurnTransfer', requires = {6}, exp = 30, disabled = true},
 	[9] = { ID = 9, price =  3000, description = 'Double sided objects', func = 'loadDoubleSided'},
-	[10] = { ID = 10, price =  500, description = 'Colored Projectiles for 30 days', func = 'loadProjectileColor', exp = 30},
+	[10] = { ID = 10, price =  1000, description = 'Colored Projectiles for 20 days', func = 'loadProjectileColor', exp = 20},
 	[11] = { ID = 11, price =  1500, description = 'NTS/DD Vehicle reroll for 30 days', func = 'loadVehicleReroll', exp = 30},
 	[12] = { ID = 12, price =  500, description = 'Deadline color change', func = 'loadDeadlineColorChange', exp = 30},
 
