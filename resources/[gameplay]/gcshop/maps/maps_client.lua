@@ -1,10 +1,10 @@
 ﻿prices = {}
 
-prices["race"] = 1100
-prices["rtf"] = 850
-prices["ctf"] = 850
-prices["nts"] = 1100
-prices["shooter"] = 1300
+prices["race"] = 750
+prices["rtf"] = 500
+prices["ctf"] = 400
+prices["nts"] = 750
+prices["shooter"] = 1000
 prices["deadline"] = 350
 
 lastWinnerDiscount = 50
