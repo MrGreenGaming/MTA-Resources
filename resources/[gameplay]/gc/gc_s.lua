@@ -12,13 +12,11 @@ local function onLoginFailed(player, silent)
 end
 
 local function onLoginSuccessfull(player)
-    
-    
     local forumID = accounts[player]:getForumID()
     local playerHitCount = 0;
-    for id, player in ipairs(getElementsByType("player")) do 
-        local otherForumID = (accounts[player] and accounts[player]:getForumID()) or 0
-        outputDebugString(getPlayerName(player))
+    for id, otherPlayer in ipairs(getElementsByType("player")) do 
+        local otherForumID = (accounts[otherPlayer] and accounts[otherPlayer]:getForumID()) or 0
+        outputDebugString(getPlayerName(otherPlayer))
         outputDebugString(otherForumID)
         if otherForumID ~= 0 and otherForumID == forumID then
             playerHitCount = playerHitCount + 1
