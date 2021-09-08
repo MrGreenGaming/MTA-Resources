@@ -16,8 +16,6 @@ local function onLoginSuccessfull(player)
     local playerHitCount = 0;
     for id, otherPlayer in ipairs(getElementsByType("player")) do 
         local otherForumID = (accounts[otherPlayer] and accounts[otherPlayer]:getForumID()) or 0
-        outputDebugString(getPlayerName(otherPlayer))
-        outputDebugString(otherForumID)
         if otherForumID ~= 0 and otherForumID == forumID then
             playerHitCount = playerHitCount + 1
             -- If 2 players share the same forum id this means 2 players are logged into 1 account, thus not possible.
