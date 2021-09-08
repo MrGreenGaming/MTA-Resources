@@ -3,15 +3,16 @@ accounts = {}
 ----------------------------
 --- Logging in and out  ---
 ----------------------------
+local function onLoginFailed(player, silent)
+    if not silent then
+        triggerClientEvent(player, "onLoginFail", player, false)
+    end
+    accounts[player]:destroy()
+    accounts[player] = nil
+end
+
 local function onLoginSuccessfull(player)
     
-    local function onLoginFailed(player, silent)
-        if not silent then
-            triggerClientEvent(player, "onLoginFail", player, false)
-        end
-        accounts[player]:destroy()
-        accounts[player] = nil
-    end
     
     local forumID = accounts[player]:getForumID()
     local playerHitCount = 0;
