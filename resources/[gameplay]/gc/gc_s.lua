@@ -3,7 +3,31 @@ accounts = {}
 ----------------------------
 --- Logging in and out  ---
 ----------------------------
+local function onLoginFailed(player, silent)
+    if not silent then
+        triggerClientEvent(player, "onLoginFail", player, false)
+    end
+    accounts[player]:destroy()
+    accounts[player] = nil
+end
+
 local function onLoginSuccessfull(player)
+    local forumID = accounts[player]:getForumID()
+    local playerHitCount = 0;
+    for id, otherPlayer in ipairs(getElementsByType("player")) do 
+        local otherForumID = (accounts[otherPlayer] and accounts[otherPlayer]:getForumID()) or 0
+        if otherForumID ~= 0 and otherForumID == forumID then
+            playerHitCount = playerHitCount + 1
+            -- If 2 players share the same forum id this means 2 players are logged into 1 account, thus not possible.
+            -- It will log the player out attempting to login
+            if playerHitCount >= 2 then
+                outputChatBox("This account is already logged into this server!", player, 255, 0,0)
+                return onLoginFailed(player, true)
+            end
+        end
+    end
+    
+    
     updateAutologin(player, accounts[player]:getForumID())
     triggerClientEvent(player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getForumName(), accounts[player]:getLoginEmail())
     triggerEvent('onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getForumName())
@@ -17,13 +41,6 @@ local function onLoginSuccessfull(player)
     downloadAvatar(player)
 end
 
-local function onLoginFailed(player, silent)
-    if not silent then
-        triggerClientEvent(player, "onLoginFail", player, false)
-    end
-    accounts[player]:destroy()
-    accounts[player] = nil
-end
 
 -- email: forum email or nickname
 -- pw: forum password
