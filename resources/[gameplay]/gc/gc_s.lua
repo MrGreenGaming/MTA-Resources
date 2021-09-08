@@ -14,13 +14,19 @@ local function onLoginSuccessfull(player)
     end
     
     local forumID = accounts[player]:getForumID()
+    local playerHitCount = 0;
     for id, player in ipairs(getElementsByType("player")) do 
         local otherForumID = accounts[player]:getForumID()
         outputDebugString(getPlayerName(player))
         outputDebugString(otherForumID)
         if otherForumID == forumID then
-            outputChatBox("This account is already logged into this server!", player, 255, 0,0)
-            return onLoginFailed(player, true)
+            playerHitCount = playerHitCount + 1
+            -- If 2 players share the same forum id this means 2 players are logged into 1 account, thus not possible.
+            -- It will log the player out attempting to login
+            if playerHitCount > 2 then
+                outputChatBox("This account is already logged into this server!", player, 255, 0,0)
+                return onLoginFailed(player, true)
+            end
         end
     end
     
