@@ -5,6 +5,18 @@ accounts = {}
 ----------------------------
 local function onLoginSuccessfull(player)
     updateAutologin(player, accounts[player]:getForumID())
+
+
+    local forumID = accounts[player]:getForumID()
+    for id, player in ipairs(getElementsByType("player")) do 
+        local otherForumID = accounts[player]:getForumID()
+        if otherForumID == forumID then
+            outputChatBox("This account is already logged into this server!", player, 255, 0,0)
+            return onLoginFailed(player, true)
+        end
+    end
+
+
     triggerClientEvent(player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getForumName(), accounts[player]:getLoginEmail())
     triggerEvent('onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getForumName())
     local serialGreencoins = getSerialGreencoins(player)
