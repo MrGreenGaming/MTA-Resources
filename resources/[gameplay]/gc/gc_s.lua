@@ -5,6 +5,13 @@ accounts = {}
 ----------------------------
 local function onLoginSuccessfull(player)
     
+    local function onLoginFailed(player, silent)
+        if not silent then
+            triggerClientEvent(player, "onLoginFail", player, false)
+        end
+        accounts[player]:destroy()
+        accounts[player] = nil
+    end
     
     local forumID = accounts[player]:getForumID()
     for id, player in ipairs(getElementsByType("player")) do 
@@ -31,13 +38,6 @@ local function onLoginSuccessfull(player)
     downloadAvatar(player)
 end
 
-local function onLoginFailed(player, silent)
-    if not silent then
-        triggerClientEvent(player, "onLoginFail", player, false)
-    end
-    accounts[player]:destroy()
-    accounts[player] = nil
-end
 
 -- email: forum email or nickname
 -- pw: forum password
