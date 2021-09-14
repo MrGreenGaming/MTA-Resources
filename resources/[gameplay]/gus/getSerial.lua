@@ -183,30 +183,33 @@ function (p,c,serial)
 end
 ,true)
 
-function getSerial(playername)
+function getSerial(playername, callback)
 	--if not canScriptWork then return false end
-	local cmd = ''
-	local query
-	local sql
+	local cmd = 'SELECT serial, ip, playername FROM serialsDB WHERE playername = ? LIMIT 1'
 	if handlerConnect then
-		cmd = "SELECT serial, ip, playername FROM serialsDB WHERE playername = ? LIMIT 1"
-		query = dbQuery(handlerConnect, cmd, playername)
-		sql = dbPoll(query, -1)
-		if sql[1] then
-			return { serial = sql[1].serial, ip = sql[1].ip }
-		else return false
-		end
+		dbQuery(function (qh)
+			if not qh then return callback(false) end
+			local sql = dbPoll(qh, 0)
+			if sql[1] then
+				return callback({ serial = sql[1].serial, ip = sql[1].ip})
+			else
+				return callback(false)
+			end
+		end, {}, handlerConnect, cmd, playername)
+	else
+		return callback(false)
 	end
 end
 
 function getSerialCommand(admin, _, playername)
-	if not playername then return false end
+	if not playername then return outputChatBox("Invalid Syntax: /getserial [playername]", admin, 255, 0, 0) end
 
-	local result = getSerial(playername)
+	getSerial(playername, function (result)
+		if not result then return outputChatBox("No serial found for " .. playername.. "!", admin, 255, 0, 0) end
 	
-	if not result then return outputChatBox("No serial found for " .. playername.. "!", admin, 255, 0, 0) end
-
-	outputChatBox("Serial found for " .. playername .. ": " .. result.serial, admin, 0, 255, 0)
+		outputChatBox("Serial found for " .. playername .. ": " .. result.serial, admin, 0, 255, 0)
+	end)
+	
 end
 addCommandHandler('getSerial', getSerialCommand, true, false)
 

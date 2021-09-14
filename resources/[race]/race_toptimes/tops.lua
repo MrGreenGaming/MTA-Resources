@@ -902,18 +902,22 @@ function getPlayerCountry(player,forumID)
 	
 	if country == "A1" then return end --if country is "Anonymous Proxy" - ignore and add country manually using /addcountry
 	
-	local query = dbQuery ( handlerConnect, "SELECT * FROM country WHERE forum_id = ?", forumID)
-	local results = dbPoll ( query, -1 )
-	if results and #results > 0 then		
-		local country_sql = results[1].country
-		if country_sql == country then 
-			return
+	local cmd = "SELECT * FROM country WHERE forum_id = ?"
+	dbQuery(function(qh) 
+		if not qh then return end
+		local results = dbPoll(query, 0)
+		if results and #results > 0 then		
+			local country_sql = results[1].country
+			if country_sql == country then
+				return
+			else
+				addPlayerCountryToDB(playerName, forumID, country)
+			end
 		else
 			addPlayerCountryToDB(playerName, forumID, country)
 		end
-	else
-		addPlayerCountryToDB(playerName, forumID, country)
-	end
+	end, {}, handlerConnect, cmd, forumID)
+
 end
 
 function addPlayerCountryToDB(playerName, forumID, country)

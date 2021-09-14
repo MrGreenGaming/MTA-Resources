@@ -1672,25 +1672,27 @@ function checkPlayerMute(thePlayer)
 	local serial = getPlayerSerial(player)
 
 	if isElement(dbHandler) then
-		local query = dbQuery(dbHandler, "SELECT * FROM mute WHERE serial = ?", serial)
-		local sql = dbPoll(query,-1)
-
-		if sql and #sql > 0 then
-			local currentTime = getRealTime().timestamp
-			local seconds = sql[1].expireTimestamp - currentTime
-			if seconds > 1 then
-				local expireReadable = secondsToTimeDesc(seconds)
-				local t = sql[1]
-				aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds)
-				local textMuted = getPlayerName(player).." was muted by "..t.byAdmin.." and will be unmuted in "..expireReadable.."."
-				local textMuted = string.gsub( textMuted, "#%x%x%x%x%x%x", "" ) 
-				outputChatBox( textMuted , root, 0, 255, 100)
-				exports.irc:outputIRC( "10* "..textMuted )
-				outputServerLog( textMuted )
-			else
-				aSetPlayerMuted ( player, false)
+		local cmd = "SELECT * FROM mute WHERE serial = ?"
+		dbQuery(function (qh) 
+			if not qh then return false end
+			local sql = dbPoll(qh, 0)
+			if sql and #sql > 0 then
+				local currentTime = getRealTime().timestamp
+				local seconds = sql[1].expireTimestamp - currentTime
+				if seconds > 1 then
+					local expireReadable = secondsToTimeDesc(seconds)
+					local t = sql[1]
+					aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds)
+					local textMuted = getPlayerName(player).." was muted by "..t.byAdmin.." and will be unmuted in "..expireReadable.."."
+					local textMuted = string.gsub( textMuted, "#%x%x%x%x%x%x", "" ) 
+					outputChatBox( textMuted , root, 0, 255, 100)
+					exports.irc:outputIRC( "10* "..textMuted )
+					outputServerLog( textMuted )
+				else
+					aSetPlayerMuted ( player, false)
+				end
 			end
-		end
+		end, {}, dbHandler, cmd, serial)
 	end
 end
 addEventHandler('onPlayerJoin', root, checkPlayerMute)
