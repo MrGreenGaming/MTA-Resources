@@ -1672,10 +1672,6 @@ function checkPlayerMute(thePlayer)
 	local serial = getPlayerSerial(player)
 
 	if isElement(dbHandler) then
-		-- TODO-ASYNC async this query
-		-- local query = dbQuery(dbHandler, "SELECT * FROM mute WHERE serial = ?", serial)
-		-- local sql = dbPoll(query,-1)
-
 		local cmd = "SELECT * FROM mute WHERE serial = ?"
 		dbQuery(function (qh) 
 			if not qh then return false end
