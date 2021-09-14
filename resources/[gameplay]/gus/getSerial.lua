@@ -192,10 +192,13 @@ function getSerial(playername, callback)
 			local sql = dbPoll(qh, 0)
 			if sql[1] then
 				return callback({ serial = sql[1].serial, ip = sql[1].ip})
+			else
+				return callback(false)
 			end
 		end, {}, handlerConnect, cmd, playername)
+	else
+		return callback(false)
 	end
-	return callback(false)
 
 	-- if handlerConnect then
 	-- 	cmd = "SELECT serial, ip, playername FROM serialsDB WHERE playername = ? LIMIT 1"
@@ -209,7 +212,7 @@ function getSerial(playername, callback)
 end
 
 function getSerialCommand(admin, _, playername)
-	if not playername then return false end
+	if not playername then return outputChatBox("Invalid Syntax: /getserial [playername]", admin, 255, 0, 0) end
 
 	getSerial(playername, function (result)
 		if not result then return outputChatBox("No serial found for " .. playername.. "!", admin, 255, 0, 0) end
