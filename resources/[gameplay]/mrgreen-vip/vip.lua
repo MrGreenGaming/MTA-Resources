@@ -128,7 +128,7 @@ function loadVipSettings(player, callback)
 			end
 		end
 	
-		return newOptions
+		return callback(newOptions)
 	end, {}, handlerConnect, cmd, theID)
 
 	-- Options handling
