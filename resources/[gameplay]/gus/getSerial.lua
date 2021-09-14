@@ -199,16 +199,6 @@ function getSerial(playername, callback)
 	else
 		return callback(false)
 	end
-
-	-- if handlerConnect then
-	-- 	cmd = "SELECT serial, ip, playername FROM serialsDB WHERE playername = ? LIMIT 1"
-	-- 	query = dbQuery(handlerConnect, cmd, playername)
-	-- 	sql = dbPoll(query, -1)
-	-- 	if sql[1] then
-	-- 		return callback({ serial = sql[1].serial, ip = sql[1].ip })
-	-- 	else return callback(false)
-	-- 	end
-	-- end
 end
 
 function getSerialCommand(admin, _, playername)
