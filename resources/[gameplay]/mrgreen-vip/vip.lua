@@ -56,27 +56,28 @@ function setPlayerVIP(player,bool)
 		-- setElementData(player, 'gcshop.vipbadge', 'vip')
 		
 		-- Get options
-		local playerOptions = loadVipSettings(player)
-		-- Get timestamp
-		local playerStamp = exports.gc:getPlayerVip(player)
-
-		if not playerOptions or not playerStamp then return end
-
-		-- Set vip player in table
-		vipPlayers[player] = {timestamp = playerStamp, options = playerOptions}
-		
-
-		
-		-- vip Items should listen to this event
-		triggerEvent( 'onPlayerVip', resourceRoot,player, true)
-		triggerClientEvent( player, 'onServerSendVip', resourceRoot, vipPlayers[player])
-
-		if vipPlayers[player] then
-			local timeLeft = secondsToTimeDesc(playerStamp - getRealTime().timestamp)
-			-- vip_outputChatBox("You are set as a VIP.",player)
-			vip_outputChatBox("You have "..timeLeft.." of VIP left",player)
-
-		end
+		loadVipSettings(player, function (playerOptions)
+			-- Get timestamp
+			local playerStamp = exports.gc:getPlayerVip(player)
+	
+			if not playerOptions or not playerStamp then return end
+	
+			-- Set vip player in table
+			vipPlayers[player] = {timestamp = playerStamp, options = playerOptions}
+			
+	
+			
+			-- vip Items should listen to this event
+			triggerEvent( 'onPlayerVip', resourceRoot,player, true)
+			triggerClientEvent( player, 'onServerSendVip', resourceRoot, vipPlayers[player])
+	
+			if vipPlayers[player] then
+				local timeLeft = secondsToTimeDesc(playerStamp - getRealTime().timestamp)
+				-- vip_outputChatBox("You are set as a VIP.",player)
+				vip_outputChatBox("You have "..timeLeft.." of VIP left",player)
+	
+			end	
+		end)
 	elseif isElement(player) and getElementType(player) == "player" and bool == false then
 		vipPlayers[player] = nil
 		triggerClientEvent( player, 'onServerRemovedVip', resourceRoot )
@@ -102,29 +103,35 @@ addEventHandler('onClientRequestsVip',resourceRoot,
 )
 
 -- Settings
-function loadVipSettings(player)
+function loadVipSettings(player, callback)
 	local theID = exports.gc:getPlayerForumID(player)
 	if not theID then return false end
-
-	local query = dbQuery(handlerConnect, "SELECT * FROM vip_items WHERE forumid=?", theID)
-	local result = dbPoll(query,-1)
+	
+	-- local query = dbQuery(handlerConnect, "SELECT * FROM vip_items WHERE forumid=?", theID)
+	-- local result = dbPoll(query,-1)
 	-- local options = fromJSON(result[1].options)
 	
-	-- Options handling
-	local newOptions = table.deepCopy(vipStandardOptions)
-
-	for i, row in ipairs(result) do
-		if newOptions[row.item] and row.options then
-			local fetchedOptions = fromJSON(row.options)
-			for optionName, optionValue in pairs(fetchedOptions) do
-				if tostring(newOptions[row.item][optionName]) ~= "nil" then
-					newOptions[row.item][optionName] = optionValue
+	local cmd = "SELECT * FROM vip_items WHERE forumid=?"
+	dbQuery(function (qh) 
+		if not qh then return callback(false) end
+		local result = dbPoll(qh, 0)
+		local newOptions = table.deepCopy(vipStandardOptions)
+	
+		for i, row in ipairs(result) do
+			if newOptions[row.item] and row.options then
+				local fetchedOptions = fromJSON(row.options)
+				for optionName, optionValue in pairs(fetchedOptions) do
+					if tostring(newOptions[row.item][optionName]) ~= "nil" then
+						newOptions[row.item][optionName] = optionValue
+					end
 				end
 			end
 		end
-	end
+	
+		return newOptions
+	end, {}, handlerConnect, cmd, theID)
 
-	return newOptions
+	-- Options handling
 end
 
 function saveVipSetting(player, itemId, key, value)
