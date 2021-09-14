@@ -905,7 +905,7 @@ function getPlayerCountry(player,forumID)
 	local cmd = "SELECT * FROM country WHERE forum_id = ?"
 	dbQuery(function(qh) 
 		if not qh then return end
-		local results = dbPoll(query, 0)
+		local results = dbPoll(qh, 0)
 		if results and #results > 0 then		
 			local country_sql = results[1].country
 			if country_sql == country then
