@@ -107,10 +107,6 @@ function loadVipSettings(player, callback)
 	local theID = exports.gc:getPlayerForumID(player)
 	if not theID then return false end
 	
-	-- local query = dbQuery(handlerConnect, "SELECT * FROM vip_items WHERE forumid=?", theID)
-	-- local result = dbPoll(query,-1)
-	-- local options = fromJSON(result[1].options)
-	
 	local cmd = "SELECT * FROM vip_items WHERE forumid=?"
 	dbQuery(function (qh) 
 		if not qh then return callback(false) end
