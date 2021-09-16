@@ -185,7 +185,7 @@ function onDerbyFinish(rank)
 		outputChatBox(Tournament.chatPrefix .. playerName .. "#FFFFFF has earned " .. pointsEarned .. " points for finishing " .. rank .. getSuffix(rank), root, 255, 255, 255, true)
 		incrementPoints(source, pointsEarned)
 	else
-		outputChatBox(Tournament.chatPrefix .. "You need to be at least " .. Tournament.ddRank .. getSuffix(Tournament.ddRank) " to earn points!", source, 255, 255, 255, true) 
+		outputChatBox(Tournament.chatPrefix .. "You need to be at least " .. Tournament.ddRank .. getSuffix(Tournament.ddRank) .. " to earn points!", source, 255, 255, 255, true) 
 	end
 end
 addEventHandler("onPlayerFinishDD", getRootElement(), onDerbyFinish)
