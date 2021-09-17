@@ -66,34 +66,34 @@ function onShopInit ( tabPanel )
 	guiGridListAddColumn(GUIEditor.gridlist[1], "Team", 0.5)
 	guiGridListAddColumn(GUIEditor.gridlist[1], "Member", 0.5)
 	
-	GUIEditor.tab[3] = guiCreateTab("Team Wars", GUIEditor.tabpanel[1])
+	-- GUIEditor.tab[3] = guiCreateTab("Team Wars", GUIEditor.tabpanel[1])
 	
-	GUIEditor.label[6] = guiCreateLabel(46, 22, 128, 16, "Select maps, update 7", false, GUIEditor.tab[3])
-	guiSetFont(GUIEditor.label[6], "default-bold-small")
-	GUIEditor.label[7] = guiCreateLabel(46, 38, 256, 16, "Select maps to be played in a Team War: ", false, GUIEditor.tab[3])
-	GUIEditor.gridlist[2] = guiCreateGridList(48, 58, 256, 256, false, GUIEditor.tab[3])
-	guiGridListAddColumn(GUIEditor.gridlist[2], "Map", 0.5)
-	guiGridListAddColumn(GUIEditor.gridlist[2], "Author", 0.5)
-	guiGridListAddColumn(GUIEditor.gridlist[2], "resname", 0.5)
-	guiGridListSetSortingEnabled(GUIEditor.gridlist[2], false)
-	GUIEditor.gridlist[3] = guiCreateGridList(406, 58, 256, 256, false, GUIEditor.tab[3])
-	guiGridListAddColumn(GUIEditor.gridlist[3], "Map", 0.5)
-	guiGridListAddColumn(GUIEditor.gridlist[3], "Author", 0.5)
-	guiGridListAddColumn(GUIEditor.gridlist[3], "resname", 0.5)
-	guiGridListSetSortingEnabled(GUIEditor.gridlist[3], false)
-	GUIEditor.btnTWAdd = guiCreateButton(312, 154, 64, 24, "Add >", false, GUIEditor.tab[3])
-	guiSetProperty(GUIEditor.btnTWAdd, "NormalTextColour", "FFAAAAAA")
-	GUIEditor.btnTWRemove = guiCreateButton(334, 194, 64, 24, "< Remove", false, GUIEditor.tab[3])
-	guiSetProperty(GUIEditor.btnTWRemove, "NormalTextColour", "FFAAAAAA")
-	GUIEditor.label[8] = guiCreateLabel(56, 328, 40, 16, "Search:", false, GUIEditor.tab[3])
-	GUIEditor.edit[1] = guiCreateEdit(104, 324, 192, 24, "", false, GUIEditor.tab[3])
-	GUIEditor.btnTWSelect = guiCreateButton(128, 174, 96, 24, "Select maps", false, GUIEditor.tab[3])
-	guiSetProperty(GUIEditor.btnTWSelect, "NormalTextColour", "FFAAAAAA")
-	guiSetVisible(GUIEditor.gridlist[2], false)
-	guiSetVisible(GUIEditor.btnTWAdd, false)
-	guiSetVisible(GUIEditor.btnTWRemove, false)
-	guiSetVisible(GUIEditor.label[8], false)
-	guiSetVisible(GUIEditor.edit[1], false)
+	-- GUIEditor.label[6] = guiCreateLabel(46, 22, 128, 16, "Select maps, update 7", false, GUIEditor.tab[3])
+	-- guiSetFont(GUIEditor.label[6], "default-bold-small")
+	-- GUIEditor.label[7] = guiCreateLabel(46, 38, 256, 16, "Select maps to be played in a Team War: ", false, GUIEditor.tab[3])
+	-- GUIEditor.gridlist[2] = guiCreateGridList(48, 58, 256, 256, false, GUIEditor.tab[3])
+	-- guiGridListAddColumn(GUIEditor.gridlist[2], "Map", 0.5)
+	-- guiGridListAddColumn(GUIEditor.gridlist[2], "Author", 0.5)
+	-- guiGridListAddColumn(GUIEditor.gridlist[2], "resname", 0.5)
+	-- guiGridListSetSortingEnabled(GUIEditor.gridlist[2], false)
+	-- GUIEditor.gridlist[3] = guiCreateGridList(406, 58, 256, 256, false, GUIEditor.tab[3])
+	-- guiGridListAddColumn(GUIEditor.gridlist[3], "Map", 0.5)
+	-- guiGridListAddColumn(GUIEditor.gridlist[3], "Author", 0.5)
+	-- guiGridListAddColumn(GUIEditor.gridlist[3], "resname", 0.5)
+	-- guiGridListSetSortingEnabled(GUIEditor.gridlist[3], false)
+	-- GUIEditor.btnTWAdd = guiCreateButton(312, 154, 64, 24, "Add >", false, GUIEditor.tab[3])
+	-- guiSetProperty(GUIEditor.btnTWAdd, "NormalTextColour", "FFAAAAAA")
+	-- GUIEditor.btnTWRemove = guiCreateButton(334, 194, 64, 24, "< Remove", false, GUIEditor.tab[3])
+	-- guiSetProperty(GUIEditor.btnTWRemove, "NormalTextColour", "FFAAAAAA")
+	-- GUIEditor.label[8] = guiCreateLabel(56, 328, 40, 16, "Search:", false, GUIEditor.tab[3])
+	-- GUIEditor.edit[1] = guiCreateEdit(104, 324, 192, 24, "", false, GUIEditor.tab[3])
+	-- GUIEditor.btnTWSelect = guiCreateButton(128, 174, 96, 24, "Select maps", false, GUIEditor.tab[3])
+	-- guiSetProperty(GUIEditor.btnTWSelect, "NormalTextColour", "FFAAAAAA")
+	-- guiSetVisible(GUIEditor.gridlist[2], false)
+	-- guiSetVisible(GUIEditor.btnTWAdd, false)
+	-- guiSetVisible(GUIEditor.btnTWRemove, false)
+	-- guiSetVisible(GUIEditor.label[8], false)
+	-- guiSetVisible(GUIEditor.edit[1], false)
 	
 	-- GUIEditor end --
 	
@@ -264,105 +264,105 @@ end
 -- Team War update--
 --------------------
 
-function updateTWInfo()
-	triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer) 
-end
-addEventHandler('onShopInit', root, updateTWInfo)
+-- function updateTWInfo()
+-- 	triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer) 
+-- end
+-- addEventHandler('onShopInit', root, updateTWInfo)
 
-function selectMaps()
-	triggerServerEvent("gcshop_teams_fetchMaps_s", resourceRoot, localPlayer) 
-end
+-- function selectMaps()
+-- 	triggerServerEvent("gcshop_teams_fetchMaps_s", resourceRoot, localPlayer) 
+-- end
 
-function fetchMaps(t)
-	guiSetVisible(teamGUI.btnTWSelect, false)
-	guiSetVisible(teamGUI.gridlist[2], true)
-	guiSetVisible(teamGUI.btnTWAdd, true)
-	guiSetVisible(teamGUI.btnTWRemove, true)
-	guiSetVisible(teamGUI.label[8], true)
-	guiSetVisible(teamGUI.edit[1], true)
+-- function fetchMaps(t)
+-- 	guiSetVisible(teamGUI.btnTWSelect, false)
+-- 	guiSetVisible(teamGUI.gridlist[2], true)
+-- 	guiSetVisible(teamGUI.btnTWAdd, true)
+-- 	guiSetVisible(teamGUI.btnTWRemove, true)
+-- 	guiSetVisible(teamGUI.label[8], true)
+-- 	guiSetVisible(teamGUI.edit[1], true)
 	
-	mapList = t
-	updateMaps(t)
-end
-addEvent("gcshop_teams_fetchMaps_c",true)
-addEventHandler("gcshop_teams_fetchMaps_c",root,fetchMaps)
+-- 	mapList = t
+-- 	updateMaps(t)
+-- end
+-- addEvent("gcshop_teams_fetchMaps_c",true)
+-- addEventHandler("gcshop_teams_fetchMaps_c",root,fetchMaps)
 
-function updateMaps(t)
-	guiGridListClear(teamGUI.gridlist[2])
+-- function updateMaps(t)
+-- 	guiGridListClear(teamGUI.gridlist[2])
 	
-	for a,b in ipairs(t) do
-		local row = guiGridListAddRow(teamGUI.gridlist[2])
-		guiGridListSetItemText(teamGUI.gridlist[2],row,1,tostring(b[1]),false,false)
-		guiGridListSetItemText(teamGUI.gridlist[2],row,2,tostring(b[2]),false,false)
-		guiGridListSetItemText(teamGUI.gridlist[2],row,3,tostring(b[3]),false,false)
-	end
-end
+-- 	for a,b in ipairs(t) do
+-- 		local row = guiGridListAddRow(teamGUI.gridlist[2])
+-- 		guiGridListSetItemText(teamGUI.gridlist[2],row,1,tostring(b[1]),false,false)
+-- 		guiGridListSetItemText(teamGUI.gridlist[2],row,2,tostring(b[2]),false,false)
+-- 		guiGridListSetItemText(teamGUI.gridlist[2],row,3,tostring(b[3]),false,false)
+-- 	end
+-- end
 
-function updateTWQueue_c(t)
-	guiGridListClear(teamGUI.gridlist[3])
+-- function updateTWQueue_c(t)
+-- 	guiGridListClear(teamGUI.gridlist[3])
 
-	for a,b in ipairs(t) do
-		local row = guiGridListAddRow(teamGUI.gridlist[3])
-		guiGridListSetItemText(teamGUI.gridlist[3],row,1,tostring(b[1]),false,false)
-		guiGridListSetItemText(teamGUI.gridlist[3],row,2,tostring(b[2]),false,false)
-		guiGridListSetItemText(teamGUI.gridlist[3],row,3,tostring(b[3]),false,false)
-	end
-end
-addEvent("gcshop_teams_updateTWQueue_c",true)
-addEventHandler("gcshop_teams_updateTWQueue_c",root,updateTWQueue_c)
+-- 	for a,b in ipairs(t) do
+-- 		local row = guiGridListAddRow(teamGUI.gridlist[3])
+-- 		guiGridListSetItemText(teamGUI.gridlist[3],row,1,tostring(b[1]),false,false)
+-- 		guiGridListSetItemText(teamGUI.gridlist[3],row,2,tostring(b[2]),false,false)
+-- 		guiGridListSetItemText(teamGUI.gridlist[3],row,3,tostring(b[3]),false,false)
+-- 	end
+-- end
+-- addEvent("gcshop_teams_updateTWQueue_c",true)
+-- addEventHandler("gcshop_teams_updateTWQueue_c",root,updateTWQueue_c)
 
-function addMaps()
-	local resname = guiGridListGetItemText(teamGUI.gridlist[2], guiGridListGetSelectedItem(teamGUI.gridlist[2]), 3)
-	if resname then
-		triggerServerEvent("gcshop_teams_addMaps_s", resourceRoot, localPlayer, resname)
-		triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer) 
-	end
-end
+-- function addMaps()
+-- 	local resname = guiGridListGetItemText(teamGUI.gridlist[2], guiGridListGetSelectedItem(teamGUI.gridlist[2]), 3)
+-- 	if resname then
+-- 		triggerServerEvent("gcshop_teams_addMaps_s", resourceRoot, localPlayer, resname)
+-- 		triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer) 
+-- 	end
+-- end
 
-function removeMaps()
-	local resname = guiGridListGetItemText(teamGUI.gridlist[3], guiGridListGetSelectedItem(teamGUI.gridlist[3]), 3)
-	if resname then
-		triggerServerEvent("gcshop_teams_removeMaps_s", resourceRoot, localPlayer, resname)
-		triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer) 
-	end
-end
+-- function removeMaps()
+-- 	local resname = guiGridListGetItemText(teamGUI.gridlist[3], guiGridListGetSelectedItem(teamGUI.gridlist[3]), 3)
+-- 	if resname then
+-- 		triggerServerEvent("gcshop_teams_removeMaps_s", resourceRoot, localPlayer, resname)
+-- 		triggerServerEvent("gcshop_teams_fetchQueue_s", resourceRoot, localPlayer) 
+-- 	end
+-- end
 
-function handleSearches(element)
-	local list
-	local searchQuery
-	if element == teamGUI.edit[1] then
-		if not mapList then return end
-		list = mapList
-		searchQuery = guiGetText(teamGUI.edit[1])
-	end
-	if not list or not searchQuery then return end
+-- function handleSearches(element)
+-- 	local list
+-- 	local searchQuery
+-- 	if element == teamGUI.edit[1] then
+-- 		if not mapList then return end
+-- 		list = mapList
+-- 		searchQuery = guiGetText(teamGUI.edit[1])
+-- 	end
+-- 	if not list or not searchQuery then return end
 	
-	if #searchQuery == 0 then
-		rebuildGridLists(element, list)
-	else
-		local t = searchTable(searchQuery,list)
-		rebuildGridLists(element, t)
-	end
-end
+-- 	if #searchQuery == 0 then
+-- 		rebuildGridLists(element, list)
+-- 	else
+-- 		local t = searchTable(searchQuery,list)
+-- 		rebuildGridLists(element, t)
+-- 	end
+-- end
 
-function rebuildGridLists(element, list)
-	if element == teamGUI.edit[1] then updateMaps(list) end
-end
+-- function rebuildGridLists(element, list)
+-- 	if element == teamGUI.edit[1] then updateMaps(list) end
+-- end
 
-function searchTable(searchQuery,t)
-    searchQuery = string.lower(tostring(searchQuery))
-    if #searchQuery == 0 then return t end
+-- function searchTable(searchQuery,t)
+--     searchQuery = string.lower(tostring(searchQuery))
+--     if #searchQuery == 0 then return t end
 	
-    local results = {}
-    for a,b in ipairs(t) do
-        local match = false
+--     local results = {}
+--     for a,b in ipairs(t) do
+--         local match = false
 		
-		for i=1,#b do
-			local f = string.find(string.lower( tostring(b[i]) ),searchQuery)
-			if type(f) == "number" then match = true end
-		end
+-- 		for i=1,#b do
+-- 			local f = string.find(string.lower( tostring(b[i]) ),searchQuery)
+-- 			if type(f) == "number" then match = true end
+-- 		end
 		
-        if match then table.insert(results,b) end
-    end
-    return results
-end
+--         if match then table.insert(results,b) end
+--     end
+--     return results
+-- end
