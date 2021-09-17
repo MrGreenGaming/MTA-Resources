@@ -88,7 +88,7 @@ function isNickProtected(nick)
 		cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE LOWER(pNick) = ?"
 		query = dbQuery(handlerConnect, cmd, string.lower(nick))
 		if not query then return false end
-		local sql = dbPoll(query, -1)
+		local sql = dbPoll(query, 2)
 		if not sql then return false end
 		if #sql == 0 then 
 			return false
@@ -110,7 +110,7 @@ function protectNick(id, name)
 		query = dbQuery(handlerConnect, cmd, id)
 
 		if not query then return false end
-		local sql = dbPoll(query, -1)
+		local sql = dbPoll(query, 2)
 		if not sql then return false end
 		
 
@@ -132,7 +132,7 @@ function removeNick(id,nick)
 		cmd = "SELECT pNick, forumId FROM gc_nickprotection WHERE pNick = ? AND forumId = ?"
 		query = dbQuery(handlerConnect, cmd, nick,id)
 		if not query then return false end
-		local sql = dbPoll(query, -1)
+		local sql = dbPoll(query, 2)
 		-- if not sql then return false end
 
 		if #sql > 0 then

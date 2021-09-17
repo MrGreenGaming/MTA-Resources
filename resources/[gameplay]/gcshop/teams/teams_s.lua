@@ -608,14 +608,14 @@ end
 
 function fetchTeams()
     local qh = dbQuery(handlerConnect, "SELECT * FROM `team`")
-    local t = dbPoll(qh, -1)
+    local t = dbPoll(qh, 2)
     if not t then return false end
     return t
 end
 
 function fetchMembers()
     local qh = dbQuery(handlerConnect, "SELECT * FROM `team_members`")
-    local t = dbPoll(qh, -1)
+    local t = dbPoll(qh, 2)
     if not t then return false end
     return t
 end
