@@ -38,7 +38,7 @@ function aCommunityValidate ( player, username, serial )
 	aCommunity.players[player].cr = c
 	aCommunity.players[player].t = setTimer ( kill, 2000, 1, player )
 
-	callRemote ( "http://community.mtasa.com/mta/verify.php", result, player, username, serial )
+	callRemote ( "http://community.mtasa.com/mta/verify.php", "communityValidate" ,result, player, username, serial )
 	return coroutine.yield()
 end
 
