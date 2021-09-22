@@ -218,23 +218,24 @@ function(player,cmd,...)
 	end
 	if not (arg[1]) then outputChatBox("State the player's full name (no color codes).",player) return end
 	local banPlayerName = string.gsub (arg[1], '#%x%x%x%x%x%x', '' )
-	local theInfo = getSerial(banPlayerName)
-	if theInfo then
-		local theSerial = theInfo.serial
-		local theIP = theInfo.ip
-		local reason = "(Nick: "..banPlayerName..") - No reason specified"
-		if (#arg>1) then
-			reason = ""
-			arg[1] = "(Nick: "..banPlayerName..") - "
-			reason = table.concat(arg," ")
+	getSerial(banPlayerName, function (theInfo)
+		if theInfo then
+			local theSerial = theInfo.serial
+			local theIP = theInfo.ip
+			local reason = "(Nick: "..banPlayerName..") - No reason specified"
+			if (#arg>1) then
+				reason = ""
+				arg[1] = "(Nick: "..banPlayerName..") - "
+				reason = table.concat(arg," ")
+			end
+			theBan = addBan(theIP, nil, theSerial, player, reason, 0)
+			if not theBan then outputChatBox("An error has occured. Can't ban player.", player)
+			else outputChatBox("Successfully banned.", player)
+				 outputChatBox(remcol(banPlayerName).." has been banned by "..remcol(getPlayerName(player)),root, 255,0,0)
+			end
+		else outputChatBox("No player match. Try again.", player)
 		end
-		theBan = addBan(theIP, nil, theSerial, player, reason, 0)
-		if not theBan then outputChatBox("An error has occured. Can't ban player.", player)
-		else outputChatBox("Successfully banned.", player)
-			 outputChatBox(remcol(banPlayerName).." has been banned by "..remcol(getPlayerName(player)),root, 255,0,0)
-		end
-	else outputChatBox("No player match. Try again.", player)
-	end
+	end)
 end
 )
 
@@ -250,12 +251,13 @@ function(player, cmd, ...)
 	local days = arg[2]
 
 	local mutePlayerName = string.gsub(arg[1], '#%x%x%x%x%x%x', '' )
-	local theInfo = getSerial(mutePlayerName)
-	if theInfo then
-		local theSerial = theInfo.serial
-		exports.admin:serialmute(player, "", theSerial, days)
-	else outputChatBox("No player match. Try again", player)
-	end
+	getSerial(mutePlayerName, function (theInfo)
+		if theInfo then
+			local theSerial = theInfo.serial
+			exports.admin:serialmute(player, "", theSerial, days)
+		else outputChatBox("No player match. Try again", player)
+		end
+	end)
 end
 )
 
@@ -268,12 +270,13 @@ function(player, cmd, ...)
 	if not (arg[1]) then outputChatBox("Wrong syntax. use /removemute [name]", player) return end
 
 	local mutePlayerName = string.gsub(arg[1], '#%x%x%x%x%x%x', '' )
-	local theInfo = getSerial(mutePlayerName)
-	if theInfo then
-		local theSerial = theInfo.serial
-		exports.admin:serialunmute(player, "", theSerial)
-	else outputChatBox("No player match. Try again", player)
-	end
+	getSerial(mutePlayerName, function (theInfo)
+		if theInfo then
+			local theSerial = theInfo.serial
+			exports.admin:serialunmute(player, "", theSerial)
+		else outputChatBox("No player match. Try again", player)
+		end
+	end)
 end
 )
 
