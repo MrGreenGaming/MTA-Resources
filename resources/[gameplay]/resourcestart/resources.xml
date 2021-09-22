@@ -1,43 +1,43 @@
 <resources>
-	<resource priority="1">analytics</resource>
-	<resource priority="1">gc</resource>
-	<resource priority="1">mrgreen-vip</resource>
-	<resource priority="1">scoreboard</resource>
-	<resource priority="1">mapmanager</resource>
-	<resource priority="1">votemanager</resource>
-	<resource priority="1">resourcebrowser</resource>
-	<resource priority="1">resourcemanager</resource>
-	<resource priority="1">joinquit</resource>
-	<resource priority="1">messages</resource>
-	<resource priority="1">anti</resource>
-	<resource priority="1">race</resource>
-	<resource priority="1">gcshop</resource>
-	<resource priority="0">maptools</resource>
-	<resource priority="1">admin</resource>
-	<resource priority="1">nickprotection</resource>
-	<resource priority="1">gus</resource>
-	<resource priority="0">geoloc</resource>
-	<resource priority="0">fps</resource>
-	<resource priority="0">voice</resource>
-	<resource priority="1">webadmin</resource>
-	<resource priority="1">webpanel</resource>
-	<resource priority="0">interchat</resource>
-	<resource priority="0">speed-o-meter</resource>
-	<resource priority="0">chatbox_ads</resource>
-	<resource priority="0">PrivateMessaging</resource>
-	<resource priority="0">radio</resource>
-	<resource priority="0">runcode</resource>
-	<resource priority="0">mapratings</resource>
-    <resource priority="0">map_window</resource>
-	<resource priority="0">helpmenu</resource>
-	<resource priority="1">mrgreen-sidebar</resource>
-	<resource priority="1">mrgreen-settings</resource>
-	<resource priority="1">mrgreen-stats</resource>
-	<resource priority="0">irc</resource>
-	<resource priority="0">achievements</resource>
-	<resource priority="0">discord</resource>
-	<resource priority="1">chattags</resource>
-	<resource priority="0">playerrecord</resource>
-	<resource priority="0">hdwheels</resource>
-	<resource priority="0">gctransfer</resource>
+	<resource priority="1" restart="0">analytics</resource>
+	<resource priority="1" restart="1">gc</resource>
+	<resource priority="1" restart="0">mrgreen-vip</resource>
+	<resource priority="1" restart="0">scoreboard</resource>
+	<resource priority="1" restart="0">mapmanager</resource>
+	<resource priority="1" restart="0">votemanager</resource>
+	<resource priority="1" restart="0">resourcebrowser</resource>
+	<resource priority="1" restart="0">resourcemanager</resource>
+	<resource priority="1" restart="0">joinquit</resource>
+	<resource priority="1" restart="0">messages</resource>
+	<resource priority="1" restart="0">anti</resource>
+	<resource priority="1" restart="0">race</resource>
+	<resource priority="1" restart="1">gcshop</resource>
+	<resource priority="0" restart="0">maptools</resource>
+	<resource priority="1" restart="0">admin</resource>
+	<resource priority="1" restart="0">nickprotection</resource>
+	<resource priority="1" restart="0">gus</resource>
+	<resource priority="0" restart="0">geoloc</resource>
+	<resource priority="0" restart="0">fps</resource>
+	<resource priority="0" restart="0">voice</resource>
+	<resource priority="1" restart="0">webadmin</resource>
+	<resource priority="1" restart="0">webpanel</resource>
+	<resource priority="0" restart="0">interchat</resource>
+	<resource priority="0" restart="0">speed-o-meter</resource>
+	<resource priority="0" restart="0">chatbox_ads</resource>
+	<resource priority="0" restart="0">PrivateMessaging</resource>
+	<resource priority="0" restart="0">radio</resource>
+	<resource priority="0" restart="0">runcode</resource>
+	<resource priority="0" restart="0">mapratings</resource>
+    <resource priority="0" restart="0">map_window</resource>
+	<resource priority="0" restart="0">helpmenu</resource>
+	<resource priority="1" restart="0">mrgreen-sidebar</resource>
+	<resource priority="1" restart="0">mrgreen-settings</resource>
+	<resource priority="1" restart="0">mrgreen-stats</resource>
+	<resource priority="0" restart="0">irc</resource>
+	<resource priority="0" restart="0">achievements</resource>
+	<resource priority="0" restart="0">discord</resource>
+	<resource priority="1" restart="0">chattags</resource>
+	<resource priority="0" restart="0">playerrecord</resource>
+	<resource priority="0" restart="0">hdwheels</resource>
+	<resource priority="0" restart="0">gctransfer</resource>
 </resources>
