@@ -149,15 +149,7 @@ function onShooterFinish(rank)
 	local playerName = getFullPlayerName(source)
 
 	if (rank <= Tournament.shooterRank) then
-
-		local pointsEarned = 0
-		if rank == 1 then
-			pointsEarned = 5
-		elseif rank == 2 then
-			pointsEarned = 3
-		elseif rank == 3 then
-			pointsEarned = 2
-		end
+		local pointsEarned = (Tournament.shooterRank - rank + 1) * 2
 
 		outputChatBox(Tournament.chatPrefix .. playerName .. " #FFFFFFfinished " .. rank .. getSuffix(rank) .. " earning " .. pointsEarned .. " points", root, 255, 255, 255, true)
 		incrementPoints(source, pointsEarned)
