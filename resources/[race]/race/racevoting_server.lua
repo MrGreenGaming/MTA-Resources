@@ -874,7 +874,7 @@ function loadMapInfoAll()
 			g_MapInfoList[map].lastTimePlayed = row.lastTimePlayed
 			g_MapInfoList[map].lastTimePlayedText = row.lastTimePlayedText
 		else --Map exists in the database, but it has been deleted from the hard drive. So delete from DB too (when Race starts)
-			executeSQLQuery( 'DELETE FROM race_mapmanager_maps WHERE resName = ?', row.resName )
+			-- executeSQLQuery( 'DELETE FROM race_mapmanager_maps WHERE resName = ?', row.resName )
 		end
 	end
 end
