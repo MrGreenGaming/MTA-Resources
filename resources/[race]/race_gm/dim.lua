@@ -234,7 +234,7 @@ function carhideKeyHandler(player,key,keystate)
 		outputChatBox("[CarHide] #FFFFFFVehicles hidden",player,0,255,0,true)
 	end
 end
-addCommandHandler("carhide", function() carhideKeyHandler(source, "x", "down") end)
+addCommandHandler("carhide", function(playersource, command) carhideKeyHandler(playersource, "x", "down") end)
 
 function carHideState ( state )
 	if not allowedModes[exports.race:getRaceMode()] then 
