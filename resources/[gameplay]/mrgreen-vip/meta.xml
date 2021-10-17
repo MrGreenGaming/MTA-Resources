@@ -126,6 +126,10 @@
     <file src="items/vipskin/skins/crysis.txd" download="false" />
     <file src="items/vipskin/skins/SeanEp3.txd" download="false" />
     <file src="items/vipskin/skins/SeanEp3.dff" download="false" />
+    <file src="items/vipskin/skins/Frontman.txd" download="false" />
+    <file src="items/vipskin/skins/Frontman.dff" download="false" />
+    <file src="items/vipskin/skins/SoldierCircle.txd" download="false" />
+    <file src="items/vipskin/skins/SoldierCircle.dff" download="false" />
 
     <!-- Vip Voice files -->
     <file src="items/vipskin/skins/voice/waifu1.mp3" />
