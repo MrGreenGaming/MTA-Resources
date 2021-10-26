@@ -257,7 +257,8 @@ function startNextMapVote()
 			end
 			if (isMapInList == false and map ~= _nextMap) then
 				local rating = exports.mapratings:getMapRating(getResourceName(map));
-				outputDebugString(rating.likes);
+				map.likes = rating.likes
+				map.dislikes = rating.dislikes
 				table.insert(otherMaps, i, map)
 				endWhile = true
 			end
@@ -278,6 +279,8 @@ function startNextMapVote()
 		if mapRes then
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local mapName = "["..map[2].."] "..mapName
+
+			mapName = mapName .. " | L:" .. mapRes.likes .. " D:" .. mapRes.dislikes
 
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes, "eventmanager", map[2];default=false})
 			setEventMapQueue = true
