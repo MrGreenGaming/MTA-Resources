@@ -345,7 +345,7 @@ function applyPollResults(chosenOption)
 	local result = triggerEvent("onPollEnd", thisResourceRoot, chosenOption)
 
 	if result == true then
-		outputVoteManager("Vote ended! ["..optionTable[1].."]",rootElement)
+		outputVoteManager("Vote ended! ["..optionTable[1].."#DF6464]",rootElement)
 		
 		local optionExecutorType = type(optionTable[2])
 		if optionExecutorType == "function" then --it is a function
