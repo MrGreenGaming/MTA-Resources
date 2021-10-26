@@ -329,7 +329,7 @@ function startNextMapVote()
 		for index, value in ipairs(otherMaps) do
 			if value ~= "null" then
 				local mapName = getResourceInfo(value, "name") or getResourceName(value)
-				local rating = exports.mapratings:getMapRating(getResourceName(map));
+				local rating = exports.mapratings:getMapRating(getResourceName(value));
 				local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
 				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 			end
