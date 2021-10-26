@@ -278,20 +278,20 @@ function startNextMapVote()
 		if mapRes then
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local rating = exports.mapratings:getMapRating(getResourceName(mapRes));
-			local mapName = "["..map[2].."] "..mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
+			local mapName = "["..map[2].."] "..mapName .. " | 👍" ..rating.likes .. " 👎" .. rating.dislikes
 
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes, "eventmanager", map[2];default=false})
 			setEventMapQueue = true
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			local rating = exports.mapratings:getMapRating(getResourceName(_nextMap));
-			local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
+			local mapName = mapName .. " | 👍" ..rating.likes .. " 👎" .. rating.dislikes
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=false})
 			for index, value in ipairs(otherMaps) do
 				if value ~= "null" then
 					local mapName = getResourceInfo(value, "name") or getResourceName(value)
 					local rating = exports.mapratings:getMapRating(getResourceName(value));
-					local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
+					local mapName = mapName .. " | 👍" ..rating.likes .. " 👎" .. rating.dislikes
 					table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 				end
 			end
@@ -304,20 +304,20 @@ function startNextMapVote()
 		if map and mapRes then
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local rating = exports.mapratings:getMapRating(getResourceName(mapRes));
-			local mapName = "[Maps-Center] "..mapName .. "| L:" .. rating.likes .. " D:" .. rating.dislikes
+			local mapName = "[Maps-Center] "..mapName .. "| 👍" .. rating.likes .. " 👎" .. rating.dislikes
 
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes,"gcshop",map[4];default=false})
 			usedGcMapQueue = true
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 			local rating = exports.mapratings:getMapRating(getResourceName(_nextMap));
-			local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
+			local mapName = mapName .. " | 👍" ..rating.likes .. " 👎" .. rating.dislikes
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=false})
 			for index, value in ipairs(otherMaps) do
 				if value ~= "null" then
 					local mapName = getResourceInfo(value, "name") or getResourceName(value)
 					local rating = exports.mapratings:getMapRating(getResourceName(value));
-					local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
+					local mapName = mapName .. " | 👍" ..rating.likes .. " 👎" .. rating.dislikes
 					table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 				end
 			end
@@ -325,13 +325,13 @@ function startNextMapVote()
 	else -- Normal next map
 		local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
 		local rating = exports.mapratings:getMapRating(getResourceName(_nextMap));
-		local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
+		local mapName = mapName .. " | 👍" ..rating.likes .. " 👎" .. rating.dislikes
 		table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=false})
 		for index, value in ipairs(otherMaps) do
 			if value ~= "null" then
 				local mapName = getResourceInfo(value, "name") or getResourceName(value)
 				local rating = exports.mapratings:getMapRating(getResourceName(value));
-				local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
+				local mapName = mapName .. " | 👍" ..rating.likes .. " 👎" .. rating.dislikes
 				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 			end
 		end
@@ -804,7 +804,7 @@ function getRandomMapCompatibleWithGamemode( gamemode, oldestPercentage, minSpaw
 	outputDebug( 'RANDMAP', ''
 			.. ' ** fallback map:' .. tostring( getResourceName( fallbackMap ) )
 			.. ' spawns:' .. tostring( getMapSpawnPointCount( fallbackMap ) )
-			.. ' ageLstPlyd:' .. tostring( getRealTimeSeconds() - getMapLastTimePlayed( fallbackMap ) )
+			.. ' ageLstPly👎' .. tostring( getRealTimeSeconds() - getMapLastTimePlayed( fallbackMap ) )
 			)
 	return fallbackMap
 end
