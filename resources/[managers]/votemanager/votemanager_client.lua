@@ -287,7 +287,7 @@ local function draw()
 			curColor = tocolor(255, 255, 255, 255)
 		end
 
-		dxDrawText(text, backgroundX+textXoffset, backgroundY + first_option_text_Yoffset + (option_text_height*i), backgroundX+backgroundWidth, backgroundY + first_option_text_Yoffset + (option_text_height*i) + option_text_height, curColor, 1.00, curFont, "left", "center", false, false, isPostGUI, false, false)
+		dxDrawText(text, backgroundX+textXoffset, backgroundY + first_option_text_Yoffset + (option_text_height*i), backgroundX+backgroundWidth, backgroundY + first_option_text_Yoffset + (option_text_height*i) + option_text_height, curColor, 1.00, curFont, "left", "center", false, false, isPostGUI, true, false)
 	end
 
 	--Countdown
