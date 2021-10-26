@@ -257,7 +257,7 @@ function startNextMapVote()
 			end
 			if (isMapInList == false and map ~= _nextMap) then
 				local rating = exports.mapratings:getMapRating(getResourceName(map));
-				outputDebugString(rating);
+				outputDebugString(rating.likes);
 				table.insert(otherMaps, i, map)
 				endWhile = true
 			end
