@@ -304,7 +304,7 @@ function startNextMapVote()
 		if map and mapRes then
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local rating = exports.mapratings:getMapRating(getResourceName(mapRes));
-			local mapName = "[Maps-Center] "..mapName .. "| L:" .. rating.likes .. " D:" .. rating.dislikes
+			local mapName = "[Maps-Center] "..mapName .. " | L:" .. rating.likes .. " D:" .. rating.dislikes
 
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes,"gcshop",map[4];default=false})
 			usedGcMapQueue = true
