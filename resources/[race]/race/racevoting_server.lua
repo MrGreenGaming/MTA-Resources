@@ -256,10 +256,6 @@ function startNextMapVote()
 				if value == map then isMapInList = true end
 			end
 			if (isMapInList == false and map ~= _nextMap) then
-				local rating = exports.mapratings:getMapRating(getResourceName(map));
-				map.likes = rating.likes
-				map.dislikes = rating.dislikes
-				table.insert(otherMaps, i, map)
 				endWhile = true
 			end
 		end
@@ -276,20 +272,25 @@ function startNextMapVote()
 		-- [1] = mapResName, [2] = eventname
 		local map = exports.eventmanager:getCurrentMapQueued(true)
 		local mapRes = getResourceFromName(map[1])
+
+		
 		if mapRes then
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
-			local mapName = "["..map[2].."] "..mapName
-
-			mapName = mapName .. " | L:" .. mapRes.likes .. " D:" .. mapRes.dislikes
+			local rating = exports.mapratings:getMapRating(getResourceName(mapRes));
+			local mapName = "["..map[2].."] "..mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
 
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes, "eventmanager", map[2];default=false})
 			setEventMapQueue = true
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
+			local rating = exports.mapratings:getMapRating(getResourceName(_nextMap));
+			local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=false})
 			for index, value in ipairs(otherMaps) do
 				if value ~= "null" then
 					local mapName = getResourceInfo(value, "name") or getResourceName(value)
+					local rating = exports.mapratings:getMapRating(getResourceName(value));
+					local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
 					table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 				end
 			end
@@ -301,26 +302,35 @@ function startNextMapVote()
 		local mapRes = getResourceFromName(map[2])
 		if map and mapRes then
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
-			local mapName = "[Maps-Center] "..mapName
+			local rating = exports.mapratings:getMapRating(getResourceName(mapRes));
+			local mapName = "[Maps-Center] "..mapName .. "| L:" .. rating.likes .. " D:" .. rating.dislikes
 
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), mapRes,"gcshop",map[4];default=false})
 			usedGcMapQueue = true
 		else-- normal next map
 			local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
+			local rating = exports.mapratings:getMapRating(getResourceName(_nextMap));
+			local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
 			table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=false})
 			for index, value in ipairs(otherMaps) do
 				if value ~= "null" then
 					local mapName = getResourceInfo(value, "name") or getResourceName(value)
+					local rating = exports.mapratings:getMapRating(getResourceName(value));
+					local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
 					table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 				end
 			end
 		end
 	else -- Normal next map
 		local mapName = getResourceInfo(_nextMap, "name") or getResourceName(_nextMap)
+		local rating = exports.mapratings:getMapRating(getResourceName(_nextMap));
+		local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
 		table.insert(poll, {mapName , 'nextMapVoteResult', getRootElement(), _nextMap;default=false})
 		for index, value in ipairs(otherMaps) do
 			if value ~= "null" then
 				local mapName = getResourceInfo(value, "name") or getResourceName(value)
+				local rating = exports.mapratings:getMapRating(getResourceName(map));
+				local mapName = mapName .. " | L:" ..rating.likes .. " D:" .. rating.dislikes
 				table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), value;default=false})
 			end
 		end
