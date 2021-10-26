@@ -476,7 +476,7 @@ function outputVoteManager(message, toElement)
 	if getElementType(toElement) == "console" then
 		outputServerLog(message)
 	else
-		outputChatBox(message, toElement, r, g, b)
+		outputChatBox(message, toElement, r, g, b, true)
 		if toElement == rootElement then
 			outputServerLog(message)
 		end
