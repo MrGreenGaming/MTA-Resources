@@ -27,7 +27,7 @@ A non-dramatic 'The MIT License' applies. See `LICENSE` file for details.
 * AfuSensi (KaliBwoy)
 * Alexey Yakubovskii (AleksCore)
 * Hans Swart (Bierbuikje)
-* Jarno Veuger (Ywa)
+* Ywa
 
 ## Additional implementation
 * Stijn Lindeman (Puma) - Pickup icons
