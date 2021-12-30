@@ -112,53 +112,53 @@ B       - Toggle spectator.
                                                     For example the following command will mark me as blocker for 2 hours:
                                                     /blocker Bierbuikje 2 hours
 
-/blockers																						Shows an overview of all online players in blocker mode.
+/blockers                                           Shows an overview of all online players in blocker mode.
 
-/k [name] [reason]																	Blow up another player who camps or is bugged in Shooter or DD mode.
+/k [name] [reason]                                  Blow up another player who camps or is bugged in Shooter or DD mode.
 
-/mute [name] [reason] [time]												Mutes a player.
+/mute [name] [reason] [time]                        Mutes a player.
                                                     Allowed timeTypes: seconds, minutes, hours, days, weeks, months, years.
                                                     For example the following command mutes me for 30 minutes:
                                                     /mute Bierbuikje reason 30 minutes
 
-/unmute [name]																			Unmutes a muted player.
+/unmute [name]                                      Unmutes a muted player.
 
-/votekick [name] [reason]														Starts a votekick against a player.
+/votekick [name] [reason]                           Starts a votekick against a player.
 
-/modsay																							Allows you to talk with other mods and admins privately
+/modsay                                             Allows you to talk with other mods and admins privately
                                                     (tip: /bind o chatbox modsay).
-
+ 
 
 -------------------------------> Admins <-------------------------------
 
 
 * --- Moderation --- *
 
-/admin 																							Opens admin panel, use 'P' instead.
+/admin                                              Opens admin panel, use 'P' instead.
 
-/banip [IP]																					Bans the IP.
-/banserial [serial]																	Bans the serial.
-/unbanip [ip]																				Unbans the IP.
-/unbanserial [serial]																Unbans the serial.
-/sban [player] [reason]															Serial ban a player for reason.
-/addban [nick] [reason]															Ban an already disconnected player.
-/kick [playerName]																	Kicks the player.
+/banip [IP]                                         Bans the IP.
+/banserial [serial]                                 Bans the serial.
+/unbanip [ip]                                       Unbans the IP.
+/unbanserial [serial]                               Unbans the serial.
+/sban [player] [reason]                             Serial ban a player for reason.
+/addban [nick] [reason]                             Ban an already disconnected player.
+/kick [playerName]                                  Kicks the player.
 
-/addmute [nick] [days] 															Mute an already disconnected player.
-/removemute [nick] 																	Unmutes an already disconnected player.
+/addmute [nick] [days]                              Mute an already disconnected player.
+/removemute [nick]                                  Unmutes an already disconnected player.
 
-/serialblocker [serial]															Marks an already disconnected player as blocker using a serial.
-/serialunblocker [serial]														Unmarks an already disconnected player as blocker using a serial.
+/serialblocker [serial]                             Marks an already disconnected player as blocker using a serial.
+/serialunblocker [serial]                           Unmarks an already disconnected player as blocker using a serial.
 
 
-/getSerial [name]																		Gives you the serial of a player who is offline.
-/serialnicks [serial]																Nicks associated with serial.
+/getSerial [name]                                   Gives you the serial of a player who is offline.
+/serialnicks [serial]                               Nicks associated with serial.
 
 * --- Resources --- *
 
 Never use these commands unless absolutely necessary. When in doubt, contact Nick_026
-/restart [ResourceName]														  Restarts a resource. (use /update preferably)
-/update [ResourceName]														  Restarts a resource at the next map change.
+/restart [ResourceName]                             Restarts a resource. (use /update preferably)
+/update [ResourceName]                              Restarts a resource at the next map change.
 
 * --- Chat --- *
 
