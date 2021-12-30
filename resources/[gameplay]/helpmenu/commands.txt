@@ -23,7 +23,8 @@ LCtrl   - Makes your bike jump if held a few seconds and then released.
 Tab     - Displays the scoreboard. 
 T       - Game chat.
 Y       - Team chat.
-U       - Global chat. 
+U       - Global chat.
+R       - Language Chat 
 Z       - Voice Chat. Can only be used once the feature has been bought from the GC Shop (F6). 
 L       - Toggle car headlights.  
 B       - Toggle spectator.
@@ -35,7 +36,6 @@ B       - Toggle spectator.
 
 
 
-/autologin [name] [pass]                            Auto login.
 /admins                                             Show admins and mods on servers.
 /assist                                             Racing assist shows line on road where your ghost was recorded [must have ghost record on].
 /assist off                                         Turn off racing assist.
@@ -99,81 +99,100 @@ B       - Toggle spectator.
 /f /f [player]                                      Pays your respects.
 
 /mode                                               Change the mode for speedo.
-/speedx												Change the x offset for speedo.
-/speedy												Change the y offset for speedo.
+/speedx																							Change the x offset for speedo.
+/speedy																							Change the y offset for speedo.
 
 -------------------------------> Mods <-------------------------------
 
+/autologin [name] [pass]                            Auto login.
 
-/blocker [name] [time] -- Gives player a blocker mode.
-Allowed timeTypes: hours, days, weeks, months, years.
-For example the following command will mark me as blocker for 2 hours:
-/blocker Bierbuikje 2 hours or /blocker Bierbuikje 2 h or /blocker Bierbuikje 2 hour
 
-/blockers -- Shows an overview of all players in blocker mode.
+/blocker [name] [time]                              Gives player a blocker mode.
+                                                    Allowed timeTypes: hours, days, weeks, months, years.
+                                                    For example the following command will mark me as blocker for 2 hours:
+                                                    /blocker Bierbuikje 2 hours
 
-/k [name] [reason] -- Blow up another player who camps or is bugged in Shooter or DD mode.
+/blockers																						Shows an overview of all online players in blocker mode.
 
-/mute [name] [reason] [time] -- Mutes a player.
-Allowed timeTypes: seconds, minutes, hours, days, weeks, months, years.
-For example the following command mutes me for 30 minutes:
-/mute Bierbuikje reason 30 minutes or /mute Bierbuikje reason 30 m or /mute Bierbuikje reason 30 minute
+/k [name] [reason]																	Blow up another player who camps or is bugged in Shooter or DD mode.
 
-/unmute [name] -- Unmutes a muted player.
+/mute [name] [reason] [time]												Mutes a player.
+                                                    Allowed timeTypes: seconds, minutes, hours, days, weeks, months, years.
+                                                    For example the following command mutes me for 30 minutes:
+                                                    /mute Bierbuikje reason 30 minutes
 
-/votekick [name] [reason] -- Starts a votekick against a player.
+/unmute [name]																			Unmutes a muted player.
 
-/modsay -- Allows you to talk with other mods and admins privately (tip: /bind o chatbox modsay).
+/votekick [name] [reason]														Starts a votekick against a player.
+
+/modsay																							Allows you to talk with other mods and admins privately
+                                                    (tip: /bind o chatbox modsay).
 
 
 -------------------------------> Admins <-------------------------------
 
 
-/admin -- Opens admin panel, use 'P' instead.
-/banip [IP] -- Bans the IP.
-/banserial [serial] -- Bans the serial.
-/unbanip [ip] -- Unbans the IP.
-/unbanserial [serial] -- Unbans the serial.
-/kick [playerName] -- Kicks the player.
-/shout [playerName] [message] -- Shouts the message across the player's screen.
-/debuggc [player] -- Dump gc info.
-/adsay [text] -- Talk in private with other admins (tip: /bind i chatbox adsay).
-/sban [player] [reason] -- Serial ban a player for reason.
-/addban [nick] [reason] -- Ban an already disconnected player.
-/addmute [nick] [DuartionInDays] -- Mute an already disconnected player.
-/removemute [nick] -- Unmutes an already disconnected player.
-/serialblocker [serial] -- Marks an already disconnected player as blocker using a serial.
-/serialunblocker [serial] -- Unmarks an already disconnected player as blocker using a serial.
-/chatoff /chaton -- Disable/enable chatting.
-/clearchat --  Clear the current chat messages.
-/achat [text] -- Show a floating message.
-/editmotd --  Edit the motd message.
-/stopvote -- Stop the current running vote.
-/new --  Start vote for new map.
-/voteredo --   Start vote for again.
-/redo -- Restart the map.
-/random --   Change to a random map.
-/forcevote --   Start the vote like the map has finished.
-/nextmap [map] --  Set nextmap.
-/tops [player] # -- Show tops for player in chat and console.
-/getSerial [playername] -- Gives you the serial of a player who is offline.
-/restart [ResourceName] -- Restarts a resource.
-/update [ResourceName] -- Updates a resource.
-/serialnicks [serial] -- Nicks associated with serial.
+* --- Moderation --- *
+
+/admin 																							Opens admin panel, use 'P' instead.
+
+/banip [IP]																					Bans the IP.
+/banserial [serial]																	Bans the serial.
+/unbanip [ip]																				Unbans the IP.
+/unbanserial [serial]																Unbans the serial.
+/sban [player] [reason]															Serial ban a player for reason.
+/addban [nick] [reason]															Ban an already disconnected player.
+/kick [playerName]																	Kicks the player.
+
+/addmute [nick] [days] 															Mute an already disconnected player.
+/removemute [nick] 																	Unmutes an already disconnected player.
+
+/serialblocker [serial]															Marks an already disconnected player as blocker using a serial.
+/serialunblocker [serial]														Unmarks an already disconnected player as blocker using a serial.
+
+
+/getSerial [name]																		Gives you the serial of a player who is offline.
+/serialnicks [serial]																Nicks associated with serial.
+
+* --- Resources --- *
+
+Never use these commands unless absolutely necessary. When in doubt, contact Nick_026
+/restart [ResourceName]														  Restarts a resource. (use /update preferably)
+/update [ResourceName]														  Restarts a resource at the next map change.
+
+* --- Chat --- *
+
+/shout [playerName] [message]											  Shouts the message across the player's screen.
+/adsay [text]																			  Talk in private with other admins (tip: /bind i chatbox adsay).
+/clearchat 																				  Clear the current chat messages.
+/achat [text]																			  Show a floating message (similar to 'player has finished 1st').
+
+* --- Other --- *
+
+/tops [player] #                                    Show tops for player in chat and console.
+
 
 
 
 -------------------------------> Map Managers <-------------------------------
 
 
-/managetops -- Manage map tops.
-/mm -- Map Manager panel.
-/setjumpheight [2-11] -- Sets jump height setting of currently played shooter map.
+/managetops                                         Manage map tops.
+/mm                                                 Map Manager panel.
+/setjumpheight [2-11]                               Sets jump height setting of currently played shooter map.
+/new                                                Start vote for new map.
+/voteredo                                           Start vote for again.
+/random                                             Change to a random map.
+/forcevote                                          Start the vote like the map has finished.
+/nextmap [map]                                      Sets the next map. (Use Admin Panel for UI)
 
 
 
 -------------------------------> Server Managers <-------------------------------
 
 
-/shutdown -- Restarts the server.
-/deletenick [nick] -- Deletes a locked nick from the database. 
+/shutdown                                           Restarts the server.
+/deletenick [nick]                                  Deletes a locked nick from the database.
+/debuggc [player]                                   Dump gc info.
+/editmotd                                           Edit the motd (message of the day) message.
+/debugscript 3                                      Dumps INFO, WARNING and ERROR messages to secondary chat
