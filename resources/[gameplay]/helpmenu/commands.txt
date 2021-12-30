@@ -99,8 +99,8 @@ B       - Toggle spectator.
 /f /f [player]                                      Pays your respects.
 
 /mode                                               Change the mode for speedo.
-/speedx																							Change the x offset for speedo.
-/speedy																							Change the y offset for speedo.
+/speedx                                             Change the x offset for speedo.
+/speedy                                             Change the y offset for speedo.
 
 -------------------------------> Mods <-------------------------------
 
@@ -162,10 +162,10 @@ Never use these commands unless absolutely necessary. When in doubt, contact Nic
 
 * --- Chat --- *
 
-/shout [playerName] [message]											  Shouts the message across the player's screen.
-/adsay [text]																			  Talk in private with other admins (tip: /bind i chatbox adsay).
-/clearchat 																				  Clear the current chat messages.
-/achat [text]																			  Show a floating message (similar to 'player has finished 1st').
+/shout [playerName] [message]                       Shouts the message across the player's screen.
+/adsay [text]                                       Talk in private with other admins (tip: /bind i chatbox adsay).
+/clearchat                                          Clear the current chat messages.
+/achat [text]                                       Show a floating message (similar to 'player has finished 1st').
 
 * --- Other --- *
 
