@@ -30,8 +30,7 @@ local vipSkins = {
 	[22] = {name = "Sean Diaz", file = "SeanEp3", customVoice = false},
 	[23] = {name = "Squid Game - Frontman", file = "Frontman", customVoice = false},
 	[24] = {name = "Squid Game - Circle Soldier", file = "SoldierCircle", customVoice = false},
-	[25] = {name = "Deadpool", file = "deadpool", customVoice = false},
-	[26] = {name = "Venom", file = "Venom", customVoice = false}
+	[25] = {name = "Deadpool", file = "deadpool", customVoice = false}
 }
 
 -- Reserved skin ID's for VIP skin. If more are needed, please check unbought GC shop skins via database and remove them from there
