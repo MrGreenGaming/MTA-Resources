@@ -132,6 +132,8 @@
     <file src="items/vipskin/skins/SoldierCircle.dff" download="false" />
     <file src="items/vipskin/skins/deadpool.txd" download="false" />
     <file src="items/vipskin/skins/deadpool.dff" download="false" />
+    <file src="items/vipskin/skins/Venom.txd" download="false" />
+    <file src="items/vipskin/skins/Venom.dff" download="false" />
 
     <!-- Vip Voice files -->
     <file src="items/vipskin/skins/voice/waifu1.mp3" />
