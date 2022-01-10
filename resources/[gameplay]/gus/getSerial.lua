@@ -208,6 +208,7 @@ function getSerialCommand(admin, _, playername)
 		if not result then return outputChatBox("No serial found for " .. playername.. "!", admin, 255, 0, 0) end
 	
 		outputChatBox("Serial found for " .. playername .. ": " .. result.serial, admin, 0, 255, 0)
+		outputServerLog("Serial found for " .. playername .. ": " .. result.serial)
 	end)
 	
 end
