@@ -342,7 +342,7 @@ function startNextMapVote()
 	local currentRes = currentMap
 	if currentMap then
 		if (not times[currentMap] or times[currentMap] < maxPlayAgain+1) and not isMapTesting() then
-			table.insert(poll, {"Play again #808080", 'nextMapVoteResult', getRootElement(), currentMap})
+			table.insert(poll, {"Play again#808080", 'nextMapVoteResult', getRootElement(), currentMap})
 		elseif setEventMapQueue then -- Start event manager map
 			outputChatBox('Maximum \'Play Again\' times ('..maxPlayAgain..') has been reached. Changing to next event map...')
 
