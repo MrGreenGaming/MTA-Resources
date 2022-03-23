@@ -36,7 +36,7 @@
     <settings>
         <!-- Rewards can be changed without restarting the resource (adminpanel) -->
         <setting name="*rewardPerHour" value="100" friendlyname="Amount of GC rewarded per hour" group="Time Reward" examples="100" />
-
+        <setting name="*rewardAfk" value="false" friendlyname="Reward GC when AFK" group="Time Reward" examples="true, false" />
     </settings>
 
 </meta>
