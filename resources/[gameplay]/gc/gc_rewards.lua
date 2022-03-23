@@ -56,7 +56,6 @@ local playerTimes = {
 	-- [player] = {tick = getTickCount(), hoursPlayed = 0}
 }
 local rewardPerHour = tonumber(get("rewardPerHour")) --100 default -- rewards
-local rewardAfk = toboolean(get("rewardAfk")) --true default -- rewards
 local gracePeriod = 5*60
 
 -- Instead of a timer for every player, compare playtime of all players
@@ -67,7 +66,7 @@ local timerInterval = aMin*1000*minuteTickAmount + 1500
 
 function updatePlaytimes()
 	rewardPerHour = tonumber(get("rewardPerHour"))
-    rewardAfk = toboolean(get("rewardAfk"))
+    local rewardAfk = toboolean(get("rewardAfk")) --true default -- rewards
 	local currentTick = getRealTime().timestamp
 	for s, t in pairs(playerTimes) do
 		if currentTick - t.time >= gracePeriod then
