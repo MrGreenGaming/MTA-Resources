@@ -59,8 +59,7 @@ local rewardPerHour = tonumber(get("rewardPerHour")) --100 default -- rewards
 local gracePeriod = 5*60
 
 -- Instead of a timer for every player, compare playtime of all players
--- TODO revert to 60
-local aMin = 3 -- minute
+local aMin = 60 -- minute
 local minuteTickAmount = 1
 local timerInterval = aMin*1000*minuteTickAmount + 1500
 
