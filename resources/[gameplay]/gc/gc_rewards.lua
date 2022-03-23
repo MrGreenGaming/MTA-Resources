@@ -53,18 +53,19 @@ end
 ------------------------
 
 local playerTimes = {
-	-- [player] = {tick = getTickCount(), hoursPlayed = 0}  
+	-- [player] = {tick = getTickCount(), hoursPlayed = 0}
 }
 local rewardPerHour = tonumber(get("rewardPerHour")) --100 default -- rewards
 local gracePeriod = 5*60
 
 -- Instead of a timer for every player, compare playtime of all players
 local aMin = 60 -- minute
-local minuteTickAmount = 1 
+local minuteTickAmount = 1
 local timerInterval = aMin*1000*minuteTickAmount + 1500
 
 function updatePlaytimes()
 	rewardPerHour = tonumber(get("rewardPerHour"))
+    local rewardAfk = toboolean(get("rewardAfk")) --true default -- rewards
 	local currentTick = getRealTime().timestamp
 	for s, t in pairs(playerTimes) do
 		if currentTick - t.time >= gracePeriod then
@@ -79,7 +80,7 @@ function updatePlaytimes()
 			jointick, hoursPlayed = currentTick, 0
 			setElementData(p, 'jointick', currentTick)
 			setElementData(p, 'hoursPlayed', 0)
-		elseif isAFK then -- AFK Players can't earn playtime
+		elseif isAFK and rewardAfk == false then -- AFK Players can't earn playtime
 			jointick = math.floor(jointick + (timerInterval / 1000))
 			if currentTick - jointick < 0 then
 				jointick = currentTick
@@ -103,7 +104,7 @@ function updatePlaytimes()
 			setElementData(p, 'hoursPlayed', hoursPlayed)
 		end
 		local minutes = math.floor((currentTick - jointick)/60)
-		if isAFK then
+		if isAFK and rewardAfk == false then
 			setElementData(p, 'playtime', "#808080 " .. getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
 		else
 			setElementData(p, 'playtime', "#FFFFFF " .. getElementData(p, 'hoursPlayed') .. ':' .. string.format('%02d', minutes))
@@ -119,10 +120,10 @@ addEventHandler("onPlayerJoin", root, function()
 		setElementData(source, 'jointick', playerTimes[serial].tick)
 		setElementData(source, 'hoursPlayed', playerTimes[serial].hoursPlayed)
 		outputChatBox('Welcome back', source)
-		
+
 		local minutes = math.floor((getRealTime().timestamp - playerTimes[serial].tick)/60)
 		setElementData(source, 'playtime', playerTimes[serial].hoursPlayed .. ':' .. string.format('%02d', minutes))
-		
+
 		playerTimes[serial] = nil
 	else
 		setElementData(source, 'jointick', getRealTime().timestamp)
@@ -168,7 +169,7 @@ function finish(rank)
 		return
 	end
 	local player = source
-	
+
 	--Ordinal indicator
 	local suffix
 	if (rank == 11) or (rank == 12) or (rank == 13) then
@@ -185,7 +186,7 @@ function finish(rank)
 			suffix = "th"
 		end
 	end
-	
+
 	if compareToTopPos and rank <= maxRewardedFinishes then
 		if not rewarded_Players[player] then
 			rewarded_Players[player] = {}
@@ -193,10 +194,10 @@ function finish(rank)
 		rewarded_Players[player].finishReward = calcFinishReward(player, rank)
 		-- outputDebugString( 'CalcFinishReward = '..tostring(rewarded_Players[player].finishReward) )
 		rewarded_Players[player].finishReward = vipRewardMult(player,rewarded_Players[player].finishReward)
-		rewarded_Players[player].finishReward = getRewardAmount(rewarded_Players[player].finishReward)		
+		rewarded_Players[player].finishReward = getRewardAmount(rewarded_Players[player].finishReward)
 		rewarded_Players[player].rank = rank
 		if isHoliday() then rewarded_Players[player].finishReward = rewarded_Players[player].finishReward * 2 end
-		
+
 		if rewarded_Players[player].finishReward > 1 then
 			addPlayerGreencoins(player, rewarded_Players[player].finishReward)
 			if not isTournamentActive then
@@ -313,7 +314,7 @@ function CTFFlagDelivered()
 	outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 scored 1 point and earned '..reward.. ' GC for himself and '.. rewar2 ..' GC for the ' .. getTeamName(team), root, 0, 255, 0, true)
 
 
-	for _, pl in ipairs(getPlayersInTeam(team)) do 
+	for _, pl in ipairs(getPlayersInTeam(team)) do
 		if pl ~= player then
 			if not exports.anti:isPlayerAFK(pl) then
 				local reward = rewardCTFFlagDeliverTeam
@@ -324,7 +325,7 @@ function CTFFlagDelivered()
 			end
 		end
 	end
-	
+
 end
 addEventHandler('onCTFFlagDelivered', root, CTFFlagDelivered)
 
@@ -334,13 +335,13 @@ function CTFTeamWon()
 	local reward = rewardCTFTeamWin
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
-	for _, player in ipairs(getPlayersInTeam(team)) do 
+	for _, player in ipairs(getPlayersInTeam(team)) do
 		if not exports.anti:isPlayerAFK(pl) then
 			addPlayerGreencoins(player, reward)
 		end
 	end
 	outputChatBox(prefix .. getTeamName(team) .. ' has been rewarded ' .. reward .. ' GC for outscoring the opponent!', root, getTeamColor(team))
-	
+
 end
 addEventHandler('onCTFTeamWon', root, CTFTeamWon)
 
@@ -384,7 +385,7 @@ function onDeadlinePlayerKill()
 	local reward = rewardKillDeadline
 	if isHoliday() then reward = reward * 2 end
 	addPlayerGreencoins(player, reward)
-	outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)	
+	outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
 end
 addEvent('onDeadlinePlayerKill')
 addEventHandler('onDeadlinePlayerKill', root, onDeadlinePlayerKill)
@@ -562,7 +563,7 @@ addEventHandler("onPlayerFinish", root, RTFfinish)
 -- 	reward = lowPopModifier(reward)
 -- 	addPlayerGreencoins(player, reward)
 -- 	outputChatBox(prefix .. getPlayerName(player) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
-	
+
 -- end
 -- addEventHandler("onPlayerFinish", root, NTSfinish)
 
@@ -621,8 +622,8 @@ addEventHandler("onManhuntVictimKillList", root, manhuntVictimKills)
 function getRewardAmount(amount)
 	local lowPopMultiplier = 0
 	local pCnt = getPlayerCount()
-	if pCnt < 5 then 
-		lowPopMultiplier = 0.5 
+	if pCnt < 5 then
+		lowPopMultiplier = 0.5
 	else
 		lowPopMultiplier = 1
 	end
@@ -661,7 +662,7 @@ end
 --http://lua-users.org/wiki/FormattingNumbers
 function comma_value(amount)
   local formatted = amount
-  while true do  
+  while true do
     formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1 %2')
     if (k==0) then
       break
@@ -697,3 +698,12 @@ function onTournamentMapChange()
 	end
 end
 addEventHandler("onMapStarting", getRootElement(), onTournamentMapChange)
+
+function toboolean( bool )
+    bool = tostring( bool )
+    if bool == "true" then
+        return true
+    elseif bool == "false" then
+        return false
+	end
+end
