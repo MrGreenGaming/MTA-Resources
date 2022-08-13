@@ -24,7 +24,7 @@ function sendPlayerCount(correction)
     elseif (serverType == "mix") then
         exports.discord:send("server.player_count_mix", { player_count = player_count, max_players = max_players })
     end
-    
+
 end
 addEventHandler("onDiscordChannelBound", root, sendPlayerCount)
 
@@ -40,7 +40,7 @@ addEventHandler("onPlayerJoin", root,
 addEventHandler("onPlayerQuit", root,
     function (quitType, reason, responsible)
         local playerName = getPlayerName(source)
-        
+
         if isElement(responsible) then
             if getElementType(responsible) == "player" then
                 responsible = getPlayerName(responsible)
@@ -54,7 +54,7 @@ addEventHandler("onPlayerQuit", root,
         if type(reason) ~= "string" or reason == "" then
             reason = false
         end
-        
+
         if quitType == "Kicked" and responsible then
             exports.discord:send("player.kick", { player = playerName, responsible = responsible, reason = reason })
         elseif quitType == "Banned" and responsible then
@@ -77,8 +77,6 @@ addEventHandler("onPlayerChat", root,
 		if getResourceFromName('censorship') and getResourceState(getResourceFromName('censorship')) == 'running' and exports.censorship:isBlockedMsg(message) then return end
         if messageType == 0 then
             exports.discord:send("chat.message.text", { author = getPlayerName(source), text = message })
-        elseif messageType == 1 then
-            exports.discord:send("chat.message.action", { author = getPlayerName(source), text = message })
         end
     end
 )
