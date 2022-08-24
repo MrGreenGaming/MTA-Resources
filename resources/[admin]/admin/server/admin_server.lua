@@ -187,7 +187,7 @@ addEventHandler ( "onResourceStop", _root, function ( resource )
 		end
 	end
 	if not stillExists then return end
-	
+
 	if ( resource ~= getThisResource() ) then
 		for id, player in ipairs(getElementsByType("player")) do
 			if ( hasObjectPermissionTo ( player, "general.tab_resources" ) ) then
@@ -196,7 +196,7 @@ addEventHandler ( "onResourceStop", _root, function ( resource )
 		end
 	else
 		local node = xmlLoadFile ( "conf\\reports.xml" )
-		if ( node ) then 
+		if ( node ) then
 			while ( xmlFindChild ( node, "message", 0 ) ~= false ) do
 				local subnode = xmlFindChild ( node, "message", 0 )
 				xmlDestroyNode ( subnode )
@@ -214,7 +214,7 @@ addEventHandler ( "onResourceStop", _root, function ( resource )
 		end
 		xmlSaveFile ( node )
 		xmlUnloadFile ( node )
-		
+
 		-- Unmute anybody muted by admin
 		for i, player in ipairs(getElementsByType("player")) do
 			local serial = getPlayerSerial( player )
@@ -440,7 +440,7 @@ addEventHandler ( "aPlayerVersion", _root, function ( version )
 		end
 		-- If version does not have a built in version check, maybe show a message box advising an upgrade
 		if version.number < 259 or ( version.mta == "1.0.3" and rc < 3 ) then
-			triggerClientEvent ( source, "aClientShowUpgradeMessage", source )	
+			triggerClientEvent ( source, "aClientShowUpgradeMessage", source )
 		end
 	end
 
@@ -510,7 +510,7 @@ addCommandHandler ( "unregister", function ( player, command, arg1, arg2 )
 		end
 	end
 	outputChatBox ( "Unregistering account '"..username.."' "..result, player, 255, 100, 70 )
-	outputServerLog ( "ADMIN: "..getAdminNameForLog ( player ).." unregistering account '"..username.."' "..result.." (IP: "..getPlayerIP(player).."  Serial: "..getPlayerSerial(player)..")" )	
+	outputServerLog ( "ADMIN: "..getAdminNameForLog ( player ).." unregistering account '"..username.."' "..result.." (IP: "..getPlayerIP(player).."  Serial: "..getPlayerSerial(player)..")" )
 end )
 
 -- Returns "name" or "name(accountname)" if they differ
@@ -548,12 +548,12 @@ function aAction ( type, action, admin, player, data, more )
 		local node = aLogMessages[type][action]
 		if ( node ) then
 			local r, g, b = node["r"], node["g"], node["b"]
-			if ( node["all"] ) then outputChatBox ( aStripString ( node["all"] ), _root, r, g, b ) 
-				if action == "mute" then 
+			if ( node["all"] ) then outputChatBox ( aStripString ( node["all"] ), _root, r, g, b )
+				if action == "mute" then
 					exports.irc:outputIRC("4* "..string.gsub( aStripString ( node["all"] ), "#%x%x%x%x%x%x", "" ))
 				elseif action == "unmute" then
 					exports.irc:outputIRC("11* "..string.gsub( aStripString ( node["all"] ), "#%x%x%x%x%x%x", "" ))
-				end 
+				end
 			end
 			if ( node["admin"] ) and ( admin ~= player ) then outputChatBox ( aStripString ( node["admin"] ), admin, r, g, b ) end
 			if ( node["player"] ) then outputChatBox ( aStripString ( node["player"] ), player, r, g, b ) end
@@ -1031,7 +1031,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 					setElementInterior ( player, interior["world"] )
 					local x, y, z = interior["x"] or 0, interior["y"] or 0, interior["z"] or 0
 					local rot = interior["r"] or 0
-					if ( vehicle ) then 
+					if ( vehicle ) then
 						setElementInterior ( vehicle, interior["world"] )
 						setElementPosition ( vehicle, x, y, z + 0.2 )
 					else
@@ -1158,7 +1158,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 						outputConsole ( "Player's vehicle is full ("..getVehicleName ( vehicle ).." - Seats: "..seats..")", p )
 					end
 				else
-      		  	warp ( p, to )		
+      		  	warp ( p, to )
 			end
 			end
 			if ( action == "warp" ) then
@@ -1396,13 +1396,13 @@ addEventHandler ( "aMessage", _root, function ( action, data )
 				local users = exports.irc:ircGetUsers()
 				local channel = exports.irc:ircGetChannelFromName("#mrgreen.mta")
 				local hasPermission
-				for i,j in ipairs(users) do 
+				for i,j in ipairs(users) do
 					hasPermission = exports.irc:ircGetUserLevel(j, channel)
 					if hasPermission == 3 then
 						exports.irc:ircSay(j , message)
 						exports.irc:ircNotice(j, message)
-					end	
-				end	
+					end
+				end
 			end
 		end
 		aReports[id].time = string.format( '%04d-%02d-%02d %02d:%02d', time.year + 1900, time.month + 1, time.monthday, time.hour, time.minute )
@@ -1489,7 +1489,7 @@ addEventHandler ( "aBans", _root, function ( action, data )
 		else
 			action = nil
 		end
-	
+
 		if ( action ~= nil ) then
 			aAction ( "bans", action, source, false, mdata, more )
 			triggerEvent ( "aSync", source, "sync", "bansdirty" )
@@ -1503,7 +1503,7 @@ end )
 addEvent ( "aExecute", true )
 addEventHandler ( "aExecute", _root, function ( action, echo )
 	if checkClient( "command.execute", source, 'aExecute', action ) then return end
-	if ( hasObjectPermissionTo ( source, "command.execute" ) ) then 
+	if ( hasObjectPermissionTo ( source, "command.execute" ) ) then
 		local result = loadstring("return " .. action)()
 		if ( echo == true ) then
 			local restring = ""
@@ -1587,14 +1587,14 @@ addEventHandler("onPlayerChangeNick", root, checkNickOnChange)
 
 
 addEvent("forceReconnect", true)
-addEventHandler("forceReconnect", root, 
+addEventHandler("forceReconnect", root,
 function (name)
 executeCommandHandler("freconnect", client, name)
 end
 )
 
 addEvent("getSerialNicks", true)
-addEventHandler("getSerialNicks", root, 
+addEventHandler("getSerialNicks", root,
 function (serial)
 executeCommandHandler("serialnicks", client, serial)
 end
@@ -1614,24 +1614,24 @@ local mute_sql = [[CREATE TABLE IF NOT EXISTS `mute` (
 
 
 addEventHandler("onResourceStart",resourceRoot,
-	function() 
+	function()
 		dbHandler = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 		if dbHandler then
-		
+
 			dbExec ( dbHandler, mute_sql )
-			
+
 			for _,p in ipairs(getElementsByType("player")) do
 				checkPlayerMute(p)
 			end
-			
+
 		else
 			outputDebugString('admin: could not connect to the mysql db')
 		end
 	end
-)	
+)
 
 function getExpireTimestamp(seconds)
-	local current = getRealTime().timestamp 
+	local current = getRealTime().timestamp
 	return tonumber(current + seconds)
 end
 
@@ -1641,10 +1641,10 @@ function removeMuteFromDB(serial)
 	return query
 end
 
-function ifNameReturnSerial() 
-	if pName then 
+function ifNameReturnSerial()
+	if pName then
 		return " ("..serial..")"
-	end 
+	end
 end
 
 function addMuteToDB(serial, pName, length, adminAccountName, pIP)
@@ -1673,7 +1673,7 @@ function checkPlayerMute(thePlayer)
 
 	if isElement(dbHandler) then
 		local cmd = "SELECT * FROM mute WHERE serial = ?"
-		dbQuery(function (qh) 
+		dbQuery(function (qh)
 			if not qh then return false end
 			local sql = dbPoll(qh, 0)
 			if sql and #sql > 0 then
@@ -1683,8 +1683,11 @@ function checkPlayerMute(thePlayer)
 					local expireReadable = secondsToTimeDesc(seconds)
 					local t = sql[1]
 					aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds)
+
 					local textMuted = getPlayerName(player).." was muted by "..t.byAdmin.." and will be unmuted in "..expireReadable.."."
-					local textMuted = string.gsub( textMuted, "#%x%x%x%x%x%x", "" ) 
+                    if seconds > 525600 then textMuted = getPlayerName(player).." was muted by "..t.byAdmin.."." end
+					textMuted = string.gsub( textMuted, "#%x%x%x%x%x%x", "" )
+
 					outputChatBox( textMuted , root, 0, 255, 100)
 					exports.irc:outputIRC( "10* "..textMuted )
 					outputServerLog( textMuted )
@@ -1711,12 +1714,12 @@ function serialmute(pAdmin, _, serial, days)
 	if not hasObjectPermissionTo ( pAdmin, "command.ban" ) then
 		return
 	end
-	
+
 	if not serial or #serial ~= 32 then
 		outputChatBox('Wrong serial. Syntax: /serialmute [serial] [days]', pAdmin, 255, 0,0)
 		return
 	end
-	
+
 	if tonumber(days) and tonumber(days) >= 1 then
 		seconds = days*24*60*60
 	else
@@ -1741,7 +1744,7 @@ function serialunmute(pAdmin, _, serial)
 	if not hasObjectPermissionTo ( pAdmin, "command.ban" ) then
 		return
 	end
-	
+
 	if not serial or #serial ~= 32 then
 		outputChatBox('Wrong serial. Syntax: /serialunmute [serial]', pAdmin, 255, 0,0)
 		return
@@ -1751,7 +1754,7 @@ function serialunmute(pAdmin, _, serial)
 	if playerToUnmute then -- if player online -> unmute local player as well
 		setPlayerMuted( playerToUnmute, false)
 	end
-	
+
 	removeMuteFromDB(serial)
 	outputChatBox("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x",""), root, 255, 100, 0)
 	outputServerLog("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x",""))
@@ -1779,7 +1782,7 @@ function muteList( player, command )
 				local timeLeft = getTimerDetails(aUnmuteTimerList[serial])
 				local timeString = ''
 				timeLeft = math.ceil(timeLeft / 1000)
-				
+
 				if timeLeft < 60 then
 					timeString = timeLeft..' s'
 				elseif timeLeft < 3600 then
@@ -1787,7 +1790,7 @@ function muteList( player, command )
 				else
 					timeString = math.floor(timeLeft / 60 / 60)..' h and '..math.floor((timeLeft - (math.floor(timeLeft / 60 / 60) * 60 * 60)) / 60)..' m'
 				end
-				
+
 				outputString = outputString .. string.gsub(getPlayerName(p),"#%x%x%x%x%x%x","") .. " (" .. timeString .. "), "
 				count = count + 1
 			elseif isPlayerMuted(p) then
