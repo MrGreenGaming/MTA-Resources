@@ -94,9 +94,9 @@ addEventHandler("onDiscordUserCommand", root, function(author, message)
 	if not (cmd and type(cmd) == "string" and #cmd > 0) then
 		return
 	end
-	
-	
-	
+
+
+
 	-- local outputIRC_ = outputIRC
 	-- local outputIRC = function(text)
 		-- exports.discord:send("chat.message.action", { author = ">", text = text })
@@ -127,12 +127,12 @@ addEventHandler('onResourceStart', getResourceRootElement(),
 	function()
 	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 	end
-)		
+)
 
 function getSerial(playername)
 	--if not canScriptWork then return false end
 	local cmd = ''
-	local query 
+	local query
 	local sql
 	if handlerConnect then
 		cmd = "SELECT serial, ip, playername FROM serialsDB WHERE playername = ? LIMIT 1"
@@ -142,12 +142,12 @@ function getSerial(playername)
 			return { serial = sql[1].serial, ip = sql[1].ip }
 		else return false
 		end
-	end	
+	end
 end
 
 function findPastNames(serial)
 	local cmd = ''
-	local query 
+	local query
 	local sql
 	if handlerConnect then
 		local stringOfPlayers = ""
@@ -155,17 +155,17 @@ function findPastNames(serial)
 		query = dbQuery(handlerConnect, cmd, serial)
 		sql = dbPoll(query, -1)
 		if #sql > 0 then
-			for i = 1, #sql do 			
+			for i = 1, #sql do
 					if #stringOfPlayers == 0 then
 						stringOfPlayers = sql[i].playername
 					else
 						stringOfPlayers = stringOfPlayers.." , "..sql[i].playername
-					end			
-			end		
-			return stringOfPlayers 
-		else return false	
+					end
+			end
+			return stringOfPlayers
+		else return false
 		end
-	else return false	
+	else return false
 	end
 end
 
@@ -196,8 +196,8 @@ function say (server,channel,user,command,...)
 				g_PlayerTimer[user] = setTimer(function(player) g_PlayerMuted[player] = false ircNotice(player, "Unmuted.") end, 30000, 1, user)
 				return
 			end
-		end	
-	else	
+		end
+	else
 		g_PlayerTickcount[user] = getTickCount()
 		g_PlayerChatNum[user] = 1
 		g_PlayerMuted[user] = false
@@ -224,26 +224,26 @@ function ircGetSerial(server,channel,user,command,par)
 			ircNotice(user,"Most recent used serial for "..par.." is: "..theSerial)
 		else
 			ircNotice(user,"Most recent used serial and IP for "..par.." is: "..theSerial.." and "..theIP)
-		end	
-	else 	
+		end
+	else
 		ircNotice(user,"No match found")
-	end	
+	end
 end
 
 addIRCCommandHandler("!serial", ircGetSerial)
 
-function ircGetBanDetails(server,channel,user,command,banType, par) 
+function ircGetBanDetails(server,channel,user,command,banType, par)
 	if banType == nil then ircNotice(user,"Usage: '!isBan <type> <who>'  where <type> can be serial/nick/ip/reason") return end
 	if par == nil then ircNotice(user,"Usage: '!isBan <type> <who>'  Need a 3rd argument") return end
 	local searchBan = nil
 	local count = 0
-	if banType == 'serial' then searchBan = getBanSerial 
+	if banType == 'serial' then searchBan = getBanSerial
 	elseif banType == 'ip' then searchBan = getBanIP
 	elseif banType == 'nick' then searchBan = getBanNick
 	elseif banType == 'reason' then searchBan = getBanReason
 	end
 	if searchBan == nil then ircNotice(user,"Usage: '!isBan <type> <who>'  where <type> can be serial/nick/ip/reason") return end
-	for _ , ban in ipairs(getBans()) do 
+	for _ , ban in ipairs(getBans()) do
 		local banFound = string.lower(tostring(searchBan(ban)))
 		if string.find(banFound, string.lower(par)) then
 			count = count + 1
@@ -268,7 +268,7 @@ function ircGetBanDetails(server,channel,user,command,banType, par)
 					bExpire = tostring(bExpire)
 					toOutput = toOutput..' Expire date: \''..bExpire..'\' seconds'
 				end
-			end	
+			end
 			ircNotice(user,toOutput)
 		end
 	end
@@ -286,7 +286,7 @@ function displayVersion(server,channel,user,command,par)
 		stringVersion = string.sub(stringVersion,10,13)
 		allVersion = allVersion..", "..getPlayerName(j).."(".."r"..stringVersion..")"
 	end
-	ircNotice(user, allVersion)	
+	ircNotice(user, allVersion)
 end
 
 addIRCCommandHandler("!version", displayVersion)
@@ -298,7 +298,7 @@ function(server,channel,user,command,par)
 		local pastNames = findPastNames(par)
 		if pastNames then
 			ircNotice(user,"Names found: "..pastNames)
-		end	
+		end
 	else
 		local playerElement = getPlayerFromPartialName(par)
 		if not playerElement then ircNotice(user,"State a player's partial name.") return end
@@ -327,10 +327,10 @@ function(server,channel,user,command,...)
 		end
 		theBan = addBan(theIP, nil, theSerial, player, reason, 0)
 		if not theBan then ircNotice(user, "An error has occured. Can't ban player.")
-		else 
-			outputIRC(banPlayerName.." has been banned by "..ircGetUserNick(user))	
+		else
+			outputIRC(banPlayerName.." has been banned by "..ircGetUserNick(user))
 		end
-	else ircNotice(user, "No player match. Try again.")	
+	else ircNotice(user, "No player match. Try again.")
 	end
 end
 )
@@ -341,7 +341,7 @@ function(server, channel, user,command, par)
 	if getPlayerFromName(par) then outputIRC("07* "..par.." is online right now.") return end
 	par = string.gsub (par, '#%x%x%x%x%x%x', '' )
 	local cmd = ''
-	local query 
+	local query
 	local sql
 	if handlerConnect then
 		cmd = "SELECT date, playername FROM serialsDB WHERE playername = ?"
@@ -350,14 +350,14 @@ function(server, channel, user,command, par)
 		if #sql > 0 then
 			local name = sql[1].playername
 			local date = sql[1].date
-			if date == nil then 
+			if date == nil then
 				outputIRC("No database entry available yet for "..name)
 			else
 				outputIRC("07* "..name.." was last seen on: "..date.." (GMT time)")
 			end
 		else outputIRC(par.." was never seen online.")
-		end	
-	end	
+		end
+	end
 end
 )
 
@@ -367,13 +367,13 @@ function(server,channel, user,command,par)
 	local adminString = ""
 	local k = 0
 	local players = getElementsByType('player')
-	for i,j in ipairs(players) do 
+	for i,j in ipairs(players) do
 		if hasObjectPermissionTo(j, "function.banPlayer", false) then
 			k = k + 1
 			admins[k] = getPlayerName(j):gsub('#%x%x%x%x%x%x', '')
 		end
 	end
-	if #admins > 0 then	
+	if #admins > 0 then
 		adminString = table.concat(admins, " , ")
 		outputIRC("07* Online admins: "..adminString)
 	else outputIRC("07* No online admins")
@@ -385,19 +385,19 @@ addIRCCommandHandler("!redirect",
 function(server,channel, user,command,arg1, arg2, arg3, arg4)
 	if not arg1 then ircNotice(user,"Syntax: !redirect <name> <server> <port> <password> Note: Password and port arguments are optional. Port:22003") return end
 	if not arg2 then ircNotice(user,"Syntax: !redirect <name> <server> <port> <password> Note: Password and port arguments are optional. Port:22003") return end
-	if not arg3 then 
+	if not arg3 then
 		arg3 = "22003"
-	end	
+	end
 	local player = getPlayerFromPartialName(arg1)
 	if player then
 		if arg4 then
 			redirectPlayer(player, arg2,arg3,arg4)
 		else
 			redirectPlayer(player, arg2, arg3)
-		end	
-	else 
+		end
+	else
 		ircNotice(user,"No player found")
-	end	
+	end
 end
 )
 
@@ -425,7 +425,7 @@ function country(server,channel,user,command,name)
 			end
 	else
 		ircSay(channel,"12* "..'Player inexistent.')
-	end	
+	end
 end
 addIRCCommandHandler("!c", country)
 addIRCCommandHandler("!country", country)
@@ -640,6 +640,7 @@ addIRCCommandHandler("!unban",
                 for i,ban in ipairs (getBans()) do
                         if getBanNick(ban) == name then
                                 removeBan(ban)
+                                ircNotice(user,"'"..name.."' was unbanned")
                         end
                 end
         end
@@ -651,6 +652,7 @@ addIRCCommandHandler("!unbanip",
                 for i,ban in ipairs (getBans()) do
                         if getBanIP(ban) == ip then
                                 removeBan(ban)
+                                ircNotice(user,"'"..ip.."' was unbanned")
                         end
                 end
         end
@@ -662,6 +664,7 @@ addIRCCommandHandler("!unbanserial",
                 for i,ban in ipairs (getBans()) do
                         if getBanSerial(ban) == serial then
                                 removeBan(ban)
+                                ircNotice(user,"'"..serial.."' was unbanned")
                         end
                 end
         end
@@ -678,8 +681,10 @@ addIRCCommandHandler("!banname",
                 end
                 if time then
                         addBan(nil,name,nil,ircGetUserNick(user),reason,toMs(time)/1000)
+                        ircNotice(user,"'"..name.."' was banned for "..toMs(time)/1000)
                 else
                         addBan(nil,name,nil,ircGetUserNick(user),reason)
+                        ircNotice(user,"'"..name.."' was banned")
                 end
         end
 )
@@ -695,8 +700,10 @@ addIRCCommandHandler("!banserial",
                 end
                 if time then
                         addBan(nil,nil,serial,ircGetUserNick(user),reason,toMs(time)/1000)
+                        ircNotice(user,"'"..serial.."' was banned for "..toMs(time)/1000)
                 else
                         addBan(nil,nil,serial,ircGetUserNick(user),reason)
+                        ircNotice(user,"'"..serial.."' was banned")
                 end
         end
 )
@@ -712,8 +719,10 @@ addIRCCommandHandler("!banip",
                 end
                 if time then
                         addBan(ip,nil,nil,ircGetUserNick(user),reason,toMs(time)/1000)
+                        ircNotice(user,"'"..ip.."' was banned for "..toMs(time)/1000)
                 else
                         addBan(ip,nil,nil,ircGetUserNick(user),reason)
+                        ircNotice(user,"'"..ip.."' was banned")
                 end
         end
 )
@@ -769,11 +778,11 @@ function players(server,channel,user,command,name)
 			end
 			ircSay(channel,"6There is "..getPlayerCount().." player ingame: "..table.concat(players,", "))
 		end
-		else 
-			local theTable = { } 
-			local k = 0 
+		else
+			local theTable = { }
+			local k = 0
 			local theName = string.lower(name)
-			for i,j in ipairs(getElementsByType('player')) do 
+			for i,j in ipairs(getElementsByType('player')) do
 				if string.find(string.lower(getNameNoColor(j)), theName, 1, true) then
 					k = k + 1
 					theTable[k] = getPlayerName(j)
@@ -785,7 +794,7 @@ function players(server,channel,user,command,name)
 				ircSay(channel,"6There is "..k.." '"..name.."' player ingame: "..table.concat(theTable,", "))
 			else
 				ircSay(channel,"6There are "..k.." '"..name.."' players ingame: "..table.concat(theTable,", "))
-			end	
+			end
 		end
 	end
 	addIRCCommandHandler("!players", players)
@@ -840,6 +849,7 @@ addIRCCommandHandler("!start",
                 if not resName then ircNotice(user,"syntax is !start <resourcename>") return end
                 local resource = getResourceFromPartialName(resName)
                 if resource then
+                    ircNotice(user,"Starting resource "..getResourceName(resource))
                         if not startResource(resource) then
                                 ircNotice(user,"Failed to start '"..getResourceName(resource).."'")
                         end
@@ -854,6 +864,7 @@ addIRCCommandHandler("!restart",
                 if not resName then ircNotice(user,"syntax is !restart <resourcename>") return end
                 local resource = getResourceFromPartialName(resName)
                 if resource then
+                    ircNotice(user,"Restarting resource "..getResourceName(resource))
                         if not restartResource(resource) then
                                 ircNotice(user,"Failed to restart '"..getResourceName(resource).."'")
                         end
@@ -868,6 +879,7 @@ addIRCCommandHandler("!stop",
                 if not resName then ircNotice(user,"syntax is !stop <resourcename>") return end
                 local resource = getResourceFromPartialName(resName)
                 if resource then
+                    ircNotice(user,"Stopping resource "..getResourceName(resource))
                         if not stopResource(resource) then
                                 ircNotice(user,"Failed to stop '"..getResourceName(resource).."'")
                         end
@@ -1059,4 +1071,4 @@ addEventHandler('onPostFinish', root, function()
 end)
 
 
-end     
+end
