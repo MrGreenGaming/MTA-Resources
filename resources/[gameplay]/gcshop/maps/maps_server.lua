@@ -1,5 +1,5 @@
 local prices = {}
-prices["race"] = 10
+prices["race"] = 750
 prices["rtf"] = 500
 prices["ctf"] = 400
 prices["nts"] = 750
@@ -71,11 +71,11 @@ function getServerMaps ()
 
             table.insert(tableOut[name]["maps"] ,{name = getResourceInfo(map, "name") or getResourceName(map), resname = getResourceName(map), author = getResourceInfo ( map, "author" )})
         end
-
+		
 		for name, mode in pairs(tableOut) do
 			table.sort(mode.maps, sortCompareFunction)
 		end
-
+		
 
     table.sort((tableOut), sortCompareFunction)
 
@@ -157,12 +157,12 @@ end
 function isDailyLimitReached(mapname)
     -- Check if element data exists first
     local theAmountTable = getElementData(root,"dailyMapBuyAmount")
-    if type(theAmountTable) ~= "table"  then
-        local t = {day = getRealTime().yearday}
-        setElementData(root,"dailyMapBuyAmount",t)
+    if type(theAmountTable) ~= "table"  then 
+        local t = {day = getRealTime().yearday} 
+        setElementData(root,"dailyMapBuyAmount",t) 
         theAmountTable = t
     elseif theAmountTable.day ~= getRealTime().yearday then
-        local t = {day = getRealTime().yearday}
+        local t = {day = getRealTime().yearday} 
         setElementData(root,"dailyMapBuyAmount",t)
         theAmountTable = t
     end
@@ -176,7 +176,7 @@ function isDailyLimitReached(mapname)
             local timeLeft = mp_cooldownTime - (getRealTime().timestamp - theAmountTable[mapname].timestamp)
             local timeLeft = secondsToTimeDesc(math.ceil(timeLeft))--math.ceil(minsleft/60)
             outputChatBox("[Maps-Center] This map has recently been bought and is still on cooldown ("..tostring(timeLeft).." remaining), please choose another map or wait.", source, 255, 0, 0)
-
+                
             return true
         end
         return false
@@ -189,15 +189,15 @@ end
 
 function addDailyLimit(mapname,player)
     -- Check if element data exists first
-
+   
     if not mapname then return end
     local theAmountTable = getElementData(root,"dailyMapBuyAmount")
-    if type(theAmountTable) ~= "table"  then
-        local t = {day = getRealTime().yearday}
-        setElementData(root,"dailyMapBuyAmount",t)
+    if type(theAmountTable) ~= "table"  then 
+        local t = {day = getRealTime().yearday} 
+        setElementData(root,"dailyMapBuyAmount",t) 
         theAmountTable = t
     elseif theAmountTable.day ~= getRealTime().yearday then
-        local t = {day = getRealTime().yearday}
+        local t = {day = getRealTime().yearday} 
         setElementData(root,"dailyMapBuyAmount",t)
         theAmountTable = t
     end
@@ -216,7 +216,7 @@ function addDailyLimit(mapname,player)
     end
 
     setElementData(root,"dailyMapBuyAmount",theAmountTable)
-
+ 
 end
 
 function queue(choice, player)
@@ -302,9 +302,9 @@ function playerHasBoughtMap(player, choice)
 end
 
 myQueue = {}
-addEventHandler('onResourceStart', getResourceRootElement(),
-    function()
-        myQueue = {}
+addEventHandler('onResourceStart', getResourceRootElement(), 
+    function() 
+        myQueue = {} 
         isDailyLimitReached(false)
     end)
 
@@ -316,7 +316,7 @@ function var_dump(...)
     local noNames = false
     local indentation = "\t\t\t\t\t\t"
     local depth = nil
-
+ 
     local name = nil
     local output = {}
     for k,v in ipairs(arg) do
@@ -348,7 +348,7 @@ function var_dump(...)
             else
                 name = ""
             end
-
+ 
             local o = ""
             if type(v) == "string" then
                 table.insert(output,name..type(v).."("..v:len()..") \""..v.."\"")
@@ -377,7 +377,7 @@ function var_dump(...)
                         end
                         local keyString, keyTable = var_dump(newModifiers,key)
                         local valueString, valueTable = var_dump(newModifiers,value)
-
+ 
                         if #keyTable == 1 and #valueTable == 1 then
                             table.insert(output,indentation.."["..keyString.."]\t=>\t"..valueString)
                         elseif #keyTable == 1 then
@@ -441,12 +441,12 @@ function secondsToTimeDesc( seconds )
         local min = math.floor ( ( seconds % 3600 ) /60 )
         local hou = math.floor ( ( seconds % 86400 ) /3600 )
         local day = math.floor ( seconds /86400 )
-
+ 
         if day > 0 then table.insert( results, day .. ( day == 1 and " day" or " days" ) ) end
         if hou > 0 then table.insert( results, hou .. ( hou == 1 and " hour" or " hours" ) ) end
         if min > 0 then table.insert( results, min .. ( min == 1 and " minute" or " minutes" ) ) end
         if sec > 0 then table.insert( results, sec .. ( sec == 1 and " second" or " seconds" ) ) end
-
+ 
         return string.reverse ( table.concat ( results, ", " ):reverse():gsub(" ,", " dna ", 1 ) )
     end
     return ""
@@ -460,14 +460,14 @@ function mapstop100_insert(p, maps100)
 			return
 		end
 	end
-
+	
 	local serverMaps = {}
 	local gamemode = getResourceFromName("race")
     local maps = call(getResourceFromName("mapmanager"), "getMapsCompatibleWithGamemode" , gamemode)
     for _,map in ipairs (maps) do
         table.insert(serverMaps, {name = getResourceInfo(map, "name") or getResourceName(map), resname = getResourceName(map), author = getResourceInfo ( map, "author" )})
     end
-
+	
 	for _,row in ipairs(maps100) do
 		for i,v in ipairs(serverMaps) do
 			if tostring(row.mapresourcename) == v.resname then
@@ -478,9 +478,9 @@ function mapstop100_insert(p, maps100)
 			end
 		end
 	end
-
+	
 	triggerClientEvent(p,"mapstop100_refresh",resourceRoot)
-
+	
 	local tableOut = {}
 	local gamemode = getResourceFromName("race")
         local maps = call(getResourceFromName("mapmanager"), "getMapsCompatibleWithGamemode" , gamemode)
@@ -495,11 +495,11 @@ function mapstop100_insert(p, maps100)
 
             table.insert(tableOut[name]["maps"] ,{name = getResourceInfo(map, "name") or getResourceName(map), resname = getResourceName(map), author = getResourceInfo ( map, "author" )})
         end
-
+		
 		for name, mode in pairs(tableOut) do
 			table.sort(mode.maps, sortCompareFunction)
 		end
-
+		
 
     table.sort((tableOut), sortCompareFunction)
 
@@ -516,9 +516,9 @@ function mapstop100_remove(p)
 			myQueue[_] = nil
 		end
 	end
-
+	
 	triggerClientEvent(p,"mapstop100_refresh",resourceRoot)
-
+	
 	local tableOut = {}
 	local gamemode = getResourceFromName("race")
         local maps = call(getResourceFromName("mapmanager"), "getMapsCompatibleWithGamemode" , gamemode)
@@ -533,16 +533,16 @@ function mapstop100_remove(p)
 
             table.insert(tableOut[name]["maps"] ,{name = getResourceInfo(map, "name") or getResourceName(map), resname = getResourceName(map), author = getResourceInfo ( map, "author" )})
         end
-
+		
 		for name, mode in pairs(tableOut) do
 			table.sort(mode.maps, sortCompareFunction)
 		end
-
+		
 
     table.sort((tableOut), sortCompareFunction)
 
 	triggerClientEvent(p ,"sendMapsToBuy", p, tableOut, myQueue)
-
+	
 	outputChatBox("All maps removed from map queue.",p)
 end
 addEvent("mapstop100_remove", true)
