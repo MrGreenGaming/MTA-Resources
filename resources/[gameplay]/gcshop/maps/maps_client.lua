@@ -1,11 +1,10 @@
 ﻿prices = {}
-
-prices["race"] = 750
-prices["rtf"] = 500
-prices["ctf"] = 400
-prices["nts"] = 750
-prices["shooter"] = 1000
-prices["deadline"] = 350
+prices["race"] = 275
+prices["rtf"] = 250
+prices["ctf"] = 200
+prices["nts"] = 275
+prices["shooter"] = 500
+prices["deadline"] = 175
 
 lastWinnerDiscount = 50
 isVipMap = false
@@ -43,15 +42,15 @@ function createNextmapWindow(tabPanel)
 	guiGridListSetSortingEnabled(tab.QueueList, false)
                 guiGridListAddColumn( tab.QueueList, "Priority", 0.15)
                 guiGridListAddColumn( tab.QueueList, "Map Name", 2)
-				
+
         tab.label1 = guiCreateLabel(0.40, 0.05, 0.50, 0.11, "This is the Maps-Center. Here you can buy maps.", true, tab.maps)
         tab.label2 = guiCreateLabel(0.40, 0.13, 0.50, 0.12, "Select a map you like and click \"Buy selected map\"", true, tab.maps)
         tab.label3 = guiCreateLabel(0.40, 0.18, 0.50, 0.17, "The map will be added to the Server Queue, where all bought maps are stored until they're played", true, tab.maps)
-		
+
         guiLabelSetHorizontalAlign(tab.label3, "left", true)
         -- tab.label4 = guiCreateLabel(0.40, 0.28, 0.50, 0.13, "The queued maps will have priority against the usual server map cycler!", true, tab.maps)
         -- guiLabelSetHorizontalAlign(tab.label4, "left", true)
-		
+
 		tab.label5 = guiCreateLabel(0.03, 0.03, 0.30, 0.12, "The winner of the last map played\ngets "..tostring(lastWinnerDiscount).."% off!", true, tab.maps)
         guiLabelSetColor( tab.label5, 255, 0, 0 )
         guiSetFont( tab.label5, "default-bold-small" )
@@ -91,9 +90,9 @@ function loadMaps(gamemodeMapTable, queuedList)
 					end
 
 					guiGridListSetItemText ( tab.MapList, row, 1, map.name, false, false )
-					
+
 					guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
-					
+
 					guiGridListSetItemText ( tab.MapList, row, 4, map.resname, false, false )
 					guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
 
@@ -245,7 +244,7 @@ local countdownTimer = false
 addEvent('onVipFreeMapInfo', true)
 addEventHandler('onVipFreeMapInfo', root, function(canUse)
 	if source ~= localPlayer then return end
-		
+
 	if canUse == true then
 		isVipMap = true
 		guiLabelSetColor( tab.viplabel, 0, 255, 0 )
@@ -260,7 +259,7 @@ end)
 addEvent('onVipFreeMapLogOut', true)
 addEventHandler('onVipFreeMapLogOut', root, function()
 	if source ~= localPlayer then return end
-		
+
 	isVipMap = false
 	guiLabelSetColor( tab.viplabel, 255, 0, 0 )
 	guiSetText(tab.viplabel, "Purchase VIP to get a free map every day!" )
@@ -282,7 +281,7 @@ function var_dump(...)
 	local noNames = false
 	local indentation = "\t\t\t\t\t\t"
 	local depth = nil
- 
+
 	local name = nil
 	local output = {}
 	for k,v in ipairs(arg) do
@@ -314,7 +313,7 @@ function var_dump(...)
 			else
 				name = ""
 			end
- 
+
 			local o = ""
 			if type(v) == "string" then
 				table.insert(output,name..type(v).."("..v:len()..") \""..v.."\"")
@@ -343,7 +342,7 @@ function var_dump(...)
 						end
 						local keyString, keyTable = var_dump(newModifiers,key)
 						local valueString, valueTable = var_dump(newModifiers,value)
- 
+
 						if #keyTable == 1 and #valueTable == 1 then
 							table.insert(output,indentation.."["..keyString.."]\t=>\t"..valueString)
 						elseif #keyTable == 1 then
