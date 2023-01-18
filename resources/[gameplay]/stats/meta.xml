@@ -20,7 +20,7 @@
     <file src="images/sprite.png" /> -->
 
     <!-- <export function="getPlayerStat" type="server"/> -->
-    
+    <file src="images/avatar.png" />
     <settings>
         
         <setting name="*stats_debug_messages" friendlyname="Output debug messages" group="Debug" accept="true | false" value="true" />
