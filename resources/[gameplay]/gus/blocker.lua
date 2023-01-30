@@ -115,7 +115,7 @@ function serialblocker(player, _, serial, duration)
 			local expireTimestamp = getExpireTimestamp(duration)
 			if expireTimestamp then
 				addBlockerToDB(serial,"",expireTimestamp,getPlayerName(player):gsub("#%x%x%x%x%x%x",""),tostring( not hasObjectPermissionTo ( player, "command.serialblocker", false ) ) )
-				logBlockAction(player, serial,"unmarked",duration)
+				logBlockAction(player, serial, "marked", duration)
 				outputChatBox("Marked "..serial.. " as a blocker for " .. math.round(((tonumber(duration) or 24) * 1000 * 60 * 60 * 1) / (60*60*1000), 1, ceil) .. 'hr', player, 255, 0, 0)
 			else
 				outputChatBox("Something went wrong, contact a developer please. 'serialblocker()' ",player)

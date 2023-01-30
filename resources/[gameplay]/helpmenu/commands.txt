@@ -3,7 +3,7 @@
 
 GC Bike Trails  (Required perk)
 1, 2, 3, 4, 5 - Each of these do different animations when the bike is in the air.
-to turn off perk /trials or /trials 0 
+to turn off perk /trials or /trials 0
 
 F1      - Sidebar.
 F2      - To be redirected to the other server.
@@ -19,19 +19,19 @@ F11     - Open/close game map.
 F12     - Take a screen shot/toggle snow.
 
 Enter   - Kills yourself.
-LCtrl   - Makes your bike jump if held a few seconds and then released.    
-Tab     - Displays the scoreboard. 
+LCtrl   - Makes your bike jump if held a few seconds and then released.
+Tab     - Displays the scoreboard.
 T       - Game chat.
 Y       - Team chat.
 U       - Global chat.
-R       - Language Chat 
-Z       - Voice Chat. Can only be used once the feature has been bought from the GC Shop (F6). 
-L       - Toggle car headlights.  
+R       - Language Chat
+Z       - Voice Chat. Can only be used once the feature has been bought from the GC Shop (F6).
+L       - Toggle car headlights.
 B       - Toggle spectator.
 
- 
 
-   
+
+
 -------------------------------> Commands <-------------------------------
 
 
@@ -41,7 +41,7 @@ B       - Toggle spectator.
 /assist off                                         Turn off racing assist.
 /afk                                                Away mode.
 /author                                             Show current map author.
-/bind [key] [command] [arg]                         Binds a command to a key of your choice. 
+/bind [key] [command] [arg]                         Binds a command to a key of your choice.
 /bind [key] [say] [text]                            Binds text to say in chat.
 /enablenametags                                     Turn nick over car off/on.
 /board                                              Show ranking board with delays.
@@ -65,7 +65,7 @@ B       - Toggle spectator.
 /like,/dislike                                      Like or dislike current map.
 /locknick,/unlocknick                               Protect or unprotect your nick. Abuse will not be tolerated.
 /lodrange [0-300]                                   Loads slow loading objects.
-/lol                                                Laugh. 
+/lol                                                Laugh.
 /lol [player]                                       Laugh at player.
 /makeowner [name]                                   To change owner of team.
 /mapinfo [map]                                      Show map info window.
@@ -80,11 +80,11 @@ B       - Toggle spectator.
 /report                                             Report a problem to admins.
 /resizeicon [size]                                  Resize typing icon.
 /round                                              Shows round 1 2 or 3.
-/s /spec /spectate[name]                            Go into spectator mode or spectate a specific player. 
+/s /spec /spectate[name]                            Go into spectator mode or spectate a specific player.
 /seen [fullName]                                    Displays last seen date and time of your friends in GMT time.
 /seticonvis [alpha]                                 Alpha for typing icon.
-/settings                                           Show settings. 
-/showchat                                           To add or remove chat 
+/settings                                           Show settings.
+/showchat                                           To add or remove chat
 /showsensor                                         Toggle the traffic sensor (F4).
 /showtimes                                          Shows the old toptimes for the current map.
 /song                                               Show the directory of the currently playing song.
@@ -127,7 +127,7 @@ B       - Toggle spectator.
 
 /modsay                                             Allows you to talk with other mods and admins privately
                                                     (tip: /bind o chatbox modsay).
- 
+
 
 -------------------------------> Admins <-------------------------------
 
@@ -147,9 +147,8 @@ B       - Toggle spectator.
 /addmute [nick] [days]                              Mute an already disconnected player.
 /removemute [nick]                                  Unmutes an already disconnected player.
 
-/serialblocker [serial]                             Marks an already disconnected player as blocker using a serial.
-/serialunblocker [serial]                           Unmarks an already disconnected player as blocker using a serial.
-
+/serialblocker [serial] [hours]                     Marks an already disconnected player as blocker using a serial.
+/unserialblocker [serial]                           Unmarks an already disconnected player as blocker using a serial.
 
 /getSerial [name]                                   Gives you the serial of a player who is offline.
 /serialnicks [serial]                               Nicks associated with serial.
