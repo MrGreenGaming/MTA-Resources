@@ -10,7 +10,7 @@ function blocker(player, _, nick, duration, timeType)
 	if not blockPlayer then
 		outputChatBox("No player found", player, 0, 255,0)
 	else
-		
+
 		outputChatBox("Marking " .. getPlayerName(blockPlayer) .. "#FF0000 as blocker for " .. (duration or "1") .. " " .. (timeType or "hours"), player, 255, 0, 0 , true)
 		if not getElementData(blockPlayer,"markedblocker") then
 			duration = tonumber(duration)
@@ -29,8 +29,8 @@ function blocker(player, _, nick, duration, timeType)
 			else
 				return outputChatBox("Invalid timetype", player, 255, 0, 0, true)
 			end
-			
-			
+
+
 			-- Mods can mark someone as blocker for up to 24 hours
 			if duration > 24 and not hasObjectPermissionTo ( player, "command.serialblocker", false ) then
 				outputChatBox("As a moderator you can mark someone for up to 24 hours", player, 255, 0, 0, true)
@@ -263,7 +263,7 @@ function logBlockAction(playerResponsible, playerBlocked,wording,hours)
     end
     local dateTime = getRealTime().monthday.."."..tostring(getRealTime().month+1).."."..tostring(getRealTime().year+1900).." - "..getRealTime().hour..":"..getRealTime().minute
     playerResponsible = getPlayerName(playerResponsible)
-    playerBlocked = getPlayerName(playerBlocked) or "serial: "..playerBlocked
+    playerBlocked = "serial: "..playerBlocked
     local hoursString = ""
     if hours then
     	hoursString = " ("..tostring(hours).."h)"
