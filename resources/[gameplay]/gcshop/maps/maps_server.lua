@@ -159,9 +159,17 @@ function getGamemodePrice(gamemode)
 end
 
 function isCoremarkersMap(mapResourceName)
-    local meta = xmlLoadFile(':'.. mapResourceName..'/meta.xml')
-    local metaString = xmlLoadString(meta)
-    return metaString.find('resource="coremarkers"')
+    local meta = xmlLoadFile(':'.. mapResourceName..'/meta.xml', true)
+
+    local children = xmlNodeGetChildren(meta)
+    for _, child in ipairs(children) do
+        if xmlNodeGetName(child) == 'include' then
+            local includedResource = xmlNodeGetAttribute(child, 'resource')
+            if includedResource == 'coremarkers' then
+                return true
+            end
+        end
+    end
 end
 
 function isDailyLimitReached(mapname)
