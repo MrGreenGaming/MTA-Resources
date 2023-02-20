@@ -10,7 +10,7 @@ prices["deadline"] = 175
 local PRICE = 1000
 local mp_maxBuyAmount = 3 -- Daily map buy amount
 local mp_cooldownTime = 360*60 -- Minutes of cooldown for specific maps
-local cm_cooldownTime = 2*60 -- Minutes of cooldown for coremarker maps
+local cm_cooldownTime = 120*60 -- Minutes of cooldown for coremarker maps
 local mp_staffMapFree = false -- Is map free for staff in ACL below
 local mp_staffACLNames = {
     'ServerManager',
@@ -131,6 +131,7 @@ function(choice)
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
     local isCoremarkers = isCoremarkersMap(choice[2])
 
+    -- Coremarkers cooldown guard clause
     if (isCoremarkers and not isCoremarkersBuyable()) then
         local timeLeft = secondsToTimeDesc(cm_cooldownTime - (getTimestamp() - getElementData(root, "coremarkersLastPurchaseUnix")))
         outputChatBox("[Maps-Center] Coremarkers maps are on cooldown. " .. timeLeft .. " left!", source, 255, 0, 0)
