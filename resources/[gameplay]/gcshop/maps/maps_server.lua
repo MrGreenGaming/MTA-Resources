@@ -170,6 +170,7 @@ function isCoremarkersMap(mapResourceName)
             end
         end
     end
+    return false
 end
 
 function isDailyLimitReached(mapname)
