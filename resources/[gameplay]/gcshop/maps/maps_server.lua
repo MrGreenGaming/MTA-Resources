@@ -131,7 +131,7 @@ function(choice)
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
     local isCoremarkers = isCoremarkersMap(choice[2])
 
-    outputDebugString("Is bought map coremarkers? " .. isCoremarkers)
+    outputDebugString("Is bought map coremarkers? " .. tostring(isCoremarkers))
 
     if isPlayerEligibleToBuy(source, choice) then
         if playerHasBoughtMap(source, choice) then
