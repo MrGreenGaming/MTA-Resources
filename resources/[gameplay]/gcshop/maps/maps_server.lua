@@ -10,7 +10,7 @@ prices["deadline"] = 175
 local PRICE = 1000
 local mp_maxBuyAmount = 3 -- Daily map buy amount
 local mp_cooldownTime = 360*60 -- Minutes of cooldown for specific maps
-local cm_cooldownTime = 60*60 -- Minutes of cooldown for coremarker maps
+local cm_cooldownTime = 2*60 -- Minutes of cooldown for coremarker maps
 local mp_staffMapFree = false -- Is map free for staff in ACL below
 local mp_staffACLNames = {
     'ServerManager',
@@ -140,7 +140,7 @@ function(choice)
     if isPlayerEligibleToBuy(source, choice) then
         if playerHasBoughtMap(source, choice) then
             queue(choice, source)
-            if (isCoremarkers) then setElementData(root, "coremarkersLastPurchaseUnix", getTimeStamp()) end
+            if (isCoremarkers) then setElementData(root, "coremarkersLastPurchaseUnix", getTimestamp()) end
         else
 			local mapprice = source == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode)
             local vipIsRunning = getResourceState( getResourceFromName( "mrgreen-vip" ) ) == "running"
