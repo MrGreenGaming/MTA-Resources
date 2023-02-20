@@ -131,11 +131,16 @@ function(choice)
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
     local isCoremarkers = isCoremarkersMap(choice[2])
 
-    outputDebugString("Is bought map coremarkers? " .. tostring(isCoremarkers))
+    if (isCoremarkers and not isCoremarkersBuyable()) then
+        local timeLeft = secondsToTimeDesc(getElementData(root, "coremarkersLastPurchaseUnix"))
+        outputChatBox("[Maps-Center] Coremarkers maps are on cooldown. " .. timeLeft .. " left!", source, 255, 0, 0)
+        return
+    end
 
     if isPlayerEligibleToBuy(source, choice) then
         if playerHasBoughtMap(source, choice) then
             queue(choice, source)
+            if (isCoremarkers) then setElementData(root, "coremarkersLastPurchaseUnix", getTimeStamp()) end
         else
 			local mapprice = source == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode)
             local vipIsRunning = getResourceState( getResourceFromName( "mrgreen-vip" ) ) == "running"
@@ -169,6 +174,16 @@ function isCoremarkersMap(mapResourceName)
                 return true
             end
         end
+    end
+    return false
+end
+
+function isCoremarkersBuyable()
+    local cmLastPurchaseUnix = getElementData(root, "coremarkersLastPurchaseUnix") or 0
+    local unix = getTimestamp()
+
+    if unix - cmLastPurchaseUnix > cm_cooldownTime then
+        return true
     end
     return false
 end
