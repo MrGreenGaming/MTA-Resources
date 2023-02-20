@@ -9,7 +9,8 @@ prices["deadline"] = 175
 
 local PRICE = 1000
 local mp_maxBuyAmount = 3 -- Daily map buy amount
-local mp_cooldownTime = 360*60 -- Minutes of cooldown
+local mp_cooldownTime = 360*60 -- Minutes of cooldown for specific maps
+local cm_cooldownTime = 120*60 -- Minutes of cooldown for coremarker maps
 local mp_staffMapFree = false -- Is map free for staff in ACL below
 local mp_staffACLNames = {
     'ServerManager',
@@ -128,10 +129,19 @@ function(choice)
     local isFreeMap = isPlayerStaff(source)
     if not isFreeMap and isDailyLimitReached(tostring(choice[2])) then return end -- Check for map bought amount if not admin
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
+    local isCoremarkers = isCoremarkersMap(choice[2])
+
+    -- Coremarkers cooldown guard clause
+    if (isCoremarkers and not isCoremarkersBuyable()) then
+        local timeLeft = secondsToTimeDesc(cm_cooldownTime - (getTimestamp() - getElementData(root, "coremarkersLastPurchaseUnix")))
+        outputChatBox("[Maps-Center] Coremarkers maps are on cooldown. " .. timeLeft .. " left!", source, 255, 0, 0)
+        return
+    end
 
     if isPlayerEligibleToBuy(source, choice) then
         if playerHasBoughtMap(source, choice) then
             queue(choice, source)
+            if (isCoremarkers) then setElementData(root, "coremarkersLastPurchaseUnix", getTimestamp()) end
         else
 			local mapprice = source == lastWinner and (getGamemodePrice(racemode) / 100) * (100 - lastWinnerDiscount) or getGamemodePrice(racemode)
             local vipIsRunning = getResourceState( getResourceFromName( "mrgreen-vip" ) ) == "running"
@@ -152,6 +162,31 @@ end)
 
 function getGamemodePrice(gamemode)
 	return prices[gamemode] or PRICE
+end
+
+function isCoremarkersMap(mapResourceName)
+    local meta = xmlLoadFile(':'.. mapResourceName..'/meta.xml', true)
+
+    local children = xmlNodeGetChildren(meta)
+    for _, child in ipairs(children) do
+        if xmlNodeGetName(child) == 'include' then
+            local includedResource = xmlNodeGetAttribute(child, 'resource')
+            if includedResource == 'coremarkers' then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+function isCoremarkersBuyable()
+    local cmLastPurchaseUnix = getElementData(root, "coremarkersLastPurchaseUnix") or 0
+    local unix = getTimestamp()
+
+    if unix - cmLastPurchaseUnix > cm_cooldownTime then
+        return true
+    end
+    return false
 end
 
 function isDailyLimitReached(mapname)
