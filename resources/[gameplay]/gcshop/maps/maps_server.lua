@@ -9,7 +9,8 @@ prices["deadline"] = 175
 
 local PRICE = 1000
 local mp_maxBuyAmount = 3 -- Daily map buy amount
-local mp_cooldownTime = 360*60 -- Minutes of cooldown
+local mp_cooldownTime = 360*60 -- Minutes of cooldown for specific maps
+local cm_cooldownTime = 60*60 -- Minutes of cooldown for coremarker maps
 local mp_staffMapFree = false -- Is map free for staff in ACL below
 local mp_staffACLNames = {
     'ServerManager',
@@ -128,6 +129,9 @@ function(choice)
     local isFreeMap = isPlayerStaff(source)
     if not isFreeMap and isDailyLimitReached(tostring(choice[2])) then return end -- Check for map bought amount if not admin
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
+    local isCoremarkers = isCoremarkersMap(choice[2])
+
+    outputDebugString("Is bought map coremarkers? " .. isCoremarkers)
 
     if isPlayerEligibleToBuy(source, choice) then
         if playerHasBoughtMap(source, choice) then
@@ -152,6 +156,12 @@ end)
 
 function getGamemodePrice(gamemode)
 	return prices[gamemode] or PRICE
+end
+
+function isCoremarkersMap(mapResourceName)
+    local meta = xmlLoadFile(':'.. mapResourceName..'/meta.xml')
+    local metaString = xmlLoadString(meta)
+    return metaString.find('resource="coremarkers"')
 end
 
 function isDailyLimitReached(mapname)
