@@ -132,7 +132,7 @@ function(choice)
     local isCoremarkers = isCoremarkersMap(choice[2])
 
     if (isCoremarkers and not isCoremarkersBuyable()) then
-        local timeLeft = secondsToTimeDesc(getElementData(root, "coremarkersLastPurchaseUnix"))
+        local timeLeft = secondsToTimeDesc(cm_cooldownTime - (getTimestamp() - getElementData(root, "coremarkersLastPurchaseUnix")))
         outputChatBox("[Maps-Center] Coremarkers maps are on cooldown. " .. timeLeft .. " left!", source, 255, 0, 0)
         return
     end
