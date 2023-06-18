@@ -974,7 +974,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			end
 		elseif ( action == "setskin" ) then
 			local vehicle = getPedOccupiedVehicle ( player )
-			local jetpack = doesPedHaveJetPack ( player )
+			local jetpack = isPedWearingJetpack ( player )
 			local seat = 0
 			if ( vehicle ) then seat = getPedOccupiedVehicleSeat ( player ) end
 			local x, y, z = getElementPosition ( player )
@@ -982,7 +982,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			if ( spawnPlayer ( player, x, y, z, getPedRotation ( player ), data, getElementInterior ( player ), getElementDimension ( player ), getPlayerTeam ( player ) ) ) then
 				fadeCamera ( player, true )
 				if ( vehicle ) then warpPedIntoVehicle ( player, vehicle, seat ) end
-				if ( jetpack ) then givePedJetPack ( player ) end
+				if ( jetpack ) then setPedWearingJetpack ( player, true ) end
 				mdata = data
 			else
 				action = nil
@@ -1054,13 +1054,13 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 				action = nil
 			end
 		elseif ( action == "jetpack" ) then
-			if ( doesPedHaveJetPack ( player ) ) then
-				removePedJetPack ( player )
+			if ( isPedWearingJetpack ( player ) ) then
+				setPedWearingJetpack  ( player, false )
 				action = "jetpackr"
 			else
 				if ( getPedOccupiedVehicle ( player ) ) then outputChatBox ( "Unable to give a jetpack - "..getPlayerName ( player ).." is in a vehicle", source, 255, 0, 0 )
 				else
-					if ( givePedJetPack ( player ) ) then
+					if ( setPedWearingJetpack ( player , true) ) then
 						action = "jetpacka"
 					end
 				end
