@@ -108,8 +108,8 @@ function DestructionDerby:launch()
     -- Debug command to end the map earlier if required
     function debugDD(source)
         local nPlayersAlive = getAlivePlayerCount()
-        outputChatBox("[DEBUG] There are " .. #nPlayersAlive .. " player(s) still alive", source, 255, 0, 0);
-        if #nPlayersAlive <= 1 then
+        outputChatBox("[DEBUG] There are " .. nPlayersAlive .. " player(s) still alive", source, 255, 0, 0);
+        if nPlayersAlive <= 1 then
             outputChatBox("Map seems bugged, ending map.", root, 255, 0, 0);
             self:endMap();
         else
