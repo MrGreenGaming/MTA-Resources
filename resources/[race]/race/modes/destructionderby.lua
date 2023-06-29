@@ -81,12 +81,6 @@ end
 function DestructionDerby:start()
 	ntsMode = true
 	self:resetChangeTimer()
-
-    local activePlayers = getActivePlayers()
-	if #activePlayers == 1 then
-        _outputChatBox("You are the only active player in the server, you can't play DD alone!", root, 255, 0, 0);
-        self:endMap();
-    end
 end
 
 
@@ -111,6 +105,13 @@ function DestructionDerby:launch()
 	if ntsMode then
 		self:startChangeTimer()
 	end
+
+    local activePlayers = getActivePlayers()
+    _outputChatBox("[DEBUG] There are " .. #activePlayers .. " active players in the server", root, 255, 0, 0);
+	if #activePlayers == 1 then
+        _outputChatBox("You are the only active player in the server, you can't play DD alone!", root, 255, 0, 0);
+        self:endMap();
+    end
 
 end
 

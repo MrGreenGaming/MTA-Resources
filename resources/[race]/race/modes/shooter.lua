@@ -535,6 +535,14 @@ addEvent('onPlayerWinShooter')
 
 function Shooter:launch()
 	RaceMode.launch(self)
+
+    local activePlayers = getActivePlayers()
+    _outputChatBox("[DEBUG] There are " .. #activePlayers .. " active players in the server", root, 255, 0, 0);
+	if #activePlayers == 1 then
+        _outputChatBox("You are the only active player in the server, you can't play Shooter alone!", root, 255, 0, 0);
+        self:endMap();
+    end
+
 	-- Read jump height from map
 	local jumpHeightSetting = (getNumber(g_MapInfo.resname..".shooter_jumpheight",0.25))
 	if jumpHeightSetting ~= 0.25 then
@@ -639,12 +647,6 @@ function Shooter:start()
 	elseif round == 3 then
 		shooterMode = "shooter"
 	end]]
-
-    local activePlayers = getActivePlayers()
-	if #activePlayers == 1 then
-        _outputChatBox("You are the only active player in the server, you can't play Shooter alone!", root, 255, 0, 0);
-        self:endMap();
-    end
 
 	if shooterMode == "cargame" then
 		--outputChatBox("Shooter launched in CarGame mode, next mode : Shooter",root,0,255,0)
