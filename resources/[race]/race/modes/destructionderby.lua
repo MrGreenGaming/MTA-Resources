@@ -115,8 +115,8 @@ function DestructionDerby:launch()
         else
             outputChatBox("There are more than 1 players still playing, map can't be ended!", source, 0, 255, 0);
         end
-        addCommandHandler('debugdd', debugDD, false, false)
     end
+    addCommandHandler('debugdd', debugDD, false, false)
 
 	if ntsMode then
 		self:startChangeTimer()
