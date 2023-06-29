@@ -538,7 +538,7 @@ function Shooter:launch()
 
     local activePlayers = getActivePlayers()
     _outputChatBox("[DEBUG] There are " .. #activePlayers .. " active players in the server", root, 255, 0, 0);
-	if #activePlayers == 1 then
+	if #activePlayers <= 1 then
         _outputChatBox("You are the only active player in the server, you can't play Shooter alone!", root, 255, 0, 0);
         self:endMap();
     end
