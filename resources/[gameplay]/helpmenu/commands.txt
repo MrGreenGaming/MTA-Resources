@@ -102,6 +102,9 @@ B       - Toggle spectator.
 /speedx                                             Change the x offset for speedo.
 /speedy                                             Change the y offset for speedo.
 
+/debugDD                                            Checks if a DD map is bugged and ends the map.
+/debugSH                                            Checks if a Shooter map is bugged and ends the map.
+
 -------------------------------> Mods <-------------------------------
 
 /autologin [name] [pass]                            Auto login.

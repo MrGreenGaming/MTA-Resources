@@ -81,8 +81,6 @@ end
 function DestructionDerby:start()
 	ntsMode = true
 	self:resetChangeTimer()
-
-
 end
 
 
@@ -102,16 +100,27 @@ local function ddgmTimer(bln,time)
 end
 addEventHandler('startddgmTimer',root,ddgmTimer)
 
+
+
 function DestructionDerby:launch()
 	RaceMode.launch(self)
+
+    -- Debug command to end the map earlier if required
+    function debugDD(source)
+        local nPlayersAlive = getAlivePlayerCount()
+        if nPlayersAlive <= 1 then
+            outputChatBox("Map seems bugged, ending map.", root, 255, 0, 0);
+            self:endMap();
+        else
+            outputChatBox("There are more than 1 players still playing, map can't be ended!", source, 0, 255, 0);
+        end
+    end
+    addCommandHandler('debugdd', debugDD, false, false)
+
 	if ntsMode then
 		self:startChangeTimer()
 	end
-
 end
-
-
-
 
 local function outputGameMessageSmart(text, who)
 	if getResourceFromName"messages" and getResourceState(getResourceFromName"messages") == "running" then
@@ -123,16 +132,16 @@ end
 
 function DestructionDerby:startChangeTimer()
 	self:resetChangeTimer()
-	
+
 	local changeTime = 15000
 	self.changeTimer = setTimer(function()
 		self:randomizeVehicles()
 	end, changeTime, 1)
-	
+
 	--[[self.changeFirstWarningTimer = setTimer(function()
 	outputGameMessageSmart("Vehicles change in 10 seconds")
 end, changeTime - 10000, 1)]]
-	
+
 	self.changeSecondWarningTimer = setTimer(function()
 		outputGameMessageSmart("Vehicles change in 5 seconds")
 	end, changeTime - 5000, 1)
@@ -158,7 +167,7 @@ function DestructionDerby:randomizeVehicles()
 		setVehicleID(self.getPlayerVehicle(player), newModel)
 		clientCall(player, 'vehicleChanging', g_MapOptions.classicchangez, newModel)
 	end
-		
+
 	self:startChangeTimer()
 end
 
@@ -169,14 +178,14 @@ function DestructionDerby:resetChangeTimer()
 		end
 		self.changeTimer = nil
 	end
-	
+
 	if self.changeFirstWarningTimer then
 		if isTimer(self.changeFirstWarningTimer) then
 			killTimer(self.changeFirstWarningTimer)
 		end
 		self.changeFirstWarningTimer = nil
 	end
-	
+
 	if self.changeSecondWarningTimer then
 		if isTimer(self.changeSecondWarningTimer) then
 			killTimer(self.changeSecondWarningTimer)
@@ -188,6 +197,7 @@ end
 function DestructionDerby:endMap()
 	self:resetChangeTimer()
 	RaceMode.endMap(self)
+    removeCommandHandler('debugdd')
 end
 
 function DestructionDerby:destroy()
@@ -241,8 +251,8 @@ DestructionDerby.modeOptions = {
 	ghostmode_map_can_override = false,
 }
 
-function disableNTSModeForDD() 
-	ntsMode = false 
+function disableNTSModeForDD()
+	ntsMode = false
 end
 
 

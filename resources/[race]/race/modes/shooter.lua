@@ -29,7 +29,7 @@ function Shooter:getPlayerRank(player)
 			end
 		end
 		return #getActivePlayers()
-	end 
+	end
 end
 
 -- Copy of old updateRank
@@ -52,7 +52,7 @@ function Shooter:updateRanks()
 		end
 	elseif shooterMode == "cargame" then
 
-		
+
 		local pTable = getActivePlayers()
 		for i,p in ipairs(pTable) do
 
@@ -78,7 +78,7 @@ function Shooter:updateRanks()
 				end)
 		end
 
-		Shooter.playerRanks = pTable 
+		Shooter.playerRanks = pTable
 
 		for rank,player in ipairs(pTable) do
 			setElementData(player,"race rank",rank)
@@ -129,7 +129,7 @@ function Shooter:onPlayerKilled(killer,suicide)
 	if shooterMode == "cargame" then
 
 		if getElementType(source) == "player" then
-			
+
 			-- setTimer(outputChatBox,500,50,getElementType(source) or type(source))
 			-- local victim = source
 
@@ -143,17 +143,17 @@ function Shooter:onPlayerKilled(killer,suicide)
 					exports.messages:outputGameMessage("You killed " .. a, killer, 2.5, 255, 255, 255)
 				end
 			else
-			
+
 				exports.messages:outputGameMessage("You got killed by " .. b, source, 2.5, 255, 255, 255)
 				exports.messages:outputGameMessage("You killed " .. a, killer, 2.5, 255, 255, 255)
 
 				setElementData(source,"cg_suicideChecker",false)
 
 
-				
+
 				if killer and killer ~= source then
 					Shooter.firstKill = false
-					Shooter:handleLevelChange(killer,1)		
+					Shooter:handleLevelChange(killer,1)
 				end
 			end
 		end
@@ -167,7 +167,7 @@ addEventHandler('cargamekill', root, Shooter.onPlayerKilled)
 function Shooter:onPlayerSuicide(player) -- Checks and handles if player suicided
 	setTimer(function()
 		if getElementData(player,"cg_suicideChecker") ~= false then -- false = no suicide
-						
+
 			if Shooter.playerRespawnTimers[player] then
 				Shooter.playerRespawnTimers[player]:destroy()
 	        	Shooter.playerRespawnTimers[player] = Countdown.create(15, g_CurrentRaceMode.restorePlayer, '(Suicide) You will respawn in:', 255, 0, 0, 0.25, 2.5, true, g_CurrentRaceMode, g_CurrentRaceMode.id, player)
@@ -180,16 +180,16 @@ function Shooter:onPlayerSuicide(player) -- Checks and handles if player suicide
 end
 addEvent("onRacePlayerSuicide")
 addEventHandler("onRacePlayerSuicide",root,
-	function() 
+	function()
 		if Shooter.UpdateLevels and shooterMode == "cargame" then
-			Shooter:onPlayerSuicide(source) 
-		end 
+			Shooter:onPlayerSuicide(source)
+		end
 	end)
 
 
 function Shooter:onPlayerWasted(player)
 	if shooterMode == "cargame" then
-		
+
 
 
 
@@ -249,14 +249,14 @@ function Shooter:playerSpectating(player)
 		if Shooter.spawnProtectionCountdown[player] then
 			Shooter.spawnProtectionCountdown[player]:destroy()
 		end
-		
+
 		Shooter:handleLevelChange(player,-1)
 	end
 end
 
 function Shooter:onPlayerJoin(player, spawnpoint)
 	if shooterMode == "cargame" then
-		
+
 		-- set player levels table
 		if not Shooter.playerLevels then
 			Shooter.playerLevels = {}
@@ -264,7 +264,7 @@ function Shooter:onPlayerJoin(player, spawnpoint)
 		local tick = getTickCount()
 		Shooter.playerLevels[player] = {level = 1, addTick = tick}
 		setElementData(player,"level",1)
-		
+
 
 		setVehicleID(self.getPlayerVehicle(player), Shooter._Levels[1])
 
@@ -304,7 +304,7 @@ function Shooter:onPlayerJoin(player, spawnpoint)
 	    -- if self:getTimeRemaining() - respawnTime > 3000 then
 	    -- end
 
-		
+
 	end
 
 end
@@ -317,7 +317,7 @@ function Shooter:restorePlayer(id, player, bNoFade, bDontFix)
 		if not bNoFade then
 			clientCall(player, 'remoteStopSpectateAndBlack')
 		end
-		
+
 		bindKey(player, "vehicle_fire", "down", self.shoot)
 		bindKey(player, "vehicle_secondary_fire", "down", self.jump)
 		bindKey(player, "mouse2", "down", self.jump)
@@ -350,12 +350,12 @@ function Shooter:restorePlayer(id, player, bNoFade, bDontFix)
 			setVehicleID(vehicle, 481)	-- BMX (fix engine sound)
 
 			-- Set Player Level Vehicle
-			local theVehLevel = Shooter._Levels[Shooter.playerLevels[player].level] 
+			local theVehLevel = Shooter._Levels[Shooter.playerLevels[player].level]
 			setVehicleID(vehicle, theVehLevel)
 
 
-			warpPedIntoVehicle(player, vehicle)	
-			
+			warpPedIntoVehicle(player, vehicle)
+
 	        setVehicleLandingGearDown(vehicle,bkp.geardown)
 
 			self:playerFreeze(player, true, bDontFix)
@@ -370,7 +370,7 @@ function Shooter:restorePlayer(id, player, bNoFade, bDontFix)
 				Shooter.spawnProtectionCountdown[player]:destroy()
 				Shooter.spawnProtectionCountdown[player] = nil
 			end
-			setTimer(function() 
+			setTimer(function()
 				-- Countdown.create(5, self.removeSpawnProtection, 'Spawn Protection will be removed in:', 255, 255, 255, 0.20, 2.5, true,self, self.id, player):start(player)
 				setVehicleDamageProof(vehicle,true)
 				-- Set control state so that forward and reverse arent pressed anymore (for spawn protection detection)
@@ -378,8 +378,8 @@ function Shooter:restorePlayer(id, player, bNoFade, bDontFix)
 				bindKey(player, "brake_reverse", "down", startSpawnProtectionCountdown)
 				toggleControl(player,"accelerate",false)
 				toggleControl(player,"brake_reverse",false)
-				
-				
+
+
 			end,2001,1)
 
 
@@ -403,7 +403,7 @@ function startSpawnProtectionCountdown(player)
 		g_CurrentRaceMode.spawnProtection[player] = "countdown"
 		Shooter.spawnProtectionCountdown[player] = Countdown.create(5, Shooter.removeSpawnProtection, 'Spawn Protection will be removed in:', 255, 255, 255, 0.20, 2.5, true,g_CurrentRaceMode,player)
 		Shooter.spawnProtectionCountdown[player]:start(player)
-		
+
 
 
 	else -- Only admins are able to spectate spam
@@ -420,13 +420,13 @@ function Shooter:removeSpawnProtection(player)
 		if not player then return end
 		if not getElementType(player) == "player" then return end
 		local vehicle = self.getPlayerVehicle(player)
-		
+
 		Shooter.spawnProtectionCountdown[player] = nil
 		setVehicleDamageProof(vehicle,false)
 		setElementData( player, "overrideCollide.cargame", nil )
 		setElementData( player, "overrideAlpha.cargame", nil )
 		self.spawnProtection[player] = false
-	end	
+	end
 end
 
 function Shooter:restorePlayerUnfreeze(id, player, bDontFix)
@@ -443,14 +443,14 @@ end
 
 function Shooter:handlePlayerWin(p,lTab)
 	if shooterMode == "cargame" then
-		
+
 		Shooter.UpdateLevels = false
 
 		local pTable = self:updateRanks()
-		
+
 
 		local theTime = getTimePassed()
-		
+
 
 		local rankingTable = {}
 		for i,player in ipairs(pTable) do
@@ -465,7 +465,7 @@ function Shooter:handlePlayerWin(p,lTab)
 		triggerEvent( "onPlayerWinCarGame",p,rankingTable )
 		Shooter.setMapOption("respawn","none")
 		setTimer(function() self:endMap() end,10000,1)
-		
+
 	end
 end
 addEvent('onPlayerFinishCarGame')
@@ -485,19 +485,19 @@ end
 
 function Shooter:handleFinishActivePlayer(player)
 	-- REMOVED rankingboard handler, now handled with events
-	if shooterMode == "cargame" then 
+	if shooterMode == "cargame" then
 
 		finishActivePlayer(player)
-		
+
 		if #getActivePlayers() == 1 then
-			
+
 			Shooter:handlePlayerWin(getActivePlayers()[1],Shooter.playerLevels)
 
 		end
 
 
 
-		 
+
 	else
 
 		local timePassed = self:getTimePassed()
@@ -535,6 +535,19 @@ addEvent('onPlayerWinShooter')
 
 function Shooter:launch()
 	RaceMode.launch(self)
+
+    -- Debug command to end the map earlier if required
+    function debugSH(source)
+        local nPlayersAlive = getAlivePlayerCount()
+        if nPlayersAlive <= 1 then
+            outputChatBox("Map seems bugged, ending map.", root, 255, 0, 0);
+            self:endMap();
+        else
+            outputChatBox("There are more than 1 players still playing, map can't be ended!", source, 0, 255, 0);
+        end
+    end
+    addCommandHandler('debugsh', debugSH, false, false)
+
 	-- Read jump height from map
 	local jumpHeightSetting = (getNumber(g_MapInfo.resname..".shooter_jumpheight",0.25))
 	if jumpHeightSetting ~= 0.25 then
@@ -554,7 +567,7 @@ function Shooter:launch()
 			outputDebugString('Shooter: Map has set custom jump height to: '..(jumpHeightSetting*10))
 		end
 	end
-	
+
 	-- Check and init auto repair
 	local autoRepairSetting = getBool(g_MapInfo.resname..".shooter_autorepair",false)
 	if autoRepairSetting then
@@ -565,7 +578,7 @@ function Shooter:launch()
 		outputDebugString('Shooter: Auto repair initiated')
 		shooterAutoRepairTimer = setTimer( Shooter.autoRepair, 500, 0)
 	end
-	
+
 	-- Send jump height and autorepair to clients
 	clientCall(root, 'clientReceiveShooterSettings', jumpHeightSetting or false, autoRepairSetting)
 
@@ -573,13 +586,13 @@ function Shooter:launch()
 		Shooter.hasLaunched = true
 		clientCall(root, 'showLevelDX', true)
 		clientCall(root, 'cgStart')
-	-- Set Level 1 vehicle for everyone 
+	-- Set Level 1 vehicle for everyone
 		for _,player in ipairs(getActivePlayers()) do
 			local veh = self.getPlayerVehicle(player)
 			if getElementModel(veh) ~= Shooter._Levels[1] then
 				setVehicleID(veh, Shooter._Levels[1])
 			end
-			
+
 		end
 
 		-- if math.random(2) == 1 then clientCall(g_Root, 'showOnlyHealthBar', true) end
@@ -603,7 +616,7 @@ function Shooter:launch()
 		if isTimer(launchTimer) then killTimer(launchTimer) end
 		launchTimer = setTimer(function()
 			showMessage("Press fire to shoot rockets and alt-fire/rmb/lshift to jump!", 0, 0, 255, root)
-			clientCall(g_Root, 'initShooterClient', true) 
+			clientCall(g_Root, 'initShooterClient', true)
 			clientCall(g_Root, 'sh_initTimeBars')
 			KillDzinyMaster()
 		end,4500,1)
@@ -619,7 +632,7 @@ Shooter.__Levels = { -- cache Levels with all possible vehicles in it, will get 
 	[5] = {402,542,603,475}, -- Muscle Cars
 	[6] = {536,575,534,567,535,576,412}, -- Lowriders
 	[7] = {459,543,422,482,478,605,554,418,582,413,440}, -- Light Trucks and Vans
-	[8] = {459,543,422,482,478,605,554,418,582,413,440,536,575,534,567,535,576,412,402,542, -- Mix of previous 
+	[8] = {459,543,422,482,478,605,554,418,582,413,440,536,575,534,567,535,576,412,402,542, -- Mix of previous
 		   603,475,602,545,496,517,401,410,518,600,527,436,589,580,419,439,533,549,526,491,474,411,429, -- Mix of previous
 		   411,541,559,415,561,480,560,562,506,565,451,434,558,494,555,502,477,503,445,467,604,426,507, -- Mix of previous
 		   547,585,405,587,409,466,550,492,566,546,540,551,421,516,529}, -- Mix of previous
@@ -637,7 +650,7 @@ function Shooter:start()
 	elseif round == 2 or round > 3 then
 		shooterMode = "cargame"
 	elseif round == 3 then
-		shooterMode = "shooter" 
+		shooterMode = "shooter"
 	end]]
 
 	if shooterMode == "cargame" then
@@ -661,9 +674,9 @@ function Shooter:start()
 			Shooter.playerLevels[player] = {level = 1, addTick = tick}
 		end
 
-		
-		
-		
+
+
+
 		-- exports.scoreboard:removeScoreboardColumn('race rank')
 		exports.scoreboard:removeScoreboardColumn('checkpoint')
 		exports.scoreboard:scoreboardAddColumn("level", root, 40, "Level", 5)
@@ -684,7 +697,7 @@ function Shooter:start()
 		for key,value in pairs(options) do
 			Shooter.setMapOption(key,value)
 		end
-		
+
 	else
 		--outputChatBox("Shooter launched in Shooter mode, next mode : CarGame",root,0,255,0)
 		local options = {
@@ -735,23 +748,23 @@ function Shooter.shoot(player, key, keyState)
 		if isTimer(cg_noShootTimer) then return end
 		if g_CurrentRaceMode:checkSpawnProtection(player) then return end
 		if not (isActivePlayer( player ) and g_CurrentRaceMode:checkAndSetShootCooldown(player)) then return end
-		-- outputDebugString('CarGame ' .. 'shoot ' .. getPlayerName(player)) 
+		-- outputDebugString('CarGame ' .. 'shoot ' .. getPlayerName(player))
 		clientCall(player, 'cgRocket')
 	else
 		if not (isActivePlayer( player ) and g_CurrentRaceMode:checkAndSetShootCooldown(player)) then return end
-		-- outputDebugString('Shooter ' .. 'shoot ' .. getPlayerName(player)) 
+		-- outputDebugString('Shooter ' .. 'shoot ' .. getPlayerName(player))
 		clientCall(player, 'createRocket')
 	end
 end
 
-function Shooter.jump(player, key, keyState)  
+function Shooter.jump(player, key, keyState)
 	if shooterMode == "cargame" then
 		if isPlayerSpectating(player) then return end
 		if not isActivePlayer( player ) then return end
 		local veh = g_CurrentRaceMode.getPlayerVehicle(player)
 
 		if not g_CurrentRaceMode:checkAndSetJumpCooldown(player) then return end
-		-- outputDebugString('CarGame ' .. 'jump ' .. getPlayerName(player)) 
+		-- outputDebugString('CarGame ' .. 'jump ' .. getPlayerName(player))
 		clientCall(player, 'cgJump')
 	else
 
@@ -759,7 +772,7 @@ function Shooter.jump(player, key, keyState)
 		local veh = g_CurrentRaceMode.getPlayerVehicle(player)
 
 		if not g_CurrentRaceMode:checkAndSetJumpCooldown(player) then return end
-		-- outputDebugString('Shooter ' .. 'jump ' .. getPlayerName(player)) 
+		-- outputDebugString('Shooter ' .. 'jump ' .. getPlayerName(player))
 		clientCall(player, 'shooterJump')
 	end
 end
@@ -808,23 +821,23 @@ function Shooter:handleLevelChange(player,amount)
 		end
 
 		-- SOUNDS --
-		if o < n then -- lvl up 
+		if o < n then -- lvl up
 			playSoundFrontEnd(player,12)
 
-			if getPedOccupiedVehicle(player) then 
+			if getPedOccupiedVehicle(player) then
 				if getElementHealth(getPedOccupiedVehicle(player)) > 350 then
 					setTimer(function() if getPedOccupiedVehicle(player) and getElementHealth(getPedOccupiedVehicle(player)) > 101 then fixVehicle(getPedOccupiedVehicle(player)) end end,200,1 ) -- Fix vehicle after a delay (anti kmz)
-					
+
 				end
 			end
-			
+
 		elseif o > n then -- lvl down
 			playSoundFrontEnd(player,11)
 		end
 
 		-- LEVEL HANDLING --
 		if n == Shooter.maxLevel then -- Player won the game
-			
+
 			setElementData(player,"level",n)
 			Shooter.playerLevels[player].level = n
 			Shooter.playerLevels[player].levelTime = getTickCount()
@@ -900,6 +913,7 @@ end
 function Shooter:endMap()
 	self:cleanup()
 	RaceMode.endMap(self)
+    removeCommandHandler('debugsh')
 end
 
 function Shooter:destroy()
@@ -930,7 +944,7 @@ function Shooter:destroy()
 
 
 		exports.scoreboard:scoreboardAddColumn("checkpoint")
-										
+
 		clientCall(g_Root, 'showLevelDX', false)
 		clientCall(root, 'cgEnd')
 		Shooter._Levels = {}
@@ -975,7 +989,7 @@ function Shooter.setNewJumpHeight(p, cmd, amount)
 		if amount and tonumber(amount) then
 			amount = tonumber(amount)
 		end
-		if amount > maxJumpHeight then 
+		if amount > maxJumpHeight then
 			outputChatBox('Jumpheight '..tostring(amount)..' is higher than the maximum: '..tostring(maxJumpHeight), p)
 			return
 		elseif amount < minJumpHeight then
