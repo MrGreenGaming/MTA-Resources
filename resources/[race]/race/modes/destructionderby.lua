@@ -110,7 +110,10 @@ function DestructionDerby:launch()
     outputChatBox("[DEBUG] There are " .. #activePlayers .. " active players in the server", root, 255, 0, 0);
 	if #activePlayers <= 1 then
         outputChatBox("You are the only active player in the server, you can't play DD alone!", root, 255, 0, 0);
-        self:endMap();
+
+        setTimer(function()
+            self:endMap();
+        end, 2500, 1)
     end
 
 end
