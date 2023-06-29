@@ -100,26 +100,28 @@ local function ddgmTimer(bln,time)
 end
 addEventHandler('startddgmTimer',root,ddgmTimer)
 
+
+
 function DestructionDerby:launch()
 	RaceMode.launch(self)
+
+    -- Debug command to end the map earlier if required
+    function debugDD(source)
+        local activePlayers = getActivePlayers()
+        outputChatBox("[DEBUG] There are " .. #activePlayers .. " still alive", source, 255, 0, 0);
+        if #activePlayers <= 1 then
+            outputChatBox("Map seems bugged, ending map.", root, 255, 0, 0);
+            self:endMap();
+        else
+            outputChatBox("There are more than 1 players still playing, map can't be ended!", source, 0, 255, 0);
+        end
+        addCommandHandler('debugdd', debugDD, false, false)
+    end
+
 	if ntsMode then
 		self:startChangeTimer()
 	end
-
-    local activePlayers = getActivePlayers()
-    outputChatBox("[DEBUG] There are " .. #activePlayers .. " active players in the server", root, 255, 0, 0);
-	if #activePlayers <= 1 then
-        outputChatBox("You are the only active player in the server, you can't play DD alone!", root, 255, 0, 0);
-
-        setTimer(function()
-            self:endMap();
-        end, 2500, 1)
-    end
-
 end
-
-
-
 
 local function outputGameMessageSmart(text, who)
 	if getResourceFromName"messages" and getResourceState(getResourceFromName"messages") == "running" then
@@ -196,6 +198,7 @@ end
 function DestructionDerby:endMap()
 	self:resetChangeTimer()
 	RaceMode.endMap(self)
+    removeCommandHandler('debugdd')
 end
 
 function DestructionDerby:destroy()
