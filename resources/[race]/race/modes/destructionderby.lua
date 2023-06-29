@@ -82,7 +82,11 @@ function DestructionDerby:start()
 	ntsMode = true
 	self:resetChangeTimer()
 
-
+    local activePlayers = getActivePlayers()
+	if #activePlayers == 1 then
+        _outputChatBox("You are the only active player in the server, you can't play DD alone!", root, 255, 0, 0);
+        self:endMap();
+    end
 end
 
 
@@ -123,16 +127,16 @@ end
 
 function DestructionDerby:startChangeTimer()
 	self:resetChangeTimer()
-	
+
 	local changeTime = 15000
 	self.changeTimer = setTimer(function()
 		self:randomizeVehicles()
 	end, changeTime, 1)
-	
+
 	--[[self.changeFirstWarningTimer = setTimer(function()
 	outputGameMessageSmart("Vehicles change in 10 seconds")
 end, changeTime - 10000, 1)]]
-	
+
 	self.changeSecondWarningTimer = setTimer(function()
 		outputGameMessageSmart("Vehicles change in 5 seconds")
 	end, changeTime - 5000, 1)
@@ -158,7 +162,7 @@ function DestructionDerby:randomizeVehicles()
 		setVehicleID(self.getPlayerVehicle(player), newModel)
 		clientCall(player, 'vehicleChanging', g_MapOptions.classicchangez, newModel)
 	end
-		
+
 	self:startChangeTimer()
 end
 
@@ -169,14 +173,14 @@ function DestructionDerby:resetChangeTimer()
 		end
 		self.changeTimer = nil
 	end
-	
+
 	if self.changeFirstWarningTimer then
 		if isTimer(self.changeFirstWarningTimer) then
 			killTimer(self.changeFirstWarningTimer)
 		end
 		self.changeFirstWarningTimer = nil
 	end
-	
+
 	if self.changeSecondWarningTimer then
 		if isTimer(self.changeSecondWarningTimer) then
 			killTimer(self.changeSecondWarningTimer)
@@ -241,8 +245,8 @@ DestructionDerby.modeOptions = {
 	ghostmode_map_can_override = false,
 }
 
-function disableNTSModeForDD() 
-	ntsMode = false 
+function disableNTSModeForDD()
+	ntsMode = false
 end
 
 
