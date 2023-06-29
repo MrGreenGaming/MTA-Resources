@@ -265,8 +265,8 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum, nitroLevel, nit
 		-- Regular checkpoint
 		local vehicle = self.getPlayerVehicle(player)
 		-- Edit #1, data for shop perk
-		self.checkpointBackups[player][checkpointNum] = { vehicle = getElementModel(vehicle), position = { getElementPosition(vehicle) }, rotation = { getVehicleRotation(vehicle) }, velocity = { getElementVelocity(vehicle) }, turnvelocity = { getElementAngularVelocity(vehicle) }, health = getElementHealth(vehicle), healthtick = getTickCount(), geardown = getVehicleLandingGearDown(vehicle) or false, nitroLevel = nitroLevel, nitroActive = nitroActive}	
-		
+		self.checkpointBackups[player][checkpointNum] = { vehicle = getElementModel(vehicle), position = { getElementPosition(vehicle) }, rotation = { getVehicleRotation(vehicle) }, velocity = { getElementVelocity(vehicle) }, turnvelocity = { getElementAngularVelocity(vehicle) }, health = getElementHealth(vehicle), healthtick = getTickCount(), geardown = getVehicleLandingGearDown(vehicle) or false, nitroLevel = nitroLevel, nitroActive = nitroActive}
+
 		self.checkpointBackups[player].goingback = true
 		TimerManager.destroyTimersFor("checkpointBackup",player)
 		-- Edit #2, edit respawn time based on shop perk
@@ -485,10 +485,10 @@ function RaceMode:restorePlayer(id, player, bNoFade, bDontFix)
 		if getElementModel(vehicle) ~= bkp.vehicle then
 			setVehicleID(vehicle, bkp.vehicle)
 		end
-		warpPedIntoVehicle(player, vehicle)	
-		
+		warpPedIntoVehicle(player, vehicle)
+
         setVehicleLandingGearDown(vehicle,bkp.geardown)
-		
+
 
 		self:playerFreeze(player, true, bDontFix)
         outputDebug( 'MISC', 'restorePlayer: setElementFrozen true for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
@@ -651,6 +651,17 @@ function getActivePlayerCount()
 	end
 	return count
 	-- return #g_CurrentRaceMode.activePlayerList
+end
+
+function getAlivePlayerCount()
+    local count = 0
+	for k, p in ipairs(g_CurrentRaceMode.activePlayerList) do
+		local state = getElementData(p, 'state')
+		if state == 'alive' and getElementData(p, 'player state') ~= 'away' then
+			count = count + 1
+		end
+	end
+	return count
 end
 
 function getActivePlayers()

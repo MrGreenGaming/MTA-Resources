@@ -536,14 +536,18 @@ addEvent('onPlayerWinShooter')
 function Shooter:launch()
 	RaceMode.launch(self)
 
-    local activePlayers = getActivePlayers()
-    outputChatBox("[DEBUG] There are " .. #activePlayers .. " active players in the server", root, 255, 0, 0);
-	if #activePlayers <= 1 then
-        outputChatBox("You are the only active player in the server, you can't play Shooter alone!", root, 255, 0, 0);
-        setTimer(function()
+    -- Debug command to end the map earlier if required
+    function debugSH(source)
+        local nPlayersAlive = getAlivePlayerCount()
+        outputChatBox("[DEBUG] There are " .. #nPlayersAlive .. " player(s) still alive", source, 255, 0, 0);
+        if #nPlayersAlive <= 1 then
+            outputChatBox("Map seems bugged, ending map.", root, 255, 0, 0);
             self:endMap();
-        end, 2500, 1)
+        else
+            outputChatBox("There are more than 1 players still playing, map can't be ended!", source, 0, 255, 0);
+        end
     end
+    addCommandHandler('debugsh', debugSH, false, false)
 
 	-- Read jump height from map
 	local jumpHeightSetting = (getNumber(g_MapInfo.resname..".shooter_jumpheight",0.25))
@@ -910,6 +914,7 @@ end
 function Shooter:endMap()
 	self:cleanup()
 	RaceMode.endMap(self)
+    removeCommandHandler('debugsh')
 end
 
 function Shooter:destroy()
