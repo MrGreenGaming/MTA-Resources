@@ -321,7 +321,7 @@ end
 -- 	end
 -- end)
 
-addEventHandler("onResourceStart", resourceRoot,
+addEventHandler("onResourcePreStart", resourceRoot,
     function()
         if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
             cancelEvent(true, "Can't start VIP whilst cw_script is running")

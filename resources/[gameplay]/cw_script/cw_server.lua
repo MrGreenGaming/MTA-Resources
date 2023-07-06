@@ -9,7 +9,7 @@ local round_started = false
 local round_ended = true
 local isWarEnded  = false
 
-addEventHandler("onResourceStart", resourceRoot,
+addEventHandler("onResourcePreStart", resourceRoot,
     function()
         if getResourceFromName("gcshop") and getResourceState(getResourceFromName("gcshop")) == "running" then
             cancelEvent(true, "Can't start CW while GcShop is running. Stop the GcShop resource (Greencoin Shop)")
