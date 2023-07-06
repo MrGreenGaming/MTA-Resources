@@ -14,7 +14,7 @@ addEventHandler("onResourceStart", resourceRoot,
     function()
         if getResourceFromName("gc") and getResourceState(getResourceFromName("gc")) == "running" then
             cancelEvent(true, "Can't start CW while GC is running. Stop the GC resource (Greencoin)")
-            outputChatBox("Can't start CW while GC is running. Stop the GC resource (Greencoin)", source, 255, 0, 0)
+            outputChatBox("Can't start CW while GC is running. Stop the GC resource using '/stop gc'", root, 255, 0, 0)
         end
     end
 )
