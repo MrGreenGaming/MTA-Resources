@@ -487,8 +487,8 @@ function startWar()
 	local r1,g1,b1 = hex2rgb(t1color)
 	local r2,g2,b2 = hex2rgb(t2color)
 	serverCall('startWar', t1name, t2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2)
-	outputChatBox('[CW] #ffffffPress #9b9bffF1 #ffffffto switch display mode', 155, 155, 255, true)
-	outputChatBox('[CW] #ffffffPress #9b9bffF3 #ffffffto select team', 155, 155, 255, true)
+	outputChatBox('[CW] #ffffffPress #9b9bffF7 #ffffffto switch display mode', 155, 155, 255, true)
+	outputChatBox('[CW] #ffffffPress #9b9bffF6 #ffffffto select team', 155, 155, 255, true)
 end
 
 ----------------------------
@@ -522,7 +522,7 @@ function updateAdminInfo(obj)
 	isAdmin = obj
 	if isAdmin then
 		createAdminGUI()
-		outputChatBox('[CW] #ffffffPress #9b9bffF2 #ffffffto open management panel', 155, 155, 255, true)
+		outputChatBox('[CW] #ffffffPress #9b9bffF10 #ffffffto open management panel', 155, 155, 255, true)
 	end
 end
 
@@ -547,9 +547,9 @@ end
 ----------------------------
 createAdminGUI()
 setTimer(function() if isElement(teams[1]) then createGUI(getTeamName(teams[1]), getTeamName(teams[2])) end end, 1000, 1)
-bindKey('F3', 'down', toogleGUI)
-bindKey('F2', 'down', toogleAdminGUI)
-bindKey('F1', 'down', toggleMode)
+bindKey('F6', 'down', toogleGUI)
+bindKey('F10', 'down', toogleAdminGUI)
+bindKey('F7', 'down', toggleMode)
 serverCall('playerJoin', localPlayer)
 
 ----------------------------

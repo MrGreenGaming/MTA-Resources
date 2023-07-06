@@ -1,7 +1,7 @@
 currentRaceState = false
 vipPlayers = {
 	-- [player] = {
-	-- 	timestamp: expireTimestamp, 
+	-- 	timestamp: expireTimestamp,
 	-- 	options: {
 	-- 		[1] = {options},
 	-- 		[2] = (options)
@@ -54,29 +54,29 @@ function setPlayerVIP(player,bool)
 	if bool and isElement(player) and getElementType(player) == "player" and not vipPlayers[player] then
 
 		-- setElementData(player, 'gcshop.vipbadge', 'vip')
-		
+
 		-- Get options
 		loadVipSettings(player, function (playerOptions)
 			-- Get timestamp
 			local playerStamp = exports.gc:getPlayerVip(player)
-	
+
 			if not playerOptions or not playerStamp then return end
-	
+
 			-- Set vip player in table
 			vipPlayers[player] = {timestamp = playerStamp, options = playerOptions}
-			
-	
-			
+
+
+
 			-- vip Items should listen to this event
 			triggerEvent( 'onPlayerVip', resourceRoot,player, true)
 			triggerClientEvent( player, 'onServerSendVip', resourceRoot, vipPlayers[player])
-	
+
 			if vipPlayers[player] then
 				local timeLeft = secondsToTimeDesc(playerStamp - getRealTime().timestamp)
 				-- vip_outputChatBox("You are set as a VIP.",player)
 				vip_outputChatBox("You have "..timeLeft.." of VIP left",player)
-	
-			end	
+
+			end
 		end)
 	elseif isElement(player) and getElementType(player) == "player" and bool == false then
 		vipPlayers[player] = nil
@@ -85,7 +85,7 @@ function setPlayerVIP(player,bool)
 		-- vip Items should listen to this event
 		triggerEvent( 'onPlayerVip', resourceRoot, player, false)
 
-		
+
 
 	end
 end
@@ -106,13 +106,13 @@ addEventHandler('onClientRequestsVip',resourceRoot,
 function loadVipSettings(player, callback)
 	local theID = exports.gc:getPlayerForumID(player)
 	if not theID then return false end
-	
+
 	local cmd = "SELECT * FROM vip_items WHERE forumid=?"
-	dbQuery(function (qh) 
+	dbQuery(function (qh)
 		if not qh then return callback(false) end
 		local result = dbPoll(qh, 0)
 		local newOptions = table.deepCopy(vipStandardOptions)
-	
+
 		for i, row in ipairs(result) do
 			if newOptions[row.item] and row.options then
 				local fetchedOptions = fromJSON(row.options)
@@ -123,7 +123,7 @@ function loadVipSettings(player, callback)
 				end
 			end
 		end
-	
+
 		return callback(newOptions)
 	end, {}, handlerConnect, cmd, theID)
 
@@ -144,7 +144,7 @@ function saveVipSetting(player, itemId, key, value)
 
 	-- Save to db
 	local saved = dbExec(handlerConnect, "INSERT INTO vip_items (forumid, item, options) VALUES (?,?,?) ON DUPLICATE KEY UPDATE options=?",forumId,itemId,jsonOptions,jsonOptions)
-	
+
 	triggerClientEvent( player, 'onServerChangedPlayerVipOptions', resourceRoot,  vipPlayers[player])
 
 	return true
@@ -156,7 +156,7 @@ function getVipSetting(player, itemId, key)
 
 end
 -- VIP Checker
-function isVipExpired(timestamp) 
+function isVipExpired(timestamp)
 	timestamp = timestamp or 0
 	return getRealTime().timestamp > timestamp
 end
@@ -175,10 +175,10 @@ setTimer( checkAllVipExpired, vipCheckMinutes * 60000, 0 )
 
 
 function isPlayerVIP(player)
-	if not exports.gc:isPlayerLoggedInGC(player) then return false end	
+	if not exports.gc:isPlayerLoggedInGC(player) then return false end
 	local timestamp = exports.gc:getPlayerVip(player)
 	if not timestamp or isVipExpired(timestamp) then return false end
-	
+
 	return true
 end
 
@@ -204,7 +204,7 @@ addEventHandler('onGCLogout', root, function()
 	if isElement(source) and getElementType(source) == "player" and not exports.gc:isPlayerLoggedInGC(source) then
 		setPlayerVIP(source,false)
 	end
-	
+
 end)
 
 
@@ -217,73 +217,73 @@ addEventHandler('onRaceStateChanging', root, onRaceStateChanging)
 
 -- function addVIP(player, cmd, target)
 -- 	if not hasObjectPermissionTo(player, 'command.addGC') then return end
-	
+
 -- 	local targetPlayer = getPlayerFromName(target)
-	
+
 -- 	if not targetPlayer then outputChatBox("Player not found!", player, 255, 0, 0) return end
-		
+
 -- 	if not exports.gc:isPlayerLoggedInGC(targetPlayer) then outputChatBox("Player is not logged in!", player, 255, 0, 0) return end
-	
+
 -- 	local forumid = exports.gc:getPlayerForumID(targetPlayer)
-	
+
 -- 	local rootNode = xmlLoadFile('vip.xml')
 -- 	if not rootNode then
 -- 		rootNode = xmlCreateFile('vip.xml', 'vips')
 -- 	end
-	
+
 -- 	local child = xmlCreateChild(rootNode, 'vip')
-	
+
 -- 	xmlNodeSetValue(child, tostring(forumid))
-	
+
 -- 	xmlSaveFile(rootNode)
 
 -- 	setElementData(targetPlayer, 'gcshop.vipbadge', 'vip')
-	
+
 -- 	outputChatBox('Success!', player, 100, 255, 100)
 -- end
 -- addCommandHandler('addvip', addVIP)
 
 -- function removeVIP(player, cmd, forumid)
 -- 	if not hasObjectPermissionTo(player, 'command.addGC') then return end
-	
+
 -- 	local rootNode = xmlLoadFile('vip.xml')
 -- 	if not rootNode then outputChatBox('No VIP file found!', player, 255, 0, 0) return end
-	
+
 -- 	local vipNodes = xmlNodeGetChildren(rootNode)
 -- 	for i,n in ipairs(vipNodes) do
 -- 		if xmlNodeGetValue(n) and tostring(xmlNodeGetValue(n)) == forumid then
 -- 			xmlDestroyNode(n)
 -- 			xmlSaveFile(rootNode)
-			
+
 -- 			for i,p in ipairs(getElementsByType('player')) do
 -- 				if exports.gc:isPlayerLoggedInGC(p) and tostring(exports.gc:getPlayerForumID(p)) == forumid then
 -- 					setElementData(p, 'gcshop.vipbadge', false)
 -- 				end
 -- 			end
-			
+
 -- 			outputChatBox("Success!", player, 100, 255, 100)
 -- 			return
 -- 		end
 -- 	end
-	
+
 -- 	outputChatBox('Given forumid is not VIP!', player, 255, 0, 0)
 -- end
 -- addCommandHandler('removevip', removeVIP)
 
 -- function vipList(player, cmd)
 -- 	if not hasObjectPermissionTo(player, 'command.addGC') then return end
-	
+
 -- 	local rootNode = xmlLoadFile('vip.xml')
 -- 	if not rootNode then outputChatBox('No VIP file found!', player, 255, 0, 0) return end
-	
+
 -- 	local outputString = ''
 -- 	local vipNodes = xmlNodeGetChildren(rootNode)
 -- 	for i,n in ipairs(vipNodes) do
 -- 		outputString = outputString .. xmlNodeGetValue(n) .. ', '
 -- 	end
-	
+
 -- 	outputString = string.sub(outputString, 0, string.len(outputString) - 2)
-	
+
 -- 	outputChatBox('Current VIP players: '..outputString, player, 100, 255, 100)
 -- end
 -- addCommandHandler('viplist', vipList)
@@ -316,8 +316,16 @@ end
 -- addEventHandler('vip-showNametag', root, function(enable)
 -- 	if enable then
 -- 		setElementData(source, 'gcshop.vipbadge', 'vip')
--- 	else 
+-- 	else
 -- 		setElementData(source, 'gcshop.vipbadge', false)
 -- 	end
 -- end)
 
+addEventHandler("onResourceStart", resourceRoot,
+    function()
+        if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
+            cancelEvent(true, "Can't start VIP whilst cw_script is running")
+            outputChatBox("Can't start VIP whilst cw_script is running.", root, 255, 0, 0)
+        end
+    end
+)
