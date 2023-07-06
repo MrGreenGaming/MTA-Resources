@@ -23,6 +23,12 @@ addEventHandler("onResourceStart", resourceRoot,
     end
 )
 
+addEventHandler("onResourceStop", resourceRoot,
+    function()
+        outputChatBox("Remember to start gcshop & mrgreen-vip if needed using '/start gcshop' & '/start mrgreen-vip'", root, 255, 0, 0)
+    end
+)
+
 -----------------
 -- Call functions
 -----------------
