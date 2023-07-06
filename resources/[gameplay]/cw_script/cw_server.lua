@@ -9,7 +9,7 @@ local round_started = false
 local round_ended = true
 local isWarEnded  = false
 
-addEventHandler("onResourcePreStart", resourceRoot,
+addEventHandler("onResourceStart", resourceRoot,
     function()
         if getResourceFromName("gcshop") and getResourceState(getResourceFromName("gcshop")) == "running" then
             cancelEvent(true, "Can't start CW while GcShop is running. Stop the GcShop resource (Greencoin Shop)")
@@ -20,12 +20,6 @@ addEventHandler("onResourcePreStart", resourceRoot,
             cancelEvent(true, "Can't start CW while VIP is running. Stop the VIP resource (Mrgreen VIP)")
             outputChatBox("Can't start CW while VIP is running. Stop the VIP resource using '/stop mrgreen-vip'", root, 255, 0, 0)
         end
-    end
-)
-
-addEventHandler("onResourceStop", resourceRoot,
-    function()
-        outputChatBox("Remember to start gcshop & mrgreen-vip if needed using '/start gcshop' & '/start mrgreen-vip'", root, 255, 0, 0)
     end
 )
 
