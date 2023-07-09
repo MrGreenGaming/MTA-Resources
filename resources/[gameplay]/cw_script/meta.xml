@@ -1,7 +1,9 @@
 <meta>
-	<info author="BurN" version="1.0" type="script" />
+	<info author="BurN &amp; lukum" version="1.0" type="script" />
 	<script src="cw_server.lua" type="server" />
 	<script src="cw_client.lua" type="client" />
+
+    <script src="one_spawn.lua" type="server"/>
 
 	<file src="fonts/Roboto-Bold.ttf" />
 	<file src="fonts/Roboto-Medium.ttf" />
