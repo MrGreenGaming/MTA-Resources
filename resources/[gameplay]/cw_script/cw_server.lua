@@ -151,21 +151,6 @@ function startRound()
 	end
 end
 
-function isRoundEnded()
-	local c_ActivePlayers = 0
-	for i,player in ipairs(getPlayersInTeam(teams[1])) do
-		if not getElementData(player, 'race.finished') then
-			c_ActivePlayers = c_ActivePlayers + 1
-		end
-	end
-	for i,player in ipairs(getPlayersInTeam(teams[2])) do
-		if not getElementData(player, 'race.finished') then
-			c_ActivePlayers = c_ActivePlayers + 1
-		end
-	end
-	if c_ActivePlayers == 0 then return true else return false end
-end
-
 function playerFinished(rank)
 	if isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3]) then
 		if getPlayerTeam(source) ~= teams[3] and not f_round and c_round > 0 then
@@ -207,9 +192,6 @@ function playerFinished(rank)
 				outputInfo(t2c .. getPlayerName(source).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')')
 			end
 		end
-		if isRoundEnded() then
-			endRound()
-		end
 	end
 end
 
@@ -240,13 +222,13 @@ function endRound()
 			local t1mvp = t1Players[1]
 			local t2mvp = t2Players[1]
             local t1mvpName = getPlayerName(t1mvp)
-            local t2mvpName = getPlayerName(t2mvp)
+            local t2mvpName = getPlayerName(t2mvp) or ''
 			local t1r, t1g, t1b = getTeamColor(teams[1])
 			local t1c = rgb2hex(t1r, t1g, t1b)
 			local t2r, t2g, t2b = getTeamColor(teams[2])
 			local t2c = rgb2hex(t2r, t2g, t2b)
 			local pts1 = getElementData(t1mvp, 'Score')
-			local pts2 = getElementData(t2mvp, 'Score')
+			local pts2 = getElementData(t2mvp, 'Score') or 0
 			endThisWar()
 			if #t1Players == 0 and #t2Players >= 1 then
 				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
