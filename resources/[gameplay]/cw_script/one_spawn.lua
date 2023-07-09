@@ -1,11 +1,15 @@
 ------------------------ Spawnpoints ------------------------
 
 local Spawnpoints = { }
+local currentGamemode = ""
 
 addEvent("onMapStarting",true)
 addEventHandler('onMapStarting', getRootElement(),
 function()
 	Spawnpoints = getAll("spawnpoint")
+
+    currentGamemode = exports.race:getRaceMode();
+    outputInfo("Current gamemode: "..currentGamemode);
 end)
 
 function getAll(name)
@@ -31,7 +35,7 @@ end
 addEvent("onRaceStateChanging",true)
 addEventHandler("onRaceStateChanging", getRootElement(),
 function ( state )
-    if (state == "GridCountdown") then
+    if (state == "GridCountdown") and (currentGamemode == "Sprint" or currentGamemode == "Never the same") then
 	    for i,player in ipairs(getElementsByType("player")) do
 			if getPedOccupiedVehicle(player) then
 			    local spawn = Spawnpoints[1]
@@ -43,7 +47,7 @@ function ( state )
 				setElementModel ( veh, model )
                 setElementPosition ( veh, x, y, z )
 				setElementRotation ( veh, 0, 0, r )
-				outputChatBox ( "#ff0000vehicle:#00ff00"..tostring(getVehicleNameFromModel(model)).." #ff0000x:#00ff00"..tostring(round(x,2)).." #ff0000y:#00ff00"..tostring(round(y,2)).." #ff0000z:#00ff00"..tostring(round(z,2)).." #ff0000r:#00ff00"..tostring(round(r,2)), player, 255,255,255,true )
+				outputInfo("Enforcing tournament spawnpoints...")
 			end
 		end
 	end
