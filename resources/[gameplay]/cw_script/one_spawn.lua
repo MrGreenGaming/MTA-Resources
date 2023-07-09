@@ -7,9 +7,7 @@ addEvent("onMapStarting",true)
 addEventHandler('onMapStarting', getRootElement(),
 function()
 	Spawnpoints = getAll("spawnpoint")
-
     currentGamemode = exports.race:getRaceMode();
-    outputInfo("Current gamemode: "..currentGamemode);
 end)
 
 function getAll(name)
@@ -47,7 +45,7 @@ function ( state )
 				setElementModel ( veh, model )
                 setElementPosition ( veh, x, y, z )
 				setElementRotation ( veh, 0, 0, r )
-				outputInfo("Enforcing war spawnpoints...")
+				outputInfo("Enforcing spawnpoints...")
 			end
 		end
 	end

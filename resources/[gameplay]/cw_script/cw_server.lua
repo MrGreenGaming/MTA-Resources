@@ -261,11 +261,11 @@ function endThisWar()
 	local t2c = rgb2hex(t2r, t2g, t2b)
 
 	if t1score > t2score then
-		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffwon ' .. t2c ..getTeamName(teams[2]).. ' #ffffffwith score ' ..t1score.. ' : ' ..t2score)
+		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffwon against' .. t2c ..getTeamName(teams[2]).. ' #ffffff ' ..t1score.. ' : ' ..t2score)
 	elseif t1score < t2score then
-		outputInfo(t2c .. getTeamName(teams[2]).. ' #ffffffwon ' .. t1c ..getTeamName(teams[1]).. ' #ffffffwith score ' ..t2score.. ' : ' ..t1score)
+		outputInfo(t2c .. getTeamName(teams[2]).. ' #ffffffwon against' .. t1c ..getTeamName(teams[1]).. ' #ffffff ' ..t2score.. ' : ' ..t1score)
 	elseif t1score == t2score then
-		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffand '.. t2c ..getTeamName(teams[2]).. ' #ffffffplayed draw with score ' ..t1score.. ' : ' ..t2score)
+		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffand '.. t2c ..getTeamName(teams[2]).. ' #ffffffdrawed ' ..t1score.. ' : ' ..t2score)
 	end
 end
 
