@@ -237,8 +237,10 @@ function endRound()
 			local t2t = getTeamFromName(t2)
 			local t1Players = getPlayersInTeam(t1t)
 			local t2Players = getPlayersInTeam(t2t)
-			local t1mvp = getPlayerName(t1Players[1])
-			local t2mvp = getPlayerName(t2Players[1])
+			local t1mvp = t1Players[1]
+			local t2mvp = t2Players[1]
+            local t1mvpName = getPlayerName(t1mvp)
+            local t2mvpName = getPlayerName(t2mvp)
 			local t1r, t1g, t1b = getTeamColor(teams[1])
 			local t1c = rgb2hex(t1r, t1g, t1b)
 			local t2r, t2g, t2b = getTeamColor(teams[2])
@@ -248,13 +250,13 @@ function endRound()
 			endThisWar()
 			if #t1Players == 0 and #t2Players >= 1 then
 				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
-				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvp .. ' #9b9bff(' .. pts2 .. ')')
+				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvpName .. ' #9b9bff(' .. pts2 .. ')')
 			elseif #t1Players >= 1 and #t2Players == 0 then
-				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvp .. ' #9b9bff(' .. pts1 .. ')')
+				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvpName .. ' #9b9bff(' .. pts1 .. ')')
 				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. '-')
 			elseif #t1Players >= 1 and #t2Players >= 1 then
-				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvp .. ' #9b9bff(' .. pts1 .. ')')
-				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvp .. ' #9b9bff(' .. pts2 .. ')')
+				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvpName .. ' #9b9bff(' .. pts1 .. ')')
+				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvpName .. ' #9b9bff(' .. pts2 .. ')')
 			else
 				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
 				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. '-')
