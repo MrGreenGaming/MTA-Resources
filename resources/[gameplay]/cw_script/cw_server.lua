@@ -151,21 +151,6 @@ function startRound()
 	end
 end
 
-function isRoundEnded()
-	local c_ActivePlayers = 0
-	for i,player in ipairs(getPlayersInTeam(teams[1])) do
-		if not getElementData(player, 'race.finished') then
-			c_ActivePlayers = c_ActivePlayers + 1
-		end
-	end
-	for i,player in ipairs(getPlayersInTeam(teams[2])) do
-		if not getElementData(player, 'race.finished') then
-			c_ActivePlayers = c_ActivePlayers + 1
-		end
-	end
-	if c_ActivePlayers == 0 then return true else return false end
-end
-
 function playerFinished(rank)
 	if isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3]) then
 		if getPlayerTeam(source) ~= teams[3] and not f_round and c_round > 0 then
@@ -207,9 +192,6 @@ function playerFinished(rank)
 				outputInfo(t2c .. getPlayerName(source).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')')
 			end
 		end
-		if isRoundEnded() then
-			endRound()
-		end
 	end
 end
 
@@ -225,7 +207,7 @@ function endRound()
 		if c_round > 0 then
 			if not round_ended then
 				round_ended = true
-				outputInfo('#9b9bff[CW] #ffffffRound has been ended')
+				outputInfo('#ffffffRound has been ended')
 			end
 		end
 		if c_round == rounds then
@@ -237,24 +219,26 @@ function endRound()
 			local t2t = getTeamFromName(t2)
 			local t1Players = getPlayersInTeam(t1t)
 			local t2Players = getPlayersInTeam(t2t)
-			local t1mvp = getPlayerName(t1Players[1])
-			local t2mvp = getPlayerName(t2Players[1])
+			local t1mvp = t1Players[1]
+			local t2mvp = t2Players[1]
+            local t1mvpName = getPlayerName(t1mvp)
+            local t2mvpName = getPlayerName(t2mvp) or ''
 			local t1r, t1g, t1b = getTeamColor(teams[1])
 			local t1c = rgb2hex(t1r, t1g, t1b)
 			local t2r, t2g, t2b = getTeamColor(teams[2])
 			local t2c = rgb2hex(t2r, t2g, t2b)
 			local pts1 = getElementData(t1mvp, 'Score')
-			local pts2 = getElementData(t2mvp, 'Score')
+			local pts2 = getElementData(t2mvp, 'Score') or 0
 			endThisWar()
-			if #t1Players < 1 and #t2Players > 0 then
+			if #t1Players == 0 and #t2Players >= 1 then
 				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
-				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvp .. ' #9b9bff(' .. pts2 .. ')')
-			elseif #t1Players > 0 and #t2Players < 1 then
-				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvp .. ' #9b9bff(' .. pts1 .. ')')
+				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvpName .. ' #9b9bff(' .. pts2 .. ')')
+			elseif #t1Players >= 1 and #t2Players == 0 then
+				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvpName .. ' #9b9bff(' .. pts1 .. ')')
 				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. '-')
-			elseif #t1Players > 0 and #t2Players > 0 then
-				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvp .. ' #9b9bff(' .. pts1 .. ')')
-				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvp .. ' #9b9bff(' .. pts2 .. ')')
+			elseif #t1Players >= 1 and #t2Players >= 1 then
+				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvpName .. ' #9b9bff(' .. pts1 .. ')')
+				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvpName .. ' #9b9bff(' .. pts2 .. ')')
 			else
 				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
 				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. '-')
@@ -277,11 +261,11 @@ function endThisWar()
 	local t2c = rgb2hex(t2r, t2g, t2b)
 
 	if t1score > t2score then
-		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffwon ' .. t2c ..getTeamName(teams[2]).. ' #ffffffwith score ' ..t1score.. ' : ' ..t2score)
+		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffwon against' .. t2c ..getTeamName(teams[2]).. ' #ffffff ' ..t1score.. ' : ' ..t2score)
 	elseif t1score < t2score then
-		outputInfo(t2c .. getTeamName(teams[2]).. ' #ffffffwon ' .. t1c ..getTeamName(teams[1]).. ' #ffffffwith score ' ..t2score.. ' : ' ..t1score)
+		outputInfo(t2c .. getTeamName(teams[2]).. ' #ffffffwon against' .. t1c ..getTeamName(teams[1]).. ' #ffffff ' ..t2score.. ' : ' ..t1score)
 	elseif t1score == t2score then
-		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffand '.. t2c ..getTeamName(teams[2]).. ' #ffffffplayed draw with score ' ..t1score.. ' : ' ..t2score)
+		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffand '.. t2c ..getTeamName(teams[2]).. ' #ffffffdrawed ' ..t1score.. ' : ' ..t2score)
 	end
 end
 

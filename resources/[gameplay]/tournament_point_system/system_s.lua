@@ -1,4 +1,4 @@
-local Tournament = {}
+Tournament = {}
 Tournament.currentGamemode = ""
 Tournament.playerPoints = {}
 
@@ -28,12 +28,7 @@ end
 addEventHandler("onResourceStart", getRootElement(), logStartEvent)
 
 function onMapChange()
-	local raceResRoot = getResourceRootElement( getResourceFromName( "race" ) )
-	local raceInfo = raceResRoot and getElementData( raceResRoot, "info" )
-	if raceInfo then
-		Tournament.currentGamemode = raceInfo.mapInfo.modename
-	end
-
+    Tournament.currentGamemode = exports.race:getRaceMode();
 	if Tournament.currentGamemode == "Sprint" then
 		outputChatBox(Tournament.chatPrefix .. "Finish in " .. Tournament.sprintRank .. getSuffix(Tournament.sprintRank) .. " place or better to earn points.", root, 255, 255, 255, true)
 	elseif Tournament.currentGamemode == "Never the same" then
@@ -153,7 +148,7 @@ function onShooterFinish(rank)
 
 		outputChatBox(Tournament.chatPrefix .. playerName .. " #FFFFFFfinished " .. rank .. getSuffix(rank) .. " earning " .. pointsEarned .. " points", root, 255, 255, 255, true)
 		incrementPoints(source, pointsEarned)
-	else 
+	else
 		outputChatBox(Tournament.chatPrefix .. "You need to be at least " .. Tournament.shooterRank .. getSuffix(Tournament.shooterRank) .. " to earn points!", source, 255, 255, 255, true)
 	end
 end
@@ -185,7 +180,7 @@ function onDerbyFinish(rank)
 		outputChatBox(Tournament.chatPrefix .. playerName .. "#FFFFFF has earned " .. pointsEarned .. " points for finishing " .. rank .. getSuffix(rank), root, 255, 255, 255, true)
 		incrementPoints(source, pointsEarned)
 	else
-		outputChatBox(Tournament.chatPrefix .. "You need to be at least " .. Tournament.ddRank .. getSuffix(Tournament.ddRank) .. " to earn points!", source, 255, 255, 255, true) 
+		outputChatBox(Tournament.chatPrefix .. "You need to be at least " .. Tournament.ddRank .. getSuffix(Tournament.ddRank) .. " to earn points!", source, 255, 255, 255, true)
 	end
 end
 addEventHandler("onPlayerFinishDD", getRootElement(), onDerbyFinish)
@@ -195,7 +190,7 @@ function onDerbyWin()
 end
 addEventHandler("onPlayerWinDD", getRootElement(), onDerbyWin)
 
-function onDerbyKill() 
+function onDerbyKill()
 	if Tournament.currentGamemode ~= "Destruction derby" then return end
 	incrementPoints(source, Tournament.ddKill)
 	outputChatBox(Tournament.chatPrefix .. "You earned " .. Tournament.ddKill .. " point(s) for a kill", source, 255, 255, 255, true)
