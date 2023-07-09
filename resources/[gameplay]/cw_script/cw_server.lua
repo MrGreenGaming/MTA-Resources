@@ -225,7 +225,7 @@ function endRound()
 		if c_round > 0 then
 			if not round_ended then
 				round_ended = true
-				outputInfo('#9b9bff[CW] #ffffffRound has been ended')
+				outputInfo('#ffffffRound has been ended')
 			end
 		end
 		if c_round == rounds then
@@ -246,13 +246,13 @@ function endRound()
 			local pts1 = getElementData(t1mvp, 'Score')
 			local pts2 = getElementData(t2mvp, 'Score')
 			endThisWar()
-			if #t1Players < 1 and #t2Players > 0 then
+			if #t1Players == 0 and #t2Players >= 1 then
 				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
 				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvp .. ' #9b9bff(' .. pts2 .. ')')
-			elseif #t1Players > 0 and #t2Players < 1 then
+			elseif #t1Players >= 1 and #t2Players == 0 then
 				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvp .. ' #9b9bff(' .. pts1 .. ')')
 				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. '-')
-			elseif #t1Players > 0 and #t2Players > 0 then
+			elseif #t1Players >= 1 and #t2Players >= 1 then
 				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvp .. ' #9b9bff(' .. pts1 .. ')')
 				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvp .. ' #9b9bff(' .. pts2 .. ')')
 			else
