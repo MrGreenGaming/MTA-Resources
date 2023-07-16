@@ -45,7 +45,7 @@ function ( state )
 				setElementModel ( veh, model )
                 setElementPosition ( veh, x, y, z )
 				setElementRotation ( veh, 0, 0, r )
-				outputChatBox(Tournament.chatPrefix .. "Enforcing spawnpoints...", root, 255, 255, 255, true)
+				outputChatBox(Tournament.chatPrefix .. "Enforcing spawnpoints...", player, 255, 255, 255, true)
 			end
 		end
 	end
