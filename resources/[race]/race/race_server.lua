@@ -165,14 +165,14 @@ function cacheMapOptions(map, bDontUseMode)
 	g_MapOptions.hunterminigun	= map.hunterminigun == 'true'
 
 	outputDebug("MISC", "duration = "..g_MapOptions.duration.."  respawn = "..g_MapOptions.respawn.."  respawntime = "..tostring(g_MapOptions.respawntime).."  time = "..g_MapOptions.time.."  weather = "..g_MapOptions.weather)
-
+	
 	if g_MapOptions.time then
 		setTime(g_MapOptions.time:match('(%d+):(%d+)'))
 	end
 	if g_MapOptions.weather then
 		setWeather(g_MapOptions.weather)
 	end
-
+	
 	-- Set ghostmode from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.ghostmode or not g_GameOptions.ghostmode_map_can_override then
 		g_MapOptions.ghostmode = g_GameOptions.ghostmode
@@ -286,7 +286,7 @@ function loadMap(res)
 	g_MapInfo.metamode  = getResourceInfo(res, 'racemode') or ''
     g_MapInfo.resname   = getResourceName(res)
 	-- Edit #1a
-
+	
 	g_SavedMapSettings = {}
 	g_SavedMapSettings.duration			= map.duration
 	g_SavedMapSettings.respawn			= map.respawn
@@ -322,13 +322,13 @@ function loadMap(res)
 			-- return false
 		-- end
 	-- end
-
+	
 	-- read spawnpoints
 	g_Spawnpoints = map:getAll('spawnpoint')
-
+	
 	-- read checkpoints
 	g_Checkpoints = map:getAll('checkpoint')
-
+	
 	-- if map isn't made in the new editor or map is an old race map multiplicate the checkpointsize with 4
 	local madeInNewEditor = map.def and map.def:find("editor_main")
 	if not madeInNewEditor or map:isRaceFormat() then
@@ -336,16 +336,16 @@ function loadMap(res)
 			checkpoint.size = checkpoint.size and checkpoint.size*4 or 4
 		end
 	end
-
+	
 	if map:isDMFormat() then
 		-- sort checkpoints
 		local chains = {}		-- a chain is a list of checkpoints that immediately follow each other
 		local prevchainnum, chainnum, nextchainnum
 		for i,checkpoint in ipairs(g_Checkpoints) do
-
+		
 			--check size
 			checkpoint.size = checkpoint.size or 4
-
+			
 			-- any chain we can place this checkpoint after?
 			chainnum = table.find(chains, '[last]', 'nextid', checkpoint.id)
 			if chainnum then
@@ -377,15 +377,15 @@ function loadMap(res)
 		end
 		g_Checkpoints = chains[1] or {}
 	end
-
+	
 	-- read objects
 	g_Objects = map:getAll('object')
-
+	
 	-- read pickups
 	g_Pickups = map:getAll('pickup')
-
+	
 	cacheMapOptions(g_SavedMapSettings)
-
+	
 	-- unload map xml
 	map:unload()
 	return true
@@ -430,7 +430,7 @@ end
 -- g_RaceStartCountdown:addClientHook(3, 'playSoundFrontEnd', 44)
 -- g_RaceStartCountdown:addClientHook(2, 'playSoundFrontEnd', 44)
 -- g_RaceStartCountdown:addClientHook(1, 'playSoundFrontEnd', 44)
--- g_RaceStartCountdown:addClientHook(0, 'playSoundFrontEnd', 45)
+-- g_RaceStartCountdown:addClientHook(0, 'playSoundFrontEnd', 45) 
 
 
 
@@ -513,15 +513,14 @@ function joinHandlerBoth(player)
     local vehicle
 	if true then
         local spawnpoint = g_CurrentRaceMode:pickFreeSpawnpoint(player)
-
+        
         local x, y, z = unpack(spawnpoint.position)
-        local rx, ry, rz = unpack(spawnpoint.rotation)
         -- Set random seed dependant on map name, so everyone gets the same models
         setRandomSeedForMap('clothes')
 
         if g_MapOptions.skins == 'cj' then
             spawnPlayer(player, x + 4, y, z, 0, 0)
-
+            
             local clothes = { [16] = math.random(12, 13), [17] = 7 }    -- 16=Hats(12:helmet 13:moto) 17=Extra(7:garageleg)
             for vehicles,vehicleclothes in pairs(g_VehicleClothes) do
                 if table.find(vehicles, spawnpoint.vehicle) then
@@ -553,13 +552,16 @@ function joinHandlerBoth(player)
         setPedStat(player, 160, 1000)
         setPedStat(player, 229, 1000)
         setPedStat(player, 230, 1000)
-
+        
         if spawnpoint.vehicle then
             setRandomSeedForMap('vehiclecolors')
 			-- Replace groups of unprintable characters with a space, and then remove any leading space
 			local plate = getPlayerName(player):gsub( '[^%a%d]+', ' ' ):gsub( '^ ', '' )
-            outputDebugString( 'Spawning ' .. tostring(spawnpoint.vehicle) .. ' for ' .. tostring(getPlayerName(player)))
-			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, rx, ry, rz, plate:sub(1, 8))
+			-- Edit #2 
+			if not spawnpoint.rotation then  --Binslayer: wtf, fixing some weirdass bug with maps that dont have rotation and make createVehicle fail thus integrity check fail
+				spawnpoint.rotation = 0 
+			end
+			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, 0, 0, spawnpoint.rotation, plate:sub(1, 8))
 			if setElementSyncer then
 				setElementSyncer( vehicle, false )
 			end
@@ -575,7 +577,7 @@ function joinHandlerBoth(player)
                 g_CurrentRaceMode.setPlayerIsFinished(player)
                 setElementPosition(vehicle, 0, 0, 0)
             end
-
+            
             if spawnpoint.paintjob or spawnpoint.upgrades then
                 setVehiclePaintjobAndUpgrades(vehicle, spawnpoint.paintjob, spawnpoint.upgrades)
             else
@@ -599,9 +601,9 @@ function joinHandlerBoth(player)
                     end
                 end
             end
-            warpPedIntoVehicle(player, vehicle)
+            warpPedIntoVehicle(player, vehicle)	
         end
-
+        
 		destroyBlipsAttachedTo(player)
         createBlipAttachedTo(player, 0, 1, 200, 200, 200)
         g_CurrentRaceMode:onPlayerJoin(player, spawnpoint)
@@ -614,7 +616,7 @@ function joinHandlerBoth(player)
     playerInfo.joined   = bPlayerJoined
 	local duration = bPlayerJoined and (g_MapOptions.duration and (g_MapOptions.duration - g_CurrentRaceMode:getTimePassed()) or true)
 	clientCall(player, 'initRace', vehicle, g_Checkpoints, g_Objects, g_Pickups, g_MapOptions, g_CurrentRaceMode:isRanked(), duration, g_GameOptions, g_MapInfo, playerInfo )
-
+	
 	if bPlayerJoined and getPlayerCount() == 2 and stateAllowsRandomMapVote() and g_GameOptions.joinrandomvote then
 		-- Start random map vote if someone joined a lone player mid-race
 		TimerManager.createTimerFor("map"):setTimer(startMidMapVoteForRandomMap,7000,1)
@@ -689,7 +691,7 @@ function setRandomSeedForMap( type )
     for i,char in ipairs( { string.byte(g_MapInfo.name,1,g_MapInfo.name:len()) } ) do
         seed = math.mod( seed * 11 + char, 216943)
     end
-    math.randomseed(seed)
+    math.randomseed(seed)    
 end
 
 
@@ -725,7 +727,7 @@ addEventHandler('onPlayerReachCheckpointInternal', g_Root,
 				end
 			end
 		end
-
+		
 		local rank, time = g_CurrentRaceMode:onPlayerReachCheckpoint(source, checkpointNum, nitroLevel, nitroActive)
 		if checkpointNum < #g_Checkpoints then
 			triggerEvent('onPlayerReachCheckpoint', source, checkpointNum, time)
@@ -787,7 +789,7 @@ addEventHandler('onPlayerWasted', g_Root,
 				local x, y, z = getElementPosition(source)
 				spawnPlayer(source, x, y, z, 0, getElementModel(source))
 				if g_Vehicles[source] then
-					warpPedIntoVehicle(source, g_Vehicles[source])
+					warpPedIntoVehicle(source, g_Vehicles[source])	
 				end
 			else
 				setPlayerStatus( source, "dead", "" )
@@ -836,7 +838,7 @@ function unloadAll()
 		destroyMessage(player)
 	end
 	destroyMessage(g_Root)
-
+	
 	table.each(g_Vehicles, destroyElement)
 	g_Vehicles = {}
 	g_Spawnpoints = {}
@@ -933,13 +935,13 @@ addEventHandler('onPlayerQuit', g_Root,
 		if g_CurrentRaceMode then
 			g_CurrentRaceMode:onPlayerQuit(source)
 		end
-
+		
 		for i,player in pairs(g_Players) do
 			if not isPlayerFinished(player) then
 				return
 			end
 		end
-
+        
 		if getTotalPlayerCount() < 2 then
 			outputDebugString('Stopping map')
 			triggerEvent('onGamemodeMapStop', g_Root)
@@ -991,7 +993,7 @@ addEventHandler('onRequestKillPlayer', g_Root,
     function(reason)
 		if checkClient( false, source, 'onRequestKillPlayer' ) then return end
         local player = source
-
+		
         if stateAllowsKillPlayer() then
 
 			local gamemode = getRunningGamemode()
@@ -1002,14 +1004,14 @@ addEventHandler('onRequestKillPlayer', g_Root,
         	if reason ~= "water" then
         		triggerEvent("onRacePlayerSuicide",source)
         	end
-
+        	
             setElementHealth(player, 0)
             toggleAllControls(player,false, true, false)
         end
     end
 )
 
-function getRunningGamemode()
+function getRunningGamemode() 
 	local raceResRoot = getResourceRootElement( getResourceFromName( "race" ) )
 	local raceInfo = raceResRoot and getElementData( raceResRoot, "info" )
 	local gamemode = false
@@ -1080,13 +1082,13 @@ addEventHandler('onClientRequestSpectate', g_Root,
 						Countdown.create(g_CurrentRaceMode.getMapOption('respawntime')/1000, clientCall, 'You will be able to respawn in:', 255, 255, 255, 0.25, 2.5, true, player, "Spectate.allowUnspectate"):start(player)
 					end
 					clientCall(player, "Spectate.start", 'manual', true )
-				end
+				end	
 				if not g_GameOptions.stealthspectate or not isPlayerInACLGroup(player, g_GameOptions.admingroup) then
 					setPlayerStatus( player, nil, "spectating")
 				end
 				if isPlayerInACLGroup(player, g_GameOptions.admingroup) then
 					setElementData(player, "kKey", "spectating")
-				end
+				end	
 				Override.setCollideOthers( "ForSpectating", g_CurrentRaceMode.getPlayerVehicle( player ), 0 )
 				g_SavedVelocity[player] = {}
 				g_SavedVelocity[player].velocity = {getElementVelocity(g_Vehicles[player])}
@@ -1194,7 +1196,7 @@ function setPlayerNotReady( player )
     activateNotReadyText()
 end
 
--- Alter not ready timeout
+-- Alter not ready timeout 
 function setPlayerReady( player )
 	setPlayerStatus( player, "alive", nil )
     g_NotReady[player] = false
@@ -1390,7 +1392,7 @@ function MoveAway.update ()
 	for player,_ in pairs(MoveAway.list) do
 		if isPedDead(player) or getElementHealth(player) == 0 then
 			local vehicle = g_Vehicles[player]
-			if isElement(vehicle) then
+			if isElement(vehicle) then 
 				setElementVelocity(vehicle,0,0,0)
 				setElementAngularVelocity(vehicle,0,0,0)
 				Override.setCollideOthers( "ForMoveAway", vehicle, 0 )
@@ -1478,7 +1480,7 @@ TimerManager.createTimerFor("raceresource","integrity"):setTimer(
 		if g_IntegrityFailCount > 1 then
 			outputRace( "Race script integrity compromised - Restarting" )
 			exports.mapmanager:changeGamemode( getThisResource() )
-		end
+		end	
 	end,
 	1000,0
 )
