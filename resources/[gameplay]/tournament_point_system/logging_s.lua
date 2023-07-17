@@ -32,7 +32,7 @@ addCommandHandler("logTournamentPoints", logPoints, true)
 
 function logCurrentGamemodeInfo()
     local gamemodeOutput = ""
-	if gammode == "Sprint" or Tournament.currentGamemode == "Never the same" then
+	if Tournament.currentGamemode == "Sprint" or Tournament.currentGamemode == "Never the same" then
 		gamemodeOutput = "Finish in 10th place or better to earn points."
 	elseif Tournament.currentGamemode == "Shooter" then
 		gamemodeOutput = "Earn " .. Tournament.shooterKill .. " point(s) by killing someone and finish in 10th place or better to earn points."
