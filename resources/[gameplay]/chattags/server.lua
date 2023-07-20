@@ -38,17 +38,17 @@ settings = {
 	['allowedGroups'] = 'Admin,ServerManager,Developer,Killers'
 }
 }
- 
+
 -- Required variables
 spam = { }
 stopChat = false
- 
+
 function chatbox(message, msgtype)
 	local account = getAccountName(getPlayerAccount(source))
-    if stopChat then 
-		cancelEvent() 
-		outputChatBox('#FF0000[FREEZECHAT] #FFFFFFAn admin has recently frozen chat.', source, 255, 255, 255, true) 
-		return 
+    if stopChat then
+		cancelEvent()
+		outputChatBox('#FF0000[FREEZECHAT] #FFFFFFAn admin has recently frozen chat.', source, 255, 255, 255, true)
+		return
 	end
     local name = getElementData(source, "vip.colorNick") or getPlayerName(source)
     local serial = getPlayerSerial(source)
@@ -96,7 +96,7 @@ function chatbox(message, msgtype)
             return
         end
         for _,v in ipairs(settings['adminTag']['ACL']) do
-            if (v[1]~='VIP' and isObjectInACLGroup('user.' .. account, aclGetGroup(v[1])) and check == 0 and not spam[serial]) or (v[1] == 'VIP' and exports['mrgreen-vip']:isPlayerVIP(source) and check == 0 and not spam[serial])then
+            if (v[1]~='VIP' and isObjectInACLGroup('user.' .. account, aclGetGroup(v[1])) and check == 0 and not spam[serial]) or (v[1] == 'VIP' and getResourceState(getResourceFromName('mrgreen-vip')) == 'running' and exports['mrgreen-vip']:isPlayerVIP(source) and check == 0 and not spam[serial])then
 				local text1 = text
 				if settings['colorFilter']['enabled'] then
 					aclgroup = split(settings['colorFilter']['allowedGroups'], ',') or settings['colorFilter']['allowedGroups']
@@ -151,7 +151,7 @@ addEventHandler("onPlayerChat", getRootElement(), chatbox)
 
 
 addEvent("antiResp")
-addEventHandler("antiResp", root, 
+addEventHandler("antiResp", root,
 function(msg, logmsg, teamChat)
     -- Ignored Player Check
     if getElementType( source ) == 'player' then
@@ -171,12 +171,12 @@ function(msg, logmsg, teamChat)
 
 					if not isSourceIgnored then
 					  outputChatBox(msg, player, 255, 255, 255, true)
-					end  
+					end
 
 				else
 				  outputChatBox(msg, player, 255, 255, 255, true)
 				end
-			end 
+			end
 		else
 			local team = getPlayerTeam(source)
 			local sourceSerial = getPlayerSerial( source )
@@ -195,13 +195,13 @@ function(msg, logmsg, teamChat)
 
 						if not isSourceIgnored then
 						  outputChatBox(msg, player, 255, 255, 255, true)
-						end  
+						end
 
 					else
 					  outputChatBox(msg, player, 255, 255, 255, true)
 					end
 				end
-			end 
+			end
 		end
 
     elseif not teamChat then
@@ -209,7 +209,7 @@ function(msg, logmsg, teamChat)
     end
     outputServerLog(logmsg)
 end)
- 
+
 addEventHandler("onPlayerConnect", getRootElement(),
 function(nick)
 	if not settings['adminTag']['enabled'] then return end
@@ -241,29 +241,29 @@ end)
 function trim(s)
    return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
- 
+
 addEventHandler("onPlayerQuit", getRootElement(),
 function()
     local serial = getPlayerName(source)
     spam[serial] = false
 end )
- 
+
 -- Freeze chat
 addCommandHandler(settings['freezeChat']['command'],
 function(player)
     if not settings['freezeChat']['enabled'] then return end
-	
+
 	local aclgroup = split(settings['freezeChat']['allowedGroups'], ',') or settings['freezeChat']['allowedGroups']
 	local allow = false
-	for i, v in ipairs(aclgroup) do 
-		if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(player)), aclGetGroup(v)) then 
+	for i, v in ipairs(aclgroup) do
+		if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(player)), aclGetGroup(v)) then
 			allow = true
 			break
 		end
 	end
-   
+
    if not allow then return end
-   
+
     if not stopChat then
         outputChatBox('#FF0000[FREEZECHAT] #FFFFFF'..getPlayerName(player)..' has frozen the chat!', getRootElement(), 255, 255, 255, true)
         stopChat = true
@@ -274,7 +274,7 @@ function(player)
     end
 end
 )
- 
+
 -- Clear chat
 addCommandHandler(settings['clearChat']['command'],
 function(player)
@@ -283,22 +283,22 @@ function(player)
     aclgroup = split(settings['clearChat']['allowedGroups'], ',') or settings['clearChat']['allowedGroups']
     for i, v in ipairs(aclgroup) do if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(player)), aclGetGroup(v)) then check = true end end
     if not check then return end
-   
+
     for i = 1, 500 do
         outputChatBox(' ')
     end
     outputChatBox('#FF0000[CLEARCHAT]#FFFFFF '..getPlayerName(player)..'  #FFFFFFhas cleared the chat', getRootElement(), 255, 255, 255, true)
 end
 )
- 
+
 function RGBToHex(red, green, blue, alpha)
         return string.format("#%.2X%.2X%.2X", red,green,blue)
 end
 
- 
+
 function isStringHexCode(theHex)
     local Hex = theHex:gsub("#", "")
     if #Hex == 6 and tonumber(Hex, 16) then return true end
     return false
 end
- 
+
