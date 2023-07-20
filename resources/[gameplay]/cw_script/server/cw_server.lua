@@ -1,5 +1,6 @@
 --init
 local teams = {}
+local mode = "CW" -- CW or FFA
 local tags = {}
 local playerData = {}
 local rounds = 10
@@ -8,6 +9,8 @@ local f_round = false
 local round_started = false
 local round_ended = true
 local isWarEnded  = false
+
+CurrentGamemode = "Sprint"
 
 addEventHandler("onResourceStart", resourceRoot,
     function()
@@ -72,7 +75,11 @@ function preStart(player, command, t1_name, t2_name, t1tag, t2tag)
 		end
 		teams[3] = createTeam('Spectators', 255, 255, 255)
 		for i,player in ipairs(getElementsByType('player')) do
-			setPlayerTeam(player, teams[3])
+            if mode == "FFA" then
+                setPlayerTeam(player, teams[1])
+            else
+                setPlayerTeam(player, teams[3])
+            end
 			setElementData(player, 'Score', 0)
 		end
 		setElementData(teams[1], 'Score', 0)
@@ -85,7 +92,9 @@ function preStart(player, command, t1_name, t2_name, t1tag, t2tag)
 			clientCall(player, 'updateTeamData', teams[1], teams[2], teams[3])
 			clientCall(player, 'updateTagData', tags[1], tags[2])
 			clientCall(player, 'updateRoundData', c_round, rounds, f_round)
-			clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
+            if mode == "CW" then
+                clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
+            end
 		end
 	else
 		outputChatBox('[CW] #ffffffYou are not admin', player, 155, 155, 255, true)
@@ -128,11 +137,13 @@ addCommandHandler('fun', funRound)
 
 function outputInfo(info)
 	for i, player in ipairs(getElementsByType('player')) do
-		outputChatBox('[CW]: #ffffff' ..info, player, 155, 155, 255, true)
+		outputChatBox('[CW] #ffffff' ..info, player, 155, 155, 255, true)
 	end
 end
 
 function startRound()
+    CurrentGamemode = exports.race:getRaceMode();
+
 	f_round = false
 	if c_round < rounds  then
 		if round_ended then
@@ -151,9 +162,9 @@ function startRound()
 	end
 end
 
-function playerFinished(rank)
+function playerFinished(player, rank)
 	if isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3]) then
-		if getPlayerTeam(source) ~= teams[3] and not f_round and c_round > 0 then
+		if getPlayerTeam(player) ~= teams[3] and not f_round and c_round > 0 then
 			local p_score = 0
 			if rank == 1 then
 				p_score = 15
@@ -180,16 +191,17 @@ function playerFinished(rank)
 			local t1c = rgb2hex(t1r, t1g, t1b)
 			local t2r, t2g, t2b = getTeamColor(teams[2])
 			local t2c = rgb2hex(t2r, t2g, t2b)
-			local old_score = getElementData(getPlayerTeam(source), 'Score')
+			local old_score = getElementData(getPlayerTeam(player), 'Score')
 			local new_score = old_score + p_score
-			local old_p_score = getElementData(source, 'Score')
+			local old_p_score = getElementData(player, 'Score')
 			local new_p_score = old_p_score + p_score
-			setElementData(source, 'Score', new_p_score)
-			setElementData(getPlayerTeam(source), 'Score', new_score)
-			if getPlayerTeam(source) == teams[1] then
-				outputInfo(t1c .. getPlayerName(source).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')')
-			elseif getPlayerTeam(source) == teams[2] then
-				outputInfo(t2c .. getPlayerName(source).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')')
+			setElementData(player, 'Score', new_p_score)
+			setElementData(getPlayerTeam(player), 'Score', new_score)
+
+			if getPlayerTeam(player) == teams[1] then
+				exports.messages:outputGameMessage(t1c .. getPlayerName(player).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
+			elseif getPlayerTeam(player) == teams[2] then
+				exports.messages:outputGameMessage(t2c .. getPlayerName(player).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
 			end
 		end
 	end
@@ -211,38 +223,11 @@ function endRound()
 			end
 		end
 		if c_round == rounds then
-			local t1tag = tags[1]
-			local t2tag = tags[2]
-			local t1 = getTeamName(teams[1])
-			local t2 = getTeamName(teams[2])
-			local t1t = getTeamFromName(t1)
-			local t2t = getTeamFromName(t2)
-			local t1Players = getPlayersInTeam(t1t)
-			local t2Players = getPlayersInTeam(t2t)
-			local t1mvp = t1Players[1]
-			local t2mvp = t2Players[1]
-            local t1mvpName = getPlayerName(t1mvp)
-            local t2mvpName = getPlayerName(t2mvp) or ''
-			local t1r, t1g, t1b = getTeamColor(teams[1])
-			local t1c = rgb2hex(t1r, t1g, t1b)
-			local t2r, t2g, t2b = getTeamColor(teams[2])
-			local t2c = rgb2hex(t2r, t2g, t2b)
-			local pts1 = getElementData(t1mvp, 'Score')
-			local pts2 = getElementData(t2mvp, 'Score') or 0
-			endThisWar()
-			if #t1Players == 0 and #t2Players >= 1 then
-				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
-				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvpName .. ' #9b9bff(' .. pts2 .. ')')
-			elseif #t1Players >= 1 and #t2Players == 0 then
-				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvpName .. ' #9b9bff(' .. pts1 .. ')')
-				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. '-')
-			elseif #t1Players >= 1 and #t2Players >= 1 then
-				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvpName .. ' #9b9bff(' .. pts1 .. ')')
-				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvpName .. ' #9b9bff(' .. pts2 .. ')')
-			else
-				outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
-				outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. '-')
-			end
+            if mode == "CW" then
+                endClanWar()
+            else
+                endFreeForAll()
+            end
 		end
 	end
 end
@@ -251,21 +236,82 @@ function rgb2hex(r,g,b)
 	return string.format("#%02X%02X%02X", r,g,b)
 end
 
-function endThisWar()
+function endFreeForAll()
+    isWarEnded = true
+
+    local t1 = getTeamName(teams[1])
+    local t1t = getTeamFromName(t1)
+    local t1Players = getPlayersInTeam(t1t)
+
+    if t1Players[1] then
+        local score = getElementData(t1Players[1], 'Score')
+        local playerName = getPlayerName(t1Players[1])
+        outputChatBox("#FFD700In 1st place with " .. score .. " points: " .. playerName, root, 255, 255, 255, true)
+    end
+
+    if t1Players[2] then
+        local score = getElementData(t1Players[2], 'Score')
+        local playerName = getPlayerName(t1Players[2])
+        outputChatBox("#C0C0C0In 2nd place with " .. score .. " points: " .. playerName, root, 255, 255, 255, true)
+    end
+
+    if t1Players[3] then
+        local score = getElementData(t1Players[3], 'Score')
+        local playerName = getPlayerName(t1Players[3])
+        outputChatBox("#CD7F32In 3rd place with " .. score .. " points: " .. playerName, root, 255, 255, 255, true)
+    end
+
+    for i, player in ipairs(t1Players) do
+        local score = getElementData(player, 'Score')
+        outputChatBox("You finished in " .. i .. getPrefix(i) .. " place with " .. score .. " points.", player, 255, 255, 255, true)
+    end
+
+end
+
+function endClanWar()
 	isWarEnded  = true
-	local t1score = tonumber(getElementData(teams[1], 'Score'))
-	local t2score = tonumber(getElementData(teams[2], 'Score'))
-	local t1r, t1g, t1b = getTeamColor(teams[1])
-	local t1c = rgb2hex(t1r, t1g, t1b)
-	local t2r, t2g, t2b = getTeamColor(teams[2])
-	local t2c = rgb2hex(t2r, t2g, t2b)
+
+    local t1tag = tags[1]
+    local t2tag = tags[2]
+    local t1 = getTeamName(teams[1])
+    local t2 = getTeamName(teams[2])
+    local t1t = getTeamFromName(t1)
+    local t2t = getTeamFromName(t2)
+    local t1Players = getPlayersInTeam(t1t)
+    local t2Players = getPlayersInTeam(t2t)
+    local t1mvp = t1Players[1]
+    local t2mvp = t2Players[1]
+    local t1mvpName = getPlayerName(t1mvp)
+    local t2mvpName = getPlayerName(t2mvp) or ''
+    local t1r, t1g, t1b = getTeamColor(teams[1])
+    local t1c = rgb2hex(t1r, t1g, t1b)
+    local t2r, t2g, t2b = getTeamColor(teams[2])
+    local t2c = rgb2hex(t2r, t2g, t2b)
+    local pts1 = getElementData(t1mvp, 'Score')
+    local pts2 = getElementData(t2mvp, 'Score') or 0
+    local t1score = tonumber(getElementData(teams[1], 'Score'))
+    local t2score = tonumber(getElementData(teams[2], 'Score'))
+
+    if #t1Players == 0 and #t2Players >= 1 then
+        outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
+        outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvpName .. ' #9b9bff(' .. pts2 .. ')')
+    elseif #t1Players >= 1 and #t2Players == 0 then
+        outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvpName .. ' #9b9bff(' .. pts1 .. ')')
+        outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. '-')
+    elseif #t1Players >= 1 and #t2Players >= 1 then
+        outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. t1mvpName .. ' #9b9bff(' .. pts1 .. ')')
+        outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. t2mvpName .. ' #9b9bff(' .. pts2 .. ')')
+    else
+        outputInfo(t1c .. t1tag .. ' #ffffffMVP: ' .. t1c .. '-')
+        outputInfo(t2c .. t2tag .. ' #ffffffMVP: ' .. t2c .. '-')
+    end
 
 	if t1score > t2score then
-		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffwon against' .. t2c ..getTeamName(teams[2]).. ' #ffffff ' ..t1score.. ' : ' ..t2score)
+		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffwon against ' .. t2c ..getTeamName(teams[2]).. ' #ffffff ' ..t1score.. ' : ' ..t2score)
 	elseif t1score < t2score then
-		outputInfo(t2c .. getTeamName(teams[2]).. ' #ffffffwon against' .. t1c ..getTeamName(teams[1]).. ' #ffffff ' ..t2score.. ' : ' ..t1score)
+		outputInfo(t2c .. getTeamName(teams[2]).. ' #ffffffwon against ' .. t1c ..getTeamName(teams[1]).. ' #ffffff ' ..t2score.. ' : ' ..t1score)
 	elseif t1score == t2score then
-		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffand '.. t2c ..getTeamName(teams[2]).. ' #ffffffdrawed ' ..t1score.. ' : ' ..t2score)
+		outputInfo(t1c .. getTeamName(teams[1]).. ' #ffffffand '.. t2c ..getTeamName(teams[2]).. ' #fffffftied ' ..t1score.. ' : ' ..t2score)
 	end
 end
 
@@ -291,7 +337,12 @@ function playerJoin(source)
     if isElement(teams[1]) then
         clientCall(source, 'updateTeamData', teams[1], teams[2], teams[3])
         clientCall(source, 'updateRoundData', c_round, rounds, f_round)
-        setPlayerTeam(source, teams[3])
+        clientCall(source, 'updateModeData', mode)
+        if (mode == "FFA") then
+            setPlayerTeam(source, teams[1])
+        else
+            setPlayerTeam(source, teams[3])
+        end
     end
     local serial = getPlayerSerial(source)
     if playerData[serial] ~= nil then
@@ -317,15 +368,21 @@ end
 -------------------
 -- FROM ADMIN PANEL
 -------------------
-function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2)
+function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m)
 	destroyTeams()
     tags[1] = t1tag
     tags[2] = t2tag
-	teams[1] = createTeam(team1name, r1, g1, b1)
-	teams[2] = createTeam(team2name, r2, g2, b2)
-	teams[3] = createTeam('Spectators', 255, 255, 255)
+	teams[1] = m == "CW" and createTeam(team1name, r1, g1, b1) or createTeam("Free-for-All", 52, 110, 68)
+	teams[2] = m == "CW" and createTeam(team2name, r2, g2, b2) or createTeam("-", 0, 0, 0)
+	teams[3] = m == "CW" and createTeam("Spectators", 255, 255, 255) or createTeam("--", 0, 0, 0)
+    mode = m
+
 	for i,player in ipairs(getElementsByType('player')) do
-		setPlayerTeam(player, teams[3])
+        if mode == "FFA" then
+            setPlayerTeam(player, teams[1])
+        else
+            setPlayerTeam(player, teams[3])
+        end
 		setElementData(player, 'Score', 0)
 	end
 	setElementData(teams[1], 'Score', 0)
@@ -337,7 +394,10 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2)
 		clientCall(player, 'updateTeamData', teams[1], teams[2], teams[3])
 		clientCall(player, 'updateTagData', tags[1], tags[2])
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
-		clientCall(player, 'createGUI', t1tag, t2tag)
+        clientCall(player, 'updateModeData', mode)
+        if mode == "CW" then
+            clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
+        end
 	end
 end
 
@@ -382,9 +442,6 @@ end
 ------------
 addEvent('onMapStarting', true)
 addEventHandler('onMapStarting', getRootElement(), startRound)
-
-addEvent('onPlayerFinish', true)
-addEventHandler('onPlayerFinish', getRootElement(), playerFinished)
 
 addEvent('onPostFinish', true)
 addEventHandler('onPostFinish', getRootElement(), endRound)
