@@ -458,12 +458,18 @@ addEventHandler('onPostFinish', getRootElement(), endRound)
 
 addEventHandler('onPlayerLogin', getRootElement(), playerLogin)
 
-addEventHandler('onPlayerVehicleEnter', getRootElement(), setColors)
-addEventHandler('onPlayerPickUpRacePickup', getRootElement(), setColors)
-
 addEvent('onPlayerReachCheckpoint', true)
 addEventHandler('onPlayerReachCheckpoint', getRootElement(), setColors)
 --addEventHandler('onPlayerReachCheckpoint', getRootElement(), getRank)
+
+addEventHandler('onElementModelChange', root, function()
+    if getElementType(source)== 'vehicle' then
+        local player = getVehicleOccupant()
+        if not player then return end
+        setTimer(setColors, 50, 1)
+    end
+end)
+
 
 addEvent("onRaceStateChanging")
 addEventHandler("onRaceStateChanging",getRootElement(),

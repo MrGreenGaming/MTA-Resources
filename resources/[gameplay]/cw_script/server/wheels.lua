@@ -28,20 +28,20 @@ function onPlayerSpawn()
 end
 addEventHandler("onPlayerSpawn", root, onPlayerSpawn)
 
--- When a player hits a vehicle change pickup - set their wheels to the offroad ones
-addEvent("onPlayerPickUpRacePickup", true)
-function onPlayerPickUpRacePickup(pickupID, pickupType, vehicleModel)
-	if pickupType == "vehiclechange" then
-		if isPedInVehicle(source) then
-			local veh = getPedOccupiedVehicle(source)
-			local wwWheels = getElementData(source, "wheels")
-			if (getVehicleType(veh) == "Automobile") or (getVehicleType(veh) == "Monster Truck") or (getVehicleType(veh) == "Quad") then
-				if wwWheels == false then addVehicleUpgrade(veh, 1025) else removeVehicleUpgrade ( veh, 1025 ) end
-			end
-		end
-	end
+addEventHandler('onElementModelChange', root, function()
+    if getElementType(source)== 'vehicle' then
+        local player = getVehicleOccupant()
+        if not player then return end
+        setTimer(applyWheels, 50, 1, player, vehicle)
+    end
+end)
+
+function applyWheels(player, vehicle)
+    if (getVehicleType(vehicle) == "Automobile") or (getVehicleType(vehicle) == "Monster Truck") or (getVehicleType(vehicle) == "Quad") then
+        local wwWheels = getElementData(player, "wheels")
+        if wwWheels == false then addVehicleUpgrade(vehicle, 1025) else removeVehicleUpgrade ( vehicle, 1025 ) end
+    end
 end
-addEventHandler("onPlayerPickUpRacePickup", root, onPlayerPickUpRacePickup)
 
 
 -- When a player hits the last checkpoint aka finishes the race - set their wheels to the offroad ones
