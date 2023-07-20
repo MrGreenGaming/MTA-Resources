@@ -559,7 +559,11 @@ end
 -- BINDS
 ----------------------------
 createAdminGUI()
-setTimer(function() if isElement(teams[1]) then createGUI(getTeamName(teams[1]), getTeamName(teams[2])) end end, 1000, 1)
+setTimer(function()
+    if isElement(teams[1]) and ffa_mode == "CW" then
+        createGUI(getTeamName(teams[1]), getTeamName(teams[2]))
+    end
+end, 2500, 1)
 bindKey('F6', 'down', toogleGUI)
 bindKey('F10', 'down', toogleAdminGUI)
 bindKey('F7', 'down', toggleMode)
