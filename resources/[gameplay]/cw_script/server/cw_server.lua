@@ -466,6 +466,9 @@ addEventHandler('onElementModelChange', root, function()
     end
 end)
 
+addEventHandler('onPlayerVehicleEnter', root, function(vehicle, seat)
+    setColors(source, vehicle)
+end)
 
 addEvent("onRaceStateChanging")
 addEventHandler("onRaceStateChanging",getRootElement(),
