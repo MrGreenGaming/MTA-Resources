@@ -464,7 +464,7 @@ addEventHandler('onPlayerReachCheckpoint', getRootElement(), setColors)
 
 addEventHandler('onElementModelChange', root, function()
     if getElementType(source)== 'vehicle' then
-        local player = getVehicleOccupant()
+        local player = getVehicleOccupant(source)
         if not player then return end
         setTimer(setColors, 50, 1)
     end

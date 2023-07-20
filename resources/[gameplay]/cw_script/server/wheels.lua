@@ -30,7 +30,7 @@ addEventHandler("onPlayerSpawn", root, onPlayerSpawn)
 
 addEventHandler('onElementModelChange', root, function()
     if getElementType(source)== 'vehicle' then
-        local player = getVehicleOccupant()
+        local player = getVehicleOccupant(source)
         if not player then return end
         setTimer(applyWheels, 50, 1, player, vehicle)
     end
