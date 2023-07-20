@@ -32,7 +32,7 @@ addEventHandler('onElementModelChange', root, function()
     if getElementType(source)== 'vehicle' then
         local player = getVehicleOccupant(source)
         if not player then return end
-        setColors(player, source)
+        setTimer(applyWheels, 50, 1, player, source)
     end
 end)
 
