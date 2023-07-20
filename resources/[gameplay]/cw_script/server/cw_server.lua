@@ -236,12 +236,22 @@ function rgb2hex(r,g,b)
 	return string.format("#%02X%02X%02X", r,g,b)
 end
 
+function getPlayersInTeamSortedByScore(team)
+    local players = getPlayersInTeam(team)
+
+    table.sort(players, function(a, b)
+        return getElementData(a, 'Score') > getElementData(b, 'Score')
+    end)
+
+    return players
+end
+
 function endFreeForAll()
     isWarEnded = true
 
     local t1 = getTeamName(teams[1])
     local t1t = getTeamFromName(t1)
-    local t1Players = getPlayersInTeam(t1t)
+    local t1Players = getPlayersInTeamSortedByScore(t1t)
 
     if t1Players[1] then
         local score = getElementData(t1Players[1], 'Score')
@@ -277,8 +287,8 @@ function endClanWar()
     local t2 = getTeamName(teams[2])
     local t1t = getTeamFromName(t1)
     local t2t = getTeamFromName(t2)
-    local t1Players = getPlayersInTeam(t1t)
-    local t2Players = getPlayersInTeam(t2t)
+    local t1Players = getPlayersInTeamSortedByScore(t1t)
+    local t2Players = getPlayersInTeamSortedByScore(t2t)
     local t1mvp = t1Players[1]
     local t2mvp = t2Players[1]
     local t1mvpName = getPlayerName(t1mvp)
@@ -449,6 +459,7 @@ addEventHandler('onPostFinish', getRootElement(), endRound)
 addEventHandler('onPlayerLogin', getRootElement(), playerLogin)
 
 addEventHandler('onPlayerVehicleEnter', getRootElement(), setColors)
+addEventHandler('onPlayerPickUpRacePickup', getRootElement(), setColors)
 
 addEvent('onPlayerReachCheckpoint', true)
 addEventHandler('onPlayerReachCheckpoint', getRootElement(), setColors)
