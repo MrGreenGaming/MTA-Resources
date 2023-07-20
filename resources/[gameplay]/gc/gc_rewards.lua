@@ -681,19 +681,19 @@ end
 
 
 function onTournamentStart(resource)
-	if getResourceName(resource) ~= "tournament_point_system" then return end
+	if getResourceName(resource) ~= "cw_script" then return end
 	isTournamentActive = true
 end
 addEventHandler("onResourceStart", getRootElement(), onTournamentStart)
 
 function onTournamentStop(resource)
-	if getResourceName(resource) ~= "tournament_point_system" then return end
+	if getResourceName(resource) ~= "cw_script" then return end
 	isTournamentActive = false
 end
 addEventHandler("onResourceStop", getRootElement(), onTournamentStop)
 
 function onTournamentMapChange()
-	if not getResourceFromName('tournament_point_system') or getResourceState(getResourceFromName('tournament_point_system')) ~= 'running' then
+	if not getResourceFromName('cw_script') or getResourceState(getResourceFromName('cw_script')) ~= 'running' then
 		isTournamentActive = false
 	end
 end

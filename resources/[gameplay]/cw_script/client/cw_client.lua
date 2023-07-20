@@ -2,6 +2,7 @@ local screenW, screenH = guiGetScreenSize()
 local text_offset = 20
 local teams = {}
 local tags = {}
+local ffa_mode = "CW" -- CW or FFA
 local c_round = 0
 local m_round = 0
 local f_round = false
@@ -75,25 +76,6 @@ function dxDrawBottomRoundedRectangle(x, y, width, height, radius, color, postGU
     dxDrawRectangle(x+radius, y, width-(radius*2), radius, color, postGUI, subPixelPositioning)
 end
 
-function getPrefix(number)
-	if number == 11 or number == 12 or number == 13 then
-		return 'th'
-	end
-
-	number = number % 10
-
-	if number == 1 then
-		return 'st'
-	elseif number == 2 then
-		return 'nd'
-	elseif number == 3 then
-		return 'rd'
-	else
-		return 'th'
-	end
-
-end
-
 function updateDisplay()
 	if isElement(teams[1]) and isElement(teams[2]) then
 		local state = ""
@@ -118,10 +100,10 @@ function updateDisplay()
 
 		if not f_round then
 			sColor = "#00ff00"
-			state = "Running"
+			state = "Event Active"
 		else
 			sColor = "#FFA500"
-			state = "Free"
+			state = "Free Round"
 		end
 
 		if #t1Players > 8 and #t2Players > 8 then
@@ -143,7 +125,9 @@ function updateDisplay()
 			end
 			dxDrawRoundedRectangle(wX, wY, windowSizeX, windowSizeY, 10, tocolor(0, 0, 0, 160), false, false) -- background
 			dxDrawRectangle(wX, wY + (rowHeight*2), windowSizeX, rowHeight, tocolor(r1, g1, b1, 30), false, false) -- t1 bg
-			dxDrawRectangle(wX, wY + (rowHeight*(2+(count+1))), windowSizeX, rowHeight, tocolor(r2, g2, b2, 30), false, false) -- t2 bg
+            if ffa_mode == "CW" then
+                dxDrawRectangle(wX, wY + (rowHeight*(2+(count+1))), windowSizeX, rowHeight, tocolor(r2, g2, b2, 30), false, false) -- t2 bg
+            end
 			dxDrawBottomRoundedRectangle(wX, wY + (rowHeight * (rowCount-1)), windowSizeX, rowHeight, 10, tocolor(0, 0, 0, 160), false, false) -- mode bg
 			dxDrawText("Press #bababaF7 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
 
@@ -168,34 +152,37 @@ function updateDisplay()
 					dxDrawText(pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(2+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+playerKey)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
 				end
 			end
-			dxDrawText(getTeamName(teams[2]), wX + margin, wY + (rowHeight*(3+count)), wX+windowSizeX-margin, wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, fBold, "left", "center", false, false, false, true, false)
-			dxDrawText(getElementData(teams[2], 'Score'), wX + rankWidth + nickWidth, wY + (rowHeight*(3+count)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, fBold, "center", "center", false, false, false, true, false)
 
-			local t2start = 0
-			if #t1Players > 8 then
-				t2start = 3+8
-			else
-				t2start = 3+#t1Players
-			end
-			for playerKey, player in ipairs(t2Players) do
-				local rank = tonumber(getElementData(player, 'race rank')) or 1
-				local playerName = getPlayerName(player)
-				local textW, textH = dxGetTextSize(playerName, 1, 1, fBold)
-				local counter = 0.0278 * (playerKey - 1)
-				local pts = getElementData(player, 'Score')
-				while textW > nickWidth do
-					textW, textH = dxGetTextSize(playerName, 1, 1, fontBold)
-					playerName = string.sub(playerName, 1, -2)
-				end
-				textW, textH = dxGetTextSize(playerName, 1, 1, fontBold)
-				if playerKey < 9 then
-					dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(t2start+playerKey)), wX+rankWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
-					dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(t2start+playerKey)), wX+nickWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(r2, g2, b2, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
-					dxDrawText(pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(t2start+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(t2start+playerKey+1)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
-				end
-			end
-		elseif mode == "compact" then
-			rowCount = 4
+            if (ffa_mode == "CW") then
+                dxDrawText(getTeamName(teams[2]), wX + margin, wY + (rowHeight*(3+count)), wX+windowSizeX-margin, wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, fBold, "left", "center", false, false, false, true, false)
+                dxDrawText(getElementData(teams[2], 'Score'), wX + rankWidth + nickWidth, wY + (rowHeight*(3+count)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, fBold, "center", "center", false, false, false, true, false)
+
+                local t2start = 0
+                if #t1Players > 8 then
+                    t2start = 3+8
+                else
+                    t2start = 3+#t1Players
+                end
+                for playerKey, player in ipairs(t2Players) do
+                    local rank = tonumber(getElementData(player, 'race rank')) or 1
+                    local playerName = getPlayerName(player)
+                    local textW, textH = dxGetTextSize(playerName, 1, 1, fBold)
+                    local counter = 0.0278 * (playerKey - 1)
+                    local pts = getElementData(player, 'Score')
+                    while textW > nickWidth do
+                        textW, textH = dxGetTextSize(playerName, 1, 1, fontBold)
+                        playerName = string.sub(playerName, 1, -2)
+                    end
+                    textW, textH = dxGetTextSize(playerName, 1, 1, fontBold)
+                    if playerKey < 9 then
+                        dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(t2start+playerKey)), wX+rankWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
+                        dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(t2start+playerKey)), wX+nickWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(r2, g2, b2, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
+                        dxDrawText(pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(t2start+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(t2start+playerKey+1)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
+                    end
+                end
+            end
+            elseif mode == "compact" then
+                rowCount = 4
 			windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(rowHeight) * rowCount
 			dxDrawRoundedRectangle(wX, wY, windowSizeX, windowSizeY, 10, tocolor(0, 0, 0, 160), false, false) -- background
 			dxDrawRectangle(wX, wY + (rowHeight*2), windowSizeX, rowHeight, tocolor(r1, g1, b1, 20), false, false) -- t1 bg
@@ -250,6 +237,7 @@ function createAdminGUI()
 	guiSetInputMode('no_binds_when_editing')
 		-- tab 1
 		tab_general = guiCreateTab('General', tab_panel)
+
 		local t1 = guiCreateLabel(59, 5, 68, 28, "Team Name", false, tab_general)
 		guiLabelSetHorizontalAlign(t1, "center", false)
 		local t2 = guiCreateLabel(260, 5, 68, 28, "Team Name", false, tab_general)
@@ -266,28 +254,32 @@ function createAdminGUI()
 		--guiCreateLabel(10, 25, 150, 20, "________________", false, tab_general)
         --guiCreateLabel(128, 20, 150, 20, "Tag:", false, tab_general)
         --guiCreateLabel(128, 25, 150, 20, "_______", false, tab_general)
+
+        ffa_field = guiCreateCheckBox(15, 143, 240, 20, "Free-for-All (ignores team settings)", ffa_mode == "FFA", false, tab_general)
+        guiCreateLabel(15, 163, 240, 20, "Cannot be changed once war has started!", false, tab_general)
+
 		if isElement(teams[1]) then
 			t1name = getTeamName(teams[1])
 		else
-			t1name = 'MrGreen'
+			t1name = 'Home'
 		end
 		t1_field = guiCreateEdit(15, 23, 154, 22, t1name, false, tab_general)
 		if isElement(teams[2]) then
 			t2name = getTeamName(teams[1])
 		else
-			t2name = 'Polish Paradise'
+			t2name = 'Guest'
 		end
 		t2_field = guiCreateEdit(217, 23, 154, 22, t2name, false, tab_general)
         if(isElement(tags[1])) then
             t1tag = tags[1]
         else
-            t1tag = 'MR'
+            t1tag = 'H'
         end
         t1t_field = guiCreateEdit(15, 63, 154, 22, t1tag, false, tab_general)
         if(isElement(tags[2])) then
             t2tag = tags[2]
         else
-            t2tag = 'PP'
+            t2tag = 'G'
         end
         t2t_field = guiCreateEdit(217, 63, 154, 22, t2tag, false, tab_general)
 
@@ -297,7 +289,7 @@ function createAdminGUI()
 			t1r, t1g, t1b = getTeamColor(teams[1])
 			t1color = rgb2hex(t1r,t1g,t1b)
 		else
-			t1color = '#bababa'
+			t1color = '#ff0000'
 		end
 		t1c_field = guiCreateEdit(15, 103, 154, 22, t1color, false, tab_general)
 		if isElement(teams[2]) then
@@ -307,7 +299,7 @@ function createAdminGUI()
 			t2color = '#00ff00'
 		end
 		t2c_field = guiCreateEdit(217, 103, 154, 22, t2color, false, tab_general)
-		zadat_button = guiCreateButton(132, 143, 114, 29, "Apply", false, tab_general)
+		zadat_button = guiCreateButton(257, 143, 114, 29, "Apply", false, tab_general)
 		guiSetProperty(zadat_button, "NormalTextColour", "FFFFFEFE")
 		addEventHandler("onClientGUIClick", zadat_button, zadatTeams, false)
 		start_button = guiCreateButton(10, 188, 112, 29, "Start CW", false, tab_general)
@@ -383,9 +375,13 @@ function toogleAdminGUI()
 end
 
 function toggleMode()
-	if mode == "main" then
+	if mode == "main" and ffa_mode == "CW" then
 		mode = "compact"
 		outputChatBox('[CW] #ffffffCompact mode', 155, 155, 255, true)
+
+    elseif mode == "main" and ffa_mode == "FFA" then
+        mode = "hidden"
+        outputChatBox('[CW] #ffffffHidden mode', 155, 155, 255, true)
 	elseif mode == "compact" then
 		mode = "hidden"
 		outputChatBox('[CW] #ffffffHidden mode', 155, 155, 255, true)
@@ -419,6 +415,8 @@ function updateAdminPanelText()
 		guiSetText(t2cur_field, t2score)
 		guiSetText(cr_field, c_round)
 		guiSetText(ct_field, m_round)
+
+        guiCheckBoxSetSelected(ffa_field, ffa_mode == "FFA")
 	end
 end
 
@@ -462,6 +460,10 @@ function zadatScoreRounds()
 end
 
 function zadatTeams()
+    local ffa = guiCheckBoxGetSelected(ffa_field) == true and "FFA" or "CW"
+
+    outputDebugString("FFA mode is: " .. tostring(ffa))
+
 	local t1name = guiGetText(t1_field)
 	local t2name = guiGetText(t2_field)
 	local t1color = guiGetText(t1c_field)
@@ -473,6 +475,7 @@ function zadatTeams()
 		serverCall('setTeamColor', teams[1], r1, g1, b1)
 		serverCall('setTeamName', teams[2], t2name)
 		serverCall('setTeamColor', teams[2], r2, g2, b2)
+        serverCall('setFFAMode', ffa_mode, ffa)
 		serverCall('sincAP')
 	end
 end
@@ -486,9 +489,14 @@ function startWar()
 	local t2color = guiGetText(t2c_field)
 	local r1,g1,b1 = hex2rgb(t1color)
 	local r2,g2,b2 = hex2rgb(t2color)
-	serverCall('startWar', t1name, t2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2)
+    local ffa = guiCheckBoxGetSelected(ffa_field) == true and "FFA" or "CW"
+
+	serverCall('startWar', t1name, t2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, ffa)
 	outputChatBox('[CW] #ffffffPress #9b9bffF7 #ffffffto switch display mode', 155, 155, 255, true)
-	outputChatBox('[CW] #ffffffPress #9b9bffF6 #ffffffto select team', 155, 155, 255, true)
+
+    if ffa == "CW" then
+        outputChatBox('[CW] #ffffffPress #9b9bffF6 #ffffffto select team', 155, 155, 255, true)
+    end
 end
 
 ----------------------------
@@ -505,6 +513,11 @@ function updateTagData(tag1, tag2)
 	tags[1] = tag1
 	tags[2] = tag2
 	updateAdminPanelText()
+end
+
+function updateModeData(mode)
+    ffa_mode = mode
+    updateAdminPanelText()
 end
 
 function updateRoundData(c_r, max_r, f_r)
