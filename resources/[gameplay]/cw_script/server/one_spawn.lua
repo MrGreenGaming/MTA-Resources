@@ -45,9 +45,9 @@ function ( state )
 				setElementModel ( veh, model )
                 setElementPosition ( veh, x, y, z )
 				setElementRotation ( veh, 0, 0, r )
-				outputInfo("Enforcing spawnpoints...")
 			end
 		end
+        outputInfo("Enforcing spawnpoints...")
 	end
 end)
 
