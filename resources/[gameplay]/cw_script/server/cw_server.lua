@@ -428,12 +428,11 @@ end
 --------------------
 -- CAR & BLIP COLORS
 --------------------
-function setColors()
-	local s_team = getPlayerTeam(source)
-	local p_veh = getPedOccupiedVehicle(source)
+function setColors(player, vehicle)
+	local s_team = getPlayerTeam(player)
 	if s_team then
 		local r, g, b = getTeamColor(s_team)
-		setVehicleColor(p_veh, r, g, b, 255, 255, 255)
+		setVehicleColor(vehicle, r, g, b, 255, 255, 255)
 	end
 end
 
@@ -457,16 +456,13 @@ addEvent('onPostFinish', true)
 addEventHandler('onPostFinish', getRootElement(), endRound)
 
 addEventHandler('onPlayerLogin', getRootElement(), playerLogin)
-
-addEvent('onPlayerReachCheckpoint', true)
-addEventHandler('onPlayerReachCheckpoint', getRootElement(), setColors)
 --addEventHandler('onPlayerReachCheckpoint', getRootElement(), getRank)
 
 addEventHandler('onElementModelChange', root, function()
     if getElementType(source)== 'vehicle' then
         local player = getVehicleOccupant(source)
         if not player then return end
-        setTimer(setColors, 50, 1)
+        setTimer(setColors, 50, 1, player, source)
     end
 end)
 
