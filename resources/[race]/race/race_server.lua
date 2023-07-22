@@ -558,7 +558,7 @@ function joinHandlerBoth(player)
 			-- Replace groups of unprintable characters with a space, and then remove any leading space
 			local plate = getPlayerName(player):gsub( '[^%a%d]+', ' ' ):gsub( '^ ', '' )
 			-- Edit #2
-			if not spawnpoint.rotation then  --Binslayer: wtf, fixing some weirdass bug with maps that dont have rotation and make createVehicle fail thus integrity check fail
+			if not spawnpoint.rotation or spawnpoint.rotation == nil then  --Binslayer: wtf, fixing some weirdass bug with maps that dont have rotation and make createVehicle fail thus integrity check fail
 				spawnpoint.rotation = 0
 			end
 			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, 0, 0, spawnpoint.rotation, plate:sub(1, 8))
