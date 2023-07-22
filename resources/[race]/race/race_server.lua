@@ -562,14 +562,7 @@ function joinHandlerBoth(player)
 				spawnpoint.rotation = 0
 			end
 
-            outputDebugString("Spawnpoint vehicle: " .. tostring(spawnpoint.vehicle))
-            outputDebugString("X: " .. tostring(x))
-            outputDebugString("Y: " .. tostring(y))
-            outputDebugString("Z: " .. tostring(z))
-            outputDebugString("Spawnpoint rotation: " .. tostring(spawnpoint.rotation))
-            outputDebugString("Plate: " .. tostring(plate:sub(1, 8)))
-
-			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, 0, 0, spawnpoint.rotation, plate:sub(1, 8))
+			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, 0, 0, spawnpoint.rotation or 0, plate:sub(1, 8))
 			if setElementSyncer then
 				setElementSyncer( vehicle, false )
 			end
