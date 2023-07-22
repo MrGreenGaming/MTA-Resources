@@ -1479,7 +1479,7 @@ TimerManager.createTimerFor("raceresource","integrity"):setTimer(
 		-- Two fails in a row triggers a script restart
 		if g_IntegrityFailCount > 1 then
 			outputRace( "Race script integrity compromised - Restarting" )
-            outputRace("Staf has been notified")
+            outputRace("Staff has been notified")
 
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
                 exports.discord:send("chat.message.text", { author = "Console - Race resource", text = "<@368400697097715713> Race resource has crashed on this map!" })
