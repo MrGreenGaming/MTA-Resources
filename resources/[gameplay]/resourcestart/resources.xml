@@ -40,4 +40,6 @@
 	<resource priority="0" restart="0">playerrecord</resource>
 	<resource priority="0" restart="0">hdwheels</resource>
 	<resource priority="0" restart="0">gctransfer</resource>
+    <resource priority="0" restart="0">eventmanager</resource>
+    <resource priority="0" restart="1">race_ghost_assist</resource>
 </resources>
