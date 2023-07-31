@@ -558,6 +558,11 @@ function updateAdminInfo(obj)
 	if isAdmin then
 		createAdminGUI()
 		outputChatBox('[CW] #ffffffPress #9b9bffF10 #ffffffto open management panel', 155, 155, 255, true)
+        if getResourceFromName("gcshop") and getResourceState(getResourceFromName("gcshop")) == "running" then
+            outputChatBox('[CW] #ffffffGcShop perks are #00FF00ENABLED. #ffffffDisable them using /stop gcshop', 155, 155, 255, true)
+        else
+            outputChatBox('[CW] #ffffffGcShop perks are #FF0000DISABLED. #ffffffEnable them using /start gcshop', 155, 155, 255, true)
+        end
 	end
 end
 

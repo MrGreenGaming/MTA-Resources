@@ -13,26 +13,6 @@ local isWarEnded  = false
 
 CurrentGamemode = "Sprint"
 
-addEventHandler("onResourceStart", resourceRoot,
-    function()
-        local canceled = false
-        if getResourceFromName("gcshop") and getResourceState(getResourceFromName("gcshop")) == "running" then
-            cancelEvent(true, "Can't start CW while GcShop is running. Stop the GcShop resource (Greencoin Shop)")
-            canceled = true
-            outputChatBox("Can't start CW while GcShop is running. Stop the GcShop resource using '/stop gcshop'", root, 255, 0, 0)
-        end
-
-        if getResourceFromName("mrgreen-vip") and getResourceState(getResourceFromName("mrgreen-vip")) == "running" then
-            cancelEvent(true, "Can't start CW while VIP is running. Stop the VIP resource (Mrgreen VIP)")
-            canceled = true
-            outputChatBox("Can't start CW while VIP is running. Stop the VIP resource using '/stop mrgreen-vip'", root, 255, 0, 0)
-        end
-
-        if not canceled then triggerEvent("onResourceTruelyStart", resourceRoot) end
-    end
-)
-addEvent("onResourceTruelyStart", true)
-
 -----------------
 -- Call functions
 -----------------

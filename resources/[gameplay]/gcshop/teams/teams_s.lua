@@ -16,7 +16,7 @@ addEventHandler("onGCShopLogin", root, function()
     local fid = exports.gc:getPlayerForumID(source)
     local player = source
 	dbQuery(
-        function(qh) 
+        function(qh)
             local result = dbPoll(qh, 0)
             local pName = getPlayerName(player)
             if #result == 0 then
@@ -27,11 +27,11 @@ addEventHandler("onGCShopLogin", root, function()
                     dbExec(handlerConnect, [[UPDATE gc_nickcache SET name=? WHERE forumid=?]], pName, fid)
                 end
             end
-            
+
             triggerClientEvent(player, "teamLogin", resourceRoot)
             checkPlayerTeam(player, true)
-        end, 
-    handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], fid)            
+        end,
+    handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], fid)
 end)
 
 addEventHandler("onGCShopLogout", root, function()
@@ -65,7 +65,7 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
             outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
             return
         end
-				
+
 		-- Checking team name for illegal characters
 		for i=1,string.len(teamname) do
 			local char = string.sub(teamname, i, i)
@@ -74,7 +74,7 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
 				return
 			end
 		end
-		
+
         local result, error = gcshopBuyItem(player, team_price, 'Team renew: ' .. tostring(r.teamid))
         if result == true then
             local added
@@ -110,7 +110,7 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
             outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
             return
         end
-		
+
 		-- Checking team name for illegal characters
 		for i=1,string.len(teamname) do
 			local char = string.sub(teamname, i, i)
@@ -159,7 +159,7 @@ addEventHandler("updateTeam", resourceRoot, function(teamname, teamtag, teamcolo
             outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
             return
         end
-				
+
 		-- Checking team name for illegal characters
 		for i=1,string.len(teamname) do
 			local char = string.sub(teamname, i, i)
@@ -168,14 +168,14 @@ addEventHandler("updateTeam", resourceRoot, function(teamname, teamtag, teamcolo
 				return
 			end
 		end
-		
+
         local result, error = gcshopBuyItem(player, team_update_price, 'Team update: ' .. tostring(r.teamid))
         if result == true then
             local added
 	    added = dbExec(handlerConnect, [[UPDATE `team` SET `name`=?, `tag`=?, `colour`=?, `message`=? WHERE `teamid`=?]], teamname, teamtag, teamcolour, teammsg, r.teamid)
 	    setTeamName(teams[r.teamid], teamtag .. ' ' .. teamname)
 	    setTeamColor(teams[r.teamid], getColorFromString(teamcolour))
-            
+
             addToLog('"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought Team update: ' .. tostring(r.teamid))
             outputChatBox('Team updated.', player, 0, 255, 0)
             checkPlayerTeam(player)
@@ -213,7 +213,7 @@ function sendClientData(nicks, res, player, r)
 	local forumNameTable = {}
 	for i, row in ipairs(result) do
 		fid = row.forumid
-		
+
 		if nicks then
 			for j, ro in ipairs(nicks) do
 				if row.forumid == ro.forumid then
@@ -223,13 +223,13 @@ function sendClientData(nicks, res, player, r)
 				end
 			end
 		end
-		
+
 		if not c then
 			table.insert(forumNameTable, {userId=fid})
 		end
 		c = false
 	end
-	
+
 	if #forumNameTable > 0 then
 		exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, player, 'getForumDetails')
 	else
@@ -238,7 +238,7 @@ function sendClientData(nicks, res, player, r)
 end
 
 addEvent('getForumDetails')
-addEventHandler('getForumDetails', root, 
+addEventHandler('getForumDetails', root,
 function(resp, res, r, player)
 	local result = res
 	if not resp then
@@ -285,7 +285,7 @@ function checkPlayerTeam2(qh, player, bLogin)
         r.age = string.format("%.2f", age / (24 * 60 * 60))
         outputConsole('[TEAMS] Team days left: ' .. r.age, player)
     end
-	
+
 	dbQuery(
         function(qh)
             local nicks = dbPoll(qh, 0)
@@ -317,8 +317,8 @@ function checkPlayerTeam2(qh, player, bLogin)
                 setElementData(teams[r.teamid], 'gcshop.teamid', r.teamid)
                 setElementData(teams[r.teamid], 'gcshop.owner', r.owner)
             end
-            -- Don't use team elements in CTF
-            if exports.race:getRaceMode() ~= "Capture the flag" then
+            -- Don't use team elements in CTF or if CW is running
+            if exports.race:getRaceMode() ~= "Capture the flag" or (getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running") then
                 setPlayerTeam(player, teams[r.teamid])
 				-- Colored blips for default radar by AleksCore
 				local blips = getElementsByType("blip")
@@ -332,7 +332,7 @@ function checkPlayerTeam2(qh, player, bLogin)
             if r.message and bLogin then
                 outputChatBox('#00FF00[TEAMS] ' .. r.message, player, tr, tg, tb, true)
             end
-        end    
+        end
     ,handlerConnect, [[SELECT * FROM gc_nickcache]])
 end
 
@@ -344,7 +344,7 @@ function leaveTeam(player)
         destroyElement(teams[teamid])
         teams[teamid] = nil
     end
-    if exports.race:getRaceMode() ~= "Capture the flag" then
+    if exports.race:getRaceMode() ~= "Capture the flag" or (getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running") then
         setPlayerTeam(player, nil)
 		-- Colored blips for default radar by AleksCore
 		local blips = getElementsByType("blip")
@@ -359,6 +359,7 @@ end
 
 addEvent('onGamemodeMapStop', true)
 addEventHandler('onGamemodeMapStop', root, function()
+    if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then return end
     for player, r in pairs(playerteams) do
         if r.status == 1 then
             setPlayerTeam(player, teams[r.teamid])
