@@ -12,7 +12,7 @@ function onResourceStart()
 		end
 	end
 end
-addEventHandler("onResourceStart", resourceRoot, onResourceStart)
+addEventHandler("onResourceTruelyStart", resourceRoot, onResourceStart)
 
 -- When a player spawns - set their wheels to the offroad ones
 function onPlayerSpawn()

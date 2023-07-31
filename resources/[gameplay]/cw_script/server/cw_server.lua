@@ -14,17 +14,23 @@ CurrentGamemode = "Sprint"
 
 addEventHandler("onResourceStart", resourceRoot,
     function()
+        local canceled = false
         if getResourceFromName("gcshop") and getResourceState(getResourceFromName("gcshop")) == "running" then
             cancelEvent(true, "Can't start CW while GcShop is running. Stop the GcShop resource (Greencoin Shop)")
+            canceled = true
             outputChatBox("Can't start CW while GcShop is running. Stop the GcShop resource using '/stop gcshop'", root, 255, 0, 0)
         end
 
         if getResourceFromName("mrgreen-vip") and getResourceState(getResourceFromName("mrgreen-vip")) == "running" then
             cancelEvent(true, "Can't start CW while VIP is running. Stop the VIP resource (Mrgreen VIP)")
+            canceled = true
             outputChatBox("Can't start CW while VIP is running. Stop the VIP resource using '/stop mrgreen-vip'", root, 255, 0, 0)
         end
+
+        if not canceled then triggerEvent("onResourceTruelyStart", resourceRoot) end
     end
 )
+addEvent("onResourceTruelyStart", true)
 
 -----------------
 -- Call functions
@@ -351,6 +357,7 @@ function playerJoin(source)
         if (mode == "FFA") then
             setPlayerTeam(source, teams[1])
         else
+            exports.anti:forcePlayerSpectatorMode(player)
             setPlayerTeam(source, teams[3])
         end
     end
@@ -391,6 +398,7 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m)
         if mode == "FFA" then
             setPlayerTeam(player, teams[1])
         else
+            exports.anti:forcePlayerSpectatorMode(player)
             setPlayerTeam(player, teams[3])
         end
 		setElementData(player, 'Score', 0)
@@ -458,6 +466,18 @@ addEventHandler('onPostFinish', getRootElement(), endRound)
 addEventHandler('onPlayerLogin', getRootElement(), playerLogin)
 --addEventHandler('onPlayerReachCheckpoint', getRootElement(), getRank)
 
+addEventHandler('onElementDataChange', root, function(key, old, new)
+    if getElementType(source) ~= 'player' then return end
+    if key == 'player state' then
+        local playerTeam = getPlayerTeam(source)
+        if playerTeam == teams[3] and new == 'alive' and old ~= 'not ready' then
+            outputChatBox("You're not allowed to play as Spectator!", source, 255, 0, 0)
+            exports.anti:forcePlayerSpectatorMode(source)
+        end
+    end
+
+end)
+
 addEventHandler('onElementModelChange', root, function()
     if getElementType(source)== 'vehicle' then
         local player = getVehicleOccupant(source)
@@ -471,7 +491,7 @@ addEventHandler('onPlayerVehicleEnter', root, function(vehicle, seat)
 end)
 
 addEvent("onRaceStateChanging")
-addEventHandler("onRaceStateChanging",getRootElement(),
+addEventHandler("onRaceStateChanging",root,
 	function(old, new)
 		local players = getElementsByType("player")
 		for k,v in ipairs(players) do
@@ -484,7 +504,7 @@ addEventHandler("onRaceStateChanging",getRootElement(),
 					r, g, b = getTeamColor (playerTeam)
 					setBlipColor(theBlip, tostring(r), tostring(g), tostring(b), 255)
 					if playerTeam == teams[3] then
-						triggerClientEvent(thePlayer, 'onSpectateRequest', getRootElement())
+						exports.anti:forcePlayerSpectatorMode(thePlayer)
 					end
 				end
 			end
