@@ -1,6 +1,7 @@
 --init
 local teams = {}
 local mode = "CW" -- CW or FFA
+local scoring = {15,13,11,9,7,5,4,3,2,1}
 local tags = {}
 local playerData = {}
 local rounds = 10
@@ -171,28 +172,8 @@ end
 function playerFinished(player, rank)
 	if isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3]) then
 		if getPlayerTeam(player) ~= teams[3] and not f_round and c_round > 0 then
-			local p_score = 0
-			if rank == 1 then
-				p_score = 15
-			elseif rank == 2 then
-				p_score = 13
-			elseif rank == 3 then
-				p_score = 11
-			elseif rank == 4 then
-				p_score = 9
-			elseif rank == 5 then
-				p_score = 7
-			elseif rank == 6 then
-				p_score = 5
-			elseif rank == 7 then
-				p_score = 4
-			elseif rank == 8 then
-				p_score = 3
-			elseif rank == 9 then
-				p_score = 2
-			elseif rank == 10 then
-				p_score = 1
-			end
+			local p_score = scoring[rank] or 0
+
 			local t1r, t1g, t1b = getTeamColor(teams[1])
 			local t1c = rgb2hex(t1r, t1g, t1b)
 			local t2r, t2g, t2b = getTeamColor(teams[2])
@@ -352,8 +333,10 @@ end
 function playerJoin(source)
     if isElement(teams[1]) then
         clientCall(source, 'updateTeamData', teams[1], teams[2], teams[3])
+        clientCall(source, 'updateTagData', tags[1], tags[2])
         clientCall(source, 'updateRoundData', c_round, rounds, f_round)
         clientCall(source, 'updateModeData', mode)
+        clientCall(source, 'updateScoringData', table.concat(scoring, ","))
         if (mode == "FFA") then
             setPlayerTeam(source, teams[1])
         else
@@ -413,6 +396,7 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m)
 		clientCall(player, 'updateTagData', tags[1], tags[2])
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
         clientCall(player, 'updateModeData', mode)
+        clientCall(player, 'updateScoringData', table.concat(scoring, ","))
         if mode == "CW" then
             clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
         end
@@ -425,6 +409,13 @@ function updateRounds(cur_round, ma_round)
 	for i, player in ipairs(getElementsByType('player')) do
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
 	end
+end
+
+function updateScoring(newScoring)
+    scoring = stringToTable(newScoring)
+    for i, player in ipairs(getElementsByType('player')) do
+        clientCall(player, 'updateScoringData', newScoring)
+    end
 end
 
 function sincAP()
@@ -471,11 +462,10 @@ addEventHandler('onElementDataChange', root, function(key, old, new)
     if key == 'player state' then
         local playerTeam = getPlayerTeam(source)
         if playerTeam == teams[3] and new == 'alive' and old ~= 'not ready' then
-            outputChatBox("You're not allowed to play as Spectator!", source, 255, 0, 0)
+            outputChatBox('[CW] #FF0000You\'re not allowed to play as Spectator', source, 155, 155, 255, true)
             exports.anti:forcePlayerSpectatorMode(source)
         end
     end
-
 end)
 
 addEventHandler('onElementModelChange', root, function()
