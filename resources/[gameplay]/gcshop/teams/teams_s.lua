@@ -359,7 +359,7 @@ end
 
 addEvent('onGamemodeMapStop', true)
 addEventHandler('onGamemodeMapStop', root, function()
-    if not (getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet())then return end
+    if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return end
     for player, r in pairs(playerteams) do
         if r.status == 1 then
             setPlayerTeam(player, teams[r.teamid])
