@@ -128,6 +128,10 @@ function outputInfo(info)
 	end
 end
 
+function areTeamsSet()
+    return isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3])
+end
+
 function startRound()
     CurrentGamemode = exports.race:getRaceMode();
 

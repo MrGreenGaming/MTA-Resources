@@ -12,4 +12,6 @@
 	<file src="fonts/Roboto-Bold.ttf" />
 	<file src="fonts/Roboto-Medium.ttf" />
 	<file src="fonts/Roboto-Regular.ttf" />
+
+    <export function="areTeamsSet" type="server" />
 </meta>
