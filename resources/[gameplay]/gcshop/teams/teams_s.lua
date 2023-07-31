@@ -318,7 +318,7 @@ function checkPlayerTeam2(qh, player, bLogin)
                 setElementData(teams[r.teamid], 'gcshop.owner', r.owner)
             end
             -- Don't use team elements in CTF or if CW is running
-            if exports.race:getRaceMode() ~= "Capture the flag" or (getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet()) then
+            if not (exports.race:getRaceMode() == "Capture the flag" or (getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet())) then
                 setPlayerTeam(player, teams[r.teamid])
 				-- Colored blips for default radar by AleksCore
 				local blips = getElementsByType("blip")
@@ -344,7 +344,7 @@ function leaveTeam(player)
         destroyElement(teams[teamid])
         teams[teamid] = nil
     end
-    if exports.race:getRaceMode() ~= "Capture the flag" or (getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet()) then
+    if not (exports.race:getRaceMode() == "Capture the flag" or (getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet())) then
         setPlayerTeam(player, nil)
 		-- Colored blips for default radar by AleksCore
 		local blips = getElementsByType("blip")
@@ -359,7 +359,7 @@ end
 
 addEvent('onGamemodeMapStop', true)
 addEventHandler('onGamemodeMapStop', root, function()
-    if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return end
+    if not (getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet())then return end
     for player, r in pairs(playerteams) do
         if r.status == 1 then
             setPlayerTeam(player, teams[r.teamid])
