@@ -151,7 +151,7 @@ function cacheMapOptions(map, bDontUseMode)
 	if g_MapOptions.respawn ~= 'timelimit' and g_MapOptions.respawn ~= 'none' then
 		g_MapOptions.respawn = 'timelimit'
 	end
-	g_MapOptions.respawntime	= g_GameOptions.defaultrespawnmode == 'none' and (map.respawntime * 1000 or g_GameOptions.defaultrespawntime) or g_GameOptions.defaultrespawntime
+	g_MapOptions.respawntime	= g_GameOptions.defaultrespawnmode == 'none' and (map.respawntime and map.respawntime * 1000 or g_GameOptions.defaultrespawntime) or g_GameOptions.defaultrespawntime
 	g_MapOptions.time			= map.time or '12:00'
 	g_MapOptions.weather		= map.weather or 0
 
