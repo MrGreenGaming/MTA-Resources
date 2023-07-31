@@ -147,10 +147,6 @@ function startRound()
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
 	end
 	round_ended = false
-	if isWarEnded then
-		destroyTeams(false)
-		isWarEnded = false
-	end
 end
 
 function playerFinished(player, rank)
@@ -199,6 +195,7 @@ function endRound()
             else
                 endFreeForAll()
             end
+            destroyTeams(false)
 		end
 	end
 end
