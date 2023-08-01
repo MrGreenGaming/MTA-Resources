@@ -679,6 +679,7 @@ addEventHandler ( "onMapStarting", root, mapRestart )
 function callSpawn ( player )
     if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then
         exports.cw_script:outputInfoForPlayer(player, "You can't change spawns during events")
+        return false
     end
 	if #allSpawnpoints == 0 then
 		return false
