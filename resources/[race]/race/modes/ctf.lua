@@ -255,7 +255,7 @@ function CTF:onPlayerWasted(player)
 
 	if self.getMapOption('respawn') == 'timelimit' and not self.isPlayerFinished(source) then
         -- See if its worth doing a respawn
-        local respawnTime = self.getRespawntime(player)
+        local respawnTime = self:getRespawntime(player)
         if self:getTimeRemaining() - respawnTime > 3000 then
             Countdown.create(respawnTime/1000, self.restorePlayer, 'You will respawn in:', 255, 255, 255, 0.25, 2.5, true, self, self.id, player):start(player)
         end
