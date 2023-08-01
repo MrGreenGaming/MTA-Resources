@@ -134,7 +134,7 @@ function updateDisplay()
                 dxDrawRectangle(wX, wY + (rowHeight*(2+(count+1))), windowSizeX, rowHeight, tocolor(r2, g2, b2, 30), false, false) -- t2 bg
             end
 			dxDrawBottomRoundedRectangle(wX, wY + (rowHeight * (rowCount-1)), windowSizeX, rowHeight, 10, tocolor(0, 0, 0, 160), false, false) -- mode bg
-			dxDrawText("Press #bababaF7 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
+			dxDrawText("Press #bababa0 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
 
 			dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
@@ -192,7 +192,7 @@ function updateDisplay()
 			dxDrawRoundedRectangle(wX, wY, windowSizeX, windowSizeY, 10, tocolor(0, 0, 0, 160), false, false) -- background
 			dxDrawRectangle(wX, wY + (rowHeight*2), windowSizeX, rowHeight, tocolor(r1, g1, b1, 20), false, false) -- t1 bg
 			dxDrawBottomRoundedRectangle(wX, wY + (rowHeight * (rowCount-1)), windowSizeX, rowHeight, 10, tocolor(0, 0, 0, 160), false, false) -- mode bg
-			dxDrawText("Press #bababaF7 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
+			dxDrawText("Press #bababa0 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText(t1c..t1tag.."   "..getElementData(teams[1], 'Score').."  #ffffff-  "..t2c..getElementData(teams[2], 'Score').."   "..t2tag, wX + margin, wY + (rowHeight*2), wX+windowSizeX-(margin*2), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "center", "center", false, false, false, true, false)
@@ -513,10 +513,10 @@ function startWar()
     local ffa = guiCheckBoxGetSelected(ffa_field) == true and "FFA" or "CW"
 
 	serverCall('startWar', t1name, t2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, ffa)
-	outputInfoClient('Press #9b9bffF7 #ffffffto switch display mode')
+	outputInfoClient('Press #9b9bff0 #ffffffto switch display mode')
 
     if ffa == "CW" then
-        outputInfoClient('Press #9b9bffF6 #ffffffto select team')
+        outputInfoClient('Press #9b9bff8 #ffffffto select team')
     end
 end
 
@@ -561,7 +561,7 @@ function updateAdminInfo(obj)
 	isAdmin = obj
 	if isAdmin then
 		createAdminGUI()
-		outputInfoClient('Press #9b9bffF10 #ffffffto open management panel')
+		outputInfoClient('Press #9b9bff9 #ffffffto open management panel')
 	end
 end
 
@@ -590,9 +590,9 @@ setTimer(function()
         createGUI(getTeamName(teams[1]), getTeamName(teams[2]))
     end
 end, 2500, 1)
-bindKey('F6', 'down', toogleGUI)
-bindKey('F10', 'down', toogleAdminGUI)
-bindKey('F7', 'down', toggleMode)
+bindKey('8', 'down', toogleGUI)
+bindKey('9', 'down', toogleAdminGUI)
+bindKey('0', 'down', toggleMode)
 serverCall('playerJoin', localPlayer)
 
 ----------------------------
