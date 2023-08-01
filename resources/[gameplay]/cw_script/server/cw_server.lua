@@ -84,7 +84,7 @@ function preStart(player, command, t1_name, t2_name, t1tag, t2tag)
             end
 		end
 	else
-		outputChatBox('[CW] #ffffffYou are not admin', player, 155, 155, 255, true)
+		outputInfoForPlayer(player, 'You are not admin')
 	end
 end
 
@@ -101,7 +101,7 @@ function destroyTeams(player)
 			clientCall(player, 'updateRoundData', c_round, rounds, f_round)
 		end
 	else
-		outputChatBox('[CW] #ffffffYou are not admin', player, 155, 155, 255, true)
+		outputInfoForPlayer(player, 'You are not admin')
 	end
 end
 
@@ -111,9 +111,9 @@ function funRound(player)
 		for i,player in ipairs(getElementsByType('player')) do
 			clientCall(player, 'updateRoundData', c_round, rounds, f_round)
 		end
-		outputInfo('#ffffffFree round')
+		outputInfo('Free round')
 	else
-		outputChatBox('[CW] #ffffffYou are not admin', player, 155, 155, 255, true)
+		outputInfoForPlayer(player, 'You are not admin')
 	end
 end
 
@@ -124,8 +124,12 @@ addCommandHandler('fun', funRound)
 
 function outputInfo(info)
 	for i, player in ipairs(getElementsByType('player')) do
-		outputChatBox('[CW] #ffffff' ..info, player, 155, 155, 255, true)
+		outputInfoForPlayer(player, info)
 	end
+end
+
+function outputInfoForPlayer(player, info)
+    outputChatBox('[Event] #ffffff' ..info, player, 155, 155, 255, true)
 end
 
 function areTeamsSet()
@@ -443,7 +447,7 @@ addEventHandler('onElementDataChange', root, function(key, old, new)
     if key == 'player state' then
         local playerTeam = getPlayerTeam(source)
         if playerTeam == teams[3] and new == 'alive' and old ~= 'not ready' then
-            outputChatBox('[CW] #FF0000You\'re not allowed to play as Spectator', source, 155, 155, 255, true)
+            outputChatBox('[Event] #FF0000You\'re not allowed to play as Spectator', source, 155, 155, 255, true)
             exports.anti:forcePlayerSpectatorMode(source)
         end
     end

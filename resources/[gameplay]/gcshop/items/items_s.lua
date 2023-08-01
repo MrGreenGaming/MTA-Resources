@@ -124,7 +124,7 @@ local perks = {
 --		local p = b.price
 --		b.price = math.ceil(p * d)
 --	end
---	
+--
 --	local players = getElementsByType("player")
 --	for a,b in ipairs(players) do
 --		local forumID = tonumber(exports.gc:getPlayerForumID(b))
@@ -135,13 +135,13 @@ local perks = {
 
 function onGCShopLogin (forumID)
 	local theSource = source
-	getPerks(forumID, 
+	getPerks(forumID,
 	function(prks)
 		local perkIdTable = {}
 		for _, p in pairs(prks) do
 			table.insert(perkIdTable, p.ID)
 		end
-		getPerkExpire(forumID, perkIdTable, 
+		getPerkExpire(forumID, perkIdTable,
 		function(expired)
 			local i = 1;
 			for _, perk in pairs(prks) do
@@ -156,12 +156,12 @@ function onGCShopLogin (forumID)
 				i * 500, 1, theSource, perk)
 				i = i + 1
 			end
-			getPerks(forumID, 
+			getPerks(forumID,
 			function(newPerks)
 				triggerClientEvent( theSource, 'itemLogin', theSource, perks, newPerks )
 				-- Trigger the event once more with a delay
 				setTimer(triggerClientEvent, 7500, 1, theSource, 'itemLogin', theSource, perks, newPerks)
-				
+
 			end)
 		end)
 	end)
@@ -170,8 +170,8 @@ addEventHandler("onGCShopLogin", root, onGCShopLogin)
 
 function onGCShopLogout (forumID)
 	local src = source
-	getPerks(forumID, 
-	function(perks) 
+	getPerks(forumID,
+	function(perks)
 		for _, perk in pairs(perks) do
 			unloadPerk(src, perk.ID)
 		end
@@ -181,12 +181,12 @@ addEventHandler("onGCShopLogout", root, onGCShopLogout)
 
 function buyPerk ( player, cmd, ID )
 	if client and client ~= player then return end
-	
+
 	ID = tonumber(ID)
 	local i = perks[ID]
-	
+
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
-	
+
 	if (not forumID) then
 		outputChatBox('You\'re not logged into a Green-Coins account!', player, 255, 0, 0 )
 		return
@@ -197,7 +197,7 @@ function buyPerk ( player, cmd, ID )
 		outputChatBox('Perk purchase has been disabled', player, 255, 0, 0 )
 		return
 	end
-	
+
 	-- Check if perk is already bought, and check for required perks
 	local idsToCheck = {ID}
 	if i.requires then
@@ -206,7 +206,7 @@ function buyPerk ( player, cmd, ID )
 		end
 	end
 
-	checkPerk(forumID, idsToCheck, 
+	checkPerk(forumID, idsToCheck,
 	function(res)
 		if res and res[ID] then
 			outputChatBox('You already bought this perk: '..i.description, player, 255, 165, 0 )
@@ -215,7 +215,7 @@ function buyPerk ( player, cmd, ID )
 			for _, perk in ipairs(i.requires) do
 				if not res[perk] then
 					outputChatBox('This perk requires another perk: '..perks[perk].description, player, 255, 0, 0 )
-					return			
+					return
 				end
 			end
 		end
@@ -229,9 +229,9 @@ function buyPerk ( player, cmd, ID )
 			addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought perk=' .. tostring(ID) .. ' ' .. tostring(i.description) ..  ' ' .. tostring(i.defaultAmount) ..  ' ' .. tostring(added))
 			outputChatBox ('Perk \"' .. i.description  .. '\" bought.', player, 0, 255, 0)
 			loadPerk( player, ID )
-			getPerks(forumID, 
+			getPerks(forumID,
 			function(thePerks)
-				triggerClientEvent( player, 'itemLogin', player, perks, thePerks ) 
+				triggerClientEvent( player, 'itemLogin', player, perks, thePerks )
 			end)
 			return
 		end
@@ -247,12 +247,12 @@ addEventHandler('gcbuyperk', root, buyPerk)
 
 function buyPerkExtra ( player, cmd, ID, total )
 	if client and client ~= player then return end
-	
+
 	ID = tonumber(ID)
 	total = math.floor(total)
 	local i = perks[ID]
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
-	
+
 	if (not forumID) then
 		outputChatBox('You\'re not logged into a Green-Coins account!', player, 255, 0, 0 )
 		return
@@ -268,19 +268,19 @@ function buyPerkExtra ( player, cmd, ID, total )
 	end
 
 	local result, error = gcshopBuyItem ( player, i.price * total, 'Perk extra: ' .. i.description .. ' x' .. total )
-	
+
 	if result == true then
 		local theSource = source
-		getPerkSettings(player, ID, 
+		getPerkSettings(player, ID,
 		function(perkSetting)
-			setPerkSetting(player, ID, 'amount', perkSetting.amount + total, false, 
-			function(added) 
+			setPerkSetting(player, ID, 'amount', perkSetting.amount + total, false,
+			function(added)
 				addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought extra perk=' .. tostring(ID) .. ' ' .. tostring(i.description) ..  ' ' .. tostring(i.defaultAmount) ..  ' ' .. tostring(total) ..  ' ' .. tostring(added))
 				outputChatBox ('Extra \"' .. i.description  .. '\" bought.', player, 0, 255, 0)
 				--loadPerk( player, ID )
-				
-				getPerks(forumID, 
-				function(res) 
+
+				getPerks(forumID,
+				function(res)
 					triggerClientEvent( theSource, 'itemLogin', theSource, perks, res )
 				end)
 			end)
@@ -332,13 +332,13 @@ function getPerks(forumID, callback)
 	end
 
 	dbQuery(
-		function(query) 
+		function(query)
 			local result = dbPoll(query,0)
 			local perkIdTable = {}
 			for _, prk in ipairs(result) do
 				table.insert(perkIdTable, prk.itembought)
 			end
-			getPerkExpire(forumID, perkIdTable, 
+			getPerkExpire(forumID, perkIdTable,
 			function(expired)
 				local return_perks = {}
 				for _, row in ipairs(result) do
@@ -351,7 +351,7 @@ function getPerks(forumID, callback)
 				end
 				callback(return_perks)
 			end)
-		end, 
+		end,
 	handlerConnect, "SELECT * FROM gc_items WHERE forumid=?", forumID)
 end
 
@@ -369,7 +369,7 @@ function checkPerk ( forumID, ID, callback )
 		end
 
 		dbQuery(
-			function(query) 
+			function(query)
 				local result = dbPoll(query,0)
 				if #result == 0 then
 					callback({})
@@ -382,14 +382,14 @@ function checkPerk ( forumID, ID, callback )
 					end
 				end
 				callback(returnVal)
-			end, 
+			end,
 		handlerConnect, "SELECT * FROM gc_items WHERE forumid=?", forumID)
 	else
 		dbQuery(
-			function(query) 
+			function(query)
 				local result = dbPoll(query,0)
 				callback(result and #result >= 1)
-			end, 
+			end,
 		handlerConnect, "SELECT * FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
 	end
 end
@@ -399,7 +399,7 @@ function getPerkExpire ( forumID, ID, callback )
 	if type(callback) ~= 'function' then
 		outputDebugString( 'getPerkExpire: No callback specified at argument #3', 1 )
 		return
-	elseif not forumID then 
+	elseif not forumID then
 		callback(false)
 		-- outputDebugString('getPerkExpire: No forumID argument', 1)
 		return
@@ -411,7 +411,7 @@ function getPerkExpire ( forumID, ID, callback )
 			if ind == 1 then
 				queryString = queryString .. ' AND ('
 			end
-			
+
 			if prk and tonumber(prk) then
 				local addedQuery = dbPrepareString(handlerConnect, 'itembought = ?', prk)
 				if addedQuery then
@@ -426,7 +426,7 @@ function getPerkExpire ( forumID, ID, callback )
 			end
 		end
 		dbQuery(
-			function(query) 
+			function(query)
 				local result = dbPoll(query,0)
 				if result == false then
 					outputDebugString('Invalid query: '..queryString)
@@ -444,7 +444,7 @@ function getPerkExpire ( forumID, ID, callback )
 		handlerConnect, queryString)
 	else
 		dbQuery(
-			function(query) 
+			function(query)
 				local result = dbPoll(query,0)
 				callback(result and result[1].expires or nil)
 			end,
@@ -457,7 +457,7 @@ function loadPerk(player, ID)
 	getPerkSettings(player, ID,
 	function(perkSettings)
 		_G[perks[ID].func](player, true, perkSettings)
-		outputDebugString('Perk loaded: ' .. getPlayerName(player) .. ' ' .. ID .. ' ' .. perks[ID].description .. (tonumber(perkSettings.amount) and ' (' .. perkSettings.amount .. ')' or ''))		
+		outputDebugString('Perk loaded: ' .. getPlayerName(player) .. ' ' .. ID .. ' ' .. perks[ID].description .. (tonumber(perkSettings.amount) and ' (' .. perkSettings.amount .. ')' or ''))
 	end)
 end
 
@@ -468,7 +468,7 @@ function unloadPerk(player, ID)
 end
 
 function getPerkSettings(player, ID, callback)
-	
+
 	ID = tonumber(ID)
 	local i = perks[ID]
 	if type(callback) ~= 'function' then
@@ -521,21 +521,21 @@ function getPerkSettings(player, ID, callback)
 			return
 		end
 		dbQuery(
-			function(query) 
+			function(query)
 				local result = dbPoll(query,0)
 				local options = {}
 				if result[1] and result[1].options then
 					options = fromJSON(result[1].options)
 				end
-				if type(options) ~= 'table' then 
+				if type(options) ~= 'table' then
 					outputDebugString('GC Perks: wrong options format [' .. forumID, 1)
 					callback(false)
-					return  
+					return
 				end
 				callback(options)
-			end, 
+			end,
 		handlerConnect, "SELECT options FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
-		
+
 	end
 end
 
@@ -548,7 +548,7 @@ function setPerkSetting(player, ID, key, value, text, callback)
 	ID = tonumber(ID)
 	local i = perks[ID]
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
-	checkPerk ( forumID, ID, 
+	checkPerk ( forumID, ID,
 	function(bool)
 		if not bool then
 			callback(false)
@@ -559,24 +559,24 @@ function setPerkSetting(player, ID, key, value, text, callback)
 			callback(false)
 			return
 		end
-		
+
 		dbQuery(
-			function(query) 
+			function(query)
 				local result = dbPoll(query,0)
 				local options = fromJSON(result[1].options)
 				if type(options) ~= 'table' then return outputDebugString('GC Perks: wrong options format [' .. forumID, 1) and false end
-				
+
 				options[key] = value
 				options = toJSON(options)
 				if type(options) ~= 'string' then return outputDebugString('GC Perks: error adding option [' .. forumID, 1) and false end
 				local result = dbExec(handlerConnect, "UPDATE gc_items SET options=? WHERE forumID=? AND itembought=?", options, forumID, ID)
-				
+
 				if type(text) == 'string' then
 					outputChatBox(tostring(text), player, 0, 255, 0)
 				end
-				
+
 				callback(result)
-			end, 
+			end,
 		handlerConnect, "SELECT options FROM gc_items WHERE forumid=? AND itembought=?", forumID, ID)
 	end)
 end
@@ -612,7 +612,7 @@ end
 addCommandHandler('gcflipv2', callFlip, false, false)
 -- addCommandHandler('flip', function(p) outputChatBox('p') setElementRotation(getPedOccupiedVehicle(p), 180,0,0) end )
 
-function flipPlayer(player)	
+function flipPlayer(player)
 	local veh = getPedOccupiedVehicle(player)
 
 	busy_with_player[player] = true
@@ -666,7 +666,7 @@ function mapRestart ( mapInfo, mapOptions, gameOptions )
 	if #allSpawnpoints == 0 then
 		--Some maps aren't converted to MTA 1.0 format so they do not return checkpoints.
 		return false
-	end	
+	end
 	-- local c_x, c_y, c_z = getElementPosition(getElementsByType('checkpoint')[1])
 	-- for k,spawn in ipairs(allSpawnpoints) do
 		-- local a_x, a_y, a_z, id, vehID, rot = getSpawnpointPosition ( spawn )
@@ -677,9 +677,12 @@ end
 addEventHandler ( "onMapStarting", root, mapRestart )
 
 function callSpawn ( player )
+    if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then
+        exports.cw_script:outputInfoForPlayer(player, "You can't change spawns during events")
+    end
 	if #allSpawnpoints == 0 then
 		return false
-	end	
+	end
 	local currentPlayerState = getElementData(player, 'state', false)
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
 	local elementID
@@ -700,13 +703,13 @@ function callSpawn ( player )
 		-- return outputChatBox('[GC] Changed to spawnpoint \"' .. tostring(elementID) .. '\" .. ('..index..'/'..distance..'m)', player, 0,255,0)
 	end
 end
-	
+
 function changeSpawn (player)
 	local x, y, z, id, vehID, rot
 	local newSpawnpoint, currentSP
 	local x2, y2, z2
 	local distance
-	
+
 	local veh = getPedOccupiedVehicle(player)
 	if not veh then return end
 
@@ -715,20 +718,20 @@ function changeSpawn (player)
 		spawnIndex[player] = 1
 	else
 		-- try to skip spawns at the same position
-		for i=1,25 do 
-			-- go to next/previous spawn 
+		for i=1,25 do
+			-- go to next/previous spawn
 			currentSP = spawnIndex[player] -- current sp
 			spawnIndex[player] = spawnIndex[player] + (getShiftState(player) and -1 or 1) -- next sp
 			-- check bounds
-			if spawnIndex[player] > #allSpawnpoints then spawnIndex[player] = 1 
+			if spawnIndex[player] > #allSpawnpoints then spawnIndex[player] = 1
 			elseif spawnIndex[player] < 1 then spawnIndex[player] = #allSpawnpoints
-			end			
+			end
 			-- check distance between spawn i and i+1
 			x2, y2, z2, _, _, _ = getSpawnpointPosition( allSpawnpoints[currentSP] )
 			x, y, z, _, _, _ = getSpawnpointPosition( allSpawnpoints[spawnIndex[player]] )
 			distance = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
 			-- outputChatBox("sp "..currentSP.." -> "..spawnIndex[player]..", dist: ".. distance) -- debug
-			
+
 			-- next sp is far enough, stop searching, example:
 			-- spawn 1 -> 2, dist: 0		bad
 			-- spawn 2 -> 3, dist: 0		bad
@@ -736,18 +739,18 @@ function changeSpawn (player)
 			if distance > 0.5 then
 				break
 			end
-			
+
 		end -- for
 	end
-	
+
 	newSpawnpoint = allSpawnpoints[spawnIndex[player]]
 	x, y, z, id, vehID, rot = getSpawnpointPosition(newSpawnpoint)
-	
+
 	setElementPosition(veh, x,y,z)
 	setElementRotation(veh, 0,0,rot)
 	setElementModel(veh, vehID)
 	setElementHealth(veh, 1000)
-		
+
 	modShopCheckVehicleAgain(player)
 	distance = getElementsByType('checkpoint')[1] and math.floor(100*getDistanceBetweenPoints3D(x,y,z,getElementPosition(getElementsByType('checkpoint')[1])))/100 or 0
 	return id, distance, spawnIndex[player]
@@ -807,7 +810,7 @@ function setPlayerRocketColor(player,color)
 
 	local exec = dbExec(handlerConnect, "UPDATE gc_rocketcolor SET color=? WHERE forumid=?", color:gsub("#",""), fID)
 
-	
+
 	if exec then setElementData(player,"gc_projectilecolor","#"..color) return true end
 
 	return false
@@ -819,7 +822,7 @@ function rockerColorChange(hex)
 	local thePlayer = client
 	if not thePlayer or not isElement(thePlayer) or getElementType(thePlayer) ~= "player" then return end
 	local setColor = setPlayerRocketColor(thePlayer,hex)
-	
+
 	triggerClientEvent(thePlayer,"clientRocketColorChangeConfirm",resourceRoot,setColor or false)
 
 end
@@ -832,13 +835,13 @@ function getPlayerRocketColor(player, callback)
 	end
 
 	local forumID = exports.gc:getPlayerForumID ( player )
-	if not forumID then 
+	if not forumID then
 		callback(false)
 		return
 	end
 
 	dbQuery(
-		function(query) 
+		function(query)
 			local result = dbPoll(query,0)
 
 			if result[1] and result[1]["color"] then
@@ -846,7 +849,7 @@ function getPlayerRocketColor(player, callback)
 				return
 			end
 			callback(false)
-		end, 
+		end,
 	handlerConnect, "SELECT color FROM gc_rocketcolor WHERE forumid=?", forumID)
 end
 
@@ -863,14 +866,14 @@ end
 --------------------------
 function loadDeadlineColorChange ( player, bool )
 	if bool then
-		getPlayerDeadLineColor(player, 
-		function(color) 
+		getPlayerDeadLineColor(player,
+		function(color)
 			if not color then
 				outputDebugString("Could not find Color for "..getPlayerName(player))
 				insertDeadLineColorToDB(player)
 				color = "00FF00"
 			end
-			setElementData(player,"gcshop_deadlinecolor","#"..color:gsub("#","")) 
+			setElementData(player,"gcshop_deadlinecolor","#"..color:gsub("#",""))
 		end)
 	else
 		removeElementData( player, 'gcshop_deadlinecolor' )
@@ -882,7 +885,7 @@ function deadlineColorChange(hex)
 	local thePlayer = client
 	if not thePlayer or not isElement(thePlayer) or getElementType(thePlayer) ~= "player" then return end
 	local setColor = setPlayerDeadLineColor(thePlayer,hex)
-	
+
 	triggerClientEvent(thePlayer,"clientDeadLineColorChangeConfirm",resourceRoot,setColor or false)
 
 end
@@ -895,7 +898,7 @@ function setPlayerDeadLineColor(player,color)
 
 	local exec = dbExec(handlerConnect, "UPDATE gc_deadlinecolor SET color=? WHERE forumid=?", color:gsub("#",""), fID)
 
-	
+
 	if exec then setElementData(player,"gcshop_deadlinecolor","#"..color:gsub("#","")) return true end
 
 	return false
@@ -909,22 +912,22 @@ function getPlayerDeadLineColor(player, callback)
 	end
 
 	local forumID = exports.gc:getPlayerForumID ( player )
-	if not forumID then 
+	if not forumID then
 		callback(false)
-		return false 
+		return false
 	end
 
 	dbQuery(
-		function(query) 
+		function(query)
 			local result = dbPoll(query,0)
 
 			if result[1] and result[1]["color"] then
 				callback(result[1]["color"])
-				return 
+				return
 			end
 
 			callback(false)
-		end, 
+		end,
 	handlerConnect, "SELECT color FROM gc_deadlinecolor WHERE forumid=?", forumID)
 end
 
@@ -946,7 +949,7 @@ function getTimestamp(year, month, day, hour, minute, second)
     local datetime = getRealTime()
     year, month, day = year or datetime.year + 1900, month or datetime.month + 1, day or datetime.monthday
     hour, minute, second = hour or datetime.hour, minute or datetime.minute, second or datetime.second
- 
+
     -- calculate timestamp
     for i=1970, year-1 do
 		timestamp = timestamp + (isLeapYear(i) and 31622400 or 31536000)
@@ -955,10 +958,10 @@ function getTimestamp(year, month, day, hour, minute, second)
 		timestamp = timestamp + ((isLeapYear(year) and i == 2) and 2505600 or monthseconds[i])
 	end
     timestamp = timestamp + 86400 * (day - 1) + 3600 * hour + 60 * minute + second
- 
+
     timestamp = timestamp - 3600 --GMT+1 compensation
     if datetime.isdst then timestamp = timestamp - 3600 end
- 
+
     return timestamp
 end
 
