@@ -28,7 +28,7 @@ local rankWidth = 40 * (screenW/1920)
 local ptsWidth = 50 * (screenW/1920)
 
 function outputInfoClient(info)
-    outputChatBox('[Event] #ffffff' ..info, player, 155, 155, 255, true)
+    outputChatBox('[Event] #ffffff' ..info, 155, 155, 255, true)
 end
 
 -----------------
