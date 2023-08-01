@@ -26,15 +26,16 @@ function addCarHealth(car, player)
 	-- setElementHealth(car, math.min(addition + x, 1000))  --105/100 = 5% addition
 	-- Do health addition clientside, so we avoid desync mistakes
 	triggerClientEvent(player, "addCarHealth", car, addition)
-	
+
 end
 
 setTimer(function()
 	if not isPerkAllowedInMode(ID) then return end
-	for player, _ in pairs(g_PlayersRegen) do 
-		if isElement(player) and getElementData(player, 'state') == 'alive' 
-			and getPedOccupiedVehicle(player) 
-			and not isVehicleDamageProof(getPedOccupiedVehicle(player)) 
+    if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return end
+	for player, _ in pairs(g_PlayersRegen) do
+		if isElement(player) and getElementData(player, 'state') == 'alive'
+			and getPedOccupiedVehicle(player)
+			and not isVehicleDamageProof(getPedOccupiedVehicle(player))
 			and not isVehicleBlown(getPedOccupiedVehicle(player))
 			and getElementHealth(getPedOccupiedVehicle(player)) > 250
 			and getElementHealth(getPedOccupiedVehicle(player)) < 1000 then

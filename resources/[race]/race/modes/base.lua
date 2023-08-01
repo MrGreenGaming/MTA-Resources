@@ -75,6 +75,15 @@ function RaceMode:isMapRespawn()
 	return self.getMapOption('respawn') == 'timelimit'
 end
 
+function RaceMode:getRespawntime(player)
+    if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then
+        return g_MapOptions['respawntime']
+    end
+    local mapRespawnTime = g_MapOptions['respawntime']
+    local gcShopRespawnTime = tonumber(getElementData(player, 'gcshop.respawntime')) or mapRespawnTime
+    return gcShopRespawnTime < mapRespawnTime and gcShopRespawnTime or mapRespawnTime
+end
+
 function RaceMode.getPlayers()
 	return g_Players
 end
@@ -270,7 +279,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum, nitroLevel, nit
 		self.checkpointBackups[player].goingback = true
 		TimerManager.destroyTimersFor("checkpointBackup",player)
 		-- Edit #2, edit respawn time based on shop perk
-		TimerManager.createTimerFor("map","checkpointBackup",player):setTimer(lastCheckpointWasSafe, tonumber(getElementData(player, 'gcshop.saferespawn')) or 5000, 1, self.id, player)
+		TimerManager.createTimerFor("map","checkpointBackup",player):setTimer(lastCheckpointWasSafe, self:getRespawntime(player), 1, self.id, player)
 	else
 		-- Finish reached
 		rank = getFinishedPlayerCount() + 1
@@ -348,7 +357,7 @@ function RaceMode:onPlayerWasted(player)
 	TimerManager.destroyTimersFor("checkpointBackup",player)
 	if self.getMapOption('respawn') == 'timelimit' and not self.isPlayerFinished(source) then
         -- See if its worth doing a respawn
-        local respawnTime       = tonumber(getElementData(player, 'gcshop.respawntime')) or self.getMapOption('respawntime')
+        local respawnTime = self:getRespawntime(player)
         if self:getTimeRemaining() - respawnTime > 3000 then
             Countdown.create(respawnTime/1000, self.restorePlayer, 'You will respawn in:', 255, 255, 255, 0.25, 2.5, true, self, self.id, player):start(player)
         end
