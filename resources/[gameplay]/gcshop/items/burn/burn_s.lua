@@ -166,6 +166,7 @@ end
 -- end
 function onPlayersVehicleCollide (player1, car1, player2, car2)
 	local saveFireHealth
+    if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return end
 	if g_PlayersBurnTransfer[player1] and isPerkAllowedInMode(ID) and getElementHealth(car1) <= 245 and getElementHealth(car2) > 245 and not isVehicleBlown(car1) and not isVehicleBlown(car2) then  --isOnFire?
 		saveFireHealth = getElementHealth(car1)
 		fixVehicle(car1)
