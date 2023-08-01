@@ -447,7 +447,7 @@ addEventHandler('onElementDataChange', root, function(key, old, new)
     if key == 'player state' then
         local playerTeam = getPlayerTeam(source)
         if playerTeam == teams[3] and new == 'alive' and old ~= 'not ready' then
-            outputChatBox('[Event] #FF0000You\'re not allowed to play as Spectator', source, 155, 155, 255, true)
+            outputInfoForPlayer(source, '#FF0000You\'re not allowed to play as Spectator')
             exports.anti:forcePlayerSpectatorMode(source)
         end
     end
