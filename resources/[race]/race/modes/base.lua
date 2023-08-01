@@ -75,7 +75,7 @@ function RaceMode:isMapRespawn()
 	return self.getMapOption('respawn') == 'timelimit'
 end
 
-function RaceMode:getRespawntime(player) -- in seconds
+function RaceMode:getRespawntime(player)
     if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then
         return g_MapOptions['respawntime']
     end
