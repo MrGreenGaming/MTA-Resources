@@ -12,10 +12,10 @@ function CTF:isMapValid()
 	local redFlagObjects, blueFlagObjects = #getElementsByType(self.red.FlagType), #getElementsByType(self.blue.FlagType)
 	if redFlagObjects ~= 1 or blueFlagObjects ~= 1 then
 		outputRace('Error. CTF map should have one red flag(' .. redFlagObjects .. ') and one blue flag(' .. blueFlagObjects .. ')')
-		return false 
+		return false
 	elseif self.getNumberOfCheckpoints() > 0 then
 		outputRace('Error. CTF map shouldn\'t have checkpoints')
-		return false 
+		return false
 	else
 		local error = false
 		for i, spawn in ipairs(g_Spawnpoints) do
@@ -45,7 +45,7 @@ function CTF:initTeam(teamTable)
 	teamTable.Team = createTeam(teamTable.name, teamTable.r, teamTable.g, teamTable.b)
 	teamTable.points = 0
 	teamTable.serials = {}
-	
+
 	local flagElement = getElementsByType(teamTable.FlagType)[1]
 	local x,y,z = getElementPosition(flagElement)
 	teamTable.flagObject= createObject(teamTable.FlagModel, x,y,z)
@@ -75,7 +75,7 @@ function CTF:setPlayerTeam(player, teamTable)
 	local r, g, b = getTeamColor(teamTable.Team)
 	createBlipAttachedTo(player, 0, 1, r, g, b)
 	setVehicleColor(g_CurrentRaceMode.getPlayerVehicle( player ), r, g, b, r, g, b, r, g, b, r, g, b)
-	clientCall(root,'applyTeamColorShader',player) 
+	clientCall(root,'applyTeamColorShader',player)
 	showMessage("You have been assigned to the " .. teamTable.name .. "!", r, g, b, player)
 end
 
@@ -148,7 +148,7 @@ function CTF:restorePlayer(id, player, bNoFade, bDontFix)
 	if not bNoFade then
 		clientCall(player, 'remoteStopSpectateAndBlack')
 	end
-	
+
 	local bkp = {}
 	local spawnpoint = self:pickFreeSpawnpoint(player)
 	bkp.position = spawnpoint.position
@@ -177,8 +177,8 @@ function CTF:restorePlayer(id, player, bNoFade, bDontFix)
 		if getElementModel(vehicle) ~= bkp.vehicle then
 			setVehicleID(vehicle, bkp.vehicle)
 		end
-		warpPedIntoVehicle(player, vehicle)	
-		
+		warpPedIntoVehicle(player, vehicle)
+
         setVehicleLandingGearDown(vehicle,bkp.geardown)
 
 		self:playerFreeze(player, true, bDontFix)
@@ -193,7 +193,7 @@ function CTF:restorePlayer(id, player, bNoFade, bDontFix)
 	local team = getPlayerTeam(player)
 	local r, g, b = getTeamColor(team)
 	setVehicleColor(g_CurrentRaceMode.getPlayerVehicle( player ), r, g, b, r, g, b, r, g, b, r, g, b)
-	clientCall(root,'applyTeamColorShader',player) 
+	clientCall(root,'applyTeamColorShader',player)
 end
 
 
@@ -203,7 +203,7 @@ function CTF:onPlayerPickUpRacePickup(player, pickup)
 		local team = getPlayerTeam(player)
 		local r, g, b = getTeamColor(team)
 		setVehicleColor(g_CurrentRaceMode.getPlayerVehicle( player ), r, g, b, r, g, b, r, g, b, r, g, b)
-		clientCall(root,'applyTeamColorShader',player) 
+		clientCall(root,'applyTeamColorShader',player)
 	end
 end
 
@@ -252,10 +252,10 @@ end
 
 function CTF:onPlayerWasted(player)
 	self:dropPlayerFlag(player)
-	
+
 	if self.getMapOption('respawn') == 'timelimit' and not self.isPlayerFinished(source) then
         -- See if its worth doing a respawn
-        local respawnTime       = tonumber(getElementData(player, 'gcshop.respawntime')) or self.getMapOption('respawntime')
+        local respawnTime = self.getRespawntime(player)
         if self:getTimeRemaining() - respawnTime > 3000 then
             Countdown.create(respawnTime/1000, self.restorePlayer, 'You will respawn in:', 255, 255, 255, 0.25, 2.5, true, self, self.id, player):start(player)
         end
@@ -292,7 +292,7 @@ end
 
 function CTF:dropPlayerFlag(player)
 	local playerFlag
-	for k, flag in ipairs(Flag.instances) do 
+	for k, flag in ipairs(Flag.instances) do
 		if flag:getCarrier() == player then
 			playerFlag = flag
 		end
@@ -447,13 +447,13 @@ function Flag:new(teamTable, object)
 	t.id = id
 	t.teamTable = teamTable
 	t.object = object
-	
+
 	t.base = {x=x, y=y, z=z}
 	t.basemarker = createMarker(x,y,z, 'cylinder', 1.5, teamTable.r, teamTable.g, teamTable.b, 100)
 	t.basecol = createColSphere(x, y, z, 2)
 	t.blip = createBlipAttachedTo(t.basemarker, 0, 4, teamTable.r, teamTable.g, teamTable.b)
 	addEventHandler('onColShapeHit', t.basecol, Flag.hit)
-	
+
 	t.marker = createMarker(x, y, z, 'corona', 1.5, teamTable.r, teamTable.g, teamTable.b, 100)
 	attachElements( t.marker, t.object)
 	setElementParent( t.marker, t.object)
@@ -462,7 +462,7 @@ function Flag:new(teamTable, object)
 	addEventHandler('onColShapeHit', t.col, Flag.hit)
 	attachElements( t.col, t.object)
 	setElementParent( t.col, t.object)
-	
+
 	-- outputDebugString("New " .. teamTable.name .. " flag (".. id .. ') ' .. tostring((object)) .. " event=" .. tostring(t.col))
 	Flag.instances[id] = setmetatable(t, self)
 	return Flag.instances[id]
@@ -491,7 +491,7 @@ addEvent('onCTFFlagTaken')
 
 function Flag:hitBaseCol(player)
 	local playerFlag = g_CurrentRaceMode:getFlagCarriedBy(player)
-	for k, flag in ipairs(Flag.instances) do 
+	for k, flag in ipairs(Flag.instances) do
 		if flag:getCarrier() == player then
 			playerFlag = flag
 		end
@@ -556,7 +556,7 @@ function Flag:resetToBase()
 	if getElementAttachedTo(self:getObject()) then
 		detachElements(self:getObject())
 	end
-	
+
 	local pos = self:getBase()
 	self:setPosition(pos.x, pos.y, pos.z)
 	playSoundFrontEnd(root, 14)
@@ -640,11 +640,11 @@ function Flag:destroy()
 	for _, v in ipairs(destroy) do
 		if v and isElement(v) then destroyElement(v) end
 	end
-	
+
 	self:resetTimers()
 	self.carrier = nil
 	self.teamTable = nil
-	
+
 	Flag.instances[self.id] = nil
 end
 
@@ -703,6 +703,6 @@ end
 addEvent("ctf_clientVehChange",true)
 local function receiveVehSwitch()
 	if getElementType(client) ~= "player" then return end
-	clientCall(root,'applyTeamColorShader',client) 
+	clientCall(root,'applyTeamColorShader',client)
 end
 addEventHandler("ctf_clientVehChange",root,receiveVehSwitch)
