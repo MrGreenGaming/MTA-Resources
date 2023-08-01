@@ -77,9 +77,9 @@ end
 
 function RaceMode:getRespawntime(player) -- in seconds
     if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then
-        return self.getMapOption('respawntime')
+        return g_MapOptions['respawntime']
     end
-    local mapRespawnTime = self.getMapOption('respawntime')
+    local mapRespawnTime = g_MapOptions['respawntime']
     local gcShopRespawnTime = tonumber(getElementData(player, 'gcshop.respawntime')) or mapRespawnTime
     return gcShopRespawnTime < mapRespawnTime and gcShopRespawnTime or mapRespawnTime
 end
