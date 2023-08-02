@@ -3,8 +3,9 @@ local text_offset = 20
 local teams = {}
 local tags = {}
 local ffa_mode = "CW" -- CW or FFA
+local scoring = "15,13,11,9,7,5,4,3,2,1"
 local c_round = 0
-local m_round = 0
+local m_round = 10
 local f_round = false
 local team_choosen = false
 local isAdmin = false
@@ -25,6 +26,10 @@ local fReg = dxCreateFont("fonts/Roboto-Medium.ttf", 9 * fSize, cleartype)
 local nickWidth = 160 * (screenW/1920)
 local rankWidth = 40 * (screenW/1920)
 local ptsWidth = 50 * (screenW/1920)
+
+function outputInfoClient(info)
+    outputChatBox('[Event] #ffffff' ..info, 155, 155, 255, true)
+end
 
 -----------------
 -- Call functions
@@ -129,7 +134,7 @@ function updateDisplay()
                 dxDrawRectangle(wX, wY + (rowHeight*(2+(count+1))), windowSizeX, rowHeight, tocolor(r2, g2, b2, 30), false, false) -- t2 bg
             end
 			dxDrawBottomRoundedRectangle(wX, wY + (rowHeight * (rowCount-1)), windowSizeX, rowHeight, 10, tocolor(0, 0, 0, 160), false, false) -- mode bg
-			dxDrawText("Press #bababaF7 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
+			dxDrawText("Press #bababa0 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
 
 			dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
@@ -187,7 +192,7 @@ function updateDisplay()
 			dxDrawRoundedRectangle(wX, wY, windowSizeX, windowSizeY, 10, tocolor(0, 0, 0, 160), false, false) -- background
 			dxDrawRectangle(wX, wY + (rowHeight*2), windowSizeX, rowHeight, tocolor(r1, g1, b1, 20), false, false) -- t1 bg
 			dxDrawBottomRoundedRectangle(wX, wY + (rowHeight * (rowCount-1)), windowSizeX, rowHeight, 10, tocolor(0, 0, 0, 160), false, false) -- mode bg
-			dxDrawText("Press #bababaF7 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
+			dxDrawText("Press #bababa0 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText(t1c..t1tag.."   "..getElementData(teams[1], 'Score').."  #ffffff-  "..t2c..getElementData(teams[2], 'Score').."   "..t2tag, wX + margin, wY + (rowHeight*2), wX+windowSizeX-(margin*2), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "center", "center", false, false, false, true, false)
@@ -313,19 +318,24 @@ function createAdminGUI()
 		addEventHandler("onClientGUIClick", fun_button, function() serverCall('funRound', localPlayer) end, false)
 		-- tab 2
 		tab_rounds = guiCreateTab('Rounds & Score', tab_panel)
-		tt1_name = guiCreateLabel(29, 33, 120, 20, "Team 1 Score", false, tab_rounds)
-		tt2_name = guiCreateLabel(29, 110, 120, 20, "Team 2 Score", false, tab_rounds)
+
+        scoring_name = guiCreateLabel(29, 127, 289, 20, "Scoring (split by ,)", false, tab_rounds)
+        scoring_field = guiCreateEdit(29, 150, 289, 27, scoring, false, tab_rounds)
+
+
+		tt1_name = guiCreateLabel(29, 13, 120, 20, "Team 1 Score", false, tab_rounds)
+		tt2_name = guiCreateLabel(29, 70, 120, 20, "Team 2 Score", false, tab_rounds)
 		local t1_score
 		local t2_score
 		if isElement(teams[1]) then t1_score = getElementData(teams[1], 'Score') else t1_score = '0' end
 		if isElement(teams[2]) then t2_score = getElementData(teams[2], 'Score') else t2_score = '0' end
-		t1cur_field = guiCreateEdit(29, 53, 120, 27, tostring(t1_score), false, tab_rounds)
-		t2cur_field = guiCreateEdit(29, 129, 120, 27, tostring(t2_score), false, tab_rounds)
-		guiCreateLabel(238, 33, 80, 20, "Current Round", false, tab_rounds)
-		guiCreateLabel(238, 109, 80, 20, "Total Rounds", false, tab_rounds)
-		cr_field = guiCreateEdit(238, 53, 80, 27, tostring(c_round), false, tab_rounds)
-		ct_field = guiCreateEdit(238, 129, 80, 27, tostring(m_round), false, tab_rounds)
-		zadat_button2 = guiCreateButton(128, 172, 100, 27, 'Apply', false, tab_rounds)
+		t1cur_field = guiCreateEdit(29, 33, 120, 27, tostring(t1_score), false, tab_rounds)
+		t2cur_field = guiCreateEdit(29, 90, 120, 27, tostring(t2_score), false, tab_rounds)
+		guiCreateLabel(238, 13, 80, 20, "Current Round", false, tab_rounds)
+		guiCreateLabel(238, 70, 80, 20, "Total Rounds", false, tab_rounds)
+		cr_field = guiCreateEdit(238, 33, 80, 27, tostring(c_round), false, tab_rounds)
+		ct_field = guiCreateEdit(238, 90, 80, 27, tostring(m_round), false, tab_rounds)
+		zadat_button2 = guiCreateButton(128, 190, 100, 27, 'Apply', false, tab_rounds)
 		guiSetProperty(zadat_button2, "NormalTextColour", "FFFFFEFE")
 		addEventHandler("onClientGUIClick", zadat_button2, zadatScoreRounds, false)
 	--	re_button = guiCreateButton(20, 120, 340, 25, 'Закончить текущий раунд', false, tab_rounds)
@@ -377,17 +387,17 @@ end
 function toggleMode()
 	if mode == "main" and ffa_mode == "CW" then
 		mode = "compact"
-		outputChatBox('[CW] #ffffffCompact mode', 155, 155, 255, true)
+		outputInfoClient('Compact mode')
 
     elseif mode == "main" and ffa_mode == "FFA" then
         mode = "hidden"
-        outputChatBox('[CW] #ffffffHidden mode', 155, 155, 255, true)
+        outputInfoClient('Hidden mode')
 	elseif mode == "compact" then
 		mode = "hidden"
-		outputChatBox('[CW] #ffffffHidden mode', 155, 155, 255, true)
+		outputInfoClient('Hidden mode')
 	else
 		mode = "main"
-		outputChatBox('[CW] #ffffffFull mode', 155, 155, 255, true)
+		outputInfoClient('Full mode')
 	end
 end
 
@@ -416,6 +426,7 @@ function updateAdminPanelText()
 		guiSetText(cr_field, c_round)
 		guiSetText(ct_field, m_round)
 
+        guiSetText(scoring_field, scoring)
         guiCheckBoxSetSelected(ffa_field, ffa_mode == "FFA")
 	end
 end
@@ -452,11 +463,21 @@ function zadatScoreRounds()
 	local t2score = guiGetText(t2cur_field)
 	local cur_round = guiGetText(cr_field)
 	local ma_round = guiGetText(ct_field)
+    local scoring_value = guiGetText(scoring_field)
 	if isElement(teams[1]) and isElement(teams[2]) then
 		setElementData(teams[1], 'Score', t1score)
 		setElementData(teams[2], 'Score', t2score)
 	end
 	serverCall('updateRounds', cur_round, ma_round)
+
+    local parsedScoring = stringToTable(scoring_value)
+    if #parsedScoring ~= 0 then
+        outputInfoClient('Scoring set to: ' .. table.concat(parsedScoring, ","))
+        serverCall('updateScoring', scoring_value)
+    else
+        outputInfoClient('#FF0000INVALID SCORING, not applying scoring', 155, 155, 255, true)
+    end
+
 end
 
 function zadatTeams()
@@ -492,10 +513,10 @@ function startWar()
     local ffa = guiCheckBoxGetSelected(ffa_field) == true and "FFA" or "CW"
 
 	serverCall('startWar', t1name, t2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, ffa)
-	outputChatBox('[CW] #ffffffPress #9b9bffF7 #ffffffto switch display mode', 155, 155, 255, true)
+	outputInfoClient('Press #9b9bff0 #ffffffto switch display mode')
 
     if ffa == "CW" then
-        outputChatBox('[CW] #ffffffPress #9b9bffF6 #ffffffto select team', 155, 155, 255, true)
+        outputInfoClient('Press #9b9bff8 #ffffffto select team')
     end
 end
 
@@ -520,6 +541,11 @@ function updateModeData(mode)
     updateAdminPanelText()
 end
 
+function updateScoringData(newScoring)
+    scoring = newScoring
+    updateAdminPanelText()
+end
+
 function updateRoundData(c_r, max_r, f_r)
 	if c_r == 0 then
 		f_round = true
@@ -535,7 +561,7 @@ function updateAdminInfo(obj)
 	isAdmin = obj
 	if isAdmin then
 		createAdminGUI()
-		outputChatBox('[CW] #ffffffPress #9b9bffF10 #ffffffto open management panel', 155, 155, 255, true)
+		outputInfoClient('Press #9b9bff9 #ffffffto open management panel')
 	end
 end
 
@@ -549,7 +575,7 @@ function stringToNumber(colorsString)
 	local g = gettok(colorsString, 2, string.byte(','))
 	local b = gettok(colorsString, 3, string.byte(','))
 	if r == false or g == false or b == false then
-		outputChatBox('[Race League]: use - [0-255], [0-255], [0-255]', 255, 155, 155, true)
+		outputInfoClient('use - [0-255], [0-255], [0-255]')
 		return 0, 255, 0
 	else
 		return r, g, b
@@ -564,9 +590,9 @@ setTimer(function()
         createGUI(getTeamName(teams[1]), getTeamName(teams[2]))
     end
 end, 2500, 1)
-bindKey('F6', 'down', toogleGUI)
-bindKey('F10', 'down', toogleAdminGUI)
-bindKey('F7', 'down', toggleMode)
+bindKey('8', 'down', toogleGUI)
+bindKey('9', 'down', toogleAdminGUI)
+bindKey('0', 'down', toggleMode)
 serverCall('playerJoin', localPlayer)
 
 ----------------------------

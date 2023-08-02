@@ -10,7 +10,7 @@
 -- 			timeoutTime = ms
 -- 		end
 -- 	end
-	
+
 
 -- 	)
 
@@ -51,10 +51,10 @@ local neon_elements = {};
 
 function buyVehicle ( player, cmd, vehicleID )
 	if client and client ~= player then return end
-	
+
 	local vehicleID = getVehicleModelFromString(vehicleID)
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
-	
+
 	if (not forumID) then
 		outputChatBox('You\'re not logged into a Green-Coins account!', player, 255, 0, 0 )
 		return
@@ -65,16 +65,16 @@ function buyVehicle ( player, cmd, vehicleID )
 		outputChatBox('You already bought this vehicle: '.. getVehicleNameFromModel(vehicleID)  .. ' (' .. tostring(vehicleID) .. ')', player, 255, 165, 0 )
 		return
 	end
-	
+
 	local result, error = gcshopBuyItem ( player, vehicle_price, 'Vehicle: ' .. getVehicleNameFromModel(vehicleID)  .. ' (' .. tostring(vehicleID) .. ')' )
-	
+
 	if result == true then
 		local added = addVehToDatabase( forumID, vehicleID )
 		addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought vehicle=' .. tostring(vehicleID) .. ' ' .. tostring(added))
 		outputChatBox ('Vehicle \"' .. getVehicleNameFromModel(vehicleID)  .. '\" (' .. tostring(vehicleID) .. ') bought.', player, 0, 255, 0)
 		-- getModsFromDB(forumID, )
-		getModsFromDB(forumID, true, 
-		function(data) 
+		getModsFromDB(forumID, true,
+		function(data)
 			triggerClientEvent( player, 'modshopLogin', player, vehicle_price, data or false )
 		end)
 		return
@@ -87,10 +87,10 @@ end
 addCommandHandler('gcbuyveh', buyVehicle, false, false)
 addEvent('gcbuyveh', true)
 addEventHandler('gcbuyveh', resourceRoot, buyVehicle)
-	
+
 function buyExtras ( player, cmd )
 	if client and client ~= player then return end
-	
+
 	local forumID = tonumber(exports.gc:getPlayerForumID ( player ))
 	local vehID = 0
 	if true and (not forumID) then
@@ -100,16 +100,16 @@ function buyExtras ( player, cmd )
 		outputChatBox('You already enabled the extra mods', player, 255, 165, 0 )
 		return
 	end
-	
+
 	local result, error = gcshopBuyItem ( player, extras_price, 'Modshop: enable extra mods' )
-	
+
 	if result == true then
 		local addedVeh = addVehToDatabase( forumID, vehID )
         local addedSlot = addUpgToSlotDatabase (forumID, vehID, 'slot0', 1 )
 		addToLog ( '"' .. getPlayerName(player) .. '" (' .. tostring(forumID) .. ') bought extra mods= ' .. tostring(addedVeh) ..' '.. tostring(addedSlot))
 		outputChatBox ('Modshop: enable extra mods bought.', player, 0, 255, 0)
-		getModsFromDB(forumID, true, 
-		function(data) 
+		getModsFromDB(forumID, true,
+		function(data)
 			triggerClientEvent( player, 'modshopLogin', player, vehicle_price, data or false )
 		end)
 		return
@@ -135,7 +135,7 @@ function setMod ( player, cmd, vehicleID, upgradeType, ... )
 
 	vehicleID = getVehicleModelFromString(vehicleID)
 	forumID = tonumber(exports.gc:getPlayerForumID ( player ))
-	local upgrades = { 
+	local upgrades = {
 		["upgrade"] = addShopUpgrade,
 		["remupgrade"] = remShopUpgrade,
 		["paintjob"] = addShopPaintJob,
@@ -145,7 +145,7 @@ function setMod ( player, cmd, vehicleID, upgradeType, ... )
         ["neon"] = addShopNeon
 	}
 	upgradeType = upgrades[upgradeType]
-	
+
 	if (not forumID) then
 		outputChatBox('You\'re not logged into a Green-Coins account!', player, 255, 0, 0 )
 		return
@@ -159,13 +159,13 @@ function setMod ( player, cmd, vehicleID, upgradeType, ... )
 		outputChatBox('Not a valid upgrade type', player, 255, 0, 0 )
 		return
 	end
-	
+
 	upgradeType ( player, forumID, vehicleID, ... )
-	getModsFromDB(forumID, true, 
-	function(data) 
+	getModsFromDB(forumID, true,
+	function(data)
 		triggerClientEvent( player, 'modshopLogin', player, vehicle_price, data or false )
 	end)
-	return 
+	return
 end
 addCommandHandler('gcsetmod', setMod, false, false )
 addEvent('gcsetmod', true)
@@ -178,7 +178,7 @@ function addShopUpgrade ( player, forumID, vehicleID, upgradeID)
 	elseif upgradeID == 1008 or upgradeID == 1009 or upgradeID == 1010 or upgradeID == 1087 then
 		outputChatBox ( 'Nitro or hydraulics are not allowed', player, 255, 0, 0 )
 	elseif vehicleID == '*' then
-		getModsFromDB(forumID,true, 
+		getModsFromDB(forumID,true,
 			function(vehTable)
 				for i = 1, #vehTable do
 					if vehTable[i].vehicle then
@@ -187,15 +187,15 @@ function addShopUpgrade ( player, forumID, vehicleID, upgradeID)
 						else
 							local added = addUpgToDatabase (forumID, vehTable[i].vehicle, upgradeID )
 							local veh = getPedOccupiedVehicle(player)
-							if veh and vehTable[i].vehicle == getElementModel(veh) then 
-					if veh and vehTable[i].vehicle == getElementModel(veh) then 
-							if veh and vehTable[i].vehicle == getElementModel(veh) then 
+							if veh and vehTable[i].vehicle == getElementModel(veh) then
+					if veh and vehTable[i].vehicle == getElementModel(veh) then
+							if veh and vehTable[i].vehicle == getElementModel(veh) then
 								addVehicleUpgrade(veh, upgradeID)
 							end
 						end
-					end	
-			end	
-					end	
+					end
+			end
+					end
 				end
 				outputChatBox ('Upgrade added to all your compatible vehicles' , player, 0, 255, 0 )
 			end
@@ -208,7 +208,7 @@ function addShopUpgrade ( player, forumID, vehicleID, upgradeID)
 		local added = addUpgToDatabase (forumID, vehicleID, upgradeID )
 		outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": new upgrade '.. tostring(upgradeID) .. ((added and '') or ' FAILED'), player, 0, 255, 0 )
 		local veh = getPedOccupiedVehicle(player)
-		if veh and vehicleID == getElementModel(veh) then 
+		if veh and vehicleID == getElementModel(veh) then
 			addVehicleUpgrade(veh, upgradeID)
 		end
 	end
@@ -220,22 +220,22 @@ function remShopUpgrade ( player, forumID, vehicleID, upgradeID)
 	if (not upgradeID) then
 		outputChatBox ( 'Not a valid upgrade ID (use numbers)', player, 255, 0, 0 )
 	elseif vehicleID == '*' then
-		getModsFromDB(forumID,true, 
-			function(vehTable) 
+		getModsFromDB(forumID,true,
+			function(vehTable)
 				for i = 1, #vehTable do
 					if vehTable[i].vehicle then
 						if isUpgInDatabase ( forumID, vehTable[i].vehicle, upgradeID ) then
 							local removed = remUpgFromDatabase (forumID, vehTable[i].vehicle, upgradeID )
 							local veh = getPedOccupiedVehicle(player)
-							if veh and vehicleID == getElementModel(veh) then 
-					if veh and vehicleID == getElementModel(veh) then 
-							if veh and vehicleID == getElementModel(veh) then 
+							if veh and vehicleID == getElementModel(veh) then
+					if veh and vehicleID == getElementModel(veh) then
+							if veh and vehicleID == getElementModel(veh) then
 								removeVehicleUpgrade(veh, upgradeID)
 							end
 						end
-					end	
-			end	
-					end	
+					end
+			end
+					end
 				end
 				outputChatBox ('Removed upgrade of all your vehicles' , player, 0, 255, 0 )
 			end
@@ -246,16 +246,16 @@ function remShopUpgrade ( player, forumID, vehicleID, upgradeID)
 		local removed = remUpgFromDatabase (forumID, vehicleID, upgradeID )
 		outputChatBox ('Vehicle \"' .. tostring(getVehicleNameFromModel(vehicleID)) .. '\": removed upgrade '.. tostring(upgradeID) .. ((removed and '') or ' FAILED'), player, 0, 255, 0 )
 		local veh = getPedOccupiedVehicle(player)
-		if veh and vehicleID == getElementModel(veh) then 
+		if veh and vehicleID == getElementModel(veh) then
 			removeVehicleUpgrade(veh, upgradeID)
 		end
 	end
 end
 
 function addShopPaintJob ( player, forumID, vehicleID, paintjob)
-	checkPerk(forumID, 4, 
+	checkPerk(forumID, 4,
 	function(bool)
-		getPerkSettings(player, 4, 
+		getPerkSettings(player, 4,
 		function(perkSetting)
 			if bool and not math.range(paintjob, 0, 3 + (perkSetting.amount or 0)) then
 				outputChatBox ( 'Wrong input, need a paintjob between 1 and 3 (0 = no paintjob) or ' .. 3 + perkSetting.amount .. 'for custom paintjobs!', player, 255, 0, 0 )
@@ -288,7 +288,7 @@ function addShopPaintJob ( player, forumID, vehicleID, paintjob)
 					end
 				end
 				local veh = getPedOccupiedVehicle(player)
-				if veh and vehicleID == getElementModel(veh) then 
+				if veh and vehicleID == getElementModel(veh) then
 					local col1, col2, col3, col4 = getVehicleColor ( veh )
 					if paintjob < 4 then
 						setVehiclePaintjob(veh, realPJ)
@@ -304,7 +304,7 @@ function addShopPaintJob ( player, forumID, vehicleID, paintjob)
 			end
 		end)
 	end)
-		
+
 end
 
 function addShopVColor ( player, forumID, vehicleID, arg1, arg2, arg3, arg4 )
@@ -341,7 +341,7 @@ function addShopVColor ( player, forumID, vehicleID, arg1, arg2, arg3, arg4 )
 			end
 		end
 		local veh = getPedOccupiedVehicle(player)
-		if veh and vehicleID == getElementModel(veh) then 
+		if veh and vehicleID == getElementModel(veh) then
 			local col1, col2, col3, col4 = getVehicleColor ( veh )
 			if isVehColorAllowed() then
 				setVehicleColor(veh, arg1 or col1, arg2 or col2, arg3 or col3, arg4 or col4)
@@ -392,7 +392,7 @@ function addShopVColorRGB ( player, forumID, vehicleID, ... )
 			outputChatBox ('All your vehicles have a new color scheme: ' .. text, player, 0, 255, 0 )
 		end
 		local veh = getPedOccupiedVehicle(player)
-		if veh and ( vehicleID == getElementModel(veh) or isVehInDatabase ( forumID, getElementModel(veh) ) ) then 
+		if veh and ( vehicleID == getElementModel(veh) or isVehInDatabase ( forumID, getElementModel(veh) ) ) then
 			if isVehColorAllowed() then
 				setVehicleColor(veh,	colors[0][1], colors[0][2], colors[0][3],
 										colors[1][1], colors[1][2], colors[1][3],
@@ -430,7 +430,7 @@ function addShopLColor ( player, forumID, vehicleID, red, green, blue )
 				outputChatBox ('All your vehicles have new headlights : ' .. red .. " " .. green .. " " .. blue, player, 0, 255, 0 )
 			end
 			local veh = getPedOccupiedVehicle(player)
-			if veh and ( vehicleID == getElementModel(veh) or isVehInDatabase ( forumID, getElementModel(veh) ) ) then 
+			if veh and ( vehicleID == getElementModel(veh) or isVehInDatabase ( forumID, getElementModel(veh) ) ) then
 				setVehicleHeadLightColor(veh, red, green, blue)
 			end
 		end
@@ -477,17 +477,17 @@ function mapRestart ( mapInfo, mapOptions, gameOptions )
 	prev_vehid = {}
 	-- check for map upgrades
 	map_allows_shop = true
-	for k,s in pairs(getElementsByType('spawnpoint')) do 
+	for k,s in pairs(getElementsByType('spawnpoint')) do
 		if getElementData(s,'upgrades') or getElementData(s,'paintjob') then
 			map_allows_shop = false
 		end
 	end
-	for k,s in pairs(getElementsByType('checkpoint')) do 
+	for k,s in pairs(getElementsByType('checkpoint')) do
 		if getElementData(s,'upgrades') or getElementData(s,'paintjob') then
 			map_allows_shop = false
 		end
 	end
-	for k,s in pairs(getElementsByType('pickup')) do 
+	for k,s in pairs(getElementsByType('pickup')) do
 		if getElementData(s,'upgrades') or getElementData(s,'paintjob') then
 			map_allows_shop = false
 		end
@@ -500,8 +500,8 @@ addEventHandler ( "onMapStarting", root, mapRestart )
 
 function shopLogIn(forumID, amount)
 	local player = source
-	getModsFromDB(forumID, true, 
-		function(playerMods) 
+	getModsFromDB(forumID, true,
+		function(playerMods)
 			local veh = getPedOccupiedVehicle(player)
 			if veh then
 				prev_vehid[player] = getElementModel(veh)
@@ -579,6 +579,7 @@ end)
 function vehicleChecker2(player)
 	player = source or player
 	if isElement(player) and getPedOccupiedVehicle(player) and map_allows_shop then
+        if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return false end
 		local previd = prev_vehid[player]
 		local id = getElementModel(getPedOccupiedVehicle(player))
 		if not previd or previd ~= id then
@@ -768,8 +769,8 @@ local function modshopTestVehicle(player, c , vehicleID)
 	elseif not isVehInDatabase ( forumID, vehicleID ) then
 		outputChatBox('You don\'t own this vehicle: '.. getVehicleNameFromModel(vehicleID)  .. ' (' .. tostring(vehicleID) .. ')', player, 255, 0, 0 )
 		return
-	elseif not permissions.preview[exports.race:getRaceMode()] or getElementData(player,"race.finished") 
-		or (currentRaceState and currentRaceState ~= "Running" and currentRaceState ~= "SomeoneWon") or playerState ~= "alive" or isElementFrozen(veh) 
+	elseif not permissions.preview[exports.race:getRaceMode()] or getElementData(player,"race.finished")
+		or (currentRaceState and currentRaceState ~= "Running" and currentRaceState ~= "SomeoneWon") or playerState ~= "alive" or isElementFrozen(veh)
 		or not( isElement(player)and getElementData(player, 'state') == 'alive' and veh and isElement(veh) and not isVehicleBlown(veh) and getElementHealth(veh) > 0) then
 		return outputChatBox('Not allowed to preview vehicles now!', player, 255,0,0)
 	end
@@ -782,7 +783,7 @@ local function modshopTestVehicle(player, c , vehicleID)
 	end
 	dimensions[random] = player;
 	dimensions[player] = random;
-	
+
 	setElementDimension(veh, random);
 	setElementDimension(player,random);
 	setElementData(player,'gcmodshop.testing', true);
@@ -880,7 +881,7 @@ function isUpgradeCompatible ( vehicle, upgrade )
 		for k, v in ipairs(compUpgrades) do
 			if v == upgrade then
 				if isElement(tempveh) then destroyElement(tempveh) end
-				return true 
+				return true
 			end
 		end
 	end
@@ -1010,7 +1011,7 @@ function isUpgInDatabase ( forumID, vehID, upgradeID )
 	vehID = tonumber(vehID)
 	upgradeID = tonumber(upgradeID)
 	local slot = upgradeSlotID(upgradeID)
-	
+
 	return tonumber(gcMods[forumID]["ID-"..vehID]["slot"..slot]) == upgradeID
 
 
@@ -1029,7 +1030,7 @@ addCommandHandler("showcache", function(p, c, f)
 	end
 end)
 
-function getUpgInDatabase (forumID, vehID )	
+function getUpgInDatabase (forumID, vehID )
 	forumID = tonumber(forumID)
 	if vehID ~= nil then
 		vehID = tonumber(vehID)
@@ -1069,7 +1070,7 @@ function addUpgToSlotDatabase (forumID, vehID, slot, upgradeID )
 	elseif (not upgradeID) then
 		return nil
 	elseif type(slot) == 'string' then
-		local conditions = ' AND vehicle=' .. tostring(vehID) 
+		local conditions = ' AND vehicle=' .. tostring(vehID)
 		if vehID == '*' then
 			conditions = ''
 		end
@@ -1102,7 +1103,7 @@ end
 function remUpgFromSlotDatabase (forumID, vehID, slot )
 	forumID = tonumber(forumID)
 	if vehID ~= '*' then vehID = tonumber(vehID) end
-		
+
 	if vehID == '*' and type(slot) == 'string' then
 		local result = dbExec(handlerConnect, "UPDATE ?? SET ?? = ? WHERE forumID=?", tableName, slot, '', tostring(forumID))
 
@@ -1130,7 +1131,7 @@ function getModsFromDB(forumID, raw, callback, ...)
 	if not type(forumID) == "number" then return end
 	local args = {...}
 	dbQuery(
-		function(query) 
+		function(query)
 			local theMods = dbPoll(query,0) -- Takes 14MS on local wamp server for fully bought and modded gc account --
 
 			gcMods[forumID] = {}
@@ -1143,26 +1144,26 @@ function getModsFromDB(forumID, raw, callback, ...)
 
 						-- gcMods[forumID][i] = nil
 
-						gcMods[forumID][vehID] = theMods[i]	
-						gcMods[forumID][vehID] = theMods[i]	
-						gcMods[forumID][vehID] = theMods[i]	
-					end	
-				end	
+						gcMods[forumID][vehID] = theMods[i]
+						gcMods[forumID][vehID] = theMods[i]
+						gcMods[forumID][vehID] = theMods[i]
+					end
+				end
 
 				for i,v in pairs(gcMods[forumID]) do -- Resort
 					if tonumber(i) then
 						v = nil
 					end
 				end
-			
+
 				if not callback or type(callback) ~= 'function' then return end
 				if raw then
-					 callback(theMods, unpack(args)) 
+					 callback(theMods, unpack(args))
 				else
 					callback(vehTable, unpack(args))
 				end
 			end
-		end, 
+		end,
 	handlerConnect,"SELECT * FROM gcshop_mod_upgrades WHERE forumID=?",forumID)
 end
 
@@ -1174,32 +1175,32 @@ end
 -- idk if this already exists but im gonna make it anyways, lemme know if it already exists ~ Mihoje
 function doesPlayerOwnVehicle(player, vehicleid)
 	if not player or getElementType(player) ~= 'player' then return false end
-	
+
 	local forumid = exports.gc:getPlayerForumID(player)
-	
+
 	if not forumid then return false end
-	
+
 	local query = dbQuery(handlerConnect, "SELECT vehicle FROM ?? WHERE forumID=? AND vehicle=?", tableName, forumid, vehicleid)
-	
+
 	local result = dbPoll(query, -1)
-	
+
 	if #result > 0 then return true else return false end
 end
 
 --same comment as the function above ~ Mihoje
 function getPlayerSavedWheelsForVehicle(player, vehicleid)
 	if not player or getElementType(player) ~= 'player' then return false end
-	
+
 	local forumid = exports.gc:getPlayerForumID(player)
-	
+
 	if not forumid then return false end
-	
+
 	local query = dbQuery(handlerConnect, "SELECT slot12 FROM ?? WHERE forumid=? AND vehicle=? AND slot12<>'' AND slot12 IS NOT NULL", tableName, forumid, vehicleid)
-	
+
 	local result = dbPoll(query, -1)
-	
+
 	if #result == 0 then return false end
-	
+
 	for i,r in ipairs(result) do
 		return r[0] or r['slot12']
 	end

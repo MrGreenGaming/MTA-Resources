@@ -16,3 +16,16 @@ function getPrefix(number)
 	end
 
 end
+
+function stringToTable(s)
+    local tbl = {}
+    for numStr in s:gmatch("(%d+),?%s*") do
+        local num = tonumber(numStr)
+        if num then
+            table.insert(tbl, num)
+        else
+            return {}
+        end
+    end
+    return tbl
+end

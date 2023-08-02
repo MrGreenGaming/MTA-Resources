@@ -1,6 +1,7 @@
 --init
 local teams = {}
 local mode = "CW" -- CW or FFA
+local scoring = {15,13,11,9,7,5,4,3,2,1}
 local tags = {}
 local playerData = {}
 local rounds = 10
@@ -11,20 +12,6 @@ local round_ended = true
 local isWarEnded  = false
 
 CurrentGamemode = "Sprint"
-
-addEventHandler("onResourceStart", resourceRoot,
-    function()
-        if getResourceFromName("gcshop") and getResourceState(getResourceFromName("gcshop")) == "running" then
-            cancelEvent(true, "Can't start CW while GcShop is running. Stop the GcShop resource (Greencoin Shop)")
-            outputChatBox("Can't start CW while GcShop is running. Stop the GcShop resource using '/stop gcshop'", root, 255, 0, 0)
-        end
-
-        if getResourceFromName("mrgreen-vip") and getResourceState(getResourceFromName("mrgreen-vip")) == "running" then
-            cancelEvent(true, "Can't start CW while VIP is running. Stop the VIP resource (Mrgreen VIP)")
-            outputChatBox("Can't start CW while VIP is running. Stop the VIP resource using '/stop mrgreen-vip'", root, 255, 0, 0)
-        end
-    end
-)
 
 -----------------
 -- Call functions
@@ -97,7 +84,7 @@ function preStart(player, command, t1_name, t2_name, t1tag, t2tag)
             end
 		end
 	else
-		outputChatBox('[CW] #ffffffYou are not admin', player, 155, 155, 255, true)
+		outputInfoForPlayer(player, 'You are not admin')
 	end
 end
 
@@ -114,7 +101,7 @@ function destroyTeams(player)
 			clientCall(player, 'updateRoundData', c_round, rounds, f_round)
 		end
 	else
-		outputChatBox('[CW] #ffffffYou are not admin', player, 155, 155, 255, true)
+		outputInfoForPlayer(player, 'You are not admin')
 	end
 end
 
@@ -124,9 +111,9 @@ function funRound(player)
 		for i,player in ipairs(getElementsByType('player')) do
 			clientCall(player, 'updateRoundData', c_round, rounds, f_round)
 		end
-		outputInfo('#ffffffFree round')
+		outputInfo('Free round')
 	else
-		outputChatBox('[CW] #ffffffYou are not admin', player, 155, 155, 255, true)
+		outputInfoForPlayer(player, 'You are not admin')
 	end
 end
 
@@ -137,8 +124,16 @@ addCommandHandler('fun', funRound)
 
 function outputInfo(info)
 	for i, player in ipairs(getElementsByType('player')) do
-		outputChatBox('[CW] #ffffff' ..info, player, 155, 155, 255, true)
+		outputInfoForPlayer(player, info)
 	end
+end
+
+function outputInfoForPlayer(player, info)
+    outputChatBox('[Event] #ffffff' ..info, player, 155, 155, 255, true)
+end
+
+function areTeamsSet()
+    return isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3])
 end
 
 function startRound()
@@ -156,37 +151,13 @@ function startRound()
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
 	end
 	round_ended = false
-	if isWarEnded then
-		destroyTeams(false)
-		isWarEnded = false
-	end
 end
 
 function playerFinished(player, rank)
 	if isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3]) then
 		if getPlayerTeam(player) ~= teams[3] and not f_round and c_round > 0 then
-			local p_score = 0
-			if rank == 1 then
-				p_score = 15
-			elseif rank == 2 then
-				p_score = 13
-			elseif rank == 3 then
-				p_score = 11
-			elseif rank == 4 then
-				p_score = 9
-			elseif rank == 5 then
-				p_score = 7
-			elseif rank == 6 then
-				p_score = 5
-			elseif rank == 7 then
-				p_score = 4
-			elseif rank == 8 then
-				p_score = 3
-			elseif rank == 9 then
-				p_score = 2
-			elseif rank == 10 then
-				p_score = 1
-			end
+			local p_score = scoring[rank] or 0
+
 			local t1r, t1g, t1b = getTeamColor(teams[1])
 			local t1c = rgb2hex(t1r, t1g, t1b)
 			local t2r, t2g, t2b = getTeamColor(teams[2])
@@ -228,6 +199,7 @@ function endRound()
             else
                 endFreeForAll()
             end
+            destroyTeams(false)
 		end
 	end
 end
@@ -346,11 +318,14 @@ end
 function playerJoin(source)
     if isElement(teams[1]) then
         clientCall(source, 'updateTeamData', teams[1], teams[2], teams[3])
+        clientCall(source, 'updateTagData', tags[1], tags[2])
         clientCall(source, 'updateRoundData', c_round, rounds, f_round)
         clientCall(source, 'updateModeData', mode)
+        clientCall(source, 'updateScoringData', table.concat(scoring, ","))
         if (mode == "FFA") then
             setPlayerTeam(source, teams[1])
         else
+            exports.anti:forcePlayerSpectatorMode(player)
             setPlayerTeam(source, teams[3])
         end
     end
@@ -391,6 +366,7 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m)
         if mode == "FFA" then
             setPlayerTeam(player, teams[1])
         else
+            exports.anti:forcePlayerSpectatorMode(player)
             setPlayerTeam(player, teams[3])
         end
 		setElementData(player, 'Score', 0)
@@ -405,6 +381,7 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m)
 		clientCall(player, 'updateTagData', tags[1], tags[2])
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
         clientCall(player, 'updateModeData', mode)
+        clientCall(player, 'updateScoringData', table.concat(scoring, ","))
         if mode == "CW" then
             clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
         end
@@ -417,6 +394,13 @@ function updateRounds(cur_round, ma_round)
 	for i, player in ipairs(getElementsByType('player')) do
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
 	end
+end
+
+function updateScoring(newScoring)
+    scoring = stringToTable(newScoring)
+    for i, player in ipairs(getElementsByType('player')) do
+        clientCall(player, 'updateScoringData', newScoring)
+    end
 end
 
 function sincAP()
@@ -458,6 +442,17 @@ addEventHandler('onPostFinish', getRootElement(), endRound)
 addEventHandler('onPlayerLogin', getRootElement(), playerLogin)
 --addEventHandler('onPlayerReachCheckpoint', getRootElement(), getRank)
 
+addEventHandler('onElementDataChange', root, function(key, old, new)
+    if getElementType(source) ~= 'player' then return end
+    if key == 'player state' then
+        local playerTeam = getPlayerTeam(source)
+        if playerTeam == teams[3] and new == 'alive' and old ~= 'not ready' then
+            outputInfoForPlayer(source, '#FF0000You\'re not allowed to play as Spectator')
+            exports.anti:forcePlayerSpectatorMode(source)
+        end
+    end
+end)
+
 addEventHandler('onElementModelChange', root, function()
     if getElementType(source)== 'vehicle' then
         local player = getVehicleOccupant(source)
@@ -471,7 +466,7 @@ addEventHandler('onPlayerVehicleEnter', root, function(vehicle, seat)
 end)
 
 addEvent("onRaceStateChanging")
-addEventHandler("onRaceStateChanging",getRootElement(),
+addEventHandler("onRaceStateChanging",root,
 	function(old, new)
 		local players = getElementsByType("player")
 		for k,v in ipairs(players) do
@@ -484,7 +479,7 @@ addEventHandler("onRaceStateChanging",getRootElement(),
 					r, g, b = getTeamColor (playerTeam)
 					setBlipColor(theBlip, tostring(r), tostring(g), tostring(b), 255)
 					if playerTeam == teams[3] then
-						triggerClientEvent(thePlayer, 'onSpectateRequest', getRootElement())
+						exports.anti:forcePlayerSpectatorMode(thePlayer)
 					end
 				end
 			end

@@ -10,7 +10,7 @@ local guix = screenSizex * 0.1
 local guiy = screenSizex * 0.1
 local globalscale = 5
 local globalalpha = .5
-	
+
 local ghostIcon = guiCreateStaticImage(0, 0, guix, guiy, "icon.png", false )
 guiSetVisible(ghostIcon, false)
 
@@ -59,17 +59,17 @@ end
 
 -- Determining if ghostmode can be disabled for the local player
 
-local minimDistanceCars = 20
-local minimDistancePlane = 35
-local minimDistanceBoats = 30
-local minimDistanceHelis = 35
+local minimDistanceCars = 30
+local minimDistancePlane = 40
+local minimDistanceBoats = 35
+local minimDistanceHelis = 40
 
 function checkGmCanWorkOk(bool)
 	if bool then return stopTimers() end
 	local isOk = true
 	local playerCar = getPedOccupiedVehicle(localPlayer)
-	
-	for i,player in ipairs(getElementsByType('player')) do 
+
+	for i,player in ipairs(getElementsByType('player')) do
 		local car = getPedOccupiedVehicle(player)
 		if player ~= localPlayer and isElement(car) and getElementData(player, "dim") == getElementData(localPlayer, "dim") then
 			if playerCar then
@@ -82,15 +82,15 @@ function checkGmCanWorkOk(bool)
 					minimDistance = minimDistanceBoats
 				elseif (getVehicleType(car) == 'Helicopter') and (getVehicleType(playerCar) == 'Helicopter') then
 					minimDistance = minimDistanceHelis
-				end	
+				end
 				local distance = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
-				if distance <= minimDistance then 
+				if distance <= minimDistance then
 					isOk = false
 					if isTimer( gmTimer ) then killTimer( gmTimer ) end
 					gmTimer = setTimer( checkGmCanWorkOk, 50, 1)
 					break
 				end
-			end		
+			end
 		end
 	end
 	if isOk == true then
@@ -98,7 +98,7 @@ function checkGmCanWorkOk(bool)
 		triggerServerEvent('onGMoff', localPlayer)
 	else
 		startBlinking()
-	end	
+	end
 end
 addEvent('checkGmCanWorkOk', true)
 addEventHandler('checkGmCanWorkOk', root, checkGmCanWorkOk)
@@ -140,19 +140,19 @@ function()
 	if car then
 		if getElementAlpha(car) ~= 255 then
 			local players = getElementsByType('player')
-			for _, player in ipairs(players) do 
-				if player ~= localPlayer and getElementData(localPlayer, "dim") == getElementData(player, "dim") then 
+			for _, player in ipairs(players) do
+				if player ~= localPlayer and getElementData(localPlayer, "dim") == getElementData(player, "dim") then
 					local pedCar = getPedOccupiedVehicle(player)
 					if pedCar and getElementAlpha(pedCar) ~= 255 then
 						local x,y,z = getElementPosition(car)
 						local cx,cy,cz = getElementPosition(pedCar)
 						local distance = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
-						if distance <= 10 then
+						if distance <= 20 then
 							setElementAlpha(car, 240)
-						
-								setElementAlpha(pedCar, 40)
-								setElementAlpha(player, 40)
-							
+
+								setElementAlpha(pedCar, 10)
+								setElementAlpha(player, 10)
+
 						else
 							setElementAlpha(pedCar, 180)
 							setElementAlpha(car, 180)
@@ -163,6 +163,6 @@ function()
 			end
 		end
 	end
-	
+
 end
 )

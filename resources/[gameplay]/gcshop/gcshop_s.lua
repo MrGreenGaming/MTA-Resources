@@ -132,13 +132,3 @@ function getRealDateTimeString( time )
 						,time.second
 						)
 end
-
-
-addEventHandler("onResourceStart", resourceRoot,
-    function()
-        if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
-            cancelEvent(true, "Can't start gcshop whilst cw_script is running")
-            outputChatBox("Can't start gcshop whilst cw_script is running.", root, 255, 0, 0)
-        end
-    end
-)

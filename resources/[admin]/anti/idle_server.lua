@@ -62,7 +62,7 @@ function(todo, idles, maxidles)
 		-- end
 	elseif todo == "setAfkState" then
 		-- if not hasObjectPermissionTo ( player, "function.kickPlayer", false ) then
-		removeWarn(player)	
+		removeWarn(player)
 		setPlayerAFK(player,true)
 		notifyPlayer(player)
 		-- else
@@ -75,7 +75,7 @@ function(todo, idles, maxidles)
 		removeWarn(player)
 		removeNotify(player)
 		setPlayerAFK(player,false)
-	end	
+	end
 end
 )
 
@@ -95,7 +95,7 @@ function(state)
 		triggerClientEvent("onMapRunning", root, true)
 	else
 		triggerClientEvent("onMapRunning", root, false)
-	end	
+	end
 
 	if state == "Running" then
 
@@ -112,7 +112,7 @@ end
 
 
 -- Join and Quit Handlers --
-addEventHandler("onResourceStart", resourceRoot, 
+addEventHandler("onResourceStart", resourceRoot,
 function()
 	local pTable = getElementsByType("player")
 	for f,u in pairs(pTable) do
@@ -122,14 +122,14 @@ function()
 	end
 end)
 
-addEventHandler("onPlayerJoin", root, 
+addEventHandler("onPlayerJoin", root,
 function()
 	if AfkTable[source] == nil then
 		AfkTable[source] = false
 	end
 end)
 
-addEventHandler("onPlayerQuit", root, 
+addEventHandler("onPlayerQuit", root,
 function()
 	if AfkTable[source] ~= nil then
 		AfkTable[source] = nil
@@ -145,9 +145,9 @@ function executeAfkState(gamemode)
 
 		for f,u in pairs(AfkTable) do
 			if u then
-				
+
 				setElementData(f,"player state","away")
-				
+
 				if isElement(getPedOccupiedVehicle(f)) and not isPedDead(f) then
 					-- outputDebugString("AFK Kill"..getPlayerName(f)..tostring(gamemode))
 					outputChatBox("You were killed, reason: AFK.",f,255,0,0)
@@ -174,7 +174,7 @@ function setPlayerAFK(p,bln)
 			AfkTable[p] = true
 			notifyPlayer(p)
 			if currentGamemode == "Destruction derby" or currentGamemode == "Shooter" or currentGamemode == "Deadline" then
-				
+
 				setElementData(p,"player state","away")
 				triggerEvent('onPlayerAway', p, bln)
 
@@ -190,13 +190,13 @@ function setPlayerAFK(p,bln)
 					end
 				end
 
-				
+
 			else
 				-- outputDebugString("AFK Spectate"..getPlayerName(p).." ::Individual Else GM")
 				triggerClientEvent(p,"triggerPlayerSpectate",resourceRoot,true)
 				setElementData(p,"player state","away")
 				triggerEvent('onPlayerAway', p, bln)
-				
+
 			end
 		elseif bln == false then
 			AfkTable[p] = false
@@ -209,7 +209,7 @@ function setPlayerAFK(p,bln)
 end
 
 
-addCommandHandler( "afk", 
+addCommandHandler( "afk",
 function(playerSource)
 	if AfkTable[playerSource] == false then
 		setPlayerAFK(playerSource,true)
@@ -225,9 +225,13 @@ function isPlayerAFK(player)
 		else
 			return false
 		end
-	else 
+	else
 		return false
 	end
+end
+
+function forcePlayerSpectatorMode(player)
+    triggerClientEvent(player,"triggerPlayerSpectate",resourceRoot,true)
 end
 
 
@@ -252,7 +256,7 @@ function()
 		local theRealData = getElementData( p, "state" )
 		setElementData( p, "player state", theRealData )
 	end
-	
+
 end
 )
 
