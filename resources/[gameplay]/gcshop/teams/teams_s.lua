@@ -437,8 +437,23 @@ function leave(player)
     dbExec(handlerConnect, [[UPDATE `team_members` SET `status`=0 WHERE `forumid`=?]], forumID)
     checkPlayerTeam(player)
 end
-
 addCommandHandler('leave', leave)
+
+function forceLeaveTeam(argPl)
+    if not argPl then return outputChatBox('Syntax: /forceLeaveTeam <player>', source, 255, 0, 0) end
+
+    local player = getPlayerFromName_(argPl)
+    if not player then return outputChatBox('Player not found', source, 255, 0, 0) end
+
+    local forumID = tonumber(exports.gc:getPlayerForumID(player))
+    if not forumID then return outputChatBox('Player is not logged in to GC', source, 255, 0, 0) end
+
+    outputChatBox('[TEAMS] You were kicked from your team by an Admin', player, 0, 255, 0)
+    outputChatBox('[TEAMS] ' .. getPlayerName(player) .. ' was kicked from their team', source, 0, 255, 0)
+    dbExec(handlerConnect, [[UPDATE `team_members` SET `status`=0 WHERE `forumid`=?]], forumID)
+    checkPlayerTeam(player)
+end
+addCommandHandler('forceLeaveTeam', forceLeaveTeam, true, false)
 
 function rejoin(player)
     local forumID = tonumber(exports.gc:getPlayerForumID(player))
