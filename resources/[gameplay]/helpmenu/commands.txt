@@ -110,16 +110,18 @@ B       - Toggle spectator.
 /autologin [name] [pass]                            Auto login.
 
 
-/blocker [name] [time]                              Gives player a blocker mode.
+/blocker [name] [time] [timeType]                   Gives player a blocker mode.
                                                     Allowed timeTypes: hours, days, weeks, months, years.
                                                     For example the following command will mark me as blocker for 2 hours:
                                                     /blocker Bierbuikje 2 hours
+
+/unblocker [name]                                   Removes blocker mode from player.
 
 /blockers                                           Shows an overview of all online players in blocker mode.
 
 /k [name] [reason]                                  Blow up another player who camps or is bugged in Shooter or DD mode.
 
-/mute [name] [reason] [time]                        Mutes a player.
+/mute [name] [reason] [time] [timeType]             Mutes a player.
                                                     Allowed timeTypes: seconds, minutes, hours, days, weeks, months, years.
                                                     For example the following command mutes me for 30 minutes:
                                                     /mute Bierbuikje reason 30 minutes
@@ -172,7 +174,8 @@ Never use these commands unless absolutely necessary. When in doubt, contact Nic
 * --- Other --- *
 
 /tops [player] #                                    Show tops for player in chat and console.
-
+/logForumIds                                        Logs the forum ids of all online players in the Console (F8)
+                                                    (useful for events where you need to know the forum id of a player to award prizes)
 
 
 
@@ -198,3 +201,7 @@ Never use these commands unless absolutely necessary. When in doubt, contact Nic
 /debuggc [player]                                   Dump gc info.
 /editmotd                                           Edit the motd (message of the day) message.
 /debugscript 3                                      Dumps INFO, WARNING and ERROR messages to secondary chat
+
+-------------------------------> Developers <-------------------------------
+
+/forceLeaveTeam [player]                            Force a player to leave their team. (Used for bugged players unable to create a team)
