@@ -385,6 +385,7 @@ function logForumIds()
             outputConsole(getPlayerName(player) .. ': not logged in', source)
         end
     end
+    outputChatBox('All forum ids & names are logged to the Console (F8)', source)
 end
 addCommandHandler('logForumIds', logForumIds, true, false)
 
