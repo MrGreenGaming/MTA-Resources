@@ -439,7 +439,7 @@ function leave(player)
 end
 addCommandHandler('leave', leave)
 
-function forceLeaveTeam(argPl)
+function forceLeaveTeam(source, _commandName, argPl)
     if not argPl then return outputChatBox('Syntax: /forceLeaveTeam <player>', source, 255, 0, 0) end
 
     local player = getPlayerFromName_(argPl)

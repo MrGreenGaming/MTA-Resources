@@ -377,7 +377,7 @@ end
 
 -- /logForumIds
 -- Logs all forum ids & names to the Console (F8)
-function logForumIds()
+function logForumIds(source)
     for i, player in ipairs(getElementsByType('player')) do
         if accounts[player] then
             outputConsole(getPlayerName(player) .. ': '.. accounts[player]:getForumName() .. " #" .. accounts[player]:getForumID(), source)
