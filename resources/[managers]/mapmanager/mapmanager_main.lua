@@ -370,6 +370,9 @@ addCommandHandler("maps",outputMapListToConsole)
 
 function startGamemode(gamemode)
 	if not startResource(gamemode) then
+        if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+            exports.discord:send("chat.message.text", { author = "Console - MapManager", text = "<@368400697097715713> Gamemode couldn't be launched!" })
+        end
 		error("mapmanager: gamemode resource could not be started.", 2)
 		return false
 	end
@@ -382,11 +385,10 @@ end
 
 function startGamemodeMap(map)
 	if not startResource(map) then
-		error("mapmanager: map resource could not be started.", 2)
         if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
             exports.discord:send("chat.message.text", { author = "Console - MapManager", text = "<@368400697097715713> map couldn't be launched!" })
         end
-        restartResource(getResourceFromName('race'))
+		error("mapmanager: map resource could not be started.", 2)
 		return false
 	end
 	return true
