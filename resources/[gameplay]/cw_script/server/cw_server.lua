@@ -170,9 +170,9 @@ function playerFinished(player, rank)
 			setElementData(getPlayerTeam(player), 'Score', new_score)
 
 			if getPlayerTeam(player) == teams[1] then
-				exports.messages:outputGameMessage(t1c .. getPlayerName(player).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
+				exports.messages:outputGameMessage(t1c .. getElementData( player, "vip.colorNick" ) or getPlayerName( player ).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
 			elseif getPlayerTeam(player) == teams[2] then
-				exports.messages:outputGameMessage(t2c .. getPlayerName(player).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
+				exports.messages:outputGameMessage(t2c .. getElementData( player, "vip.colorNick" ) or getPlayerName( player ).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
 			end
 		end
 	end
@@ -227,19 +227,19 @@ function endFreeForAll()
 
     if t1Players[1] then
         local score = getElementData(t1Players[1], 'Score')
-        local playerName = getPlayerName(t1Players[1])
+        local playerName = getElementData( t1Players[1], "vip.colorNick" ) or getPlayerName( t1Players[1] )
         outputChatBox("#FFD700In 1st place with " .. score .. " points: " .. playerName, root, 255, 255, 255, true)
     end
 
     if t1Players[2] then
         local score = getElementData(t1Players[2], 'Score')
-        local playerName = getPlayerName(t1Players[2])
+        local playerName = getElementData( t1Players[2], "vip.colorNick" ) or getPlayerName( t1Players[2] )
         outputChatBox("#C0C0C0In 2nd place with " .. score .. " points: " .. playerName, root, 255, 255, 255, true)
     end
 
     if t1Players[3] then
         local score = getElementData(t1Players[3], 'Score')
-        local playerName = getPlayerName(t1Players[3])
+        local playerName = getElementData( t1Players[3], "vip.colorNick" ) or getPlayerName( t1Players[3] )
         outputChatBox("#CD7F32In 3rd place with " .. score .. " points: " .. playerName, root, 255, 255, 255, true)
     end
 
@@ -263,8 +263,8 @@ function endClanWar()
     local t2Players = getPlayersInTeamSortedByScore(t2t)
     local t1mvp = t1Players[1]
     local t2mvp = t2Players[1]
-    local t1mvpName = getPlayerName(t1mvp)
-    local t2mvpName = getPlayerName(t2mvp) or ''
+    local t1mvpName = getElementData( t1mvp, "vip.colorNick" ) or getPlayerName( t1mvp ) or ""
+    local t2mvpName = getElementData( t2mvp, "vip.colorNick" ) or getPlayerName( t2mvp ) or ""
     local t1r, t1g, t1b = getTeamColor(teams[1])
     local t1c = rgb2hex(t1r, t1g, t1b)
     local t2r, t2g, t2b = getTeamColor(teams[2])

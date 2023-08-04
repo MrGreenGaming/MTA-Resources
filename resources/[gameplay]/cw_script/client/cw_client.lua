@@ -142,7 +142,7 @@ function updateDisplay()
 			dxDrawText(getElementData(teams[1], 'Score'), wX + rankWidth + nickWidth, wY + (rowHeight*2), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "center", "center", false, false, false, true, false)
 			for playerKey, player in ipairs(t1Players) do
 				local rank = tonumber(getElementData(player, 'race rank')) or 1
-				local playerName = getPlayerName(player)
+				local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
 				local textW, textH = dxGetTextSize(playerName, 1, 1, fBold)
 				local counter = 0.0278 * (playerKey - 1)
 				local pts = getElementData(player, 'Score')
@@ -170,7 +170,7 @@ function updateDisplay()
                 end
                 for playerKey, player in ipairs(t2Players) do
                     local rank = tonumber(getElementData(player, 'race rank')) or 1
-                    local playerName = getPlayerName(player)
+                    local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
                     local textW, textH = dxGetTextSize(playerName, 1, 1, fBold)
                     local counter = 0.0278 * (playerKey - 1)
                     local pts = getElementData(player, 'Score')
