@@ -164,14 +164,7 @@ function updateDisplay()
                 for playerKey, player in ipairs(t2Players) do
                     local rank = tonumber(getElementData(player, 'race rank')) or 1
                     local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
-                    local textW, textH = dxGetTextSize(playerName, 1, 1, fBold)
-                    local counter = 0.0278 * (playerKey - 1)
                     local pts = getElementData(player, 'Score')
-                    while textW > nickWidth do
-                        textW, textH = dxGetTextSize(playerName, 1, 1, fontBold)
-                        playerName = string.sub(playerName, 1, -2)
-                    end
-                    textW, textH = dxGetTextSize(playerName, 1, 1, fontBold)
                     if playerKey < 9 then
                         dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(t2start+playerKey)), wX+rankWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
                         dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(t2start+playerKey)), wX+nickWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(r2, g2, b2, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
