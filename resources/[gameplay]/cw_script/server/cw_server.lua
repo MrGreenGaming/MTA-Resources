@@ -187,14 +187,14 @@ end
 
 function endRound()
 	if isElement(teams[1]) and isElement(teams[2]) and not f_round then
-        for i, player in ipairs(getElementsByType('player')) do
-            updateScoreData(player)
-        end
 
 		if c_round > 0 then
 			if not round_ended then
 				round_ended = true
 			end
+            for i, player in ipairs(getElementsByType('player')) do
+                updateScoreData(player)
+            end
 		end
 		if c_round == rounds then
             if mode == "CW" then
@@ -336,13 +336,9 @@ function playerJoin(source)
     end
     local serial = getPlayerSerial(source)
     if playerData[serial] ~= nil then
-            setElementData(source, 'Score', playerData[serial]["score"])
-            --setElementData(source, 'Pts per map', playerData[serial]["ppm"])
-            --setElementData(source, 'Maps played', playerData[serial]["mp"])
+            setElementData(source, 'Score', playerData[serial].score)
         else
             setElementData(source, 'Score', 0)
-            --setElementData(source, 'Pts per map', 0)
-            --setElementData(source, 'Maps played', 0)
     end
 end
 
@@ -496,12 +492,16 @@ addEventHandler("onRaceStateChanging",root,
 -- ADDITIONAL EVENTS
 --------------------
 function logScoreDataToConsole()
-    table.sort(playerData, function(a,b) return a["score"] > b["score"] end)
+    local playerDataSorted = {}
+    for k,v in pairs(playerData) do
+        table.insert(playerDataSorted, v)
+    end
+    table.sort(playerDataSorted, function(a,b) return a.score > b.score end)
 
     -- print results to console
     outputConsole("END SCORES:")
-    for k,v in ipairs(playerData) do
-        outputConsole(v["name"] .. ": " .. v["score"])
+    for serial,data in ipairs(playerData) do
+        outputConsole(data.name .. ": " .. data.score)
     end
 end
 
@@ -512,10 +512,8 @@ function updateScoreData(player)
             local serial = getPlayerSerial(player)
             local playerName = getPlayerName(player)
             playerData[serial] = {}
-            playerData[serial]["score"] = getElementData(player, 'Score')
-            playerData[serial]["name"] = playerName
-            -- playerData[serial]["ppm"] = getElementData(source, 'Pts per map')
-            -- playerData[serial]["mp"] = getElementData(source, 'Maps played')
+            playerData[serial].score = getElementData(player, 'Score')
+            playerData[serial].name = playerName
         end
     end
 end
