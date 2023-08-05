@@ -58,7 +58,7 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
         if #teammsg > 255 then
             outputChatBox('Team message is too long, max 255 characters', player, 255, 0, 0)
             return
-        else
+        end
 
         if type(teamname) ~= 'string' or #teamname < 3 or #teamname > 50 then
             outputChatBox('Not a valid teamname, must be between 3 - 50 characters', player, 255, 0, 0)
