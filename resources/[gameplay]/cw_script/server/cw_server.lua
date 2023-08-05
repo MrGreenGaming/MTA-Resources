@@ -170,9 +170,9 @@ function playerFinished(player, rank)
 			setElementData(getPlayerTeam(player), 'Score', new_score)
 
 			if getPlayerTeam(player) == teams[1] then
-				exports.messages:outputGameMessage(t1c .. getElementData( player, "vip.colorNick" ) or getPlayerName( player ).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
+				exports.messages:outputGameMessage(t1c .. getPlayerName( player ).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
 			elseif getPlayerTeam(player) == teams[2] then
-				exports.messages:outputGameMessage(t2c .. getElementData( player, "vip.colorNick" ) or getPlayerName( player ).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
+				exports.messages:outputGameMessage(t2c .. getPlayerName( player ).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
 			end
 		end
 	end
@@ -187,10 +187,13 @@ end
 
 function endRound()
 	if isElement(teams[1]) and isElement(teams[2]) and not f_round then
+        for i, player in ipairs(getElementsByType('player')) do
+            updateScoreData(player)
+        end
+
 		if c_round > 0 then
 			if not round_ended then
 				round_ended = true
-				outputInfo('#ffffffRound has been ended')
 			end
 		end
 		if c_round == rounds then
@@ -490,16 +493,33 @@ addEventHandler("onRaceStateChanging",root,
 --------------------
 -- ADDITIONAL EVENTS
 --------------------
-addEventHandler("onPlayerQuit", getRootElement(),
-    function()
-        if isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3]) then
-            if getElementData(source, 'Score') > 0 and isWarEnded == false then
-                local serial = getPlayerSerial(source)
-                playerData[serial] = {}
-                playerData[serial]["score"] = getElementData(source, 'Score')
-                -- playerData[serial]["ppm"] = getElementData(source, 'Pts per map')
-                -- playerData[serial]["mp"] = getElementData(source, 'Maps played')
-            end
+function logScoreDataToConsole()
+    -- sort playerData by score
+    local sortedPlayerData = {}
+    for k,v in spairs(playerData, function(t,a,b) return t[b]["score"] < t[a]["score"] end) do
+        table.insert(sortedPlayerData, v)
+    end
+
+    -- print results to console
+    outputConsole("END SCORES:")
+    for k,v in ipairs(sortedPlayerData) do
+        outputConsole(v["name"] .. ": " .. v["score"])
+    end
+end
+
+
+function updateScoreData(player)
+    if isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3]) then
+        if getElementData(player, 'Score') > 0 and isWarEnded == false then
+            local serial = getPlayerSerial(player)
+            local playerName = getPlayerName(player)
+            playerData[serial] = {}
+            playerData[serial]["score"] = getElementData(player, 'Score')
+            playerData[serial]["name"] = playerName
+            -- playerData[serial]["ppm"] = getElementData(source, 'Pts per map')
+            -- playerData[serial]["mp"] = getElementData(source, 'Maps played')
         end
     end
-)
+end
+addEventHandler("onPlayerQuit", getRootElement(), function() updateScoreData(source) end)
+
