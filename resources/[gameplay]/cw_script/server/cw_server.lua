@@ -500,7 +500,7 @@ function logScoreDataToConsole()
     -- print results to console
     outputConsole("END SCORES:")
     for serial,data in ipairs(playerDataSorted) do
-        outputConsole(data.name .. ": " .. data.score)
+        outputConsole(data.name .. " #" .. data.forumId .. ": " .. data.score)
     end
 end
 
@@ -513,8 +513,9 @@ function updateScoreData(player)
             playerData[serial] = {}
             playerData[serial].score = getElementData(player, 'Score')
             playerData[serial].name = playerName
+            playerData[serial].forumId = exports.gc:getPlayerForumID(player) or "N/A"
         end
     end
 end
-addEventHandler("onPlayerQuit", getRootElement(), function() updateScoreData(source) end)
+addEventHandler("onPlayerQuit", getRootElement(), function() updateScoreData(source) end, true, "high")
 
