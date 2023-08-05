@@ -105,11 +105,16 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
         if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255 * 255 * 255)) end
         if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
 
-        if type(teamname) ~= 'string' or #teamname < 3 then
-            outputChatBox('Not a valid teamname', player, 255, 0, 0)
+        if #teammsg > 255 then
+            outputChatBox('Team message is too long, max 255 characters', player, 255, 0, 0)
             return
-        elseif type(teamtag) ~= 'string' or #teamtag < 3 then
-            outputChatBox('Not a valid teamtag', player, 255, 0, 0)
+        end
+
+        if type(teamname) ~= 'string' or #teamname < 3 or #teamname > 50 then
+            outputChatBox('Not a valid teamname, must be between 3 - 50 characters', player, 255, 0, 0)
+            return
+        elseif type(teamtag) ~= 'string' or #teamtag < 3 or #teamtag > 6 then
+            outputChatBox('Not a valid teamtag. must be between 3 - 6 characters', player, 255, 0, 0)
             return
         elseif type(teamcolour) ~= 'string' or not getColorFromString(teamcolour) then
             outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
@@ -154,11 +159,16 @@ addEventHandler("updateTeam", resourceRoot, function(teamname, teamtag, teamcolo
         if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255 * 255 * 255)) end
         if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
 
-        if type(teamname) ~= 'string' or #teamname < 3 then
-            outputChatBox('Not a valid teamname', player, 255, 0, 0)
+        if #teammsg > 255 then
+            outputChatBox('Team message is too long, max 255 characters', player, 255, 0, 0)
             return
-        elseif type(teamtag) ~= 'string' or #teamtag < 3 then
-            outputChatBox('Not a valid teamtag', player, 255, 0, 0)
+        end
+
+        if type(teamname) ~= 'string' or #teamname < 3 or #teamname > 50 then
+            outputChatBox('Not a valid teamname, must be between 3 - 50 characters', player, 255, 0, 0)
+            return
+        elseif type(teamtag) ~= 'string' or #teamtag < 3 or #teamtag > 6 then
+            outputChatBox('Not a valid teamtag, must be between 3 - 6 characters', player, 255, 0, 0)
             return
         elseif type(teamcolour) ~= 'string' or not getColorFromString(teamcolour) then
             outputChatBox('Not a valid teamcolour', player, 255, 0, 0)
