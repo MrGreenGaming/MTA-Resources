@@ -202,7 +202,9 @@ function endRound()
             else
                 endFreeForAll()
             end
+            logScoreDataToConsole()
             destroyTeams(false)
+            stopResource(getThisResource())
 		end
 	end
 end
