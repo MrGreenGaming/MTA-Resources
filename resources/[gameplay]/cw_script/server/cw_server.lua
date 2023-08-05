@@ -496,15 +496,11 @@ addEventHandler("onRaceStateChanging",root,
 -- ADDITIONAL EVENTS
 --------------------
 function logScoreDataToConsole()
-    -- sort playerData by score
-    local sortedPlayerData = {}
-    for k,v in spairs(playerData, function(t,a,b) return t[b]["score"] < t[a]["score"] end) do
-        table.insert(sortedPlayerData, v)
-    end
+    table.sort(playerData, function(a,b) return a["score"] > b["score"] end)
 
     -- print results to console
     outputConsole("END SCORES:")
-    for k,v in ipairs(sortedPlayerData) do
+    for k,v in ipairs(playerData) do
         outputConsole(v["name"] .. ": " .. v["score"])
     end
 end
