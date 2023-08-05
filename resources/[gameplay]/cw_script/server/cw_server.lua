@@ -169,6 +169,8 @@ function playerFinished(player, rank)
 			setElementData(player, 'Score', new_p_score)
 			setElementData(getPlayerTeam(player), 'Score', new_score)
 
+            updateScoreData(player)
+
 			if getPlayerTeam(player) == teams[1] then
 				exports.messages:outputGameMessage(t1c .. getPlayerName( player ).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
 			elseif getPlayerTeam(player) == teams[2] then
@@ -192,9 +194,6 @@ function endRound()
 			if not round_ended then
 				round_ended = true
 			end
-            for i, player in ipairs(getElementsByType('player')) do
-                updateScoreData(player)
-            end
 		end
 		if c_round == rounds then
             if mode == "CW" then
@@ -500,7 +499,7 @@ function logScoreDataToConsole()
 
     -- print results to console
     outputConsole("END SCORES:")
-    for serial,data in ipairs(playerData) do
+    for serial,data in ipairs(playerDataSorted) do
         outputConsole(data.name .. ": " .. data.score)
     end
 end
