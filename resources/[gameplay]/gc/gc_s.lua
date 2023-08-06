@@ -14,7 +14,7 @@ end
 local function onLoginSuccessfull(player)
     local forumID = accounts[player]:getForumID()
     local playerHitCount = 0;
-    for id, otherPlayer in ipairs(getElementsByType("player")) do 
+    for id, otherPlayer in ipairs(getElementsByType("player")) do
         local otherForumID = (accounts[otherPlayer] and accounts[otherPlayer]:getForumID()) or 0
         if otherForumID ~= 0 and otherForumID == forumID then
             playerHitCount = playerHitCount + 1
@@ -26,8 +26,8 @@ local function onLoginSuccessfull(player)
             end
         end
     end
-    
-    
+
+
     updateAutologin(player, accounts[player]:getForumID())
     triggerClientEvent(player, "onLoginSuccess", player, accounts[player]:getGreencoins(), accounts[player]:getForumName(), accounts[player]:getLoginEmail())
     triggerEvent('onGCLogin', player, accounts[player]:getForumID(), accounts[player]:getGreencoins(), accounts[player]:getForumName())
@@ -73,7 +73,7 @@ function onAutoLogin(forumID, player)
             removeElementData( player,'gc.autoLoginCache') -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
             if result then
                 onLoginSuccessfull(player)
-            else 
+            else
                 onLoginFailed(player, true)
             end
         end)
@@ -321,7 +321,7 @@ end
 function getPlayerVip(player)
     if accounts[player] then
         return accounts[player]:getVipTimestamp()
-    else 
+    else
         return false
     end
 end
@@ -374,6 +374,20 @@ end
 ------------------------
 -- Usefull commands  --
 ------------------------
+
+-- /logForumIds
+-- Logs all forum ids & names to the Console (F8)
+function logForumIds(source)
+    for i, player in ipairs(getElementsByType('player')) do
+        if accounts[player] then
+            outputConsole(getPlayerName(player) .. ': '.. accounts[player]:getForumName() .. " #" .. accounts[player]:getForumID(), source)
+        else
+            outputConsole(getPlayerName(player) .. ': not logged in', source)
+        end
+    end
+    outputChatBox('All forum ids & names are logged to the Console (F8)', source)
+end
+addCommandHandler('logForumIds', logForumIds, true, false)
 
 -- /addGC <amount> [player]
 -- Gives the amount GC to yourself or specified player
@@ -507,12 +521,12 @@ function secondsToTimeDesc( seconds )
 		local min = math.floor ( ( seconds % 3600 ) /60 )
 		local hou = math.floor ( ( seconds % 86400 ) /3600 )
 		local day = math.floor ( seconds /86400 )
-		
+
 		if day > 0 then table.insert( results, day .. ( day == 1 and " day" or " days" ) ) end
 		if hou > 0 then table.insert( results, hou .. ( hou == 1 and " hour" or " hours" ) ) end
 		if min > 0 then table.insert( results, min .. ( min == 1 and " minute" or " minutes" ) ) end
 		if sec > 0 then table.insert( results, sec .. ( sec == 1 and " second" or " seconds" ) ) end
-		
+
 		return string.reverse ( table.concat ( results, ", " ):reverse():gsub(" ,", " dna ", 1 ) )
 	end
 	return ""

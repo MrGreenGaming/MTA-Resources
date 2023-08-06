@@ -20,8 +20,8 @@ local windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(
 local wX, wY = screenW - windowSizeX - 20, (screenH - windowSizeY) / 2
 
 local fSize = screenH/1080
-local fBold = dxCreateFont("fonts/Roboto-Bold.ttf", 9 * fSize, cleartype)
-local fReg = dxCreateFont("fonts/Roboto-Medium.ttf", 9 * fSize, cleartype)
+local fBold = dxCreateFont("fonts/Roboto-Bold.ttf", 9 * fSize, true,"cleartype") or "default"
+local fReg = dxCreateFont("fonts/Roboto-Medium.ttf", 9 * fSize, false, "cleartype") or "default"
 
 local nickWidth = 160 * (screenW/1920)
 local rankWidth = 40 * (screenW/1920)
@@ -142,15 +142,8 @@ function updateDisplay()
 			dxDrawText(getElementData(teams[1], 'Score'), wX + rankWidth + nickWidth, wY + (rowHeight*2), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "center", "center", false, false, false, true, false)
 			for playerKey, player in ipairs(t1Players) do
 				local rank = tonumber(getElementData(player, 'race rank')) or 1
-				local playerName = getPlayerName(player)
-				local textW, textH = dxGetTextSize(playerName, 1, 1, fBold)
-				local counter = 0.0278 * (playerKey - 1)
+				local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
 				local pts = getElementData(player, 'Score')
-				while textW > nickWidth do
-					textW, textH = dxGetTextSize(playerName, 1, 1, fBold)
-					playerName = string.sub(playerName, 1, -2)
-				end
-				textW, textH = dxGetTextSize(playerName, 1, 1, fBold)
 				if playerKey < 9 then
 					dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
 					dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(2+playerKey)), wX+nickWidth, wY+(rowHeight*(3+playerKey)), tocolor(r1, g1, b1, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
@@ -170,15 +163,8 @@ function updateDisplay()
                 end
                 for playerKey, player in ipairs(t2Players) do
                     local rank = tonumber(getElementData(player, 'race rank')) or 1
-                    local playerName = getPlayerName(player)
-                    local textW, textH = dxGetTextSize(playerName, 1, 1, fBold)
-                    local counter = 0.0278 * (playerKey - 1)
+                    local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
                     local pts = getElementData(player, 'Score')
-                    while textW > nickWidth do
-                        textW, textH = dxGetTextSize(playerName, 1, 1, fontBold)
-                        playerName = string.sub(playerName, 1, -2)
-                    end
-                    textW, textH = dxGetTextSize(playerName, 1, 1, fontBold)
                     if playerKey < 9 then
                         dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(t2start+playerKey)), wX+rankWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
                         dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(t2start+playerKey)), wX+nickWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(r2, g2, b2, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
