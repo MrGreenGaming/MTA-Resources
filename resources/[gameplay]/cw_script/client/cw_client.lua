@@ -20,8 +20,8 @@ local windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(
 local wX, wY = screenW - windowSizeX - 20, (screenH - windowSizeY) / 2
 
 local fSize = screenH/1080
-local fBold = dxCreateFont("fonts/Roboto-Bold.ttf", 9 * fSize, cleartype) or "default"
-local fReg = dxCreateFont("fonts/Roboto-Medium.ttf", 9 * fSize, cleartype) or "default"
+local fBold = dxCreateFont("fonts/Roboto-Bold.ttf", 9 * fSize, true,"cleartype") or "default"
+local fReg = dxCreateFont("fonts/Roboto-Medium.ttf", 9 * fSize, false, "cleartype") or "default"
 
 local nickWidth = 160 * (screenW/1920)
 local rankWidth = 40 * (screenW/1920)
