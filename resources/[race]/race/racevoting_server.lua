@@ -274,7 +274,7 @@ function startNextMapVote()
 		local map = exports.eventmanager:getCurrentMapQueued(true)
 		local mapRes = getResourceFromName(map[1])
 
-		
+
 		if mapRes then
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local rating = exports.mapratings:getMapRating(getResourceName(mapRes));
@@ -296,7 +296,7 @@ function startNextMapVote()
 				end
 			end
 		end
-	elseif getResourceFromName('gcshop') and getResourceState(getResourceFromName('gcshop')) == 'running' and exports.gcshop:isAnyMapQueued(true) and skipMapQueue ~= exports.mapmanager:getRunningGamemodeMap() then
+	elseif getResourceFromName('gcshop') and getResourceState(getResourceFromName('gcshop')) == 'running' and exports.gcshop:isAnyMapQueued(true) then
 		-- GCshop next queued map
 		-- [1] = mapName, [2] = mapResName, [3] = gamemode, [4] = playername
 		local map = exports.gcshop:getCurrentMapQueued(true)

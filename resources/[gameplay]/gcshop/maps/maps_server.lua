@@ -1,5 +1,5 @@
 local prices = {}
-prices["race"] = 275
+prices["race"] = 10
 prices["rtf"] = 250
 prices["ctf"] = 200
 prices["nts"] = 275
