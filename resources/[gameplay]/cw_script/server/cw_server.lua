@@ -512,7 +512,7 @@ function updateScoreData(player)
             local playerName = getPlayerName(player)
             playerData[serial] = {}
             playerData[serial].score = getElementData(player, 'Score')
-            playerData[serial].name = playerName
+            playerData[serial].name = string.gsub(playerName, '#%x%x%x%x%x%x', '')
             playerData[serial].forumId = exports.gc:getPlayerForumID(player) or "N/A"
         end
     end
