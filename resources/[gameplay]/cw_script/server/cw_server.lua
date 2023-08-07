@@ -499,8 +499,10 @@ function logScoreDataToConsole()
 
     -- print results to console
     outputConsole("END SCORES:")
+		local rank = 1
     for serial,data in ipairs(playerDataSorted) do
-        outputConsole(data.name .. " #" .. data.forumId .. ": " .. data.score)
+        outputConsole(rank .. getPrefix(rank) .. " " ..data.name .. " #" .. data.forumId .. ": " .. data.score)
+        rank = rank + 1
     end
 end
 
