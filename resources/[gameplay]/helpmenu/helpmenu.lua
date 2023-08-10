@@ -51,7 +51,7 @@ end)
 function buildGUI()
 	local screenWidth, screenHeight = guiGetScreenSize()
 	MainWindow = guiCreateStaticImage(left, top, windowW, windowH, "img/dot.jpg", false)
-	guiSetProperty(MainWindow, "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A") 
+	guiSetProperty(MainWindow, "ImageColours", "tl:FF0A0A0A tr:FF0A0A0A bl:FF0A0A0A br:FF0A0A0A")
 	GUIEditor.staticimage[2] = guiCreateStaticImage(0, 0, windowW, 10, "img/dot.jpg", false, MainWindow)
 	guiSetProperty(GUIEditor.staticimage[2], "ImageColours", "tl:FF4EC857 tr:FF4EC857 bl:FF4EC857 br:FF4EC857")
 	GUIEditor.staticimage[3] = guiCreateStaticImage(0, 10, windowW, 10, "img/dot.jpg", false, MainWindow)
@@ -64,19 +64,19 @@ function buildGUI()
 	guiSetProperty(GUIEditor.label[1], "AlwaysOnTop", "true")
 
 	TabPanel = guiCreateTabPanel( 0.5*(windowW-tabpanelW), 0.08*windowH, tabpanelW, tabpanelH, false, MainWindow)
-	
+
 	AboutTab = guiCreateTab("About", TabPanel)
-	
+
 	MotdMemo = guiCreateMemo(motdIndent, motdIndent, motdW, motdH, "Welcome to the Mr. Green MTA servers!", false, AboutTab)
 	guiMemoSetReadOnly(MotdMemo,true)
-	
+
 	MrGreenLogo = guiCreateStaticImage( (motdIndent+motdW)+0.5*(tabpanelW-(motdIndent+motdW)-logoW), tabpanelH*0.08, 350, 137, ":helpmenu/img/logo.png", false, AboutTab)
-	
-	StaffTitle = guiCreateLabel(motdW, tabpanelH*0.45, tabpanelW-(motdIndent+motdW), 20, "Mr Green Gaming Staff", false, AboutTab)
+
+	StaffTitle = guiCreateLabel(motdW, tabpanelH*0.45, tabpanelW-(motdIndent+motdW), 20, "MrGreen MTA Staff", false, AboutTab)
 	guiSetFont(StaffTitle, "default-bold-small")
 	guiLabelSetHorizontalAlign(StaffTitle, "center", false)
 	guiLabelSetColor(StaffTitle, 0, 255, 0)
-	
+
 	local multiplierX = 1.0
 	local multiplierY = 0.88
 	offline = guiCreateLabel(adminColumnN1posX-motdIndent*multiplierX, tabpanelH*multiplierY, adminColumnW, adminColumnH, "•          ", false, AboutTab)
@@ -84,7 +84,7 @@ function buildGUI()
 	guiLabelSetHorizontalAlign(offline, "right", false)
 	offline2 = guiCreateLabel(adminColumnN1posX-motdIndent*multiplierX, tabpanelH*multiplierY, adminColumnW, adminColumnH, "offline ", false, AboutTab)
 	guiLabelSetHorizontalAlign(offline2, "right", false)
-	
+
 	online = guiCreateLabel(adminColumnN2posX-motdIndent*multiplierX, tabpanelH*multiplierY, adminColumnW, adminColumnH, " •", false, AboutTab)
 	guiLabelSetColor(online, onlineColor.r, onlineColor.g, onlineColor.b)
 	guiCreateLabel(adminColumnN2posX-motdIndent*multiplierX, tabpanelH*multiplierY, adminColumnW, adminColumnH, "   online", false, AboutTab)
@@ -96,7 +96,7 @@ function buildGUI()
 		admins[i].label = guiCreateLabel(adminColumnN1posX-10, tabpanelH*0.45+m, adminColumnW, adminColumnH, "•", false, AboutTab)
 		guiLabelSetColor(admins[i].label, offlineColor.r, offlineColor.g, offlineColor.b)
 	end
-	
+
 	local m = 0
 	for i=math.ceil(#admins/2)+1, #admins do --column #2
 		m = m + 20
@@ -104,9 +104,9 @@ function buildGUI()
 		admins[i].label = guiCreateLabel(adminColumnN2posX-10, tabpanelH*0.45+m, adminColumnW, adminColumnH, "•", false, AboutTab)
 		guiLabelSetColor(admins[i].label, offlineColor.r, offlineColor.g, offlineColor.b)
 	end
-	
+
 	CommandsBindsTab = guiCreateTab("Commands & Binds", TabPanel)
-	
+
 	CommandsBindsMemoText = guiCreateMemo(motdIndent, motdIndent, tabpanelW-motdIndent*2, motdH, "                           _______________________________ BINDS _________________________________", false, CommandsBindsTab)
 	guiMemoSetReadOnly(CommandsBindsMemoText,true)
 
@@ -116,16 +116,16 @@ function buildGUI()
 		guiSetText(CommandsBindsMemoText, cmdsText)
 		fileClose(cmdFile)
 	end
-	
+
 	LogBindsTab = guiCreateTab("Changelog", TabPanel)
-	
+
 	ChangeLogUpdates = guiCreateLabel(268, 48, 20, 20, "*", false, MainWindow)
     guiLabelSetColor(ChangeLogUpdates, 253, 0, 0)
 	guiSetProperty(ChangeLogUpdates, "AlwaysOnTop", "True")
 	guiSetVisible(ChangeLogUpdates, false)
-	
+
 	addEventHandler("onClientGUIClick", TabPanel, function() guiSetVisible(ChangeLogUpdates, false) end, false)
-	
+
 	LogBindsMemoText = guiCreateMemo(motdIndent, motdIndent, tabpanelW-motdIndent*2, motdH, "Changelog currently isn't available for a some reason. Try to reconnect or check this tab a bit later", false, LogBindsTab)
 	guiMemoSetReadOnly(LogBindsMemoText, true)
 
@@ -135,10 +135,10 @@ function buildGUI()
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
 	languageTabs.EN = RulesFaqsTab
-	
+
 	--]]
-	-- Turkish 
---[[	
+	-- Turkish
+--[[
 	RulesFaqsTab = guiCreateTab("Türkçe", TabPanel)
     RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ Rules _____\n\n\n  1. Do not cheat, hack or exploit to get any advantage\n\n  2. Do not insult or provoke any players or admins\n\n  3. Do not block other players or camp in DD and SH\n\n  4. Do not flood or spam the main chat\n\n  5. Do not advertise other servers\n\n  6. Do not TeamKill in CTF\n\n  7. Do not deliberately lock other people's name\n\n  Breaking any of these rules may result in ban.\n\n", false, RulesFaqsTab)
     FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ Frequently Asked Questions _____\n\n\n  Q: What are GreenCoins?\n  \n  A: GreenCoins are our community currency, you can         use them on all of our servers.\n\n  Q: How do win GreenCoins?\n\n  A: You win GreenCoins by simply playing on our servers     you can also donate to get GreenCoins in return.\n\n  Q: What can I buy on this server with GreenCoins?\n\n  A: You can buy Perks, Maps, Custom Horns, Skins             and you can modify your vehicle on our GC Shop - F6\n\n If you have any other questions refer them to our staff", false, RulesFaqsTab)
@@ -154,21 +154,21 @@ function buildGUI()
     guiMemoSetReadOnly(RulesMemo, true)
     guiMemoSetReadOnly(FaqsMemo, true)
 	languageTabs.PL = RulesFaqsTab
-    
+
     -- Russian / Military
-    
+
     RulesFaqsTab = guiCreateTab("Русский", TabPanel)
-    
+
     RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                          __ Правила __ \n\n\n  1.  Запрещено использовать читы или любые другие  программы для получения преимущества. \n\n  2. Не оскорбляйте и не провоцируйте игроков и администраторов. \n\n  3. Не блокируйте других игроков. Запрещено избегать других игроков (кэмперить, прятаться) в режимах DD и SH. \n\n  4. Флуд и спам в основном чате запрещены. \n\n  5. Реклама других серверов запрещена. \n\n  6. Не убивайте своих тиммейтов в режиме CTF. \n\n  7. Использование чужого PaintJob (винила для машины) без  разрешения владельца запрещено и наказуемо.\n\n  8. Намеренная блокировка чужого никнейма (Locked Nicks) запрещена.  \n\n 9. В основной чат можно писать только на английском языке. Используйте /language для выбора языка. Для написания в языковой чат нажмите R.  \ n \ n Нарушение любого из этих правил может привести к бану.\n\n", false, RulesFaqsTab)
     FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n      ______Часто задаваемые вопросы______  \n \n \n Q: Что такое GreenCoins? \n \n A: GreenCoins - это валюта нашего сообщества, вы можете использовать её на всех наших серверах. \n \n Q: Где взять GreenCoins? \n \n A: Вы выигрываете GreenCoins, просто играя на наших серверах, можете задонатить, чтобы получить GreenCoins взамен. \n \n В: Что я могу купить на этом сервере с помощью GreenCoins? \n \n A: Вы можете купить Перки, Карты, Пользовательские Сигналы, Скины, также вы можете изменить свой автомобиль в нашем Магазине GC - F6 \n \n Если у вас есть другие вопросы, обратитесь к администрации или просто спросите в чате. ", false, RulesFaqsTab)
     guiMemoSetReadOnly(RulesMemo, true)
     guiMemoSetReadOnly(FaqsMemo, true)
     languageTabs.RU = RulesFaqsTab
-    
+
 	-- Spanish / Anthony
 
 	RulesFaqsTab = guiCreateTab("Español", TabPanel)
-	
+
 
     RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         __ Reglas __\n\n\n  1. No hacer trampas, hackear o abusar de bugs para obtener ventajas.\n\n  2. No insultar o provocar a ningun admin y/o jugador.\n\n 3. No bloquear a otros jugadores (NTS) y no campear (DD y SH).\n\n  4. No hacer flood ni spam en el chat principal.\n\n 5. No anunciar cualquier contenido de otros servidores.\n\n 6. No matar compañeros de equipo en CTF.\n\n 7.Usar el PaintJob de otra persona sin su permiso no está permitido y es punible\n\n 8. No bloquear el nombre de otros jugadores\n\n 9. El chat principal es solo en inglés. Use /Language & R para usar otros idiomas\n\nRomper cualquiera de estas reglas puede resultar en un ban.\n\n", false, RulesFaqsTab)
     FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          __ Preguntas frecuentes: __\n\n\n  Q: ¿Que son los Greencoins?\n \n R: Los Greencoins son la moneda de la comunidad MrGreen, puedes hacer uso de estos en todos nuestros servidores.\n\n  Q: ¿Como puedo obtener Greencoins?\n\n R: Fácil, puedes conseguirlos jugando en nuestros servidores. Además puedes hacer donaciones monetarias y recibir Greencoins a cambio.\n\n  Q: ¿Que puedo comprar en este servidor con Greencoins?\n\n R: Puedes comprar Perks, Mapas, Silbatos únicos (Horns) y skins , además de poder modificar tus coches en nuestra tienda GC (F6)\n\n ¿Dudas?, Puedes preguntarle a cualquier miembro del staff.", false, RulesFaqsTab)
@@ -176,13 +176,13 @@ function buildGUI()
     guiMemoSetReadOnly(FaqsMemo, true)
 	languageTabs.ES = RulesFaqsTab
 	-- Hungarian
---[[	
+--[[
 		RulesFaqsTab = guiCreateTab("Magyar", TabPanel)
     RulesMemo = guiCreateMemo(22, 20, 340, motdH, "\n                         _____ Rules _____\n\n\n  1. Do not cheat, hack or exploit to get any advantage\n\n  2. Do not insult or provoke any players or admins\n\n  3. Do not block other players or camp in DD and SH\n\n  4. Do not flood or spam the main chat\n\n  5. Do not advertise other servers\n\n  6. Do not TeamKill in CTF\n\n  7. Do not deliberately lock other people's name\n\n  Breaking any of these rules may result in ban.\n\n", false, RulesFaqsTab)
     FaqsMemo = guiCreateMemo(tabpanelW-340-motdIndent, 20, 340, motdH, "\n          _____ Frequently Asked Questions _____\n\n\n  Q: What are GreenCoins?\n  \n  A: GreenCoins are our community currency, you can         use them on all of our servers.\n\n  Q: How do win GreenCoins?\n\n  A: You win GreenCoins by simply playing on our servers     you can also donate to get GreenCoins in return.\n\n  Q: What can I buy on this server with GreenCoins?\n\n  A: You can buy Perks, Maps, Custom Horns, Skins             and you can modify your vehicle on our GC Shop - F6\n\n If you have any other questions refer them to our staff", false, RulesFaqsTab)
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
-]]-- 
+]]--
 	-- BR / NITRO
 
 	RulesFaqsTab = guiCreateTab("Português BR", TabPanel)
@@ -192,7 +192,7 @@ function buildGUI()
 	guiMemoSetReadOnly(RulesMemo, true)
 	guiMemoSetReadOnly(FaqsMemo, true)
 	languageTabs.PT = RulesFaqsTab
-	
+
 	-- Arabic / Haxardous
 
 -- 	RulesFaqsTab = guiCreateTab("العربية", TabPanel)
@@ -203,7 +203,7 @@ function buildGUI()
 -- 	guiMemoSetReadOnly(FaqsMemo, true)
 -- 	languageTabs.AR = RulesFaqsTab
 
-	-- close button 
+	-- close button
 
 	CloseButton = guiCreateStaticImage(650, 505, 131, 21.5, "img/dot.jpg", false, MainWindow)
 	CloseButtonTwo = guiCreateStaticImage(650, 505, 131, 41, "img/dot.jpg", false, MainWindow)
@@ -216,7 +216,7 @@ function buildGUI()
 	guiLabelSetHorizontalAlign(CloseLabel, "center", false)
 	guiLabelSetVerticalAlign(CloseLabel, "center")
 	guiSetProperty(CloseLabel, "AlwaysOnTop", "true")
-	
+
 	addEventHandler("onClientMouseEnter", CloseLabel, function()
 		guiSetAlpha(CloseButton, 1)
 		guiSetAlpha(CloseButtonTwo, 1)
@@ -230,7 +230,7 @@ function buildGUI()
 	if on_pushButton_clicked then
 		addEventHandler("onClientGUIClick", CloseLabel, on_pushButton_clicked, false)
 	end
-	
+
 	-- switch button
 
 	SwitchButtonOne = guiCreateStaticImage(350, 505, 131, 21.5, "img/dot.jpg", false, MainWindow)
@@ -244,7 +244,7 @@ function buildGUI()
 	guiLabelSetHorizontalAlign(SwitchButton, "center", false)
 	guiLabelSetVerticalAlign(SwitchButton, "center")
 	guiSetProperty(SwitchButton, "AlwaysOnTop", "true")
-	
+
 	addEventHandler("onClientMouseEnter", SwitchButton, function()
 		guiSetAlpha(SwitchButtonOne, 1)
 		guiSetAlpha(SwitchButtonTwo, 1)
@@ -255,7 +255,7 @@ function buildGUI()
 		guiSetAlpha(SwitchButtonTwo, 0.5)
 	end)
 	addEventHandler("onClientGUIClick", SwitchButton, function() triggerServerEvent('onRequestRedirect', localPlayer) end, false)
-	
+
 	-- settingsbutton
 
 	SettingsButtonOne = guiCreateStaticImage(50, 505, 131, 21.5, "img/dot.jpg", false, MainWindow)
@@ -269,7 +269,7 @@ function buildGUI()
 	guiLabelSetHorizontalAlign(SettingsButton, "center", false)
 	guiLabelSetVerticalAlign(SettingsButton, "center")
 	guiSetProperty(SettingsButton, "AlwaysOnTop", "true")
-	
+
 	addEventHandler("onClientMouseEnter", SettingsButton, function()
 		guiSetAlpha(SettingsButtonOne, 1)
 		guiSetAlpha(SettingsButtonTwo, 1)
@@ -283,8 +283,8 @@ function buildGUI()
 	if on_pushButton_2_clicked then
 		addEventHandler("onClientGUIClick", SettingsButton, on_pushButton_2_clicked, false)
 	end
-	
-	
+
+
 	guiSetVisible(MainWindow, false)
 	triggerServerEvent('requestMOTD', resourceRoot)
 end
@@ -292,7 +292,7 @@ addEventHandler("onClientResourceStart", resourceRoot, buildGUI)
 
 
 addEvent('receiveAdmins', true)
-addEventHandler('receiveAdmins', resourceRoot, 
+addEventHandler('receiveAdmins', resourceRoot,
 function ( onlineAdmins )
 	for k, v in pairs(onlineAdmins) do
 		if onlineAdmins[k] == true then
@@ -306,11 +306,11 @@ end
 
 
 addEvent('receiveChangelog', true)
-addEventHandler('receiveChangelog', resourceRoot, 
+addEventHandler('receiveChangelog', resourceRoot,
 function ( changelog, changelogLastUpdate, output )
 	if not changelog then return end
 	guiSetText(LogBindsMemoText, changelog)
-	
+
 	if isNewChangelog(changelogLastUpdate) then
 		guiSetVisible(ChangeLogUpdates, true)
 		if output then
@@ -336,10 +336,10 @@ end
 
 
 addEvent('receiveMotd', true)
-addEventHandler('receiveMotd', resourceRoot, 
+addEventHandler('receiveMotd', resourceRoot,
 function ( motdText, motdVersion )
 	guiSetText(MotdMemo, motdText)
-	
+
 	if isNewMotd(motdVersion) then
 		showhideGUI()
 	end
@@ -382,7 +382,7 @@ end
 
 function on_pushButton_2_clicked(button, state, absoluteX, absoluteY)
 	if (button ~= "left") or (state ~= "up") then return end
-	executeCommandHandler("settings")	
+	executeCommandHandler("settings")
 end
 
 addEvent("sb_showHelp")

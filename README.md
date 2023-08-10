@@ -18,11 +18,12 @@ A non-dramatic 'The MIT License' applies. See `LICENSE` file for details.
 
 # Credits
 ## Project team
-* Cena1 (Cena) - Owner, merger, issue management
-* AfuSensi (KaliBwoy) - Merger, issue management
-* Mihail (Mihoje) - Merger, issue management
+* Cena1 (Cena)
+* Nick S. (Nick_026)
 
-## Implementation
+## Past Contributors
+* AfuSensi (KaliBwoy)
+* Mihail (Mihoje)
 * EsDeKa (SDK)
 * AfuSensi (KaliBwoy)
 * Alexey Yakubovskii (AleksCore)
