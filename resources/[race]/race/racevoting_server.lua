@@ -235,7 +235,7 @@ function startNextMapVote()
 		title="Different Map?",
 		visibleTo=getRootElement(),
 		percentage=51,
-		timeout=10,
+		timeout=7,
 		allowchange=true;
 		}
 
@@ -274,7 +274,7 @@ function startNextMapVote()
 		local map = exports.eventmanager:getCurrentMapQueued(true)
 		local mapRes = getResourceFromName(map[1])
 
-		
+
 		if mapRes then
 			local mapName = getResourceInfo(mapRes, "name") or getResourceName(mapRes)
 			local rating = exports.mapratings:getMapRating(getResourceName(mapRes));

@@ -116,7 +116,7 @@ function RaceMode:endMap()
     if stateAllowsPostFinish() then
         gotoState('PostFinish')
         local text = g_GameOptions.randommaps and 'Next map starts in:' or 'Vote for next map starts in:'
-        Countdown.create(5, self.startNextMapSelect, text, 255, 255, 255, 0.6, 2.5 ):start()
+        Countdown.create(3, self.startNextMapSelect, text, 255, 255, 255, 0.6, 2.5 ):start()
 		triggerEvent('onPostFinish', g_Root)
     end
 end
