@@ -68,31 +68,25 @@ function startPoll(pollData)
 	if type(pollData.visibleTo) == "table" then
 		for k,player in ipairs(pollData.visibleTo) do
 			if isElement(player) and getElementType(player) == "player" then
-				allowedPlayers[player] = true
-				local addPlayerAmount = 1
-				if getResourceState( getResourceFromName('gc') ) == 'running' and not exports.gc:isPlayerLoggedInGC(player) then
-					addPlayerAmount = 0
-				end
-				playerAmount = playerAmount + addPlayerAmount
+                if canGuestVote(player) and getElementData(player, 'player state') ~= 'away' then
+                    allowedPlayers[player] = true
+                    playerAmount = playerAmount + 1
+                end
 			end
 		end
 	elseif isElement(pollData.visibleTo) and getElementType(pollData.visibleTo) == "team"  then
 		for k,player in ipairs(getPlayersInTeam(pollData.visibleTo)) do
-			allowedPlayers[player] = true
-			local addPlayerAmount = 1
-			if getResourceState( getResourceFromName('gc') ) == 'running' and not exports.gc:isPlayerLoggedInGC(player) then
-				addPlayerAmount = 0
-			end
-			playerAmount = playerAmount + addPlayerAmount
+            if canGuestVote(player) and getElementData(player, 'player state') ~= 'away' then
+                allowedPlayers[player] = true
+                playerAmount = playerAmount + 1
+            end
 		end
 	elseif isElement(pollData.visibleTo) or pollData.visibleTo == nil then
 		for k,player in ipairs(getElementsByType("player",pollData.visibleTo or rootElement)) do
-			allowedPlayers[player] = true
-			local addPlayerAmount = 1
-			if getResourceState( getResourceFromName('gc') ) == 'running' and not exports.gc:isPlayerLoggedInGC(player) then
-				addPlayerAmount = 0
-			end
-			playerAmount = playerAmount + addPlayerAmount
+            if canGuestVote(player) and getElementData(player, 'player state') ~= 'away' then
+                allowedPlayers[player] = true
+                playerAmount = playerAmount + 1
+            end
 		end
 	else
 		return false, errorCode.invalidVisibleTo
@@ -138,10 +132,22 @@ function startPoll(pollData)
 		end
 	end
 
-	--send the poll data (players are its keys, not values)
-	for player in pairs(activePoll.allowedPlayers) do
-		sendPoll(player)
-	end
+    for _, player in ipairs(getElementsByType("player")) do
+        if allowedPlayers[player] then
+            sendPoll(player)
+        else
+            local playerState = getElementData(player, 'player state')
+            local message = "You can't participate in this vote."
+
+            if playerState == 'away' then
+                message = "You can't participate in a vote whilst AFK."
+            elseif not canGuestVote(player) then
+                message = "You can't participate in this vote without an account. (F6 > register/login)"
+            end
+
+            outputVoteManager(message, player)
+        end
+    end
 
 	--prepare to end the poll
 	pollTimer = setTimer(endPoll, activePoll.timeout * 1000, 1)
@@ -167,6 +173,7 @@ function stopPoll()
 	for player in pairs(activePoll.allowedPlayers) do
 		triggerClientEvent(player, "doStopPoll", rootElement)
 	end
+
 
 	--unload the poll
 	activePoll = nil
