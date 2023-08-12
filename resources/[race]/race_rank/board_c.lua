@@ -292,7 +292,7 @@ function round(x)
 end
 
 -- Resolution dependent scale
-local scale = round((screenY/800)*10)/10 
+local scale = round((screenY/800)*10)/10
 
 --
 -- RankBoard class
@@ -328,11 +328,11 @@ function RankBoard:create(player, name, color)
         localPlayer = player == getLocalPlayer(),
         rank = 0,
         name = name or (getElementData(player, 'vip.colorNick') or getPlayerName(player)),
-        country = getElementData(player, 'specialCountry') or getElementData(player, 'country') or "",
+        country = getElementData(player, 'specialCountry') or (getElementData(player, 'flag-country') and getElementData(player, 'flag-country').country) or "",
         hidden = true,
         willHide = false,
         willShow = false,
-        color = color and tocolor(color[1], color[2], color[3]) or tocolor(100,100,100), 
+        color = color and tocolor(color[1], color[2], color[3]) or tocolor(100,100,100),
         colorRGB = color or {100,100,100},
         checkpoint = nil,
         times = {},
@@ -341,12 +341,12 @@ function RankBoard:create(player, name, color)
         state = getElementData(player, "player state", false) or "alive",
         split = false,
         offset = 0,
-        x = 0, 
-        y = 0, 
+        x = 0,
+        y = 0,
         a = 1,
-	rankChange = 0, 
-	rankChangeTime = nil, 
-	splitValue = "", 
+	rankChange = 0,
+	rankChangeTime = nil,
+	splitValue = "",
 	splitTime = nil,
         animations = {},
     }, self)
@@ -370,14 +370,14 @@ function RankBoard:update(what)
 
 	for key, value in pairs (what) do
 		if key == "rank" then
-			
+
 			local newY = ((value - 1) * RankBoard.itemheight) --+ ((value - 1) * RankBoard.padding)
-			
+
 			if self.offset > 0 then
-				--newY = newY - (self.offset - 1) * (RankBoard.itemheight + RankBoard.padding) + RankBoard.itemheight/2 
+				--newY = newY - (self.offset - 1) * (RankBoard.itemheight + RankBoard.padding) + RankBoard.itemheight/2
 				newY = newY - (self.offset - 1) * (RankBoard.itemheight) + RankBoard.padding
 			end
-		
+
 			if not self.hidden and not self.willHide then
 				if RankBoard.animate and not self.willShow then
 					if self.animations["y"] ~= nil then destroyAnimation(self.animations["y"]) end
@@ -390,12 +390,12 @@ function RankBoard:update(what)
 					self.y = newY
 				end
 			end
-		
+
 			if self.rank > 0 and self.rank ~= value then
 				self.rankChange = self.rank - value
 				self.rankChangeTime = getTickCount()
 			end
-			
+
 			self.rank = value
 		elseif key == "split" and value ~= "" then
 			self.split = value
@@ -407,7 +407,7 @@ function RankBoard:update(what)
 			elseif self.state == "dead" then
 				self.a = 1
 			end
-			
+
 			self.state = value
 		elseif key == "offset" then
 			self.offset = value
@@ -434,7 +434,7 @@ function RankBoard:update(what)
 					end
 				end
 			end
-			
+
 			if not RankBoard.bestCPTimes[value.checkpoint] then
 				RankBoard.bestCPTimes[value.checkpoint] = value.tick
 				self.cpTime = 0
@@ -446,18 +446,18 @@ function RankBoard:update(what)
 					self.delay = 0
 				end
 			end
-			
+
 		end
 	end
 end
 
 function RankBoard:hide(hide)
 	if hide == self.hidden then return end
-	
+
 	self.willShow = self.hidden and not hide
 	self.hidden = hide
 	self.willHide = hide
-	
+
 	if not RankBoard.animate then
 		self.a = hide and 0 or 1
 		self.willHide = false
@@ -484,11 +484,11 @@ function RankBoard:draw()
 	local p = RankBoard.padding
 	local alpha = self.a
 	local stateX = x + w + (RankBoard.showIntervals and RankBoard.timeW or 0)
-	
+
 	local rankColor = self.rankChange == 0 and tocolor(255,255,255,220*alpha) or self.rankChange > 0 and tocolor(100,255,100,220*alpha) or tocolor(255,100,100,220*alpha)
-	
+
 	local teamColor = (alpha>0 and alpha<1) and tocolor(self.colorRGB[1], self.colorRGB[2], self.colorRGB[3], 255*alpha) or self.color
-	
+
 	local bgcolor = nil
 	local bgalpha = 255 * RankBoard.backgroundOpacity * (self.state == "dead" and 1 or alpha)
 	if self.localPlayer then
@@ -496,29 +496,29 @@ function RankBoard:draw()
 	else
 		bgcolor = self.state == "finished" and tocolor(0,60,0,bgalpha) or tocolor(0,0,0,bgalpha)
 	end
-	
-	
+
+
 	dxDrawRectangle(x, y, w + (RankBoard.showIntervals and RankBoard.timeW or 0) + h + p, h, bgcolor)
-	
+
 	dxDrawRectangle(x + p, y + p, h - p*2, h - p*2, rankColor)
 	dxDrawRectangle(x + h + p, y + p, p*1.5, h - p*2, teamColor)
 	dxDrawText(self.rank, x + p, y + p, x + h - p, y + h - p , tocolor(0,0,0, 255*alpha), 1, RankBoard.font,"center", "center",true)
-	if RankBoard.showIntervals then 
+	if RankBoard.showIntervals then
 		local timeWithDelay = self.cpTime + self.delay
 		local time = (self.rank == 1) and "Interval" or (math.floor(timeWithDelay) == 0 and "" or timeMsToTimeText(timeWithDelay))
-		dxDrawText(time, x + w + p, y + p, x + w + RankBoard.timeW - p, y + h - p , tocolor(200,200,200, 200*alpha), 1, RankBoard.fontSmall,"right", "center",true) 
+		dxDrawText(time, x + w + p, y + p, x + w + RankBoard.timeW - p, y + h - p , tocolor(200,200,200, 200*alpha), 1, RankBoard.fontSmall,"right", "center",true)
 	end
-	
+
 	if RankBoard.showFlags and self.country ~= "" and flagMap[self.country] ~= nil then
 		local flag = flagMap[self.country]
 		dxDrawImageSection(x + w - p - (h - p*2)/40*60, y + p, (h - p*2)/40*60, h - p*2, tonumber(flag[1]), tonumber(flag[2]), 60, 40, flagImage)
 	end
-	
+
 	dxDrawColorText(self.name, x + h + p*5, y + p, x + w - p*5, y + h - p, tocolor(255,255,255, 255*alpha), 1, RankBoard.font,"left", "center",true, alpha)
-	
-	
+
+
 	local stateText = ""
-	
+
 	if self.state == "away" then
 		stateText = "a"
 	elseif self.state == "dead" then
@@ -528,24 +528,24 @@ function RankBoard:draw()
 	elseif self.state == "finished" then
 		stateText = "f"
 	end
-	
+
 	if stateText ~= "" then
 		dxDrawText(stateText, stateX + p*2, y + p, stateX + h - p, y + h - p, tocolor(255,255,255, 200*alpha), 1, RankBoard.fontState,"center", "center",true)
 	end
-	
-	
+
+
 	if self.split and self.splitValue ~= "" then
 		local splitColor = self.splitValue:sub(1,1) == "+" and tocolor(68,255,68) or tocolor(255,68,68)
 		local w2 = dxGetTextWidth(self.splitValue, 1, RankBoard.fontSmall) + p*2
 		dxDrawRectangle(x - w2, y, w2, h, tocolor(0,0,0,160*alpha))
 		dxDrawText(self.splitValue, x - w2 + p, y + p, x - p, y + h - p , splitColor, 1, RankBoard.fontSmall,"center", "center",true)
 	end
-	
+
 	if self.rankChangeTime ~= nil and getTickCount() - self.rankChangeTime > 3000 then
 		self.rankChangeTime = nil
 		self.rankChange = 0
 	end
-	
+
 	if self.splitTime ~= nil and getTickCount() - self.splitTime > 5000 then
 		self.splitTime = nil
 		self.splitValue = ""
@@ -558,16 +558,16 @@ function RankBoard.setLine(position)
 		RankBoard.linePosition = 0
 		return
 	end
-	
+
 	if position == RankBoard.linePosition then return end
-	
+
 	local newY = RankBoard.y + (position * (RankBoard.itemheight))
-	
+
 	if RankBoard.animate and RankBoard.linePosition ~= 0 then
 		if RankBoard.animations["line"] ~= nil then destroyAnimation(RankBoard.animations["line"]) end
 		RankBoard.animations["line"] = animate(RankBoard.lineY, newY, "OutQuad", 300, function(y)
 			RankBoard.lineY = y
-			
+
     		end, function()
     			RankBoard.animations["line"] = nil
     		end)
@@ -581,7 +581,7 @@ end
 function RankBoard.drawLine()
 	if RankBoard.linePosition == 0 then return end
 	dxDrawRectangle(RankBoard.x, RankBoard.lineY, RankBoard.w + (RankBoard.showIntervals and RankBoard.timeW or 0) + RankBoard.itemheight + RankBoard.padding, RankBoard.padding, tocolor(255,0,0,200))
-	
+
 end
 
 function RankBoard.getScaled(value, round)
@@ -633,65 +633,65 @@ function updateWhiteList()
 	for k,v in pairs(g_DrawList) do
 		g_DrawList[k] = nil
 	end
-	
+
 	for k,v in pairs(RankBoard.sorted) do
 		RankBoard.sorted[k] = nil
 	end
-	
+
 	g_Rank = tonumber(getElementData(localPlayer, 'race rank'))
 	--g_Rank =myRank
 	if not isBoardAllowed() or not g_Rank then return end
-	
+
 	local players = getElementsByType('player')
-	table.sort ( players, 
+	table.sort ( players,
 		function ( a, b )
 			a = tonumber(getElementData(a, 'race rank'))
 			b = tonumber(getElementData(b, 'race rank'))
 			if not a then
 				return false
-			elseif not b then 
+			elseif not b then
 				return true
 			else
 				return a < b
 			end
 		end
 	)
-	
+
 	local ranksTop = math.clamp ( 1, lines - (1 + ranksBefore + ranksBehind), #players)
 	local ranksBefore  = math.clamp ( 1, g_Rank - math.abs( ranksBefore ), g_Rank)
 	local ranksBehind  = math.clamp ( g_Rank, g_Rank + math.abs( ranksBehind ), #players)
-	
+
 	local offsetAfter = 0
 	local offsetRank = 0
-	
+
 	local leaderNextCP = 0
 	local leaderTimeToNextCP = 0
 	local leaderDistanceToNextCP = 0
 	local leaderSpeed = 0
 	RankBoard.leader = players[1]
-	
+
 	for rank, player in ipairs (players) do
 		table.insert(RankBoard.sorted, 1, player)
 		local item = RankBoard.items[player]
 		local line = false
 		local split = false
 		if not item then item = RankBoard:create(player) end
-		
+
 		if RankBoard.showIntervals and RankBoard.liveIntervals then
 			local delay = 0
 			local nextCP = item.checkpoint and item.checkpoint + 1 or 1
 			local distance  = distanceFromPlayerToCheckpoint(player, nextCP)
 			local vehicle = getPedOccupiedVehicle(player)
-			
+
 			local speed = vehicle and getElementSpeed(vehicle, 0) or 0
 			if not g_Speeds[player] then g_Speeds[player] = {} end
 			table.insert(g_Speeds[player], speed)
 			if #g_Speeds[player] == 5 then table.remove(g_Speeds[player], 1) end
 			speed = mean(g_Speeds[player])
-			
+
 			if distance and nextCP > 1 and nextCP <= #g_Checkpoints and item.state == "alive" then
 				local timeToNextCP = (distance / (math.floor(speed) ~= 0 and speed or 1))*1000
-				
+
 				if rank == 1 then
 					leaderNextCP = nextCP
 					leaderTimeToNextCP = timeToNextCP
@@ -707,29 +707,29 @@ function updateWhiteList()
 					-- heading for the same CP as the leader
 					elseif leaderTimeToNextCP ~= nil and nextCP == leaderNextCP then
 						if timeToNextCP < leaderTimeToNextCP then
-							local timeToCatchUp = ((distance - leaderDistanceToNextCP) / (speed - leaderSpeed)) * 1000	
+							local timeToCatchUp = ((distance - leaderDistanceToNextCP) / (speed - leaderSpeed)) * 1000
 							delay = timeToCatchUp - item.cpTime
 						else
 							delay = (timeToNextCP - leaderTimeToNextCP) - item.cpTime
 						end
-						
+
 					end
 				end
-				
+
 				if item.cpTime and delay < item.cpTime * -1 then delay = item.cpTime * -1 + 1 end
 				item.delay = delay
 			else
 				item.delay = 0
 			end
 		end
-		
+
 		if rank <= ranksTop and rank <= g_Rank -- top ranks
 		or ranksBefore <= rank and #g_DrawList < lines -- front and back ranks
 		or #players - rank < lines - #g_DrawList then
 			g_DrawList[#g_DrawList + 1] = { rank = rank, player = player}
 			if g_DrawList[#g_DrawList].rank > 1 and g_DrawList[#g_DrawList].rank - g_DrawList[#g_DrawList - 1].rank ~= 1 then
 				g_DrawList[#g_DrawList - 1].line = true
-				offsetAfter = #g_DrawList - 1 
+				offsetAfter = #g_DrawList - 1
 				offsetRank = rank - offsetAfter
 				line = true
 			elseif rank <= splitsTop or (g_Rank - splitsBefore <= rank and rank <= g_Rank + splitsBehind) then
@@ -738,10 +738,10 @@ function updateWhiteList()
 			end
 			item:hide(false)
 			item:update({offset = offsetRank, rank = rank, line = line, split = split});
-		else 
+		else
 			item:hide(true)
 			item:update({offset = 0, rank = rank, split = false})
-			
+
 		end
 	end
 	RankBoard.setLine(offsetAfter) -- Separator line
@@ -777,7 +777,7 @@ addEventHandler("onClientElementDataChange", root, function(dataName, old, new)
 			RankBoard.items[source].name = name
 		end
 	end
-	
+
 end)
 
 addEvent("onClientPlayerStateChange", true)
@@ -793,7 +793,7 @@ addEventHandler("onClientPlayerQuit", root, function()
 end)
 
 addEventHandler("onClientScreenFadedOut",getRootElement(),function()
-	screenFadedOut = true 
+	screenFadedOut = true
 end)
 addEventHandler("onClientScreenFadedIn",getRootElement(),function() screenFadedOut = false end)
 
@@ -814,7 +814,7 @@ end
 
 
 addEvent('onClientMapStarting', true)
-addEventHandler('onClientMapStarting', getRootElement(), 
+addEventHandler('onClientMapStarting', getRootElement(),
 	function(mapinfo)
 		-- reset the board
 		RankBoard.reset()
@@ -832,7 +832,7 @@ addEventHandler('onClientMapStarting', getRootElement(),
 )
 
 addEvent('onClientPlayerReachCheckpoint', true)
-addEventHandler('onClientPlayerReachCheckpoint', getRootElement(), 
+addEventHandler('onClientPlayerReachCheckpoint', getRootElement(),
 	function(checkpoint, time)
 		if checkpoint == 0 then checkpoint = #g_Checkpoints end
 		if RankBoard.items[source] ~= nil then
@@ -874,9 +874,9 @@ function timeMsToTimeText( timeMs )
 	timeMs			= timeMs - minutes * 60000;
 
 	-- local seconds	= math.floor( timeMs / 1000 )
-	local seconds	=  timeMs / 1000 
+	local seconds	=  timeMs / 1000
 	-- local ms		= timeMs - seconds * 1000;
-	
+
 	return string.format( '%s%d:%05.2f', pre, minutes, seconds )
 end
 
@@ -889,8 +889,8 @@ function timeMsToTimeText2( timeMs )
 
 	local seconds	= math.floor( timeMs / 1000 )
 	local ms		= timeMs - seconds * 1000;
-	
-	
+
+
 	return pre .. string.format( '%01d:%02d:%03d', minutes, seconds, ms );
 end
 
@@ -988,7 +988,7 @@ function toNameColor(red, green, blue, alpha)
 end
 
 function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY, clip, alpha)
- 
+
 	if alignX then
 		if alignX == "center" then
 			local w = dxGetTextWidth(str:gsub("#%x%x%x%x%x%x",""), scale, font)
@@ -1018,7 +1018,7 @@ function dxDrawColorText(str, ax, ay, bx, by, color, scale, font, alignX, alignY
 			local w = dxGetTextWidth(cap, scale, font)
 			if clip and ax + w > bx then w = w - ( ax + w - bx) end
 			dxDrawText(cap, ax, ay, ax + w, by, color, scale, font, nil, nil, clip)
-			ax = ax + w  
+			ax = ax + w
 			color = toNameColor(tonumber("0x"..col:sub(1, 2)), tonumber("0x"..col:sub(3, 4)), tonumber("0x"..col:sub(5, 6)), 255 * (alpha or 1))
 		end
 		last = e + 1
@@ -1047,7 +1047,7 @@ function getAllCheckPoints()
 		result[i] = {}
 		result[i].id = getElementID(element) or i
 		result[i].nextid = getElementData(element, "nextid") or 0
-		result[i].size = getElementData(element,"size") or 4 
+		result[i].size = getElementData(element,"size") or 4
 		local position = {
 			tonumber(getElementData(element,"posX")),
 			tonumber(getElementData(element,"posY")),
@@ -1055,7 +1055,7 @@ function getAllCheckPoints()
 		}
 		result[i].position = position;
 	end
-	
+
 	local prevPos = nil
 	for i,checkpoint in pairs(result) do
 		if prevPos then
