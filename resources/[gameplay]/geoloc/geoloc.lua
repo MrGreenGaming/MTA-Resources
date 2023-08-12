@@ -16,7 +16,7 @@ function checkIP(player)
 			-- fetch our own IP for local adresses
 			fetchRemote('http://www.geoplugin.net/json.gp', "ip" , receiveIPdata, '', false, IP, getPlayerName(player))
 		else
-			fetchRemote('http://www.geoplugin.net/json.gp?ip=' .. IP, "ip" ,  receiveIPdata, '', false, IP, getPlayerName(player))	
+			fetchRemote('http://www.geoplugin.net/json.gp?ip=' .. IP, "ip" ,  receiveIPdata, '', false, IP, getPlayerName(player))
 		end
 -- 	else ignore
 	end
@@ -55,8 +55,27 @@ function receiveIPdata(json, err, IP, nick)
 		setElementData(player, 'country', table.geoplugin_countryCode)
 		setElementData(player, 'flag-country', {type = "flag-country", flag = ":admin/client/images/flags_new/"..string.lower(table.geoplugin_countryCode)..".png", country = table.geoplugin_countryCode} )
 		setElementData(player, 'fullCountryName', table.geoplugin_countryName)
-	end	
+	end
 end
+
+addCommandHandler("setcountry",
+	function(thePlayer, command, country_code)
+		if not country_code then
+			outputChatBox("* Usage: /setcountry countrycode", thePlayer, 255, 100, 100)
+			outputChatBox("* Example: /setcountry UK (to show as United Kingdom in TAB player list)", thePlayer, 255, 100, 100)
+			return false
+		end
+		country_code = string.lower(country_code)
+		local img = ":admin/client/images/flags_new/"..country_code..".png"
+		if not fileExists(img) then
+			outputChatBox("* Sorry, '"..country_code.."' is not an existing country code.", thePlayer, 255, 100, 100)
+			return false
+		end
+        -- Setelementdata country and flag-country
+        setElementData(player, 'flag-country', {type = "flag-country", flag = ":admin/client/images/flags_new/"..string.lower(country_code)..".png", country = string.upper(country_code)} )
+		return true
+	end
+)
 
 -- fetchip(nil,nil, "89.114.155.108")
 -- fetchip(nil,nil, "186.63.9.151")
