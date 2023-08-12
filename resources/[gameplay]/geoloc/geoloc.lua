@@ -72,7 +72,7 @@ addCommandHandler("setcountry",
 			return false
 		end
         -- Setelementdata country and flag-country
-        setElementData(player, 'flag-country', {type = "flag-country", flag = ":admin/client/images/flags_new/"..string.lower(country_code)..".png", country = string.upper(country_code)} )
+        setElementData(thePlayer, 'flag-country', {type = "flag-country", flag = ":admin/client/images/flags_new/"..string.lower(country_code)..".png", country = string.upper(country_code)} )
 		return true
 	end
 )
