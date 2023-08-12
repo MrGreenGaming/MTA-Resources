@@ -530,8 +530,10 @@ hornsTable = {
     [526] = "Neyi başaramadın amk",
     [527] = "Todays episode of how f**ked up",
     [528] = "Dj Dikkat Beni vurmak için",
-
-    
+	[529] = "Kazakhstan ogazhran nabomboroki",
+	[530] = "Lois I'm coming",
+	[531] = "Lambo",
+	[532] = "OOOOOAAAAAAAAAAAAAAA",
     
  
 }
