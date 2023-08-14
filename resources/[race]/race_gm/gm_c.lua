@@ -161,7 +161,7 @@ function()
 							setElementAlpha(player, 10)
 						else
 							setElementAlpha(pedCar, 180)
-							setElementAlpha(car, 180)
+							setElementAlpha(player, 180)
 						end
 					end
 				end
