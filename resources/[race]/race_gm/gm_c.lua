@@ -108,12 +108,13 @@ addEventHandler('checkGmCanWorkOk', root, checkGmCanWorkOk)
 local alphaTimer
 
 function startBlinking()
-	if isTimer( alphaTimer ) then killTimer( alphaTimer ) end
-	alphaTimer = setTimer ( blink, 50, 0 )
+	if not isTimer( alphaTimer ) then
+        alphaTimer = setTimer ( blink, 6, 0 )
+    end
 end
 
 local currentAlpha = 180
-local alphaStep = 5
+local alphaStep = 1
 local increasing = true
 
 function blink()
@@ -126,7 +127,7 @@ function blink()
         end
     else
         currentAlpha = currentAlpha - alphaStep
-        if currentAlpha <= 150 then
+        if currentAlpha <= 100 then
             increasing = true
         end
     end
