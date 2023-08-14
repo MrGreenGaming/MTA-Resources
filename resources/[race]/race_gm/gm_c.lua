@@ -106,21 +106,30 @@ addEventHandler('checkGmCanWorkOk', root, checkGmCanWorkOk)
 
 -- Blinking alpha to indicate GM can drop anytime
 local alphaTimer
-local alphaToggle = false
 
 function startBlinking()
 	if isTimer( alphaTimer ) then killTimer( alphaTimer ) end
-	alphaTimer = setTimer ( blink, 400, 0 )
+	alphaTimer = setTimer ( blink, 50, 0 )
 end
 
+local currentAlpha = 180
+local alphaStep = 5
+local increasing = true
+
 function blink()
-	if alphaToggle then
-		setElementAlpha( getPedOccupiedVehicle(localPlayer), 90 )
-		alphaToggle = not alphaToggle
-	else
-		setElementAlpha( getPedOccupiedVehicle(localPlayer), 200 )
-		alphaToggle = not alphaToggle
-	end
+    setElementAlpha(getPedOccupiedVehicle(localPlayer), currentAlpha)
+
+    if increasing then
+        currentAlpha = currentAlpha + alphaStep
+        if currentAlpha >= 254 then
+            increasing = false
+        end
+    else
+        currentAlpha = currentAlpha - alphaStep
+        if currentAlpha <= 150 then
+            increasing = true
+        end
+    end
 end
 
 
@@ -148,15 +157,11 @@ function()
 						local cx,cy,cz = getElementPosition(pedCar)
 						local distance = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
 						if distance <= 20 then
-							setElementAlpha(car, 240)
-
-								setElementAlpha(pedCar, 10)
-								setElementAlpha(player, 10)
-
+							setElementAlpha(pedCar, 10)
+							setElementAlpha(player, 10)
 						else
 							setElementAlpha(pedCar, 180)
 							setElementAlpha(car, 180)
-							setElementAlpha(player, 180)
 						end
 					end
 				end
