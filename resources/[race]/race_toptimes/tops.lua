@@ -43,6 +43,7 @@ addEventHandler('onMapStarting', root,
 		queryMapTimes(mapInfo)
 		checkResources()
 	end
+    , true, "high"
 )
 
 addEventHandler('onResourceStart', resourceRoot,
@@ -56,7 +57,6 @@ addEventHandler('onResourceStart', resourceRoot,
 			queryMapTimes(raceInfo.mapInfo, true)
 		end
 		checkResources()
-		
 		dbExec ( handlerConnect, country_sql_table )
 	end
 )
@@ -114,7 +114,7 @@ function maptimes(qh, mapInfo, bStart)
 	for _, t in ipairs(times) do
 		t.formatDate = FormatDate(t.date)
 	end
-	
+
 	if not bStart then
 		sendClientTimes()
 	else
@@ -210,23 +210,23 @@ function updatePlayerTop(player, rank, value)
 			break
 		end
 	end
-	
+
 	if not score[exports.race:getRaceMode()] and rank == 1 and not (monthtTopTime and monthtTopTime.month ~= getRealTime().month+1) and (not monthtTopTime or (not times.kills and value < monthtTopTime.value) or (times.kills and value > monthtTopTime.value)) then
 		local oldTime = monthtTopTime and monthtTopTime.value or nil
-		
+
 		-- dont reward first monthly top for a map
 
 		local oldRewarded = 1
 		if #monthtimes > 1 or (monthtimes[1] and monthtimes[1].month ~= getRealTime().month+1) then
 			oldRewarded = 0
 		end
-		
+
 		monthtTopTime = {}
 		monthtTopTime.forumid = forumid
 		monthtTopTime.value = value
 		monthtTopTime.date = getRealTime().timestamp
 		monthtTopTime.month = getRealTime().month+1
-		
+
 		monthtTopTime.resname = info.resname
 		monthtTopTime.mapname = info.name
 		monthtTopTime.modename = info.modename
@@ -236,13 +236,13 @@ function updatePlayerTop(player, rank, value)
 		monthtTopTime.mta_name = getPlayerName(player)
 		monthtTopTime.country = exports.geoloc:getPlayerCountry(player)
 		monthtTopTime.rewarded = oldRewarded
-		
+
 		if oldTime then
 			monthtimes[1] = monthtTopTime
 		else
 			table.insert(monthtimes, 2, monthtTopTime)
 		end
-		
+
 		local q = "INSERT INTO toptimes_month VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE forumid = ?, value = ?, date=?;"
 		dbExec(handlerConnect, q, forumid, info.resname, value, getRealTime().timestamp, getRealTime().month+1, oldRewarded, forumid, value, getRealTime().timestamp)
 		sendMonthTime()
@@ -255,7 +255,7 @@ function updatePlayerTop(player, rank, value)
 		local newPos, newTime, oldPos, oldTime
 		newTime = value
 		if not toptime then
-			q = [[	
+			q = [[
 					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname`, `racemode` ) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE date=VALUES(date), value=VALUES(value);
 					INSERT INTO `maps`( `resname`,`mapname`, `racemode` ) VALUES (?,?,?) ON DUPLICATE KEY UPDATE resname=resname;
 				]]
@@ -278,7 +278,7 @@ function updatePlayerTop(player, rank, value)
 			-- outputDebugString('updated top for ' .. getPlayerName(player))
 			dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, mapnameFull, racemode, mapname)
 		end
-		
+
 		if not times.kills then
 			table.sort(times, function(a,b) return a.value < b.value or (a.value == b.value and a.date < b.date) end)
 		else
@@ -515,7 +515,7 @@ function sendToptimesToAdmin(admin)
 	for i, v in ipairs(times) do
 		if i > amountToClient then
 			break
-		end 
+		end
 		table.insert(topsToClient,v)
 	end
 	triggerClientEvent(admin, 'onAdminRequestOpenTopManager', admin, mapname, topsToClient)
@@ -523,9 +523,9 @@ end
 
 
 function adminConfirmedAction(theAction)
-	if not isAdminAuthorized(client) then 
+	if not isAdminAuthorized(client) then
 		outputChatBox('You are not authorized to remove toptimes',client,255,0,0)
-		return 
+		return
 	end
 
 	-- Handle all top deletions here
@@ -541,17 +541,17 @@ function adminConfirmedAction(theAction)
 				end
 			end
 		end
-		
+
 		-- Insert into toptimes_deleted
 		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.forumid = ? AND a.mapname = ?"
 		dbExec( handlerConnect, toptimesDeletedQuery, theAction.reason, getAccountName(getPlayerAccount(client)) or _getPlayerName(client), theAction.forumid, theAction.mapname)
 		-- Delete from toptimes
 		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE forumid = ? and mapname = ?', theAction.forumid, theAction.mapname)
-		
+
 		outputChatBox('[TOPS] Top #' .. theAction.position .. ' by ' .. theAction.playername .. ' on map "'..theAction.mapname..'" was deleted by ' .. _getPlayerName(client), root, 255,50,50)
 
 		deletelog(("Top #%d (%s %s) on map \"%s\" was deleted by %s (%s): %s"):format(theAction.position, timeMsToTimeText(theAction.value), theAction.playername, theAction.mapname, _getPlayerName(client), getAccountName(getPlayerAccount(client)), theAction.reason))
-	
+
 	elseif theAction.action == "deleteAllPlayerTops" then
 		-- Delete All Player Tops
 		for i, row in ipairs(times) do
@@ -561,17 +561,17 @@ function adminConfirmedAction(theAction)
 				break
 			end
 		end
-		
+
 		-- Insert into toptimes_deleted
 		local toptimesDeletedQuery = "INSERT INTO toptimes_deleted (`forumid`,`mapname`,`pos`,`value`,`date`,`racemode`,`delete_reason`,`delete_admin`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode, ?, ? FROM toptimes a WHERE a.forumid = ?"
 		dbExec( handlerConnect, toptimesDeletedQuery, theAction.reason, getAccountName(getPlayerAccount(client)) or _getPlayerName(client), theAction.forumid)
 		-- Delete from toptimes
 		dbExec(handlerConnect, 'DELETE FROM toptimes WHERE forumid = ? ', theAction.forumid)
-		
+
 		outputChatBox('[TOPS] All tops from player ' .. theAction.playername .. ' have been removed by ' .. _getPlayerName(client), root, 255,50,50)
 
 		deletelog(("ALL tops by %s (forumid: %s) have been deleted by %s (%s): %s"):format(theAction.playername, theAction.forumid, _getPlayerName(client), getAccountName(getPlayerAccount(client)), theAction.reason))
-	
+
 	elseif theAction.action == "deleteAllMapTops" then
 		-- Remove all tops, then send to client
 		times = {}
@@ -644,7 +644,7 @@ end
 -- Checking tops --
 -------------------
 
-addCommandHandler('oldtops', 
+addCommandHandler('oldtops',
 	function(p, cmd, name, ex)
 		local player = string.lower(name or _getPlayerName(p))
 		ex= tonumber(ex) or 3
@@ -657,10 +657,10 @@ addCommandHandler('oldtops',
 		for k, v in ipairs(exports.mapmanager:getMapsCompatibleWithGamemode(getResourceFromName('race'))) do
 			map_names['race maptimes Sprint ' .. (getResourceInfo(v, 'name' ) or getResourceName(v))] = v
 		end
-		
+
 		local maps_table = executeSQLQuery( "SELECT tbl_name FROM sqlite_master WHERE tbl_name LIKE 'race maptimes Sprint %' " )
 		for k, v in ipairs(maps_table) do
-		
+
 			local mapTable = v.tbl_name
 			if map_names[mapTable] then
 				local mapTimes = executeSQLQuery( "SELECT playerName FROM ? LIMIT ?", mapTable, tostring(ex) )
@@ -671,9 +671,9 @@ addCommandHandler('oldtops',
 					end
 				end
 			end
-			
+
 		end
-		
+
 		outputChatBox(player .. ' old toptimes: ' , p)
 		local player = name or _getPlayerName(p)
 		for a=1,ex do
@@ -685,7 +685,7 @@ addCommandHandler('oldtops',
 addCommandHandler('tops',
 	function(p, cmd, ex)
 		ex = tonumber(ex)
-		ex = ex and ex < 11 and ex or 3 
+		ex = ex and ex < 11 and ex or 3
 		local forumid = exports.gc:getPlayerForumID(p)
 		if not forumid then
 			return outputChatBox("You are not logged in to Greencoins!", p, 255, 0, 0, true)
@@ -765,7 +765,7 @@ function var_dump(...)
 	local noNames = false
 	local indentation = "\t\t\t\t\t\t"
 	local depth = nil
- 
+
 	local name = nil
 	local output = {}
 	for k,v in ipairs(arg) do
@@ -797,7 +797,7 @@ function var_dump(...)
 			else
 				name = ""
 			end
- 
+
 			local o = ""
 			if type(v) == "string" then
 				table.insert(output,name..type(v).."("..v:len()..") \""..v.."\"")
@@ -826,7 +826,7 @@ function var_dump(...)
 						end
 						local keyString, keyTable = var_dump(newModifiers,key)
 						local valueString, valueTable = var_dump(newModifiers,value)
- 
+
 						if #keyTable == 1 and #valueTable == 1 then
 							table.insert(output,indentation.."["..keyString.."]\t=>\t"..valueString)
 						elseif #keyTable == 1 then
@@ -888,7 +888,7 @@ end
 --------------- Get the country of a player for flags ----------------------
 ----------------------------------------------------------------------------
 
-addEventHandler("onGCLogin" , root, 
+addEventHandler("onGCLogin" , root,
 function(forumID)
 	getPlayerCountry(source, forumID)
 end
@@ -896,17 +896,17 @@ end
 
 function getPlayerCountry(player,forumID)
 	if not handlerConnect then return end
-	
+
 	local country = exports.geoloc:getPlayerCountry(player)
 	local playerName = getPlayerName(player)
-	
+
 	if country == "A1" then return end --if country is "Anonymous Proxy" - ignore and add country manually using /addcountry
-	
+
 	local cmd = "SELECT * FROM country WHERE forum_id = ?"
-	dbQuery(function(qh) 
+	dbQuery(function(qh)
 		if not qh then return end
 		local results = dbPoll(qh, 0)
-		if results and #results > 0 then		
+		if results and #results > 0 then
 			local country_sql = results[1].country
 			if country_sql == country then
 				return
@@ -937,7 +937,7 @@ function addcountry(p, c, pos, code)
 	elseif not code then
 		return outputChatBox('Syntax: /addcountry <position> <country code>', p)
 	end
-	
+
 	local query = dbExec(handlerConnect, "REPLACE INTO `country` (forum_id, country) VALUES (?,?)", times[pos].forumid, code)
 
 	if query then
@@ -968,7 +968,7 @@ function cleanToptimesCache (forumID)
 end
 addEventHandler("onGCLogout" , root, cleanToptimesCache )
 
-addEventHandler("onResourceStart", resourceRoot, 
+addEventHandler("onResourceStart", resourceRoot,
 	function()
 		queryTopsAll()
 	end
@@ -977,38 +977,38 @@ addEventHandler("onResourceStart", resourceRoot,
 function queryTopsAll()
 	local resGC = getResourceFromName'gc'
 	if not resGC or getResourceState ( resGC ) ~= 'running' then return false end
-	
+
 	local forumids = {}
-	for _, player in ipairs(getElementsByType'player') do 
+	for _, player in ipairs(getElementsByType'player') do
 		local forumID = exports.gc:getPlayerForumID (player)
 		if forumID then
 			table.insert(forumids, forumID)
 		end
 	end
-	
-	if #forumids > 0 then 
+
+	if #forumids > 0 then
 		cachePlayerToptimes(forumids)
 	end
 end
 
 function cachePlayerToptimes(tableForumIDs)
 	if not handlerConnect then return end
-	
+
 	forumids = table.concat(tableForumIDs, ',')
-	
+
 	dbQuery(function(qh)
 		local result = dbPoll(qh, -1)
-		if not result then 
-			outputDebugString("cachePlayerToptimes() - Error: Query not ready or error") 
-			return false 
+		if not result then
+			outputDebugString("cachePlayerToptimes() - Error: Query not ready or error")
+			return false
 		else
 			for _, id in pairs(tableForumIDs) do
 				toptimesCache[id] = {}
 			end
-			
+
 			for _, row in ipairs(result) do
 				if not toptimesCache[row.forumid] then toptimesCache[row.forumid] = {} end
-				
+
 				local racemodes = split(row.racemodes, ", ")
 				for _, racemode in pairs(racemodes) do
 					if not toptimesCache[row.forumid][racemode] then toptimesCache[row.forumid][racemode] = {} end
@@ -1020,11 +1020,11 @@ function cachePlayerToptimes(tableForumIDs)
 end
 
 addEvent("onPlayerToptimeImprovement")
-addEventHandler("onPlayerToptimeImprovement", root, 
+addEventHandler("onPlayerToptimeImprovement", root,
 	function(newPos, newTime, oldPos, oldTime)
 		local forumID = exports.gc:getPlayerForumID(source)
 		if not forumID then return end
-		
+
 		if newPos <= positionsToCache then
 			g_newTops = true
 		end
@@ -1052,7 +1052,7 @@ end
 function getPlayerToptimes(forumID)
 	if type(forumID) ~= "number" then return false end
 	if not toptimesCache[forumID] then return false end
-	
+
 	return toptimesCache[forumID]
 end
 
@@ -1060,6 +1060,6 @@ function getPlayerToptimesByRacemode(forumID, racemode)
 	if type(forumID) ~= "number" then return false end
 	if not racemode then return false end
 	if not toptimesCache[forumID] then return false end
-	
+
 	return toptimesCache[forumID][racemode]
 end
