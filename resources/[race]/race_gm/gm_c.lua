@@ -109,16 +109,17 @@ local alphaTimer
 
 function startBlinking()
 	if not isTimer( alphaTimer ) then
-        alphaTimer = setTimer ( blink, 6, 0 )
+        alphaTimer = setTimer ( blink, 5, 0 )
     end
 end
 
 local currentAlpha = 180
-local alphaStep = 1
+local alphaStep = 2
 local increasing = true
 
 function blink()
     setElementAlpha(getPedOccupiedVehicle(localPlayer), currentAlpha)
+    setElementAlpha(localPlayer, currentAlpha)
 
     if increasing then
         currentAlpha = currentAlpha + alphaStep
@@ -127,7 +128,7 @@ function blink()
         end
     else
         currentAlpha = currentAlpha - alphaStep
-        if currentAlpha <= 100 then
+        if currentAlpha <= 80 then
             increasing = true
         end
     end
