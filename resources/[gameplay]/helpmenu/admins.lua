@@ -1,6 +1,6 @@
 admins = {
-    { name = "Nick_026", title = "Server Manager & Developer", accountName = "Nick_026" },
-    { name = "Cena", title = "Server Manager", accountName = "cena"},
+    { name = "Nick_026", title = "Dev & MTA Manager", accountName = "Nick_026" },
+    { name = "Cena", title = "MTA Manager", accountName = "cena"},
 	{ name = "Haxardous", title = "Developer", accountName = "Axa" },
     { name = "Koolaid", title = "Map Manager", accountName = "koolaidkarlis" },
 	{ name = "Mateoryt", title="Map Manager", accountName = "mateoryt"},
