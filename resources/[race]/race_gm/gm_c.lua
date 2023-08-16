@@ -128,7 +128,7 @@ function blink()
         end
     else
         currentAlpha = currentAlpha - alphaStep
-        if currentAlpha <= 100 then
+        if currentAlpha <= 102 then
             increasing = true
         end
     end
