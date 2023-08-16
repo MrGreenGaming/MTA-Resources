@@ -5,5 +5,6 @@ admins = {
     { name = "Koolaid", title = "Map Manager", accountName = "koolaidkarlis" },
 	{ name = "Mateoryt", title="Map Manager", accountName = "mateoryt"},
 	{ name = "Military", title ="Admin", accountName = "mili"},
-	{ name = "Sandro", title="Admin", accountName = "Patogjeniii"}
+	{ name = "Sandro", title="Admin", accountName = "Patogjeniii"},
+	{ name = "Mekuar", title="Admin", accountName = "Mekuar1"},
 }
