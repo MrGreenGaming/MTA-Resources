@@ -6,6 +6,7 @@ local boundVoteKeys = {}
 local nameFromVoteID = {}
 local voteIDFromName = {}
 local optionLabels = {}
+local preVoteIndex = 0
 
 local isVoteActive
 local hasAlreadyVoted = false
@@ -32,6 +33,23 @@ local function updateTime()
 	end
 end
 
+local function playerPressedController(button, press)
+    if not press then return end
+    if button == "pov_up" or button == "pov_down" then
+        if button == "pov_up" then
+            preVoteIndex = preVoteIndex - 1
+        elseif button == "pov_down" then
+            preVoteIndex = preVoteIndex + 1
+        end
+        if preVoteIndex < 1 then preVoteIndex = #nameFromVoteID end
+        if preVoteIndex > #nameFromVoteID then preVoteIndex = 1 end
+    elseif button == "joy2" then
+        if preVoteIndex then
+            sendVote(preVoteIndex)
+        end
+    end
+end
+
 addEvent("doShowPoll", true)
 addEvent("doSendVote", true)
 addEvent("doStopPoll", true)
@@ -49,22 +67,22 @@ addEventHandler("doShowPoll", rootElement, function(pollData, pollOptions, pollT
 	--Reset
 	titleSuffix = ""
 	optionsVotes = {}
-		
+
 	--determine if we have to append nomination number
 	local nominationString = ""
-	if pollData.nomination > 1 then 
+	if pollData.nomination > 1 then
 		nominationString = " (nomination "..pollData.nomination..")"
 	end
-		
+
 	isChangeAllowed = pollData.allowchange
 
 	-- layout.title.width  = layout.window.width - 20
 	-- layout.option.width = layout.window.width
 	-- layout.cancel.width = layout.window.width
 	-- layout.time.width   = layout.window.width
-		
+
 	local screenX, screenY = guiGetScreenSize()
-	
+
 	--Bind options to keys
 	for index, option in ipairs(pollOptions) do
 		--Bind 10th option to 0-key
@@ -77,10 +95,12 @@ addEventHandler("doShowPoll", rootElement, function(pollData, pollOptions, pollT
 		local optionKey = tostring(index)
 		bindKey(optionKey, "down", sendVote_bind)
 		bindKey("num_"..optionKey, "down", sendVote_bind)
-			
+
 		table.insert(boundVoteKeys, optionKey)
 	end
-		
+
+    addEventHandler("onClientKey", root, playerPressedController)
+
 	if isChangeAllowed then
 		bindKey("backspace", "down", sendVote_bind)
 	end
@@ -115,15 +135,17 @@ end
 addEventHandler("doStopPoll", rootElement, function()
 	isVoteActive = false
 	hasAlreadyVoted = false
+    preVoteIndex = 0
 
 	for i, key in ipairs(boundVoteKeys) do
 		unbindKey(key, "down", sendVote_bind)
 		unbindKey("num_"..key, "down", sendVote_bind)
 	end
-		
+
 	unbindKey("backspace", "down", sendVote_bind)
 	setPollVisible(false)
 	removeEventHandler("onClientRender", rootElement, updateTime)
+    removeEventHandler("onClientKey", root, playerPressedController)
 end)
 
 function sendVote_bind(key)
@@ -148,7 +170,7 @@ function sendVote_bind(key)
 				else
 					cacheVoteNumber = ""
 				end
-			else		
+			else
 				cacheTimer = setTimer(sendVote, 500, 1, tonumber(cacheVoteNumber))
 			end
 		end
@@ -161,7 +183,7 @@ function sendVote(voteID)
 	if not isVoteActive then
 		return
 	end
-	
+
 	--if option changing is not allowed, unbind the keys
 	if not isChangeAllowed and voteID ~= -1 then
 		for i, key in ipairs(boundVoteKeys) do
@@ -169,7 +191,7 @@ function sendVote(voteID)
 			unbindKey("num_"..key, "down", sendVote_bind)
 		end
 	end
-	
+
 	--if the player hasn't voted already (or if vote change is allowed anyway), update the vote text
 	if not hasAlreadyVoted or isChangeAllowed then
 		if voteID ~= -1 then
@@ -180,11 +202,11 @@ function sendVote(voteID)
 	if voteID == -1 then
 		setOption(voteID)
 	end
-	
+
 	--clear the send vote cache
 	cacheVoteNumber = ""
 	hasAlreadyVoted = voteID
-	
+
 	--send the vote to the server
 	triggerServerEvent("onClientSendVote", localPlayer, voteID)
 end
@@ -235,7 +257,7 @@ textXoffset = 22
 descriptionHeight = 40
 first_option_text_Yoffset = 65
 option_text_height = 25
-countdown_text_height = 35 
+countdown_text_height = 35
 unvote_text_height = 22
 backgroundHeight = (option_text_height*option_amount)+option_text_height+first_option_text_Yoffset+countdown_text_height+unvote_text_height+2
 trueBackgroundY = false -- True Y position where it should go after anim
@@ -266,7 +288,7 @@ local function draw()
 
 	--Description
 	dxDrawText(description_text, backgroundX+textXoffset, backgroundY+descriptionYoffset, backgroundX + backgroundWidth - 20, backgroundY+descriptionYoffset+descriptionHeight, tocolor(255, 255, 255, 255), 1, fontBold, "left", "top", false, true, isPostGUI, false, false)
-	
+
 	--Options
 	for i, option in ipairs(optionTable) do
 		local votes = 0
@@ -282,6 +304,10 @@ local function draw()
 			dxDrawRectangle(backgroundX, backgroundY+first_option_text_Yoffset+(option_text_height*i), backgroundWidth, option_text_height, tocolor(255, 255, 255, 228), isPostGUI,false)
 			curFont = middleFont
 			curColor = tocolor(10, 10, 10, 255)
+        elseif i == preVoteIndex then
+            dxDrawRectangle(backgroundX, backgroundY+first_option_text_Yoffset+(option_text_height*i), backgroundWidth, option_text_height, tocolor(255, 255, 255, 50), isPostGUI,false)
+            curFont = font
+            curColor = tocolor(255, 255, 255, 255)
 		else
 			curFont = font
 			curColor = tocolor(255, 255, 255, 255)
@@ -339,14 +365,14 @@ function popWindowUp()
 	local elapsedTime = now - anim.popWindowUp.startTime
 	local duration = anim.popWindowUp.endTime - anim.popWindowUp.startTime
 	local progress = elapsedTime / duration
- 
-	local width, height, _ = interpolateBetween( 
-		anim.popWindowUp.startSize[1], anim.popWindowUp.startSize[2], 0, 
-		anim.popWindowUp.endSize[1], anim.popWindowUp.endSize[2], 0, 
+
+	local width, height, _ = interpolateBetween(
+		anim.popWindowUp.startSize[1], anim.popWindowUp.startSize[2], 0,
+		anim.popWindowUp.endSize[1], anim.popWindowUp.endSize[2], 0,
 		progress, "InOutBack")
- 
+
 	backgroundY = height
- 
+
 	if now >= anim.popWindowUp.endTime then
 		breakAnimation = false
 
@@ -359,14 +385,14 @@ function popWindowDown()
 	local elapsedTime = now - anim.popWindowDown.startTime
 	local duration = anim.popWindowDown.endTime - anim.popWindowDown.startTime
 	local progress = elapsedTime / duration
- 
-	local width, height, _ = interpolateBetween( 
-		anim.popWindowDown.startSize[1], anim.popWindowDown.startSize[2], 0, 
-		anim.popWindowDown.endSize[1], anim.popWindowDown.endSize[2], 0, 
+
+	local width, height, _ = interpolateBetween(
+		anim.popWindowDown.startSize[1], anim.popWindowDown.startSize[2], 0,
+		anim.popWindowDown.endSize[1], anim.popWindowDown.endSize[2], 0,
 		progress, "InOutBack")
- 
+
 	backgroundY = height
- 
+
 	if now >= anim.popWindowDown.endTime or breakAnimation then
 		breakAnimation = false
 		backgroundY = screenH

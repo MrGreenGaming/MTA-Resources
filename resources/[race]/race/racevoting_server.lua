@@ -234,7 +234,7 @@ function startNextMapVote()
 	local poll = {
 		title="Different Map?",
 		visibleTo=getRootElement(),
-		percentage=51,
+		percentage=76,
 		timeout=7,
 		allowchange=true;
 		}
