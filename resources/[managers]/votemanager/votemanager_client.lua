@@ -43,7 +43,7 @@ local function playerPressedController(button, press)
         end
         if preVoteIndex < 1 then preVoteIndex = #nameFromVoteID end
         if preVoteIndex > #nameFromVoteID then preVoteIndex = 1 end
-    elseif button == "joy2" or button == "joy3" then
+    elseif button == "joy2" or button == "joy1" then
         if preVoteIndex then
             sendVote(preVoteIndex)
         end
