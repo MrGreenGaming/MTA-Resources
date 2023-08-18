@@ -27,15 +27,15 @@ addEvent("getAllowedPowerTypes", true)
 addEventHandler("getAllowedPowerTypes", resourceRoot, getAllowedPowerTypes)
 
 
-addEventHandler("onClientResourceStart", resourceRoot, 
-	function()	
+addEventHandler("onClientResourceStart", resourceRoot,
+	function()
 		setElementData(localPlayer, "coremarkers_powerType", false, true)
 		setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false, true)
 		setElementData(localPlayer, "coremarkers_isPlayerRektBySpikes", false, true)
-		
-		engineImportTXD ( engineLoadTXD ( "oil.txd" ) , 2717 ) 
-		engineImportTXD ( engineLoadTXD ( "crate.txd" ) , 3798 ) 
-		
+
+		engineImportTXD ( engineLoadTXD ( "oil.txd" ) , 2717 )
+		engineImportTXD ( engineLoadTXD ( "crate.txd" ) , 3798 )
+
 		engineSetModelLODDistance(1225, 100)
 		engineSetModelLODDistance(3374, 300)
 		engineSetModelLODDistance(2717, 300)
@@ -48,7 +48,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 
 function getRandomPower()
 	playSound("marker.mp3")
-	
+
 	if #powerTypes == 0 then
 		powerTypes = table.copy(powerTypesBackup)
 	end
@@ -85,11 +85,11 @@ function getRandomPower()
 	bgPicture = guiCreateStaticImage(iconPosX, iconPosY, iconSize, iconSize, "pics/background.png", false)
 	_typePicture = guiCreateStaticImage(iconPosX, iconPosY, iconSize, iconSize, "pics/"..randomPower..".png", false)
 	guiSetAlpha(_typePicture, 0.45)
-	
+
 	stopRoulette = setTimer(function() end, delay-animSpeed, 1)
 	changePic(1)
 	givePowerTimer = setTimer(
-		function(randomPower) 
+		function(randomPower)
 			if isTimer(changePicTimer) then
 				killTimer(changePicTimer)
 			end
@@ -103,10 +103,10 @@ addEventHandler("getRandomPower", resourceRoot, getRandomPower)
 function changePic(number)
 	if not isElement(_typePicture) then return end
 	if not isTimer(stopRoulette) then return end
-	
-	local timeleft = getTimerDetails(stopRoulette) 
+
+	local timeleft = getTimerDetails(stopRoulette)
 	guiStaticImageLoadImage(_typePicture, "pics/"..powerTypesBackup[number]..".png")
-	
+
 	if number >= 1 and number < #powerTypesBackup then
 		nextNumber = number+1
 	elseif number == #powerTypesBackup then
@@ -115,22 +115,46 @@ function changePic(number)
 	changePicTimer = setTimer(changePic, animSpeed*(delay/timeleft), 1, nextNumber)
 end
 
+function preShootMinigunController(button, pressed)
+    if button == "joy11" then
+        if pressed then
+            triggerServerEvent("onClientControllerMinigunFire", root, localPlayer, nil, "down")
+        else
+            triggerServerEvent("onClientControllerMinigunFire", root, localPlayer, nil, "up")
+        end
+    end
+end
+
+function removeShootMinigunController()
+    removeEventHandler("onClientKey", root, preShootMinigunController)
+end
+addEvent("onClientControllerMinigunFireStop", true)
+addEventHandler("onClientControllerMinigunFireStop", root, removeShootMinigunController)
+
 function givePower(powerType)
 	if isElement(_typePicture) then destroyElement(_typePicture) end
 	if isElement(typePicture) then destroyElement(typePicture) end
 	typePicture = guiCreateStaticImage(iconPosX, iconPosY, iconSize, iconSize, "pics/"..powerType..".png", false)
 	bindKey("mouse1", "down", onPlayerUsePower, powerType)
 	bindKey("lctrl", "down", onPlayerUsePower, powerType)
-	
+
+    function onControllerUsePower(button, pressed)
+        if pressed and button == "joy11" then
+            onPlayerUsePower(nil, nil, powerType)
+        end
+    end
+    addEventHandler("onClientKey", root, onControllerUsePower)
+
 	setElementData(localPlayer, "coremarkers_powerType", powerType, true)
 	guiSetAlpha(typePicture, 1)
 	guiSetAlpha(bgPicture, 1)
-		
+
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	local minX, minY, minZ, maxX, maxY, maxZ = getElementBoundingBox(theVehicle)
 	if powerType == "rocket" then
 		triggerServerEvent("createRocketLauncher", resourceRoot, maxY)
 	elseif powerType == "minigun" then
+        addEventHandler("onClientKey", root, preShootMinigunController)
 		triggerServerEvent("preGiveMinigun", resourceRoot)
 	end
 end
@@ -139,18 +163,21 @@ end
 function removePower(powerType, delay)
 	unbindKey("mouse1", "down", onPlayerUsePower)
 	unbindKey("lctrl", "down", onPlayerUsePower)
+    if onControllerUsePower then
+        removeEventHandler("onClientKey", root, onControllerUsePower)
+    end
 	if isElement(_typePicture) then destroyElement(_typePicture) end
 	if isTimer(givePowerTimer) then killTimer(givePowerTimer) end
 	if powerType == "rocket" then
 		triggerServerEvent("removeRocketLauncher", resourceRoot)
 	end
-	
+
 	if isTimer(removePowerTimer) then killTimer(removePowerTimer) end
-	
+
 	if delay == -1 then
 		return
 	end
-	if delay then 		
+	if delay then
 		if isElement(typePicture) then guiSetAlpha(typePicture, 0.5) end
 		if isElement(bgPicture) then guiSetAlpha(bgPicture, 0.5) end
 	end
@@ -158,7 +185,7 @@ function removePower(powerType, delay)
 		function()
 			if isElement(bgPicture) then destroyElement(bgPicture) end
 			if isElement(typePicture) then destroyElement(typePicture) end
-			setElementData(localPlayer, "coremarkers_powerType", false, true)	
+			setElementData(localPlayer, "coremarkers_powerType", false, true)
 		end
 	, delay or 0, 1)
 end
@@ -171,16 +198,16 @@ addEventHandler('onClientPlayerFinish', root, removePower)
 
 function onPlayerUsePower(key, keyState, powerType)
 	if getElementData(localPlayer, "coremarkers_powerType") == false then return end
-	
+
 	local theVehicle = getPedOccupiedVehicle(localPlayer)
 	local x, y, z = getElementPosition(theVehicle)
 	local _, _, rz = getElementRotation(theVehicle)
 	local minX, minY, minZ, maxX, maxY, maxZ = getElementBoundingBox(theVehicle)
-	
+
 
 	if powerType == "spikes" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
-		local z = getGroundPosition(x, y, z)		
+		local z = getGroundPosition(x, y, z)
 		triggerServerEvent("dropSpikes", resourceRoot, x, y, z, rz)
 	elseif powerType == "boost" then
 		local currentSpeed = getElementSpeed(theVehicle, "kmh")
@@ -190,23 +217,23 @@ function onPlayerUsePower(key, keyState, powerType)
 		local blurTimer = setTimer(function() if blurTimer and isTimer(blurTimer) then killTimer(blurTimer) end setBlurLevel(blur) end, 1000, 1)
 		triggerServerEvent("startSound3D", resourceRoot, "boost.mp3")
 		triggerServerEvent("attachMarker", resourceRoot, nil, 1000, 0, 255, 0, 80)
-	elseif powerType == "oil" then 
+	elseif powerType == "oil" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
-		local z = getGroundPosition(x, y, z)	
+		local z = getGroundPosition(x, y, z)
 		triggerServerEvent("dropOil", resourceRoot, x, y, z, rz)
 	elseif powerType == "magnet" then
 		triggerServerEvent("doMagnet", resourceRoot)
 	elseif powerType == "hay" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-2.4, 0)
-		local z = getGroundPosition(x, y, z)	
+		local z = getGroundPosition(x, y, z)
 		triggerServerEvent("dropHay", resourceRoot, x, y, z, rz)
 	elseif powerType == "rock" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-1.5, 0)
-		local z = getGroundPosition(x, y, z)	
+		local z = getGroundPosition(x, y, z)
 		triggerServerEvent("dropRock", resourceRoot, x, y, z, rz)
 	elseif powerType == "ramp" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-2.1, 0)
-		local z = getGroundPosition(x, y, z)	
+		local z = getGroundPosition(x, y, z)
 		triggerServerEvent("dropRamp", resourceRoot, x, y, z, rz)
 	elseif powerType == "rocket" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, maxY+1, 0)
@@ -226,11 +253,11 @@ function onPlayerUsePower(key, keyState, powerType)
 		triggerServerEvent("fixVehicle", resourceRoot, true)
 	elseif powerType == "jump" then
 		triggerServerEvent("doJump", resourceRoot)
-	elseif powerType == "smoke" then 
+	elseif powerType == "smoke" then
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, minY-0.2, 0)
-		local z = getGroundPosition(x, y, z)	
+		local z = getGroundPosition(x, y, z)
 		triggerServerEvent("doSmoke", resourceRoot, x, y, z, rz)
-	elseif powerType == "nitro" then 
+	elseif powerType == "nitro" then
 		addVehicleUpgrade(theVehicle, 1010)
 		setVehicleNitroLevel(theVehicle, 1)
 		triggerServerEvent("giveNitro", resourceRoot)
@@ -253,7 +280,7 @@ function onPlayerUsePower(key, keyState, powerType)
 		--stop radio and pause all other music
 		radioChannel = getRadioChannel()
 		setRadioChannel(0)
-		
+
 		tRestoreAllSounds = {}
 		for _,sound in pairs(getElementsByType("sound")) do
 			if getElementData(sound, "isCoreMarkersSound") then
@@ -266,26 +293,26 @@ function onPlayerUsePower(key, keyState, powerType)
 
 		screenColor = 2
 		screenColorTimer = setTimer(function() screenColor = 1 setTimer(function() if isTimer(screenColorTimer) then screenColor = 2 end end, 200, 1) end, 400, 0)
-		
+
 		triggerServerEvent("startSound3D", resourceRoot, "speed.mp3")
 		triggerServerEvent("speedMode", resourceRoot, speedItemTime)
-		
+
 		--//speed turn off timer
 		speedTimer = setTimer(
-			function() 
+			function()
 				local speed = 1
 				if getElementData(localPlayer, "coremarkers_isPlayerSlowedDown") == true then
 					speed = 0.8
 				end
-				setGameSpeed(speed) 
+				setGameSpeed(speed)
 				for sound,volume in pairs(tRestoreAllSounds) do
 					if isElement(sound) and getElementType(sound) == "sound" and tonumber(volume) then
 						setSoundVolume(sound, volume)
 					end
 				end
 				setRadioChannel(radioChannel)
-				if isTimer(screenColorTimer) then 
-					killTimer(screenColorTimer) 
+				if isTimer(screenColorTimer) then
+					killTimer(screenColorTimer)
 				end
 				screenColor = nil
 			end
@@ -294,7 +321,7 @@ function onPlayerUsePower(key, keyState, powerType)
 		--\\
 		return
 	elseif powerType == "fly" then
-		outputChatBox(">#00ff00CoreMarkers: #ffffffYou can press LAlt button to cancel Fly", 255, 255, 255, true)
+		outputChatBox(">#00ff00CoreMarkers: #ffffffYou can press LAlt or L3/LSB button to cancel Fly", 255, 255, 255, true)
 		vehicleModel = getElementModel(theVehicle)
 		local nitro = getVehicleUpgradeOnSlot(theVehicle, 8)
 		local nitroCount
@@ -312,11 +339,11 @@ function onPlayerUsePower(key, keyState, powerType)
 		setElementModel(theVehicle, 411)
 		triggerServerEvent("startSound3D", resourceRoot, "fly.mp3")
 		triggerServerEvent("flyMode", resourceRoot, flyItemTime)
-		
+
 		--stop radio and pause all other music
 		radioChannel = getRadioChannel()
 		setRadioChannel(0)
-		
+
 		tRestoreAllSounds = {}
 		for _,sound in pairs(getElementsByType("sound")) do
 			if getElementData(sound, "isCoreMarkersSound") then
@@ -326,12 +353,12 @@ function onPlayerUsePower(key, keyState, powerType)
 				setSoundVolume(sound, 0)
 			end
 		end
-		
+
 		if isTimer(flyTimer) then killTimer(flyTimer) end
 		setWorldSpecialPropertyEnabled("aircars", true)
 		removePower(nil, flyItemTime)
 		--//
-		local function stopFlying() 
+		local function stopFlying()
 			unbindKey("lalt", "down", stopFlying)
 			if isTimer(flyTimer) then killTimer(flyTimer) end
 			if isTimer(gravityTimer) then killTimer(gravityTimer) end
@@ -344,7 +371,7 @@ function onPlayerUsePower(key, keyState, powerType)
 				end
 			end
 			setRadioChannel(radioChannel)
-			
+
 			if isElement(theVehicle) then
 				local x, y, z = getElementPosition(theVehicle)
 				local groundZ = getGroundPosition(x, y, z)
@@ -375,12 +402,20 @@ function onPlayerUsePower(key, keyState, powerType)
 					, 50, 0)
 				else
 					setElementModel(theVehicle, lastModel)
-				end					
-			end 
+				end
+			end
 		end
 		--\\
 		flyTimer = setTimer(stopFlying, flyItemTime, 1)
 		bindKey("lalt", "down", stopFlying)
+        function stopFlyingController(button, pressed)
+            if pressed and button == "joy11" then
+                stopFlying()
+                removeEventHandler("onClientKey", root, stopFlyingController)
+            end
+        end
+        addEventHandler("onClientKey", root, stopFlyingController)
+
 		return
 	elseif powerType == "kmz" then
 		triggerServerEvent("kamikazeMode", resourceRoot)
@@ -389,7 +424,7 @@ function onPlayerUsePower(key, keyState, powerType)
 		removePower(nil, kmzItemTime)
 		return
 	end
-	
+
 	removePower()
 end
 
@@ -406,7 +441,7 @@ function DrawLaser(player)
 end
 
 addEvent("slowDownPlayer", true)
-addEventHandler("slowDownPlayer", resourceRoot, 
+addEventHandler("slowDownPlayer", resourceRoot,
 	function (magnetSlowDownTime)
 		--stopSpeed()
 		local speed = 0.8
@@ -416,17 +451,17 @@ addEventHandler("slowDownPlayer", resourceRoot,
 		if isTimer(slowDownTimer) then
 			killTimer(slowDownTimer)
 		end
-		
+
 		setGameSpeed(speed)
 		setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", true)
 		--//
-		slowDownTimer = setTimer(function() 
+		slowDownTimer = setTimer(function()
 									local speed = 1
 									if isTimer(speedTimer) then
 										speed = 2
 									end
-									setGameSpeed(speed) 
-									setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false, true) 
+									setGameSpeed(speed)
+									setElementData(localPlayer, "coremarkers_isPlayerSlowedDown", false, true)
 								end, magnetSlowDownTime, 1)
 		--\\
 	end
@@ -436,13 +471,13 @@ local minigun = {}
 local minigunPlayer = {}
 local minigunTimer = {}
 addEvent("giveMinigun", true)
-addEventHandler("giveMinigun", resourceRoot, 
+addEventHandler("giveMinigun", resourceRoot,
 	function(theVehicle)
 		local minX, minY, minZ, maxX, maxY, maxZ = getElementBoundingBox(theVehicle)
 		local x, y, z = getPositionFromElementOffset(theVehicle, 0, maxY+1, 0)
 		local thePlayer = getVehicleOccupant(theVehicle)
 		if isTimer(minigunTimer[thePlayer]) then killTimer(minigunTimer[thePlayer]) end
-		
+
 		local minigun1 = createWeapon("minigun", x, y, z)
 		setWeaponAmmo(minigun1, 100)
 		setWeaponProperty(minigun1, "fire_rotation", 0, -30, 0)
@@ -458,13 +493,13 @@ addEventHandler("giveMinigun", resourceRoot,
 		setWeaponFiringRate(minigun2, 60)
 		attachElements(minigun2, theVehicle, minX, maxY-1, 0, 0, 30, 90)
 		minigun[minigun2] = thePlayer
-		
+
 		minigunPlayer[thePlayer] = {minigun1, minigun2}
 	end
 )
 
 addEvent("startShootMinigun", true)
-addEventHandler("startShootMinigun", resourceRoot, 
+addEventHandler("startShootMinigun", resourceRoot,
 	function(thePlayer)
 		if not isTimer(minigunTimer[thePlayer]) then
 			if thePlayer == localPlayer then
@@ -482,7 +517,7 @@ addEventHandler("startShootMinigun", resourceRoot,
 				end
 			, minigunItemTime, 1)
 		end
-		
+
 		local minigun1 = minigunPlayer[thePlayer][1]
 		local minigun2 = minigunPlayer[thePlayer][2]
 		if isElement(minigun1) and isElement(minigun2) then
@@ -493,7 +528,7 @@ addEventHandler("startShootMinigun", resourceRoot,
 )
 
 addEvent("stopShootMinigun", true)
-addEventHandler("stopShootMinigun", resourceRoot, 
+addEventHandler("stopShootMinigun", resourceRoot,
 	function(thePlayer)
 		local minigun1 = minigunPlayer[thePlayer][1]
 		local minigun2 = minigunPlayer[thePlayer][2]
@@ -505,7 +540,7 @@ addEventHandler("stopShootMinigun", resourceRoot,
 )
 
 addEvent('createExplosionEffect', true)
-addEventHandler('createExplosionEffect', resourceRoot, 
+addEventHandler('createExplosionEffect', resourceRoot,
 function (x, y, z)
 	createExplosion(x, y, z, 0, true, -1.0, false)
 
@@ -534,7 +569,7 @@ function attachEffect(effect, element, pos)
 	return true
 end
 
-addEventHandler("onClientPreRender", root, 	
+addEventHandler("onClientPreRender", root,
 	function()
 		for fx, info in pairs(attachedEffects) do
 			local x, y, z = getPositionFromElementOffset(info.element, info.pos.x, info.pos.y, info.pos.z)
@@ -561,19 +596,19 @@ end
 )
 
 addEvent("spikesTimerFunction", true)
-addEventHandler("spikesTimerFunction", resourceRoot, 
+addEventHandler("spikesTimerFunction", resourceRoot,
 function ()
 	if isTimer(spikesTimer) then
 		killTimer(spikesTimer)
 	end
-	
-	spikesTimer = setTimer(function() 
-		setElementData(localPlayer, "coremarkers_isPlayerRektBySpikes", false, true) 
+
+	spikesTimer = setTimer(function()
+		setElementData(localPlayer, "coremarkers_isPlayerRektBySpikes", false, true)
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		local s1, _, _, _ = getVehicleWheelStates(theVehicle)
 		if s1 ~= 0 then
 			triggerServerEvent("fixVehicle", resourceRoot, false)
-		end 
+		end
 	end, 10000, 1)
 
 end
@@ -581,7 +616,7 @@ end
 
 
 addEvent("hideSpikesRepairHUD", true)
-addEventHandler("hideSpikesRepairHUD", resourceRoot, 
+addEventHandler("hideSpikesRepairHUD", resourceRoot,
 function ()
 	if isTimer(spikesTimer) then
 		killTimer(spikesTimer)
@@ -643,7 +678,7 @@ function create3DSound(theVehicle, sound)
 	setElementData(sounds[theVehicle], "isCoreMarkersSound", true)
 	setSoundMaxDistance(sounds[theVehicle], 200)
     local soundLength = getSoundLength(sounds[theVehicle])*1000
-	
+
 	soundTimer[theVehicle] = setTimer(
 		function(theVehicle, sound)
 			if not isElement(sound) or not isElement(theVehicle) then return end
@@ -658,13 +693,13 @@ function create3DSound(theVehicle, sound)
             setElementPosition(sound, x, y, z)
 		end
 	, 50, 0, theVehicle, sounds[theVehicle])
-	
+
 	if isTimer(killSoundTimer[theVehicle]) then killTimer(killSoundTimer[theVehicle]) end
 	killSoundTimer[theVehicle] = setTimer(
-		function(soundTimer, theVehicle) 
-			if isTimer(soundTimer) then 
-				killTimer(soundTimer) 
-			end 
+		function(soundTimer, theVehicle)
+			if isTimer(soundTimer) then
+				killTimer(soundTimer)
+			end
 		end
 	, soundLength, 50, soundTimer[theVehicle], theVehicle)
 	return sounds[theVehicle]
@@ -706,10 +741,10 @@ function onClientPlayerWasted()
 	end
 	if source ~= localPlayer then return end
 	if lasthit and isElement(lasthit) and lasttick and getTickCount() - lasttick <= 5000 then
-		if getElementData(localPlayer, "kamikaze") then 
+		if getElementData(localPlayer, "kamikaze") then
 			lasthit = nil
 			lasttick = nil
-			return 
+			return
 		end
 		triggerServerEvent('Kill', localPlayer, lasthit)
 		lasthit = nil
@@ -728,7 +763,7 @@ function vehicleChange(oldModel, newModel)
 			if isTimer(gravityTimer) then killTimer(gravityTimer) end
 		end
 		local thePlayer = getVehicleOccupant(source)
-		if isElement(thePlayer) and getElementData(thePlayer, "coremarkers_powerType") == "minigun" then 
+		if isElement(thePlayer) and getElementData(thePlayer, "coremarkers_powerType") == "minigun" then
 			local minX, minY, minZ, maxX, maxY, maxZ = getElementBoundingBox(source)
 			attachElements(minigunPlayer[thePlayer][1], source, maxX, maxY-1, 0, 0, 30, 90)
 			attachElements(minigunPlayer[thePlayer][2], source, minX, maxY-1, 0, 0, 30, 90)
@@ -744,7 +779,7 @@ addEventHandler("onClientRender",  root,
 				DrawLaser(player)
 			end
 		end
-		
+
 		if isElement(getPedOccupiedVehicle(localPlayer)) then
 			local s1, _, _, _ = getVehicleWheelStates(getPedOccupiedVehicle(localPlayer))
 			if getElementData(localPlayer, "coremarkers_isPlayerRektBySpikes") and s1 ~= 0 then
@@ -757,39 +792,39 @@ addEventHandler("onClientRender",  root,
 				dxDrawRectangle(1023*sWidth/1920, 900*sHeight/1080, 14*sWidth/1920, timeLeft/10000*168*sHeight/1080, tocolor(30, 30, 30, 200))
 			end
 		end
-		
+
 		if getElementData(localPlayer, "coremarkers_powerType") == "speed" then
 			if isTimer(speedTimer) then
-				local timeleft = getTimerDetails(speedTimer) 
+				local timeleft = getTimerDetails(speedTimer)
 				local d = speedItemTime/360
 				dxDrawCircle(circlePosX, circlePosY, circleSize, circleSize, tocolor(255,255,255,185), 0, 360-(timeleft/d), 10*sHeight/1080)
 			end
 		end
-		
+
 		if getElementData(localPlayer, "coremarkers_powerType") == "fly" then
 			if isTimer(flyTimer) then
-				local timeleft = getTimerDetails(flyTimer) 
+				local timeleft = getTimerDetails(flyTimer)
 				local d = flyItemTime/360
 				dxDrawCircle(circlePosX, circlePosY, circleSize, circleSize, tocolor(255,255,255,185), 0, 360-(timeleft/d), 10*sHeight/1080)
 			end
 		end
-		
+
 		if getElementData(localPlayer, "coremarkers_powerType") == "minigun" then
 			if isTimer(minigunTimer[localPlayer]) then
-				local timeleft = getTimerDetails(minigunTimer[localPlayer]) 
+				local timeleft = getTimerDetails(minigunTimer[localPlayer])
 				local d = minigunItemTime/360
 				dxDrawCircle(circlePosX, circlePosY, circleSize, circleSize, tocolor(255,255,255,185), 0, 360-(timeleft/d), 10*sHeight/1080)
 			end
 		end
-		
+
 		if getElementData(localPlayer, "coremarkers_powerType") == "kmz" then
 			if isTimer(kmzTimer) then
-				local timeleft = getTimerDetails(kmzTimer) 
+				local timeleft = getTimerDetails(kmzTimer)
 				local d = kmzItemTime/360
 				dxDrawCircle(circlePosX, circlePosY, circleSize, circleSize, tocolor(255,255,255,185), 0, 360-(timeleft/d), 10*sHeight/1080)
 			end
 		end
-		
+
 		if getElementData(localPlayer, "coremarkers_isPlayerSlowedDown") then
 			dxDrawImage(0, 0, sWidth, sHeight, "pics/effect.png", 0, 0, 0, tocolor(255,255,255,25), true)
 		end

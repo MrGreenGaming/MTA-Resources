@@ -23,12 +23,12 @@ local fullPowerTypesList = {
 	"kmz",
 	"minigun",
 }
-					
+
 ------------------------
 -- Gamemode Detection --
 ------------------------
 addEvent('onMapStarting')
-addEventHandler('onMapStarting', resourceRoot, 
+addEventHandler('onMapStarting', resourceRoot,
 	function(mapInfo, mapOptions, gameOptions)
 		currentMap = mapInfo.resname
 		currentGameMode = string.upper(mapInfo.modename)
@@ -173,7 +173,7 @@ addEventHandler('onMapStarting', resourceRoot,
 					"minigun",
 			}
 		end
-				
+
 		local powerTypes2 = checkItemsListInMapSettings()
 		if powerTypes2 then
 			powerTypes = powerTypes2
@@ -207,9 +207,9 @@ function checkItemsListInMapSettings()
 		end
 	end
 end
-		
+
 addEvent("requestAllowedPowerTypes", true)
-addEventHandler("requestAllowedPowerTypes", resourceRoot, 
+addEventHandler("requestAllowedPowerTypes", resourceRoot,
 	function()
 		triggerClientEvent(client, "getAllowedPowerTypes", resourceRoot, powerTypes)
 	end
@@ -219,22 +219,22 @@ addEventHandler("requestAllowedPowerTypes", resourceRoot,
 --------------------
 -- Initialization --
 --------------------
-addEventHandler("onResourceStart", resourceRoot, 
+addEventHandler("onResourceStart", resourceRoot,
 	function()
 		outputChatBox( '#ffffff"Core Markers" by #00dd22AleksCore #fffffflaunched.', root, 255, 0, 0, true)
 		showText_Create()
-		showText( 54, 201, 46, "Pick-up markers (boxes)\n @\nPress LMB or LCTRL button", 12000, all)
+		showText( 54, 201, 46, "Pick-up markers (boxes)\n @\nPress LMB, LCTRL or L3/LSB button", 12000, all)
 		setTimer(
-			function() 
-				textItemSetColor(showText_Text, 54, 201, 46, 255) 
+			function()
+				textItemSetColor(showText_Text, 54, 201, 46, 255)
 				setTimer(
-					function() 
-						textItemSetColor(showText_Text, 255, 255, 255, 255) 
+					function()
+						textItemSetColor(showText_Text, 255, 255, 255, 255)
 					end
 				, 600, 1)
 			end
 		, 1000, 11)
-		
+
 		local coremarkers = getElementsByType("coremarker")
 		if #coremarkers > 0 then --new way, coremarkers as elements placed into .map file using mrgreen map editor plugin
 			for _, element in ipairs(coremarkers) do
@@ -263,7 +263,7 @@ function spawnPickup(object, x, y, z, isRespawn)
 	if object == nil or getElementType(object) == "coremarker" then
 		object = createObject(3798, x, y, z+0.3)
 	end
-	
+
 	local marker = createMarker(x, y, z-2.75, "cylinder", 3.3, 0, 255, 0, 255)
 	local col = createColSphere(x, y, z, 3.7)
 	setElementParent(object, col)
@@ -281,22 +281,22 @@ function spawnPickup(object, x, y, z, isRespawn)
 	moveObject(object, animationSpeed*1000, x, y, z+box_posZ+amplitude, 0, 0, 0, easing)
 	setTimer(
 		function()
-			if isElement(object) then 
+			if isElement(object) then
 				moveObject(object, animationSpeed*1000, x, y, z+box_posZ-amplitude, 0, 0, 0, easing)
 			end
 		end
 	, animationSpeed*1000, 1)
 	setTimer(
-		function() 
-			if isElement(object) then 
-				moveObject(object, animationSpeed*1000, x, y, z+box_posZ+amplitude, 0, 0, 0, easing) 
+		function()
+			if isElement(object) then
+				moveObject(object, animationSpeed*1000, x, y, z+box_posZ+amplitude, 0, 0, 0, easing)
 				setTimer(
 					function()
 						if isElement(object) then
 							moveObject(object, animationSpeed*1000, x, y, z+box_posZ-amplitude, 0, 0, 0, easing)
 						end
 				end, animationSpeed*1000, 1)
-			end 
+			end
 		end
 	, animationSpeed*2000, 0)
 end
@@ -327,7 +327,7 @@ function getRandomPower(thePlayer) --onColShapeHit
 end
 --For tests only
 -- for k,v in pairs(getElementsByType("player")) do
-	-- bindKey(v, "mouse5", "down", getRandomPower)
+-- 	bindKey(v, "v", "down", getRandomPower)
 -- end
 
 
@@ -336,14 +336,14 @@ end
 -- Drop Spikes Event --
 -----------------------
 addEvent("dropSpikes", true)
-addEventHandler("dropSpikes", resourceRoot, 
+addEventHandler("dropSpikes", resourceRoot,
 	function (x, y, z, rz)
 		local spikes = createObject(2892, 0, 0, -200, 0, 0, rz+90)
 		setObjectScale(spikes, 0.5)
 		setElementPosition(spikes, x, y, z+0.1)
 		local spikesCol = createColSphere(x, y, z, 2.6)
 		setElementParent(spikes, spikesCol)
-		
+
 		addEventHandler("onColShapeHit", spikesCol,
 		function(thePlayer)
 			if getElementType(thePlayer) == "player" then
@@ -364,7 +364,7 @@ addEventHandler("dropSpikes", resourceRoot,
 )
 
 addEvent("onPlayerPickUpRacePickup", true)
-addEventHandler("onPlayerPickUpRacePickup", resourceRoot, 
+addEventHandler("onPlayerPickUpRacePickup", resourceRoot,
 	function(pickupID, pickupType)
 		if pickupType == "repair" then
 			setElementData(source, "coremarkers_isPlayerRektBySpikes", false, true)
@@ -376,7 +376,7 @@ addEventHandler("onPlayerPickUpRacePickup", resourceRoot,
 --- Drop Hay Event --
 ---------------------
 addEvent("dropHay", true)
-addEventHandler("dropHay", resourceRoot, 
+addEventHandler("dropHay", resourceRoot,
 	function (x, y, z, rz)
 		createObject(3374, x, y, z+1.5, 0, 0, rz+90)
 	end
@@ -387,7 +387,7 @@ addEventHandler("dropHay", resourceRoot,
 --- Drop Rock Event --
 ----------------------
 addEvent("dropRock", true)
-addEventHandler("dropRock", resourceRoot, 
+addEventHandler("dropRock", resourceRoot,
 	function (x, y, z, rz)
 		createObject(1305, x, y, z+1.5, 0, 0, rz+90)
 	end
@@ -398,7 +398,7 @@ addEventHandler("dropRock", resourceRoot,
 --- Smoke Event --
 ------------------
 addEvent("doSmoke", true)
-addEventHandler("doSmoke", resourceRoot, 
+addEventHandler("doSmoke", resourceRoot,
 	function (x, y, z, rz)
 		local theVehicle = getPedOccupiedVehicle(client)
 		triggerClientEvent(root, "createSmokeEffect", resourceRoot, x, y, z, rz, theVehicle)
@@ -411,13 +411,13 @@ addEventHandler("doSmoke", resourceRoot,
 ----------------------
 droppedRampTimer = {}
 addEvent("dropRamp", true)
-addEventHandler("dropRamp", resourceRoot, 
+addEventHandler("dropRamp", resourceRoot,
 	function (x, y, z, rz)
 		local ramp = createObject(13645, x, y, z+0.4, 4, 0, rz)
 		local rampCol = createColSphere(x, y, z+0.4, 4)
 		attachElements(rampCol, ramp, 0, 1.5, 0)
 		setElementParent(ramp, rampCol)
-	
+
 		addEventHandler("onColShapeHit", rampCol,
 			function(hitElement)
 				if getElementType(hitElement) == "player" then
@@ -442,7 +442,7 @@ addEventHandler("dropRamp", resourceRoot,
 --------------------------
 barrelCreator = {}
 addEvent("dropBarrels", true)
-addEventHandler("dropBarrels", resourceRoot, 
+addEventHandler("dropBarrels", resourceRoot,
 	function (x, y, z, rz)
 		local barrels = {}
 		barrels[1] = createObject(1225, x, y, z+0.4)
@@ -450,7 +450,7 @@ addEventHandler("dropBarrels", resourceRoot,
 		barrels[3] = createObject(1225, x-0.5, y-0.5, z+0.4)
 		barrels[4] = createObject(1225, x+0.5, y-0.5, z+0.4)
 		barrels[5] = createObject(1225, x-0.5, y+0.5, z+0.4)
-		
+
 		for _, barrel in ipairs(barrels) do
 			barrelCreator[barrel] = client
 		end
@@ -458,7 +458,7 @@ addEventHandler("dropBarrels", resourceRoot,
 )
 
 addEvent("destroyBarrel", true)
-addEventHandler("destroyBarrel", resourceRoot, 
+addEventHandler("destroyBarrel", resourceRoot,
 	function(barrel)
 		if barrelCreator and barrelCreator[barrel] and isElement(barrelCreator[barrel]) then
 			destroyElement(barrel)
@@ -472,7 +472,7 @@ addEventHandler("destroyBarrel", resourceRoot,
 ----------------------------
 local rocketLauncher = {}
 addEvent("createRocketLauncher", true)
-addEventHandler("createRocketLauncher", resourceRoot, 
+addEventHandler("createRocketLauncher", resourceRoot,
 	function(maxY)
 		local theVehicle = getPedOccupiedVehicle(client)
 		rocketLauncher[client] = createObject(360, 0, 0, -50)
@@ -481,7 +481,7 @@ addEventHandler("createRocketLauncher", resourceRoot,
 )
 
 addEvent("removeRocketLauncher", true)
-addEventHandler("removeRocketLauncher", resourceRoot, 
+addEventHandler("removeRocketLauncher", resourceRoot,
 	function()
 		if rocketLauncher and isElement(rocketLauncher[client]) then destroyElement(rocketLauncher[client]) end
 	end
@@ -490,7 +490,7 @@ addEventHandler("removeRocketLauncher", resourceRoot,
 function vehicleChange(oldModel, newModel)
 	if getElementType(source) == "vehicle" then
 		local thePlayer = getVehicleOccupant(source)
-		if isElement(thePlayer) and getElementData(thePlayer, "coremarkers_powerType") == "rocket" then 
+		if isElement(thePlayer) and getElementData(thePlayer, "coremarkers_powerType") == "rocket" then
 			local _, _, _, _, maxY, _ = getVehicleBoundingBox(newModel)
 			attachElements(rocketLauncher[thePlayer], source, -0.04, maxY-0.3, -0.14, 0, 0, 270)
 		end
@@ -503,7 +503,7 @@ addEventHandler("onElementModelChange", resourceRoot, vehicleChange)
 --- Drop Oil Event --
 ---------------------
 addEvent("dropOil", true)
-addEventHandler("dropOil", resourceRoot, 
+addEventHandler("dropOil", resourceRoot,
 	function (x, y, z, rz)
 		local oil = createObject(2717, x, y, z, 90, 0, 0)
 		setObjectScale(oil, 2)
@@ -511,13 +511,13 @@ addEventHandler("dropOil", resourceRoot,
 		setElementParent(oil, oilCol)
 		setElementData(oilCol, "creator", client) --temporary protection for creator from oil
 		setTimer( --remove protection after 2s
-			function() 
-				if isElement(oilCol) then 
+			function()
+				if isElement(oilCol) then
 					setElementData(oilCol, "creator", nil)
 				end
 			end
 		, 2000, 1)
-		
+
 		addEventHandler("onColShapeHit", oilCol,
 		function(thePlayer)
 			if getElementType(thePlayer) == "player" then
@@ -525,9 +525,9 @@ addEventHandler("dropOil", resourceRoot,
 				if math.random(2) == 1 then
 					setElementAngularVelocity(getPedOccupiedVehicle(thePlayer),0, 0, 0.146)
 				else
-					setElementAngularVelocity(getPedOccupiedVehicle(thePlayer),0, 0, -0.146)	
+					setElementAngularVelocity(getPedOccupiedVehicle(thePlayer),0, 0, -0.146)
 				end
-				
+
 				destroyElement(source)
 			end
 		end
@@ -535,14 +535,14 @@ addEventHandler("dropOil", resourceRoot,
 	end
 )
 
-	
+
 --------------------
 -- Kamikaze Event --
 --------------------
 kamikazeTimer = {}
 preKamikazeTimer = {}
 addEvent("kamikazeMode", true)
-addEventHandler("kamikazeMode", resourceRoot, 
+addEventHandler("kamikazeMode", resourceRoot,
 	function()
 		local theVehicle = getPedOccupiedVehicle(client)
 		local marker = attachMarker(theVehicle, 6000, 255, 0, 0, 80)
@@ -587,7 +587,7 @@ addEventHandler("kamikazeMode", resourceRoot,
 					if getElementData(victim, "state") == "alive" then
 						local x2, y2, z2 = getElementPosition(victim)
 						local distance = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
-						if distance <= 35 then 
+						if distance <= 35 then
 							setElementHealth(getPedOccupiedVehicle(victim), 0)
 							if victim ~= thePlayer then
 								sendClientMessage(getFullPlayerName(victim) .. " #ffffffwas killed by " .. getFullPlayerName(thePlayer) .. " (Kamikaze)", root, 255, 255, 255, "bottom")
@@ -622,12 +622,12 @@ addEventHandler("kamikazeMode", resourceRoot,
 --------------------
 local speedMarkerColorTimer = {}
 addEvent("speedMode", true)
-addEventHandler("speedMode", resourceRoot, 
+addEventHandler("speedMode", resourceRoot,
 	function(speedItemTime)
 		local theVehicle = getPedOccupiedVehicle(client)
 		local marker = attachMarker(theVehicle, speedItemTime+200, 255, 125, 0, 80)
 		speedMarkerColorTimer[client] = setTimer(
-			function(marker) 
+			function(marker)
 				if isElement(marker) then
 					local r, g, b = getMarkerColor(marker)
 					if  g == 125 then
@@ -646,7 +646,7 @@ addEventHandler("speedMode", resourceRoot,
 -- Fly Event --
 ---------------
 addEvent("flyMode", true)
-addEventHandler("flyMode", resourceRoot, 
+addEventHandler("flyMode", resourceRoot,
 	function(flyItemTime)
 		local theVehicle = getPedOccupiedVehicle(client)
 		attachMarker(theVehicle, flyItemTime+200, 125, 0, 125, 80)
@@ -658,7 +658,7 @@ addEventHandler("flyMode", resourceRoot,
 -- Magnet Event --
 ------------------
 addEvent("doMagnet", true)
-addEventHandler("doMagnet", resourceRoot, 
+addEventHandler("doMagnet", resourceRoot,
 	function()
 		local killer = client
 		local killer_rank = getElementData(killer, "race rank")
@@ -674,7 +674,7 @@ addEventHandler("doMagnet", resourceRoot,
 				if victim then break end
 			end
 		end
-		
+
 		if victim then
 			setElementData(victim, "coremarkers_isPlayerSlowedDown", true, true)
 			triggerClientEvent(victim, "slowDownPlayer", resourceRoot, magnetSlowDownTime)
@@ -707,7 +707,7 @@ end
 ---------------------------------------
 -- Reset Everything On Death/Respawn --
 ---------------------------------------
-function resetAllTheStuff() 
+function resetAllTheStuff()
 	if getElementType(source) == "player" then
 		player = source
 	elseif getElementType(source) == "vehicle" then
@@ -726,6 +726,9 @@ function resetAllTheStuff()
 	if rocketLauncher and isElement(rocketLauncher[player]) then destroyElement(rocketLauncher[player]) end
 	unbindKey(player, "mouse1", "both", preShootMinigun)
 	unbindKey(player, "lctrl", "both", preShootMinigun)
+    if preShootMinigunController then
+        removeEventHandler("onClientKey", player, preShootMinigunController)
+    end
 end
 addEvent("onPlayerRaceWasted", true)
 addEventHandler("onPlayerRaceWasted", root, resetAllTheStuff)
@@ -733,11 +736,11 @@ addEventHandler ("onVehicleEnter", root, resetAllTheStuff)
 
 
 
-addEventHandler("onElementDataChange", root, 
+addEventHandler("onElementDataChange", root,
 	function(dataName,oldValue)
 		if dataName == "state" then
 			if getElementData(source, dataName) == "spectating" or getElementData(source, dataName) ~= "alive"then
-				resetAllTheStuff(source) 
+				resetAllTheStuff(source)
 			end
 		end
 	end
@@ -748,8 +751,8 @@ addEventHandler("onElementDataChange", root,
 -- Repair Vehicle Event --
 --------------------------
 addEvent("fixVehicle", true)
-addEventHandler("fixVehicle", resourceRoot, 
-	function(fix) 
+addEventHandler("fixVehicle", resourceRoot,
+	function(fix)
 		local theVehicle = getPedOccupiedVehicle(client)
 		if fix then
 			fixVehicle(theVehicle)
@@ -765,8 +768,8 @@ addEventHandler("fixVehicle", resourceRoot,
 -- Nitro Event --
 -----------------
 addEvent("giveNitro", true)
-addEventHandler("giveNitro", resourceRoot, 
-	function() 
+addEventHandler("giveNitro", resourceRoot,
+	function()
 		local theVehicle = getPedOccupiedVehicle(client)
 		addVehicleUpgrade(theVehicle, 1010)
 		playSoundFrontEnd(client, 46)
@@ -778,7 +781,7 @@ addEventHandler("giveNitro", resourceRoot,
 -- Jump Event --
 ----------------
 addEvent("doJump", true)
-addEventHandler("doJump", resourceRoot, 
+addEventHandler("doJump", resourceRoot,
 	function()
 		local theVehicle = getPedOccupiedVehicle(client)
 		local x, y, z = getElementVelocity(theVehicle)
@@ -809,7 +812,7 @@ addEvent("Kill", true)
 addEventHandler("Kill", root,
 	function (killer)
 		if getElementType(killer) == "vehicle" then killer = getVehicleOccupant(killer) end
-		if getElementType(killer) == "object" then 
+		if getElementType(killer) == "object" then
 			if barrelCreator[killer] then
 				killer = barrelCreator[killer]
 			else
@@ -843,6 +846,8 @@ function preShootMinigun(thePlayer, key, keyState)
 		triggerClientEvent(root, "stopShootMinigun", resourceRoot, thePlayer)
 	end
 end
+addEvent("onClientControllerMinigunFire", true)
+addEventHandler("onClientControllerMinigunFire", root, preShootMinigun)
 
 function preGiveMinigun()
 	local theVehicle = getPedOccupiedVehicle(client)
@@ -856,6 +861,7 @@ addEventHandler("preGiveMinigun", resourceRoot, preGiveMinigun)
 function removeMinigun()
 	unbindKey(client, "mouse1", "both", preShootMinigun)
 	unbindKey(client, "lctrl", "both", preShootMinigun)
+    triggerClientEvent(client, "onClientControllerMinigunFireStop", resourceRoot)
 end
 addEvent("removeMinigun", true)
 addEventHandler("removeMinigun", resourceRoot, removeMinigun)
@@ -865,7 +871,7 @@ addEventHandler("removeMinigun", resourceRoot, removeMinigun)
 -- Force CoreMarkers to stop on map stops --
 --------------------------------------------
 addEvent('onGamemodeMapStop', true)
-addEventHandler('onGamemodeMapStop', root, 
+addEventHandler('onGamemodeMapStop', root,
 	function()
 		if getResourceState(resource) == "running" then
 			stopResource(resource)
