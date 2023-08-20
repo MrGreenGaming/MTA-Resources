@@ -11,6 +11,8 @@ local round_started = false
 local round_ended = true
 local isWarEnded  = false
 
+local checkSpectatorsTimer = nil
+
 CurrentGamemode = "Sprint"
 
 -----------------
@@ -81,6 +83,13 @@ function preStart(player, command, t1_name, t2_name, t1tag, t2tag)
 			clientCall(player, 'updateRoundData', c_round, rounds, f_round)
             if mode == "CW" then
                 clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
+                checkSpectatorsTimer = setTimer(function ()
+                    for i,player in ipairs(getElementsByType('player')) do
+                        if getPlayerTeam(player) == teams[3] then
+                            exports.anti:forcePlayerSpectatorMode(player)
+                        end
+                    end
+                end, 2500, 0)
             end
 		end
 	else
@@ -216,6 +225,9 @@ function endRound()
             end
             logScoreDataToConsole()
             destroyTeams(false)
+            if isTimer(checkSpectatorsTimer) then
+                killTimer(checkSpectatorsTimer)
+            end
             stopResource(getThisResource())
 		end
 	end
@@ -471,13 +483,6 @@ addEventHandler('onElementDataChange', root, function(key, old, new)
         if playerTeam == teams[3] and new == 'alive' and old ~= 'not ready' then
             outputInfoForPlayer(source, '#FF0000You\'re not allowed to play as Spectator')
             exports.anti:forcePlayerSpectatorMode(source)
-            setTimer(function()
-                if not isElement(source) then return end
-                local playerTeam = getPlayerTeam(source)
-                if playerTeam == teams[3] then
-                    exports.anti:forcePlayerSpectatorMode(source)
-                end
-            end, 4000, 1)
         end
     end
 end)
