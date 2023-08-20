@@ -117,10 +117,23 @@ function funRound(player)
 	end
 end
 
+function realRound(player)
+    if isAdmin(player) then
+        f_round = false
+        for i,player in ipairs(getElementsByType('player')) do
+            clientCall(player, 'updateRoundData', c_round, rounds, f_round)
+        end
+        outputInfo('Active round')
+    else
+        outputInfoForPlayer(player, 'You are not admin')
+    end
+end
+
 --------- { COMMANDS } ----------
 addCommandHandler('newtr', preStart)
 addCommandHandler('endtr', destroyTeams)
 addCommandHandler('fun', funRound)
+addCommandHandler('endfun', realRound)
 
 function outputInfo(info)
 	for i, player in ipairs(getElementsByType('player')) do
