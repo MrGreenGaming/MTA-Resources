@@ -419,6 +419,7 @@ end
 
 function team1Choosen()
 	serverCall('setPlayerTeam', localPlayer, teams[1])
+    triggerServerEvent('onPlayerChangeTeam', localPlayer, teams[1])
 	if not guiGetVisible(a_window) then
 		showCursor(false)
 	end
@@ -428,6 +429,7 @@ end
 
 function team2Choosen()
 	serverCall('setPlayerTeam', localPlayer, teams[2])
+    triggerServerEvent('onPlayerChangeTeam', localPlayer, teams[2])
 	if not guiGetVisible(a_window) then
 		showCursor(false)
 	end
@@ -437,6 +439,7 @@ end
 
 function team3Choosen()
 	serverCall('setPlayerTeam', localPlayer, teams[3])
+    triggerServerEvent('onPlayerChangeTeam', localPlayer, teams[3])
 	if not guiGetVisible(a_window) then
 		showCursor(false)
 	end

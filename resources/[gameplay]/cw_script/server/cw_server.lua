@@ -350,6 +350,15 @@ function playerLogin(p_a, c_a)
 	end
 end
 
+function onPlayerChangeTeam(team)
+    setColors(source, getPedOccupiedVehicle(source))
+    if team == team[3] then
+        exports.anti:forcePlayerSpectatorMode(source)
+    end
+end
+addEvent("onPlayerChangeTeam", true)
+addEventHandler("onPlayerChangeTeam", root, onPlayerChangeTeam)
+
 -------------------
 -- FROM ADMIN PANEL
 -------------------
