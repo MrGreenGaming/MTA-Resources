@@ -449,6 +449,13 @@ addEventHandler('onElementDataChange', root, function(key, old, new)
         if playerTeam == teams[3] and new == 'alive' and old ~= 'not ready' then
             outputInfoForPlayer(source, '#FF0000You\'re not allowed to play as Spectator')
             exports.anti:forcePlayerSpectatorMode(source)
+            setTimer(function()
+                if not isElement(source) then return end
+                local playerTeam = getPlayerTeam(source)
+                if playerTeam == teams[3] then
+                    exports.anti:forcePlayerSpectatorMode(source)
+                end
+            end, 4000, 1)
         end
     end
 end)
