@@ -352,7 +352,7 @@ end
 
 function onPlayerChangeTeam(team)
     setColors(source, getPedOccupiedVehicle(source))
-    if team == team[3] then
+    if team == getTeamName(teams[3]) then
         exports.anti:forcePlayerSpectatorMode(source)
     end
 end
