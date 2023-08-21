@@ -79,9 +79,7 @@ function toggleTimes(b)
 	end
 	tick = getTickCount()
 end
-addCommandHandler('showtops', function()
-	toggleTimes(true)
-end)
+addCommandHandler('showtops', toggleTimes)
 bindKey('F5', 'down', function() toggleTimes() end)
 
 function updateTexture()
@@ -222,7 +220,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
             guiGridListAddRow(confirmGUI.toplist)
         end
 		addEventHandler('onClientGUIClick',confirmGUI.toplist, adminClickedOnTopsList, false)
-		
+
         confirmGUI.label[1] = guiCreateLabel(58, 48, 244, 36, "Select Top Time", false, confirmGUI.window[1])
         guiSetFont(confirmGUI.label[1], "default-bold-small")
         guiLabelSetColor(confirmGUI.label[1], 0, 255, 0)
@@ -263,7 +261,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
         guiEditSetMaxLength(confirmGUI.reasonEditBox, 60)
         confirmGUI.label[7] = guiCreateLabel(320, 48, 342, 36, "Selected Top Info", false, confirmGUI.window[1])
         guiSetFont(confirmGUI.label[7], "default-bold-small")
-        guiLabelSetVerticalAlign(confirmGUI.label[7], "center")    
+        guiLabelSetVerticalAlign(confirmGUI.label[7], "center")
     end
 )
 local ttm_topsTable = false
