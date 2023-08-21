@@ -79,7 +79,7 @@ function toggleTimes(b)
 	end
 	tick = getTickCount()
 end
-addCommandHandler('showtops', toggleTimes)
+addCommandHandler('showtops', function() toggleTimes() end)
 bindKey('F5', 'down', function() toggleTimes() end)
 
 function updateTexture()
