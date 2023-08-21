@@ -27,6 +27,8 @@
 	<script src="minimize_s.lua" type="server" />
 	<script src="minimize.lua" type="client" />
 
+    <script src="afk_auto_kick.lua" type="server" />
+
 	<!--
 	<script src="timeout_c.lua" type="client" />
 	<script src="timeout.lua" type="server" />
@@ -38,6 +40,7 @@
 	<settings>
 		<setting name='@differenceBetweenMessages_ms' value='[4000]' /> <!-- in this time (in miliseconds), player can send specific amount of messages -->
 		<setting name='@messagesNumber' value='[4]' /> <!-- the amount of messages player can send in the amount of ms set above -->
+        <setting name="*afkTimeBeforeKick" value="120" friendlyname="Auto Kick Player Time" desc="Time in minutes before a player gets automatically kicked for being AFK" />
 	</settings>
 
 	<min_mta_version server="1.5.1-9.07633" />
