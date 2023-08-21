@@ -16,12 +16,12 @@ function onMapStarting(mapInfo, mapOptions, gameOptions)
 	-- Tell client to stop any previous gm checking and reset vars
 	mapHasJustStarted = true
 	dimensionsEnabled = false
-	for _, player in ipairs(getElementsByType('player')) do
+	for _, player in ipairs(getElementsByType('player')) do 
 		g_Players[player] = {}
 		g_Players[player].timesPerMap = 0
 		if getElementData(player, "kKey") == "spectating" then
 			setElementData(player, "kKey", "alive")
-		end
+		end	
 		setElementData(player, "dim", 0)
 	end
 	--if enough players, start dividing them up
@@ -48,30 +48,30 @@ function onMapStarting(mapInfo, mapOptions, gameOptions)
 				elseif g_PlayersRank[player] <= i*2 or dimensionsEnabled == 2 then
 					setElementData(player, "dim", 1)
 				else
-					setElementData(player, "dim", 2)
+					setElementData(player, "dim", 2)	
 				end
 			else
 			-- else, just fill up dimensions
-				setElementData(player, "dim", theKey % dimensionsEnabled)
-			end
+				setElementData(player, "dim", theKey % dimensionsEnabled)	
+			end	
 		end
 		mapUseGM = mapOptions['ghostmode']
 	end
 	triggerClientEvent('onServerMapStarting', root, dimensionsEnabled)
 	-- reset ranks for the next map
 	g_PlayersRank = {}
-end
+end	
 addEventHandler("onMapStarting", root, onMapStarting)
 
 
 -- Remember ranks to group players with similar skills
 function onPostFinish()
-	for _, player in ipairs(getElementsByType('player')) do
+	for _, player in ipairs(getElementsByType('player')) do 
 		local rank = getElementData(player, 'race rank')
 		if rank and tonumber(rank) then
 			g_PlayersRank[player] = rank
-		end
-	end
+		end	
+	end	
 end
 addEvent('onPostFinish', true)
 addEventHandler('onPostFinish', root, onPostFinish)
@@ -97,9 +97,9 @@ addEventHandler('onPlayerQuit', root, onPlayerQuit)
 -- Stopping resource: disable dimensions
 function onResourceStop()
 	exports.scoreboard:removeScoreboardColumn("dim", root)
-	for _,player in ipairs(getElementsByType('player')) do
+	for _,player in ipairs(getElementsByType('player')) do 
 		setElementData(player, "dim", 0)
-	end
+	end	
 end
 addEventHandler('onResourceStop', resourceRoot, onResourceStop)
 
@@ -107,10 +107,10 @@ addEventHandler('onResourceStop', resourceRoot, onResourceStop)
 function onRaceStateChanging ( state )
 	if state == "PostFinish" then
 		triggerClientEvent('onServerMapStarting', root, dimensionsEnabled)
-	end
+	end	
 	if state == "Running" then
 		mapHasJustStarted = false
-	end
+	end	
 end
 addEvent('onRaceStateChanging', true)
 addEventHandler('onRaceStateChanging', root, onRaceStateChanging)
@@ -134,16 +134,16 @@ addEventHandler('onPlayerReachCheckpoint', root, onPlayerReachCheckpoint)
 function changeDimension()
 	if mapHasJustStarted then return end
 	if getElementData(source, "state") == "finished" then return end
-
-	exports.messages:outputGameMessage("You will join the First dimension in 3 seconds.", source, 2.5, 255, 0, 0, true)
-
-	setTimer( function(player)
+	
+	exports.messages:outputGameMessage("You will join the First dimension in 3 seconds.", source, 2.5, 255, 0, 0, true)	
+	
+	setTimer( function(player) 
 			if (not mapHasJustStarted) and mapUseGM ~= true and isElement(player) then
 				setElementData( player, "overrideCollide.uniqueblah", 0, false )
 				setElementData( player, "overrideAlpha.uniqueblah", 180, false )
 			end
 		end, 2500, 1, source)
-
+	
 	setTimer( function(player)
 			if (not mapHasJustStarted) and isElement(player) then
 				local oldTeam = getElementData(player, "dim")
@@ -157,7 +157,7 @@ function changeDimension()
 				else
 					exports.messages:outputGameMessage("Dimension changed!", player, 2.5, 255, 0, 0, true)
 				end
-			end
+			end	
 		end, 3000, 1, source)
 end
 addEvent('changeDimension', true)
@@ -205,18 +205,25 @@ local allowedModes = {
 	['Reach the flag'] = true,
 	['Never the same'] = true,
 	['Sprint'] = true
-
+	
 }
 
+local carHideCooldowns = {}
+local carHideCooldownAmount = 7000
 function carhideKeyHandler(player,key,keystate)
 	if keystate ~= "down" then return end
 	if not carHideAllowed then return end
 	if not player then return end
+	if carHideCooldowns[player] then
+		outputChatBox("[CarHide] #FFFFFFPlease wait "..(carHideCooldownAmount/1000).." seconds before changing carhide again!",player,0,255,0,true)
+		return
+	end
 	local playerVeh = getPedOccupiedVehicle(player)
 	if not playerVeh then return end
 
 	-- Check for gamemode/spectate
-	if exports.race:getRaceMode() ~= 'Reach the flag' and not isGhostModeEnabled(player) or isPlayerSpectating(player) then return end
+	if exports.race:getRaceMode() ~= 'Reach the flag' and not isGhostModeEnabled(player) or isPlayerSpectating(player) then return end 
+	carHideCooldowns[player] = setTimer(function() carHideCooldowns[player] = nil end, carHideCooldownAmount, 1)
 	if getElementData(player,"carhide") then -- If player is in a dimension
 
 		removeElementData(player,'carhide')
@@ -230,21 +237,21 @@ end
 addCommandHandler("carhide", function(playersource, command) carhideKeyHandler(playersource, "x", "down") end)
 
 function carHideState ( state )
-	if not allowedModes[exports.race:getRaceMode()] then
+	if not allowedModes[exports.race:getRaceMode()] then 
 		-- Reset
 		carHideAllowed = false
 		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
-		return
+		return 
 	end
-
-	if state == "GridCountdown" then
+	
+	if state == "GridCountdown" then	
 		local coreMarkersState = getResourceState( getResourceFromName"coremarkers" )
 		if coreMarkersState == "running" then
 			carHideAllowed = false
 			triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
-			return
+			return 
 		end
-
+		
 		carHideAllowed = true
 		for _,p in ipairs(getElementsByType("player")) do
 			removeElementData(p,'carhide')
@@ -259,12 +266,12 @@ function carHideState ( state )
 			removeElementData(p,'carhide')
 			unbindKey(p,"x","down",carhideKeyHandler)
 		end
-
+		
 		triggerClientEvent("onCarHideStatusChange",root,false,exports.race:getRaceMode())
 
 	elseif state == "NoMap" then
 		carHideAllowed = false
-
+		
 		for _,p in ipairs(getElementsByType("player")) do
 			removeElementData(p,'carhide')
 			unbindKey(p,"x","down",carhideKeyHandler)
@@ -289,7 +296,7 @@ end
 function watchGhostMode(key, old, new)
 	-- Watch for ghostmode, and disable carhide when a player loses ghostmode
 	if (key == 'overrideCollide.uniqueblah' or key == 'overrideAlpha.uniqueblah') and getElementType(source) == 'player' and carHideAllowed and not isGhostModeEnabled(source) then
-		triggerClientEvent(source, "onCarHideStatusChange",root,false, exports.race:getRaceMode())
+		triggerClientEvent(source, "onCarHideStatusChange",root,false, exports.race:getRaceMode())	
 		removeElementData(source,'carhide')
 	end
 end
