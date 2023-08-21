@@ -116,7 +116,7 @@ function changePic(number)
 end
 
 function preShootMinigunController(button, pressed)
-    if button == "joy11" then
+    if button == "joy11" or button == "joy9" then
         if pressed then
             triggerServerEvent("onClientControllerMinigunFire", root, localPlayer, nil, "down")
         else
@@ -139,7 +139,7 @@ function givePower(powerType)
 	bindKey("lctrl", "down", onPlayerUsePower, powerType)
 
     function onControllerUsePower(button, pressed)
-        if pressed and button == "joy11" then
+        if pressed and (button == "joy11" or button == "joy9") then
             onPlayerUsePower(nil, nil, powerType)
         end
     end
@@ -409,7 +409,7 @@ function onPlayerUsePower(key, keyState, powerType)
 		flyTimer = setTimer(stopFlying, flyItemTime, 1)
 		bindKey("lalt", "down", stopFlying)
         function stopFlyingController(button, pressed)
-            if pressed and button == "joy11" then
+            if pressed and (button == "joy11" or button == "joy9") then
                 stopFlying()
                 removeEventHandler("onClientKey", root, stopFlyingController)
             end
