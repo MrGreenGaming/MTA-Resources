@@ -46,7 +46,10 @@ visual = { -- Standard Settings, 0 = off --
 	["nitrocolor"] = "0078FF",
 	["lodrange"] = 0,
 	["customHornIcons"] = 1,
-    ["controller"] = 0 -- 0 = "XBOX", 1 = "Playstation"
+    ["controller"] = 0, -- 0 = "XBOX", 1 = "Playstation"
+    ["controllerStart"] = 1, -- 1 allow Start bind, 0 disallow
+    ["controllerSelect"] = 1, -- 1 allow Select bind, 0 disallow
+    ["controllerLogo"] = 1, -- 1 allow Logo bind, 0 disallow
 }
 
 
@@ -263,6 +266,38 @@ function visualCheckBoxHandler()
 			v_setSaveTimer()
 			visual["customHornIcons"] = 0
 		end
+
+    elseif source == GUIEditor.checkbox["controllerStart"] then
+        if guiCheckBoxGetSelected( GUIEditor.checkbox["controllerStart"] ) then
+            triggerEvent("allowControllerStartBind", root, true)
+            v_setSaveTimer()
+            visual["controllerStart"] = 1
+        else
+            triggerEvent("allowControllerStartBind", root, false)
+            v_setSaveTimer()
+            visual["controllerStart"] = 0
+        end
+
+    elseif source == GUIEditor.checkbox["controllerSelect"] then
+        if guiCheckBoxGetSelected( GUIEditor.checkbox["controllerSelect"] ) then
+            triggerEvent("allowControllerSelectBind", root, true)
+            v_setSaveTimer()
+            visual["controllerSelect"] = 1
+        else
+            triggerEvent("allowControllerSelectBind", root, false)
+            v_setSaveTimer()
+            visual["controllerSelect"] = 0
+        end
+    elseif source == GUIEditor.checkbox["controllerLogo"] then
+        if guiCheckBoxGetSelected( GUIEditor.checkbox["controllerLogo"] ) then
+            triggerEvent("allowControllerLogoBind", root, true)
+            v_setSaveTimer()
+            visual["controllerLogo"] = 1
+        else
+            triggerEvent("allowControllerLogoBind", root, false)
+            v_setSaveTimer()
+            visual["controllerLogo"] = 0
+        end
 	end
 end
 addEventHandler("onClientGUIClick", resourceRoot, visualCheckBoxHandler)
@@ -588,6 +623,29 @@ function setVisualGUI()
             guiComboBoxSetSelected( GUIEditor.combobox["controller"], u )
             triggerEvent("updateControllerSetting", localPlayer, getControllerName(u))
 
+        elseif f == "controllerStart" then
+            if u == 0 then
+                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerStart"], false )
+            elseif u == 1 then
+                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerStart"], true )
+                triggerEvent("allowControllerStartBind", root, true)
+            end
+
+        elseif f == "controllerSelect" then
+            if u == 0 then
+                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerSelect"], false )
+            elseif u == 1 then
+                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerSelect"], true )
+                triggerEvent("allowControllerSelectBind", root, true)
+            end
+
+        elseif f == "controllerLogo" then
+            if u == 0 then
+                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerLogo"], false )
+            elseif u == 1 then
+                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerLogo"], true )
+                triggerEvent("allowControllerLogoBind", root, true)
+            end
 		elseif f == "bloom" then
 			if u == 1 then
 				guiCheckBoxSetSelected( GUIEditor.checkbox["bloom"], true )

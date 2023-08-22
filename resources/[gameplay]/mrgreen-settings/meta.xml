@@ -27,7 +27,7 @@
     <include resource="-shaders-watershine"/>
 
 	<!-- Images -->
-	
+
 	<file src="img/dot_white.png"></file>
     <file src="img/sprite.png"></file>
 
@@ -35,14 +35,16 @@
 	<script src="gui.lua" type="client" />
     <script src="visual.lua" type="client" />
     <script src="sound.lua" type="client" />
-    
+
     <script src="userinterface.lua" type="client" />
     <script src="s_userinterface.lua" type="server" />
+
+    <script src="controller-binds.lua" type="client" />
 
     <script src="social.lua" type="client" />
     <script src="s_social.lua" type="server" />
 
-    
+
     <!-- tooltip script by "Aibo" -->
     <script src="tooltips.lua" type="client" />
 
@@ -265,12 +267,10 @@
 
 
 
-    
+
 </meta>
-    
+
     <info name="MrGreen Settings" author="KaliBwoy" version="1.0.1" description="A central place to set all settings"></info>
     <settings>
     </settings>
 </meta>
-
-

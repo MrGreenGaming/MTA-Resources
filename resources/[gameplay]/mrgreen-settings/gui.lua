@@ -345,6 +345,15 @@ local screenW, screenH = guiGetScreenSize()
         guiComboBoxAddItem(GUIEditor.combobox["controller"], "PlayStation")
         guiComboBoxSetSelected(GUIEditor.combobox["controller"], 0)
 
+        GUIEditor.label["controllerStart"] = guiCreateLabel(104, 123+25, 300, 15, "Press Start to toggle spectator mode", false, GUIEditor.tab[6])
+        GUIEditor.checkbox["controllerStart"] = guiCreateCheckBox(78, 122+25, 15, 15, "", false, false, GUIEditor.tab[6])
+
+        GUIEditor.label["controllerSelect"] = guiCreateLabel(104, 123+25+25, 300, 15, "Press Select/Back to toggle map info & toptimes", false, GUIEditor.tab[6])
+        GUIEditor.checkbox["controllerSelect"] = guiCreateCheckBox(78, 122+25+25, 15, 15, "", false, false, GUIEditor.tab[6])
+
+        GUIEditor.label["controllerLogo"] = guiCreateLabel(104, 123+25+25+25, 300, 15, "Press Logo button to show scoreboard", false, GUIEditor.tab[6])
+        GUIEditor.checkbox["controllerLogo"] = guiCreateCheckBox(78, 122+25+25+25, 15, 15, "", false, false, GUIEditor.tab[6])
+
 -- end controller tab
 
 
