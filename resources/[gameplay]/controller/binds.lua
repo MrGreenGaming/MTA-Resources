@@ -21,15 +21,13 @@ function bindControllerKey(key, onPressed, onReleased, ...)
         registeredEvents[name] = function(actualKey, actualPressed)
             if actualKey == getKey(key) then
                 if actualPressed then
-                    if (not onPressed) then
-                        return
+                    if onPressed then
+                        triggerEvent(onPressed, root, key, unpack(args))
                     end
-                    triggerEvent(onPressed, root, key, unpack(args))
                 else
-                    if (not onReleased) then
-                        return
+                    if onReleased then
+                        triggerEvent(onReleased, root, key, unpack(args))
                     end
-                    triggerEvent(onReleased, root, key, unpack(args))
                 end
             end
         end
