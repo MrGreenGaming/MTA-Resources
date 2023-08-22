@@ -115,21 +115,26 @@ function changePic(number)
 	changePicTimer = setTimer(changePic, animSpeed*(delay/timeleft), 1, nextNumber)
 end
 
-function preShootMinigunController(button, pressed)
-    if button == "joy11" or button == "joy9" then
-        if pressed then
-            triggerServerEvent("onClientControllerMinigunFire", root, localPlayer, nil, "down")
-        else
-            triggerServerEvent("onClientControllerMinigunFire", root, localPlayer, nil, "up")
-        end
-    end
-end
+addEvent("controllerUsePower")
+addEventHandler("controllerUsePower", root, function (_, powerType)
+    onPlayerUsePower(nil, nil, powerType)
+end)
+
+addEvent("controllerShootMinigunPower")
+addEventHandler("controllerShootMinigunPower", root, function ()
+    triggerServerEvent("onClientControllerMinigunFire", root, localPlayer, nil, "down")
+end)
+
+addEvent("controllerStopShootMinigunPower")
+addEventHandler("controllerStopShootMinigunPower", root, function ()
+    triggerServerEvent("onClientControllerMinigunFire", root, localPlayer, nil, "up")
+end)
 
 function removeShootMinigunController()
-    removeEventHandler("onClientKey", root, preShootMinigunController)
+    exports.controller:unbindControllerKey("l3", "controllerShootMinigunPower", "controllerStopShootMinigunPower")
 end
-addEvent("onClientControllerMinigunFireStop", true)
-addEventHandler("onClientControllerMinigunFireStop", root, removeShootMinigunController)
+addEvent("onClientControllerRemoveMinigunPower", true)
+addEventHandler("onClientControllerRemoveMinigunPower", root, removeShootMinigunController)
 
 function givePower(powerType)
 	if isElement(_typePicture) then destroyElement(_typePicture) end
@@ -138,12 +143,7 @@ function givePower(powerType)
 	bindKey("mouse1", "down", onPlayerUsePower, powerType)
 	bindKey("lctrl", "down", onPlayerUsePower, powerType)
 
-    function onControllerUsePower(button, pressed)
-        if pressed and (button == "joy11" or button == "joy9") then
-            onPlayerUsePower(nil, nil, powerType)
-        end
-    end
-    addEventHandler("onClientKey", root, onControllerUsePower)
+    exports.controller:bindControllerKey("l3", "controllerUsePower", nil, powerType)
 
 	setElementData(localPlayer, "coremarkers_powerType", powerType, true)
 	guiSetAlpha(typePicture, 1)
@@ -154,8 +154,8 @@ function givePower(powerType)
 	if powerType == "rocket" then
 		triggerServerEvent("createRocketLauncher", resourceRoot, maxY)
 	elseif powerType == "minigun" then
-        addEventHandler("onClientKey", root, preShootMinigunController)
 		triggerServerEvent("preGiveMinigun", resourceRoot)
+        exports.controller:bindControllerKey("l3", "controllerShootMinigunPower", "controllerStopShootMinigunPower")
 	end
 end
 
@@ -163,9 +163,7 @@ end
 function removePower(powerType, delay)
 	unbindKey("mouse1", "down", onPlayerUsePower)
 	unbindKey("lctrl", "down", onPlayerUsePower)
-    if onControllerUsePower then
-        removeEventHandler("onClientKey", root, onControllerUsePower)
-    end
+    exports.controller:unbindControllerKey("l3", "controllerUsePower")
 	if isElement(_typePicture) then destroyElement(_typePicture) end
 	if isTimer(givePowerTimer) then killTimer(givePowerTimer) end
 	if powerType == "rocket" then
@@ -321,7 +319,7 @@ function onPlayerUsePower(key, keyState, powerType)
 		--\\
 		return
 	elseif powerType == "fly" then
-		outputChatBox(">#00ff00CoreMarkers: #ffffffYou can press LAlt or L3/LSB button to cancel Fly", 255, 255, 255, true)
+		outputChatBox(">#00ff00CoreMarkers: #ffffffYou can press LAlt or " .. exports.controller:getLabel("l3") .. " button to cancel Fly", 255, 255, 255, true)
 		vehicleModel = getElementModel(theVehicle)
 		local nitro = getVehicleUpgradeOnSlot(theVehicle, 8)
 		local nitroCount
@@ -408,13 +406,13 @@ function onPlayerUsePower(key, keyState, powerType)
 		--\\
 		flyTimer = setTimer(stopFlying, flyItemTime, 1)
 		bindKey("lalt", "down", stopFlying)
-        function stopFlyingController(button, pressed)
-            if pressed and (button == "joy11" or button == "joy9") then
-                stopFlying()
-                removeEventHandler("onClientKey", root, stopFlyingController)
-            end
-        end
-        addEventHandler("onClientKey", root, stopFlyingController)
+        exports.controller:bindControllerKey("l3", "controllerStopFly")
+
+        addEvent("controllerStopFly")
+        addEventHandler("controllerStopFly", root, function()
+            stopFlying()
+            exports.controller:unbindControllerKey("l3", "controllerStopFly")
+        end)
 
 		return
 	elseif powerType == "kmz" then
