@@ -25,16 +25,16 @@ function main()
 				setPlayerSpectate(true)
 				warned = nil
 				isPlayerAFK = true
-			elseif (afk >= warn) and commandAFK == false and not warned then		
+			elseif (afk >= warn) and commandAFK == false and not warned then
 				triggerServerEvent("warnPlayerIdle", localPlayer, "warnPlayer")
 				warned = true	-- We warned the player
 				isPlayerAFK = false
-			end	
+			end
 		else
 			-- The player isn't afk anymore
 			if warned ~= false then
 				triggerServerEvent("warnPlayerIdle", localPlayer, "removeWarn")
-			end	
+			end
 			isPlayerAFK = false
 			warned = false		-- False: The on screen warning is removed
 			afk = 0
@@ -55,16 +55,16 @@ function spawnAFKchecker()
 					setPlayerSpectate(true)
 					warned = false
 					isPlayerAFK = true
-				elseif (spawnafk >= spawnwarn) and commandAFK == false and not warned then		
+				elseif (spawnafk >= spawnwarn) and commandAFK == false and not warned then
 					triggerServerEvent("warnPlayerIdle", localPlayer, "warnPlayer")
 					warned = true	-- We warned the player
 					isPlayerAFK = false
-				end	
+				end
 			else
 			-- The player isn't afk anymore
 				if warned ~= false then
 					triggerServerEvent("warnPlayerIdle", localPlayer, "removeWarn")
-				end	
+				end
 			warned = false		-- False: The on screen warning is removed
 			spawnafk = 0
 			isPlayerAFK = false
@@ -76,7 +76,7 @@ end
 
 function detectInput(button,pressOrRelease)
 	if pressOrRelease and button ~= "lalt" and button ~= "tab" and button ~= "escape" then
-		if warned and not isPlayerAFK then 
+		if warned and not isPlayerAFK then
 			triggerServerEvent("warnPlayerIdle", localPlayer, "removeWarn")
 			warned = false
 			afk  = 0
@@ -87,7 +87,7 @@ end
 addEventHandler("onClientKey", root, detectInput)
 
 function removePlayerIdle()
-	
+
 		triggerServerEvent("warnPlayerIdle", localPlayer, "removeWarn")
 		warned = false
 		afk  = 0
@@ -99,6 +99,8 @@ bindKey("b","down",removePlayerIdle)
 bindKey("accelerate","down",removePlayerIdle)
 bindKey("brake_reverse","down",removePlayerIdle)
 
+addEvent('controllerRemoveAFK')
+addEventHandler('controllerRemoveAFK', root, removePlayerIdle)
 
 addEvent("usedAFKcommand", true)
 addEventHandler("usedAFKcommand", resourceRoot, function() commandAFK = true end)

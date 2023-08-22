@@ -15,7 +15,7 @@ g_Objects = {}
 addEventHandler('onClientResourceStart', g_ResRoot,
 	function()
 		g_Players = getElementsByType('player')
-		
+
         fadeCamera(false,0.0)
 		-- create GUI
 		local screenWidth, screenHeight = guiGetScreenSize()
@@ -39,15 +39,15 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 		guiSetFont(g_GUI.timeleft, 'default-bold-small')
 		guiLabelSetHorizontalAlign(g_GUI.timeleft, 'center')
 		g_GUI.speedbar:setProgress(0)
-		
+
 		hideGUIComponents('timeleftbg', 'timeleft', 'healthbar', 'speedbar', 'ranknum', 'ranksuffix', 'checkpoint', 'timepassed')
         RankingBoard.precreateLabels(10)
-		
+
 		-- set update handlers
 		g_PickupStartTick = getTickCount()
 		addEventHandler('onClientRender', g_Root, updateBars)
 		g_WaterCheckTimer = setTimer(checkWater, 1000, 0)
-		
+
 		-- load pickup models and textures
 		for name,id in pairs(g_ModelForPickupType) do
 			engineImportTXD(engineLoadTXD('model/' .. name .. '.txd'), id)
@@ -159,7 +159,7 @@ function TravelScreen.init()
 	-- Edit, changing the fonts to a neater look.
 --[[	g_dxGUI['travelText1'] = dxText:create('Travelling to', screenWidth/2, screenHeight/2-130, false, 'bankgothic', 0.60, 'center' )
 	g_dxGUI['travelText2'] = dxText:create('', screenWidth/2, screenHeight/2-100, false, 'bankgothic', 0.70, 'center' )
-	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-70, false, 'bankgothic', 0.70, 'center' ) 
+	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-70, false, 'bankgothic', 0.70, 'center' )
 	-- Edit #4, server ad
 	g_dxGUI['travelText4'] = dxText:create('', screenWidth/2, screenHeight/2-40, false, 'bankgothic', 0.45, 'center' )
     g_dxGUI['travelText1']:color(240,240,240) ]]
@@ -167,12 +167,12 @@ function TravelScreen.init()
 	g_dxGUI['travelText2'] = dxText:create('', screenWidth/2, screenHeight/2-100, false, 'default-bold', 1.70, 'center' )
 	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-70, false, 'default-bold', 1.70, 'center' )
 	g_dxGUI['travelText4'] = dxText:create('', screenWidth/2, screenHeight/2-40, false, 'default-bold', 1.45, 'center' )
-	-- colors 
+	-- colors
 	g_dxGUI['travelText1']:color(104, 232, 44)
 	g_dxGUI['travelText2']:color(244, 244, 244)
 	g_dxGUI['travelText3']:color(104, 232, 44)
 	g_dxGUI['travelText4']:color(104, 232, 44)
-	
+
 
     hideGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3')
 	guiMoveToBack(g_GUI['travelImage'])
@@ -180,7 +180,7 @@ end
 
 function TravelScreen.show( mapName, authorName )
     TravelScreen.startTime = getTickCount()
-    g_dxGUI['travelText2']:text(mapName) 
+    g_dxGUI['travelText2']:text(mapName)
 	g_dxGUI['travelText3']:text(authorName and "Author: " .. authorName or "")
 	-- Edit #4, server ad
 	g_dxGUI['travelText4']:text('Want to try something else? Join our second server! Press F2')
@@ -221,23 +221,23 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
     -- outputDebugString( 'initRace start' )
     outputDebug( 'MISC', 'initRace start' )
 	unloadAll()
-	
+
 	g_Players = getElementsByType('player')
 	g_MapOptions = mapoptions
 	g_GameOptions = gameoptions
 	g_MapInfo = mapinfo
     g_PlayerInfo = playerInfo
     triggerEvent('onClientMapStarting', g_Me, mapinfo, mapoptions )
-	
+
 	g_dxGUI.mapdisplay:text("Map: "..g_MapInfo.name)
-	
+
 	fadeCamera(true)
 	showHUD(false)
-	
+
 	g_Vehicle = vehicle
 	setVehicleDamageProof(g_Vehicle, true)
 	OverrideClient.updateVars(g_Vehicle)
-	
+
 	--local x, y, z = getElementPosition(g_Vehicle)
 	setCameraBehindVehicle(vehicle)
 	--alignVehicleToGround(vehicle)
@@ -251,7 +251,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 
 	-- checkpoints
 	g_Checkpoints = checkpoints
-	
+
 	-- pickups
 	local object
 	local pos
@@ -272,7 +272,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 			g_Pickups[colshape].label:type("shadow",2)
         end
 	end
-	
+
 	-- objects
 	g_Objects = {}
 	local pos, rot
@@ -286,7 +286,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 		g_CurrentCheckpoint = 0
 		showNextCheckpoint()
 	end
-	
+
 	-- GUI
 	g_dxGUI.timepassed:text('0:00:00')
 	showGUIComponents('healthbar', 'speedbar', 'timepassed')
@@ -301,14 +301,14 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	else
 		hideGUIComponents('checkpoint')
 	end
-	
+
 	g_HurryDuration = g_GameOptions.hurrytime
 	if duration then
 		launchRace(duration)
 	end
 
 	fadeCamera( false, 0.0 )
-	
+
 	checkMapLoaded()
 end
 
@@ -371,12 +371,12 @@ function launchRace(duration)
 		g_Duration = duration
 		addEventHandler('onClientRender', g_Root, updateTime)
 	end
-	
+
 	setVehicleDamageProof(g_Vehicle, false)
-	
+
 	g_StartTick = getTickCount()
 	g_TimePassedStartTick = getTickCount()
-	
+
 	triggerEvent('onClientMapLaunched', g_Me, g_StartTick, g_Duration )
 end
 
@@ -753,7 +753,7 @@ function updateSpectatingCheckpointsAndRank()
 		local rankValue = getElementData(watchedPlayer, 'race rank') or 0
 		if rankValue ~= rankValuePrev then
 			rankValuePrev = rankValue
-			setRankDisplay( rankValue )	
+			setRankDisplay( rankValue )
 		end
 	end
 end
@@ -789,7 +789,7 @@ function checkpointReached(elem, matchingDimension)
 	if elem ~= g_Vehicle or isVehicleBlown(g_Vehicle) or getElementHealth(g_Me) == 0 or Spectate.active or not matchingDimension then
 		return
 	end
-	
+
 	--if g_Checkpoints[g_CurrentCheckpoint].vehicle and g_Checkpoints[g_CurrentCheckpoint].vehicle ~= getElementModel(g_Vehicle) then
 		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
 		--alignVehicleWithUp()
@@ -1232,7 +1232,7 @@ function MovePlayerAway.update(nozcheck)
 				else
 					_,_, MovePlayerAway.rotZ = getElementRotation(camTarget)
 				end
-			end  
+			end
 		end
 		local vehicle = g_Vehicle
 		if vehicle then
@@ -1308,7 +1308,7 @@ function unloadAll()
 	end
 	g_Checkpoints = {}
 	g_CurrentCheckpoint = nil
-	
+
 	for colshape,pickup in pairs(g_Pickups) do
 		destroyElement(colshape)
 		if pickup.object then
@@ -1320,19 +1320,19 @@ function unloadAll()
 	end
 	g_Pickups = {}
 	g_VisiblePickups = {}
-	
+
 	table.each(g_Objects, destroyElement)
 	g_Objects = {}
-	
+
 	setElementData(g_Me, 'race.checkpoint', nil)
-	
+
 	g_Vehicle = nil
 	removeEventHandler('onClientRender', g_Root, updateTime)
 	-- Edit #8 warning fix
 	if isTimer(mapTimer) then killTimer(mapTimer) end
-	
+
 	toggleAllControls(true)
-	
+
 	if g_GUI then
 		hideGUIComponents('timeleftbg', 'timeleft', 'healthbar', 'speedbar', 'ranknum', 'ranksuffix', 'checkpoint', 'timepassed')
 		if g_GUI.hurry then
@@ -1356,7 +1356,7 @@ function createCheckpoint(i)
 	end
 	local pos = checkpoint.position
 	local color = checkpoint.color or { 0, 0, 255 }
-	
+
 	if checkpoint.type == "corona" then
 		custommarker = exports.custom_coronas:createCorona(pos[1], pos[2], pos[3], checkpoint.size+0.1, color[1], color[2], color[3], color[4] or 255)
 		exports.custom_coronas:enableDepthBiasScale(true)
@@ -1366,7 +1366,7 @@ function createCheckpoint(i)
 	else
 		checkpoint.marker = createMarker(pos[1], pos[2], pos[3], checkpoint.type or 'checkpoint', checkpoint.size, color[1], color[2], color[3])
 	end
-	
+
 	if (not checkpoint.type or checkpoint.type == 'checkpoint') and i == #g_Checkpoints then
 		setMarkerIcon(checkpoint.marker, 'finish')
 	end
@@ -1375,13 +1375,13 @@ function createCheckpoint(i)
 	end
 	-- Edit #9, finish icon for last checkpoint
 	if #g_Checkpoints == 1 then
-		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 53, isCurrent and 2 or 1, color[1], color[2], color[3])	
-	elseif (i == (#g_Checkpoints)) then 
-		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 53, isCurrent and 2 or 1, color[1], color[2], color[3])	
+		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 53, isCurrent and 2 or 1, color[1], color[2], color[3])
+	elseif (i == (#g_Checkpoints)) then
+		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 53, isCurrent and 2 or 1, color[1], color[2], color[3])
 	else
 		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and 2 or 1, color[1], color[2], color[3])
 	end
-	
+
 	setBlipOrdering(checkpoint.blip, 1)
 	return checkpoint.marker
 end
@@ -1396,7 +1396,7 @@ function makeCheckpointCurrent(i,bOtherPlayer)
 	else
 		setBlipSize(checkpoint.blip, 2)
 	end
-	
+
 	if not checkpoint.type or checkpoint.type == 'checkpoint' then
 		checkpoint.colshape = createColCircle(pos[1], pos[2], checkpoint.size + 4)
 	else
@@ -1613,7 +1613,7 @@ function spectate(command, playername)
 			triggerServerEvent('onClientRequestSpectate', g_Me, true )
 		end
 	end
-	
+
 	-- There's a bug when a spectated player goes afk/spectator you'll see him floating in the air, this solves it
 	-- After 200ms the specate lock will be disabled after you start spectating someone
 	setTimer(
@@ -1627,6 +1627,9 @@ addCommandHandler('spec',spectate)
 addCommandHandler('spectate',spectate)
 addCommandHandler('Toggle spectator',spectate)
 bindKey("b","down","Toggle spectator")
+
+addEvent("controllerToggleSpectator")
+addEventHandler("controllerToggleSpectator", root, spectate)
 
 function setPipeDebug(bOn)
     g_bPipeDebug = bOn
@@ -1645,13 +1648,13 @@ function findPlayerByName(playerPart)
 		end
     end
  end
- 
- 
- 
+
+
+
 function getRaceMode()
 	return g_MapInfo and g_MapInfo.modename or false
 end
- 
+
 function getStartTick()
 	return g_StartTick or false
 end

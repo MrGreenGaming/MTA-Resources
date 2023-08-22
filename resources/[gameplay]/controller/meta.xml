@@ -1,0 +1,26 @@
+<meta>
+    <info author="Nick_026" version="1.0" type="script" />
+
+    <file src="images/controller.png"/>
+    <file src="images/wasd.png"/>
+
+    <script src="scoreboard_s.lua" type="server" />
+    <script src="scoreboard_c.lua" type="client" />
+
+    <script src="keys.lua" type="shared" />
+    <script src="binds.lua" type="client" />
+
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
+
+    <export function="getKey" type="client" />
+    <export function="getLabel" type="client" />
+
+    <export function="bindControllerKey" type="client" />
+    <export function="unbindControllerKey" type="client" />
+
+    <export function="getControllerForPlayer" type="server" />
+    <export function="getKeyForPlayer" type="server" />
+    <export function="getLabelForPlayer" type="server" />
+
+</meta>

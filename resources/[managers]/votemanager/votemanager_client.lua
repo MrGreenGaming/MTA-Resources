@@ -33,22 +33,33 @@ local function updateTime()
 	end
 end
 
-local function playerPressedController(button, press)
-    if not press then return end
-    if button == "pov_up" or button == "pov_down" then
-        if button == "pov_up" then
-            preVoteIndex = preVoteIndex - 1
-        elseif button == "pov_down" then
-            preVoteIndex = preVoteIndex + 1
-        end
-        if preVoteIndex < 1 then preVoteIndex = #nameFromVoteID end
-        if preVoteIndex > #nameFromVoteID then preVoteIndex = 1 end
-    elseif button == "joy2" or button == "joy1" then
-        if preVoteIndex then
-            sendVote(preVoteIndex)
-        end
-    end
+local function guardControllerCursorOverflow()
+    if preVoteIndex < 1 then preVoteIndex = #nameFromVoteID end
+    if preVoteIndex > #nameFromVoteID then preVoteIndex = 1 end
 end
+
+addEvent("moveControllerCursorUp")
+addEventHandler("moveControllerCursorUp", rootElement, function()
+    if preVoteIndex then
+        preVoteIndex = preVoteIndex - 1
+    end
+    guardControllerCursorOverflow()
+end)
+
+addEvent("moveControllerCursorDown")
+addEventHandler("moveControllerCursorDown", rootElement, function()
+    if preVoteIndex then
+        preVoteIndex = preVoteIndex + 1
+    end
+    guardControllerCursorOverflow()
+end)
+
+addEvent("sendControllerVote")
+addEventHandler("sendControllerVote", rootElement, function()
+    if preVoteIndex then
+        sendVote(preVoteIndex)
+    end
+end)
 
 addEvent("doShowPoll", true)
 addEvent("doSendVote", true)
@@ -99,7 +110,9 @@ addEventHandler("doShowPoll", rootElement, function(pollData, pollOptions, pollT
 		table.insert(boundVoteKeys, optionKey)
 	end
 
-    addEventHandler("onClientKey", root, playerPressedController)
+    exports.controller:bindControllerKey("up", 'moveControllerCursorUp')
+    exports.controller:bindControllerKey("down", 'moveControllerCursorDown')
+    exports.controller:bindControllerKey("cross", 'sendControllerVote')
 
 	if isChangeAllowed then
 		bindKey("backspace", "down", sendVote_bind)
@@ -145,7 +158,9 @@ addEventHandler("doStopPoll", rootElement, function()
 	unbindKey("backspace", "down", sendVote_bind)
 	setPollVisible(false)
 	removeEventHandler("onClientRender", rootElement, updateTime)
-    removeEventHandler("onClientKey", root, playerPressedController)
+    exports.controller:unbindControllerKey("up", 'moveControllerCursorUp')
+    exports.controller:unbindControllerKey("down", 'moveControllerCursorDown')
+    exports.controller:unbindControllerKey("cross", 'sendControllerVote')
 end)
 
 function sendVote_bind(key)

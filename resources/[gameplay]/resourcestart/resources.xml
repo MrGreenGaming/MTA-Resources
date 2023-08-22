@@ -1,5 +1,6 @@
 <resources>
 	<resource priority="1" restart="0">analytics</resource>
+    <resource priority="1" restart="0">controller</resource>
 	<resource priority="1" restart="1">gc</resource>
 	<resource priority="1" restart="0">mrgreen-vip</resource>
 	<resource priority="1" restart="0">scoreboard</resource>

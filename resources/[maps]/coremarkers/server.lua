@@ -223,7 +223,9 @@ addEventHandler("onResourceStart", resourceRoot,
 	function()
 		outputChatBox( '#ffffff"Core Markers" by #00dd22AleksCore #fffffflaunched.', root, 255, 0, 0, true)
 		showText_Create()
-		showText( 54, 201, 46, "Pick-up markers (boxes)\n @\nPress LMB, LCTRL or L3/LSB button", 12000, all)
+        for _, player in ipairs(getElementsByType("player")) do
+            showText( 54, 201, 46, "Pick-up markers (boxes)\n@\nPress LMB, LCTRL or " .. exports.controller:getLabelForPlayer(player, "l3") .." button", 12000, player)
+        end
 		setTimer(
 			function()
 				textItemSetColor(showText_Text, 54, 201, 46, 255)
@@ -726,9 +728,7 @@ function resetAllTheStuff()
 	if rocketLauncher and isElement(rocketLauncher[player]) then destroyElement(rocketLauncher[player]) end
 	unbindKey(player, "mouse1", "both", preShootMinigun)
 	unbindKey(player, "lctrl", "both", preShootMinigun)
-    if preShootMinigunController then
-        removeEventHandler("onClientKey", player, preShootMinigunController)
-    end
+    triggerClientEvent(player, "onClientControllerRemoveMinigunPower", resourceRoot)
 end
 addEvent("onPlayerRaceWasted", true)
 addEventHandler("onPlayerRaceWasted", root, resetAllTheStuff)
@@ -861,7 +861,7 @@ addEventHandler("preGiveMinigun", resourceRoot, preGiveMinigun)
 function removeMinigun()
 	unbindKey(client, "mouse1", "both", preShootMinigun)
 	unbindKey(client, "lctrl", "both", preShootMinigun)
-    triggerClientEvent(client, "onClientControllerMinigunFireStop", resourceRoot)
+    triggerClientEvent(client, "onClientControllerRemoveMinigunPower", resourceRoot)
 end
 addEvent("removeMinigun", true)
 addEventHandler("removeMinigun", resourceRoot, removeMinigun)
