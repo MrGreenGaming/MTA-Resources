@@ -1,8 +1,14 @@
 <meta>
     <info author="Nick_026" version="1.0" type="script" />
 
-    <script src="keys.lua" type="shared"/>
-    <script src="binds.lua" type="client"/>
+    <file src="images/controller.png"/>
+    <file src="images/wasd.png"/>
+
+    <script src="scoreboard_s.lua" type="server" />
+    <script src="scoreboard_c.lua" type="client" />
+
+    <script src="keys.lua" type="shared" />
+    <script src="binds.lua" type="client" />
 
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" />
