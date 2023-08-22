@@ -1,7 +1,6 @@
 local currentMode = nil
 
 addEventHandler("onClientKey", root, function(key, pressed)
-    outputDebugString(key)
     if (string.find(key, "joy") or string.find(key, "pov") or string.find(key, "axis")) then
         if (not currentMode or currentMode == 'keyboard') then
             currentMode = 'controller'
