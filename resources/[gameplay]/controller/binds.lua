@@ -18,7 +18,6 @@ function bindControllerKey(key, onPressed, onReleased, ...)
     end
 
     if (not registeredEvents[name]) then
-        outputDebugString("Added event handler function: " .. name)
         registeredEvents[name] = function(actualKey, actualPressed)
             if actualKey == getKey(key) then
                 if actualPressed then
@@ -45,10 +44,8 @@ end
 function unbindControllerKey(key, onPressed, onReleased)
     local name = getHandlerName(sourceResource, key, onPressed, onReleased)
     if (not registeredEvents[name]) then
-        -- trying to unbind a non-existing key shouldn't matter to the user
-        return outputDebugString("No such event handler function: " .. name)
+        return
     end
-    outputDebugString("Removed event handler function: " .. name)
     removeEventHandler("onClientKey", root, registeredEvents[name])
     registeredEvents[name] = nil
 end
@@ -63,7 +60,6 @@ end
 function resourceStop(resource)
     for name, handler in pairs(registeredEvents) do
         if string.find(name, getResourceName(resource) .. "_") then
-            outputDebugString("Removed event handler function: " .. name)
             removeEventHandler("onClientKey", root, handler)
             registeredEvents[name] = nil
         end
