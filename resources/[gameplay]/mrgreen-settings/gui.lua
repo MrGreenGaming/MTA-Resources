@@ -39,7 +39,7 @@ local screenW, screenH = guiGetScreenSize()
         guiSetProperty(GUIEditor.edit["drawdistance"], "ValidationString", "^[0-9]*$")
         GUIEditor.button["drawdistance"] = guiCreateButton(36+85, 256+85, 33, 25, "OK", false, GUIEditor.tab[1])
         guiSetProperty(GUIEditor.button["drawdistance"], "NormalTextColour", "FFAAAAAA")
-  
+
 
 
         GUIEditor.label["lodrange"] = guiCreateLabel(36, 237+133, 222, 15, "Set LOD range (1 - 300), 0 to disable", false, GUIEditor.tab[1])
@@ -49,7 +49,7 @@ local screenW, screenH = guiGetScreenSize()
         guiSetProperty(GUIEditor.edit["lodrange"], "ValidationString", "^[0-9]*$")
         GUIEditor.button["lodrange"] = guiCreateButton(36+85, 256+133, 33, 25, "OK", false, GUIEditor.tab[1])
         guiSetProperty(GUIEditor.button["lodrange"], "NormalTextColour", "FFAAAAAA")
-      
+
 
         GUIEditor.label["bloom"] = guiCreateLabel(72, 75, 209, 14, "Enable Bloom", false, GUIEditor.tab[1])
 
@@ -60,7 +60,7 @@ local screenW, screenH = guiGetScreenSize()
 
         GUIEditor.button["fpslimit"] = guiCreateButton(292+85, 272+19, 33, 25, "OK", false, GUIEditor.tab[1])
         guiSetProperty(GUIEditor.button["fpslimit"], "NormalTextColour", "FFAAAAAA")
-		
+
 		GUIEditor.label["fpslimitboats"] = guiCreateLabel(292, 290+30, 222, 15, "Set client FPS Limit for boats (25 - 100)", false, GUIEditor.tab[1])
 		setTooltip(GUIEditor.label["fpslimitboats"], "Boats may slide or swim badly with FPS >50!")
         GUIEditor.edit["fpslimitboats"] = guiCreateEdit(292, 310+30, 81, 24, "", false, GUIEditor.tab[1])
@@ -133,7 +133,7 @@ local screenW, screenH = guiGetScreenSize()
 
         GUIEditor.checkbox["nitro"] = guiCreateCheckBox(292, 223, 15, 15, "", false, false, GUIEditor.tab[1])
         GUIEditor.label["nitro"] = guiCreateLabel(324, 223, 209, 14, "Enable Nitro Color", false, GUIEditor.tab[1])
-        GUIEditor.button["nitro"] = guiCreateButton(292, 223+19, 150, 25, "Set Nitro Color", false, GUIEditor.tab[1]) 
+        GUIEditor.button["nitro"] = guiCreateButton(292, 223+19, 150, 25, "Set Nitro Color", false, GUIEditor.tab[1])
 
         NitroColorImage = guiCreateStaticImage(469, 223, 26, 17, "img/dot_white.png", false, GUIEditor.tab[1])
         guiSetProperty(NitroColorImage, "ImageColours", "tl:FF0078FF tr:FF0078FF bl:FF0078FF br:FF0078FF")
@@ -147,7 +147,7 @@ local screenW, screenH = guiGetScreenSize()
 
         GUIEditor.label[9] = guiCreateLabel(66, 90, 126, 15, "Map Music Volume:", false, GUIEditor.tab[2])
         setTooltip(GUIEditor.label[9],"Sets the volume of the music that mapmakers put in their maps. Beware: toggling the mapmusic off and on will reset it's volume on most maps.")
-        
+
         GUIEditor.scrollbar[1] = guiCreateScrollBar(202, 90, 255, 18, true, false, GUIEditor.tab[2])
 
         GUIEditor.label[10] = guiCreateLabel(467, 93, 47, 15, "100%", false, GUIEditor.tab[2])
@@ -205,11 +205,11 @@ local screenW, screenH = guiGetScreenSize()
 
 
         GUIEditor.staticimage[1] = guiCreateStaticImage(152, 48+70, 34, 32, "/img/reset.png", false, GUIEditor.tab[3])
-        
+
         GUIEditor.checkbox[5] = guiCreateCheckBox(64, 26+70, 15, 15, "Enable Rank Board", false, false, GUIEditor.tab[3])
         GUIEditor.label[23] = guiCreateLabel(104, 27+70, 113, 15, "Enable Rank Board", false, GUIEditor.tab[3])
         GUIEditor.button[5] = guiCreateButton(216, 25+70, 60, 22, "Settings", false, GUIEditor.tab[3])
-        
+
 
         GUIEditor.label[24] = guiCreateLabel(104, 52+70, 123, 15, "Enable Traffic Sensor", false, GUIEditor.tab[3])
         GUIEditor.checkbox[7] = guiCreateCheckBox(64, 51+70, 15, 15, "Enable Traffic Sensor", false, false, GUIEditor.tab[3])
@@ -233,16 +233,16 @@ local screenW, screenH = guiGetScreenSize()
         GUIEditor.checkbox[12] = guiCreateCheckBox(64, 176+70, 15, 15, "Enable Floating Messages", false, false, GUIEditor.tab[3])
         setTooltip(GUIEditor.label[29],"Floating messages are the messages that float on the screen, giving you information. If disabled, the information will be in the chatbox instead.")
 
-        
-        
+
+
         -- GUIEditor.label[30] = guiCreateLabel(104, 201+70, 141, 15, "Enable Progress Bar", false, GUIEditor.tab[3])
         -- GUIEditor.checkbox[13] = guiCreateCheckBox(64, 201+70, 15, 15, "Enable Progress Bar", true, false, GUIEditor.tab[3])
-        
+
         GUIEditor.staticimage[2] = guiCreateStaticImage(284, 19+70, 1, 207, "/img/dot_white.png", false, GUIEditor.tab[3])
         GUIEditor.button[2] = guiCreateButton(60, 230+50, 185, 24, "Go to Progress Bar Settings", false, GUIEditor.tab[3])
-        
+
         setTooltip(GUIEditor.button[2],"Here you can find all settings related to the progress bar, including an option to disable it.")
-        
+
         guiSetProperty(GUIEditor.button[2], "NormalTextColour", "FFAAAAAA")
         GUIEditor.combobox[1] = guiCreateComboBox(311, 62+70, 95, 78, "", false, GUIEditor.tab[3])
         guiSetFont(GUIEditor.combobox[1], "default-bold-small")
@@ -250,32 +250,32 @@ local screenW, screenH = guiGetScreenSize()
         guiComboBoxAddItem(GUIEditor.combobox[1], "SP Hud")
         guiComboBoxAddItem(GUIEditor.combobox[1], "Old Hud")
         GUIEditor.label[31] = guiCreateLabel(413, 28+70, 141, 15, "Speed-o-meter Mode", false, GUIEditor.tab[3])
-        
+
         GUIEditor.combobox[2] = guiCreateComboBox(311, 28+70, 95, 78, "", false, GUIEditor.tab[3])
         guiSetFont(GUIEditor.combobox[2], "default-bold-small")
         guiComboBoxAddItem(GUIEditor.combobox[2], "km/h")
         guiComboBoxAddItem(GUIEditor.combobox[2], "mph")
         guiComboBoxAddItem(GUIEditor.combobox[2], "None")
-        
+
         GUIEditor.label[32] = guiCreateLabel(413, 62+70, 141, 15, "HUD Mode", false, GUIEditor.tab[3])
-        
+
         GUIEditor.checkbox[14] = guiCreateCheckBox(309, 170, 15, 15, "", false, false, GUIEditor.tab[3])
         GUIEditor.label[34] = guiCreateLabel(346, 170, 141, 15, "Enable New Radar", false, GUIEditor.tab[3])
-        
+
         GUIEditor.checkbox[15] = guiCreateCheckBox(309, 195, 15, 15, "", false, false, GUIEditor.tab[3])
         GUIEditor.label[35] = guiCreateLabel(346, 195, 141, 15, "Enable FPS Counter", false, GUIEditor.tab[3])
 
 
         GUIEditor.checkbox[16] = guiCreateCheckBox(309, 220, 15, 15, "", false, false, GUIEditor.tab[3])
         GUIEditor.label[36] = guiCreateLabel(346, 220, 141, 15, "Enable Countdown Timer", false, GUIEditor.tab[3])
-        
+
         customNameTagsCheckBox = guiCreateCheckBox(309, 245, 15, 15, "", false, false, GUIEditor.tab[3])
         customNameTagsLabel = guiCreateLabel(346, 245, 141, 15, "Enable Custom NameTags", false, GUIEditor.tab[3])
-        
+
         GUIEditor.label["vehicleChange"] = guiCreateLabel(346, 270, 141, 15, "Enable Vehicle CP Icons", false, GUIEditor.tab[3])
         GUIEditor.checkbox["vehicleChange"] = guiCreateCheckBox(309, 270, 15, 15, "", false, false, GUIEditor.tab[3])
-        
-        
+
+
         GUIEditor.button[3] = guiCreateButton(505, 475, 71, 23, "Close", false, GUIEditor.window[1])
         guiSetProperty(GUIEditor.button[3], "NormalTextColour", "FFAAAAAA")
         GUIEditor.label[33] = guiCreateLabel(9, 467, 262, 21, "Settings for the Mr. Green Servers.", false, GUIEditor.window[1])
@@ -329,9 +329,27 @@ local screenW, screenH = guiGetScreenSize()
 
 -- end gameplay Tab
 
+-- Controller Tab
 
-        guiSetVisible( GUIEditor.window[1], false )  
-        -- showCursor( true ) 
+        GUIEditor.tab[6] = guiCreateTab("Controller", GUIEditor.tabpanel[1])
+
+        GUIEditor.label["controller"] = guiCreateLabel(110, 16, 347, 33, "Controller Settings", false, GUIEditor.tab[6])
+        guiSetFont(GUIEditor.label["controller"], "default-bold-small")
+        guiLabelSetHorizontalAlign(GUIEditor.label["controller"], "center", false)
+        GUIEditor.label["controllerText"] = guiCreateLabel(76, 43, 410, 39, "Due to GTA handling controllers differently set your controller to the controller you're using for the correct bindings.", false, GUIEditor.tab[6])
+        guiLabelSetHorizontalAlign(GUIEditor.label["controllerText"], "left", true)
+
+        GUIEditor.label["controller"] = guiCreateLabel(110-30, 103, 144, 15, "Controller", false, GUIEditor.tab[6])
+        GUIEditor.combobox["controller"] = guiCreateComboBox(78, 122, 100, 75, "", false, GUIEditor.tab[6])
+        guiComboBoxAddItem(GUIEditor.combobox["controller"], "XBOX")
+        guiComboBoxAddItem(GUIEditor.combobox["controller"], "PlayStation")
+        guiComboBoxSetSelected(GUIEditor.combobox["controller"], 0)
+
+-- end controller tab
+
+
+        guiSetVisible( GUIEditor.window[1], false )
+        -- showCursor( true )
         triggerEvent('guiShaderCreated', GUIEditor.window[1])
     end
 )
@@ -370,7 +388,7 @@ addEventHandler("sb_showSettings",root,function()
 
 addEventHandler("onClientGUIClick", resourceRoot, function()
     if source == GUIEditor.button[3] then
-        executeCommandHandler("settings") 
+        executeCommandHandler("settings")
     end
 end)
 
