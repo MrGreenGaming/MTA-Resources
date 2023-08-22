@@ -2,11 +2,15 @@ CurrentController = "XBOX"
 
 function onStart()
     -- PLACE GLOBAL BINDS HERE
+    bindControllerKey("logo", "controllerShowScoreboard", "controllerHideScoreboard")
+    bindControllerKey("select", "controllerToggleToptimes")
+    bindControllerKey("select", "controllerToggleMapInfo")
+    bindControllerKey("start", "controllerRemoveAFK")
+    bindControllerKey("start", "controllerToggleSpectator")
 end
 addEventHandler("onClientResourceStart", resourceRoot, onStart)
 
 function updateControllerSettings(controller)
-    outputDebugString("Received controller update: " .. controller)
     CurrentController = controller
     triggerServerEvent("onPlayerChangeController", localPlayer, CurrentController)
 end

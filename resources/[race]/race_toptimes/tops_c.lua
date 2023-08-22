@@ -82,6 +82,11 @@ end
 addCommandHandler('showtops', function() toggleTimes() end)
 bindKey('F5', 'down', function() toggleTimes() end)
 
+addEvent("controllerToggleToptimes")
+addEventHandler("controllerToggleToptimes", root, function()
+    toggleTimes()
+end)
+
 function updateTexture()
 	dxSetRenderTarget(target, true)
 	--dxDrawImage(0,0,sizex,sizey,texture,0,0,0,imageColor)

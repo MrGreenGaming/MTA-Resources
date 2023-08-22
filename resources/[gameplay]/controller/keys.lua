@@ -48,6 +48,10 @@ Keys = {
             label = "R3",
             key = "joy12"
         },
+        logo = {
+            label = "PS Button",
+            key = "joy13"
+        },
         up = {
             label = "↑",
             key = "pov_up"
@@ -112,7 +116,11 @@ Keys = {
         },
         r3 = {
             label = "RS",
-            key = "joy12"
+            key = "joy10"
+        },
+        logo = {
+            label = "XBOX Button",
+            key = "joy13"
         },
         up = {
             label = "↑",
