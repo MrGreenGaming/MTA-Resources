@@ -8,8 +8,8 @@ function onClientElementDataChange(name)
 	if name ~= 'gcshop.custompaintjob' then return end
 
 	local val = getElementData(source, 'gcshop.custompaintjob')
-	
-	
+
+
 	if val ~= nil then
 		addShaders(source, val)
 		--outputDebugString("c add custom paintjob")
@@ -20,217 +20,217 @@ function onClientElementDataChange(name)
 end
 addEventHandler('onClientElementDataChange', root, onClientElementDataChange)
 local textureVehicle = {
-[500] = { "vehiclegrunge256","*map*" }, 
-[520] = "hydrabody256", 
-[552] = { "vehiclegrunge256","*map*" }, 
-[584] = {"petrotr92interior128","petroltr92decal256"}, 
-[521] = "fcr90092body128", 
-[405] = { "vehiclegrunge256","*map*" }, 
-[585] = { "vehiclegrunge256","*map*" }, 
-[437] = {"vehiclegrunge256","*map*","bus92decals128","coach92interior128","vehiclegeneric256"}, 
-[453] = "vehiclegrunge256","*map*", 
-[469] = "sparrow92body128", 
-[485] = "vehiclegrunge256","*map*", 
-[501] = "rcgoblin92texpage128", 
+[500] = { "vehiclegrunge256","*map*" },
+[520] = "hydrabody256",
+[552] = { "vehiclegrunge256","*map*" },
+[584] = {"petrotr92interior128","petroltr92decal256"},
+[521] = "fcr90092body128",
+[405] = { "vehiclegrunge256","*map*" },
+[585] = { "vehiclegrunge256","*map*" },
+[437] = {"vehiclegrunge256","*map*","bus92decals128","coach92interior128","vehiclegeneric256"},
+[453] = "vehiclegrunge256","*map*",
+[469] = "sparrow92body128",
+[485] = "vehiclegrunge256","*map*",
+[501] = "rcgoblin92texpage128",
 [522] = {"nrg50092body128","vehiclegeneric256" },
-[554] = "vehiclegrunge256","*map*", 
-[586] = {"wayfarerbody8bit128"}, 
-[523] = "copbike92body128", 
-[406] = "vehiclegrunge256","*map*" , 
-[587] = "vehiclegrunge256","*map*" , 
-[438] = { "vehiclegrunge256","*map*" }, 
-[454] = { "vehiclegrunge256","*map*" }, 
-[470] = { "vehiclegrunge256","*map*" }, 
-[486] = { "vehiclegrunge256","*map*" }, 
-[502] = { "vehiclegrunge256","*map*" }, 
-[524] = { "vehiclegrunge256","*map*" }, 
-[556] = "monstera92body256a", 
-[588] = "hotdog92body256", 
-[525] = { "vehiclegrunge256","*map*" }, 
-[407] = { "vehiclegrunge256","*map*" }, 
-[589] = { "vehiclegrunge256","*map*" }, 
-[439] = { "vehiclegrunge256","*map*" }, 
-[455] = { "vehiclegrunge256","*map*" }, 
-[471] = { "vehiclegrunge256","*map*" }, 
-[487] = "maverick92body128", 
-[503] = { "vehiclegrunge256","*map*" }, 
-[526] = { "vehiclegrunge256","*map*" }, 
-[558] = { "vehiclegrunge256","*map*","@hite" }, 
-[590] = "freibox92texpage256", 
-[527] = { "vehiclegrunge256","*map*" }, 
-[408] = { "trash92body128", "vehiclegrunge256","*map*" }, 
-[424] = { "vehiclegrunge256","*map*" }, 
-[440] = {"rumpo92adverts256","vehiclegrunge256"}, 
-[456] = { "yankee92logos", "vehiclegrunge256","*map*" }, 
-[472] = { "vehiclegrunge256","*map*" }, 
-[488] = { "vehiclegrunge256","*map*","polmavbody128a"}, 
-[504] = { "vehiclegrunge256","*map*" }, 
-[528] = { "vehiclegrunge256","*map*" }, 
-[560] = { "vehiclegrunge256","*map*","#emapsultanbody256" }, 
-[592] = {"andromeda92wing", "andromeda92body"}, 
-[529] = { "vehiclegrunge256","*map*" }, 
-[409] = { "vehiclegrunge256","*map*" }, 
-[593] = "dodo92body8bit256", 
-[441] = "vehiclegeneric256", 
-[457] = { "vehiclegrunge256","*map*" }, 
-[473] = { "vehiclegrunge256","*map*" }, 
-[489] = { "vehiclegrunge256","*map*" }, 
-[505] = { "vehiclegrunge256","*map*" }, 
-[530] = { "vehiclegrunge256","*map*" }, 
-[562] = { "vehiclegrunge256","*map*" }, 
-[594] = "rccam92pot64", 
-[531] = { "vehiclegrunge256","*map*" }, 
-[410] = { "vehiclegrunge256","*map*" }, 
-[426] = { "vehiclegrunge256","*map*" }, 
-[442] = { "vehiclegrunge256","*map*" }, 
-[458] = { "vehiclegrunge256","*map*" }, 
-[474] = { "vehiclegrunge256","*map*" }, 
-[490] = { "vehiclegrunge256","*map*" }, 
-[506] = { "vehiclegrunge256","*map*" }, 
-[532] = "combinetexpage128", 
-[564] = "rctiger92body128", 
-[596] = { "vehiclegrunge256","*map*" }, 
-[533] = { "vehiclegrunge256","*map*" }, 
-[411] = { "vehiclegrunge256","*map*" }, 
-[597] = { "vehiclegrunge256","*map*" }, 
-[443] = { "vehiclegrunge256","*map*" }, 
-[459] = { "vehiclegrunge256","*map*" }, 
-[475] = { "vehiclegrunge256","*map*" }, 
-[491] = { "vehiclegrunge256","*map*" }, 
-[507] = { "vehiclegrunge256","*map*" }, 
-[534] = { "vehiclegrunge256","*map*","*map*" }, 
-[566] = { "vehiclegrunge256","*map*" }, 
-[598] = { "vehiclegrunge256","*map*" }, 
-[535] = { "vehiclegrunge256","*map*","#emapslamvan92body128" }, 
-[567] = { "vehiclegrunge256","*map*","*map*" }, 
-[599] = { "vehiclegrunge256","*map*" }, 
-[444] = { "vehiclegrunge256","*map*" }, 
-[460] = {"skimmer92body128","vehiclegrunge256","*map*"}, 
-[476] = "rustler92body256", 
-[492] = { "vehiclegrunge256","*map*" }, 
-[508] = { "vehiclegrunge256","*map*" }, 
-[536] = { "vehiclegrunge256","*map*" }, 
-[568] = "bandito92interior128", 
-[600] = { "vehiclegrunge256","*map*" }, 
-[591] = { "vehiclegrunge256","*map*" }, 
-[537] = { "vehiclegrunge256","*map*" }, 
-[413] = { "vehiclegrunge256","*map*" }, 
-[601] = { "vehiclegrunge256","*map*" }, 
-[445] = { "vehiclegrunge256","*map*" }, 
-[461] = { "vehiclegrunge256","*map*" }, 
-[477] = { "vehiclegrunge256","*map*" }, 
-[493] = { "vehiclegeneric256" }, 
-[509] = { "vehiclegrunge256","*map*" }, 
-[538] = { "vehiclegrunge256","*map*" }, 
-[570] = { "vehiclegrunge256","*map*" }, 
-[602] = { "vehiclegrunge256","*map*" }, 
-[605] = { "vehiclegrunge256","*map*" }, 
-[425] = "hunterbody8bit256a", 
-[415] = { "vehiclegrunge256","*map*" }, 
-[611] = { "vehiclegrunge256","*map*" }, 
-[569] = { "vehiclegrunge256","*map*" }, 
-[539] = { "vehiclegrunge256","*map*" }, 
-[414] = { "vehiclegrunge256","*map*" }, 
-[430] = {"predator92body128","vehiclegrunge256","*map*"}, 
-[446] = { "vehiclegrunge256","*map*" }, 
-[462] = { "vehiclegrunge256","*map*" }, 
-[478] = { "vehiclegrunge256","*map*" }, 
-[494] = { "vehiclegrunge256","*map*" }, 
-[510] = { "vehiclegrunge256","*map*" }, 
-[540] = { "vehiclegrunge256","*map*" }, 
-[572] = { "vehiclegrunge256","*map*" }, 
-[604] = { "vehiclegrunge256","*map*" }, 
-[557] = "monsterb92body256a", 
-[607] = { "vehiclegrunge256","*map*" }, 
-[579] = { "vehiclegrunge256","*map*" }, 
-[400] = { "vehiclegrunge256","*map*" }, 
-[404] = { "vehiclegrunge256","*map*" }, 
-[541] = { "vehiclegrunge256","*map*" }, 
-[573] = { "vehiclegrunge256","*map*" }, 
-[431] = {"vehiclegrunge256","*map*","bus92decals128","dash92interior128"}, 
-[447] = "sparrow92body128", 
-[463] = { "vehiclegrunge256","*map*" }, 
-[479] = { "vehiclegrunge256","*map*" }, 
-[495] = { "vehiclegrunge256","*map*" }, 
+[554] = "vehiclegrunge256","*map*",
+[586] = {"wayfarerbody8bit128"},
+[523] = "copbike92body128",
+[406] = "vehiclegrunge256","*map*" ,
+[587] = "vehiclegrunge256","*map*" ,
+[438] = { "vehiclegrunge256","*map*" },
+[454] = { "vehiclegrunge256","*map*" },
+[470] = { "vehiclegrunge256","*map*" },
+[486] = { "vehiclegrunge256","*map*" },
+[502] = { "vehiclegrunge256","*map*" },
+[524] = { "vehiclegrunge256","*map*" },
+[556] = "monstera92body256a",
+[588] = "hotdog92body256",
+[525] = { "vehiclegrunge256","*map*" },
+[407] = { "vehiclegrunge256","*map*" },
+[589] = { "vehiclegrunge256","*map*" },
+[439] = { "vehiclegrunge256","*map*" },
+[455] = { "vehiclegrunge256","*map*" },
+[471] = { "vehiclegrunge256","*map*" },
+[487] = "maverick92body128",
+[503] = { "vehiclegrunge256","*map*" },
+[526] = { "vehiclegrunge256","*map*" },
+[558] = { "vehiclegrunge256","*map*","@hite" },
+[590] = "freibox92texpage256",
+[527] = { "vehiclegrunge256","*map*" },
+[408] = { "trash92body128", "vehiclegrunge256","*map*" },
+[424] = { "vehiclegrunge256","*map*" },
+[440] = {"rumpo92adverts256","vehiclegrunge256"},
+[456] = { "yankee92logos", "vehiclegrunge256","*map*" },
+[472] = { "vehiclegrunge256","*map*" },
+[488] = { "vehiclegrunge256","*map*","polmavbody128a"},
+[504] = { "vehiclegrunge256","*map*" },
+[528] = { "vehiclegrunge256","*map*" },
+[560] = { "vehiclegrunge256","*map*","#emapsultanbody256" },
+[592] = {"andromeda92wing", "andromeda92body"},
+[529] = { "vehiclegrunge256","*map*" },
+[409] = { "vehiclegrunge256","*map*" },
+[593] = "dodo92body8bit256",
+[441] = "vehiclegeneric256",
+[457] = { "vehiclegrunge256","*map*" },
+[473] = { "vehiclegrunge256","*map*" },
+[489] = { "vehiclegrunge256","*map*" },
+[505] = { "vehiclegrunge256","*map*" },
+[530] = { "vehiclegrunge256","*map*" },
+[562] = { "vehiclegrunge256","*map*" },
+[594] = "rccam92pot64",
+[531] = { "vehiclegrunge256","*map*" },
+[410] = { "vehiclegrunge256","*map*" },
+[426] = { "vehiclegrunge256","*map*" },
+[442] = { "vehiclegrunge256","*map*" },
+[458] = { "vehiclegrunge256","*map*" },
+[474] = { "vehiclegrunge256","*map*" },
+[490] = { "vehiclegrunge256","*map*" },
+[506] = { "vehiclegrunge256","*map*" },
+[532] = "combinetexpage128",
+[564] = "rctiger92body128",
+[596] = { "vehiclegrunge256","*map*" },
+[533] = { "vehiclegrunge256","*map*" },
+[411] = { "vehiclegrunge256","*map*" },
+[597] = { "vehiclegrunge256","*map*" },
+[443] = { "vehiclegrunge256","*map*" },
+[459] = { "vehiclegrunge256","*map*" },
+[475] = { "vehiclegrunge256","*map*" },
+[491] = { "vehiclegrunge256","*map*" },
+[507] = { "vehiclegrunge256","*map*" },
+[534] = { "vehiclegrunge256","*map*","*map*" },
+[566] = { "vehiclegrunge256","*map*" },
+[598] = { "vehiclegrunge256","*map*" },
+[535] = { "vehiclegrunge256","*map*","#emapslamvan92body128" },
+[567] = { "vehiclegrunge256","*map*","*map*" },
+[599] = { "vehiclegrunge256","*map*" },
+[444] = { "vehiclegrunge256","*map*" },
+[460] = {"skimmer92body128","vehiclegrunge256","*map*"},
+[476] = "rustler92body256",
+[492] = { "vehiclegrunge256","*map*" },
+[508] = { "vehiclegrunge256","*map*" },
+[536] = { "vehiclegrunge256","*map*" },
+[568] = "bandito92interior128",
+[600] = { "vehiclegrunge256","*map*" },
+[591] = { "vehiclegrunge256","*map*" },
+[537] = { "vehiclegrunge256","*map*" },
+[413] = { "vehiclegrunge256","*map*" },
+[601] = { "vehiclegrunge256","*map*" },
+[445] = { "vehiclegrunge256","*map*" },
+[461] = { "vehiclegrunge256","*map*" },
+[477] = { "vehiclegrunge256","*map*" },
+[493] = { "vehiclegeneric256" },
+[509] = { "vehiclegrunge256","*map*" },
+[538] = { "vehiclegrunge256","*map*" },
+[570] = { "vehiclegrunge256","*map*" },
+[602] = { "vehiclegrunge256","*map*" },
+[605] = { "vehiclegrunge256","*map*" },
+[425] = "hunterbody8bit256a",
+[415] = { "vehiclegrunge256","*map*" },
+[611] = { "vehiclegrunge256","*map*" },
+[569] = { "vehiclegrunge256","*map*" },
+[539] = { "vehiclegrunge256","*map*" },
+[414] = { "vehiclegrunge256","*map*" },
+[430] = {"predator92body128","vehiclegrunge256","*map*"},
+[446] = { "vehiclegrunge256","*map*" },
+[462] = { "vehiclegrunge256","*map*" },
+[478] = { "vehiclegrunge256","*map*" },
+[494] = { "vehiclegrunge256","*map*" },
+[510] = { "vehiclegrunge256","*map*" },
+[540] = { "vehiclegrunge256","*map*" },
+[572] = { "vehiclegrunge256","*map*" },
+[604] = { "vehiclegrunge256","*map*" },
+[557] = "monsterb92body256a",
+[607] = { "vehiclegrunge256","*map*" },
+[579] = { "vehiclegrunge256","*map*" },
+[400] = { "vehiclegrunge256","*map*" },
+[404] = { "vehiclegrunge256","*map*" },
+[541] = { "vehiclegrunge256","*map*" },
+[573] = { "vehiclegrunge256","*map*" },
+[431] = {"vehiclegrunge256","*map*","bus92decals128","dash92interior128"},
+[447] = "sparrow92body128",
+[463] = { "vehiclegrunge256","*map*" },
+[479] = { "vehiclegrunge256","*map*" },
+[495] = { "vehiclegrunge256","*map*" },
 [511] =  {"vehiclegrunge256","*map*","beagle256"},
-[542] = { "vehiclegrunge256","*map*" }, 
-[574] = { "vehiclegrunge256","*map*" }, 
-[606] = { "vehiclegrunge256","*map*" }, 
-[555] = { "vehiclegrunge256","*map*" }, 
-[563] = "raindance92body128", 
-[428] = { "vehiclegrunge256","*map*" }, 
-[565] = { "vehiclegrunge256","*map*","@hite" }, 
-[561] = { "vehiclegrunge256","*map*" }, 
-[543] = { "vehiclegrunge256","*map*" }, 
-[416] = { "vehiclegrunge256","*map*" }, 
-[432] = "rhino92texpage256", 
-[448] = { "vehiclegrunge256","*map*" }, 
-[464] = "rcbaron92texpage64", 
-[480] = { "vehiclegrunge256","*map*" }, 
-[496] = { "vehiclegrunge256","*map*" }, 
-[512] = "cropdustbody256", 
-[544] = { "vehiclegrunge256","*map*" }, 
-[576] = { "vehiclegrunge256","*map*" }, 
-[608] = { "vehiclegrunge256","*map*" }, 
-[559] = { "vehiclegrunge256","*map*" }, 
-[429] = { "vehiclegrunge256","*map*" }, 
-[571] = { "vehiclegrunge256","*map*" }, 
-[427] = { "vehiclegrunge256","*map*" }, 
-[513] = "stunt256", 
-[545] = { "vehiclegrunge256","*map*" }, 
-[577] = "at400_92_256", 
-[433] = { "vehiclegrunge256","*map*" }, 
-[449] = { "vehiclegrunge256","*map*" }, 
-[465] = "rcraider92texpage128", 
-[481] = "vehiclegeneric256", 
-[497] = {"polmavbody128a", "vehiclegrunge256","*map*"}, 
-[514] = { "vehiclegrunge256","*map*" }, 
-[546] = { "vehiclegrunge256","*map*" }, 
-[578] = { "vehiclegrunge256","*map*" }, 
-[610] = { "vehiclegrunge256","*map*" }, 
-[603] = { "vehiclegrunge256","*map*" }, 
-[402] = { "vehiclegrunge256","*map*" }, 
-[412] = { "vehiclegrunge256","*map*" }, 
-[575] = { "vehiclegrunge256","*map*","remapbroadway92body128" }, 
-[515] = { "vehiclegrunge256","*map*" }, 
-[547] = { "vehiclegrunge256","*map*" }, 
-[418] = { "vehiclegrunge256","*map*" }, 
+[542] = { "vehiclegrunge256","*map*" },
+[574] = { "vehiclegrunge256","*map*" },
+[606] = { "vehiclegrunge256","*map*" },
+[555] = { "vehiclegrunge256","*map*" },
+[563] = "raindance92body128",
+[428] = { "vehiclegrunge256","*map*" },
+[565] = { "vehiclegrunge256","*map*","@hite" },
+[561] = { "vehiclegrunge256","*map*" },
+[543] = { "vehiclegrunge256","*map*" },
+[416] = { "vehiclegrunge256","*map*" },
+[432] = "rhino92texpage256",
+[448] = { "vehiclegrunge256","*map*" },
+[464] = "rcbaron92texpage64",
+[480] = { "vehiclegrunge256","*map*" },
+[496] = { "vehiclegrunge256","*map*" },
+[512] = "cropdustbody256",
+[544] = { "vehiclegrunge256","*map*" },
+[576] = { "vehiclegrunge256","*map*" },
+[608] = { "vehiclegrunge256","*map*" },
+[559] = { "vehiclegrunge256","*map*" },
+[429] = { "vehiclegrunge256","*map*" },
+[571] = { "vehiclegrunge256","*map*" },
+[427] = { "vehiclegrunge256","*map*" },
+[513] = "stunt256",
+[545] = { "vehiclegrunge256","*map*" },
+[577] = "at400_92_256",
+[433] = { "vehiclegrunge256","*map*" },
+[449] = { "vehiclegrunge256","*map*" },
+[465] = "rcraider92texpage128",
+[481] = "vehiclegeneric256",
+[497] = {"polmavbody128a", "vehiclegrunge256","*map*"},
+[514] = { "vehiclegrunge256","*map*" },
+[546] = { "vehiclegrunge256","*map*" },
+[578] = { "vehiclegrunge256","*map*" },
+[610] = { "vehiclegrunge256","*map*" },
+[603] = { "vehiclegrunge256","*map*" },
+[402] = { "vehiclegrunge256","*map*" },
+[412] = { "vehiclegrunge256","*map*" },
+[575] = { "vehiclegrunge256","*map*","remapbroadway92body128" },
+[515] = { "vehiclegrunge256","*map*" },
+[547] = { "vehiclegrunge256","*map*" },
+[418] = { "vehiclegrunge256","*map*" },
 [434] = { "hotknifebody128a", "hotknifebody128b"},
-[450] = { "vehiclegrunge256","*map*" }, 
-[466] = { "vehiclegrunge256","*map*" }, 
-[482] = { "vehiclegrunge256","*map*" }, 
-[498] = { "vehiclegrunge256","*map*" }, 
-[516] = { "vehiclegrunge256","*map*" }, 
-[548] = {"cargobob92body256" ,"vehiclegrunge256","*map*"}, 
-[580] = { "vehiclegrunge256","*map*" }, 
-[583] = { "vehiclegrunge256","*map*" }, 
-[422] = { "vehiclegrunge256","*map*" }, 
-[423] = { "vehiclegrunge256","*map*" }, 
-[403] = { "vehiclegrunge256","*map*" }, 
-[609] = { "vehiclegrunge256","*map*" }, 
-[517] = { "vehiclegrunge256","*map*" }, 
-[549] = { "vehiclegrunge256","*map*" }, 
-[419] = { "vehiclegrunge256","*map*" }, 
-[435] = "artict1logos", 
-[451] = { "vehiclegrunge256","*map*" }, 
-[467] = { "vehiclegrunge256","*map*" }, 
-[483] = { "vehiclegrunge256","*map*" }, 
-[499] = { "vehiclegrunge256","*map*" }, 
-[518] = { "vehiclegrunge256","*map*" }, 
-[550] = { "vehiclegrunge256","*map*" }, 
-[582] = { "vehiclegrunge256","*map*" }, 
-[421] = { "vehiclegrunge256","*map*" }, 
-[595] = { "vehiclegrunge256","*map*" }, 
-[553] = { "vehiclegrunge256","*map*","nevada92body256"}, 
-[581] = "bf40092body128", 
-[417] = "leviathnbody8bit256", 
-[519] = "shamalbody256", 
-[551] = { "vehiclegrunge256","*map*" }, 
-[420] = { "vehiclegrunge256","*map*" }, 
-[436] = { "vehiclegrunge256","*map*" }, 
-[452] = { "vehiclegrunge256","*map*" }, 
-[468] = { "vehiclegrunge256","*map*" }, 
-[484] = { "vehiclegrunge256","*map*", "vehiclegeneric256","marquis92interior128" }, 
+[450] = { "vehiclegrunge256","*map*" },
+[466] = { "vehiclegrunge256","*map*" },
+[482] = { "vehiclegrunge256","*map*" },
+[498] = { "vehiclegrunge256","*map*" },
+[516] = { "vehiclegrunge256","*map*" },
+[548] = {"cargobob92body256" ,"vehiclegrunge256","*map*"},
+[580] = { "vehiclegrunge256","*map*" },
+[583] = { "vehiclegrunge256","*map*" },
+[422] = { "vehiclegrunge256","*map*" },
+[423] = { "vehiclegrunge256","*map*" },
+[403] = { "vehiclegrunge256","*map*" },
+[609] = { "vehiclegrunge256","*map*" },
+[517] = { "vehiclegrunge256","*map*" },
+[549] = { "vehiclegrunge256","*map*" },
+[419] = { "vehiclegrunge256","*map*" },
+[435] = "artict1logos",
+[451] = { "vehiclegrunge256","*map*" },
+[467] = { "vehiclegrunge256","*map*" },
+[483] = { "vehiclegrunge256","*map*" },
+[499] = { "vehiclegrunge256","*map*" },
+[518] = { "vehiclegrunge256","*map*" },
+[550] = { "vehiclegrunge256","*map*" },
+[582] = { "vehiclegrunge256","*map*" },
+[421] = { "vehiclegrunge256","*map*" },
+[595] = { "vehiclegrunge256","*map*" },
+[553] = { "vehiclegrunge256","*map*","nevada92body256"},
+[581] = "bf40092body128",
+[417] = "leviathnbody8bit256",
+[519] = "shamalbody256",
+[551] = { "vehiclegrunge256","*map*" },
+[420] = { "vehiclegrunge256","*map*" },
+[436] = { "vehiclegrunge256","*map*" },
+[452] = { "vehiclegrunge256","*map*" },
+[468] = { "vehiclegrunge256","*map*" },
+[484] = { "vehiclegrunge256","*map*", "vehiclegeneric256","marquis92interior128" },
 [401] = { "vehiclegrunge256","*map*" },}
 
 
@@ -251,7 +251,7 @@ function buildRemoveTable() -- Gets all used textures and puts them in a table f
 			for _,texture2 in ipairs(texture) do
 				if not isTextureInTable(texture2) then
 					table.insert(removeTable,texture2)
-					
+
 				end
 			end
 		else
@@ -282,12 +282,12 @@ function addShaders(player, val)
 	-- Textures (dxCreateTexture) are loaded at map load
 	if not shaders[player] then
 		shaders[player] = {}
-		
+
 	end
 	if not shaders[player].shader then
 		shaders[player].shader = createPJShader()
 	end
-	
+
 	if shaders[player]['textures'] then
 		local texture = shaders[player]['textures'][val]
 		if texture then
@@ -330,11 +330,11 @@ function applyPJtoVehicle(shader,veh)
 		for _, texture in ipairs(textureVehicle[vehID]) do
 			apply = engineApplyShaderToWorldTexture(shader,texture,veh)
 
-			
+
 		end
 	else
 		apply = engineApplyShaderToWorldTexture(shader,textureVehicle[vehID],veh)
-		
+
 	end
 
 	return apply
@@ -343,7 +343,7 @@ end
 
 local paintjobShader_raw_data = [[
 	texture gTexture;
- 
+
 	technique TexReplace
 	{
 		pass P0
@@ -356,7 +356,7 @@ local paintjobShader_raw_data = [[
 -- This function does not create textures, they should be made at map start/when joining
 function createPJShader()
 	local shader, tec = dxCreateShader( paintjobShader_raw_data, 1, 220, false, 'vehicle' )
-   
+
 	--bit of sanity checking
 	if not shader then
 		outputConsole( "Could not create shader. Please use debugscript 3" )
@@ -385,7 +385,7 @@ function buildTextures(textureTable, overwrite)
 				if shaders[player]['textures'][texName] and isElement(shaders[player]['textures'][texName]) then
 					destroyElement(shaders[player]['textures'][texName])
 				end
-	
+
 				local theTexture = dxCreateTexture(client_path .. texName .. '.bmp', 'dxt5')
 				if theTexture then
 					shaders[player]['textures'][texName] = theTexture
@@ -419,10 +419,10 @@ end
 
 function refreshShaders()
 	-- for _,player in pairs(shaders) do
-		
+
 	-- 	if isElement(player.shader) then destroyElement(player[1]) end
 	-- 	if isElement(player[2]) then destroyElement(player[2]) end
-		
+
 	-- end
 	-- shaders = {}
 end
@@ -454,7 +454,7 @@ addEventHandler('onClientResourceStart', resourceRoot, onClientStart)
 -- 	elseif veh and getElementModel(veh) then
 -- 		prev = getElementModel(veh)
 -- 	end
-	
+
 -- end, 50, 0)
 
 --------------------------------------
@@ -490,6 +490,8 @@ function gcshopRequestPaintjob(imageMD5, forumID, filename, id)
 				triggerServerEvent( 'receiveImage', localPlayer, false, id)
 			elseif not isValidImage(filename) then
 				outputChatBox('Custom paintjob image "' .. tostring(filename) .. '" is not a valid image!!', 255, 0, 0)
+            elseif not isImageValidSize(filename) then
+                outputChatBox('Custom paintjob image "' .. tostring(filename) .. '" is too big! (max 500kb)', 255, 0, 0)
 			else
 				-- a new image needs to be uploaded
 				--outputDebugString('c: New image ' .. tostring(localMD5) .. ' ' .. tostring(imageMD5) .. ' ' .. getPlayerName(localPlayer))
@@ -508,14 +510,18 @@ function isValidImage(image)
 	local isImage = guiCreateStaticImage( 1.1, 1.1, 0.01, 0.01, image, true);
 	if not isImage then	return false end
 	destroyElement(isImage);
-	local file = fileOpen(image, true);
-	local size = fileGetSize(file);
-	fileClose(file);
-	if size <= 1000000/2 then
-		return true;
-	end
+    return true;
 end
 
+function isImageValidSize(image)
+    local file = fileOpen(image, true);
+    local size = fileGetSize(file);
+    fileClose(file);
+    -- 512_000 bytes is 500kb
+    if size <= 512000 then
+        return true;
+    end
+end
 
 ----------------------------------------
 ---   Downloading custom paintjobs   ---
@@ -540,17 +546,17 @@ function serverPaintjobsMD5 ( md5list, idList )
 						buildTexturesTable[thePlayer] = {}
 					end
 					table.insert(buildTexturesTable[thePlayer], tostring(forumID) .. '-' .. pid)
-					
+
 				end
 			end
 		end
 	end
-	
+
 	buildTextures(buildTexturesTable)
 	if #requests > 0 then
 		triggerServerEvent( 'clientRequestsPaintjobs', localPlayer, requests)
 	end
-	
+
 	for k, player in ipairs(getElementsByType'player') do
 		local val = getElementData(player, 'gcshop.custompaintjob')
 		if val ~= nil then
@@ -574,7 +580,7 @@ function serverSendsPaintjobs ( files )
 		local value = split(filename,'.')[1]
 		local thePlayer = idToPlayerList[tonumber(forumId)]
 		if forumId and tonumber(forumId) and idToPlayerList and thePlayer and value then
-			 
+
 			if not buildTexturesTable[thePlayer] then
 				buildTexturesTable[thePlayer] = {}
 			end
