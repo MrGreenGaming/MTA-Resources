@@ -484,6 +484,7 @@ addEventHandler('onElementDataChange', root, function(key, old, new)
 end)
 
 addEventHandler('onElementModelChange', root, function()
+    if mode == "FFA" then return end
     if getElementType(source)== 'vehicle' then
         local player = getVehicleOccupant(source)
         if not player then return end
@@ -492,6 +493,7 @@ addEventHandler('onElementModelChange', root, function()
 end)
 
 addEventHandler('onPlayerVehicleEnter', root, function(vehicle, seat)
+    if mode == "FFA" then return end
     setColors(source, vehicle)
 end)
 
