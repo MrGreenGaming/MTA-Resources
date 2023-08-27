@@ -105,8 +105,8 @@ function updateDisplay()
                 if ffa_mode == "FFA" then rank = playerKey end
 				local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
 				local pts = getElementData(player, 'Score') or 0
-                if player == getLocalPlayer() then isLocalPlayerInView = true end
 				if playerKey <= 6 then
+                    if player == getLocalPlayer then isLocalPlayerInView = true end
 					dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
 					dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(2+playerKey)), wX+nickWidth, wY+(rowHeight*(3+playerKey)), tocolor(r1, g1, b1, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
 					dxDrawText(pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(2+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+playerKey)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
