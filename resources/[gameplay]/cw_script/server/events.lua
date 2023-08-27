@@ -103,7 +103,7 @@ addEventHandler('onElementDataChange', root, function(key, old, new)
 end)
 
 addEventHandler('onElementModelChange', root, function()
-    if ffa_mode == "FFA" and ffa_keep_modshop then return end
+    if not areTeamsSet() and ffa_mode == "FFA" and ffa_keep_modshop then return end
     if getElementType(source)== 'vehicle' then
         local player = getVehicleOccupant(source)
         if not player then return end
@@ -112,7 +112,7 @@ addEventHandler('onElementModelChange', root, function()
 end)
 
 addEventHandler('onPlayerVehicleEnter', root, function(vehicle, seat)
-    if ffa_mode == "FFA" and ffa_keep_modshop then return end
+    if not areTeamsSet() and ffa_mode == "FFA" and ffa_keep_modshop then return end
     setColors(source, vehicle)
 end)
 
