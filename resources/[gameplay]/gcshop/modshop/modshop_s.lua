@@ -579,7 +579,6 @@ end)
 function vehicleChecker2(player)
 	player = source or player
 	if isElement(player) and getPedOccupiedVehicle(player) and map_allows_shop then
-        if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return false end
 		local previd = prev_vehid[player]
 		local id = getElementModel(getPedOccupiedVehicle(player))
 		if not previd or previd ~= id then
@@ -587,6 +586,7 @@ function vehicleChecker2(player)
 			local veh = getPedOccupiedVehicle(player)
 			cleanVehicle(veh, player)
 		end
+        if getResourceState(getResourceFromName("cw_script")) == "running" and not exports.cw_script:areModShopModificationsAllowed() then return false end
 		local forumID = tonumber(exports.gc:getPlayerForumID(player))
 		return upgradeVehicle(player, forumID)
 	end
@@ -615,6 +615,7 @@ function upgradeVehicle(player, forumID)
 
 	local addUpg = {}
 	for i = 0, 24 do
+
 		if #split(tostring(upgrades['slot' .. i]), ",") <= 1 then
 			addUpg[i] = tonumber(upgrades['slot' .. i])
 		else
@@ -624,7 +625,13 @@ function upgradeVehicle(player, forumID)
 			end
 		end
 		if i <= 16 and addUpg[i] and (i ~= 8 and i ~= 9) then
-			addVehicleUpgrade(veh, addUpg[i])
+            if i ~= 12 then
+                addVehicleUpgrade(veh, addUpg[i])
+            else
+                if getResourceState(getResourceFromName("cw_script")) == "loaded" or not exports.cw_script:areTeamsSet() then
+                    addVehicleUpgrade(veh, addUpg[i])
+                end
+            end
 		elseif i == 17 and addUpg[i] then
 			if permissions.colour[exports.race:getRaceMode()] then
 				local col1, col2, col3, col4 = getVehicleColor(veh)
