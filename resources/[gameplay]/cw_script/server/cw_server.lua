@@ -300,11 +300,11 @@ end
 
 function updateScoreData(player)
     if isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3]) then
-        if getElementData(player, 'Score') > 0 and isWarEnded == false then
+        if isWarEnded == false then
             local serial = getPlayerSerial(player)
             local playerName = getPlayerName(player)
             playerData[serial] = {}
-            playerData[serial].score = getElementData(player, 'Score')
+            playerData[serial].score = getElementData(player, 'Score') or 0
             playerData[serial].name = string.gsub(playerName, '#%x%x%x%x%x%x', '')
             playerData[serial].forumId = exports.gc:getPlayerForumID(player) or "N/A"
         end

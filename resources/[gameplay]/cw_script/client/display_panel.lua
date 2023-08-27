@@ -102,7 +102,11 @@ function updateDisplay()
             local isLocalPlayerInView = false
 			for playerKey, player in ipairs(t1Players) do
 				local rank = tonumber(getElementData(player, 'race rank')) or 1
-                if ffa_mode == "FFA" then rank = playerKey end
+                if ffa_mode == "FFA" then
+                    rank = playerKey
+                    local playerTeam = getPlayerTeam(player)
+                    r1, g1, b1 = playerTeam and getTeamColor(playerTeam) or 255, 255, 255
+                end
 				local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
 				local pts = getElementData(player, 'Score') or 0
 				if playerKey <= 8 then
