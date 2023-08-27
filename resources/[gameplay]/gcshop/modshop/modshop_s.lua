@@ -628,7 +628,7 @@ function upgradeVehicle(player, forumID)
             if i ~= 12 then
                 addVehicleUpgrade(veh, addUpg[i])
             else
-                if not getResourceState(getResourceFromName("cw_script")) == "running" or exports.cw_script:areTeamsSet() then
+                if getResourceState(getResourceFromName("cw_script")) ~= "running" or not exports.cw_script:areTeamsSet() then
                     addVehicleUpgrade(veh, addUpg[i])
                 end
             end
