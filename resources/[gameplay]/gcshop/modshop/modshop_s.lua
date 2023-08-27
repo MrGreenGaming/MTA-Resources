@@ -616,7 +616,7 @@ function upgradeVehicle(player, forumID)
 	local addUpg = {}
 	for i = 0, 24 do
         if i == 12 then -- wheels
-            if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return end
+            if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then do break end;
         end
 
 		if #split(tostring(upgrades['slot' .. i]), ",") <= 1 then
