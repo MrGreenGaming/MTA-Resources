@@ -579,7 +579,6 @@ end)
 function vehicleChecker2(player)
 	player = source or player
 	if isElement(player) and getPedOccupiedVehicle(player) and map_allows_shop then
-        if getResourceState(getResourceFromName("cw_script")) == "running" and not exports.cw_script:areModShopModificationsAllowed() then return false end
 		local previd = prev_vehid[player]
 		local id = getElementModel(getPedOccupiedVehicle(player))
 		if not previd or previd ~= id then
@@ -587,6 +586,7 @@ function vehicleChecker2(player)
 			local veh = getPedOccupiedVehicle(player)
 			cleanVehicle(veh, player)
 		end
+        if getResourceState(getResourceFromName("cw_script")) == "running" and not exports.cw_script:areModShopModificationsAllowed() then return false end
 		local forumID = tonumber(exports.gc:getPlayerForumID(player))
 		return upgradeVehicle(player, forumID)
 	end

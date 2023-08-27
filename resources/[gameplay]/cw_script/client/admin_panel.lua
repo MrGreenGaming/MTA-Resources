@@ -93,9 +93,9 @@ function createAdminGUI()
         tab_ffa = guiCreateTab('Free-for-All', tab_panel)
         ffa_field = guiCreateCheckBox(59, 5, 300, 20, "Enable Free-for-All (will ignore team settings)", ffa_mode == "FFA", false, tab_ffa)
 
-        ffa_keep_gcshop_teams_field = guiCreateCheckBox(59, 25, 240, 20, "Keep GcShop teams", false, false, tab_ffa)
+        ffa_keep_gcshop_teams_field = guiCreateCheckBox(59, 25, 240, 20, "Keep GcShop teams", ffa_keep_gcshop_teams == true, false, tab_ffa)
 
-        ffa_keep_modshop_field = guiCreateCheckBox(59, 45, 350, 20, "Keep ModShop modifications (except wheels)", false, false, tab_ffa)
+        ffa_keep_modshop_field = guiCreateCheckBox(59, 45, 350, 20, "Keep ModShop modifications (except wheels)", ffa_keep_modshop == true, false, tab_ffa)
 
         ffa_warn_label = guiCreateLabel(0, 170, 500, 20, "WARNING: The settings on this page can't change once event started!", false, tab_ffa)
 
