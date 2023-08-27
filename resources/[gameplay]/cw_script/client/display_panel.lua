@@ -114,7 +114,7 @@ function updateDisplay()
 
                 -- shows local player in the list if he is not in top 8 during FFA mode
                 if ffa_mode == "FFA" then
-                    if ~isLocalPlayerInView and playerKey >= 9 then
+                    if (not isLocalPlayerInView) and playerKey >= 9 then
                         if player == localPlayer then
                             dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(2+9)), wX+rankWidth, wY+(rowHeight*(3+9)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
                             dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(2+8)), wX+nickWidth, wY+(rowHeight*(3+9)), tocolor(r1, g1, b1, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
