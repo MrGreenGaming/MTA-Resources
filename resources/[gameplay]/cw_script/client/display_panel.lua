@@ -59,8 +59,8 @@ function updateDisplay()
 
 		windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(rowHeight) * rowCount
 
-		table.sort(t1Players, function(a, b) return getElementData(a, 'Score') > getElementData(b, 'Score') end)
-		table.sort(t2Players, function(a, b) return getElementData(a, 'Score') > getElementData(b, 'Score') end)
+		table.sort(t1Players, function(a, b) return (getElementData(a, 'Score') or 0) > (getElementData(b, 'Score') or 0) end)
+		table.sort(t2Players, function(a, b) return (getElementData(a, 'Score') or 0) > (getElementData(b, 'Score') or 0) end)
 
 		if not f_round then
 			sColor = "#00ff00"
