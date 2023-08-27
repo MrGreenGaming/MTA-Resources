@@ -53,11 +53,11 @@ function areTeamsSet()
 end
 
 function areGcShopTeamsAllowed()
-    return areTeamsSet() and ffa_mode == "FFA" and ffa_keep_gcshop_teams == true
+    return not areTeamsSet() or (ffa_mode == "FFA" and ffa_keep_gcshop_teams)
 end
 
 function areModShopModificationsAllowed()
-    return areTeamsSet() and ffa_mode == "FFA" and ffa_keep_modshop == true
+    return not areTeamsSet() or (ffa_mode == "FFA" and ffa_keep_modshop)
 end
 
 function rgb2hex(r,g,b)
