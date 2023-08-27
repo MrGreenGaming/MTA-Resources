@@ -630,7 +630,13 @@ function upgradeVehicle(player, forumID)
 			end
 		end
 		if i <= 16 and addUpg[i] and (i ~= 8 and i ~= 9) then
-			addVehicleUpgrade(veh, addUpg[i])
+            if i ~= 12 then
+                addVehicleUpgrade(veh, addUpg[i])
+            else
+                if getResourceState(getResourceFromName("cw_script")) ~= "running" or not exports.cw_script:areTeamsSet() then
+                    addVehicleUpgrade(veh, addUpg[i])
+                end
+            end
 		elseif i == 17 and addUpg[i] then
 			if permissions.colour[exports.race:getRaceMode()] then
 				local col1, col2, col3, col4 = getVehicleColor(veh)
