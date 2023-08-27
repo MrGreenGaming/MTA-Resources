@@ -105,7 +105,11 @@ function updateDisplay()
                 if ffa_mode == "FFA" then
                     rank = playerKey
                     local playerTeam = getPlayerTeam(player)
-                    r1, g1, b1 = playerTeam and getTeamColor(playerTeam) or 255, 255, 255
+                    if playerTeam then
+                        r1, g1, b1 = getTeamColor(playerTeam)
+                    else
+                        r1, g1, b1 = 255, 255, 255
+                    end
                 end
 				local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
 				local pts = getElementData(player, 'Score') or 0
