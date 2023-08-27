@@ -14,50 +14,60 @@ function createAdminGUI()
 		-- tab 1
 		tab_general = guiCreateTab('General', tab_panel)
 
-		local t1 = guiCreateLabel(59, 5, 68, 28, "Team Name", false, tab_general)
+        start_button = guiCreateButton(10, 188, 112, 29, "Start CW", false, tab_general)
+		guiSetProperty(start_button, "NormalTextColour", "FF30FE00")
+		addEventHandler("onClientGUIClick", start_button, startWar, false)
+		stop_button = guiCreateButton(132, 188, 114, 29, "Stop CW", false, tab_general)
+		guiSetProperty(stop_button, "NormalTextColour", "FFFE0000")
+		addEventHandler("onClientGUIClick", stop_button, function() serverCall('destroyTeams', localPlayer) end, false)
+		fun_button = guiCreateButton(257, 188, 114, 29, "Fun Round", false, tab_general)
+		guiSetProperty(fun_button, "NormalTextColour", "FFFD7D00")
+		addEventHandler("onClientGUIClick", fun_button, function() serverCall('funRound', localPlayer) end, false)
+
+        -- tab teams
+        tab_teams = guiCreateTab('Teams', tab_panel)
+
+		local t1 = guiCreateLabel(59, 5, 68, 28, "Team Name", false, tab_teams)
 		guiLabelSetHorizontalAlign(t1, "center", false)
-		local t2 = guiCreateLabel(260, 5, 68, 28, "Team Name", false, tab_general)
+		local t2 = guiCreateLabel(260, 5, 68, 28, "Team Name", false, tab_teams)
 		guiLabelSetHorizontalAlign(t2, "center", false)
-		local t1t = guiCreateLabel(59, 45, 68, 28, "Team Tag", false, tab_general)
+		local t1t = guiCreateLabel(59, 45, 68, 28, "Team Tag", false, tab_teams)
 		guiLabelSetHorizontalAlign(t1t, "center", false)
-		local t2t = guiCreateLabel(260, 45, 68, 28, "Team Tag", false, tab_general)
+		local t2t = guiCreateLabel(260, 45, 68, 28, "Team Tag", false, tab_teams)
 		guiLabelSetHorizontalAlign(t2t, "center", false)
-		local t1c = guiCreateLabel(39, 85, 100, 28, "Team Color [hex]", false, tab_general)
+		local t1c = guiCreateLabel(39, 85, 100, 28, "Team Color [hex]", false, tab_teams)
 		guiLabelSetHorizontalAlign(t1c, "center", false)
-		local t2c = guiCreateLabel(240, 85, 100, 28, "Team Color [hex]", false, tab_general)
+		local t2c = guiCreateLabel(240, 85, 100, 28, "Team Color [hex]", false, tab_teams)
 		guiLabelSetHorizontalAlign(t2c, "center", false)
 		--guiCreateLabel(10, 20, 150, 20, "Team name:", false, tab_general)
 		--guiCreateLabel(10, 25, 150, 20, "________________", false, tab_general)
         --guiCreateLabel(128, 20, 150, 20, "Tag:", false, tab_general)
         --guiCreateLabel(128, 25, 150, 20, "_______", false, tab_general)
 
-        ffa_field = guiCreateCheckBox(15, 143, 240, 20, "Free-for-All (ignores team settings)", ffa_mode == "FFA", false, tab_general)
-        guiCreateLabel(15, 163, 240, 20, "Cannot be changed once war has started!", false, tab_general)
-
 		if isElement(teams[1]) then
 			t1name = getTeamName(teams[1])
 		else
 			t1name = 'Home'
 		end
-		t1_field = guiCreateEdit(15, 23, 154, 22, t1name, false, tab_general)
+		t1_field = guiCreateEdit(15, 23, 154, 22, t1name, false, tab_teams)
 		if isElement(teams[2]) then
 			t2name = getTeamName(teams[1])
 		else
 			t2name = 'Guest'
 		end
-		t2_field = guiCreateEdit(217, 23, 154, 22, t2name, false, tab_general)
+		t2_field = guiCreateEdit(217, 23, 154, 22, t2name, false, tab_teams)
         if(isElement(tags[1])) then
             t1tag = tags[1]
         else
             t1tag = 'H'
         end
-        t1t_field = guiCreateEdit(15, 63, 154, 22, t1tag, false, tab_general)
+        t1t_field = guiCreateEdit(15, 63, 154, 22, t1tag, false, tab_teams)
         if(isElement(tags[2])) then
             t2tag = tags[2]
         else
             t2tag = 'G'
         end
-        t2t_field = guiCreateEdit(217, 63, 154, 22, t2tag, false, tab_general)
+        t2t_field = guiCreateEdit(217, 63, 154, 22, t2tag, false, tab_teams)
 
 		--guiCreateLabel(180, 20, 100, 20, "Color [RGB]:", false, tab_general)
 		--guiCreateLabel(180, 25, 100, 20, "__________________________", false, tab_general)
@@ -67,27 +77,33 @@ function createAdminGUI()
 		else
 			t1color = '#ff0000'
 		end
-		t1c_field = guiCreateEdit(15, 103, 154, 22, t1color, false, tab_general)
+		t1c_field = guiCreateEdit(15, 103, 154, 22, t1color, false, tab_teams)
 		if isElement(teams[2]) then
 			t2r, t2g, t2b = getTeamColor(teams[2])
 			t2color = rgb2hex(t2r,t2g,t2b)
 		else
 			t2color = '#00ff00'
 		end
-		t2c_field = guiCreateEdit(217, 103, 154, 22, t2color, false, tab_general)
-		zadat_button = guiCreateButton(257, 143, 114, 29, "Apply", false, tab_general)
+		t2c_field = guiCreateEdit(217, 103, 154, 22, t2color, false, tab_teams)
+		zadat_button = guiCreateButton(257, 143, 114, 29, "Apply", false, tab_teams)
 		guiSetProperty(zadat_button, "NormalTextColour", "FFFFFEFE")
 		addEventHandler("onClientGUIClick", zadat_button, zadatTeams, false)
-		start_button = guiCreateButton(10, 188, 112, 29, "Start CW", false, tab_general)
-		guiSetProperty(start_button, "NormalTextColour", "FF30FE00")
-		addEventHandler("onClientGUIClick", start_button, startWar, false)
-		stop_button = guiCreateButton(132, 188, 114, 29, "Stop CW", false, tab_general)
-		guiSetProperty(stop_button, "NormalTextColour", "FFFE0000")
-		addEventHandler("onClientGUIClick", stop_button, function() serverCall('destroyTeams', localPlayer) end, false)
-		fun_button = guiCreateButton(257, 188, 114, 29, "Fun Round", false, tab_general)
-		guiSetProperty(fun_button, "NormalTextColour", "FFFD7D00")
-		addEventHandler("onClientGUIClick", fun_button, function() serverCall('funRound', localPlayer) end, false)
-		-- tab 2
+
+        -- tab Free-for-all
+        tab_ffa = guiCreateTab('Free-for-All', tab_panel)
+        ffa_field = guiCreateCheckBox(59, 5, 300, 20, "Enable Free-for-All (will ignore team settings)", ffa_mode == "FFA", false, tab_ffa)
+
+        ffa_keep_gcshop_teams_field = guiCreateCheckBox(59, 25, 240, 20, "Keep GcShop teams", false, false, tab_ffa)
+
+        ffa_keep_modshop_field = guiCreateCheckBox(59, 45, 350, 20, "Keep ModShop modifications (except wheels)", false, false, tab_ffa)
+
+        ffa_warn_label = guiCreateLabel(0, 170, 500, 20, "WARNING: The settings on this page can't change once event started!", false, tab_ffa)
+
+        zadat_button_ffa = guiCreateButton(128, 190, 100, 27, 'Apply not needed', false, tab_ffa)
+		guiSetProperty(zadat_button_ffa, "NormalTextColour", "FFFFFEFE")
+        guiSetEnabled(zadat_button_ffa, false)
+
+		-- tab scoring
 		tab_rounds = guiCreateTab('Rounds & Score', tab_panel)
 
         scoring_name = guiCreateLabel(29, 127, 289, 20, "Scoring (split by ,)", false, tab_rounds)
@@ -189,10 +205,6 @@ function zadatScoreRounds()
 end
 
 function zadatTeams()
-    local ffa = guiCheckBoxGetSelected(ffa_field) == true and "FFA" or "CW"
-
-    outputDebugString("FFA mode is: " .. tostring(ffa))
-
 	local t1name = guiGetText(t1_field)
 	local t2name = guiGetText(t2_field)
 	local t1color = guiGetText(t1c_field)
@@ -204,7 +216,6 @@ function zadatTeams()
 		serverCall('setTeamColor', teams[1], r1, g1, b1)
 		serverCall('setTeamName', teams[2], t2name)
 		serverCall('setTeamColor', teams[2], r2, g2, b2)
-        serverCall('setFFAMode', ffa_mode, ffa)
 		serverCall('sincAP')
 	end
 end
@@ -219,11 +230,22 @@ function startWar()
 	local r1,g1,b1 = hex2rgb(t1color)
 	local r2,g2,b2 = hex2rgb(t2color)
     local ffa = guiCheckBoxGetSelected(ffa_field) == true and "FFA" or "CW"
+    local keepTeams = guiCheckBoxGetSelected(ffa_keep_gcshop_teams_field) == true
+    local keepModShop = guiCheckBoxGetSelected(ffa_keep_modshop_field) == true
 
-	serverCall('startWar', t1name, t2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, ffa)
+	serverCall('startWar', t1name, t2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, ffa, keepTeams, keepModShop)
 	outputInfoClient('Press #9b9bff0 #ffffffto switch display mode')
 
     if ffa == "CW" then
         outputInfoClient('Press #9b9bff8 #ffffffto select team')
     end
 end
+
+function onResStart()
+	serverCall('isClientAdmin', localPlayer)
+	createAdminGUI()
+end
+
+bindKey('9', 'down', toogleAdminGUI)
+createAdminGUI()
+addEventHandler('onClientResourceStart', getResourceRootElement(), onResStart)

@@ -22,24 +22,21 @@ function playerFinished(player, rank)
 		if getPlayerTeam(player) ~= teams[3] and not f_round and c_round > 0 then
 			local p_score = scoring[rank] or 0
 
-			local t1r, t1g, t1b = getTeamColor(teams[1])
-			local t1c = rgb2hex(t1r, t1g, t1b)
-			local t2r, t2g, t2b = getTeamColor(teams[2])
-			local t2c = rgb2hex(t2r, t2g, t2b)
-			local old_score = getElementData(getPlayerTeam(player), 'Score')
-			local new_score = old_score + p_score
+            local playerTeam = getPlayerTeam(player)
+            if playerTeam then
+                local old_score = getElementData(playerTeam, 'Score') or 0
+                local new_score = old_score + p_score
+                setElementData(playerTeam, 'Score', new_score)
+            end
 			local old_p_score = getElementData(player, 'Score')
 			local new_p_score = old_p_score + p_score
 			setElementData(player, 'Score', new_p_score)
-			setElementData(getPlayerTeam(player), 'Score', new_score)
 
             updateScoreData(player)
 
-			if getPlayerTeam(player) == teams[1] then
-				exports.messages:outputGameMessage(t1c .. getPlayerName( player ).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
-			elseif getPlayerTeam(player) == teams[2] then
-				exports.messages:outputGameMessage(t2c .. getPlayerName( player ).. ' #ffffffgot #9b9bff' ..p_score.. ' #ffffffpoints #9b9bff('.. new_p_score .. ')', root, 2.5, 0,255,0, false, false,  true)
-			end
+            if p_score > 0 then
+                exports.messages:outputGameMessage(getPlayerName( player ).. ' earned ' ..p_score.. ' points!', root, 2.5, 0,255,0, false, false,  true)
+            end
 		end
 	end
 end
@@ -53,7 +50,7 @@ function endRound()
 			end
 		end
 		if c_round == rounds then
-            if mode == "CW" then
+            if ffa_mode == "CW" then
                 endClanWar()
             else
                 endFreeForAll()
@@ -106,7 +103,7 @@ addEventHandler('onElementDataChange', root, function(key, old, new)
 end)
 
 addEventHandler('onElementModelChange', root, function()
-    if mode == "FFA" then return end
+    if ffa_mode == "FFA" and ffa_keep_modshop then return end
     if getElementType(source)== 'vehicle' then
         local player = getVehicleOccupant(source)
         if not player then return end
@@ -115,7 +112,7 @@ addEventHandler('onElementModelChange', root, function()
 end)
 
 addEventHandler('onPlayerVehicleEnter', root, function(vehicle, seat)
-    if mode == "FFA" then return end
+    if ffa_mode == "FFA" and ffa_keep_modshop then return end
     setColors(source, vehicle)
 end)
 

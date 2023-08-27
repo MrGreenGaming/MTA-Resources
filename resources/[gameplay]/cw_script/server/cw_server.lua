@@ -1,6 +1,8 @@
 --init
 teams = {}
-mode = "CW" -- CW or FFA
+ffa_mode = "CW" -- CW or FFA
+ffa_keep_gcshop_teams = false
+ffa_keep_modshop = false
 scoring = {15,13,11,9,7,5,4,3,2,1}
 tags = {}
 playerData = {}
@@ -50,12 +52,23 @@ function areTeamsSet()
     return isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3])
 end
 
+function areGcShopTeamsAllowed()
+    return areTeamsSet() and ffa_mode == "FFA" and ffa_keep_gcshop_teams == true
+end
+
+function areModShopModificationsAllowed()
+    return areTeamsSet() and ffa_mode == "FFA" and ffa_keep_modshop == true
+end
+
 function rgb2hex(r,g,b)
 	return string.format("#%02X%02X%02X", r,g,b)
 end
 
 function getPlayersInTeamSortedByScore(team)
     local players = getPlayersInTeam(team)
+    if ffa_mode == "FFA" then
+        players = getElementsByType('player')
+    end
 
     table.sort(players, function(a, b)
         return getElementData(a, 'Score') > getElementData(b, 'Score')
@@ -166,11 +179,11 @@ function playerJoin(source)
         clientCall(source, 'updateTeamData', teams[1], teams[2], teams[3])
         clientCall(source, 'updateTagData', tags[1], tags[2])
         clientCall(source, 'updateRoundData', c_round, rounds, f_round)
-        clientCall(source, 'updateModeData', mode)
+        clientCall(source, 'updateModeData', ffa_mode, ffa_keep_gcshop_teams, ffa_keep_modshop)
         clientCall(source, 'updateScoringData', table.concat(scoring, ","))
-        if (mode == "FFA") then
+        if (ffa_mode == "FFA" and not ffa_keep_gcshop_teams) then
             setPlayerTeam(source, teams[1])
-        else
+        elseif ffa_mode == "CW" then
             exports.anti:forcePlayerSpectatorMode(player)
             setPlayerTeam(source, teams[3])
         end
@@ -186,19 +199,21 @@ end
 -------------------
 -- FROM ADMIN PANEL
 -------------------
-function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m)
+function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m, keep_gcshop_teams, keep_modshop)
 	destroyTeams()
     tags[1] = t1tag
     tags[2] = t2tag
 	teams[1] = m == "CW" and createTeam(team1name, r1, g1, b1) or createTeam("Free-for-All", 52, 110, 68)
 	teams[2] = m == "CW" and createTeam(team2name, r2, g2, b2) or createTeam("-", 0, 0, 0)
 	teams[3] = m == "CW" and createTeam("Spectators", 255, 255, 255) or createTeam("--", 0, 0, 0)
-    mode = m
+    ffa_mode = m
+    ffa_keep_gcshop_teams = keep_gcshop_teams
+    ffa_keep_modshop = keep_modshop
 
 	for i,player in ipairs(getElementsByType('player')) do
-        if mode == "FFA" then
+        if ffa_mode == "FFA" and not ffa_keep_gcshop_teams then
             setPlayerTeam(player, teams[1])
-        else
+        elseif ffa_mode == "CW" then
             exports.anti:forcePlayerSpectatorMode(player)
             setPlayerTeam(player, teams[3])
         end
@@ -213,9 +228,9 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m)
 		clientCall(player, 'updateTeamData', teams[1], teams[2], teams[3])
 		clientCall(player, 'updateTagData', tags[1], tags[2])
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
-        clientCall(player, 'updateModeData', mode)
+        clientCall(player, 'updateModeData', ffa_mode, ffa_keep_gcshop_teams, ffa_keep_modshop)
         clientCall(player, 'updateScoringData', table.concat(scoring, ","))
-        if mode == "CW" then
+        if ffa_mode == "CW" then
             clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
         end
 	end

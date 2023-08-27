@@ -60,3 +60,11 @@ function team3Choosen()
 	guiSetVisible(c_window, false)
 	--outputChatBox('[CW] #ffffffPress #9b9bffF3 #ffffffto select team again', 155, 155, 255, true)
 end
+bindKey('8', 'down', toogleGUI)
+
+setTimer(function()
+    if isElement(teams[1]) and ffa_mode == "CW" then
+        createGUI(getTeamName(teams[1]), getTeamName(teams[2]))
+    end
+end, 2500, 1)
+serverCall('playerJoin', localPlayer)

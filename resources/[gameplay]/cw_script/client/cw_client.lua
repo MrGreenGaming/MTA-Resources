@@ -2,6 +2,8 @@ text_offset = 20
 teams = {}
 tags = {}
 ffa_mode = "CW" -- CW or FFA
+ffa_keep_gcshop_teams = false
+ffa_keep_modshop = false
 scoring = "15,13,11,9,7,5,4,3,2,1"
 c_round = 0
 m_round = 10
@@ -68,8 +70,10 @@ function updateTagData(tag1, tag2)
 	updateAdminPanelText()
 end
 
-function updateModeData(mode)
+function updateModeData(mode, keep_gcshop_teams, keep_modshop)
     ffa_mode = mode
+    ffa_keep_gcshop_teams = keep_gcshop_teams
+    ffa_keep_modshop = keep_modshop
     updateAdminPanelText()
 end
 
@@ -97,11 +101,6 @@ function updateAdminInfo(obj)
 	end
 end
 
-function onResStart()
-	serverCall('isClientAdmin', localPlayer)
-	createAdminGUI()
-end
-
 function stringToNumber(colorsString)
 	local r = gettok(colorsString, 1, string.byte(','))
 	local g = gettok(colorsString, 2, string.byte(','))
@@ -113,23 +112,3 @@ function stringToNumber(colorsString)
 		return r, g, b
 	end
 end
-----------------------------
--- BINDS
-----------------------------
-createAdminGUI()
-setTimer(function()
-    if isElement(teams[1]) and ffa_mode == "CW" then
-        createGUI(getTeamName(teams[1]), getTeamName(teams[2]))
-    end
-end, 2500, 1)
-bindKey('8', 'down', toogleGUI)
-bindKey('9', 'down', toogleAdminGUI)
-bindKey('0', 'down', toggleMode)
-serverCall('playerJoin', localPlayer)
-
-----------------------------
--- EVENT HANDLERS
-----------------------------
-addEventHandler('onClientRender', getRootElement(), updateDisplay)
-addEventHandler('onClientResourceStart', getResourceRootElement(), onResStart)
---guiCreateLabel(30, 3, 200, 200, '*Race League script by [CsB]Vally', false)

@@ -1,9 +1,9 @@
 <meta>
     <info author="BurN &amp; lukum" version="1.0" type="script" />
+    <script src="client/cw_client.lua" type="client" />
     <script src="client/admin_panel.lua" type="client" />
     <script src="client/display_panel.lua" type="client" />
     <script src="client/teams_panel.lua" type="client" />
-    <script src="client/cw_client.lua" type="client" />
 
     <script src="server/cw_server.lua" type="server" />
     <script src="server/one_spawn.lua" type="server" />
@@ -19,6 +19,9 @@
     <file src="fonts/Roboto-Regular.ttf" />
 
     <export function="areTeamsSet" type="server" />
+    <export function="areGcShopTeamsAllowed" type="server" />
+    <export function="areModShopModificationsAllowed" type="server" />
+
     <export function="outputInfoForPlayer" type="server" />
 
     <aclrequest>

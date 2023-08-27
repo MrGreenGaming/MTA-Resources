@@ -579,7 +579,7 @@ end)
 function vehicleChecker2(player)
 	player = source or player
 	if isElement(player) and getPedOccupiedVehicle(player) and map_allows_shop then
-        if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return false end
+        if getResourceState(getResourceFromName("cw_script")) == "running" and not exports.cw_script:areModShopModificationsAllowed() then return false end
 		local previd = prev_vehid[player]
 		local id = getElementModel(getPedOccupiedVehicle(player))
 		if not previd or previd ~= id then
@@ -615,6 +615,10 @@ function upgradeVehicle(player, forumID)
 
 	local addUpg = {}
 	for i = 0, 24 do
+        if i == 12 then -- wheels
+            if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return end
+        end
+
 		if #split(tostring(upgrades['slot' .. i]), ",") <= 1 then
 			addUpg[i] = tonumber(upgrades['slot' .. i])
 		else

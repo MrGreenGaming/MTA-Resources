@@ -23,7 +23,7 @@ function preStart(player, command, t1_name, t2_name, t1tag, t2tag)
 		end
 		teams[3] = createTeam('Spectators', 255, 255, 255)
 		for i,player in ipairs(getElementsByType('player')) do
-            if mode == "FFA" then
+            if ffa_mode == "FFA" then
                 setPlayerTeam(player, teams[1])
             else
                 setPlayerTeam(player, teams[3])
@@ -40,7 +40,7 @@ function preStart(player, command, t1_name, t2_name, t1tag, t2tag)
 			clientCall(player, 'updateTeamData', teams[1], teams[2], teams[3])
 			clientCall(player, 'updateTagData', tags[1], tags[2])
 			clientCall(player, 'updateRoundData', c_round, rounds, f_round)
-            if mode == "CW" then
+            if ffa_mode == "CW" then
                 clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
             end
 		end
@@ -61,6 +61,10 @@ function destroyTeams(player)
 			clientCall(player, 'updateTagData', tags[1], tags[2])
 			clientCall(player, 'updateRoundData', c_round, rounds, f_round)
 		end
+
+        for i, team in ipairs(getElementsByType('team')) do
+            setElementData(team, 'Score', 0)
+        end
 	else
 		outputInfoForPlayer(player, 'You are not admin')
 	end
