@@ -14,7 +14,7 @@ function bindControllerKey(key, onPressed, onReleased, ...)
         return error("No event handler function specified", 2)
     end
     if registeredEvents[name] then
-        return error("Event handler function already exists: " .. name, 2)
+        return false
     end
 
     if (not registeredEvents[name]) then
