@@ -290,7 +290,7 @@ function RaceElementMap:getAll(name, type)
 			local val = getElementData(element, attr)
 			if attr == "rotation" then
                 val = val
-                    and { 0, 0, tonumber(val) } -- older maps only have rotation value (z-axis)
+                    and { 0, 0, tonumber(val) or 0 } -- older maps only have rotation value (z-axis)
                     or { -- newer maps use rotationX/Y/Z
                         tonumber(getElementData(element, "rotX")) or 0,
                         tonumber(getElementData(element, "rotY")) or 0,
