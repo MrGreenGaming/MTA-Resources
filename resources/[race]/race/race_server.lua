@@ -514,6 +514,7 @@ function joinHandlerBoth(player)
         local spawnpoint = g_CurrentRaceMode:pickFreeSpawnpoint(player)
 
         local x, y, z = unpack(spawnpoint.position)
+        local rx, ry, rz = unpack(spawnpoint.rotation or {0, 0, 0})
         -- Set random seed dependant on map name, so everyone gets the same models
         setRandomSeedForMap('clothes')
 
@@ -556,12 +557,8 @@ function joinHandlerBoth(player)
             setRandomSeedForMap('vehiclecolors')
 			-- Replace groups of unprintable characters with a space, and then remove any leading space
 			local plate = getPlayerName(player):gsub( '[^%a%d]+', ' ' ):gsub( '^ ', '' )
-			-- Edit #2
-			if not spawnpoint.rotation or spawnpoint.rotation == "nil" then  --Binslayer: wtf, fixing some weirdass bug with maps that dont have rotation and make createVehicle fail thus integrity check fail
-				spawnpoint.rotation = 0
-			end
 
-			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, 0, 0, spawnpoint.rotation, plate:sub(1, 8))
+			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, rx or 0, ry or 0, rz or 0, plate:sub(1, 8))
 			if setElementSyncer then
 				setElementSyncer( vehicle, false )
 			end
