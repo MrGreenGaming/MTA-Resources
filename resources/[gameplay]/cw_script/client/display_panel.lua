@@ -37,48 +37,70 @@ function dxDrawBottomRoundedRectangle(x, y, width, height, radius, color, postGU
     dxDrawRectangle(x+radius, y, width-(radius*2), radius, color, postGUI, subPixelPositioning)
 end
 
+local state = ""
+local sColor = "#ffffff"
+local r1, g1, b1 = 255, 255, 255
+local r2, g2, b2 = 255, 255, 255
+local t1c = "#FFFFFF"
+local t2c = "#FFFFFF"
+local t1tag = ""
+local t2tag = ""
+local t1 = ""
+local t2 = ""
+local t1t = nil
+local t2t = nil
+local t2Players = {}
+
+local t1Players = {}
+
+windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(rowHeight) * rowCount
+
+function updateDisplayData()
+    if not isElement(teams[1]) or not isElement(teams[2]) then return end
+    state = ""
+    sColor = "#ffffff"
+    t1tag = tags[1]
+    t2tag = tags[2]
+    t1 = getTeamName(teams[1])
+    t2 = getTeamName(teams[2])
+    t1t = getTeamFromName(t1)
+    t2t = getTeamFromName(t2)
+    r1, g1, b1 = getTeamColor(t1t)
+    r2, g2, b2 = getTeamColor(t2t)
+    t1c = rgb2hex(r1, g1, b1)
+    t2c = rgb2hex(r2, g2, b2)
+    t2Players = getPlayersInTeam(t2t)
+
+    t1Players = getPlayersInTeam(t1t)
+    if ffa_mode == "FFA" then t1Players = getElementsByType("player") end
+
+
+    table.sort(t1Players, function(a, b) return (getElementData(a, 'Score') or 0) > (getElementData(b, 'Score') or 0) end)
+    table.sort(t2Players, function(a, b) return (getElementData(a, 'Score') or 0) > (getElementData(b, 'Score') or 0) end)
+
+    if #t1Players > 8 and #t2Players > 8 then
+        rowCount = 8 + 8 + 5
+    elseif #t1Players > 8 and #t2Players < 8 then
+        rowCount = 8 + #t2Players + 5
+    elseif #t1Players < 8 and #t2Players > 8 then
+        rowCount = 8 + #t1Players + 5
+    else
+        rowCount = #t1Players + #t2Players + 5
+    end
+    windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(rowHeight) * rowCount
+end
+addEvent("updateDisplayPlayerData", true)
+addEventHandler("updateDisplayPlayerData", getRootElement(), updateDisplayData)
+
 function updateDisplay()
 	if isElement(teams[1]) and isElement(teams[2]) then
-		local state = ""
-		local sColor = "#ffffff"
-		local r1, g1, b1 = getTeamColor(teams[1])
-        local r2, g2, b2 = getTeamColor(teams[2])
-		local t1c = rgb2hex(r1, g1, b1)
-		local t2c = rgb2hex(r2, g2, b2)
-        local t1tag = tags[1]
-        local t2tag = tags[2]
-		local t1 = getTeamName(teams[1])
-		local t2 = getTeamName(teams[2])
-		local t1t = getTeamFromName(t1)
-		local t2t = getTeamFromName(t2)
-		local t2Players = getPlayersInTeam(t2t)
-
-		local t1Players = getPlayersInTeam(t1t)
-        if ffa_mode == "FFA" then t1Players = getElementsByType("player") end
-
-
-		windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(rowHeight) * rowCount
-
-		table.sort(t1Players, function(a, b) return (getElementData(a, 'Score') or 0) > (getElementData(b, 'Score') or 0) end)
-		table.sort(t2Players, function(a, b) return (getElementData(a, 'Score') or 0) > (getElementData(b, 'Score') or 0) end)
-
-		if not f_round then
-			sColor = "#00ff00"
-			state = "Event Active"
-		else
-			sColor = "#FFA500"
-			state = "Free Round"
-		end
-
-		if #t1Players > 8 and #t2Players > 8 then
-			rowCount = 8 + 8 + 5
-		elseif #t1Players > 8 and #t2Players < 8 then
-			rowCount = 8 + #t2Players + 5
-		elseif #t1Players < 8 and #t2Players > 8 then
-			rowCount = 8 + #t1Players + 5
-		else
-			rowCount = #t1Players + #t2Players + 5
-		end
+        if not f_round then
+            sColor = "#00ff00"
+            state = "Event Active"
+        else
+            sColor = "#FFA500"
+            state = "Free Round"
+        end
 
 		if mode == "main" then
 			local count = 0
@@ -102,6 +124,7 @@ function updateDisplay()
             local isLocalPlayerInView = false
 			for playerKey, player in ipairs(t1Players) do
 				local rank = tonumber(getElementData(player, 'race rank')) or 1
+                local r1, g1, b1 = r1, g1, b1
                 if ffa_mode == "FFA" then
                     rank = playerKey
                     local playerTeam = getPlayerTeam(player)

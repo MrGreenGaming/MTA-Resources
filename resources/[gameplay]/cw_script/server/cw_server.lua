@@ -194,6 +194,7 @@ function playerJoin(source)
         else
             setElementData(source, 'Score', 0)
     end
+    triggerClientEvent("updateDisplayPlayerData", root)
 end
 
 -------------------
@@ -233,6 +234,7 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m,
         if ffa_mode == "CW" then
             clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
         end
+        triggerClientEvent(player, "updateDisplayPlayerData", root)
 	end
 end
 
@@ -307,6 +309,8 @@ function updateScoreData(player)
             playerData[serial].score = getElementData(player, 'Score') or 0
             playerData[serial].name = string.gsub(playerName, '#%x%x%x%x%x%x', '')
             playerData[serial].forumId = exports.gc:getPlayerForumID(player) or "N/A"
+
+            triggerClientEvent("updateDisplayPlayerData", root)
         end
     end
 end

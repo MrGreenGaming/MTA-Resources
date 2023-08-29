@@ -69,6 +69,7 @@ function onPlayerChangeTeam(team)
     if team == getTeamName(teams[3]) then
         exports.anti:forcePlayerSpectatorMode(source)
     end
+    triggerClientEvent("updateDisplayPlayerData", root)
 end
 addEvent("onPlayerChangeTeam", true)
 addEventHandler("onPlayerChangeTeam", root, onPlayerChangeTeam)
