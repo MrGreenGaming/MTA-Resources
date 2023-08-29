@@ -1,17 +1,18 @@
 local marker
 local blip
 
-local enabled = isEnabledXML()
+local enabled = false
 
 function clearThirdCheckpoint()
 	if marker then destroyElement(marker) end
 	marker = nil
-	
+
 	if blip then destroyElement(blip) end
 	blip = nil
 end
 addEvent("clearThirdCheckpoint", true)
 addEventHandler("clearThirdCheckpoint", root, clearThirdCheckpoint)
+addEventHandler("controllerToggleSpectator", root, clearThirdCheckpoint)
 addCommandHandler("s", clearThirdCheckpoint)
 addCommandHandler("spec", clearThirdCheckpoint)
 addCommandHandler("spectate", clearThirdCheckpoint)
@@ -24,8 +25,8 @@ function setThirdCheckpoint(checkpoint, isFinish, facing)
 	if not enabled then return false end;
 
 	-- checkpoint object:
-	-- { position={x, y, z}, size=size, color={r, g, b}, type=type, vehicle=vehicleID, paintjob=paintjob, upgrades={...} } 
-	
+	-- { position={x, y, z}, size=size, color={r, g, b}, type=type, vehicle=vehicleID, paintjob=paintjob, upgrades={...} }
+
 	-- For some reason older maps have a color boolean, changing it to default blue
 	if checkpoint.color == false then
 		checkpoint.color = {}
@@ -52,17 +53,15 @@ end
 addEvent("setThirdCheckpoint", true)
 addEventHandler("setThirdCheckpoint", root, setThirdCheckpoint)
 
-function toggleEnabledDisabled()
-	enabled = not enabled
+function toggleEnabledDisabled(b)
+	enabled = b
 
-	if not enabled then
-		outputChatBox("#00FF00[Checkpoints]#FFFFFF You can now see 2 checkpoints", 255, 255, 255, true)
-		clearThirdCheckpoint()
+	if enabled then
+        triggerServerEvent("onPlayerThirdCheckPointEnabled", localPlayer)
 	else
-		outputChatBox("#00FF00[Checkpoints]#FFFFFF When you hit the next checkpoint you can see 3 checkpoints", 255, 255, 255, true)
+		clearThirdCheckpoint()
 	end
-
-	saveXML(enabled)
 end
-addCommandHandler("checkpoints", toggleEnabledDisabled)
+addEvent("toggleThirdCheckpoint")
+addEventHandler("toggleThirdCheckpoint", root, toggleEnabledDisabled)
 

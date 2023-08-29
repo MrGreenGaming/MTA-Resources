@@ -21,6 +21,7 @@ function onMapStart(mapInfo, mapOptions, gameOptions)
 
 end
 addEventHandler("onMapStarting", getRootElement(), onMapStart)
+addEventHandler("onResourceStart", resourceRoot, onMapStart)
 
 function onPlayerJoin()
 	if not modes[exports.race:getRaceMode()] then return false end
@@ -45,16 +46,18 @@ addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)
 
 function onPlayerSpawn()
 	if not modes[exports.race:getRaceMode()] then return false end
-	setTimer(function(player)
-		local cpId = getElementData(player, "race.checkpoint")
+	setTimer(function(source)
+		local cpId = getElementData(source, "race.checkpoint")
 
 		if not cpId then return false end
-		
+
 		if checkpoints[cpId + 2] then
-			triggerClientEvent(player, "setThirdCheckpoint", root, checkpoints[cpId + 2], not checkpoints[cpId + 3])
+			triggerClientEvent(source, "setThirdCheckpoint", root, checkpoints[cpId + 2], not checkpoints[cpId + 3])
 		else
-			triggerClientEvent(player, "clearThirdCheckpoint", root)
+			triggerClientEvent(source, "clearThirdCheckpoint", root)
 		end
 	end, 100, 1, source)
 end
 addEventHandler("onPlayerSpawn", root, onPlayerSpawn)
+addEvent("onPlayerThirdCheckPointEnabled", true)
+addEventHandler("onPlayerThirdCheckPointEnabled", root, onPlayerSpawn)

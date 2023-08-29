@@ -272,10 +272,6 @@ local screenW, screenH = guiGetScreenSize()
         customNameTagsCheckBox = guiCreateCheckBox(309, 245, 15, 15, "", false, false, GUIEditor.tab[3])
         customNameTagsLabel = guiCreateLabel(346, 245, 141, 15, "Enable Custom NameTags", false, GUIEditor.tab[3])
 
-        GUIEditor.label["vehicleChange"] = guiCreateLabel(346, 270, 141, 15, "Enable Vehicle CP Icons", false, GUIEditor.tab[3])
-        GUIEditor.checkbox["vehicleChange"] = guiCreateCheckBox(309, 270, 15, 15, "", false, false, GUIEditor.tab[3])
-
-
         GUIEditor.button[3] = guiCreateButton(505, 475, 71, 23, "Close", false, GUIEditor.window[1])
         guiSetProperty(GUIEditor.button[3], "NormalTextColour", "FFAAAAAA")
         GUIEditor.label[33] = guiCreateLabel(9, 467, 262, 21, "Settings for the Mr. Green Servers.", false, GUIEditor.window[1])
@@ -329,6 +325,15 @@ local screenW, screenH = guiGetScreenSize()
 
         GUIEditor.label["eventOffroadWheels"] = guiCreateLabel(104, 123+50, 300, 15, "Use offroad wheels during events", false, GUIEditor.tab[5])
         GUIEditor.checkbox["eventOffroadWheels"] = guiCreateCheckBox(78, 122+50, 15, 15, "", false, false, GUIEditor.tab[5])
+        setTooltip(GUIEditor.label["eventOffroadWheels"], "If you enable this, you will use offroad wheels during staff hosted events. (Check Discord for events)")
+
+        GUIEditor.label["thirdCheckpoint"] = guiCreateLabel(104, 123 + 75, 125, 15, "Show 3 checkpoints", false, GUIEditor.tab[5])
+        GUIEditor.checkbox["thirdCheckpoint"] = guiCreateCheckBox(78, 122 + 75, 15, 15, "", false, false, GUIEditor.tab[5])
+        setTooltip(GUIEditor.label["thirdCheckpoint"], "If you enable this, you will see 3 checkpoints instead of 2.")
+
+        GUIEditor.label["vehicleChange"] = guiCreateLabel(104, 123 + 100, 141, 15, "Enable Vehicle CP Icons", false, GUIEditor.tab[5])
+        GUIEditor.checkbox["vehicleChange"] = guiCreateCheckBox(78, 122 + 100, 15, 15, "", false, false, GUIEditor.tab[5])
+        setTooltip(GUIEditor.label["vehicleChange"], "If you enable this, a vehicle icon will appear on checkpoints that changes your vehicle.")
 
 -- end gameplay Tab
 
@@ -348,14 +353,14 @@ local screenW, screenH = guiGetScreenSize()
         guiComboBoxAddItem(GUIEditor.combobox["controller"], "PlayStation")
         guiComboBoxSetSelected(GUIEditor.combobox["controller"], 0)
 
-        GUIEditor.label["controllerStart"] = guiCreateLabel(104, 123+25, 300, 15, "Press Start to toggle spectator mode", false, GUIEditor.tab[6])
-        GUIEditor.checkbox["controllerStart"] = guiCreateCheckBox(78, 122+25, 15, 15, "", false, false, GUIEditor.tab[6])
+        GUIEditor.label["controllerStart"] = guiCreateLabel(104, 123+50, 300, 15, "Press Start to toggle spectator mode", false, GUIEditor.tab[6])
+        GUIEditor.checkbox["controllerStart"] = guiCreateCheckBox(78, 122+50, 15, 15, "", false, false, GUIEditor.tab[6])
 
-        GUIEditor.label["controllerSelect"] = guiCreateLabel(104, 123+25+25, 300, 15, "Press Select/Back to toggle map info & toptimes", false, GUIEditor.tab[6])
-        GUIEditor.checkbox["controllerSelect"] = guiCreateCheckBox(78, 122+25+25, 15, 15, "", false, false, GUIEditor.tab[6])
+        GUIEditor.label["controllerSelect"] = guiCreateLabel(104, 123+75, 300, 15, "Press Select/Back to toggle map info & toptimes", false, GUIEditor.tab[6])
+        GUIEditor.checkbox["controllerSelect"] = guiCreateCheckBox(78, 122+75, 15, 15, "", false, false, GUIEditor.tab[6])
 
-        GUIEditor.label["controllerLogo"] = guiCreateLabel(104, 123+25+25+25, 300, 15, "Press Logo button to show scoreboard", false, GUIEditor.tab[6])
-        GUIEditor.checkbox["controllerLogo"] = guiCreateCheckBox(78, 122+25+25+25, 15, 15, "", false, false, GUIEditor.tab[6])
+        GUIEditor.label["controllerLogo"] = guiCreateLabel(104, 123+100, 300, 15, "Press Logo button to show scoreboard", false, GUIEditor.tab[6])
+        GUIEditor.checkbox["controllerLogo"] = guiCreateCheckBox(78, 122+100, 15, 15, "", false, false, GUIEditor.tab[6])
 
 -- end controller tab
 

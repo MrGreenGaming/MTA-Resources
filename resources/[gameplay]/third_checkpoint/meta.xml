@@ -1,6 +1,5 @@
 <meta>
 	<info name="Third checkpoint" description="In race type gamemodes: Renders the third checkpoint" author="Nick_026" type="script" addon="race" version="1.0" />
-	<script src="helper.lua" type="client" />
 	<script src="c_client.lua" type="client" />
 	<script src="s_server.lua" type="server" />
 </meta>

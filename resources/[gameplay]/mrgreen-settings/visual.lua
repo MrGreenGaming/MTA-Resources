@@ -51,13 +51,14 @@ visual = { -- Standard Settings, 0 = off --
     ["controllerSelect"] = 1, -- 1 allow Select bind, 0 disallow
     ["controllerLogo"] = 1, -- 1 allow Logo bind, 0 disallow
     ["eventOffroadWheels"] = 1,
+    ["thirdCheckpoint"] = 1,
 }
 
 
 -- Reapply settings when one of these resources (re)starts
 local VSL_reApplyTimer = false
 -- Add resource name here when used
-local resetResource = {"-shaders-bloom_fix","-shaders-car_paint_fix","-shaders-car_paint_reflect","-shaders-contrast","-shaders-depth_of_field","-shaders-dynamic_sky","-shaders-nitro","-shaders-palette","-shaders-radial_blur","-shaders-SkyBox_ALT","-shaders-watershine","race","race_ghost", "race_fix", "controller", "cw_script"}
+local resetResource = {"-shaders-bloom_fix","-shaders-car_paint_fix","-shaders-car_paint_reflect","-shaders-contrast","-shaders-depth_of_field","-shaders-dynamic_sky","-shaders-nitro","-shaders-palette","-shaders-radial_blur","-shaders-SkyBox_ALT","-shaders-watershine","race","race_ghost", "race_fix", "controller", "cw_script", "third_checkpoint"}
 addEventHandler("onClientResourceStart",root,
 	function(res)
 		local resName = getResourceName(res)
@@ -312,6 +313,16 @@ function visualCheckBoxHandler()
             end
             v_setSaveTimer()
             visual["eventOffroadWheels"] = 0
+        end
+    elseif source == GUIEditor.checkbox["thirdCheckpoint"] then
+        if guiCheckBoxGetSelected( GUIEditor.checkbox["thirdCheckpoint"] ) then
+            triggerEvent("toggleThirdCheckpoint", localPlayer, true)
+            v_setSaveTimer()
+            visual["thirdCheckpoint"] = 1
+        else
+            triggerEvent("toggleThirdCheckpoint", localPlayer, false)
+            v_setSaveTimer()
+            visual["thirdCheckpoint"] = 0
         end
 	end
 end
@@ -634,6 +645,14 @@ function setVisualGUI()
 				toggleSkyBox(true)
 			end
 
+        elseif f == "thirdCheckpoint" then
+            if u == 1 then
+                guiCheckBoxSetSelected( GUIEditor.checkbox["thirdCheckpoint"], true )
+                triggerEvent("toggleThirdCheckpoint", localPlayer, true)
+            else
+                guiCheckBoxSetSelected( GUIEditor.checkbox["thirdCheckpoint"], false )
+                triggerEvent("toggleThirdCheckpoint", localPlayer, false)
+            end
         elseif f == "controller" then
             guiComboBoxSetSelected( GUIEditor.combobox["controller"], u )
             triggerEvent("updateControllerSetting", localPlayer, getControllerName(u))
