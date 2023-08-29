@@ -43,6 +43,8 @@ local r1, g1, b1 = 255, 255, 255
 local r2, g2, b2 = 255, 255, 255
 local t1c = "#FFFFFF"
 local t2c = "#FFFFFF"
+local t1Score = 0
+local t2Score = 0
 local t1tag = ""
 local t2tag = ""
 local t1 = ""
@@ -52,6 +54,10 @@ local t2t = nil
 local t2Players = {}
 
 local t1Players = {}
+
+-- {rank, playerName, score}
+local t1PlayersFormatted = {}
+local t2PlayersFormatted = {}
 
 windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(rowHeight) * rowCount
 
@@ -63,6 +69,8 @@ function updateDisplayData()
     t2tag = tags[2]
     t1 = getTeamName(teams[1])
     t2 = getTeamName(teams[2])
+    t1Score = getElementData(teams[1], 'Score')
+    t2Score = getElementData(teams[2], 'Score')
     t1t = getTeamFromName(t1)
     t2t = getTeamFromName(t2)
     r1, g1, b1 = getTeamColor(t1t)
@@ -88,9 +96,39 @@ function updateDisplayData()
         rowCount = #t1Players + #t2Players + 5
     end
     windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(rowHeight) * rowCount
+
+    t1PlayersFormatted = formatPlayerData(t1Players)
+    t2PlayersFormatted = formatPlayerData(t2Players)
 end
 addEvent("updateDisplayPlayerData", true)
 addEventHandler("updateDisplayPlayerData", getRootElement(), updateDisplayData)
+
+function formatPlayerData(players)
+    local toReturn = {}
+    for i, player in ipairs(players) do
+        local rank = tonumber(getElementData(player, 'race rank')) or 1
+        local r1, g1, b1 = r1, g1, b1
+        if ffa_mode == "FFA" then
+            rank = i
+            local playerTeam = getPlayerTeam(player)
+            if playerTeam then
+                r1, g1, b1 = getTeamColor(playerTeam)
+            else
+                r1, g1, b1 = 255, 255, 255
+            end
+        end
+        local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
+        local pts = getElementData(player, 'Score') or 0
+        table.insert(toReturn, {
+            rank = rank,
+            r, g, b = r1, g1, b1,
+            playerName = playerName,
+            pts = pts,
+            isLocalPlayer = player == localPlayer
+        })
+    end
+    return toReturn
+end
 
 function updateDisplay()
 	if isElement(teams[1]) and isElement(teams[2]) then
@@ -119,55 +157,36 @@ function updateDisplay()
 
 			dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
-			dxDrawText(getTeamName(teams[1]), wX + margin, wY + (rowHeight*2), wX+windowSizeX-margin, wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "left", "center", false, false, false, true, false)
-			dxDrawText(getElementData(teams[1], 'Score'), wX + rankWidth + nickWidth, wY + (rowHeight*2), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "center", "center", false, false, false, true, false)
+			dxDrawText(t1, wX + margin, wY + (rowHeight*2), wX+windowSizeX-margin, wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "left", "center", false, false, false, true, false)
+			dxDrawText(t1Score, wX + rankWidth + nickWidth, wY + (rowHeight*2), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "center", "center", false, false, false, true, false)
             local isLocalPlayerInView = false
-			for playerKey, player in ipairs(t1Players) do
-                if not player then
-                    dxDrawText('-', wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
-                    dxDrawText("Player left", wX + rankWidth, wY + (rowHeight*(2+playerKey)), wX+nickWidth, wY+(rowHeight*(3+playerKey)), tocolor(r1, g1, b1, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
-                    dxDrawText('-', wX + rankWidth + nickWidth, wY + (rowHeight*(2+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+playerKey)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
-                else
-                    local rank = tonumber(getElementData(player, 'race rank')) or 1
-                    local r1, g1, b1 = r1, g1, b1
-                    if ffa_mode == "FFA" then
-                        rank = playerKey
-                        local playerTeam = getPlayerTeam(player)
-                        if playerTeam then
-                            r1, g1, b1 = getTeamColor(playerTeam)
-                        else
-                            r1, g1, b1 = 255, 255, 255
-                        end
-                    end
-                    local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
-                    local pts = getElementData(player, 'Score') or 0
-                    if playerKey <= 8 then
-                        if player == getLocalPlayer() then isLocalPlayerInView = true end
-                        dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
-                        dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(2+playerKey)), wX+nickWidth, wY+(rowHeight*(3+playerKey)), tocolor(r1, g1, b1, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
-                        dxDrawText(pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(2+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+playerKey)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
-                    end
+			for playerKey, player in ipairs(t1PlayersFormatted) do
+                if playerKey <= 8 then
+                    if player.isLocalPlayer then isLocalPlayerInView = true end
+                    dxDrawText(player.rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
+                    dxDrawText(player.playerName, wX + rankWidth, wY + (rowHeight*(2+playerKey)), wX+nickWidth, wY+(rowHeight*(3+playerKey)), tocolor(player.r, player.g, player.b, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
+                    dxDrawText(player.pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(2+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+playerKey)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
+                end
 
-                    -- shows local player in the list if he is not in top 8 during FFA mode
-                    if ffa_mode == "FFA" then
-                        if playerKey >= 9 and (not isLocalPlayerInView) then
-                            if player == getLocalPlayer() then
-                                dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(2+9)), wX+rankWidth, wY+(rowHeight*(3+9)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
-                                dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(2+9)), wX+nickWidth, wY+(rowHeight*(3+9)), tocolor(r1, g1, b1, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
-                                dxDrawText(pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(2+9)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+9)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
-                            end
-                        elseif playerKey == 9 and isLocalPlayerInView then
-                            dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
-                            dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(2+playerKey)), wX+nickWidth, wY+(rowHeight*(3+playerKey)), tocolor(r1, g1, b1, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
-                            dxDrawText(pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(2+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+playerKey)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
+                -- shows local player in the list if he is not in top 8 during FFA mode
+                if ffa_mode == "FFA" then
+                    if playerKey >= 9 and (not isLocalPlayerInView) then
+                        if player.isLocalPlayer then
+                            dxDrawText(player.rank .. getPrefix(player.rank), wX + margin, wY + (rowHeight*(2+9)), wX+rankWidth, wY+(rowHeight*(3+9)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
+                            dxDrawText(player.playerName, wX + rankWidth, wY + (rowHeight*(2+9)), wX+nickWidth, wY+(rowHeight*(3+9)), tocolor(player.r, player.g, player.b, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
+                            dxDrawText(player.pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(2+9)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+9)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
                         end
+                    elseif playerKey == 9 and isLocalPlayerInView then
+                        dxDrawText(player.rank .. getPrefix(player.rank), wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
+                        dxDrawText(player.playerName, wX + rankWidth, wY + (rowHeight*(2+playerKey)), wX+nickWidth, wY+(rowHeight*(3+playerKey)), tocolor(player.r, player.g, player.b, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
+                        dxDrawText(player.pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(2+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+playerKey)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
                     end
                 end
 			end
 
             if (ffa_mode == "CW") then
-                dxDrawText(getTeamName(teams[2]), wX + margin, wY + (rowHeight*(3+count)), wX+windowSizeX-margin, wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, fBold, "left", "center", false, false, false, true, false)
-                dxDrawText(getElementData(teams[2], 'Score'), wX + rankWidth + nickWidth, wY + (rowHeight*(3+count)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, fBold, "center", "center", false, false, false, true, false)
+                dxDrawText(t2name, wX + margin, wY + (rowHeight*(3+count)), wX+windowSizeX-margin, wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, fBold, "left", "center", false, false, false, true, false)
+                dxDrawText(t2Score, wX + rankWidth + nickWidth, wY + (rowHeight*(3+count)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, fBold, "center", "center", false, false, false, true, false)
 
                 local t2start = 0
                 if #t1Players > 8 then
@@ -175,14 +194,11 @@ function updateDisplay()
                 else
                     t2start = 3+#t1Players
                 end
-                for playerKey, player in ipairs(t2Players) do
-                    local rank = tonumber(getElementData(player, 'race rank')) or 1
-                    local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
-                    local pts = getElementData(player, 'Score')
+                for playerKey, player in ipairs(t2PlayersFormatted) do
                     if playerKey < 9 then
-                        dxDrawText(rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(t2start+playerKey)), wX+rankWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
-                        dxDrawText(playerName, wX + rankWidth, wY + (rowHeight*(t2start+playerKey)), wX+nickWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(r2, g2, b2, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
-                        dxDrawText(pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(t2start+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(t2start+playerKey+1)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
+                        dxDrawText(player.rank .. getPrefix(player.rank), wX + margin, wY + (rowHeight*(t2start+playerKey)), wX+rankWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
+                        dxDrawText(player.playerName, wX + rankWidth, wY + (rowHeight*(t2start+playerKey)), wX+nickWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(player.r, player.g, player.b, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
+                        dxDrawText(player.pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(t2start+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(t2start+playerKey+1)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
                     end
                 end
             end
@@ -195,7 +211,7 @@ function updateDisplay()
 			dxDrawText("Press #bababa0 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
 			dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, fBold, "center", "center", false, false, true, true, false)
-			dxDrawText(t1c..t1tag.."   "..getElementData(teams[1], 'Score').."  #ffffff-  "..t2c..getElementData(teams[2], 'Score').."   "..t2tag, wX + margin, wY + (rowHeight*2), wX+windowSizeX-(margin*2), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "center", "center", false, false, false, true, false)
+			dxDrawText(t1c..t1tag.."   "..t1Score.."  #ffffff-  "..t2c..t2Score.."   "..t2tag, wX + margin, wY + (rowHeight*2), wX+windowSizeX-(margin*2), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, fBold, "center", "center", false, false, false, true, false)
 		else
 			dxDrawRoundedRectangle(1,1,1,1, 0, tocolor(0, 0, 0, 0), false, false)
 		end
