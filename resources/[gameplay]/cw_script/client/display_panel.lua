@@ -163,7 +163,7 @@ function updateDisplay()
 			for playerKey, player in ipairs(t1PlayersFormatted) do
                 if playerKey <= 8 then
                     if player.isLocalPlayer then isLocalPlayerInView = true end
-                    dxDrawText(player.rank .. getPrefix(rank), wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
+                    dxDrawText(player.rank .. getPrefix(player.rank), wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, fReg, "left", "center", false, false, false, true, false)
                     dxDrawText(player.playerName, wX + rankWidth, wY + (rowHeight*(2+playerKey)), wX+nickWidth, wY+(rowHeight*(3+playerKey)), tocolor(player.r, player.g, player.b, 255), 1.0, fBold, "left", "center", false, false, false, true, false)
                     dxDrawText(player.pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(2+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(3+playerKey)), tocolor(255, 255, 255, 255), 1.0, fReg, "center", "center", false, false, false, true, false)
                 end
