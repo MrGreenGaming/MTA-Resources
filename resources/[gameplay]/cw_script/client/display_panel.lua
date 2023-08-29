@@ -107,21 +107,23 @@ function formatPlayerData(players)
     local toReturn = {}
     for i, player in ipairs(players) do
         local rank = tonumber(getElementData(player, 'race rank')) or 1
-        local r1, g1, b1 = r1, g1, b1
+        local r, g, b = r1, g1, b1
         if ffa_mode == "FFA" then
             rank = i
             local playerTeam = getPlayerTeam(player)
             if playerTeam then
-                r1, g1, b1 = getTeamColor(playerTeam)
+                r, g, b = getTeamColor(playerTeam)
             else
-                r1, g1, b1 = 255, 255, 255
+                r, g, b = 255, 255, 255
             end
         end
         local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
         local pts = getElementData(player, 'Score') or 0
         table.insert(toReturn, {
             rank = rank,
-            r, g, b = r1, g1, b1,
+            r = r,
+            b = b,
+            g = g,
             playerName = playerName,
             pts = pts,
             isLocalPlayer = player == localPlayer
