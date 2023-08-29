@@ -235,6 +235,10 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m,
             clientCall(player, 'createGUI', getTeamName(teams[1]), getTeamName(teams[2]))
         end
         triggerClientEvent(player, "updateDisplayPlayerData", root)
+        local vehicle = getPedOccupiedVehicle(player)
+        if vehicle then
+            applyWheels(player, vehicle)
+        end
 	end
 end
 

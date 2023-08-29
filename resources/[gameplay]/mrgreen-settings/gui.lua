@@ -327,6 +327,9 @@ local screenW, screenH = guiGetScreenSize()
         guiComboBoxAddItem(GUIEditor.combobox["NOSMode"], "nfs")
         guiComboBoxSetSelected(GUIEditor.combobox["NOSMode"], 2)
 
+        GUIEditor.label["eventOffroadWheels"] = guiCreateLabel(104, 123+50, 300, 15, "Use offroad wheels during events", false, GUIEditor.tab[5])
+        GUIEditor.checkbox["eventOffroadWheels"] = guiCreateCheckBox(78, 122+50, 15, 15, "", false, false, GUIEditor.tab[5])
+
 -- end gameplay Tab
 
 -- Controller Tab

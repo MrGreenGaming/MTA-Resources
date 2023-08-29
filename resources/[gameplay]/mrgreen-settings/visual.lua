@@ -50,13 +50,14 @@ visual = { -- Standard Settings, 0 = off --
     ["controllerStart"] = 1, -- 1 allow Start bind, 0 disallow
     ["controllerSelect"] = 1, -- 1 allow Select bind, 0 disallow
     ["controllerLogo"] = 1, -- 1 allow Logo bind, 0 disallow
+    ["eventOffroadWheels"] = 1,
 }
 
 
 -- Reapply settings when one of these resources (re)starts
 local VSL_reApplyTimer = false
 -- Add resource name here when used
-local resetResource = {"-shaders-bloom_fix","-shaders-car_paint_fix","-shaders-car_paint_reflect","-shaders-contrast","-shaders-depth_of_field","-shaders-dynamic_sky","-shaders-nitro","-shaders-palette","-shaders-radial_blur","-shaders-SkyBox_ALT","-shaders-watershine","race","race_ghost", "race_fix", "controller"}
+local resetResource = {"-shaders-bloom_fix","-shaders-car_paint_fix","-shaders-car_paint_reflect","-shaders-contrast","-shaders-depth_of_field","-shaders-dynamic_sky","-shaders-nitro","-shaders-palette","-shaders-radial_blur","-shaders-SkyBox_ALT","-shaders-watershine","race","race_ghost", "race_fix", "controller", "cw_script"}
 addEventHandler("onClientResourceStart",root,
 	function(res)
 		local resName = getResourceName(res)
@@ -297,6 +298,20 @@ function visualCheckBoxHandler()
             triggerEvent("allowControllerLogoBind", root, false)
             v_setSaveTimer()
             visual["controllerLogo"] = 0
+        end
+    elseif source == GUIEditor.checkbox["eventOffroadWheels"] then
+        if guiCheckBoxGetSelected( GUIEditor.checkbox["eventOffroadWheels"] ) then
+            if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
+                triggerServerEvent("eventApplyWheelSetting", localPlayer, true)
+            end
+            v_setSaveTimer()
+            visual["eventOffroadWheels"] = 1
+        else
+            if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
+                triggerServerEvent("eventApplyWheelSetting", localPlayer, false)
+            end
+            v_setSaveTimer()
+            visual["eventOffroadWheels"] = 0
         end
 	end
 end
@@ -645,6 +660,19 @@ function setVisualGUI()
             elseif u == 1 then
                 guiCheckBoxSetSelected( GUIEditor.checkbox["controllerLogo"], true )
                 triggerEvent("allowControllerLogoBind", root, true)
+            end
+
+        elseif f == "eventOffroadWheels" then
+            if u == 0 then
+                guiCheckBoxSetSelected( GUIEditor.checkbox["eventOffroadWheels"], false )
+                if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
+                    triggerServerEvent("eventApplyWheelSetting", localPlayer, false)
+                end
+            elseif u == 1 then
+                guiCheckBoxSetSelected( GUIEditor.checkbox["eventOffroadWheels"], true )
+                if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
+                    triggerServerEvent("eventApplyWheelSetting", localPlayer, true)
+                end
             end
 		elseif f == "bloom" then
 			if u == 1 then
