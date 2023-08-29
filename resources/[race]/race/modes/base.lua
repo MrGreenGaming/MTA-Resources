@@ -261,7 +261,7 @@ end
 
 function RaceMode:onPlayerJoin(player, spawnpoint)
 	self.checkpointBackups[player] = {}
-	self.checkpointBackups[player][0] = { vehicle = spawnpoint.vehicle, position = spawnpoint.position, rotation = {0, 0, spawnpoint.rotation}, velocity = {0, 0, 0}, turnvelocity = {0, 0, 0}, geardown = true}
+	self.checkpointBackups[player][0] = { vehicle = spawnpoint.vehicle, position = spawnpoint.position, rotation = spawnpoint.rotation, velocity = {0, 0, 0}, turnvelocity = {0, 0, 0}, geardown = true}
 end
 
 function RaceMode:onPlayerPickUpRacePickup(player, pickup)
@@ -464,7 +464,7 @@ function RaceMode:restorePlayer(id, player, bNoFade, bDontFix)
 	if not self.checkpointsExist() or checkpoint==1 then
 		local spawnpoint = self:pickFreeSpawnpoint(player)
 		bkp.position = spawnpoint.position
-		bkp.rotation = {0, 0, spawnpoint.rotation}
+		bkp.rotation = spawnpoint.rotation
 		bkp.geardown = true                 -- Fix landing gear state
 		bkp.vehicle = spawnpoint.vehicle    -- Fix spawn'n'blow
 		--setVehicleID(self.getPlayerVehicle(player), spawnpoint.vehicle)
