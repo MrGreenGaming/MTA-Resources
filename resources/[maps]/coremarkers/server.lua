@@ -222,20 +222,9 @@ addEventHandler("requestAllowedPowerTypes", resourceRoot,
 addEventHandler("onResourceStart", resourceRoot,
 	function()
 		outputChatBox( '#ffffff"Core Markers" by #00dd22AleksCore #fffffflaunched.', root, 255, 0, 0, true)
-		showText_Create()
         for _, player in ipairs(getElementsByType("player")) do
             showText( 54, 201, 46, "Pick-up markers (boxes)\n@\nPress LMB, LCTRL or " .. exports.controller:getLabelForPlayer(player, "l3") .." button", 12000, player)
         end
-		setTimer(
-			function()
-				textItemSetColor(showText_Text, 54, 201, 46, 255)
-				setTimer(
-					function()
-						textItemSetColor(showText_Text, 255, 255, 255, 255)
-					end
-				, 600, 1)
-			end
-		, 1000, 11)
 
 		local coremarkers = getElementsByType("coremarker")
 		if #coremarkers > 0 then --new way, coremarkers as elements placed into .map file using mrgreen map editor plugin
