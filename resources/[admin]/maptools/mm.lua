@@ -532,9 +532,10 @@ addEvent("cmm_restoreMap",true)
 function restoreMap(map)
     if hasObjectPermissionTo(client,"command.deletemap",false) then
         local theRes = getResourceFromName(map.resname)
+        local actualResName = string.gsub(map.resname, "/home/container", "")
         if not theRes then outputChatBox("Error: map can not be restored (can't find map resource)",client,255,0,0) return end
 
-        local properName = string.gsub(map.resname,"_deleted","")
+        local properName = string.gsub(actualResName,"_deleted","")
 
         local raceMode = getResourceInfo(theRes,"racemode")
         if not raceMode then raceMode = "[maps]/[dd]" else raceMode = "[maps]/["..raceMode.."]" end
@@ -542,9 +543,9 @@ function restoreMap(map)
         local theCopy
         local sn = string.lower(getServerName())
         if string.find(sn,"mix") then -- looks if mix or race server
-            theCopy = renameResource(theRes,properName,raceMode)
+            theCopy = renameResource(actualResName,properName,raceMode)
         else
-            theCopy = renameResource(theRes,properName,"[maps]")
+            theCopy = renameResource(actualResName,properName,"[maps]")
         end
 
         if not theCopy then outputChatBox("Can't copy map, resource may already exist",client,255,0,0) return end
