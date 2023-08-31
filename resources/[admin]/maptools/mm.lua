@@ -532,10 +532,9 @@ addEvent("cmm_restoreMap",true)
 function restoreMap(map)
     if hasObjectPermissionTo(client,"command.deletemap",false) then
         local theRes = getResourceFromName(map.resname)
-        local actualResName = string.gsub(map.resname, "/home/container", "")
         if not theRes then outputChatBox("Error: map can not be restored (can't find map resource)",client,255,0,0) return end
 
-        local properName = string.gsub(actualResName,"_deleted","")
+        local properName = string.gsub(map.resname,"_deleted","")
 
         local raceMode = getResourceInfo(theRes,"racemode")
         if not raceMode then raceMode = "[maps]/[dd]" else raceMode = "[maps]/["..raceMode.."]" end
@@ -543,15 +542,16 @@ function restoreMap(map)
         local theCopy
         local sn = string.lower(getServerName())
         if string.find(sn,"mix") then -- looks if mix or race server
-            theCopy = renameResource(actualResName,properName,raceMode)
+            theCopy = copyResource(theRes,properName,raceMode)
         else
-            theCopy = renameResource(actualResName,properName,"[maps]")
+            theCopy = copyResource(theRes,properName,"[maps]")
         end
 
         if not theCopy then outputChatBox("Can't copy map, resource may already exist",client,255,0,0) return end
+        deleteResource(theRes)
 
-        setResourceInfo(theRes,"gamemodes","race")
-        setResourceInfo(theRes,"deleted","false")
+        setResourceInfo(theCopy,"gamemodes","race")
+        setResourceInfo(theCopy,"deleted","false")
 		if handlerConnect then -- if there is db connection, else save in local db file
 			local query = "INSERT INTO uploaded_maps (mapname, uploadername, manager, resname, status) VALUES (?,?,?,?,'Restored')"
 			local toptimesQuery = "INSERT IGNORE INTO toptimes (`forumid`, `mapname`, `pos`, `value`, `date`, `racemode`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode FROM toptimes_deleted a WHERE a.mapname = ? AND a.delete_reason = ?"
@@ -559,14 +559,14 @@ function restoreMap(map)
 
 			dbExec ( handlerConnect, toptimesQuery, properName, "Map Deletion")
 			dbExec ( handlerConnect, toptimesDeleteQuery, properName, "Map Deletion")
-			dbExec ( handlerConnect, query,getResourceInfo(theRes, "name") or properName,getResourceInfo(theRes,"author") or "N/A",tostring(getAccountName(getPlayerAccount(client))),properName)
+			dbExec ( handlerConnect, query,getResourceInfo(theCopy, "name") or properName,getResourceInfo(theCopy,"author") or "N/A",tostring(getAccountName(getPlayerAccount(client))),properName)
 		end
 
-		if getResourceInfo(theRes, 'forumid') then
-			notifyMapAction(getResourceInfo(theRes, "name"), '', getAccountName(getPlayerAccount(client)), map.resname, 'restored', getResourceInfo(theRes, 'forumid'))
+		if getResourceInfo(theCopy, 'forumid') then
+			notifyMapAction(getResourceInfo(theCopy, "name"), '', getAccountName(getPlayerAccount(client)), map.resname, 'restored', getResourceInfo(theCopy, 'forumid'))
 		end
 
-        outputChatBox("Map '".. getResourceName(theRes) .."' restored!",client)
+        outputChatBox("Map '".. getResourceName(theCopy) .."' restored!",client)
         refreshResources()
         fetchMaps(client)
     end
