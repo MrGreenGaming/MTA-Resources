@@ -55,7 +55,7 @@ addEventHandler("buyTeam", resourceRoot, function(teamname, teamtag, teamcolour,
         if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255 * 255 * 255)) end
         if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
 
-        if #teammsg > 255 then
+        if teammsg and #teammsg > 255 then
             outputChatBox('Team message is too long, max 255 characters', player, 255, 0, 0)
             return
         end
@@ -159,7 +159,7 @@ addEventHandler("updateTeam", resourceRoot, function(teamname, teamtag, teamcolo
         if type(teamcolour) ~= 'string' or #teamcolour < 1 then teamcolour = string.format('#%06X', math.random(0, 255 * 255 * 255)) end
         if type(teammsg) ~= 'string' or #teammsg < 1 then teammsg = nil end
 
-        if #teammsg > 255 then
+        if teammsg and #teammsg > 255 then
             outputChatBox('Team message is too long, max 255 characters', player, 255, 0, 0)
             return
         end
