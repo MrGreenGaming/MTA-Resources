@@ -28,6 +28,19 @@ addEventHandler('onPlayerVehicleEnter', root, function(vehicle, seat)
     applyWheels(source, vehicle)
 end)
 
+addEvent("onRaceStateChanging",true)
+addEventHandler("onRaceStateChanging", root,
+function ( state )
+    if state == "GridCountdown" then
+	    for i,player in ipairs(getElementsByType("player")) do
+            local vehicle = getPedOccupiedVehicle(player)
+            if vehicle then
+                applyWheels(player, vehicle)
+            end
+		end
+	end
+end)
+
 function applyWheels(player, vehicle)
     if not areTeamsSet() then return end
     if useOffroad[player] then addVehicleUpgrade(vehicle, 1025) else removeVehicleUpgrade ( vehicle, 1025 ) end
