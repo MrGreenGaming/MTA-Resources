@@ -18,9 +18,9 @@ function getAll(name)
 		local position = { tonumber(getElementData(element,"posX")), tonumber(getElementData(element,"posY")), tonumber(getElementData(element,"posZ")) }
 		local rotation = 0
 		if getElementData(element,"rotation") then
-		    rotation = tonumber(getElementData(element,"rotation"))
+            rotation = {0, 0, tonumber(getElementData(element,"rotation")) or 0}
 		elseif getElementData(element,"rotZ") then
-		    rotation = tonumber(getElementData(element,"rotZ"))
+            rotation = {tonumber(getElementData(element,"rotX")) or 0, tonumber(getElementData(element,"rotY")) or 0, tonumber(getElementData(element,"rotZ")) or 0}
 		end
 		local vehicle = tonumber(getElementData(element,"vehicle"))
 		result[i].position = position
@@ -40,11 +40,10 @@ function ( state )
 				local veh = getPedOccupiedVehicle(player)
 				local x, y, z = unpack(spawn.position)
 				local model = spawn.vehicle
-				local r = spawn.rotation
-				setCameraTarget( player, player )
+				local rx, ry, rz = unpack(spawn.rotation)
 				setElementModel ( veh, model )
                 setElementPosition ( veh, x, y, z )
-				setElementRotation ( veh, 0, 0, r )
+				setElementRotation ( veh, rx, ry, rz )
 			end
 		end
         outputInfo("Enforcing spawnpoints...")
