@@ -52,7 +52,7 @@ visual = { -- Standard Settings, 0 = off --
 	["controllerLogo"] = 1, -- 1 allow Logo bind, 0 disallow
 	["eventOffroadWheels"] = 1,
 	["thirdCheckpoint"] = 1,
-	["raceAssist"] = 1, -- 1 show race line of local ghost, 0 no race line
+	["raceAssist"] = 0, -- 1 show race line of local ghost, 0 no race line
 }
 
 
