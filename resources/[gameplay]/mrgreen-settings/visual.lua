@@ -46,19 +46,20 @@ visual = { -- Standard Settings, 0 = off --
 	["nitrocolor"] = "0078FF",
 	["lodrange"] = 0,
 	["customHornIcons"] = 1,
-    ["controller"] = 0, -- 0 = "XBOX", 1 = "Playstation"
-    ["controllerStart"] = 1, -- 1 allow Start bind, 0 disallow
-    ["controllerSelect"] = 1, -- 1 allow Select bind, 0 disallow
-    ["controllerLogo"] = 1, -- 1 allow Logo bind, 0 disallow
-    ["eventOffroadWheels"] = 1,
-    ["thirdCheckpoint"] = 1,
+	["controller"] = 0, -- 0 = "XBOX", 1 = "Playstation"
+	["controllerStart"] = 1, -- 1 allow Start bind, 0 disallow
+	["controllerSelect"] = 1, -- 1 allow Select bind, 0 disallow
+	["controllerLogo"] = 1, -- 1 allow Logo bind, 0 disallow
+	["eventOffroadWheels"] = 1,
+	["thirdCheckpoint"] = 1,
+	["raceAssist"] = 1, -- 1 show race line of local ghost, 0 no race line
 }
 
 
 -- Reapply settings when one of these resources (re)starts
 local VSL_reApplyTimer = false
 -- Add resource name here when used
-local resetResource = {"-shaders-bloom_fix","-shaders-car_paint_fix","-shaders-car_paint_reflect","-shaders-contrast","-shaders-depth_of_field","-shaders-dynamic_sky","-shaders-nitro","-shaders-palette","-shaders-radial_blur","-shaders-SkyBox_ALT","-shaders-watershine","race","race_ghost", "race_fix", "controller", "cw_script", "third_checkpoint"}
+local resetResource = {"-shaders-bloom_fix","-shaders-car_paint_fix","-shaders-car_paint_reflect","-shaders-contrast","-shaders-depth_of_field","-shaders-dynamic_sky","-shaders-nitro","-shaders-palette","-shaders-radial_blur","-shaders-SkyBox_ALT","-shaders-watershine","race","race_ghost", "race_fix", "controller", "cw_script", "third_checkpoint", "race_ghost_assist"}
 addEventHandler("onClientResourceStart",root,
 	function(res)
 		local resName = getResourceName(res)
@@ -323,6 +324,16 @@ function visualCheckBoxHandler()
             triggerEvent("toggleThirdCheckpoint", localPlayer, false)
             v_setSaveTimer()
             visual["thirdCheckpoint"] = 0
+        end
+    elseif source == GUIEditor.checkbox["raceAssist"] then
+        if guiCheckBoxGetSelected(GUIEditor.checkbox["raceAssist"]) then
+            triggerEvent("toggleRaceAssist", localPlayer, true)
+            v_setSaveTimer()
+            visual["raceAssist"] = 1
+        else
+            triggerEvent("toggleRaceAssist", localPlayer, false)
+            v_setSaveTimer()
+            visual["raceAssist"] = 0
         end
 	end
 end
@@ -645,76 +656,77 @@ function setVisualGUI()
 				toggleSkyBox(true)
 			end
 
-        elseif f == "thirdCheckpoint" then
-            if u == 1 then
-                guiCheckBoxSetSelected( GUIEditor.checkbox["thirdCheckpoint"], true )
-                triggerEvent("toggleThirdCheckpoint", localPlayer, true)
-            else
-                guiCheckBoxSetSelected( GUIEditor.checkbox["thirdCheckpoint"], false )
-                triggerEvent("toggleThirdCheckpoint", localPlayer, false)
-            end
-        elseif f == "controller" then
-            guiComboBoxSetSelected( GUIEditor.combobox["controller"], u )
-            triggerEvent("updateControllerSetting", localPlayer, getControllerName(u))
+		elseif f == "raceAssist" then
+			if u == 1 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["raceAssist"], true)
+				triggerEvent("toggleRaceAssist", localPlayer, true)
+			else
+				guiCheckBoxSetSelected(GUIEditor.checkbox["raceAssist"], false)
+				triggerEvent("toggleRaceAssist", localPlayer, false)
+			end
 
-        elseif f == "controllerStart" then
-            if u == 0 then
-                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerStart"], false )
-            elseif u == 1 then
-                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerStart"], true )
-                triggerEvent("allowControllerStartBind", root, true)
-            end
-
-        elseif f == "controllerSelect" then
-            if u == 0 then
-                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerSelect"], false )
-            elseif u == 1 then
-                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerSelect"], true )
-                triggerEvent("allowControllerSelectBind", root, true)
-            end
-
-        elseif f == "controllerLogo" then
-            if u == 0 then
-                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerLogo"], false )
-            elseif u == 1 then
-                guiCheckBoxSetSelected( GUIEditor.checkbox["controllerLogo"], true )
-                triggerEvent("allowControllerLogoBind", root, true)
-            end
-
-        elseif f == "eventOffroadWheels" then
-            if u == 0 then
-                guiCheckBoxSetSelected( GUIEditor.checkbox["eventOffroadWheels"], false )
-                if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
-                    triggerServerEvent("eventApplyWheelSetting", localPlayer, false)
-                end
-            elseif u == 1 then
-                guiCheckBoxSetSelected( GUIEditor.checkbox["eventOffroadWheels"], true )
-                if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
-                    triggerServerEvent("eventApplyWheelSetting", localPlayer, true)
-                end
-            end
+		elseif f == "thirdCheckpoint" then
+			if u == 1 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["thirdCheckpoint"], true)
+				triggerEvent("toggleThirdCheckpoint", localPlayer, true)
+			else
+				guiCheckBoxSetSelected(GUIEditor.checkbox["thirdCheckpoint"], false)
+				triggerEvent("toggleThirdCheckpoint", localPlayer, false)
+			end
+		elseif f == "controller" then
+			guiComboBoxSetSelected(GUIEditor.combobox["controller"], u)
+			triggerEvent("updateControllerSetting", localPlayer, getControllerName(u))
+		elseif f == "controllerStart" then
+			if u == 0 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["controllerStart"], false)
+			elseif u == 1 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["controllerStart"], true)
+				triggerEvent("allowControllerStartBind", root, true)
+			end
+		elseif f == "controllerSelect" then
+			if u == 0 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["controllerSelect"], false)
+			elseif u == 1 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["controllerSelect"], true)
+				triggerEvent("allowControllerSelectBind", root, true)
+			end
+		elseif f == "controllerLogo" then
+			if u == 0 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["controllerLogo"], false)
+			elseif u == 1 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["controllerLogo"], true)
+				triggerEvent("allowControllerLogoBind", root, true)
+			end
+		elseif f == "eventOffroadWheels" then
+			if u == 0 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["eventOffroadWheels"], false)
+				if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
+					triggerServerEvent("eventApplyWheelSetting", localPlayer, false)
+				end
+			elseif u == 1 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["eventOffroadWheels"], true)
+				if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" then
+					triggerServerEvent("eventApplyWheelSetting", localPlayer, true)
+				end
+			end
 		elseif f == "bloom" then
 			if u == 1 then
-				guiCheckBoxSetSelected( GUIEditor.checkbox["bloom"], true )
-				triggerEvent( "switchBloom", root, true )
+				guiCheckBoxSetSelected(GUIEditor.checkbox["bloom"], true)
+				triggerEvent("switchBloom", root, true)
 			end
-
-
 		elseif f == "dof" then
 			if u == 1 then
-				guiCheckBoxSetSelected( GUIEditor.checkbox["dof"], true )
-				triggerEvent( "switchDoF", root, true )
+				guiCheckBoxSetSelected(GUIEditor.checkbox["dof"], true)
+				triggerEvent("switchDoF", root, true)
 			end
-
 		elseif f == "enb" then
 			if u == 1 then
-				guiCheckBoxSetSelected( GUIEditor.checkbox["palette"], true )
-				triggerEvent( "switchPalette", root, true )
+				guiCheckBoxSetSelected(GUIEditor.checkbox["palette"], true)
+				triggerEvent("switchPalette", root, true)
 			end
-
 		elseif f == "chromewheels" then
 			if u == 1 then
-				guiCheckBoxSetSelected( GUIEditor.checkbox["chromewheels"], true )
+				guiCheckBoxSetSelected(GUIEditor.checkbox["chromewheels"], true)
 				loadBTWheels(false)
 				replaceWheels(true)
 			end

@@ -335,6 +335,10 @@ local screenW, screenH = guiGetScreenSize()
         GUIEditor.checkbox["vehicleChange"] = guiCreateCheckBox(78, 122 + 100, 15, 15, "", false, false, GUIEditor.tab[5])
         setTooltip(GUIEditor.label["vehicleChange"], "If you enable this, a vehicle icon will appear on checkpoints that changes your vehicle.")
 
+        GUIEditor.label["raceAssist"] = guiCreateLabel(104, 123 + 125, 100, 15, "Race Assist", false, GUIEditor.tab[5])
+        GUIEditor.checkbox["raceAssist"] = guiCreateCheckBox(78, 122 + 125, 15, 15, "", false, false, GUIEditor.tab[5])
+        setTooltip(GUIEditor.label["raceAssist"], "If you enable this, a line of your best ghost recording will show on the road.")
+
 -- end gameplay Tab
 
 -- Controller Tab
