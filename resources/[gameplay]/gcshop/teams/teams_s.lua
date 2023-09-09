@@ -388,8 +388,21 @@ addEventHandler('onGamemodeMapStop', root, function()
 			end
         end
     end
+    deleteEmptyTeams()
 end)
 
+function deleteEmptyTeams()
+    for i, team in ipairs(getElementsByType("team")) do
+        local playerCount = countPlayersInTeam(team)
+        if playerCount == 0 then
+            local gcshopId = getElementData(team, "gcshop.teamid") or 0
+            if gcshopId > 0 then
+                teams[gcshopId] = nil
+            end
+            destroyElement(team)
+        end
+    end
+end
 
 -- Sending invites, accepting, leaving team
 function invite(sender, c, playername)
