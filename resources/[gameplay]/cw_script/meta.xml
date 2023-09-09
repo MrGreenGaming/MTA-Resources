@@ -14,10 +14,6 @@
 
     <script src="helpers.lua" type="shared" />
 
-    <file src="fonts/Roboto-Bold.ttf" />
-    <file src="fonts/Roboto-Medium.ttf" />
-    <file src="fonts/Roboto-Regular.ttf" />
-
     <export function="areTeamsSet" type="server" />
     <export function="areGcShopTeamsAllowed" type="server" />
     <export function="areModShopModificationsAllowed" type="server" />
