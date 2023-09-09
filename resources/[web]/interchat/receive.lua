@@ -17,11 +17,11 @@ function playerRedirect ( serial, playtime, tick, hoursPlayed )
 	}
 end
 
-function onPlayerConnect(nick, ip, username, serial)
+function onPlayerJoinRedirectedCheck()
+    local serial = getPlayerSerial(source)
 	if joiningSerials[serial] then
 		if getTickCount() - joiningSerials[serial].tick <= 10 * 1000 then
-			local player = getPlayerFromName(nick)
-			setElementData(player, 'redirectedFrom', other_server, false)
+			setElementData(source, 'redirectedFrom', other_server)
 		else
 			for s, t in pairs(joiningSerials) do
 				if getTickCount() - t.tick >= 10 * 1000 then
@@ -31,7 +31,7 @@ function onPlayerConnect(nick, ip, username, serial)
 		end
 	end
 end
-addEventHandler('onPlayerConnect', root, onPlayerConnect)
+addEventHandler('onPlayerJoin', root, onPlayerJoinRedirectedCheck, true, "high")
 
 function onPlayerJoin()
 	local j = joiningSerials[getPlayerSerial(source)]
