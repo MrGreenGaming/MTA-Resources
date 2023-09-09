@@ -52,7 +52,7 @@ function showMessage(text, r, g, b, player)
 		player = g_Root
         ypos = 0.35
 	end
-	
+
 	if g_Messages[player] then
 		TimerManager.destroyTimersFor("message",player)
 	else
@@ -61,7 +61,7 @@ function showMessage(text, r, g, b, player)
 			textitem = textCreateTextItem('', 0.5, ypos, 'medium', 255, 0, 0, 255, 3.0, 'center', 'center', 128)
 		}
 	end
-	
+
 	local display = g_Messages[player].display
 	local textitem = g_Messages[player].textitem
 	textDisplayAddText(display, textitem)
@@ -91,7 +91,7 @@ function destroyAllMessages()
     for key,value in pairs(g_Messages) do
         destroyMessage(key)
     end
-    g_Messages = {}  
+    g_Messages = {}
 end
 
 
@@ -122,7 +122,7 @@ function setVehicleID(vehicle, id)
 	end
 	TimerManager.createTimerFor("map",vehicle):setTimer(revertVehicleWheels, 1000, 1, vehicle)
 	TimerManager.createTimerFor("map",vehicle):setTimer(revertVehicleDoors, 1000, 1, vehicle)
-	
+
 	return vehicle
 end
 
@@ -236,6 +236,7 @@ function getStringFromColor(r, g, b)
 end
 
 function isPlayerInACLGroup(player, groupName)
+    if not player then return false end
 	local account = getPlayerAccount(player)
 	if not account then
 		return false
@@ -304,7 +305,7 @@ function table.find(t, ...)
 		end
 		return false
 	end
-	
+
 	local value = table.remove(args)
 	if value == '[nil]' then
 		value = nil
