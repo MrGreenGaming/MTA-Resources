@@ -69,23 +69,23 @@ achievementListRace = {
 addEventHandler('onResourceStart', resourceRoot,
 function()
 	g_Players = {}
-	for i,j in ipairs(getElementsByType('player')) do 
+	for i,j in ipairs(getElementsByType('player')) do
 		g_Players[j] = {}
-		g_Players[j].nos = false 
+		g_Players[j].nos = false
 		g_Players[j].mapsWon = 0
 		g_Players[j].countMapsWithNoDeaths = 0
 		g_Players[j].countMapsWithNoDamage = 0
 		g_Players[j].hasBeenChatting = false
 		g_Players[j].deathCount = 0
 		g_Players[j].timer = false
-	end	
+	end
 end
 )
 
 addEventHandler('onPlayerJoin', root,
 function()
 	g_Players[source] = {}
-	g_Players[source].nos = false 
+	g_Players[source].nos = false
 	g_Players[source].countMapsWithNoDeaths = 0
 	g_Players[source].countMapsWithNoDamage = 0
 	g_Players[source].hasBeenChatting = false
@@ -117,7 +117,7 @@ function(rank, time)
     	g_Players[source].mapsWon = g_Players[source].mapsWon + 1
     	if g_Players[source].mapsWon == 10 then
         	addPlayerAchievementRace(source, 27)
-    	end    
+    	end
     	addAchievementProgressRace ( source, 47, 1 )
     	addAchievementProgressRace ( source, 48, 1 )
     	addAchievementProgressRace ( source, 49, 1 )
@@ -133,9 +133,9 @@ function(rank, time)
 		local cps = #getElementsByType('checkpoint')
 		if (collidable == 0) and (cps > 5) then
 			addPlayerAchievementRace(source, 11)
-		end	
+		end
 	end
-	
+
 	if (mapResName == "race-hellbykataklysm") then
 		addPlayerAchievementRace(source, 1)
 	end
@@ -206,70 +206,70 @@ function(rank, time)
 		elseif g_Players[source].wins == 10 and activePlayerCount >= 5 then
 			addPlayerAchievementRace(source, 53)
 		end
-	else 
+	else
 		g_Players[source].wins = 0
 		g_Players[source].win = false
-	end	
+	end
 	local ok = true
-	for i,j in ipairs(tableOfPlayers) do 
+	for i,j in ipairs(tableOfPlayers) do
 		if j == source then
 			ok = false
 		end
 	end
 	if ok then
-		addPlayerAchievementRace(source, 13)	
-	end	
+		addPlayerAchievementRace(source, 13)
+	end
 	if ( rank == 1 ) then
 		local ok = true
-		for i,j in ipairs(tableOfPlayers) do 
+		for i,j in ipairs(tableOfPlayers) do
 			if j == source then
 				ok = false
 			end
 		end
 		if ok then
-			addPlayerAchievementRace(source, 14)	
-		end	
-	end	
+			addPlayerAchievementRace(source, 14)
+		end
+	end
 	if time <= 20000 then
 		addPlayerAchievementRace(source, 15)
 	end
 	if rank == 1 and time <= 20000 then
 		addPlayerAchievementRace(source, 16)
-	end	
+	end
 	if (not g_Players[source].damaged) then
 		addPlayerAchievementRace(source, 17)
-	end	
+	end
 	if (g_Players[source].countMapsWithNoDamage == 3) then
 		addPlayerAchievementRace(source, 18)
-	end	
+	end
 	if (g_Players[source].deathCount >= 3) then
 		addPlayerAchievementRace(source, 19)
-	end	
+	end
 	if (g_Players[source].deathCount >= 1) and (rank == 1) then
 		addPlayerAchievementRace(source, 20)
-	end	
+	end
 	if (g_Players[source].hasBeenChatting) then
 		addPlayerAchievementRace(source, 22)
-	end	
+	end
 	if (g_Players[source].nos == false) and (rank == 1) and (hasNitro) and (getVehicleType(getPedOccupiedVehicle(source)) ~= "Bike") then
 		addPlayerAchievementRace(source, 23)
 	end
 	if (rank == 1) and (getElementHealth(getPedOccupiedVehicle(source)) < 250) then
 		addPlayerAchievementRace(source, 25)
-	end		
+	end
 	if (getElementHealth(getPedOccupiedVehicle(source)) < 250) then
 		addPlayerAchievementRace(source, 26)
-	end	
+	end
 	local c = 0
 	if (rank == 1) then
 		tickTimer = setTimer(function()
 				c = c + 1
 		end, 1000, 44)         --this needs to be adjusted in case Green server changes max Hurry time.
 		g_Players[source].timer = true
-	end	
+	end
 	if (c >= 43) and (g_Players[source].timer == false) then  --this needs to be adjusted in case Green server changes max Hurry time.
 		addPlayerAchievementRace(source, 28)
-	end	
+	end
 end
 )
 
@@ -286,13 +286,13 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	local activePlayers = getActivePlayerCount()
 	--"Be the only noob to die in a map"
 
-	for i,j in ipairs(getElementsByType('player')) do 
+	for i,j in ipairs(getElementsByType('player')) do
 		local isFinished = getElementData(j, "race.finished")
 		if (g_Players[j].wins ~= 0) and (g_Players[j].win ~= false) and (isFinished == false) then
 			g_Players[j].wins = 0
 			g_Players[j].win = false
-		end	
-	end	
+		end
+	end
 	local count = 0
 	local onlyPlayer
 	for i,j in pairs(g_Players) do
@@ -302,19 +302,19 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 		end
 	end
 
-	if count == 1 and activePlayers >= 5 then	
+	if count == 1 and activePlayers >= 5 then
 		addPlayerAchievementRace(onlyPlayer, 5)
 	end
 
 	--"be the only person who hasn't died in a map"
 	count = 0
-	for i,j in pairs(g_Players) do 
+	for i,j in pairs(g_Players) do
 		if type(j.died) == 'boolean' and j.died == false and not wasPlayerAfk(i) then
 			count = count + 1
 			onlyPlayer = i
 		end
 	end
-	if count == 1 and activePlayers >= 5 then	
+	if count == 1 and activePlayers >= 5 then
 		 addPlayerAchievementRace(onlyPlayer, 8)
 	end
 	removeEventHandler('onPlayerWasted', root, wastedFunc)
@@ -328,7 +328,7 @@ end
 
 function firstNoob()
 	if (firstDead == false) then
-		addPlayerAchievementRace(source, 12)	
+		addPlayerAchievementRace(source, 12)
 	end
 	firstDead = true
 end
@@ -338,7 +338,7 @@ function vehicleFunc()
 	if player and getElementType(player) == 'player' then
 		g_Players[player].damaged = true
 		g_Players[player].countMapsWithNoDamage = 0
-	end	
+	end
 end
 
 addEvent('onRaceStateChanging', true)
@@ -354,9 +354,9 @@ addEventHandler('onMapStarting', root,
 function(mapInfo, mapOptions, gameOptions)
 if exports.race:getRaceMode() ~= "Sprint" then return end
 
-	for i,j in pairs(g_Players) do 
+	for i,j in pairs(g_Players) do
 		j.died = false
-	end	
+	end
 	removeEventHandler('onPlayerWasted', root, wastedFunc)
 	removeEventHandler('onPlayerWasted', root, dieFunc)
 	removeEventHandler('onVehicleDamage', root, vehicleFunc)
@@ -371,15 +371,15 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	hasNitro = false
 	racepickups = getElementsByType('racepickup')
 	if #racepickups > 0 then
-		for id, pickup in ipairs(racepickups) do 
+		for id, pickup in ipairs(racepickups) do
 			if getElementData(pickup, "type") == "nitro" then
 				hasNitro = true
 				break
 			end
 		end
-	end	
+	end
 	tableOfWinners = {}
-	for i,j in pairs(g_Players) do 
+	for i,j in pairs(g_Players) do
 		j.hasBeenChatting = false
 		j.deathCount = 0
 		j.nos = false
@@ -387,7 +387,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 		if j.damaged then
 			j.damaged = false
 			j.countMapsWithNoDamage = 0
-		else	
+		else
 		j.countMapsWithNoDamage = j.countMapsWithNoDamage + 1
 		end
 		if j.dead or wasPlayerAfk(j) then
@@ -396,10 +396,10 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			j.countMapsWithNoDeaths = j.countMapsWithNoDeaths + 1
 		else
 			j.countMapsWithNoDeaths = j.countMapsWithNoDeaths + 1
-		end	
+		end
 	end
 end
-)	
+)
 
 addEvent('onPostFinish', true)
 addEventHandler('onPostFinish', root,
@@ -410,7 +410,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 	if #tableOfWinners == 1 then
 		addPlayerAchievementRace(tableOfWinners[1], 21)
 	end
-	tableOfWinners = {}	
+	tableOfWinners = {}
 	for i,j in ipairs(getElementsByType('player')) do
 		if g_Players[j].dead or wasPlayerAfk(j) then
 			g_Players[j].countMapsWithNoDeaths = 0
@@ -424,7 +424,7 @@ if exports.race:getRaceMode() ~= "Sprint" then return end
 			addPlayerAchievementRace(j, 7)
 		elseif g_Players[j].countMapsWithNoDeaths == 10 then
 			addPlayerAchievementRace(j, 54)
-		end	
+		end
 	end
 	removeEventHandler('onPlayerWasted', root, dieFunc)
 	removeEventHandler('onVehicleDamage', root, vehicleFunc)
@@ -458,13 +458,13 @@ addEvent("onPlayerToptimeImprovement",true)
 addEventHandler("onPlayerToptimeImprovement",root,
     function (newPos,newTime,oldPos,oldTime)
 	if exports.race:getRaceMode() ~= "Sprint" then return end
-	
+
 		if newPos == 1 then
 			if pl == source then
 				addPlayerAchievementRace(source, 24)
-			end	
+			end
 			pl = source
-		end	
+		end
     end
 )
 
@@ -475,15 +475,15 @@ function wasPlayerAfk(player)
 end
 
 addEvent('onPlayerAway')
-addEventHandler('onPlayerAway', root, 
-function(bool) 
+addEventHandler('onPlayerAway', root,
+function(bool)
 	if bool and isElement(source) and getElementType(source) == 'player' then
 		playerAfkCache[source] = true
 	end
 end)
-addEventHandler('onPlayerQuit', root, function() if playerAfkCache[source] then playerAfkCache[player] = nil end end)
-addEventHandler('onMapStarting', root, function() 
-	playerAfkCache = {} 
+addEventHandler('onPlayerQuit', root, function() if playerAfkCache[source] then playerAfkCache[source] = nil end end)
+addEventHandler('onMapStarting', root, function()
+	playerAfkCache = {}
 	for _, p in ipairs(getElementsByType('player')) do
 		if getElementData(p, 'player state') == 'away' then
 			playerAfkCache[p] = true
