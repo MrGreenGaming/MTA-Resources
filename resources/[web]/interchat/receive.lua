@@ -1,6 +1,6 @@
 ----------------------------------------------
 -- 				Receive.lua					--
--- Respond to requests from other servers	-- 
+-- Respond to requests from other servers	--
 ----------------------------------------------
 
 
@@ -21,7 +21,7 @@ function onPlayerConnect(nick, ip, username, serial)
 	if joiningSerials[serial] then
 		if getTickCount() - joiningSerials[serial].tick <= 10 * 1000 then
 			local player = getPlayerFromName(nick)
-			setElementData(player, 'redirectedFrom', other_server)
+			setElementData(player, 'redirectedFrom', other_server, false)
 		else
 			for s, t in pairs(joiningSerials) do
 				if getTickCount() - t.tick >= 10 * 1000 then
@@ -123,7 +123,7 @@ function sendMapInfo ( name, author, gmname, outputMap, returnMapInfo )
 	if outputMap then
 		outputChatBox("[" .. other_server:upper() .. "] Map started: '" .. name .. "' / Gamemode: "..gmname, root, 0xFF, 0xD7, 0x00)
 	end
-	
+
 	triggerClientEvent("updateF2GUI", resourceRoot, other_server.." Map", "Map: "..name.."\nAuthor: "..author)
 
 	if returnMapInfo then
@@ -131,13 +131,13 @@ function sendMapInfo ( name, author, gmname, outputMap, returnMapInfo )
 		if not mapInfo then
 			local s = getElementData( getResourceRootElement( getResourceFromName("race") ) , "info")
 			if s then
-				mapInfo = s.mapInfo 
+				mapInfo = s.mapInfo
 			else
 				mapInfo = {}
 			end
 		end
 		return mapInfo
-	end	
+	end
 end
 
 
