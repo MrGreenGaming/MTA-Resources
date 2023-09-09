@@ -388,7 +388,9 @@ addEventHandler('onGamemodeMapStop', root, function()
 			end
         end
     end
-    deleteEmptyTeams()
+    if getResourceState(getResourceFromName("cw_script")) == "loaded" then
+        deleteEmptyTeams()
+    end
 end)
 
 function deleteEmptyTeams()
