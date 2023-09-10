@@ -1,4 +1,4 @@
-function startRound()
+function startRound(mapInfo)
     CurrentGamemode = exports.race:getRaceMode();
 
 	f_round = false
@@ -9,7 +9,7 @@ function startRound()
 		round_started = true
 	end
 
-    local eventName = exports.eventmanager:getEventName()
+    eventName = exports.eventmanager:getEventName()
     local nextMapName = exports.eventmanager:getNextMapName()
 
     if not nextMapName then

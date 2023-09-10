@@ -101,10 +101,9 @@ addEventHandler("updateDisplayPlayerData", getRootElement(), updateDisplayData)
 function formatPlayerData(players)
     local toReturn = {}
     for i, player in ipairs(players) do
-        local rank = tonumber(getElementData(player, 'race rank')) or 1
+        local rank = i
         local r, g, b = r1, g1, b1
         if ffa_mode == "FFA" then
-            rank = i
             local playerTeam = getPlayerTeam(player)
             if playerTeam then
                 r, g, b = getTeamColor(playerTeam)
@@ -163,9 +162,6 @@ function updateDisplay()
             local isLocalPlayerInView = false
 			for playerKey, player in ipairs(t1PlayersFormatted) do
                 if playerKey <= 8 then
-                    if mode == "CW" then
-                        player.rank = tonumber(getElementData(player, 'race rank')) or 1
-                    end
                     if player.isLocalPlayer then isLocalPlayerInView = true end
                     dxDrawText(player.rank .. getPrefix(player.rank), wX + margin, wY + (rowHeight*(2+playerKey)), wX+rankWidth, wY+(rowHeight*(3+playerKey)), tocolor(255,255,255, 255), 1, "default-bold", "left", "center", false, false, false, true, false)
                     dxDrawText(player.playerName, wX + rankWidth, wY + (rowHeight*(2+playerKey)), wX+nickWidth, wY+(rowHeight*(3+playerKey)), tocolor(player.r, player.g, player.b, 255), 1.0, "default-bold", "left", "center", false, false, false, true, false)
@@ -200,7 +196,6 @@ function updateDisplay()
                 end
                 for playerKey, player in ipairs(t2PlayersFormatted) do
                     if playerKey < 9 then
-                        player.rank = tonumber(getElementData(player, 'race rank')) or 1
                         dxDrawText(player.rank .. getPrefix(player.rank), wX + margin, wY + (rowHeight*(t2start+playerKey)), wX+rankWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(255,255,255, 255), 1, "default-bold", "left", "center", false, false, false, true, false)
                         dxDrawText(player.playerName, wX + rankWidth, wY + (rowHeight*(t2start+playerKey)), wX+nickWidth, wY+(rowHeight*(t2start+playerKey+1)), tocolor(player.r, player.g, player.b, 255), 1.0, "default-bold", "left", "center", false, false, false, true, false)
                         dxDrawText(player.pts .. ' pts', wX + rankWidth + nickWidth, wY + (rowHeight*(t2start+playerKey)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(t2start+playerKey+1)), tocolor(255, 255, 255, 255), 1.0, "default-bold", "center", "center", false, false, false, true, false)

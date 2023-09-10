@@ -681,6 +681,8 @@ addCommandHandler('forcevote',
 		startNextMapVote()
 	end
 )
+addEvent("onEventBothTeamsReady")
+addEventHandler("onEventBothTeamsReady", root, startNextMapVote)
 
 
 ---------------------------------------------------------------------------

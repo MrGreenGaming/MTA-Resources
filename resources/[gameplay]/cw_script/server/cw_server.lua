@@ -12,6 +12,9 @@ f_round = false
 round_ended = true
 isWarEnded  = false
 
+eventName = false
+nextMapName = false
+
 CurrentGamemode = "Sprint"
 
 -----------------
@@ -226,8 +229,8 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m,
 	c_round = 0
 	call(getResourceFromName("scoreboard"), "scoreboardAddColumn", "Score")
 
-    local eventName = exports.eventmanager:getEventName()
-    local nextMapName = exports.eventmanager:getNextMapName()
+    eventName = exports.eventmanager:getEventName()
+    nextMapName = exports.eventmanager:getNextMapName()
     if not nextMapName then
         nextMapName = exports.gcshop:getQueuedMapName()
     end
@@ -330,18 +333,37 @@ addEventHandler("onPlayerQuit", getRootElement(), function() updateScoreData(sou
 
 -- Exported function: get basic event data to use in other resources
 function getEventData()
+    if not areTeamsSet() then return false end
+
+    local eventName = eventName or exports.eventmanager:getEventName()
+    local nextMapName = exports.eventmanager:getNextMapName()
+    if not nextMapName then
+        nextMapName = exports.gcshop:getQueuedMapName()
+    end
+
     local t1 = getTeamName(teams[1])
     local t2 = getTeamName(teams[2])
     local t1t = getTeamFromName(t1)
     local t2t = getTeamFromName(t2)
+    local t1r, t1g, t1b = getTeamColor(t1t)
+    local t2r, t2g, t2b = getTeamColor(t2t)
     return {
         mode = ffa_mode,
         team1Name = t1,
         team2Name = t2,
-        team1Color = getTeamColor(t1t),
-        team2Color = getTeamColor(t2t),
         team1Score = tonumber(getElementData(t1t, 'Score')),
-        team2Score = tonumber(getElementData(t1t, 'Score')),
-        ffaPlayersSorted = getPlayersInTeamSortedByScore(t1t),
+        team2Score = tonumber(getElementData(t2t, 'Score')),
+        team1Players = getPlayersInTeamSortedByScore(t1t),
+        team2Players = getPlayersInTeamSortedByScore(t2t),
+        eventName = eventName,
+        nextMapName = nextMapName,
+        cRound = c_round,
+        mRound = rounds,
+        t1r = t1r,
+        t1g = t1g,
+        t1b = t1b,
+        t2r = t2r,
+        t2g = t2g,
+        t2b = t2b,
     }
 end

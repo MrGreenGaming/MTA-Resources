@@ -84,7 +84,7 @@ end
 
 function setEventName(player, _, ...)
     local arg = {...}
-    local name = table.concat( arg, " " )
+    eventName = table.concat( arg, " " )
     if isAdmin(player) then
         for i, player in ipairs(getElementsByType('player')) do
             clientCall(player, "updateEventName", name)
