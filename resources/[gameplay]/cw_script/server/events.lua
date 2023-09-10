@@ -1,3 +1,6 @@
+-- TODO Replace with actual lobby res name
+local lobbyResName = "HeightVehicleChangerMap-Test"
+
 function startRound(mapInfo)
     CurrentGamemode = exports.race:getRaceMode();
 
@@ -14,6 +17,15 @@ function startRound(mapInfo)
 
     if not nextMapName then
         nextMapName = exports.gcshop:getQueuedMapName()
+    end
+
+    if mapInfo.resname == lobbyResName then
+        f_round = true
+    end
+
+    -- sets next map to Lobby for CW's
+    if mapInfo.resname ~= lobbyResName and c_round ~= rounds and ffa_mode == "CW" then
+        triggerEvent("onEventSetNextMapLobby", root, lobbyResName)
     end
 
 	for i,player in ipairs(getElementsByType('player')) do

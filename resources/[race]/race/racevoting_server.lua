@@ -977,6 +977,16 @@ addCommandHandler('nextmap',
 	end
 )
 
+addEvent("onEventSetNextMapLobby")
+addEventHandler("onEventSetNextMapLobby", root, function(lobbyResName)
+    local map = getResourceFromName(lobbyResName)
+    if map then
+        g_ForcedNextMap = map
+        outputChatBox("Next map set to " .. getMapName(g_ForcedNextMap) .. ' by Event Script', g_Root, 0, 240, 0)
+        triggerEvent('onNextMapSettingChange', root, g_ForcedNextMap)
+    end
+end)
+
 --Find a map which matches, or nil and a text message if there is not one match
 function findMap( query )
 	local maps = findMaps( query )
