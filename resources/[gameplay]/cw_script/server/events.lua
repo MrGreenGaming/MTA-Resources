@@ -146,3 +146,9 @@ addEventHandler("onRaceStateChanging",root,
 		end
 	end
 )
+
+addEventHandler("onTellCwScriptPlayerBoughtMap", root, function(mapName)
+    for i, player in ipairs(getElementsByType('player')) do
+        callClient(player, "updateNextMapNameIfNotSet", mapName)
+    end
+end)

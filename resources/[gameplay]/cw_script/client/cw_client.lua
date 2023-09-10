@@ -91,6 +91,12 @@ function updateEventMetadata(_eventName, _nextMapName)
     c_nextMapName = _nextMapName
 end
 
+function updateNextMapNameIfNotSet(_nextMapName)
+    if not c_nextMapName then
+        c_nextMapName = _nextMapName
+    end
+end
+
 function updateEventName(_eventName)
     c_eventName = _eventName
 end

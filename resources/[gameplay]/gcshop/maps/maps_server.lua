@@ -263,9 +263,11 @@ function queue(choice, player)
     end
     triggerClientEvent('onTellClientPlayerBoughtMap', player, choice[1], #myQueue)
     triggerEvent('onNextmapSettingChange', root, getResourceFromName(myQueue[1][2]))
+    triggerEvent('onTellCwScriptPlayerBoughtMap', player, choice[1])
 	addToLog ( '"' .. getPlayerName(player) .. '" bought map=' .. tostring(choice[1]))
     addDailyLimit(tostring(choice[2]),player)
 end
+addEvent('onTellCwScriptPlayerBoughtMap')
 
 function getCurrentMapQueued(noRemove)
     if #myQueue == 0 then
@@ -296,7 +298,7 @@ end
 
 function getQueuedMapName()
     if #myQueue > 0 then
-        return getResourceInfo(getResourceFromName(myQueue[1][1]), "name")
+        return getResourceInfo(getResourceFromName(myQueue[1][2]), "name")
     end
     return false
 end
