@@ -8,7 +8,7 @@ function serverStart()
 	--for i=1,2 do
 	--	table.insert(eventQueue, {"race-neverthesame", "Bierbuikje Event"})
 	--end
-	
+
 	local xml
 	xml = xmlLoadFile("eventManager.xml")
 	if not xml then
@@ -16,10 +16,26 @@ function serverStart()
 		xmlSaveFile(xml)
 	end
 	xmlUnloadFile(xml)
-	
-	handlerConnect = dbConnect( 'mysql', 'host=' .. get"*gcshop.host" .. ';dbname=' .. get"*gcshop.dbname" .. ';charset=utf8mb4', get("*gcshop.user"), get("*gcshop.pass"))
 end
 addEventHandler('onResourceStart', getResourceRootElement(),serverStart)
+
+---------------------
+-- Exports         --
+---------------------
+
+function getNextMapName()
+    if #eventQueue > 0 then
+        return getResourceInfo(getResourceFromName(eventQueue[1][1]), "name")
+    end
+    return false
+end
+
+function getEventName()
+    if #eventQueue > 0 then
+        return eventQueue[1][2]
+    end
+    return false
+end
 
 --------------
 -- Commands --
@@ -79,13 +95,13 @@ function currentEvent()
 	if #eventQueue > 0 then
 		str = eventQueue[1][2]
 	end
-	
+
 	return str
 end
 
 function fetchQueue(p)
 	t = mapQueue()
-	
+
 	triggerClientEvent(p,"eventmanager_fetchQueue_c",resourceRoot,t)
 end
 addEvent("eventmanager_fetchQueue_s",true)
@@ -96,14 +112,14 @@ function mapQueue()
 	for a,b in ipairs(eventQueue) do
 		local map = eventQueue[a][1]
 		if not map then break end
-		
+
 		local name = getResourceInfo(getResourceFromName(map), "name")
 		local author = getResourceInfo(getResourceFromName(map), "author")
 		if not author then author = "N/A" end
-		
+
 		t[a] = {name, author, map}
 	end
-	
+
 	return t
 end
 
@@ -126,7 +142,7 @@ addEventHandler("eventmanager_fetchOverview_s",root,fetchOverview)
 function fetchMaps(p)
 	local raceMaps = exports.mapmanager:getMapsCompatibleWithGamemode(getResourceFromName("race"))
 	if not raceMaps then return false end
-	
+
 	local t = {}
     for a,b in ipairs(raceMaps) do
         local name = getResourceInfo(b,"name")
@@ -135,14 +151,14 @@ function fetchMaps(p)
 
         if not name then name = resname end
         if not author then author = "N/A" end
-		
+
         local r = {name, author, resname}
-		
+
         table.insert(t,r)
     end
 
 	table.sort(t,function(a,b) return tostring(a[1]) < tostring(b[1]) end)
-	
+
 	triggerClientEvent(p,"eventmanager_fetchMaps_c",resourceRoot,t)
 end
 addEvent("eventmanager_fetchMaps_s",true)
@@ -162,11 +178,11 @@ function fetchEvent(p, current, event)
 					for c,d in ipairs(maps) do
 						local map = xmlNodeGetValue(d)
 						if not map then break end
-						
+
 						local name = getResourceInfo(getResourceFromName(map), "name")
 						local author = getResourceInfo(getResourceFromName(map), "author")
 						if not author then author = "N/A" end
-						
+
 						t[c] = {name, author, map}
 					end
 					break
@@ -184,7 +200,7 @@ function eventCreate(p, name)
 		if name and name ~= "" then
 			local xml = xmlLoadFile("eventManager.xml")
 			if not xml then return end
-			
+
 			local bool = false
 			local events = xmlNodeGetChildren(xml)
 			for a,b in ipairs(events) do
@@ -193,7 +209,7 @@ function eventCreate(p, name)
 					break
 				end
 			end
-			
+
 			if bool then
 				outputDebugString("Event already exists for " .. getPlayerName(p), 0)
 			else
@@ -201,7 +217,7 @@ function eventCreate(p, name)
 				xmlNodeSetAttribute(eventChild, "name", name)
 				outputDebugString("Event " .. name .. " succesfully created for " .. getPlayerName(p), 0)
 			end
-			
+
 			xmlSaveFile(xml)
 			xmlUnloadFile(xml)
 		else
@@ -218,7 +234,7 @@ function startEvent(p, sEvent)
 		if sEvent and name ~= "" then
 			local xml = xmlLoadFile("eventManager.xml")
 			if not xml then return end
-			
+
 			local events = xmlNodeGetChildren(xml)
 			for a,b in ipairs(events) do
 				if xmlNodeGetAttribute(b, "name") == sEvent then
@@ -226,17 +242,17 @@ function startEvent(p, sEvent)
 					for c,d in ipairs(maps) do
 						local map = xmlNodeGetValue(d)
 						if not map then break end
-						
+
 						local name = getResourceInfo(getResourceFromName(map), "name")
 						local author = getResourceInfo(getResourceFromName(map), "author")
 						if not author then author = "N/A" end
-						
+
 						eventQueue[#eventQueue + 1 ] = {map, sEvent}
 					end
 					break
 				end
 			end
-			
+
 			xmlUnloadFile(xml)
 		else
 		end
@@ -252,7 +268,7 @@ function deleteEvent(p, dEvent)
 		if dEvent and name ~= "" then
 			local xml = xmlLoadFile("eventManager.xml")
 			if not xml then return end
-			
+
 			local events = xmlNodeGetChildren(xml)
 			for a,b in ipairs(events) do
 				if xmlNodeGetAttribute(b, "name") == dEvent then
@@ -260,7 +276,7 @@ function deleteEvent(p, dEvent)
 					break
 				end
 			end
-			
+
 			xmlSaveFile(xml)
 			xmlUnloadFile(xml)
 		else
@@ -284,7 +300,7 @@ function eventAdd(p, resname, current, event)
 		elseif current == false and event ~= "" then
 			local xml = xmlLoadFile("eventManager.xml")
 			if not xml then return end
-			
+
 			local events = xmlNodeGetChildren(xml)
 			for a,b in ipairs(events) do
 				if xmlNodeGetAttribute(b, "name") == event then
@@ -293,7 +309,7 @@ function eventAdd(p, resname, current, event)
 					break
 				end
 			end
-			
+
 			xmlSaveFile(xml)
 			xmlUnloadFile(xml)
 		end
@@ -311,7 +327,7 @@ function eventRemove(p, row, current, event)
 		elseif current == false and event ~= "" then
 			local xml = xmlLoadFile("eventManager.xml")
 			if not xml then return end
-			
+
 			local events = xmlNodeGetChildren(xml)
 			for a,b in ipairs(events) do
 				if xmlNodeGetAttribute(b, "name") == event then
@@ -321,7 +337,7 @@ function eventRemove(p, row, current, event)
 					break
 				end
 			end
-			
+
 			xmlSaveFile(xml)
 			xmlUnloadFile(xml)
 		end
@@ -355,7 +371,7 @@ function eventMove(p, current, event, row, resname, n, cat)
 			local t = {}
 			local xml = xmlLoadFile("eventManager.xml")
 			if not xml then return end
-			
+
 			local events = xmlNodeGetChildren(xml)
 			for a,b in ipairs(events) do
 				if xmlNodeGetAttribute(b, "name") == event then
@@ -368,7 +384,7 @@ function eventMove(p, current, event, row, resname, n, cat)
 					break
 				end
 			end
-			
+
 			for a,b in ipairs(events) do
 				if xmlNodeGetAttribute(b, "name") == event then
 					local maps = xmlNodeGetChildren(b)
@@ -377,7 +393,7 @@ function eventMove(p, current, event, row, resname, n, cat)
 					end
 				end
 			end
-			
+
 			local r = 1
 			table.remove(t,row)
 			if cat == "up" then
@@ -393,7 +409,7 @@ function eventMove(p, current, event, row, resname, n, cat)
 			end
 			if r < 1 or r > #t then r = row end
 			table.insert(t,r,resname)
-			
+
 			for a,b in ipairs(events) do
 				if xmlNodeGetAttribute(b, "name") == event then
 					for c,d in ipairs(t) do
@@ -402,7 +418,7 @@ function eventMove(p, current, event, row, resname, n, cat)
 					end
 				end
 			end
-			
+
 			xmlSaveFile(xml)
 			xmlUnloadFile(xml)
 		end

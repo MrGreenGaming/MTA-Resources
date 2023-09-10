@@ -131,10 +131,10 @@ function updateDisplay()
 	if isElement(teams[1]) and isElement(teams[2]) then
         if not f_round then
             sColor = "#00ff00"
-            state = "Event Active"
+            state = c_eventName or "EVENT RUNNING"
         else
-            sColor = "#FFA500"
-            state = "Free Round"
+            sColor = "#FF0000"
+            state = "EVENT PAUSED"
         end
 
 		if mode == "main" then
@@ -150,10 +150,14 @@ function updateDisplay()
                 dxDrawRectangle(wX, wY + (rowHeight*(2+(count+1))), windowSizeX, rowHeight, tocolor(r2, g2, b2, 30), false, false) -- t2 bg
             end
 			dxDrawBottomRoundedRectangle(wX, wY + (rowHeight * (rowCount-1)), windowSizeX, rowHeight, 10, tocolor(0, 0, 0, 160), false, false) -- mode bg
-			dxDrawText("Press #bababa0 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, "default-bold", "center", "center", false, false, true, true, false)
-
+            if ffa_mode == "FFA" then
+                dxDrawText("Press #bababa0 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, "default-bold", "center", "center", false, false, true, true, false)
+            else
+                dxDrawText("#bababa0#ffffff: change mode | #bababa8#ffffff: change team", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, "default-bold", "center", "center", false, false, true, true, false)
+            end
 			dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
-			dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+            dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+            dxDrawText("#bababaNext: " .. (c_nextMapName or "N/A"), wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
 			dxDrawText(t1, wX + margin, wY + (rowHeight*2), wX+windowSizeX-margin, wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, "default-bold", "left", "center", false, false, false, true, false)
 			dxDrawText(t1Score, wX + rankWidth + nickWidth, wY + (rowHeight*2), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, "default-bold", "center", "center", false, false, false, true, false)
             local isLocalPlayerInView = false
@@ -204,15 +208,20 @@ function updateDisplay()
                 end
             end
             elseif mode == "compact" then
-                rowCount = 4
-			windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(rowHeight) * rowCount
-			dxDrawRoundedRectangle(wX, wY, windowSizeX, windowSizeY, 10, tocolor(0, 0, 0, 160), false, false) -- background
-			dxDrawRectangle(wX, wY + (rowHeight*2), windowSizeX, rowHeight, tocolor(r1, g1, b1, 20), false, false) -- t1 bg
-			dxDrawBottomRoundedRectangle(wX, wY + (rowHeight * (rowCount-1)), windowSizeX, rowHeight, 10, tocolor(0, 0, 0, 160), false, false) -- mode bg
-			dxDrawText("Press #bababa0 #ffffffto change mode", wX, wY + (rowHeight * (rowCount-1)), wX+windowSizeX, wY + (rowHeight * (rowCount)), tocolor(255, 255, 255, 200), 1, "default-bold", "center", "center", false, false, true, true, false)
-			dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
-			dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
-			dxDrawText(t1c..t1tag.."   "..t1Score.."  #ffffff-  "..t2c..t2Score.."   "..t2tag, wX + margin, wY + (rowHeight*2), wX+windowSizeX-(margin*2), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, "default-bold", "center", "center", false, false, false, true, false)
+                local compactRowCount = 4
+                windowSizeX, windowSizeY = math.floor(250 * (screenW / 1920)), math.floor(rowHeight) * compactRowCount
+                dxDrawRoundedRectangle(wX, wY, windowSizeX, windowSizeY, 10, tocolor(0, 0, 0, 160), false, false) -- background
+                dxDrawRectangle(wX, wY + (rowHeight*2), windowSizeX, rowHeight, tocolor(r1, g1, b1, 20), false, false) -- t1 bg
+                dxDrawBottomRoundedRectangle(wX, wY + (rowHeight * (compactRowCount-1)), windowSizeX, rowHeight, 10, tocolor(0, 0, 0, 160), false, false) -- mode bg
+                if mode == "FFA" then
+                    dxDrawText("Press #bababa0 #ffffffto change mode", wX, wY + (rowHeight * (compactRowCount-1)), wX+windowSizeX, wY + (rowHeight * (compactRowCount)), tocolor(255, 255, 255, 200), 1, "default-bold", "center", "center", false, false, true, true, false)
+                else
+                    dxDrawText("#bababa0#ffffff: change mode | #bababa8#ffffff: change team", wX, wY + (rowHeight * (compactRowCount-1)), wX+windowSizeX, wY + (rowHeight * (compactRowCount)), tocolor(255, 255, 255, 200), 1, "default-bold", "center", "center", false, false, true, true, false)
+                end
+                dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+                dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+                dxDrawText("#bababaNext: " .. (c_nextMapName or "N/A"), wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+                dxDrawText(t1c..t1tag.."   "..t1Score.."  #ffffff-  "..t2c..t2Score.."   "..t2tag, wX + margin, wY + (rowHeight*2), wX+windowSizeX-(margin*2), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, "default-bold", "center", "center", false, false, false, true, false)
 		else
 			dxDrawRoundedRectangle(1,1,1,1, 0, tocolor(0, 0, 0, 0), false, false)
 		end

@@ -225,8 +225,16 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m,
 	round_ended = true
 	c_round = 0
 	call(getResourceFromName("scoreboard"), "scoreboardAddColumn", "Score")
+
+    local eventName = exports.eventmanager:getEventName()
+    local nextMapName = exports.eventmanager:getNextMapName()
+    if not nextMapName then
+        nextMapName = exports.gcshop:getQueuedMapName()
+    end
+
 	for i, player in ipairs(getElementsByType('player')) do
 		clientCall(player, 'updateTeamData', teams[1], teams[2], teams[3])
+        clientCall(player, 'updateEventMetadata', eventName, nextMapName)
 		clientCall(player, 'updateTagData', tags[1], tags[2])
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
         clientCall(player, 'updateModeData', ffa_mode, ffa_keep_gcshop_teams, ffa_keep_modshop)
@@ -320,3 +328,20 @@ function updateScoreData(player)
 end
 addEventHandler("onPlayerQuit", getRootElement(), function() updateScoreData(source) end, true, "high")
 
+-- Exported function: get basic event data to use in other resources
+function getEventData()
+    local t1 = getTeamName(teams[1])
+    local t2 = getTeamName(teams[2])
+    local t1t = getTeamFromName(t1)
+    local t2t = getTeamFromName(t2)
+    return {
+        mode = ffa_mode,
+        team1Name = t1,
+        team2Name = t2,
+        team1Color = getTeamColor(t1t),
+        team2Color = getTeamColor(t2t),
+        team1Score = tonumber(getElementData(t1t, 'Score')),
+        team2Score = tonumber(getElementData(t1t, 'Score')),
+        ffaPlayersSorted = getPlayersInTeamSortedByScore(t1t),
+    }
+end

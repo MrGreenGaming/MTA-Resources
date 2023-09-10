@@ -294,6 +294,13 @@ function isAnyMapQueued()
     return false
 end
 
+function getQueuedMapName()
+    if #myQueue > 0 then
+        return getResourceInfo(getResourceFromName(myQueue[1][1]), "name")
+    end
+    return false
+end
+
 function isPlayerEligibleToBuy(player, choice)
 	local gcRes = getResourceFromName('gc')
 	if gcRes and getResourceState(gcRes) == 'running' and exports.gc then

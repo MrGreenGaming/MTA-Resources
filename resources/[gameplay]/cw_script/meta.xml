@@ -18,6 +18,7 @@
     <export function="areGcShopTeamsAllowed" type="server" />
     <export function="areModShopModificationsAllowed" type="server" />
 
+    <export function="getEventData" type="server" />
     <export function="outputInfoForPlayer" type="server" />
 
     <aclrequest>

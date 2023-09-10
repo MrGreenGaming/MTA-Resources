@@ -82,6 +82,20 @@ function funRound(player)
 	end
 end
 
+function setEventName(player, _, ...)
+    local arg = {...}
+    local name = table.concat( arg, " " )
+    if isAdmin(player) then
+        for i, player in ipairs(getElementsByType('player')) do
+            clientCall(player, "updateEventName", name)
+        end
+
+        outputInfoForPlayer(player, "Event name will update next round")
+    else
+        outputInfoForPlayer(player, "You are not admin")
+    end
+end
+
 function realRound(player)
     if isAdmin(player) then
         f_round = false
@@ -99,3 +113,4 @@ addCommandHandler('newtr', preStart)
 addCommandHandler('endtr', destroyTeams)
 addCommandHandler('fun', funRound)
 addCommandHandler('endfun', realRound)
+addCommandHandler('seteventname', setEventName)

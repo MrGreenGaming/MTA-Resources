@@ -7,10 +7,18 @@ function startRound()
 			c_round = c_round + 1
 		end
 		round_started = true
---	else
 	end
+
+    local eventName = exports.eventmanager:getEventName()
+    local nextMapName = exports.eventmanager:getNextMapName()
+
+    if not nextMapName then
+        nextMapName = exports.gcshop:getQueuedMapName()
+    end
+
 	for i,player in ipairs(getElementsByType('player')) do
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
+        clientCall(player, 'updateEventMetadata', eventName, nextMapName)
 	end
 	round_ended = false
 end

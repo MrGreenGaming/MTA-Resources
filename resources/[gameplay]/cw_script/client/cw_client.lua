@@ -12,6 +12,8 @@ team_choosen = false
 isAdmin = false
 compact = false
 
+c_eventName = false
+c_nextMapName = false
 
 function outputInfoClient(info)
     outputChatBox('[Event] #ffffff' ..info, 155, 155, 255, true)
@@ -80,6 +82,17 @@ end
 function updateScoringData(newScoring)
     scoring = newScoring
     updateAdminPanelText()
+end
+
+function updateEventMetadata(_eventName, _nextMapName)
+    if _eventName then
+        c_eventName = _eventName
+    end
+    c_nextMapName = _nextMapName
+end
+
+function updateEventName(_eventName)
+    c_eventName = _eventName
 end
 
 function updateRoundData(c_r, max_r, f_r)
