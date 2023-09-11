@@ -102,14 +102,10 @@ function formatPlayerData(players)
     local toReturn = {}
     for i, player in ipairs(players) do
         local rank = i
-        local r, g, b = r1, g1, b1
-        if ffa_mode == "FFA" then
-            local playerTeam = getPlayerTeam(player)
-            if playerTeam then
-                r, g, b = getTeamColor(playerTeam)
-            else
-                r, g, b = 255, 255, 255
-            end
+        local r, g, b = 255, 255, 255
+        local playerTeam = getPlayerTeam(player)
+        if playerTeam then
+            r, g, b = getTeamColor(playerTeam)
         end
         local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
         local pts = getElementData(player, 'Score') or 0
