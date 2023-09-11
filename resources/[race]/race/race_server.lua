@@ -269,7 +269,7 @@ function cacheMapOptions(map, bDontUseMode)
     -- Change a few settings if map is Lobby regardless of Server Settings
     if map.resName == "0MrGreenLobby" then
         g_MapOptions.ghostmode = false
-        g_MapOptions.duration = 360*60*100
+        g_MapOptions.duration = 360*60*1000
     end
 end
 
