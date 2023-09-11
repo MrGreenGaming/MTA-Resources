@@ -181,10 +181,6 @@ function cacheMapOptions(map, bDontUseMode)
 		end
 	end
 
-    -- if map is MrGreen Lobby, disable ghostmode regardless of Server Settings
-    if map.resName == "0MrGreenLobby" then
-        g_MapOptions.ghostmode = false
-    end
 
 	if mode.ghostmode ~= nil and mode.ghostmode_map_can_override == false then
 		g_MapOptions.ghostmode = mode.ghostmode
@@ -269,6 +265,12 @@ function cacheMapOptions(map, bDontUseMode)
 	if mode.hunterminigun ~= nil and not mode.hunterminigun_map_can_override == true then
 		g_MapOptions.hunterminigun = mode.hunterminigun
 	end
+
+    -- Change a few settings if map is Lobby regardless of Server Settings
+    if map.resName == "0MrGreenLobby" then
+        g_MapOptions.ghostmode = false
+        g_MapOptions.duration = 360*60*100
+    end
 end
 
 
