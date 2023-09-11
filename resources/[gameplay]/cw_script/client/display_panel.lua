@@ -181,7 +181,7 @@ function updateDisplay()
 			end
 
             if (ffa_mode == "CW") then
-                dxDrawText(t2name, wX + margin, wY + (rowHeight*(3+count)), wX+windowSizeX-margin, wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, "default-bold", "left", "center", false, false, false, true, false)
+                dxDrawText(t2, wX + margin, wY + (rowHeight*(3+count)), wX+windowSizeX-margin, wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, "default-bold", "left", "center", false, false, false, true, false)
                 dxDrawText(t2Score, wX + rankWidth + nickWidth, wY + (rowHeight*(3+count)), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*(4+count)), tocolor(r2, g2, b2, 255), 1, "default-bold", "center", "center", false, false, false, true, false)
 
                 local t2start = 0
