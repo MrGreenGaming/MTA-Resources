@@ -158,6 +158,7 @@ function cacheMapOptions(map, bDontUseMode)
 	g_MapOptions.skins			= map.skins or 'cj'
 	g_MapOptions.vehicleweapons = map.vehicleweapons == 'true'
 	g_MapOptions.ghostmode		= map.ghostmode == 'true'
+
 	g_MapOptions.autopimp		= map.autopimp == 'true'
 	g_MapOptions.firewater		= map.firewater == 'true'
 	g_MapOptions.classicchangez	= map.classicchangez == 'true'
@@ -179,6 +180,11 @@ function cacheMapOptions(map, bDontUseMode)
 			g_MapOptions.ghostmode = mode.ghostmode
 		end
 	end
+
+    -- if map is MrGreen Lobby, disable ghostmode regardless of Server Settings
+    if map.resName == "0MrGreenLobby" then
+        g_MapOptions.ghostmode = false
+    end
 
 	if mode.ghostmode ~= nil and mode.ghostmode_map_can_override == false then
 		g_MapOptions.ghostmode = mode.ghostmode
@@ -300,6 +306,7 @@ function loadMap(res)
 	g_SavedMapSettings.classicchangez	= map.classicchangez
 	g_SavedMapSettings.firewater		= map.firewater
 	g_SavedMapSettings.hunterminigun	= map.hunterminigun
+    g_SavedMapSettings.resName          = getResourceName(res)
 
 	cacheMapOptions(g_SavedMapSettings, true)
 
