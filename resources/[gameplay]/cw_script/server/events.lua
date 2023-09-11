@@ -1,5 +1,4 @@
--- TODO Replace with actual lobby res name
-local lobbyResName = "HeightVehicleChangerMap-Test"
+local lobbyResName = "0MrGreenLobby"
 
 function startRound(mapInfo)
     CurrentGamemode = exports.race:getRaceMode();
