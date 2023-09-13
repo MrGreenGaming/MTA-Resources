@@ -97,6 +97,8 @@ end
 
 
 local function poll(a, va)
+    if getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet() then return end
+
 	local _alivePlayers = getAlivePlayers()
 	local alivePlayers = {}
 	for i,player in ipairs(_alivePlayers) do -- Add players without kills to alivePlayers
@@ -109,7 +111,7 @@ local function poll(a, va)
 	if not a and (pollDidStart or #alivePlayers < 3) then
 		return
 	end
-	
+
 	triggerClientEvent("serverN", root)
 
 	--TODO: Prevent duplicate victims
@@ -124,7 +126,7 @@ local function poll(a, va)
 		allowchange = true,
 		visibleTo = getDeadPlayers(),
 	}
-	
+
 	local randA, randB = voteOutcomes[tonumber(a)] and tonumber(a) or math.random(1,#voteOutcomes), math.random(1,#voteOutcomes)
 
 	--Copy to prevent string.format issues
@@ -148,7 +150,7 @@ local function poll(a, va)
 	--Add victims to outcomes
 	table.insert(pollTable[1],victimA)
 	table.insert(pollTable[2],victimB)
-	
+
 	pollDidStart = exports.votemanager:startPoll(pollTable)
 end
 
@@ -165,7 +167,7 @@ addEventHandler('onRaceStateChanging', root, function(new)
 	end
 end)
 
-function stopRandom() 
+function stopRandom()
 	if isTimer(pollTimer) then
 		killTimer(pollTimer)
 	end
@@ -325,7 +327,7 @@ function typeF()
 
 		setTimer(tp, 5000, 1, vehicle, posx, posy, posz, rotx, roty, rotz)
 	end
-	
+
 	outputChatBox("Teleporting back to current location in 5 seconds")
 end
 addEventHandler("F", root, typeF)
@@ -440,7 +442,7 @@ function typeL(victim)
 	end
 	currentVictim = victim
 	local victimName = getPlayerStrippedName(victim)
-	currentVictim = victim	
+	currentVictim = victim
 
 
 	if not isPlayerAlive(victim) then
@@ -460,7 +462,7 @@ function typeL(victim)
 		else
 			setElementSpeed(vehicle,0,200)
 			outputChatBox(victimName .." is going home with 200 KM/h")
-			
+
 			outputVictimNotice(victim,victimName)
 		end
 	end
@@ -527,10 +529,10 @@ function typeO(victim)
 		return
 	end
 	currentVictim = victim
-	local victimName = getPlayerStrippedName(victim)	
+	local victimName = getPlayerStrippedName(victim)
 	outputChatBox(victimName .." is sleeping with the fish")
 	outputVictimNotice(victim,victimName)
-	
+
 	triggerClientEvent("serverSleepWithFish", victim)
 end
 addEventHandler("O", root, typeO)
@@ -552,10 +554,10 @@ function typeP(victim)
 	setElementAlpha(vehicle,0)
 	setElementAlpha(victim,0)
 	setPlayerNametagShowing(victim, false)
-	
-	local victimName = getPlayerStrippedName(victim)	
+
+	local victimName = getPlayerStrippedName(victim)
 	outputChatBox(victimName .." is invisible for 15 seconds")
-	
+
 	local function changeBack()
 		if not isPlayerAlive(victim) then
 			return
@@ -581,7 +583,7 @@ function typeZ(victim)
 		return
 	end
 	currentVictim = victim
-	local victimName = getPlayerStrippedName(victim)	
+	local victimName = getPlayerStrippedName(victim)
 	outputChatBox(victimName .."'s brakes malfunctioned!")
 	outputVictimNotice(victim,victimName)
 	triggerClientEvent(victim, "serverNoBrakes", root)
@@ -661,7 +663,7 @@ function s_Forklift(victim)
 end
 addEventHandler("ForkLiftEvent", root, s_Forklift)
 
-function s_Ravebreak() 
+function s_Ravebreak()
 	pollDidStart = nil
 	local RaveTime = 10000 -- time of the rave in MS
 	setTimer(triggerClientEvent, RaveTime, 1, root, 'stopRaveBreak', root)
@@ -719,11 +721,11 @@ function hunterHandler(victim)
 	triggerClientEvent(victim, "onServerVotedHunter", victim) -- Moved clientsided because of setHelicopterRotorSpeed()
 	outputChatBox(victimName .." became a Hunter")
 	outputVictimNotice(victim,victimName)
-	
-	
+
+
 end
 addEventHandler("onRandomHunter", root, hunterHandler)
-  
+
 function fallingRocksHandler(victim)
 	pollDidStart = nil
 	-- if not isPlayerAlive(victim) then
@@ -741,10 +743,10 @@ function fallingRocksHandler(victim)
 			local offset = math.random(-distanceOffset,distanceOffset)
 			local rockSizes = {1303,1305}
 
-			
+
 			local veh = getPedOccupiedVehicle(victim)
-			if not (veh and isElement(veh)) then 
-				return 
+			if not (veh and isElement(veh)) then
+				return
 			end
 
 			local speed = getElementSpeed(veh,1)
@@ -767,32 +769,32 @@ function fallingRocksHandler(victim)
 
 
 			table.insert(theRocks,rock)
-			
+
 
 			setElementVelocity( vehicle, 0, 0, -0.5)
 
 			setTimer(
-				function() -- Destroy rc car 
+				function() -- Destroy rc car
 					detachElements(rock,vehicle)
 					destroyElement(vehicle)
 				end
 			,100,1)
-			
-			
+
+
 		end
 	,200,math.random(25,35))
 
 	local remaining, executes = getTimerDetails(rockTimer)
 	setTimer(
 		function()
-			for _,rocks in ipairs(theRocks) do 
-				if isElement(rocks) then 
+			for _,rocks in ipairs(theRocks) do
+				if isElement(rocks) then
 					destroyElement(rocks)
-				end 
-			end 
+				end
+			end
 		end
 	,remaining*executes+10000,1)
-				
+
 end
 addEvent ( "fallingRocksEvent", true )
 addEventHandler("fallingRocksEvent",root,fallingRocksHandler)
