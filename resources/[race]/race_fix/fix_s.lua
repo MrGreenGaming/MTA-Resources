@@ -13,18 +13,19 @@ addEventHandler('onGamemodeMapStop', root, onGamemodeMapStop)
 ---   Fix for parked cars having gm in some maps
 ---------------------------------------------------
 
-addEvent("onRaceStateChanging", true)
-addEventHandler("onRaceStateChanging", root,
-	function(newstate, oldstate)
-		for i,j in ipairs(getElementsByType('vehicle')) do 
+addEvent("onMapStarting", true)
+addEventHandler("onMapStarting", root,
+	function(mapInfo)
+        for _, j in ipairs(getElementsByType('player')) do
+            setPlayerHudComponentVisible(j, 'radio', true)
+        end
+        if mapInfo.resname == "0MrGreenLobby" then return end
+		for i,j in ipairs(getElementsByType('vehicle')) do
 			if (getVehicleOccupant(j) == false) and (isVehicleBlown(j) == false) then
 				setElementData ( j, 'race.collideothers', 1 )
-			end	
+			end
 		end
-		for _, j in ipairs(getElementsByType('player')) do 
-			setPlayerHudComponentVisible(j, 'radio', true)
-		end	
-	end	
+	end
 )
 
 
@@ -46,7 +47,7 @@ function quickFix ( theVehicle )
 				for i=1,5 do
 					setVehicleDoorState(theVehicle, i, 0)
 				end
-			end	
+			end
 		end, 150, 1, theVehicle, a)
 	end
 end
@@ -63,50 +64,50 @@ local vehicleModelVariants={
   [423]={0,1},
   [424]={0},
   [428]={0,1},
-  [433]={0,1},                                                                                                                                         
-  [434]={0},                                                                                                                                           
-  [435]={0,1,2,3,4,5},                                                                                                                                 
-  [437]={0,1},                                                                                                                                         
-  [439]={0,1,2},                                                                                                                                       
-  [440]={0,1,2,3,4,5},                                                                                                                                 
-  [442]={0,1,2},                                                                                                                                       
-  [449]={0,1,2,3,4},                                                                                                                                   
-  [450]={0},                                                                                                                                           
-  [453]={0,1},                                                                                                                                         
-  [455]={0,1,2},                                                                                                                                       
-  [456]={0,1,2,3},                                                                                                                                     
-  [457]={0,1,2,3,4,5},                                                                                                                                 
-  [459]={0},                                                                                                                                           
-  [470]={0,1,2},                                                                                                                                       
-  [472]={0,1,2},                                                                                                                                       
-  [477]={0},                                                                                                                                           
-  [478]={0,1,2},                                                                                                                                       
-  [482]={0},                                                                                                                                           
-  [483]={0,1},                                                                                                                                         
-  [484]={0},                                                                                                                                           
-  [485]={0,1,2},                                                                                                                                       
-  [499]={0,1,2,3},                                                                                                                                     
-  [500]={0,1},                                                                                                                                         
-  [502]={0,1,2,3,4,5},                                                                                                                                 
-  [503]={0,1,2,3,4,5},                                                                                                                                 
-  [504]={0,1,2,3,4,5},                                                                                                                                 
-  [506]={0},                                                                                                                                           
-  [521]={0,1,2,3,4},                                                                                                                                   
-  [522]={0,1,2,3,4},                                                                                                                                   
-  [535]={0,1},  
-  [543]={0,1,2,3,4},                                                                                                                                       
-  [552]={0,1},                                                                                                                                         
-  [555]={0,1},                                                                                                                                         
-  [556]={0,1,2},                                                                                                                                       
-  [557]={0,1},                                                                                                                                         
-  [571]={0,1},                                                                                                                                         
-  [581]={0,1,2,3,4},                                                                                                                                   
-  [583]={0,1},                                                                                                                                         
-  [595]={0,1},                                                                                                                                         
-  [600]={0,1},                                                                                                                                         
-  [601]={0,1,2,3},                                                                                                                                     
-  [605]={0,1,2,3,4},                                                                                                                                     
-  [607]={0,1,2},                                                                                                                                       
+  [433]={0,1},
+  [434]={0},
+  [435]={0,1,2,3,4,5},
+  [437]={0,1},
+  [439]={0,1,2},
+  [440]={0,1,2,3,4,5},
+  [442]={0,1,2},
+  [449]={0,1,2,3,4},
+  [450]={0},
+  [453]={0,1},
+  [455]={0,1,2},
+  [456]={0,1,2,3},
+  [457]={0,1,2,3,4,5},
+  [459]={0},
+  [470]={0,1,2},
+  [472]={0,1,2},
+  [477]={0},
+  [478]={0,1,2},
+  [482]={0},
+  [483]={0,1},
+  [484]={0},
+  [485]={0,1,2},
+  [499]={0,1,2,3},
+  [500]={0,1},
+  [502]={0,1,2,3,4,5},
+  [503]={0,1,2,3,4,5},
+  [504]={0,1,2,3,4,5},
+  [506]={0},
+  [521]={0,1,2,3,4},
+  [522]={0,1,2,3,4},
+  [535]={0,1},
+  [543]={0,1,2,3,4},
+  [552]={0,1},
+  [555]={0,1},
+  [556]={0,1,2},
+  [557]={0,1},
+  [571]={0,1},
+  [581]={0,1,2,3,4},
+  [583]={0,1},
+  [595]={0,1},
+  [600]={0,1},
+  [601]={0,1,2,3},
+  [605]={0,1,2,3,4},
+  [607]={0,1,2},
 }
 
 function vehicleChange( player, theVehicle, old )
