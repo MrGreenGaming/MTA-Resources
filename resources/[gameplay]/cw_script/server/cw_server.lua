@@ -74,7 +74,7 @@ function getPlayersInTeamSortedByScore(team)
     end
 
     table.sort(players, function(a, b)
-        return getElementData(a, 'Score') > getElementData(b, 'Score')
+        return (getElementData(a, 'Score') or 0) > (getElementData(b, 'Score') or 0)
     end)
 
     return players
