@@ -8,17 +8,29 @@ local g_CustomPlayers = {}
 local PJ_API_URL = "https://mrgreengaming.com/api/custompaintjobs/"
 
 
-function loadGCCustomPaintjob ( player, bool, settings )
-	-- outputDebugString('loadGCCustomPaintjob :'..tostring(bool)..' - type: '..type(bool)..' - '..tostring(getPlayerName(player)))
-	if bool then
-		g_CustomPlayers[player] = player
-		sendPaintjobs ( {player}, player )
-		checkAPIOutdatedPaintjobs(player)
-	else
-		g_CustomPlayers[player] = nil
-	end
+local loadGCCustomPaintjobQueue = {}
+
+function loadGCCustomPaintjob(player, bool, settings)
+    local function executeLoadGCCustomPaintjob()
+        if bool then
+            if not isElement(player) then return end
+            g_CustomPlayers[player] = player
+            sendPaintjobs({player}, player)
+            checkAPIOutdatedPaintjobs(player)
+        else
+            g_CustomPlayers[player] = nil
+        end
+    end
+    table.insert(loadGCCustomPaintjobQueue, executeLoadGCCustomPaintjob)
 end
 
+function executeAllLoadPaintjobFunctionsInQueue()
+    for _, func in ipairs(loadGCCustomPaintjobQueue) do
+        func()
+    end
+    -- Clear the queue after executing all functions.
+    loadGCCustomPaintjobQueue = {}
+end
 
 ------------------------------------
 ---   Drawing custom paintjobs   ---
@@ -66,7 +78,7 @@ local server_path = 'items/paintjob/'
 function sendPaintjobs ( from, to, pid )
 	-- outputChatBox('Sending to')
 	-- outputChatBox(tostring(getElementType(to)))
-	getPerkSettings(from, ID, 
+	getPerkSettings(from, ID,
 	function(res)
 		local md5list = {}
 		if type(res) == 'table' then
@@ -126,7 +138,7 @@ addEventHandler('clientRequestsPaintjobs', root, clientRequestsPaintjobs)
 addEventHandler('onPlayerQuit', root, function()
 	g_CustomPlayers[source] = nil
 
-	
+
 end)
 
 ----------------------------------------
@@ -180,8 +192,8 @@ function receiveImage ( image, pid )
 			sendAPICustomPaintjob(player, forumID .. '-' .. pid, base64Encode(image))
 		end
 
-		
-		
+
+
 	end
 end
 addEvent('receiveImage', true)
@@ -254,7 +266,7 @@ function receiveAPICustomPaintjobMD5(res, info)
 	if not result or result.error then
 		return
 	end
-	
+
 	-- Check for changes
 	for name, hash in pairs(result) do
 		if type(hash) == 'string' and type(name) == 'string' then
@@ -359,7 +371,8 @@ end
 -- Send info to clients for (re)making textures
 addEvent('onRaceStateChanging', true)
 function serverRefreshClientPJTable(state)
-	if state == "NoMap" then
+	if state == "LoadingMap" then
+        executeAllLoadPaintjobFunctionsInQueue()
 		sendPaintjobs(getCustomPlayersArray(), root)
 		-- triggerClientEvent("clientRefreshShaderTable",resourceRoot,root)
 	end
