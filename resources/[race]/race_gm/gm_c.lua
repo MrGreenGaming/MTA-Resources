@@ -152,6 +152,8 @@ function()
 		if getElementAlpha(car) ~= 255 then
 			local players = getElementsByType('player')
 			for _, player in ipairs(players) do
+                local playerState = getElementData(player, "player state")
+                if playerState == "away" or playerState == "spectating" or playerState == "dead" then break end
 				if player ~= localPlayer and getElementData(localPlayer, "dim") == getElementData(player, "dim") then
 					local pedCar = getPedOccupiedVehicle(player)
 					if pedCar and getElementAlpha(pedCar) ~= 255 then

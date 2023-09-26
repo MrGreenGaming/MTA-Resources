@@ -19,7 +19,7 @@ NAMETAG_OUTLINE_THICKNESS = 1.2
 NAMETAG_TEXTBORDERSIZE = 0
 --
 NAMETAG_ALPHA_DIFF = NAMETAG_DISTANCE - NAMETAG_ALPHA_DISTANCE
-NAMETAG_SCALE = 1/NAMETAG_SCALE * 800 / g_screenY 
+NAMETAG_SCALE = 1/NAMETAG_SCALE * 800 / g_screenY
 font = "default"
 
 NAMETAG_VIP_TEX = nil
@@ -43,7 +43,7 @@ function setNametagValues(bool)
 		NAMETAG_TEXTBORDERSIZE = 0.8
 		--
 		NAMETAG_ALPHA_DIFF = NAMETAG_DISTANCE - NAMETAG_ALPHA_DISTANCE
-		NAMETAG_SCALE = 1/NAMETAG_SCALE * 800 / g_screenY 
+		NAMETAG_SCALE = 1/NAMETAG_SCALE * 800 / g_screenY
 		--
 		font = exports.fonts:getFont("OpenSans")
 
@@ -64,7 +64,7 @@ function setNametagValues(bool)
 		NAMETAG_TEXTBORDERSIZE = 0
 	--
 		NAMETAG_ALPHA_DIFF = NAMETAG_DISTANCE - NAMETAG_ALPHA_DISTANCE
-		NAMETAG_SCALE = 1/NAMETAG_SCALE * 800 / g_screenY 
+		NAMETAG_SCALE = 1/NAMETAG_SCALE * 800 / g_screenY
 		font = "default"
 	end
 end
@@ -120,7 +120,7 @@ function nametagHandler()
 			return
 		end
 		-- Font double check, return to vanilla if font can't be loaded --
-		if not font and enableCustomNametags then 
+		if not font and enableCustomNametags then
 			font = exports.fonts:getFont("OpenSans")
 		end
 
@@ -130,16 +130,21 @@ function nametagHandler()
 		-- End Double Font Check --
 
 		local x,y,z = getCameraMatrix()
-		for player in pairs(nametags) do 
+		for player in pairs(nametags) do
 			while true do
 				if not isPedInVehicle(player) or isPedDead(player) then break end
+
+				local playerState = getElementData(player, "player state")
+
+				if playerState == "away" or playerState == "spectating" or playerState == "dead" then break end
+
 				local vehicle = getPedOccupiedVehicle(player)
 				local px,py,pz = getElementPosition ( vehicle )
 				-- Better positioning for custom nametag
 				if enableCustomNametags then
 					minx,miny,minz,maxx,maxy,maxz = getElementBoundingBox( vehicle )
 					pedminx,pedminy,pedminz,pedmaxx,pedmaxy,pedmaxz = getElementBoundingBox( player )
-					if pedmaxz > maxz then maxz = pedmaxz 
+					if pedmaxz > maxz then maxz = pedmaxz
 					elseif maxz > 1.3 then maxz = 1.3 end
 				end
 
@@ -189,9 +194,9 @@ function nametagHandler()
 						elseif enableCustomNametags then
 							dxDrawText ( name:gsub("#%x%x%x%x%x%x",""), sx+NAMETAG_TEXTBORDERSIZE, sy - offset+NAMETAG_TEXTBORDERSIZE, sx+NAMETAG_TEXTBORDERSIZE, sy - offset+NAMETAG_TEXTBORDERSIZE, tocolor(0,0,0,textalpha/100*50), textscale*NAMETAG_TEXTSIZE/100*7, font, "center", "bottom", false, false, false, false ,true)
 							dxDrawText ( name, sx, sy - offset, sx, sy - offset, tocolor(r,g,b,textalpha), textscale*NAMETAG_TEXTSIZE/100*7, font, "center", "bottom", false, false, false, true,true )
-							
+
 							local isPlayerVIP = getElementData(player,'gcshop.vipbadge')
-							
+
 							if isPlayerVIP then
 								local vipBadgeSize = textscale*NAMETAG_TEXTSIZE*20
 								local badgeMarginBottom = vipBadgeSize/4
@@ -204,7 +209,7 @@ function nametagHandler()
 									dxDrawImage( badge_drawX, badge_drawY, vipBadgeSize, vipBadgeSize, NAMETAG_VIP_PLUS_TEX, 0, 0, 0, tocolor(255,255,255,textalpha) )
 								end
 
-								
+
 							end
 
 						end
@@ -214,24 +219,24 @@ function nametagHandler()
 					drawY = sy + offset
 					local width,height =  NAMETAG_WIDTH*scale, NAMETAG_HEIGHT*scale
 					dxDrawRectangle ( drawX, drawY, width, height, tocolor(0,0,0,alpha) )
-					--Next the inner background 
+					--Next the inner background
 					local _health = getElementHealth(vehicle)
 					health = math.max(_health - 250, 0)/750
 					local p = -510*(health^2)
 					local r,g = math.max(math.min(p + 255*health + 255, 255), 0), math.max(math.min(p + 765*health, 255), 0)
-					dxDrawRectangle ( 	drawX + outlineThickness, 
-										drawY + outlineThickness, 
-										width - outlineThickness*2, 
-										height - outlineThickness*2, 
-										tocolor(r,g,0,0.4*alpha) 
+					dxDrawRectangle ( 	drawX + outlineThickness,
+										drawY + outlineThickness,
+										width - outlineThickness*2,
+										height - outlineThickness*2,
+										tocolor(r,g,0,0.4*alpha)
 									)
 					--Finally, the actual health
-					dxDrawRectangle ( 	drawX + outlineThickness, 
-										drawY + outlineThickness, 
-										health*(width - outlineThickness*2), 
-										height - outlineThickness*2, 
-										tocolor(r,g,0,alpha) 
-									)	
+					dxDrawRectangle ( 	drawX + outlineThickness,
+										drawY + outlineThickness,
+										health*(width - outlineThickness*2),
+										height - outlineThickness*2,
+										tocolor(r,g,0,alpha)
+									)
 
 					if enableCustomNametags then
 						-- Draw % of health
@@ -245,40 +250,40 @@ function nametagHandler()
 						local healthRight = drawX + outlineThickness + width - outlineThickness*2
 						local healthBottom = drawY + outlineThickness + height - outlineThickness*2
 						-- health shadow
-						dxDrawText( 		tostring(healthUnits).."%", 
-											drawX + outlineThickness+0.5, 
+						dxDrawText( 		tostring(healthUnits).."%",
+											drawX + outlineThickness+0.5,
 											drawY + outlineThickness+0.5 ,
-											healthRight+0.5, 
-											healthBottom+0.5, 
-											tocolor(0,0,0,textalpha/100*50),                   
-											textscale*NAMETAG_TEXTSIZE/100*51.5, 
-											"clear", 
-											"center", 
-											"center",                  
-											true, 
-											false, 
-											false,                  
-											false, 
-											true                
+											healthRight+0.5,
+											healthBottom+0.5,
+											tocolor(0,0,0,textalpha/100*50),
+											textscale*NAMETAG_TEXTSIZE/100*51.5,
+											"clear",
+											"center",
+											"center",
+											true,
+											false,
+											false,
+											false,
+											true
 											)
 						-- health text
-						dxDrawText( 		tostring(healthUnits).."%", 
-											drawX + outlineThickness, 
+						dxDrawText( 		tostring(healthUnits).."%",
+											drawX + outlineThickness,
 											drawY + outlineThickness ,
-											healthRight, 
-											healthBottom, 
-											tocolor(255,255,255,textalpha),                   
-											textscale*NAMETAG_TEXTSIZE/100*51.5, 
-											"clear", 
-											"center", 
-											"center",                  
-											true, 
-											false, 
-											false,                  
-											false, 
-											true                
-											)	
-					end		
+											healthRight,
+											healthBottom,
+											tocolor(255,255,255,textalpha),
+											textscale*NAMETAG_TEXTSIZE/100*51.5,
+											"clear",
+											"center",
+											"center",
+											true,
+											false,
+											false,
+											false,
+											true
+											)
+					end
 				end
 				break
 			end
@@ -344,7 +349,7 @@ function enableNametags(mode)
 		bEnableNametags = mode
 	else bEnableNametags = not bEnableNametags
 	end
-	
+
 	-- show
 	if bEnableNametags then
 		addEventHandler("onClientRender", g_Root, nametagHandler)
@@ -362,9 +367,9 @@ addCommandHandler("enablenametags", enableNametags)
 addEventHandler("onClientMapStarting", g_Root,
 	function()
 		if bEnableNametags == false then
-			for key, player in ipairs(getElementsByType("player")) do 
+			for key, player in ipairs(getElementsByType("player")) do
 				setPlayerNametagShowing(player, false)
-			end 
+			end
 		end
 	end -- function
 )
