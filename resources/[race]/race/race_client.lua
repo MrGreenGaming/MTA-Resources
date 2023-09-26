@@ -1200,9 +1200,9 @@ MovePlayerAway.rotZ = 0
 MovePlayerAway.health = 0
 
 function MovePlayerAway.start()
-	local element = g_Vehicle or getPedOccupiedVehicle(g_Me) or g_Me
+	local element = getPedOccupiedVehicle(g_Me) or g_Me
 	MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ = getElementPosition(element)
-	MovePlayerAway.posZ = 34567 + math.random(0,4000)
+	MovePlayerAway.posZ = 34567
 	MovePlayerAway.rotZ = 0
 	MovePlayerAway.health = math.max(1,getElementHealth(element))
 	setElementHealth( element, 2000 )
@@ -1216,35 +1216,34 @@ end
 function MovePlayerAway.update(nozcheck)
 	-- Move our player far away
 	local camTarget = getCameraTarget()
-	if not (getPedOccupiedVehicle(g_Me)) then
+	local vehicle = getPedOccupiedVehicle(g_Me)
+	if not vehicle then
 		-- outputDebugString('no vehicle to move away')
-		setElementPosition( g_Me, MovePlayerAway.posX-10, MovePlayerAway.posY-10, MovePlayerAway.posZ )
+		setElementPosition(g_Me, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ)
 	end
-	if g_Vehicle or getPedOccupiedVehicle(g_Me) then
+	if vehicle then
 		if not nozcheck then
 			if camTarget then
 				MovePlayerAway.posX, MovePlayerAway.posY = getElementPosition(camTarget)
 				if getElementType(camTarget) ~= "vehicle" then
-					outputDebug( 'SPECTATE', 'camera target type:' .. getElementType(camTarget) )
+					outputDebug('SPECTATE', 'camera target type:' .. getElementType(camTarget))
 				end
 				if getElementType(camTarget) == 'ped' then
 					MovePlayerAway.rotZ = getPedRotation(camTarget)
 				else
-					_,_, MovePlayerAway.rotZ = getElementRotation(camTarget)
+					_, _, MovePlayerAway.rotZ = getElementRotation(camTarget)
 				end
 			end
 		end
-		local vehicle = g_Vehicle
-		if vehicle then
-			fixVehicle( vehicle )
-			setElementFrozen ( vehicle, true )
-			setElementPosition( vehicle, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ )
-			setElementVelocity( vehicle, 0,0,0 )
-			setElementAngularVelocity( vehicle, 0,0,0 )
-			setElementRotation ( vehicle, 0,0,MovePlayerAway.rotZ )
-		end
+
+		fixVehicle(vehicle)
+		setElementFrozen(vehicle, true)
+		setElementPosition(vehicle, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ)
+		setElementVelocity(vehicle, 0, 0, 0)
+		setElementAngularVelocity(vehicle, 0, 0, 0)
+		setElementRotation(vehicle, 0, 0, MovePlayerAway.rotZ)
 	end
-	setElementHealth( g_Me, 90 )
+	setElementHealth(g_Me, 90)
 
 	if camTarget and camTarget ~= getCameraTarget() then
 		setCameraTarget(camTarget)
