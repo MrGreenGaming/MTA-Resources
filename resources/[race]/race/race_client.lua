@@ -1202,7 +1202,7 @@ MovePlayerAway.health = 0
 function MovePlayerAway.start()
 	local element = getPedOccupiedVehicle(g_Me) or g_Me
 	MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ = getElementPosition(element)
-	MovePlayerAway.posZ = 34567
+	MovePlayerAway.posZ = -99
 	MovePlayerAway.rotZ = 0
 	MovePlayerAway.health = math.max(1,getElementHealth(element))
 	setElementHealth( element, 2000 )
