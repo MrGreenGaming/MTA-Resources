@@ -34,7 +34,7 @@ local sqrt2		= 	math.sqrt(2)
 -- We first draw a larger (*sqrt2) version of the radar area bigger than its texture holder, so the radar can rotate without loss
 local offset 	= 	- radarWidth * (sqrt2-1) / 2
 local diagonal	= 	radarWidth * sqrt2
-local clip3D	=	{ 
+local clip3D	=	{
 	NW = {	x = radarWidth * x1,
 			y = radarWidth * h1 },
 	NE = {	x = radarWidth * (1 - x1),
@@ -56,7 +56,7 @@ local radarTransformed	=	dxCreateRenderTarget ( radarWidth, radarWidth, true )		
 dxSetTextureEdge(radarTransformed, 'clamp')
 local transformShader 	=	dxCreateShader ( 'files/textureReplace.fx' )						-- Extra step, shader needed to be able to use dxSetShaderTransform
 dxSetShaderValue(transformShader, 'tex', radarImage)
-if tilted then 
+if tilted then
 dxSetShaderTransform(transformShader, 0, heightRotation, 0, 0, -.7, -0.19, false, 0)	-- Transform the map
 end
 local zoom = 2
@@ -90,27 +90,27 @@ function render()
 	end
 
 	dxDrawRectangle ( dX, dY + radarH, width, 3 * borderH + healthH + speedH, borderColour )
-	
+
 	if radarImage then
 		dxDrawImage ( dX, dY, width, radarH, radarImage, 0, 0, 0, tocolor(255,255,255,255) )
 	end
-	
+
 	if healthImage then
 		dxDrawImage ( dX, dY + radarH + borderH, width, healthH, healthImage)
 	end
-	
+
 	if speedImage then
 		dxDrawImage ( dX, dY + radarH + 2 * borderH + healthH, width, speedH, speedImage)
 	end
-	
+
 	if nosImage then
 		dxDrawImage ( dX, dY - borderH - nosH, width, nosH, nosImage)
 	end
-	
+
 	drawTime(dX+2.5, dY, dX + width, dY+radarH )
 
 	drawNorth(dX, dY, width, radarH, rot)
-	
+
 
 	drawDebug()
 end
@@ -126,7 +126,7 @@ function drawNorth (dX, dY, w, h, rot_)
 		N_Y = rot > 180 and 0 or h						-- y = h or 0
 		N_X = 1/tan(rot) * (N_Y - h/2) + w/2			-- x = intersect
 	else
-		-- intersect x=0 or x=w with y = 1*slope * (x - x0) + y0 when x,y=w/2,h/2 and slope=tan(rot) 
+		-- intersect x=0 or x=w with y = 1*slope * (x - x0) + y0 when x,y=w/2,h/2 and slope=tan(rot)
 		N_X = cos(rot) > cos(switchAngle) and w or 0	-- x = w or 0
 		N_Y = tan(rot) * ( N_X - w/2 ) + h/2			-- y = intersect
 	end
@@ -212,26 +212,26 @@ function renderRadar()
 	local px, py, pz = getElementPosition ( localPlayer )								-- Player position and rotation
 	local rot = rotate and -math.deg(getRot()) or 0
 	-- local imgSizeX, imgSizeY	= 	dxGetMaterialSize(mapTexture)						-- Get map texture size
-	local imgx, imgy = (px + 3000) * imgSizeX / 6000, (3000 - py) * imgSizeY / 6000		-- Convert players position to image coords with (0, 0) being left top 
+	local imgx, imgy = (px + 3000) * imgSizeX / 6000, (3000 - py) * imgSizeY / 6000		-- Convert players position to image coords with (0, 0) being left top
 																						-- and (imgSizeX, imgSizeY) right bottom of the image
 	-- Draw the normal radar area, section from mapTexture
 	dxSetRenderTarget ( radarImage, true )
 	dxDrawImageSection ( offset, offset, diagonal, diagonal, imgx - imgSizeX / radarZoom *sqrt2, imgy - imgSizeY / radarZoom*sqrt2, imgSizeX / radarZoom*2*sqrt2, imgSizeY / radarZoom*2*sqrt2, mapTexture, rot)
 	-- Draw blips on normal map area
 	drawBlips(rot)
-	
+
 	-- Transform the map, create a tilted 3d effect
 	if (tilted) then
 		radar = radarTransformed
 		dxSetRenderTarget ( radarTransformed, true )
 		-- remove 1/4 left and right
-		-- remove 1/2 from top, 
+		-- remove 1/2 from top,
 		dxDrawImage ( -radarWidth/4, -radarWidth*2/4, radarWidth*6/4, radarWidth*2, transformShader)
 	end
-	
+
 	-- Draw radar on screen
 	dxSetRenderTarget()
-	
+
 	return radar, rot
 end
 
@@ -263,7 +263,7 @@ function drawBlips(rot)
 			local path = 'images/blips/'..id..'.png'
 			local size = math.round ( blipSize*3/5 * getBlipSize(blip)/2 / 2)
 			local attachedTo = getElementAttachedTo(blip)
-			
+
 			if id==0 then --handling normal blip showing up or down
 				color = {getBlipColor(blip)}
 				if pz<ez-5 then
@@ -287,22 +287,22 @@ function drawBlips(rot)
 					end
 				end
 			end
-			
+
 			local bx, by =  (ex - px)*a, -(ey - py)*a
 			local d = math.sqrt(bx^2 + by^2)
 			-- local angle = math.deg(math.atan2(bx,by))
 			local angle = math.rad(90 - math.deg(math.atan2(bx,by)) + rot)
 			bx = math.round( d*math.cos(angle) + midx)
 			by = math.round( d*math.sin(angle) + midy)
-			
+
 			if tilted then
 				local minH, maxH = (h1 - 0.0) * radarWidth, (h2 - 0.0) * radarWidth
 				sl_l, sl_r 	= ( h2 - h1 ) / ( x2 - x1 ), ( h2 - h1 ) / ( x1 - x2 )
 				i_l, i_r 	= ( h2 - sl_l * x2 ) * radarWidth, ( h2 - sl_r * (1-x2) ) * radarWidth
-				
+
 				-- dxDrawLine ( (rw*2-i_l)/sl_l, rw*2, (-i_l)/sl_l, 0, tocolor(0, 0, 255) )
 				-- dxDrawLine ( (rw*2-i_r)/sl_r, rw*2, (-i_r)/sl_r, 0, tocolor(0, 0, 255) )
-				
+
 				if (by > sl_l * (bx) + i_l) then
 					-- color = tocolor(255,0,0,100)
 					local bx_, by_ = getProjectionOffPointOnLine ( sl_l, i_l, bx, by )
@@ -325,18 +325,20 @@ function drawBlips(rot)
 			else
 				bx = math.clip ( 0, bx, radarWidth )
 				by = math.clip ( 0, by, radarWidth )
-			end	
+			end
 			local customBlipPath = getElementData(blip,'customBlipPath')
 			if type(customBlipPath)=='string' then
 				path=customBlipPath
 			end
-			
+
 			dxDrawImage ( bx - size, by - size, size*2, size*2, blipTextures[path] or path, blipPointRot, 0, 0, tocolor(color[1], color[2], color[3], color[4] ))
 		end
 	end
 	if getPedOccupiedVehicle(localPlayer) and getCameraTarget() == getPedOccupiedVehicle(localPlayer) then
 		local playerBlipPath = 'images/blips/2.png'
-		dxDrawImage(midx - blipSize/2,midx - blipSize/2, blipSize, blipSize, blipTextures[playerBlipPath] or playerBlipPath, rot -(getPedRotation(localPlayer)))
+        local team = getPlayerTeam(localPlayer) or false
+        local color = team and {getTeamColor ( team )} or {255, 255, 255, 255}
+		dxDrawImage(midx - blipSize/2,midx - blipSize/2, blipSize, blipSize, blipTextures[playerBlipPath] or playerBlipPath, rot -(getPedRotation(localPlayer)), 0, 0, tocolor(color[1], color[2], color[3], color[4]))
 	end
 end
 
@@ -462,7 +464,7 @@ function drawDebug()
 	end
 	if true then return end
 	dxSetRenderTarget()
-	
+
 	local x, y = 200, 50
 	dxDrawImage ( x, y+radarWidth, radarWidth, -radarWidth, radarImage)	-- Normal map
 	for i = 1,10 do	-- Line grid over normal map
@@ -474,17 +476,17 @@ function drawDebug()
 	-- dxDrawLine(x + clip3D.NE.x, y + clip3D.NE.y, x + clip3D.SE.x, y + clip3D.SE.y, tocolor(255,255,0) )
 	-- dxDrawLine(x + clip3D.SE.x, y + clip3D.SE.y, x + clip3D.SW.x, y + clip3D.SW.y, tocolor(255,255,0) )
 	-- dxDrawLine(x + clip3D.SW.x, y + clip3D.SW.y, x + clip3D.NW.x, y + clip3D.NW.y, tocolor(255,255,0) )
-	
-	
+
+
 	shaderX, shaderY = dxGetMaterialSize(transformShader)
 	dxDrawImage ( 1000, 50, shaderX, shaderY, transformShader)	-- Transformed map
 	dxDrawRectangle(1000, 50, shaderX, shaderY,tocolor(255,255,255,155),false)	-- Original drawing area before transformation
 	local b = 0.06
 	dxDrawLine(1000 - shaderX * (b), 50, 1000 + shaderX * (1+b), 50, tocolor(255,0,0) )-- Top line transformed map
-	
-	
+
+
 	dxDrawLine(radarX * resX,radarY * resY+radarWidth/2,radarX * resX+radarWidth /(radarRatio*2),radarY * resY, tocolor(255,255,0) )	-- Corner line over final map
-	
+
 	-- dxDrawImage ( 1000, 400, radarWidth*3/2, radarWidth*2, transformShader)
 	-- dxDrawLine(radarX * resX,radarY * resY,radarX * resX+radarWidth /(radarRatio*2),radarY * resY+radarWidth/2, tocolor(255,0,0) )
 	-- dxDrawLine(radarX * resX,radarY * resY+radarWidth/2,radarX * resX+radarWidth /(radarRatio*2),radarY * resY, tocolor(255,0,0) )
@@ -570,7 +572,7 @@ setTimer( function()
 		prev = getElementModel(veh)
 		lostNOS()
 	end
-	
+
 end, 50, 0)
 
 function lostNOS()
