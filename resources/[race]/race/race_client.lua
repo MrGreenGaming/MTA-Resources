@@ -668,7 +668,7 @@ function checkWater()
         if not g_WaterCraftIDs[getElementModel(g_Vehicle)] then
             local x, y, z = getElementPosition(g_Me)
             local waterZ = getWaterLevel(x, y, z)
-            if waterZ and z < waterZ - 0.5 and not isPlayerRaceDead(g_Me) and not isPlayerFinished(g_Me) and g_MapOptions then
+            if waterZ and z < waterZ - 0.5 and not isPlayerRaceDead(g_Me) and not isPlayerFinished(g_Me) and not isPlayerSpectating(g_Me) and g_MapOptions then
                 if g_MapOptions.firewater then
                     blowVehicle ( g_Vehicle, true )
                 else
