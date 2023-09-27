@@ -675,7 +675,7 @@ function checkWater()
                     setElementHealth(g_Me,0)
                     triggerServerEvent('onRequestKillPlayer',g_Me,"water")
                 end
-            elseif g_MapInfo.modename ~= 'Sprint' and g_MapInfo.modename ~= 'Never the same' and isElementInWater(g_Vehicle) and not isPlayerRaceDead(g_Me) and not isPlayerFinished(g_Me) and g_MapOptions then
+            elseif g_MapInfo.modename ~= 'Sprint' and g_MapInfo.modename ~= 'Never the same' and isElementInWater(g_Vehicle) and not isPlayerRaceDead(g_Me) and not isPlayerFinished(g_Me) and not not getElementData(g_Me, "player state") == "spectating" and g_MapOptions then
                 setElementHealth(g_Me,0)
                 triggerServerEvent('onRequestKillPlayer',g_Me,"water")
             end
