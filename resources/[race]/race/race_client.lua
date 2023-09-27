@@ -1220,6 +1220,7 @@ function MovePlayerAway.update(nozcheck)
 	if not vehicle then
 		-- outputDebugString('no vehicle to move away')
 		setElementPosition(g_Me, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ)
+        setElementFrozen(g_Me, true)
 	end
 	if vehicle then
 		if not nozcheck then
@@ -1263,6 +1264,7 @@ function MovePlayerAway.stop()
 			setElementHealth ( vehicle, MovePlayerAway.health )
 		end
 		setElementVelocity( g_Me, 0,0,0 )
+        setElementFrozen(g_me, false)
 	end
 end
 
