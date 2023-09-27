@@ -19,6 +19,10 @@ function outputInfoClient(info)
     outputChatBox('[Event] #ffffff' ..info, 155, 155, 255, true)
 end
 
+function getEventMode()
+    return ffa_mode
+end
+
 -----------------
 -- Call functions
 -----------------

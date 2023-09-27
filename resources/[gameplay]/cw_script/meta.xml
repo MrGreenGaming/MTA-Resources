@@ -21,6 +21,8 @@
     <export function="getEventData" type="server" />
     <export function="outputInfoForPlayer" type="server" />
 
+    <export function="getEventMode" type="client" />
+
     <aclrequest>
         <right name="function.stopResource" access="true" />
     </aclrequest>

@@ -639,7 +639,11 @@ function updateWhiteList()
 	end
 
 	g_Rank = tonumber(getElementData(localPlayer, 'race rank'))
-	--g_Rank =myRank
+    -- During Clan Wars focus on the player who's 1st to improve spectator players
+    if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:getEventMode() == "CW" then
+        g_Rank = 1
+    end
+
 	if not isBoardAllowed() or not g_Rank then return end
 
 	local players = getElementsByType('player')
