@@ -209,7 +209,7 @@ end
 function renderRadar()
 	if not imgSizeX then return false end
 	local radar = radarImage
-	local px, py, pz = getElementPosition ( localPlayer )								-- Player position and rotation
+	local px, py, pz = getElementPosition ( getTargetPlayer() )								-- Player position and rotation
 	local rot = rotate and -math.deg(getRot()) or 0
 	-- local imgSizeX, imgSizeY	= 	dxGetMaterialSize(mapTexture)						-- Get map texture size
 	local imgx, imgy = (px + 3000) * imgSizeX / 6000, (3000 - py) * imgSizeY / 6000		-- Convert players position to image coords with (0, 0) being left top
@@ -279,9 +279,10 @@ function drawBlips(rot)
 					if path ~= 'images/blips/0-up.png' then
 						path = 'images/blips/2.png'
 						blipPointRot = -(getPedRotation(attachedTo)) + rot
-					size = size * sqrt2
+					    size = blipSize / 2
+                    else
+                        size = size * sqrt2
 					end
-					size = size * sqrt2
 					if color[1] == 200 and color[2] == 200 and color[3] == 200 and color[4] == 255 then
 						color = {255, 255, 255, 240}
 					end
