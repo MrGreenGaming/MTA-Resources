@@ -279,10 +279,14 @@ function drawBlips(rot)
 					if path ~= 'images/blips/0-up.png' then
 						path = 'images/blips/2.png'
 						blipPointRot = -(getPedRotation(attachedTo)) + rot
-					    size = blipSize / 2
-                    else
-                        size = size * sqrt2
+					size = size * sqrt2
 					end
+					size = size * sqrt2
+
+                    if getTargetPlayer() == attachedTo then
+                        size = blipSize / 2
+                    end
+
 					if color[1] == 200 and color[2] == 200 and color[3] == 200 and color[4] == 255 then
 						color = {255, 255, 255, 240}
 					end
