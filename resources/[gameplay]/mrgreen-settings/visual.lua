@@ -53,13 +53,14 @@ visual = { -- Standard Settings, 0 = off --
 	["eventOffroadWheels"] = 1,
 	["thirdCheckpoint"] = 1,
 	["raceAssist"] = 0, -- 1 show race line of local ghost, 0 no race line
+    ["vehicleChange"] = 1, -- 1 Show Vehicle Change Icons
 }
 
 
 -- Reapply settings when one of these resources (re)starts
 local VSL_reApplyTimer = false
 -- Add resource name here when used
-local resetResource = {"-shaders-bloom_fix","-shaders-car_paint_fix","-shaders-car_paint_reflect","-shaders-contrast","-shaders-depth_of_field","-shaders-dynamic_sky","-shaders-nitro","-shaders-palette","-shaders-radial_blur","-shaders-SkyBox_ALT","-shaders-watershine","race","race_ghost", "race_fix", "controller", "cw_script", "third_checkpoint", "race_ghost_assist"}
+local resetResource = {"-shaders-bloom_fix","-shaders-car_paint_fix","-shaders-car_paint_reflect","-shaders-contrast","-shaders-depth_of_field","-shaders-dynamic_sky","-shaders-nitro","-shaders-palette","-shaders-radial_blur","-shaders-SkyBox_ALT","-shaders-watershine","race","race_ghost", "race_fix", "controller", "cw_script", "race_ghost_assist"}
 addEventHandler("onClientResourceStart",root,
 	function(res)
 		local resName = getResourceName(res)
@@ -324,6 +325,17 @@ function visualCheckBoxHandler()
             triggerEvent("toggleThirdCheckpoint", localPlayer, false)
             v_setSaveTimer()
             visual["thirdCheckpoint"] = 0
+        end
+
+    elseif source == GUIEditor.checkbox["vehicleChange"] then
+        if guiCheckBoxGetSelected(GUIEditor.checkbox["vehicleChange"]) then
+            triggerEvent("toggleVcIcons", localPlayer, true)
+            v_setSaveTimer()
+            visual["vehicleChange"] = 1
+        else
+            triggerEvent("toggleVcIcons", localPlayer, false)
+            v_setSaveTimer()
+            visual["vehicleChange"] = 0
         end
     elseif source == GUIEditor.checkbox["raceAssist"] then
         if guiCheckBoxGetSelected(GUIEditor.checkbox["raceAssist"]) then
@@ -672,6 +684,15 @@ function setVisualGUI()
 			else
 				guiCheckBoxSetSelected(GUIEditor.checkbox["thirdCheckpoint"], false)
 				triggerEvent("toggleThirdCheckpoint", localPlayer, false)
+			end
+
+        elseif f == "vehicleChange" then
+			if u == 1 then
+				guiCheckBoxSetSelected(GUIEditor.checkbox["vehicleChange"], true)
+				triggerEvent("toggleVcIcons", localPlayer, true)
+			else
+				guiCheckBoxSetSelected(GUIEditor.checkbox["vehicleChange"], false)
+				triggerEvent("toggleVcIcons", localPlayer, false)
 			end
 		elseif f == "controller" then
 			guiComboBoxSetSelected(GUIEditor.combobox["controller"], u)

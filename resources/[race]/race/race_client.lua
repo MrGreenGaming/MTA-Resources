@@ -692,6 +692,7 @@ function checkWater()
 	end
 end
 
+local showThirdCheckpoint = false
 
 function showNextCheckpoint(bOtherPlayer)
 	g_CurrentCheckpoint = g_CurrentCheckpoint + 1
@@ -707,12 +708,118 @@ function showNextCheckpoint(bOtherPlayer)
 		local curCheckpoint = g_Checkpoints[i]
 		local nextCheckpoint = g_Checkpoints[i+1]
 		local nextMarker = createCheckpoint(i+1)
+        if showThirdCheckpoint then
+            createCheckpoint(i+2)
+        end
+        if curCheckpoint.vehicle then
+            showVehicleIcon(curCheckpoint)
+        end
 		setMarkerTarget(curCheckpoint.marker, unpack(nextCheckpoint.position))
 	end
 	if not Spectate.active then
 		setElementData(g_Me, 'race.checkpoint', i)
 	end
 end
+
+-------------------------------------------------------------------------------
+-- Render icons vehicle change
+local vcEnabled = false
+
+local vcCheckpoint = nil
+local vcVehType = nil
+local vcVehicleName = nil
+local vcImage = nil
+local vcGlobalSize = 5
+local vcGlobalAlpha = .50
+
+local screenSizeX, screenSizeY = guiGetScreenSize()
+local guiX = screenSizeX * 0.1
+local guiY = screenSizeX * 0.1
+
+function showVehicleIcon(checkpoint)
+    if not vcEnabled then return end
+    vcVehType = getVehicleType(checkpoint.vehicle)
+	if vcVehType == "Monster Truck" then vcVehType = "MonsterTruck" end
+    if vcVehType == "Vortex" then vcVehType="hovercraft" end
+
+    vcVehicleName = getVehicleNameFromModel(checkpoint.vehicle)
+    vcCheckpoint = checkpoint
+    vcImage = guiCreateStaticImage(0, 0, guiX, guiY, "./icons/" .. vcVehType ..".png", false)
+    guiSetVisible(vcImage, false)
+end
+
+function destroyVehicleIcon()
+    vcCheckpoint = nil
+    destroyElement(vcImage)
+    vcImage = nil
+end
+
+function renderVehicleIcon()
+    if not vcEnabled then return end
+    if not vcCheckpoint then return end
+
+    local x, y, z = unpack(vcCheckpoint.position)
+
+    local playerX, playerY, playerZ = getCameraMatrix()
+    local dist = getDistanceBetweenPoints3D(x, y, z + 3, playerX, playerY, playerZ)
+    if dist < 300 and (isLineOfSightClear(x, y, z + 3, playerX, playerY, playerZ, true, false, false, false)) then
+        local clientVehicle = getPedOccupiedVehicle(localPlayer)
+        if vcVehicleName == getVehicleName(clientVehicle) then return guiSetVisible(vcImage, false) end
+
+        local screenX, screenY
+        local playerX, playerY, playerZ = getElementPosition(localPlayer)
+
+        if ((vcCheckpoint.type == false or vcCheckpoint.type == "checkpoint") and playerZ > z) then
+            -- -- Checkpoint is a default checkpoint in which the height doesn't matter. The icon is relative to the player's height
+            screenX, screenY = getScreenFromWorldPosition(x, y, playerZ + 1)
+            dxDrawTextOnElement(x, y, playerZ - 2, vcVehicleName)
+        else
+            screenX, screenY = getScreenFromWorldPosition(x, y, z + 3)
+            dxDrawTextOnElement(x, y, z, vcVehicleName)
+        end
+
+        if screenX and screenY then
+            local scaled = screenSizeX * (1/(2*(dist+5))) * 0.6
+            local relx, rely = scaled * vcGlobalSize, scaled * vcGlobalSize
+            guiSetAlpha(vcImage, vcGlobalAlpha)
+            guiSetSize(vcImage, relx, rely, false)
+            guiSetPosition(vcImage, screenX - (relx / 2), screenY, false)
+            guiSetVisible(vcImage, true)
+        else
+            guiSetVisible(vcImage, false)
+        end
+    else
+        if vcImage then
+            guiSetVisible(vcImage, false)
+        end
+    end
+end
+addEventHandler("onClientRender", root, renderVehicleIcon)
+
+function dxDrawTextOnElement(x, y, z,text,size,height,distance,R,G,B,alpha,font,...)
+	local x2, y2, z2 = getCameraMatrix()
+	z = z + 1
+	local distance = distance or 300
+	local height = height or -1
+
+	local sx, sy = getScreenFromWorldPosition(x, y, z+height)
+	if(sx) and (sy) then
+		local distanceBetweenPoints = getDistanceBetweenPoints3D(x, y, z, x2, y2, z2)
+		if(distanceBetweenPoints < distance) then
+			dxDrawText(text, sx+2, sy+2, sx, sy, tocolor(R or 255, G or 255, B or 255, alpha or (255 * 0.65)), (size or 1)-(distanceBetweenPoints / distance), font or "pricedown", "center", "center")
+		end
+	end
+end
+
+addEvent("toggleVcIcons")
+addEventHandler("toggleVcIcons", root, function(b)
+    if b then
+        vcEnabled = true
+    else
+        vcEnabled = false
+        destroyVehicleIcon()
+    end
+end)
 
 -------------------------------------------------------------------------------
 -- Show checkpoints and rank info that is relevant to the player being spectated
@@ -1289,9 +1396,8 @@ function raceTimeout()
 	removeEventHandler('onClientRender', g_Root, updateTime)
 	-- Edit #7 warning fix
 	if isTimer(mapTimer) then killTimer(mapTimer) end
-	if g_CurrentCheckpoint then
-		destroyCheckpoint(g_CurrentCheckpoint)
-		destroyCheckpoint(g_CurrentCheckpoint + 1)
+	for i=1,#g_Checkpoints do
+		destroyCheckpoint(i)
 	end
 	guiSetText(g_GUI.timeleft, msToTimeStr(0))
 	if g_GUI.hurry then
@@ -1352,6 +1458,7 @@ end
 
 function createCheckpoint(i)
 	local checkpoint = g_Checkpoints[i]
+    if not checkpoint then return end
 	if checkpoint.marker then
 		return
 	end
@@ -1410,6 +1517,9 @@ end
 
 function destroyCheckpoint(i)
 	local checkpoint = g_Checkpoints[i]
+
+    if vcCheckpoint == checkpoint then destroyVehicleIcon() end
+
 	if checkpoint and checkpoint.marker then
 		if getElementChildren (checkpoint.marker) then
 			local marker = getElementChildren (checkpoint.marker)
@@ -1427,8 +1537,9 @@ function destroyCheckpoint(i)
 end
 
 function setCurrentCheckpoint(i, bOtherPlayer)
-	destroyCheckpoint(g_CurrentCheckpoint)
-	destroyCheckpoint(g_CurrentCheckpoint + 1)
+	for i=1,#g_Checkpoints do
+		destroyCheckpoint(i)
+	end
 	createCheckpoint(i)
 	g_CurrentCheckpoint = i - 1
 	showNextCheckpoint(bOtherPlayer)
@@ -1667,3 +1778,15 @@ end
 function e_getPickups()
 	return g_Pickups
 end
+
+function toggleEnabledDisabled(b)
+	enabled = b
+
+	if enabled then
+        showThirdCheckpoint = true
+	else
+        showThirdCheckpoint = false
+	end
+end
+addEvent("toggleThirdCheckpoint")
+addEventHandler("toggleThirdCheckpoint", root, toggleEnabledDisabled)

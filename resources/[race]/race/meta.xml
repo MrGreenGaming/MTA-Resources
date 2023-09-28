@@ -7,9 +7,6 @@
     <include resource="customblips" />
     <include resource="custom_coronas" />
     <include resource="stats" />
-    <include resource="language-chat" />
-    <include resource="third_checkpoint" />
-    <include resource="icons-vehicle-change" />
     <include resource="streaks" />
 
 
@@ -93,6 +90,20 @@
     <file src="img/pj_red.png" />
     <file src="img/pj_blue.png" />
     <file src="img/arrow-up.png" />
+
+    <file src="icons/Automobile.png" />
+	<file src="icons/bike.png" />
+	<file src="icons/bmx.png" />
+	<file src="icons/boat.png" />
+	<file src="icons/helicopter.png" />
+	<file src="icons/hovercraft.png" />
+	<file src="icons/hydra.png" />
+	<file src="icons/MonsterTruck.png" />
+	<file src="icons/plane.png" />
+	<file src="icons/quad.png" />
+	<file src="icons/sanchez.png" />
+	<file src="icons/trailer.png" />
+	<file src="icons/train.png" />
 
     <!-- DeadLine -->
     <file src="img/rocket66.png" />
