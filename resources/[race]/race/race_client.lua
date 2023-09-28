@@ -739,10 +739,10 @@ local guiY = screenSizeX * 0.1
 function showVehicleIcon(checkpoint)
     if not vcEnabled then return end
     vcVehType = getVehicleType(checkpoint.vehicle)
-	if vcVehType == "Monster Truck" then vcVehType = "MonsterTruck" end
-    if vcVehType == "Vortex" then vcVehType="hovercraft" end
-
     vcVehicleName = getVehicleNameFromModel(checkpoint.vehicle)
+		if vcVehType == "Monster Truck" then vcVehType = "MonsterTruck" end
+    if vcVehicleName == "Vortex" then vcVehType="hovercraft" end
+
     vcCheckpoint = checkpoint
     vcImage = guiCreateStaticImage(0, 0, guiX, guiY, "./icons/" .. vcVehType ..".png", false)
     guiSetVisible(vcImage, false)
