@@ -1,0 +1,5 @@
+<meta>
+    <info author="Nick_026" name="Lap Support" description="Add lap UI support to your maps" version="1.0" type="script" />
+
+    <script src="server.lua" type="server" />
+</meta>
