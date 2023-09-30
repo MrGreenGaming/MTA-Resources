@@ -54,7 +54,6 @@ addEventHandler("onPlayerReachCheckpoint", root, function(checkpoint, time_)
     else
         lapTimes[source] = time_
     end
-    outputDebugString(lapTimes[source])
     setElementData(source, "race.bestlap", lapTimes[source], true)
 end)
 
