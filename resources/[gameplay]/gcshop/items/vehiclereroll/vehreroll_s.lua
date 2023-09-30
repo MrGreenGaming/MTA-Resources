@@ -8,6 +8,8 @@ local maxRollsPerMap = 1
 local vehroll_firstcheckpoint = false -- don't allow before first checkpoint reached
 local vehroll_firstCheckpointPlayer = {}
 
+local playerPreviousCheckpoint = {} -- [player] = cpId
+
 local vehreroll_vehs = { -- [gamemode] = {vehicle = {}, boat = {}, air = {} }
 	["Never the same"] = {
 		["vehicle"] = {	602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585,
@@ -59,6 +61,7 @@ function vehroll_raceState(state)
 		playerRolledAmount = {}
 		rerollPlayer = {}
 		isRerollAllowed = true
+        playerPreviousCheckpoint = {}
 	elseif state == "SomeoneWon" then -- exceptions here
 
 		return
@@ -74,6 +77,7 @@ addEvent("onRaceStateChanging",true)
 addEventHandler("onRaceStateChanging",root,vehroll_raceState)
 
 function vehroll_handleCPReached(checkpoint)
+    playerPreviousCheckpoint[source] = checkpoint
 	if vehroll_firstcheckpoint and checkpoint == 1 then
 		vehroll_firstCheckpointPlayer[source] = true
 	end
@@ -167,7 +171,7 @@ function vehreroll_getRandomVehicleID(ID, player, checkpoints)
 	local gm = exports.race:getRaceMode()
 
 	if gm == "Never the same" then
-		local playerCP = getElementData(player, "race.checkpoint") - 1
+		local playerCP = playerPreviousCheckpoint[player] or 0
 		local cpType
 		if playerCP == 0 then
 			cpType = "none"
