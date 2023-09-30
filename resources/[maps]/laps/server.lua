@@ -38,6 +38,12 @@ end
 addEvent("onMapStarting")
 addEventHandler("onMapStarting", resourceRoot, mapStarting)
 
+addEventHandler("onPlayerJoin", root, function()
+    if #laps > 0 then
+        setElementData(source, "race.totalLaps", #laps + 1, true)
+    end
+end)
+
 addEventHandler("onPlayerReachCheckpoint", root, function(checkpoint, time_)
     if #laps == 0 then return end
 
