@@ -1,12 +1,14 @@
 local laps = {}
 
 local lapTimes = {}
+local prevLapTimes = {}
 
 local currentMapRes
 
 function mapStarting(mapInfo, mapOptions, gameOptions)
     laps = {}
     lapTimes = {}
+    prevLapTimes = {}
 
     currentMapRes = mapInfo.resname
 
@@ -53,12 +55,14 @@ addEventHandler("onPlayerReachCheckpoint", root, function(checkpoint, time_)
     setElementData(source, "race.lap", newLap + 1, true)
 
     if lapTimes[source] then
-        local lapTime = time_ - lapTimes[source]
+        local lapTime = time_ - prevLapTimes[source]
+        prevLapTimes[source] = lapTime
         if lapTime < lapTimes[source] then
             lapTimes[source] = lapTime
         end
     else
         lapTimes[source] = time_
+        prevLapTimes[source] = time_
     end
     setElementData(source, "race.bestlap", lapTimes[source], true)
 end)
