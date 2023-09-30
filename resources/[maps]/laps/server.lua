@@ -1,7 +1,10 @@
 local laps = {}
 
+local lapTimes = {}
+
 function mapStarting(mapInfo, mapOptions, gameOptions)
     laps = {}
+    lapTimes = {}
 
     local lapList = get(mapInfo.resname..".laps")
 
@@ -22,6 +25,7 @@ function mapStarting(mapInfo, mapOptions, gameOptions)
 
     for i, player in ipairs(getElementsByType("player")) do
         setElementData(player, "race.lap", nil, true)
+        setElementData(player, "race.bestlap", nil, true)
     end
 end
 addEvent("onMapStarting")
@@ -34,6 +38,17 @@ addEventHandler("onPlayerReachCheckpoint", root, function(checkpoint, time_)
     if not newLap then return end
 
     setElementData(source, "race.lap", newLap + 1, true)
+
+    if lapTimes[source] then
+        local lapTime = time_ - lapTimes[source]
+        if lapTime < lapTimes[source] then
+            lapTimes[source] = lapTime
+        end
+    else
+        lapTimes[source] = time_
+    end
+    outputDebugString(lapTimes[source])
+    setElementData(source, "race.bestlap", lapTimes[source], true)
 end)
 
 function findIndex(table, element)

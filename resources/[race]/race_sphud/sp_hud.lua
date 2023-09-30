@@ -397,7 +397,6 @@ function drawIVHud (player, g_Veh, rank, players, currentCheckpoint, totalCheckp
 		msPassed = g_StartTick and (getTickCount() - g_StartTick) or 0
 	end
 
-
 	local minutes, seconds, milliseconds = msToTime(msPassed)
 	local text = minutes .. ':' .. seconds .. '.' .. milliseconds
 	local t, b = sy * ( y - fontHeight ), sy * y
@@ -414,7 +413,7 @@ function drawIVHud (player, g_Veh, rank, players, currentCheckpoint, totalCheckp
 	dxDrawText ( "TIME", l, t, m, b, textColor, labelScale, font, "right", "center", false, false, false, false, true)
 
 	if rank then
-		local t, b = sy * ( y - fontHeight * 3 - dy * 2), sy * (y - fontHeight * 2 - dy * 2)
+		local t, b = sy * ( y - fontHeight * 2 - dy), sy * (y - fontHeight - dy)
 		local sRank = rank .. ' / ' .. tonumber(players)
 
 		dxDrawRectangle ( math.floor(m) + 1, t, w + rightBorder * sx, h, color)
@@ -443,23 +442,8 @@ function drawIVHud (player, g_Veh, rank, players, currentCheckpoint, totalCheckp
 	else return
 	end
 
-	if totalCheckpoints and totalCheckpoints > 0 then
-        if totalLaps then
-            local t, b = sy * ( y - fontHeight * 4 - dy * 3), sy * (y - fontHeight * 3 - dy * 3)
-            local sLaps = (currentLap or 1) .. " / " .. totalLaps
-
-            dxDrawRectangle ( math.floor(m) + 1, t, w + rightBorder * sx, h, color)
-            dxDrawText ( sLaps, m, t, r, b, textColor, dataScale, font, "right", "bottom", false, false, false, false, true)
-
-            for i = math.floor(l), math.floor(m) do
-                local a = backAlpha * (i-l) / (m-l)
-                dxDrawRectangle ( i, t, 1, h, tocolor(team[1] or 0, team[2] or 0, team[3] or 0,a) )
-            end
-
-            dxDrawText("LAP", l, t, m, b, textColor, labelScale, font, "right", "center", false, false, false, false, true )
-        end
-
-		local t, b = sy * ( y - fontHeight * 2 - dy), sy * (y - fontHeight - dy)
+	if totalCheckpoints and totalCheckpoints > 0 and not totalLaps then
+ 		local t, b = sy * ( y - fontHeight * 3 - dy * 2), sy * (y - fontHeight * 2 - dy * 2)
 		local sCheckpoint = currentCheckpoint .. ' / ' .. totalCheckpoints
 
 		dxDrawRectangle ( math.floor(m) + 1, t, w + rightBorder * sx, h, color)
@@ -476,6 +460,36 @@ function drawIVHud (player, g_Veh, rank, players, currentCheckpoint, totalCheckp
 			dxDrawText ( "CHECKPOINT", l, t, m, b, textColor, labelScale, 0.5, "right", "center", false, false, false, false, true)
 			-- Don't really know if this will help, it makes the font more tiny, won't change entire code cuz a letter is outside, this should kind of fix it, don't so important to add
 		end
+    elseif totalCheckpoints and totalCheckpoints > 0 and totalLaps then
+        if totalLaps then
+            local t, b = sy * ( y - fontHeight * 3 - dy * 2), sy * (y - fontHeight * 2 - dy * 2)
+            local sLaps = (currentLap or 1) .. " / " .. totalLaps
+
+            dxDrawRectangle ( math.floor(m) + 1, t, w + rightBorder * sx, h, color)
+            dxDrawText ( sLaps, m, t, r, b, textColor, dataScale, font, "right", "bottom", false, false, false, false, true)
+
+            for i = math.floor(l), math.floor(m) do
+                local a = backAlpha * (i-l) / (m-l)
+                dxDrawRectangle ( i, t, 1, h, tocolor(team[1] or 0, team[2] or 0, team[3] or 0,a) )
+            end
+
+            dxDrawText("LAP", l, t, m, b, textColor, labelScale, font, "right", "center", false, false, false, false, true )
+
+            local t, b= sy * ( y - fontHeight * 4 - dy * 3), sy * (y - fontHeight * 3 - dy * 3)
+            dxDrawRectangle ( math.floor(m) + 1, t, w + rightBorder * sx, h, color)
+
+            local minutes, seconds, milliseconds = msToTime(getElementData(player, "race.bestlap") or 0)
+            local text = minutes .. ':' .. seconds .. '.' .. milliseconds
+
+            dxDrawText(text, m, t, r, b, textColor, dataScale, font, "right", "bottom", false, false, false, false, true)
+
+            for i = math.floor(l), math.floor(m) do
+                local a = backAlpha * (i-l) / (m-l)
+                dxDrawRectangle ( i, t, 1, h, tocolor(team[1] or 0, team[2] or 0, team[3] or 0,a) )
+            end
+
+            dxDrawText("BEST LAP", l, t, m, b, textColor, labelScale, font, "right", "center", false, false, false, false, true )
+        end
 	elseif exports.race:getRaceMode() == 'Shooter' or exports.race:getRaceMode() == 'Destruction derby' or exports.race:getRaceMode() == 'Deadline' then
 		local t, b = sy * ( y - fontHeight * 3 - dy * 2), sy * (y - fontHeight * 2 - dy * 2)
 		local sKills = getElementData(player, 'kills') or 0
