@@ -54,30 +54,26 @@ addEventHandler("onPlayerReachCheckpoint", root, function(checkpoint, time_)
 
     setElementData(source, "race.lap", newLap + 1, true)
 
-    if lapTimes[source] then
-        local lapTime = time_ - prevLapTimes[source]
-        prevLapTimes[source] = lapTime
-        if lapTime < lapTimes[source] then
-            lapTimes[source] = lapTime
-        end
-    else
-        lapTimes[source] = time_
-        prevLapTimes[source] = time_
-    end
-    setElementData(source, "race.bestlap", lapTimes[source], true)
+    updateLapTime(time_, source)
 end)
 
 addEventHandler("onPlayerFinish", root, function(rank, time_)
-    if lapTimes[source] then
-        local lapTime = time_ - lapTimes[source]
-        if lapTime < lapTimes[source] then
-            lapTimes[source] = lapTime
+    updateLapTime(time_, source)
+end)
+
+function updateLapTime(time_, player)
+    if lapTimes[player] then
+        local lapTime = time_ - prevLapTimes[player]
+        if lapTime < lapTimes[player] then
+            lapTimes[player] = lapTime
+            setElementData(source, "race.bestlap", lapTimes[player], true)
         end
     else
-        lapTimes[source] = time_
+        lapTimes[player] = time_
+        setElementData(source, "race.bestlap", lapTimes[player], true)
     end
-    setElementData(source, "race.bestlap", lapTimes[source], true)
-end)
+    prevLapTimes[player] = time_
+end
 
 function addLapsToMap(playerSource, _, ...)
     if not ... then return outputChatBox("Incorrect usage, use '/addlaps 5 9 11' to mark checkpoint 5,9 and 11 as lap checkpoints", playerSource, 255, 0,0) end
