@@ -63,23 +63,25 @@ end)
 
 addEventHandler("onPostFinish", root, function()
     if not laps or not #lapTimes then return end
-    local bestPlayer
-    local bestTime
+    local bestPlayer = nil
+    local bestTime = nil
 
-    for player, time_ in ipairs(lapTimes) do
+    for player, time_ in pairs(lapTimes) do
         if not bestTime or time_ < bestTime then
             bestPlayer = player
             bestTime = time_
         end
     end
 
-    local minutes, seconds, ms = msToTime(bestTime)
-    local text = minutes .. ":" .. seconds .. "." .. ms
+    if not bestPlayer then return end
+
+	local minutes, seconds, milliseconds = msToTime(bestTime)
+	local text = minutes .. ':' .. seconds .. '.' .. milliseconds
 
     if isElement(bestPlayer) then
-        outputChatBox(getFullPlayerName(bestPlayer) .. "#bababa had the best lap time: #00ff00" .. text.. "!", root, 255, 255, 255, true)
+        outputChatBox(getFullPlayerName(bestPlayer) .. "#bababa had the best lap time: #00ff00" .. text.. "#bababa!", root, 255, 255, 255, true)
     else
-        outputChatBox("#bababaThe player with the best time left... They had: #00ff00" .. text"!", root, 255, 255, 255, true)
+        outputChatBox("#bababaThe player with the best time left... They had: #00ff00" .. text .. "#bababa!", root, 255, 255, 255, true)
     end
 end)
 
