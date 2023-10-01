@@ -62,7 +62,7 @@ addEventHandler("onPlayerFinish", root, function(rank, time_)
 end)
 
 function updateLapTime(time_, player, lap)
-    if prevLapTimes[player] and laps <= prevLapTimes[player].lap then return end
+    if prevLapTimes[player] and lap <= prevLapTimes[player].lap then return end
 
     if lapTimes[player] then
         local lapTime = time_ - prevLapTimes[player]
