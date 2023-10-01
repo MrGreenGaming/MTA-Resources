@@ -61,11 +61,33 @@ addEventHandler("onPlayerFinish", root, function(rank, time_)
     updateLapTime(time_, source, #laps + 1)
 end)
 
+addEventHandler("onPostFinish", root, function()
+    if not laps or not #lapTimes then return end
+    local bestPlayer
+    local bestTime
+
+    for player, time_ in ipairs(lapTimes) do
+        if not bestTime or time_ < bestTime then
+            bestPlayer = player
+            bestTime = time_
+        end
+    end
+
+    local minutes, seconds, ms = msToTime(bestTime)
+    local text = minutes .. ":" .. seconds .. "." .. ms
+
+    if isElement(bestPlayer) then
+        outputChatBox(getFullPlayerName(bestPlayer) .. "#bababa had the best lap time: #00ff00" .. text.. "!", root, 255, 255, 255, true)
+    else
+        outputChatBox("#bababaThe player with the best time left... They had: #00ff00" .. text"!", root, 255, 255, 255, true)
+    end
+end)
+
 function updateLapTime(time_, player, lap)
     if prevLapTimes[player] and lap <= prevLapTimes[player].lap then return end
 
     if lapTimes[player] then
-        local lapTime = time_ - prevLapTimes[player]
+        local lapTime = time_ - prevLapTimes[player].time
         if lapTime < lapTimes[player] then
             lapTimes[player] = lapTime
             setElementData(source, "race.bestlap", lapTimes[player], true)
@@ -136,4 +158,35 @@ function findIndex(table, element)
         end
     end
     return nil
+end
+
+function getFullPlayerName(player)
+    local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
+    local teamColor = "#FFFFFF"
+    local team = getPlayerTeam(player)
+    if (team) then
+        r,g,b = getTeamColor(team)
+        teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
+    end
+    return "" .. teamColor .. playerName
+end
+
+function msToTime(ms)
+	if not ms then
+		return ''
+	end
+	local centiseconds = tostring(math.floor(math.fmod(ms, 1000)/10))
+	if #centiseconds == 1 then
+		centiseconds = '0' .. centiseconds
+	end
+	local s = math.floor(ms / 1000)
+	local seconds = tostring(math.fmod(s, 60))
+	if #seconds == 1 then
+		seconds = '0' .. seconds
+	end
+	local minutes = tostring(math.floor(s / 60))
+	if #minutes == 1 then
+		minutes = '0' .. minutes
+	end
+	return minutes, seconds, centiseconds
 end
