@@ -62,7 +62,7 @@ addEventHandler("onPlayerFinish", root, function(rank, time_)
 end)
 
 addEventHandler("onPostFinish", root, function()
-    if not laps or not #lapTimes then return end
+    if #laps == 0 then return end
     local bestPlayer = nil
     local bestTime = nil
 
