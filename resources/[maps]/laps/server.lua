@@ -62,14 +62,16 @@ addEventHandler("onPlayerFinish", root, function(rank, time_)
 end)
 
 function updateLapTime(time_, player, lap)
+    if prevLapTimes[player] and laps <= prevLapTimes[player].laps then return end
+
     if lapTimes[player] then
         local lapTime = time_ - prevLapTimes[player]
-        if lapTime < lapTimes[player] and lap > prevLapTimes[player].lap then
+        if lapTime < lapTimes[player] then
             lapTimes[player] = lapTime
             setElementData(source, "race.bestlap", lapTimes[player], true)
         end
     else
-        lapTimes[player] = {time = time_, lap = lap}
+        lapTimes[player] = time_
         setElementData(source, "race.bestlap", lapTimes[player], true)
     end
     prevLapTimes[player] = {
