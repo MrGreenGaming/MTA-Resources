@@ -54,25 +54,28 @@ addEventHandler("onPlayerReachCheckpoint", root, function(checkpoint, time_)
 
     setElementData(source, "race.lap", newLap + 1, true)
 
-    updateLapTime(time_, source)
+    updateLapTime(time_, source, newLap)
 end)
 
 addEventHandler("onPlayerFinish", root, function(rank, time_)
-    updateLapTime(time_, source)
+    updateLapTime(time_, source, #laps + 1)
 end)
 
-function updateLapTime(time_, player)
+function updateLapTime(time_, player, lap)
     if lapTimes[player] then
         local lapTime = time_ - prevLapTimes[player]
-        if lapTime < lapTimes[player] then
+        if lapTime < lapTimes[player] and lap > prevLapTimes[player].lap then
             lapTimes[player] = lapTime
             setElementData(source, "race.bestlap", lapTimes[player], true)
         end
     else
-        lapTimes[player] = time_
+        lapTimes[player] = {time = time_, lap = lap}
         setElementData(source, "race.bestlap", lapTimes[player], true)
     end
-    prevLapTimes[player] = time_
+    prevLapTimes[player] = {
+        time = time_,
+        lap = lap
+    }
 end
 
 function addLapsToMap(playerSource, _, ...)
