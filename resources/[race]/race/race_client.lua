@@ -1310,7 +1310,7 @@ MovePlayerAway.health = 0
 function MovePlayerAway.start()
 	local element = getPedOccupiedVehicle(g_Me) or g_Me
 	MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ = getElementPosition(element)
-	MovePlayerAway.posZ = -99
+	MovePlayerAway.posZ = -90
 	MovePlayerAway.rotZ = 0
 	MovePlayerAway.health = math.max(1,getElementHealth(element))
 	setElementHealth( element, 2000 )
@@ -1328,7 +1328,6 @@ function MovePlayerAway.update(nozcheck)
 	if not vehicle then
 		-- outputDebugString('no vehicle to move away')
 		setElementPosition(g_Me, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ)
-        setElementFrozen(g_Me, true)
 	end
 	if vehicle then
 		if not nozcheck then
@@ -1372,7 +1371,6 @@ function MovePlayerAway.stop()
 			setElementHealth ( vehicle, MovePlayerAway.health )
 		end
 		setElementVelocity( g_Me, 0,0,0 )
-        setElementFrozen(g_me, false)
 	end
 end
 
