@@ -738,7 +738,7 @@ local guiY = screenSizeX * 0.1
 
 function showVehicleIcon(checkpoint)
     if g_MapInfo.modename ~= 'Sprint' then return end
-    if not vcEnabled then return end
+    if not vcEnabled or not checkpoint.vehicle then return end
     vcVehType = getVehicleType(checkpoint.vehicle)
 		if not vcVehType then return end
     vcVehicleName = getVehicleNameFromModel(checkpoint.vehicle)
