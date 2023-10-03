@@ -740,6 +740,7 @@ function showVehicleIcon(checkpoint)
     if g_MapInfo.modename ~= 'Sprint' then return end
     if not vcEnabled then return end
     vcVehType = getVehicleType(checkpoint.vehicle)
+		if not vcVehType then return end
     vcVehicleName = getVehicleNameFromModel(checkpoint.vehicle)
 		if vcVehType == "Monster Truck" then vcVehType = "MonsterTruck" end
     if vcVehicleName == "Vortex" then vcVehType="hovercraft" end
