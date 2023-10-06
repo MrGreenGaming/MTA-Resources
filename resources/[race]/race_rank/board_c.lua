@@ -647,34 +647,19 @@ function updateWhiteList()
 	if not isBoardAllowed() or not g_Rank then return end
 
 	local players = getElementsByType('player')
-    table.sort(players,
-    function(a, b)
-        local aRank = tonumber(getElementData(a, 'race rank'))
-        local bRank = tonumber(getElementData(b, 'race rank'))
-        local aState = getElementData(a, "player state")
-        local bState = getElementData(b, "player state")
-
-        if not aRank then
-            return false
-        elseif not bRank then
-            return true
-        else
-            -- Check if a or b is in the "away" state
-            local aIsAway = (aState == "away")
-            local bIsAway = (bState == "away")
-
-            if aIsAway and not bIsAway then
-                return false -- a is "away," b is not
-            elseif not aIsAway and bIsAway then
-                return true -- b is "away," a is not
-            else
-                -- Both are either "away" or not, compare ranks
-                return aRank < bRank
-            end
-        end
-    end
-)
-
+	table.sort ( players,
+		function ( a, b )
+			a = tonumber(getElementData(a, 'race rank'))
+			b = tonumber(getElementData(b, 'race rank'))
+			if not a then
+				return false
+			elseif not b then
+				return true
+			else
+				return a < b
+			end
+		end
+	)
 
 	local ranksTop = math.clamp ( 1, lines - (1 + ranksBefore + ranksBehind), #players)
 	local ranksBefore  = math.clamp ( 1, g_Rank - math.abs( ranksBefore ), g_Rank)
