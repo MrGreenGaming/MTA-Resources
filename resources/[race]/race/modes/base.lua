@@ -222,18 +222,32 @@ function RaceMode:updateRanks()
 	-- Faster version of old updateRank
 
 	-- Make a table with the active players
-	local sortinfo = {}
-	for i,player in ipairs(getActivePlayers()) do
-		sortinfo[i] = {}
-		sortinfo[i].player = player
-		sortinfo[i].checkpoint = getPlayerCurrentCheckpoint(player)
-		sortinfo[i].cpdist = distanceFromPlayerToCheckpoint(player, sortinfo[i].checkpoint )
-	end
-	-- Order by cp
-	table.sort( sortinfo, function(a,b)
-						return a.checkpoint > b.checkpoint or
-							   ( a.checkpoint == b.checkpoint and a.cpdist < b.cpdist )
-					  end )
+    local sortinfo = {}
+    for i, player in ipairs(getActivePlayers()) do
+        sortinfo[i] = {}
+        sortinfo[i].player = player
+        sortinfo[i].checkpoint = getPlayerCurrentCheckpoint(player)
+        sortinfo[i].cpdist = distanceFromPlayerToCheckpoint(player, sortinfo[i].checkpoint)
+        sortinfo[i].state = getElementData(player, "player state") -- Use player variable here
+    end
+
+    -- Define a function to compare players based on checkpoint and state
+    local function comparePlayers(a, b)
+        if a.state == "away" then
+            if b.state == "away" then
+                return a.checkpoint < b.checkpoint or (a.checkpoint == b.checkpoint and a.cpdist < b.cpdist)
+            else
+                return false -- a is "away", b is not
+            end
+        elseif b.state == "away" then
+            return true -- b is "away", a is not
+        else
+            return a.checkpoint < b.checkpoint or (a.checkpoint == b.checkpoint and a.cpdist < b.cpdist)
+        end
+    end
+
+    -- Order by cp and state
+    table.sort(sortinfo, comparePlayers)
 	-- Copy back into active players list to speed up sort next time
 	for i,info in ipairs(sortinfo) do
 		g_CurrentRaceMode.activePlayerList[i] = info.player
