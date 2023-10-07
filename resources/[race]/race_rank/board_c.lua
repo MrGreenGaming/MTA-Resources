@@ -415,19 +415,19 @@ function RankBoard:update(what)
 			self.times[value.checkpoint] = value
 			self.checkpoint = value.checkpoint
 
-			local localItem = RankBoard.items[getLocalPlayer()]
+			local localItem = RankBoard.items[targetPlayer]
 			local localTimes = localItem and localItem.times or false
 			local localCP = localItem and localItem.checkpoint or false
 
-			if localCP and (self.localPlayer or self.split) then
+			if localCP and (self.player == targetPlayer or self.split) then
 				for player,item in pairs(RankBoard.items) do
 					local playerTimes = item.times or false
-					if player ~= getLocalPlayer() and playerTimes and item.split then
+					if player ~= targetPlayer and playerTimes and item.split then
 						local playerCP = item.checkpoint or false
-						if self.localPlayer and playerTimes[localCP] then  -- when reaching a checkpoint behind someone
+						if self.player == targetPlayer and playerTimes[localCP] then  -- when reaching a checkpoint behind someone
 							item.splitValue = timeMsToTimeText(playerTimes[localCP].time - localTimes[localCP].time)
 							item.splitTime = getTickCount()
-						elseif not self.localPlayer and localTimes[playerCP] then  -- when someone reaches a cp behind you
+						elseif not self.player == targetPlayer and localTimes[playerCP] then  -- when someone reaches a cp behind you
 							item.splitValue = timeMsToTimeText(playerTimes[playerCP].time - localTimes[playerCP].time)
 							item.splitTime = getTickCount()
 						end
@@ -491,7 +491,7 @@ function RankBoard:draw()
 
 	local bgcolor = nil
 	local bgalpha = 255 * RankBoard.backgroundOpacity * (self.state == "dead" and 1 or alpha)
-	if self.localPlayer then
+	if self.player == targetPlayer then
 		bgcolor = self.state == "finished" and tocolor(20,80,20,bgalpha) or tocolor(40,40,40,bgalpha)
 	else
 		bgcolor = self.state == "finished" and tocolor(0,60,0,bgalpha) or tocolor(0,0,0,bgalpha)
@@ -624,6 +624,7 @@ g_Rank = nil
 g_Checkpoints = {}
 g_Speeds = {}
 localPlayer = getLocalPlayer()
+targetPlayer = getLocalPlayer()
 
 --
 -- Updates the RankBoard - calculates which items should be hidden or shown based on the settings
@@ -638,15 +639,26 @@ function updateWhiteList()
 		RankBoard.sorted[k] = nil
 	end
 
-	g_Rank = tonumber(getElementData(localPlayer, 'race rank'))
-    -- During Clan Wars focus on the player who's 1st to improve spectator players
-    if getResourceFromName("cw_script") and getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:getEventMode() == "CW" then
-        g_Rank = 1
-    end
+    targetPlayer = getTargetPlayer()
+	g_Rank = tonumber(getElementData(targetPlayer, 'race rank')) or 1
 
 	if not isBoardAllowed() or not g_Rank then return end
 
 	local players = getElementsByType('player')
+
+	local function shouldFilterPlayer(player)
+        local playerState = getElementData(player, "player state")
+        local checkpoint = tonumber(getElementData(player, "race.checkpoint"))
+
+        return (playerState == "away" or playerState == "spectating") and (checkpoint == 1 or checkpoint == 2)
+	end
+
+	for i = #players, 1, -1 do
+			if shouldFilterPlayer(players[i]) then
+					table.remove(players, i)
+			end
+	end
+
 	table.sort ( players,
 		function ( a, b )
 			a = tonumber(getElementData(a, 'race rank'))
@@ -1194,4 +1206,16 @@ function setBoardScale(value)
 	RankBoard.timeW = round((dxGetTextWidth(" +00:00:00", 1, RankBoard.fontSmall) + itemPadding*2))
 	RankBoard.x = screenX - round((w+40) * scale) - (showIntervals and RankBoard.timeW or 0)
 	RankBoard.w = round(w * scale);
+end
+
+function getTargetPlayer()
+	local target = getCameraTarget()
+	if not (target or isElement(target)) then
+		return localPlayer
+	elseif getElementType ( target ) == 'player' then
+		return target
+	elseif getElementType ( target ) == 'vehicle' then
+		return getVehicleController(target) or localPlayer
+	end
+	return localPlayer
 end
