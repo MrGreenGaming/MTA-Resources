@@ -427,7 +427,7 @@ function RankBoard:update(what)
 						if self.player == targetPlayer and playerTimes[localCP] then  -- when reaching a checkpoint behind someone
 							item.splitValue = timeMsToTimeText(playerTimes[localCP].time - localTimes[localCP].time)
 							item.splitTime = getTickCount()
-						elseif not self.player == targetPlayer and localTimes[playerCP] then  -- when someone reaches a cp behind you
+						elseif self.player ~= targetPlayer and localTimes[playerCP] then  -- when someone reaches a cp behind you
 							item.splitValue = timeMsToTimeText(playerTimes[playerCP].time - localTimes[playerCP].time)
 							item.splitTime = getTickCount()
 						end
