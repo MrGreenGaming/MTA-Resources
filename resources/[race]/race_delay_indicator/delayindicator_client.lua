@@ -9,15 +9,38 @@ local SCALE = 1
 if g_screenY > 768 then SCALE = 1.5 end
 
 local frontTick
+local topTick
 local behindTick
 local delayDisplayFront = dxText:create("", 0.5, 0.37, true, "default-bold", SCALE)
+local delayDisplayTop = dxText:create("", 0.5, 0.34, true, "default-bold", SCALE)
 local delayDisplayBehind = dxText:create("", 0.5, 0.43, true, "default-bold", SCALE)
 delayDisplayFront:color(248,28,11)
+delayDisplayTop:color(248, 28, 11)
 delayDisplayBehind:color(80,233,11)
 delayDisplayFront:type("shadow",1)
+delayDisplayTop:type("shadow", 1)
 delayDisplayBehind:type("shadow",1)
 delayDisplayFront:colorCode(true)
+delayDisplayTop:colorCode(true)
 delayDisplayBehind:colorCode(true)
+
+addEvent("showTop", true)
+addEventHandler("showTop", g_Root,
+    function(delayTime, rank)
+        if delayTime < 0 then
+            -- outputChatBox("-"..msToTimeStr(-delayTime).." current record")
+            delayDisplayTop:text("+"..msToTimeStr(-delayTime).." record #"..rank)
+            delayDisplayTop:color(255, 255, 0)
+        elseif delayTime > 0 then
+            -- outputChatBox("+"..msToTimeStr(delayTime).." current record")
+            delayDisplayTop:text("-"..msToTimeStr(delayTime).." record #"..rank)
+            delayDisplayTop:color(0, 255, 255)
+        end
+        delayDisplayTop:visible(true)
+        frontTick = getTickCount()
+        setTimer(hideDelayDisplay, TIME_TO_DISPLAY, 1, "top")
+    end
+)
 
 addEvent("showDelay", true)
 addEventHandler("showDelay", g_Root,
@@ -66,6 +89,15 @@ function hideDelayDisplay(front)
 	if front == "both" then
 		delayDisplayFront:visible(false)
 		delayDisplayBehind:visible(false)
+        delayDisplayTop:visible(false)
+    elseif front == "top" then
+        local pastTime = getTickCount() - topTick
+        if pastTime >= TIME_TO_DISPLAY then
+            delayDisplayTop:visible(false)
+        else
+            if pastTime < 50 then pastTime = 50 end
+            setTimer(hideDelayDisplay, pastTime, 1, "top")
+        end
 	elseif front then
 		local pastTime = getTickCount() - frontTick
 		if pastTime >= TIME_TO_DISPLAY then
@@ -93,6 +125,7 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 		if settingsFile then
 			local pos = xmlNodeGetAttributes(settingsFile)
 			delayDisplayFront:position(pos.x, pos.y - DISTANCE_FRONT_BEHIND)
+            delayDisplayTop:position(pos.x, pos.y - DISTANCE_FRONT_BEHIND - 0.025)
 			delayDisplayBehind:position(pos.x, pos.y + DISTANCE_FRONT_BEHIND)
 		else
 			settingsFile = xmlCreateFile("settings.xml","settings")
@@ -109,12 +142,16 @@ addCommandHandler("setdelaypos",
 		if x and y then
 			if tonumber(x) and tonumber(y) then
 				delayDisplayFront:position(x, y - DISTANCE_FRONT_BEHIND)
+                delayDisplayTop:position(x, y - DISTANCE_FRONT_BEHIND - 0.025)
 				delayDisplayBehind:position(x, y + DISTANCE_FRONT_BEHIND)
 				delayDisplayFront:text("FRONT")
+                delayDisplayTop:text("TOP")
 				delayDisplayBehind:text("BEHIND")
 				delayDisplayFront:color(255, 0, 0)
+                delayDisplayTop:color(0, 0, 255)
 				delayDisplayBehind:color(0, 255, 0)
 				delayDisplayFront:visible(true)
+                delayDisplayTop:visible(true)
 				delayDisplayBehind:visible(true)
 				setTimer(hideDelayDisplay, TIME_TO_DISPLAY, 1, "both")
 				local settingsFile = xmlLoadFile("settings.xml")
@@ -165,7 +202,7 @@ end
 function addTeamColor(player)
 	local customNick = getElementData(player, "vip.colorNick")
 	if customNick then return customNick end
-	local playerTeam = getPlayerTeam ( player ) 
+	local playerTeam = getPlayerTeam ( player )
 	if ( playerTeam ) then
 		local r,g,b = getTeamColor ( playerTeam )
 		local n1 = toHex(r)

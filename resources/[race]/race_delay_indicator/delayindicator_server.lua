@@ -81,6 +81,8 @@ addEventHandler('onPlayerReachCheckpoint', g_Root,
 				end
 				if showClientDelays[source] then
 					triggerClientEvent(source, "showDelay", frontPlayer, diff)
+                    local diffTop = topTimeInterims[checkpointNum] - timePassed
+                    triggerClientEvent(source, "showTop", source, diffTop, topTimeRankPlayer)
 				end
 				if showClientDelays[frontPlayer] then
 					triggerClientEvent(frontPlayer, "showDelay", source, diff, checkpointNum)
@@ -123,7 +125,7 @@ addEventHandler("onPlayerToptimeImprovement", g_Root,
 function updatetopTimeInterims()
 	local sql = executeSQLQuery("SELECT * FROM mapinterims")
 	local needUpdate
-	if sql and #sql > 0 then 
+	if sql and #sql > 0 then
 		for i=1,math.min(5,#sql) do
 			if not string.find(sql[math.random(1,#sql)].playername," ") then
 				needUpdate = true
@@ -147,7 +149,7 @@ end
 function updateMapNames()
 	local sql = executeSQLQuery("SELECT * FROM mapinterims")
 	local needUpdate
-	if sql and #sql > 0 then 
+	if sql and #sql > 0 then
 		for i=1,math.min(5,#sql) do
 			if not getResourceFromName(sql[math.random(1,#sql)].mapname) then
 				needUpdate = true
