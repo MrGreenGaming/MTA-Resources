@@ -81,8 +81,10 @@ addEventHandler('onPlayerReachCheckpoint', g_Root,
 				end
 				if showClientDelays[source] then
 					triggerClientEvent(source, "showDelay", frontPlayer, diff)
-                    local diffTop = topTimeInterims[checkpointNum] - timePassed
-                    triggerClientEvent(source, "showTop", source, diffTop, topTimeRankPlayer)
+                    if topTimeInterims and topTimeRankPlayer then
+                        local diffTop = topTimeInterims[checkpointNum] - timePassed
+                        triggerClientEvent(source, "showTop", source, diffTop, topTimeRankPlayer)
+                    end
 				end
 				if showClientDelays[frontPlayer] then
 					triggerClientEvent(frontPlayer, "showDelay", source, diff, checkpointNum)
