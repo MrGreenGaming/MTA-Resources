@@ -31,7 +31,7 @@ addEventHandler('onResourceStart', g_ResRoot,
 addEventHandler('onMapStarting', g_Root,
 	function(mapInfo)
 		if debug then outputDebugString("delay_indicator: sending data: "..mapInfo.resname) end
-        mapeName = mapInfo.resname
+        mapName = mapInfo.resname
 		allCpTimes = {}
 		topTimeInterims = nil
 		local sql = executeSQLQuery("SELECT playername, interims FROM mapinterims WHERE mapname = ?", mapName )
