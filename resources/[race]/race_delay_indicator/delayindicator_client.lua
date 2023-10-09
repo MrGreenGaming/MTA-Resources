@@ -29,11 +29,11 @@ addEventHandler("showTop", g_Root,
     function(delayTime, rank)
         if delayTime < 0 then
             -- outputChatBox("-"..msToTimeStr(-delayTime).." current record")
-            delayDisplayTop:text("+"..msToTimeStr(-delayTime).." record #"..rank[1])
+            delayDisplayTop:text("+"..msToTimeStr(-delayTime).." record #"..rank[1] .. "-" .. rank[2])
             delayDisplayTop:color(255, 255, 0)
         elseif delayTime > 0 then
             -- outputChatBox("+"..msToTimeStr(delayTime).." current record")
-            delayDisplayTop:text("-"..msToTimeStr(delayTime).." record #"..rank[1])
+            delayDisplayTop:text("-"..msToTimeStr(delayTime).." record #"..rank[1] .. "-" .. rank[2])
             delayDisplayTop:color(0, 255, 255)
         end
         delayDisplayTop:visible(true)
@@ -59,11 +59,11 @@ addEventHandler("showDelay", g_Root,
 		elseif type(optional) == "table" then
 			if delayTime < 0 then
 				-- outputChatBox("-"..msToTimeStr(-delayTime).." current record")
-				delayDisplayFront:text("+"..msToTimeStr(-delayTime).." record #"..optional[1])
+				delayDisplayFront:text("+"..msToTimeStr(-delayTime).." record #"..optional[1].."-"..optional[2])
 				delayDisplayFront:color(255, 255, 0)
 			elseif delayTime > 0 then
 				-- outputChatBox("+"..msToTimeStr(delayTime).." current record")
-				delayDisplayFront:text("-"..msToTimeStr(delayTime).." record #"..optional[1])
+				delayDisplayFront:text("-"..msToTimeStr(delayTime).." record #"..optional[1].."-"..optional[2])
 				delayDisplayFront:color(0, 255, 255)
 			end
 			delayDisplayFront:visible(true)
