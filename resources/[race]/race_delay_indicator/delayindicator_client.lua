@@ -29,11 +29,11 @@ addEventHandler("showTop", g_Root,
     function(delayTime, rank)
         if delayTime < 0 then
             -- outputChatBox("-"..msToTimeStr(-delayTime).." current record")
-            delayDisplayTop:text("+"..msToTimeStr(-delayTime).." record #"..rank)
+            delayDisplayTop:text("+"..msToTimeStr(-delayTime).." record #"..rank[1])
             delayDisplayTop:color(255, 255, 0)
         elseif delayTime > 0 then
             -- outputChatBox("+"..msToTimeStr(delayTime).." current record")
-            delayDisplayTop:text("-"..msToTimeStr(delayTime).." record #"..rank)
+            delayDisplayTop:text("-"..msToTimeStr(delayTime).." record #"..rank[1])
             delayDisplayTop:color(0, 255, 255)
         end
         delayDisplayTop:visible(true)
