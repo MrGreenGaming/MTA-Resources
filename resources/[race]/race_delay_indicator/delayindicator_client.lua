@@ -37,7 +37,7 @@ addEventHandler("showTop", g_Root,
             delayDisplayTop:color(0, 255, 255)
         end
         delayDisplayTop:visible(true)
-        frontTick = getTickCount()
+        topTick = getTickCount()
         setTimer(hideDelayDisplay, TIME_TO_DISPLAY, 1, "top")
     end
 )
