@@ -12,7 +12,7 @@ function load()
     setTimer(function()
         local currentTime = getRealTime()
         if currentTime.yearday == dayOfServerStart then return end
-        local minutes = (hourOfRestart - currentTime.hour) * 60 - currentTime.minute
+        local minutes = (hourOfRestart * 60) - (currentTime.hour * 60 + currentTime.minute)
         if minutes > 0 and minutes <= delayInMinutes then
             notifyPlayers(minutes)
         elseif minutes <= 0 and minutes >= -delayInMinutes then
