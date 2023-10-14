@@ -1,0 +1,12 @@
+<meta>
+    <info author="Nick_026" version="1" name="Auto Restart Server" type="script" />
+    <script src="shutdown_s.lua" type="server" />
+
+    <settings>
+        <setting name="*hourOfRestart" value="3" friendlyname="Time of auto restart (3 AM UTC Default)" />
+    </settings>
+
+    <aclrequest>
+        <right name="function.shutdown" access="true" />
+    </aclrequest>
+</meta>
