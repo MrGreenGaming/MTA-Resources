@@ -26,12 +26,12 @@ function notifyPlayers(minutes)
     if minutes then
         outputChatBox("SERVER WILL RESTART IN " .. minutes .. " MINUTES!", root, 255, 0, 0)
         if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-            exports.discord:send("chat.message.text", { author = "Server", text = "SERVER WILL RESTART IN " .. minutes .. " MINUTES!" })
+            exports.discord:send("chat.message.text", { author = "Console", text = "Server will restart in " .. minutes .. " minutes!" })
         end
     else
         outputChatBox("SERVER WILL RESTART SHORTLY!", root, 255, 0, 0)
         if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-            exports.discord:send("chat.message.text", { author = "Server", text = "SERVER WILL RESTART SHORTLY!" })
+            exports.discord:send("chat.message.text", { author = "Console", text = "Server will restart :wave:" })
         end
     end
 end

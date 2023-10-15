@@ -192,7 +192,7 @@
 
         <setting name="*respawntime" value="10" friendlyname="Respawn time" accept="0-60" group="Gameplay" desc="Default respawn time in seconds, if one is not set in the map." />
 
-        <setting name="*duration" value="3600" friendlyname="Map duration" accept="1-3600" group="Gameplay" desc="Default duration in seconds, if one is not set in the map." />
+        <setting name="*duration" value="3600" friendlyname="Map duration" accept="1-10800" group="Gameplay" desc="Max duration of a Sprint/NTS Map. Used as default value if not set in map." />
 
         <setting name="*ghostmode" value="false" friendlyname="Ghost mode" accept="false,true" group="Gameplay" desc="Set to true to disable collisions." />
 
