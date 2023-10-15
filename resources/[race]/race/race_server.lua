@@ -143,6 +143,8 @@ function cacheMapOptions(map, bDontUseMode)
 	g_MapOptions.duration = map.duration and tonumber(map.duration) > 0 and map.duration*1000 or g_GameOptions.defaultduration
 	if mode.duration and g_MapOptions.duration > mode.duration then
 		g_MapOptions.duration = mode.duration
+	elseif g_MapOptions.duration > getNumber('race.duration',6000) * 1000 then
+		g_MapOptions.duration = getNumber('race.duration',6000) * 1000
 	end
 	g_MapOptions.respawn = map.respawn or g_GameOptions.defaultrespawnmode
 	g_MapOptions.respawn = mode.respawn ~= nil and mode.respawn or g_MapOptions.respawn
