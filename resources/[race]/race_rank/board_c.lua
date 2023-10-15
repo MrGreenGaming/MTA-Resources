@@ -7,7 +7,7 @@ gamemodeAllowed = false
 allowedGM = {
 	["Never the same"] = true,
 	["Sprint"] = true,
-	["Reach the flag"] = true,
+	["Reach the flag"] = false,
 }
 
 lines = 8
