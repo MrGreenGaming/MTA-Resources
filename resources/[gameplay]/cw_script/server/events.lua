@@ -86,7 +86,11 @@ addEventHandler('onPostFinish', getRootElement(), endRound)
 function onPlayerChangeTeam(team)
     setColors(source, getPedOccupiedVehicle(source))
     if team == getTeamName(teams[3]) then
-        exports.anti:forcePlayerSpectatorMode(source)
+        if CurrentGamemode == "Destruction derby" or CurrentGamemode == "Shooter" then
+            killPed(thePlayer)
+        else
+            exports.anti:forcePlayerSpectatorMode(thePlayer)
+        end
     end
     triggerClientEvent("updateDisplayPlayerData", root)
 end
