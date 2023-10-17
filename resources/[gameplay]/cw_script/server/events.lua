@@ -138,7 +138,7 @@ end)
 
 addEvent("onRaceStateChanging")
 addEventHandler("onRaceStateChanging",root,
-	function(old, new)
+	function(new, old)
 		local players = getElementsByType("player")
 		for k,v in ipairs(players) do
 			local thePlayer = v
@@ -146,11 +146,15 @@ addEventHandler("onRaceStateChanging",root,
 			local theBlip = getBlipAttachedTo(thePlayer)
 			local r,g,b
 			if ( playerTeam ) then
-				if old == "Running" and new == "GridCountdown" then
+				if new == "Running" and old == "GridCountdown" then
 					r, g, b = getTeamColor (playerTeam)
 					setBlipColor(theBlip, tostring(r), tostring(g), tostring(b), 255)
 					if playerTeam == teams[3] then
-						exports.anti:forcePlayerSpectatorMode(thePlayer)
+                        if CurrentGamemode == "Destruction derby" or CurrentGamemode == "Shooter" then
+                            killPed(thePlayer)
+                        else
+                            exports.anti:forcePlayerSpectatorMode(thePlayer)
+                        end
 					end
 				end
 			end
