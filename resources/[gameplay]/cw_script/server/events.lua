@@ -87,9 +87,9 @@ function onPlayerChangeTeam(team)
     setColors(source, getPedOccupiedVehicle(source))
     if team == getTeamName(teams[3]) then
         if CurrentGamemode == "Destruction derby" or CurrentGamemode == "Shooter" then
-            killPed(thePlayer)
+            killPed(source)
         else
-            exports.anti:forcePlayerSpectatorMode(thePlayer)
+            exports.anti:forcePlayerSpectatorMode(source)
         end
     end
     triggerClientEvent("updateDisplayPlayerData", root)
