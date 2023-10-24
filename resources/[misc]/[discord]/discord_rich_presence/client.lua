@@ -28,7 +28,7 @@ function onMapStarting(mapInfo)
 
         if mapInfo.modename == "Sprint" then
             mode = "race"
-        elseif mapInfo.modename == "Never The Same" then
+        elseif mapInfo.modename == "Never the same" then
             mode = "nts"
         elseif mapInfo.modename == "Capture The Flag" then
             mode = "ctf"
@@ -36,7 +36,7 @@ function onMapStarting(mapInfo)
             mode = "shooter"
         elseif mapInfo.modename == "Destruction Derby" then
             mode = "dd"
-        elseif mapInfo.modename == "Reach The Flag" then
+        elseif mapInfo.modename == "Reach the flag" then
             mode = "rtf"
         else
             mode = nil
