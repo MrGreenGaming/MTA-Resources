@@ -1,0 +1,13 @@
+<meta>
+    <info name="Discord Rich Presence" author="Nick_026" version="1.0.0" type="script" description="Implements Discord Rich Presence into the server" />
+
+    <script src="server.lua" type="server" />
+
+    <script src="client.lua" type="client" />
+
+    <settings>
+        <setting name="*appid" value="" accept="*" friendlyname="Application ID" desc="Application ID of Discord application" />
+        <setting name="*serverUrl" value="" accept="*" friendlyname="Server IP" desc="mtasa:// to the server" />
+        <setting name="*forumUrl" value="https://mrgreengaming.com/" accept="*" friendlyname="Forum URL" desc="Link to the forums" />
+    </settings>
+</meta>
