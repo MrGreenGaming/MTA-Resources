@@ -9,6 +9,7 @@ function onDiscordInitialize(appId, websiteUrl, serverUrl)
     if appId then
         resetDiscordRichPresenceData()
         setDiscordApplicationID(appId)
+        setDiscordRichPresencePartySize(0, 0)
         setDiscordRichPresenceButton(1, "Join now!", serverUrl)
         setDiscordRichPresenceButton(2, "Website", websiteUrl)
         setDiscordRichPresenceAsset("mrgreenlogo", "MrGreen Gaming")
