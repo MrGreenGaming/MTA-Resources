@@ -141,7 +141,7 @@ addEventHandler("onMapGather", getRootElement(),
 function checkGear()
     local theVehicle = getPedOccupiedVehicle(localPlayer)
     if ( getElementModel(theVehicle) == 520 and getVehicleLandingGearDown( theVehicle ) == true) then
-      setVehicleLandingGearDown(theVehicle,false) 
+      setVehicleLandingGearDown(theVehicle,false)
       outputChatBox( "[Hydra] Landing gear is ready!", 0, 255, 0)
         if ( getAnalogControlState( "special_control_up" ) == 0 ) then
             setAnalogControlState( "special_control_up", 1 )
@@ -222,6 +222,10 @@ light.currentMode = false
 light.mode = ""
 
 function light.toggleDaylight()
+    if getResourceFromName("snow") and getResourceState(getResourceFromName("snow")) == "running" then
+        outputChatBox("Daylight cannot be used while Santa Claus is here.", 200, 0, 0)
+        return
+    end
     if light.mode ~= "day" then
         local allowed = light.isAllowed()
         if light.mode == "night" then outputChatBox("Nightlight disabled.", 200, 0, 0) end
@@ -239,6 +243,11 @@ end
 addCommandHandler("daylight", light.toggleDaylight)
 
 function light.toggleNightlight()
+    if getResourceFromName("snow") and getResourceState(getResourceFromName("snow")) == "running" then
+        outputChatBox("Nightlight cannot be used while Santa Claus is here.", 200, 0, 0)
+        return
+    end
+
     if light.mode ~= "night" then
         local allowed = light.isAllowed()
         if light.mode == "day" then outputChatBox("Daylight disabled.", 200, 0, 0) end
