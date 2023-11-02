@@ -56,7 +56,7 @@ function setVipSkin(player, id)
 		setElementData( player, 'vip.skin', id )
 		setElementModel(player, skinIds[id])
 		triggerClientEvent(player, 'onVipSelectedSkin', player)
-	end 
+	end
 end
 
 function checkVipSkin()
@@ -77,8 +77,8 @@ setTimer( checkVipSkin, 1000, 0 )
 
 addEvent('onClientRemoveVipSkin',true)
 addEvent('onClientUseVipSkin',true)
-addEventHandler('onClientRemoveVipSkin', root, 
-	function() 
+addEventHandler('onClientRemoveVipSkin', root,
+	function()
 		if getElementType(source) ~= "player" or not isPlayerVIP(source) then return false end
 
 		 -- save VIP skin
@@ -91,15 +91,15 @@ addEventHandler('onClientRemoveVipSkin', root,
 		 end
 	end
 )
-addEventHandler('onClientUseVipSkin', root, 
-	function(id) 
+addEventHandler('onClientUseVipSkin', root,
+	function(id)
 		if getElementType(source) ~= "player" or not isPlayerVIP(source) or not tonumber(id) or not skinIds[id] then return false end
 
 		local saved = saveVipSetting(source, 5, 'skin', tonumber(id))
 		 if saved then
 		 	setVipSkin(source,id)
 			vip_outputChatBox("Your VIP skin has successfully been changed! Other players will see this when the next map starts.",source,0,255,100)
-			 
+
 		 else
 		 	vip_outputChatBox("There was an error changing your VIP skin!",source,255,0,0)
 		 end
@@ -118,7 +118,12 @@ addEventHandler('onPlayerVip', resourceRoot,
 	function(player, loggedIn)
 		if player and isElement(player) and getElementType(player) == "player" then
 			if loggedIn then
-				
+
+                if getResourceFromName("snow") and getResourceState(getResourceFromName("snow")) == "running" then
+                    vip_outputChatBox("VIP skins cannot be used while Santa Claus is here.", player, 0, 255, 100)
+                    return
+                end
+
 				local playerVipSkin = getVipSetting(player, 5, 'skin')
 				if playerVipSkin and tonumber(playerVipSkin) then
 					setVipSkin(player, playerVipSkin)
