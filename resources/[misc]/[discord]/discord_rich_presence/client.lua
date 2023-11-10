@@ -1,30 +1,40 @@
 local mode
 local clientAppId
+local clientWebsiteUrl
+local clientServerUrl
+
+local startTime = 0
 
 function onStart()
     triggerServerEvent("onClientRequestDiscordInitialization", localPlayer)
+    startTime = getRealTime().timestamp
 end
 addEventHandler("onClientResourceStart", resourceRoot, onStart)
 
 function onStop ( stoppedRes )
     if getResourceName(stoppedRes) ~= "discord_rich_presence" then
-        setDiscordApplicationID(clientAppId)
+        setupInfo()
     end
 end
-addEventHandler( "onClientResourceStop", root, onStop);
+addEventHandler( "onClientResourceStop", getRootElement(), onStop);
 
+function setupInfo()
+    resetDiscordRichPresenceData()
+    setDiscordApplicationID(clientAppId)
+    setDiscordRichPresencePartySize(0, 0)
+    setDiscordRichPresenceButton(1, "Join now!", clientServerUrl)
+    setDiscordRichPresenceButton(2, "Website", clientWebsiteUrl)
+    setDiscordRichPresenceAsset("mrgreenlogo", "MrGreen Gaming")
+    setDiscordRichPresenceStartTime(getRealTime().timestamp - startTime)
+end
 
 function onDiscordInitialize(appId, websiteUrl, serverUrl)
     if appId then
         clientAppId = appId
+        clientWebsiteUrl = websiteUrl
+        clientServerUrl = serverUrl
 
-        resetDiscordRichPresenceData()
-        setDiscordApplicationID(appId)
-        setDiscordRichPresencePartySize(0, 0)
-        setDiscordRichPresenceButton(1, "Join now!", serverUrl)
-        setDiscordRichPresenceButton(2, "Website", websiteUrl)
-        setDiscordRichPresenceAsset("mrgreenlogo", "MrGreen Gaming")
-        setDiscordRichPresenceStartTime(1)
+        setupInfo()
         setTimer(onUpdateRank, 1500, 0)
     else
         setTimer(onStart, 60000 * 5, 1)
@@ -64,7 +74,7 @@ end
 addEventHandler("onClientMapStarting", root, onMapStarting)
 
 function onUpdateRank()
-    if mode == "race" or mode == "nts" then
+    if (mode == "race" or mode == "nts") and isDiscordRichPresenceConnected() then
         local rank = getElementData(localPlayer,'race rank')
 
         if not tonumber(rank) then
