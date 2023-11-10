@@ -56,7 +56,7 @@ function onUpdateRank()
     if mode == "race" or mode == "nts" then
         local rank = getElementData(localPlayer,'race rank')
 
-        if not rank then
+        if not tonumber(rank) then
             setDiscordRichPresenceState("")
             return
         end
