@@ -921,6 +921,8 @@ function getPlayerCountry(player,forumID)
 end
 
 function addPlayerCountryToDB(playerName, forumID, country)
+    if not country then return end
+
 	local query = dbExec(handlerConnect,"REPLACE INTO `country` (forum_id, country) VALUES (?,?)", forumID, country)
 	if query then
 		outputDebugString("Added country code for player: "..playerName..". Country code: "..country)
