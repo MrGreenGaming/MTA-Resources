@@ -31,11 +31,11 @@ function onMapStarting(mapInfo)
             mode = "race"
         elseif mapInfo.modename == "Never the same" then
             mode = "nts"
-        elseif mapInfo.modename == "Capture The Flag" then
+        elseif mapInfo.modename == "Capture the flag" then
             mode = "ctf"
         elseif mapInfo.modename == "Shooter" then
             mode = "shooter"
-        elseif mapInfo.modename == "Destruction Derby" then
+        elseif mapInfo.modename == "Destruction derby" then
             mode = "dd"
         elseif mapInfo.modename == "Reach the flag" then
             mode = "rtf"
@@ -55,6 +55,12 @@ addEventHandler("onClientMapStarting", root, onMapStarting)
 function onUpdateRank()
     if mode == "race" or mode == "nts" then
         local rank = getElementData(localPlayer,'race rank')
+
+        if not rank then
+            setDiscordRichPresenceState("")
+            return
+        end
+
         local currentCheckpoint = (getElementData(localPlayer, 'race.checkpoint') or 1) - ((getElementData(localPlayer, 'race.finished') and 0) or 1)
         local totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
 
