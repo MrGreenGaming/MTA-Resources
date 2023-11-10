@@ -9,10 +9,6 @@ addEventHandler("onClientResourceStart", resourceRoot, onStart)
 function onStop ( stoppedRes )
     if getResourceName(stoppedRes) ~= "discord_rich_presence" then
         setDiscordApplicationID(clientAppId)
-        setDiscordRichPresencePartySize(0, 0)
-        setDiscordRichPresenceButton(1, "Join now!", serverUrl)
-        setDiscordRichPresenceButton(2, "Website", websiteUrl)
-        setDiscordRichPresenceAsset("mrgreenlogo", "MrGreen Gaming")
     end
 end
 addEventHandler( "onClientResourceStop", root, onStop);
