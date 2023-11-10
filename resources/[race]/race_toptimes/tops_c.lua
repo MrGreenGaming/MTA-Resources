@@ -120,7 +120,7 @@ function updateTexture()
 		if r.player == localPlayer then
 			dxDrawText(k..'.', w*pos.x*sw, (titleHeight+topsAreaHeight)*sh, w*pos.y*sw, (titleHeight+topsAreaHeight+personalTopHeight)*sh, textColor, scaleX, scaleY, font, 'right', 'center')
 			dxDrawText((playerName), w*nick.x*sw, (titleHeight+topsAreaHeight)*sh, w*nick.y*sw, (titleHeight+topsAreaHeight+personalTopHeight)*sh, textColor, scaleX, scaleY, font, 'left', 'center', true, false, false, true)
-			if r.country ~= nil then dxDrawImage(w*flag.x*sw, (titleHeight+topsAreaHeight+6.5)*sh, 16, 11, ":admin/client/images/flags_new/"..string.lower(r.country)..".png") end
+			if r.country ~= nil and type(r.country) == 'string' and r.country ~= '0' then dxDrawImage(w*flag.x*sw, (titleHeight+topsAreaHeight+6.5)*sh, 16, 11, ":admin/client/images/flags_new/"..string.lower(r.country)..".png") end
 			dxDrawText(times.kills and r.value..' kills' or timeMsToTimeText(r.value), w*value.x*sw, (titleHeight+(tops)*topsAreaHeight/tops)*sh, w*value.y*sw, (titleHeight+topsAreaHeight+personalTopHeight)*sh, textColor, scaleX, scaleY, font, 'center', 'center')
 			dxDrawText(r.formatDate, w*date.x*sw, (titleHeight+(tops)*topsAreaHeight/tops)*sh, w*date.y*sw, (titleHeight+topsAreaHeight+personalTopHeight)*sh, textColor, scaleX, scaleY, font, 'right', 'center')
 		end
