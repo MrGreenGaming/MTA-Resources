@@ -1,12 +1,23 @@
 local mode
+local clientAppId
 
 function onStart()
     triggerServerEvent("onClientRequestDiscordInitialization", localPlayer)
 end
 addEventHandler("onClientResourceStart", resourceRoot, onStart)
 
+function onStop ( stoppedRes )
+    if getResourceName(stoppedRes) ~= "discord_rich_presence" then
+        setDiscordApplicationID(clientAppId)
+    end
+end
+addEventHandler( "onClientResourceStop", root, onStop);
+
+
 function onDiscordInitialize(appId, websiteUrl, serverUrl)
     if appId then
+        clientAppId = appId
+
         resetDiscordRichPresenceData()
         setDiscordApplicationID(appId)
         setDiscordRichPresencePartySize(0, 0)
