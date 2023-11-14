@@ -64,41 +64,68 @@ end
 ----------------------------------------------------------------------------
 -- startMidMapVoteForRandomMap
 --
--- Start the vote menu if during a race and more than 30 seconds from the end
--- No messages if this was not started by a player
+-- Allows players to start a vote for a new map every `voteDelay` seconds
 ----------------------------------------------------------------------------
-function startMidMapVoteForRandomMap(player)
 
+local prevVoteTime = 0
+local voteDelay = 900  -- 15 minutes in seconds
+local minPlayersForVote = 5
+function startMidMapVoteForRandomMap(player)
 	-- Check state and race time left
 	-- if not stateAllowsRandomMapVote() or g_CurrentRaceMode:getTimeRemaining() < 30000 then
-	if (not stateAllowsRandomMapVote()) or (not isPlayerInACLGroup(player, g_GameOptions.admingroup)) then
+	if not stateAllowsRandomMapVote() then
 		if player then
-			outputRace( "I'm afraid I can't let you do that, " .. getPlayerName(player) .. ".", player )
+			outputRace("It's not possible to vote for a new map currently, " .. getPlayerName(player) .. ".", player)
 		end
 		return
 	end
 
-	displayHilariarseMessage( player )
+	-- Check if there are enough players for non-admins to start the vote
+	if getTotalPlayerCount() > minPlayersForVote then
+		if player then
+			outputRace("You can only start a vote when there are " .. minPlayersForVote .. " or fewer players online.", player)
+		end
+		return
+	end
+
+    -- Check if the global cooldown is still active
+    local timeElapsed = getRealTime().timestamp - prevVoteTime
+
+    if timeElapsed < voteDelay then
+        local remainingMinutes = math.ceil((voteDelay - timeElapsed) / 60)
+        local timeMessage = remainingMinutes > 1 and "minutes" or "minute"
+
+        if player then
+            outputRace("You must wait " .. remainingMinutes .. " " .. timeMessage .. " before starting a new vote.", player)
+        end
+        return
+    end
+
+    -- Record the current time as the new global vote time
+    prevVoteTime = getRealTime().timestamp
+
+	displayHilariarseMessage(player)
 	exports.votemanager:stopPoll()
 
 	-- Actual vote started here
 	local pollDidStart = exports.votemanager:startPoll {
-			title='Do you want to change to a random map?',
-			percentage=51,
-			timeout=15,
-			allowchange=true,
-			visibleTo=getRootElement(),
-			[1]={'Yes', 'midMapVoteResult', getRootElement(), true},
-			[2]={'No', 'midMapVoteResult', getRootElement(), false;default=true},
+		title = 'Start a new map?',
+		percentage = 100,
+		timeout = 20,
+		allowchange = true,
+		visibleTo = getRootElement(),
+		[1] = {'Yes', 'midMapVoteResult', getRootElement(), true},
+		[2] = {'No', 'midMapVoteResult', getRootElement(), false; default = true},
 	}
 
 	-- Change state if vote did start
 	if pollDidStart then
 		gotoState('MidMapVote')
 	end
-
 end
-addCommandHandler('new',startMidMapVoteForRandomMap, true, true)
+addCommandHandler('new', startMidMapVoteForRandomMap, false, false)
+
+
 
 
 ----------------------------------------------------------------------------
