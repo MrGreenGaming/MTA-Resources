@@ -474,7 +474,9 @@ addEvent('onPlayerWinCarGame')
 function Shooter:onPlayerQuit(player)
 	if isActivePlayer(player) then
 		self:handleFinishActivePlayer(player)
-		Shooter.playerLevels[player] = nil
+        if Shooter.playerLevels and Shooter.playerLevels[player] then
+            Shooter.playerLevels[player] = nil
+        end
 		if getActivePlayerCount() <= 1 then
 			self:endMap()
 		end

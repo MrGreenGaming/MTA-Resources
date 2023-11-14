@@ -949,8 +949,11 @@ addEventHandler('onPlayerQuit', g_Root,
 		end
 
 		if getTotalPlayerCount() < 2 then
-			outputDebugString('Stopping map')
-			triggerEvent('onGamemodeMapStop', g_Root)
+            local mode = g_CurrentRaceMode:getName()
+            if mode ~= "Sprint" and mode ~= "Never the same" and mode ~= "Reach the flag" then
+                outputDebugString('Stopping map mode ' .. mode)
+                triggerEvent('onGamemodeMapStop', g_Root)
+            end
 		else
 			-- Edit #3 warning fix
 			if stateAllowsPostFinish() and g_CurrentRaceMode and g_CurrentRaceMode.running then
