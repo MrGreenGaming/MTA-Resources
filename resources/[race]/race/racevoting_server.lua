@@ -81,7 +81,7 @@ function startMidMapVoteForRandomMap(player)
 	end
 
 	-- Check if there are enough players for non-admins to start the vote
-	if getTotalPlayerCount() > minPlayersForVote then
+	if getActivePlayerCount() > minPlayersForVote then
 		if player then
 			outputRace("You can only start a vote when there are " .. minPlayersForVote .. " or fewer players online.", player)
 		end
