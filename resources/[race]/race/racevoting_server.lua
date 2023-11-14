@@ -10,8 +10,8 @@ g_MapInfoList = {}
 -- NextMapVote handled in this file
 --
 
-
-
+-- Event maps or bought maps
+local isCurrentMapPremium = false
 
 
 local lastVoteStarterName = ''
@@ -76,6 +76,13 @@ function startMidMapVoteForRandomMap(player)
 	if not stateAllowsRandomMapVote() then
 		if player then
 			outputRace("It's not possible to vote for a new map currently, " .. getPlayerName(player) .. ".", player)
+		end
+		return
+	end
+
+	if isCurrentMapPremium then
+		if player then
+			outputRace("Premium maps (bought, event etc.) can't be skipped", player)
 		end
 		return
 	end
@@ -172,6 +179,7 @@ function startRandomMap()
 		end
 	currentmode = currentmode + 1
 	if currentmode > #modes then currentmode = 1 end
+        isCurrentMapPremium = false
 	else
 		outputWarning( 'startRandomMap failed' )
 	end
@@ -541,6 +549,7 @@ addEventHandler('nextMapVoteResult', getRootElement(),
 				if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
 					problemChangingMap()
 				elseif lastPlayed ~= map then
+                    isCurrentMapPremium = false
 					currentmode = currentmode + 1
 					if currentmode > #modes then currentmode = 1 end
 					-- outputDebugString('Next mode ' .. modes[currentmode] .. ' ' .. currentmode)
@@ -551,6 +560,7 @@ addEventHandler('nextMapVoteResult', getRootElement(),
 				if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
 					problemChangingMap()
 				else
+					isCurrentMapPremium = true
 					outputChatBox("["..var.."] Starting next map", root, 0, 255, 0)
 					triggerEvent("data_onEventMapStart", root, map)
 				end
@@ -560,6 +570,7 @@ addEventHandler('nextMapVoteResult', getRootElement(),
 				if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
 					problemChangingMap()
 				else
+					isCurrentMapPremium = true
 					outputChatBox("[Maps-Center] Starting queued map for " .. var:gsub( '#%x%x%x%x%x%x', '' ), root, 0, 255, 0)
 					triggerEvent("data_onGCShopMapStart", root, map)
 				end
