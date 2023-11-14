@@ -123,7 +123,7 @@ function startMidMapVoteForRandomMap(player)
 		gotoState('MidMapVote')
 	end
 end
-addCommandHandler('new', startMidMapVoteForRandomMap, false, false)
+addCommandHandler('new', startMidMapVoteForRandomMap, true, false)
 
 
 
