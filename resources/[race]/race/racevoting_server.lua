@@ -69,7 +69,7 @@ end
 
 local prevVoteTime = 0
 local voteDelay = 900  -- 15 minutes in seconds
-local minPlayersForVote = 5
+local minPlayersForVote = 10
 function startMidMapVoteForRandomMap(player)
 	-- Check state and race time left
 	-- if not stateAllowsRandomMapVote() or g_CurrentRaceMode:getTimeRemaining() < 30000 then
