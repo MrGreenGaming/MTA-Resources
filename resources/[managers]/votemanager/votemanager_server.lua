@@ -135,12 +135,6 @@ function startPoll(pollData)
     for _, player in ipairs(getElementsByType("player")) do
         if allowedPlayers[player] then
             sendPoll(player)
-            -- temporary log to inform players of controller support
-            outputVoteManager("Tip: Use your controller to vote using: " ..
-                exports.controller:getLabelForPlayer(player, "up") .. ", " ..
-                exports.controller:getLabelForPlayer(player, "down") .. " and " ..
-                exports.controller:getLabelForPlayer(player, "cross")
-                , player)
         else
             local playerState = getElementData(player, 'player state')
             local message = "You can't participate in this vote."
