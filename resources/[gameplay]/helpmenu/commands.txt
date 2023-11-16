@@ -72,6 +72,7 @@ B       - Toggle spectator.
 /mapflash                                           To enable or disable flashing icon on taskbar when next map starts.
 /maps                                               List of the maps we have (in console = F8).
 /messages                                           Disable F3 messaging to you.
+/new                                                Start a vote to change the current map.
 /nick [name]                                        Set player name.
 /oldcam                                             Switch to different camera.
 /players [mix/race]                                 Show players on other server.
@@ -95,7 +96,6 @@ B       - Toggle spectator.
 /toggleicon                                         Toggle typing icon.
 /upload                                             Show upload address.
 /getpackets [player]                                Show's if a player is lagging (anything above %0.0 considered as a lag number).
-/language                                           Allows you to select your language.
 /f /f [player]                                      Pays your respects.
 
 /mode                                               Change the mode for speedo.
