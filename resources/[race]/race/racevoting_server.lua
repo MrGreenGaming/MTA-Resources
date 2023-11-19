@@ -69,7 +69,7 @@ end
 
 local prevVoteTime = 0
 local voteDelay = 900  -- 15 minutes in seconds
-local minPlayersForVote = 10
+local minPlayersForVote = 7
 function startMidMapVoteForRandomMap(player)
 	-- Check state and race time left
 	-- if not stateAllowsRandomMapVote() or g_CurrentRaceMode:getTimeRemaining() < 30000 then
@@ -88,7 +88,7 @@ function startMidMapVoteForRandomMap(player)
 	end
 
 	-- Check if there are enough players for non-admins to start the vote
-	if getActivePlayerCount() > minPlayersForVote then
+	if getPlayerCount() > minPlayersForVote then
 		if player then
 			outputRace("You can only start a vote when there are " .. minPlayersForVote .. " or fewer players online.", player)
 		end
