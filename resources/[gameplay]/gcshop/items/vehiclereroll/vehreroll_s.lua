@@ -52,7 +52,8 @@ end
 
 function vehroll_raceState(state, old)
 
-	if state == "Running" and old ~= "MidMapVote" and vehreroll_vehs[exports.race:getRaceMode()] then
+	if state == "Running" and vehreroll_vehs[exports.race:getRaceMode()] then
+        if old == "MidMapVote" then return end
 		if exports.race:getRaceMode() == "Never the same" then
 			vehroll_firstcheckpoint = true
 			vehroll_firstCheckpointPlayer = {}
