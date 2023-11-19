@@ -58,7 +58,7 @@ function onVehicleDamage(loss)
 	if not isElement(player) then return end
 	local playerState = getElementData(player, 'state', false)
 	if busy_with_player[player] or getElementData(player,"race.finished") or not g_PlayersBurn[player]
-		or (currentRaceState and currentRaceState ~= "Running" and currentRaceState ~= "SomeoneWon") or playerState ~= "alive" then
+		or (currentRaceState and currentRaceState ~= "Running" and currentRaceState ~= "MidMapVote" and currentRaceState ~= "SomeoneWon") or playerState ~= "alive" then
 		return
 	elseif not isPerkAllowedInMode(ID) then
 		return
@@ -78,7 +78,7 @@ addEventHandler('onVehicleDamage', root, onVehicleDamage)
 
 function resetBurnUpTime(player, times, marker, marker1)
 	if not (isElement(player) and getPedOccupiedVehicle(player) and isElement(getPedOccupiedVehicle(player)) and getElementHealth(getPedOccupiedVehicle(player)) < 250)
-		or getElementData(player,"race.finished") or (currentRaceState and currentRaceState ~= "Running" and currentRaceState ~= "SomeoneWon") or getElementData(player, 'state', false) ~= "alive"
+		or getElementData(player,"race.finished") or (currentRaceState and currentRaceState ~= "Running" and currentRaceState ~= "MidMapVote" and currentRaceState ~= "SomeoneWon") or getElementData(player, 'state', false) ~= "alive"
 		then
 		busy_with_player[player] = nil
 		if isElement(marker) then destroyElement(marker) end

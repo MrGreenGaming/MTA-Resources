@@ -29,18 +29,18 @@ local startdely = ""
 local pause = ""
 -----------------------------
 -----------------------------
-local myTextDisplay = textCreateDisplay ()                                        
-local myTextItem = textCreateTextItem ( "HuntBot will start in:", 0.5, 0.048, "low", 255, 0, 0, 255, 1, "center")    
-textDisplayAddText ( myTextDisplay, myTextItem ) 
+local myTextDisplay = textCreateDisplay ()
+local myTextItem = textCreateTextItem ( "HuntBot will start in:", 0.5, 0.048, "low", 255, 0, 0, 255, 1, "center")
+textDisplayAddText ( myTextDisplay, myTextItem )
  function showtext()
 	local players = getElementsByType("player")
-	for i, p in ipairs (players) do 
+	for i, p in ipairs (players) do
 		textDisplayAddObserver(myTextDisplay,p)
 	end
  end
  function hidetext()
 	local players = getElementsByType("player")
-	for i, p in ipairs (players) do 
+	for i, p in ipairs (players) do
 		textDisplayRemoveObserver(myTextDisplay,p)
 	end
  end
@@ -51,7 +51,7 @@ function isNumSettingOK(setting,arg)
 		else
 			return nil
 		end
-	else 
+	else
 		return nil
 	end
 end
@@ -64,10 +64,10 @@ function setupBotSettings(locals,globalse,defs)
 		return defs
 	end
 end
-addEventHandler("onRaceStateChanging", getRootElement(),function ( state )	
+addEventHandler("onRaceStateChanging", getRootElement(),function ( state, old )
 	--outputDebugString("racestate: ("..state..")")
 	racestate = state
-	if (state == "Running") and (activestate == 1) then
+	if (state == "Running" and old ~= "MidMapVote") and (activestate == 1) then
 		if startdely == 0 then
 			activate()
 		else
@@ -145,7 +145,7 @@ function botai(benfirst)
 		if firstplayer ~= benfirst then
 			outputDebugString('newfitst: '..getPlayerName(firstplayer))
 			triggerClientEvent(getRootElement(),"onnewfirstplayer",firstplayer,benfirst)
-		end	
+		end
 		local veh = getPedOccupiedVehicle(firstplayer)
 		local px,py,z = getElementPosition(firstplayer)
 		local x,y = px,py
@@ -158,7 +158,7 @@ function botai(benfirst)
 		end
 		if vy then
 			y = y + 10*modspd*vy
-		end 
+		end
 		local bx,by,bz = getElementPosition(core)
 		local waypointangle = ( 360 - math.deg ( math.atan2 ( ( x - bx ), ( y - by ) ) ) ) % 360
 		local rx,ry,rz = getElementRotation(core)
@@ -184,7 +184,7 @@ function botai(benfirst)
 		end
 		realdist = getDistanceBetweenPoints2D(x,y,bx,by)
 		local curspeed = realdist/(0.36*aitime)
-		
+
 		local wayhangle = -((30*curspeed)/100)
 		if wayhangle <= -30 then
 			wayhangle = -30
@@ -231,7 +231,7 @@ addEventHandler("onNewPlayerDetected", getRootElement(),function ()
 		end,1000,1)
 	end
 end)
-addEventHandler("onMapStarting", getRootElement(),function ()	
+addEventHandler("onMapStarting", getRootElement(),function ()
 	if isTimer(pausetimer) then
 		killTimer(pausetimer)
 	end

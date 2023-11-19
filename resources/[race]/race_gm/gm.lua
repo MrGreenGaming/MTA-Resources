@@ -14,7 +14,7 @@ function onMapStarting(mapInfo, mapOptions, gameOptions)
 	if not modes[exports.race:getRaceMode()] then
 		return false
 	end
-	
+
 	-- Default values, set all players into ghostmode before the start
 	firstCheckpoint = 3
 	warnCheckpoint = 4
@@ -25,7 +25,7 @@ function onMapStarting(mapInfo, mapOptions, gameOptions)
 		triggerClientEvent(source, "drawSign", root, false)
 	end
 	useCPGM = false
-	
+
 	-- Check if the map has a new ghostmode checkpoint defined
 	local map = exports.mapmanager:getRunningGamemodeMap()
 	newGMCheckpoint = tonumber(get(getResourceName(map) .. '.ghostmode_checkpoint'))
@@ -33,7 +33,7 @@ function onMapStarting(mapInfo, mapOptions, gameOptions)
 		firstCheckpoint = newGMCheckpoint - 2
 		warnCheckpoint = newGMCheckpoint - 1
 		changeCheckpoint = newGMCheckpoint
-		
+
 		--Ordinal indicator
 		local suffix
 		if newGMCheckpoint == 11 or newGMCheckpoint == 12 or newGMCheckpoint == 13 then
@@ -76,11 +76,11 @@ function onPlayerReachCheckpoint(cp)
 		-- No need to check for changes
 		return
 	end
-	
+
 	if cp == firstCheckpoint then
 		-- Warn the player that gm will be disabled and start drawing the ghostmode sign
 		exports.messages:outputGameMessage("Disabling Ghostmode after 2 checkpoints", source, 2, 255, 255, 0, true)
-		
+
 		--Draw Ghostbusters sign at checkpoint
 		local checkpoints = getElementsByType("checkpoint")
 		local x, y, z
@@ -98,9 +98,9 @@ function onPlayerReachCheckpoint(cp)
 		triggerClientEvent(source, 'checkGmCanWorkOk', root)
 		triggerClientEvent(source, "drawSign", root, false)
 	end
-end	
+end
 addEvent("onPlayerReachCheckpoint", true)
-addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)	
+addEventHandler("onPlayerReachCheckpoint", root, onPlayerReachCheckpoint)
 
 function onGMoff()
 	--Player is far enough from others, disable GM
@@ -128,7 +128,7 @@ function onResourceStop()
 		setElementData(plr, "overrideAlpha.uniqueblah", nil, false)
 	end
 end
-addEventHandler("onResourceStop", resourceRoot, onResourceStop)	
+addEventHandler("onResourceStop", resourceRoot, onResourceStop)
 
 -- DD ghostmode
 
@@ -141,9 +141,9 @@ function(new, old)
 				setElementData(plr, "overrideAlpha.uniqueblah", 180, false)
 				setElementData(plr, "overrideCollide.uniqueblah", 0, false)
 			end
-		elseif new == "Running" then
+		elseif new == "Running" and old ~= "MidMapVote" then
 			triggerEvent( 'startddgmTimer', root, true,DDGhostModeStartTime)
-			
+
 			setTimer(function()
 				triggerClientEvent('onCheckCollisions', root)
 				for _,plr in pairs(getElementsByType('player')) do

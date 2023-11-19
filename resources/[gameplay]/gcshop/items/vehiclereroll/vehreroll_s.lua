@@ -50,9 +50,9 @@ end
 
 
 
-function vehroll_raceState(state)
+function vehroll_raceState(state, old)
 
-	if state == "Running" and vehreroll_vehs[exports.race:getRaceMode()] then
+	if state == "Running" and old ~= "MidMapVote" and vehreroll_vehs[exports.race:getRaceMode()] then
 		if exports.race:getRaceMode() == "Never the same" then
 			vehroll_firstcheckpoint = true
 			vehroll_firstCheckpointPlayer = {}
@@ -62,7 +62,7 @@ function vehroll_raceState(state)
 		rerollPlayer = {}
 		isRerollAllowed = true
         playerPreviousCheckpoint = {}
-	elseif state == "SomeoneWon" then -- exceptions here
+	elseif state == "SomeoneWon" or state ~= "MidMapVote" then -- exceptions here
 
 		return
 

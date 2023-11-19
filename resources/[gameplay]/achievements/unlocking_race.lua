@@ -343,8 +343,8 @@ end
 
 addEvent('onRaceStateChanging', true)
 addEventHandler('onRaceStateChanging', root,
-function(state)
-	if state == "Running" then
+function(state, old)
+	if state == "Running" and old ~= "MidMapVote" then
 		tableOfPlayers = getElementsByType('player')
 	end
 end

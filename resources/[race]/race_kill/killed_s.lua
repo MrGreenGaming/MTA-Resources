@@ -6,10 +6,10 @@ local hitby = {}
 
 addEvent('onRaceStateChanging', true)
 addEventHandler('onRaceStateChanging', getRootElement(),
-	function(state)
+	function(state, old)
 		triggerClientEvent('killedDDMapRunning', resourceRoot, exports.race:getRaceMode() == "Destruction derby" and state == "Running")
-		
-		if state == "Running" then
+
+		if state == "Running" and old ~= "MidMapVote" then
 			victimKillerTable = {}
 			hitby = {}
 			g_PlayersKills = {}
@@ -26,24 +26,24 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 					setElementData(pl, 'kills', 0)
 					g_PlayersKills[pl] = 0
 				end
-				
+
 				if exports.race:getShooterMode() == "cargame" then
 					--kills always 0 in CarGame
 				else
 					exports.scoreboard:scoreboardAddColumn('kills', root, 40, "Kills", 5)
 				end
 				triggerClientEvent('startShooterKillDetection', resourceRoot)
-			
+
 			elseif exports.race:getRaceMode() == "Deadline" then
 				for _, pl in ipairs(getElementsByType('player')) do
 					setElementData(pl, 'kills', 0)
 					g_PlayersKills[pl] = 0
 				end
-				
+
 				exports.scoreboard:scoreboardAddColumn('kills', root, 40, "Kills", 5)
 
 
-			
+
 			elseif exports.race:getRaceMode() == "Capture the flag" then
 				triggerClientEvent('killedCTFMapRunning', resourceRoot, true)
 				for _, pl in ipairs(getElementsByType('player')) do
@@ -51,14 +51,14 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 					g_PlayersKills[pl] = 0
 				end
 				-- exports.scoreboard:addScoreboardColumn('defends')
-				
-				
+
+
 			elseif exports.race:getRaceMode() == "Sprint" then
 				exports.scoreboard:scoreboardAddColumn("checkpoint", root, 77, "Checkpoint", 5)
-				
-				
-			elseif exports.race:getRaceMode() == "Reach the flag" then				
-				
+
+
+			elseif exports.race:getRaceMode() == "Reach the flag" then
+
 			elseif exports.race:getRaceMode() == "Never the same" then
 				exports.scoreboard:scoreboardAddColumn("checkpoint", root, 77, "Checkpoint", 5)
 			end
@@ -70,7 +70,7 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 				setElementData(pl, 'kills', nil)
 			end
 			ctfWipe()
-        end    
+        end
 	end
 )
 addEventHandler("onPlayerJoin",root,
@@ -89,9 +89,9 @@ addEventHandler("onPlayerJoin",root,
 function onRaceAddRank(time)
 	if not g_PlayersKills or (exports.race:getRaceMode() ~= "Destruction derby" and exports.race:getRaceMode() ~= "Shooter" and exports.race:getRaceMode() ~= "Deadline") then return end
 	local player = source
-	
+
 	cancelEvent(true, 'Kills: ' .. g_PlayersKills[player])
-	
+
 end
 addEventHandler('onRaceAddRank', root, onRaceAddRank)
 
@@ -129,12 +129,12 @@ function wasted()
 			g_PlayersKills[hitby[source][3]] = g_PlayersKills[hitby[source][3]] + 1
 			setElementData(hitby[source][3], 'kills', g_PlayersKills[hitby[source][3]])
 
-			
+
 			triggerEvent('onDDPlayerKill', hitby[source][3], source)
 		end
-	elseif exports.race:getRaceMode() == "Capture the flag" then 
+	elseif exports.race:getRaceMode() == "Capture the flag" then
 		if hitby[source] and isElement(hitby[source][3]) and getElementHealth(hitby[source][3]) > 0.1 and (getTickCount() - hitby[source][2]) < 10000 then
-			
+
 			local killedTeamName = getPlayerTeam(source)
 			local killedTeamName = getTeamName(killedTeamName)
 			local killedTeamName = string.explode(killedTeamName," ")
@@ -151,7 +151,7 @@ function wasted()
 						setElementData(hitByPlayer, 'defends', g_PlayersKills[hitByPlayer])
 
 						addKillCount(hitByPlayer,source)
-						
+
 					end
 				elseif killedTeamName == "blue" then
 					if playersInDefendArea.red[source] then
@@ -172,8 +172,8 @@ function wasted()
 				triggerEvent('onCTFFlagCarrierKill', hitByPlayer, source)
 			end
 
-			
-			
+
+
 		end
 	end
 end
@@ -223,16 +223,16 @@ function addKillCount(p,killed)
 	end
 	ctfPlayerKillsAmt[p][killed] = ctfPlayerKillsAmt[p][killed] + 1
 
-	
+
 	triggerEvent('onCTFPlayerKill', p, killed, ctfPlayerKillsAmt[p][killed])
-	
+
 end
 
 function DefColshapeHit(theElement)
 	if not isElement then return end
 	if getElementType(theElement) ~= "player" then return end
 
-	
+
 	if source == redDefColShape then
 		-- outputChatBox(getPlayerName(theElement).." entered RED")
 		playersInDefendArea.red[theElement] = true
@@ -316,7 +316,7 @@ function shooterKill(killer)
 			local victim = source
 			local a = string.gsub (getElementData(victim, 'vip.colorNick') or getPlayerName(victim), '#%x%x%x%x%x%x', '' )
 			local b = string.gsub (getElementData(killer, 'vip.colorNick') or getPlayerName(killer), '#%x%x%x%x%x%x', '' )
-			
+
 			exports.messages:outputGameMessage(a .. " was killed by " .. b, root, 2.5, 255, 255, 255)
 			g_PlayersKills[killer] = g_PlayersKills[killer] + 1
 			setElementData(killer, 'kills', g_PlayersKills[killer])
@@ -326,11 +326,11 @@ function shooterKill(killer)
 
 		else
 
-			
+
 			-- local victim = source
 			-- local a = string.gsub (getPlayerName(victim), '#%x%x%x%x%x%x', '' )
 			-- local b = string.gsub (getPlayerName(killer), '#%x%x%x%x%x%x', '' )
-			
+
 			-- exports.messages:outputGameMessage("You got killed by " .. b, victim, 2.5, 255, 255, 255)
 			-- exports.messages:outputGameMessage("You killed " .. a, killer, 2.5, 255, 255, 255)
 
@@ -339,7 +339,7 @@ function shooterKill(killer)
 
 			-- triggerEvent('onCarGamePlayerKill', killer)
 			-- triggerEvent('onCarGamePlayerDeath', victim)
-			
+
 			-- victimKillerTable[victim] = killer
 		end
 	end
@@ -354,7 +354,7 @@ function deadlineKill(killer)
 		local victim = source
 		local a = string.gsub (getElementData(victim, 'vip.colorNick') or getPlayerName(victim), '#%x%x%x%x%x%x', '' )
 		local b = string.gsub (getElementData(killer, 'vip.colorNick') or getPlayerName(killer), '#%x%x%x%x%x%x', '' )
-		
+
 		exports.messages:outputGameMessage(a .. " was killed by " .. b, root, 2.5, 255, 255, 255)
 		g_PlayersKills[killer] = g_PlayersKills[killer] + 1
 		setElementData(killer, 'kills', g_PlayersKills[killer])
@@ -382,21 +382,21 @@ end
 -- util
 function Check(funcname, ...)
     local arg = {...}
- 
+
     if (type(funcname) ~= "string") then
         error("Argument type mismatch at 'Check' ('funcname'). Expected 'string', got '"..type(funcname).."'.", 2)
     end
     if (#arg % 3 > 0) then
         error("Argument number mismatch at 'Check'. Expected #arg % 3 to be 0, but it is "..(#arg % 3)..".", 2)
     end
- 
+
     for i=1, #arg-2, 3 do
         if (type(arg[i]) ~= "string" and type(arg[i]) ~= "table") then
             error("Argument type mismatch at 'Check' (arg #"..i.."). Expected 'string' or 'table', got '"..type(arg[i]).."'.", 2)
         elseif (type(arg[i+2]) ~= "string") then
             error("Argument type mismatch at 'Check' (arg #"..(i+2).."). Expected 'string', got '"..type(arg[i+2]).."'.", 2)
         end
- 
+
         if (type(arg[i]) == "table") then
             local aType = type(arg[i+1])
             for _, pType in next, arg[i] do
@@ -415,9 +415,9 @@ function Check(funcname, ...)
 end
 function string.explode(self, separator)
     Check("string.explode", "string", self, "ensemble", "string", separator, "separator")
- 
+
     if (#self == 0) then return {} end
     if (#separator == 0) then return { self } end
- 
+
     return loadstring("return {\""..self:gsub(separator, "\",\"").."\"}")()
 end
