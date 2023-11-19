@@ -62,7 +62,7 @@ function vehroll_raceState(state, old)
 		rerollPlayer = {}
 		isRerollAllowed = true
         playerPreviousCheckpoint = {}
-	elseif state == "SomeoneWon" or state ~= "MidMapVote" then -- exceptions here
+	elseif state == "SomeoneWon" or state == "MidMapVote" then -- exceptions here
 
 		return
 
