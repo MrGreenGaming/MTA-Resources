@@ -1,20 +1,21 @@
 <meta>
     <info author="Remp (edits BinSlayer)" name="Snow" version="1.0.3" type="misc" addon="race"/>
-	
+
 	<file src="direction_image.png"/>
 	<file src="direction_pointer.png"/>
 	<file src="cursor.png"/>
-	
+
 	<file src="flakes/cartoon_tile.png"/>
 	<file src="flakes/real_tile.png"/>
-	
+
 
 	<script src="snow_gui.lua" type="client"/>
 	<script src="snow.lua" type="client"/>
 	<script src="snow_s.lua"/>
+    <script src="night.lua" type="client" />
 	<config src="help.xml" type="client"/>
 
-	
+
 	<min_mta_version client="1.1.0" server="1.1.0" />
 
 	<script src="c_snow_ground.lua" type="client" />

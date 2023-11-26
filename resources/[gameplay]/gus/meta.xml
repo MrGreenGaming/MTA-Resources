@@ -28,6 +28,7 @@
     <!-- Exports for settings resource  KaliBwoy -->
     <export function="showChaticon" type="client"/>
     <export function="hideChaticon" type="client"/>
+    <export function="getDayNightMode" type="client" />
 
 	<settings>
 		<setting

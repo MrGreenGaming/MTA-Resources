@@ -221,11 +221,12 @@ light.durationCache = getMinuteDuration()
 light.currentMode = false
 light.mode = ""
 
+function getDayNightMode()
+    if not light.mode or light.mode == "" then return false end
+    return light.mode
+end
+
 function light.toggleDaylight()
-    if getResourceFromName("snow") and getResourceState(getResourceFromName("snow")) == "running" then
-        outputChatBox("Daylight cannot be used while Santa Claus is here.", 200, 0, 0)
-        return
-    end
     if light.mode ~= "day" then
         local allowed = light.isAllowed()
         if light.mode == "night" then outputChatBox("Nightlight disabled.", 200, 0, 0) end
@@ -243,11 +244,6 @@ end
 addCommandHandler("daylight", light.toggleDaylight)
 
 function light.toggleNightlight()
-    if getResourceFromName("snow") and getResourceState(getResourceFromName("snow")) == "running" then
-        outputChatBox("Nightlight cannot be used while Santa Claus is here.", 200, 0, 0)
-        return
-    end
-
     if light.mode ~= "night" then
         local allowed = light.isAllowed()
         if light.mode == "day" then outputChatBox("Daylight disabled.", 200, 0, 0) end
