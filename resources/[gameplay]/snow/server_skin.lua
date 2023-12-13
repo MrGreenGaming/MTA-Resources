@@ -1,5 +1,5 @@
 function elementChanged(oldModel, newModel)
-    if getElementType(source) == 'player' and newModel ~= 1 and bPlayerUse[source] then
+    if getElementType(source) == 'player' and newModel ~= 1 and bPlayerUse[source] and not getElementData(source, 'vip.skin') then
 		setTimer(setElementModel,2000, 1, source, 1)
 	end
 end
@@ -7,7 +7,7 @@ addEventHandler("onElementModelChange", root, elementChanged)
 
 addEventHandler('onPlayerSpawn', getRootElement(),
 function()
-	if bPlayerUse[source] then
+	if bPlayerUse[source] and not getElementData(source, 'vip.skin') then
 		setTimer(function(player) if isElement(player) and getElementModel(player) ~= 1 then setElementModel(player, 1) end end,2000, 1, source)
 	end
 end

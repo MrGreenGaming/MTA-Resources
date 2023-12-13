@@ -119,11 +119,6 @@ addEventHandler('onPlayerVip', resourceRoot,
 		if player and isElement(player) and getElementType(player) == "player" then
 			if loggedIn then
 
-                if getResourceFromName("snow") and getResourceState(getResourceFromName("snow")) == "running" then
-                    vip_outputChatBox("VIP skins cannot be used while Santa Claus is here.", player, 0, 255, 100)
-                    return
-                end
-
 				local playerVipSkin = getVipSetting(player, 5, 'skin')
 				if playerVipSkin and tonumber(playerVipSkin) then
 					setVipSkin(player, playerVipSkin)
