@@ -829,27 +829,52 @@ addEventHandler ( "aAdmin", _root, function ( action, ... )
 end )
 
 
--- seconds to description i.e. "1 month 15 days 3 hours"
-function secondsToTimeDesc( seconds )
-	local toReturn = ""
-	if seconds then
-		local nLoops = 0
-		local tab = { {"year", 60*60*24*365},{"month", 60*60*24*31}, {"day",60*60*24},  {"hour",60*60},  {"min",60},  {"sec",1} }
-		for i,item in ipairs(tab) do
-			local t = math.floor(seconds/item[2])
-			seconds = seconds - (t * item[2])
-			if t > 0 or i == #tab then
-				toReturn = toReturn .. tostring(t) .. " " .. item[1] .. (t~=1 and "s " or " ")
-				nLoops = nLoops + 1
-			end
-			if nLoops == 3 then
-				return toReturn
-			end
-		end
-		return toReturn
-	end
-	return ""
+function secondsToTimeDesc(seconds)
+    if seconds then
+        local results = {}
+        local sec = seconds % 60
+        local min = math.floor((seconds % 3600) / 60)
+        local hou = math.floor((seconds % 86400) / 3600)
+        local day = math.floor(seconds / 86400)
+        local mon = math.floor(day / 30) -- Assuming an average month is 30 days
+        local year = math.floor(day / 365) -- Assuming an average year is 365 days
+
+        local count = 0  -- Keep track of the number of elements added to the results table
+
+        if year > 0 then
+            table.insert(results, year .. (year == 1 and " year" or " years"))
+            count = count + 1
+        end
+
+        if mon > 0 and count < 2 then
+            table.insert(results, mon .. (mon == 1 and " month" or " months"))
+            count = count + 1
+        end
+
+        if day % 30 > 0 and count < 2 then
+            table.insert(results, (day % 30) .. ((day % 30) == 1 and " day" or " days"))
+            count = count + 1
+        end
+
+        if hou > 0 and count < 2 then
+            table.insert(results, hou .. (hou == 1 and " hour" or " hours"))
+            count = count + 1
+        end
+
+        if min > 0 and count < 2 then
+            table.insert(results, min .. (min == 1 and " minute" or " minutes"))
+            count = count + 1
+        end
+
+        if sec > 0 and count < 2 then
+            table.insert(results, sec .. (sec == 1 and " second" or " seconds"))
+        end
+
+        return string.reverse(table.concat(results, " and "):reverse():gsub(" ,", " and ", 1))
+    end
+    return ""
 end
+
 
 addEvent ( "aPlayer", true )
 addEventHandler ( "aPlayer", _root, function ( player, action, data, additional, additional2 )
@@ -1685,8 +1710,6 @@ function checkPlayerMute(thePlayer)
 					aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds)
 
 					local textMuted = getPlayerName(player).." was muted by "..t.byAdmin.." and will be unmuted in "..expireReadable.."."
-                    -- 2 months
-                    if seconds > 62 * 24 * 3600 then textMuted = getPlayerName(player).." was muted by "..t.byAdmin.."." end
 					textMuted = string.gsub( textMuted, "#%x%x%x%x%x%x", "" )
 
 					outputChatBox( textMuted , root, 0, 255, 100)
