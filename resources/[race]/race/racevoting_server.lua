@@ -162,7 +162,7 @@ addEventHandler('midMapVoteResult', getRootElement(),
 --
 -- Changes the current map to a random race map
 ----------------------------------------------------------------------------
-function startRandomMap()
+function startRandomMap(randomMode)
 
 	-- Handle forced nextmap setting
 	if maybeApplyForcedNextMap() then
@@ -171,17 +171,18 @@ function startRandomMap()
 
 	-- Get a random map chosen from the 10% of least recently player maps, with enough spawn points for all the players (if required)
 	-- local map = getRandomMapCompatibleWithGamemode( getThisResource(), 10, g_GameOptions.ghostmode and 0 or getTotalPlayerCount() )
-	local map = getRandomMapCompatibleWithGamemode( getThisResource(), 10, g_GameOptions.ghostmode and 0 or getTotalPlayerCount(), false, modes[currentmode] )
+	local map = getRandomMapCompatibleWithGamemode( getThisResource(), 10, g_GameOptions.ghostmode and 0 or getTotalPlayerCount(), false, randomMode and modes[math.random(#modes)] or modes[currentmode] )
 	if map then
 		g_IgnoreSpawnCountProblems = map	-- Uber hack 4000
 		if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
 			problemChangingMap()
 		end
-	currentmode = currentmode + 1
-	if currentmode > #modes then currentmode = 1 end
+	    currentmode = currentmode + 1
+	    if currentmode > #modes then currentmode = 1 end
         isCurrentMapPremium = false
 	else
 		outputWarning( 'startRandomMap failed' )
+        problemChangingMap()
 	end
 end
 
@@ -214,13 +215,13 @@ end
 -- Sort it
 ----------------------------------------------------------------------------
 function problemChangingMap()
-	outputRace( 'Changing to random map in 5 seconds' )
+	outputRace( 'Map load failed: Changing to random map in 5 seconds' )
 	local currentMap = exports.mapmanager:getRunningGamemodeMap()
 	TimerManager.createTimerFor("resource","mapproblem"):setTimer(
         function()
 			-- Check that something else hasn't already changed the map
 			if currentMap == exports.mapmanager:getRunningGamemodeMap() then
-	            startRandomMap()
+	            startRandomMap(true)
 			end
         end,
         math.random(4500,5500), 1 )
