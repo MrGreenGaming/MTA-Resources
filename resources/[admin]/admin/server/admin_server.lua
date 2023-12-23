@@ -1685,7 +1685,8 @@ function checkPlayerMute(thePlayer)
 					aSetPlayerMuted ( player, not isPlayerMuted ( player ), seconds)
 
 					local textMuted = getPlayerName(player).." was muted by "..t.byAdmin.." and will be unmuted in "..expireReadable.."."
-                    if seconds > 525600 then textMuted = getPlayerName(player).." was muted by "..t.byAdmin.."." end
+                    -- 2 months
+                    if seconds > 62 * 24 * 3600 then textMuted = getPlayerName(player).." was muted by "..t.byAdmin.."." end
 					textMuted = string.gsub( textMuted, "#%x%x%x%x%x%x", "" )
 
 					outputChatBox( textMuted , root, 0, 255, 100)
