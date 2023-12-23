@@ -836,8 +836,8 @@ function secondsToTimeDesc(seconds)
         local min = math.floor((seconds % 3600) / 60)
         local hou = math.floor((seconds % 86400) / 3600)
         local day = math.floor(seconds / 86400)
-        local mon = math.floor(day / 30) -- Assuming an average month is 30 days
-        local year = math.floor(day / 365) -- Assuming an average year is 365 days
+        local mon = math.floor(day / 31)
+        local year = math.floor(day / 365)
 
         local count = 0  -- Keep track of the number of elements added to the results table
 
