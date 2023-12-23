@@ -836,8 +836,8 @@ function secondsToTimeDesc(seconds)
         local min = math.floor((seconds % 3600) / 60)
         local hou = math.floor((seconds % 86400) / 3600)
         local day = math.floor(seconds / 86400)
-        local mon = math.floor(day / 31)
-        local year = math.floor(day / 365)
+        local mon = math.floor(day / 30) -- Assuming an average month is 30 days
+        local year = math.floor(day / 365) -- Assuming an average year is 365 days
 
         local count = 0  -- Keep track of the number of elements added to the results table
 
@@ -851,7 +851,7 @@ function secondsToTimeDesc(seconds)
             count = count + 1
         end
 
-        if day % 31 > 0 and count < 2 then
+        if day % 30 > 0 and count < 2 then
             table.insert(results, (day % 30) .. ((day % 30) == 1 and " day" or " days"))
             count = count + 1
         end
@@ -937,7 +937,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 				elseif timeType == "w" or timeType == "week" or timeType == "weeks" then
 					duration = duration * 60 * 60 * 24 * 7
 				elseif timeType == "M" or timeType == "month" or timeType == "months" then
-					duration = duration * 60 * 60 * 24 * 31
+					duration = duration * 60 * 60 * 24 * 30
 				elseif timeType == "y" or timeType == "year" or timeType == "years" then
 					duration = duration * 60 * 60 * 24 * 365
 				else
