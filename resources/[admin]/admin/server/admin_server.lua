@@ -851,7 +851,7 @@ function secondsToTimeDesc(seconds)
             count = count + 1
         end
 
-        if day % 30 > 0 and count < 2 then
+        if day % 31 > 0 and count < 2 then
             table.insert(results, (day % 30) .. ((day % 30) == 1 and " day" or " days"))
             count = count + 1
         end
