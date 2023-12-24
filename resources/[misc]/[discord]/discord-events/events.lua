@@ -70,7 +70,7 @@ addEventHandler("onPlayerChangeNick", root,
     function (previous, nick)
         exports.discord:send("player.nickchange", { player = nick:monochrome(), previous = previous:monochrome() })
     end
-)
+, true, "low")
 
 addEventHandler("onPlayerChat", root,
     function (message, messageType)
@@ -91,55 +91,120 @@ addEventHandler("onInterchatMessage", root,
 local mutes = {}
 local lastchatid, lastchatnick
 
+function onStart()
+    mutes = {}
+    local xml = xmlLoadFile("mutes.xml")
+    if xml then
+        local nodes = xmlNodeGetChildren(xml)
+        for _, node in ipairs(nodes) do
+            local id = xmlNodeGetAttribute(node, "id")
+            local by = xmlNodeGetAttribute(node, "by")
+            mutes[id] = by
+        end
+        xmlUnloadFile(xml)
+    else
+        xml = xmlCreateFile("mutes.xml", "mutes")
+        xmlSaveFile(xml)
+        xmlUnloadFile(xml)
+    end
+end
+addEventHandler("onResourceStart", resourceRoot, onStart)
+
+function saveMutesToXML()
+    local xml = xmlLoadFile("mutes.xml") or xmlCreateFile("mutes.xml", "mutes")
+
+    -- Clear existing nodes in the XML
+    local childNodes = xmlNodeGetChildren(xml)
+    for _, childNode in ipairs(childNodes) do
+        xmlDestroyNode(childNode)
+    end
+
+    -- Create new nodes for each mute entry
+    for id, by in pairs(mutes) do
+        local node = xmlCreateChild(xml, "mute")
+        xmlNodeSetAttribute(node, "id", id)
+        xmlNodeSetAttribute(node, "by", by)
+    end
+
+    xmlSaveFile(xml)
+    xmlUnloadFile(xml)
+end
+
+function removeMuteFromXML(id)
+    local xml = xmlLoadFile("mutes.xml")
+    if xml then
+        local nodes = xmlNodeGetChildren(xml)
+        for _, node in ipairs(nodes) do
+            local xmlId = xmlNodeGetAttribute(node, "id")
+            if xmlId == id then
+                xmlDestroyNode(node)
+                break
+            end
+        end
+        xmlSaveFile(xml)
+        xmlUnloadFile(xml)
+    end
+end
+
 function discordmutelast(p, c)
-	if not hasObjectPermissionTo(p, 'command.mute') then
-		outputDebugString('no access to discord command')
-		return
-	end
-	if not lastchatid then
-		outputChatBox('No last discord chatter', p, 255,0,0)
-	else
-		outputChatBox('Discord user ' .. lastchatnick .. ' muted by ' .. getPlayerName(p), root, 255,0,0)
-		mutes[lastchatid] = getPlayerName(p)
-	end
+    local isConsole = getElementType(p) == "console"
+    local playerName = isConsole and "Console" or getPlayerName(p)
+    if not hasObjectPermissionTo(p, 'command.mute') then
+        outputDebugString('no access to discord command')
+        return
+    end
+    if not lastchatid then
+        outputChatBox('No last discord chatter', p, 255, 0, 0)
+    else
+        outputChatBox('Discord user ' .. lastchatnick .. ' muted by ' .. playerName, root, 255, 0, 0)
+        mutes[lastchatid] = playerName
+        saveMutesToXML()  -- Save to mutes.xml
+    end
 end
 addCommandHandler('discordmutelast', discordmutelast)
 
 function discordmuteid(p, c, id)
-	if not hasObjectPermissionTo(p, 'command.mute') then
-		outputDebugString('no access to discord command')
-		return
-	end
-	if not id then
-		outputChatBox('usage: /discordmuteid <discordid>', p, 255,0,0)
-	else
-		outputChatBox('Discord user ' .. id .. ' muted by ' .. getPlayerName(p), root, 255,0,0)
-		mutes[id] = getPlayerName(p)
-	end
+    local isConsole = getElementType(p) == "console"
+    local playerName = isConsole and "Console" or getPlayerName(p)
+    if not hasObjectPermissionTo(p, 'command.mute') then
+        outputDebugString('no access to discord command')
+        return
+    end
+    if not id then
+        outputChatBox('usage: /discordmuteid <discordid>', p, 255, 0, 0)
+    else
+        outputChatBox('Discord user ' .. id .. ' muted by ' .. playerName, root, 255, 0, 0)
+        mutes[id] = playerName
+        saveMutesToXML()  -- Save to mutes.xml
+    end
 end
 addCommandHandler('discordmuteid', discordmuteid)
 
 function discordunmuteid(p, c, id)
-	if not hasObjectPermissionTo(p, 'command.mute') then
-		outputDebugString('no access to discord command')
-		return
-	end
-	if not id then
-		outputChatBox('usage: /discordunmuteid <discordid>', p, 255,0,0)
-	else
-		outputChatBox('Discord user ' .. id .. ' unmuted by ' .. getPlayerName(p), root, 255,0,0)
-		mutes[id] = nil
-	end
+    local isConsole = getElementType(p) == "console"
+    local playerName = isConsole and "Console" or getPlayerName(p)
+    if not hasObjectPermissionTo(p, 'command.mute') then
+        outputDebugString('no access to discord command')
+        return
+    end
+    if not id then
+        outputChatBox('usage: /discordunmuteid <discordid>', p, 255, 0, 0)
+    else
+        outputChatBox('Discord user ' .. id .. ' unmuted by ' .. playerName, root, 255, 0, 0)
+        mutes[id] = nil
+        removeMuteFromXML(id)  -- Remove from mutes.xml
+    end
 end
 addCommandHandler('discordunmuteid', discordunmuteid)
 
 function discordmutes(p, c)
-	outputChatBox('Discord mutes: ', p, 255,0,0)
-	for id,by in pairs(mutes) do
-		outputChatBox('Discord user ' .. id .. ' muted by ' .. by, p, 255,0,0)
-	end
+    outputChatBox('Discord mutes: ', p, 255, 0, 0)
+    for id, by in pairs(mutes) do
+        outputChatBox('Discord user ' .. id .. ' muted by ' .. by, p, 255, 0, 0)
+    end
 end
 addCommandHandler('discordmutes', discordmutes)
+
 
 addEvent("onDiscordPacket")
 addEventHandler("onDiscordPacket", root,
