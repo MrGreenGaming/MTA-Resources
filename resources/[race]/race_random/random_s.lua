@@ -181,7 +181,7 @@ addEvent('onPostFinish')
 addEventHandler('onPostFinish', root, stopRandom)
 
 --Double Damage
-addEvent("doubleDamage", true)
+addEvent("doubleDamage")
 function typeDoubleDamage()
 	pollDidStart = nil
 
@@ -194,7 +194,7 @@ end
 addEventHandler("doubleDamage", root, typeDoubleDamage)
 
 --Spawning Dumper
-addEvent("B", true)
+addEvent("B")
 function typeB(victim)
 	pollDidStart = nil
 
@@ -223,7 +223,7 @@ end
 addEventHandler("B", root, typeB)
 
 --Sweeper
-addEvent( "C", true )
+addEvent( "C" )
 function typeC(victim)
 	pollDidStart = nil
 
@@ -264,7 +264,7 @@ end
 addEventHandler("C", root, typeC)
 
 --Hallelujah
-addEvent("D", true)
+addEvent("D")
 function typeD(victim)
 	pollDidStart = nil
 
@@ -295,7 +295,7 @@ addEventHandler("D", root, typeD)
 
 
 --Darkness
-addEvent("E", true)
+addEvent("E")
 function typeE()
 	pollDidStart = nil
 
@@ -314,7 +314,7 @@ local function tp(vehicle, posx, posy, posz, rotx, roty, rotz)
 end
 
 --Teleport back
-addEvent("F", true)
+addEvent("F")
 function typeF()
 	pollDidStart = nil
 
@@ -333,7 +333,7 @@ end
 addEventHandler("F", root, typeF)
 
 --Turn around
-addEvent("G", true)
+addEvent("G")
 function typeG()
 	pollDidStart = nil
 
@@ -344,7 +344,7 @@ end
 addEventHandler("G", root, typeG)
 
 --Increase gamespeed
-addEvent("H", true)
+addEvent("H")
 function typeH()
 	pollDidStart = nil
 
@@ -356,7 +356,7 @@ end
 addEventHandler("H", root, typeH)
 
 --Massive Slap
-addEvent( "I", true)
+addEvent( "I")
 function typeI()
 	pollDidStart = nil
 
@@ -366,7 +366,7 @@ end
 addEventHandler("I", root, typeI)
 
 --Floating
-addEvent("J", true)
+addEvent("J")
 function typeJ(victim)
 	pollDidStart = nil
 
@@ -384,7 +384,7 @@ end
 addEventHandler ( "J", root, typeJ )
 
 --Tank!
-addEvent("K", true)
+addEvent("K")
 function typeK(victim)
 	pollDidStart = nil
 
@@ -432,7 +432,7 @@ function setElementSpeed(element, unit, speed) -- only work if element is moving
 end
 
 --Speed
-addEvent("L", true)
+addEvent("L")
 function typeL(victim)
 	pollDidStart = nil
 
@@ -476,7 +476,7 @@ addEventHandler ( "L", root, typeL )
 
 
 --Sudden Death
-addEvent("M", true)
+addEvent("M")
 function typeM(victim)
 	pollDidStart = nil
 
@@ -502,7 +502,7 @@ end
 addEventHandler("M", root, typeM)
 
 --Stairway to heaven
-addEvent("N", true)
+addEvent("N")
 function typeN(victim)
 	pollDidStart = nil
 
@@ -520,7 +520,7 @@ end
 addEventHandler("N", root, typeN)
 
 --Sleep with the fish
-addEvent ( "O", true )
+addEvent ( "O")
 function typeO(victim)
 	pollDidStart = nil
 
@@ -539,7 +539,7 @@ addEventHandler("O", root, typeO)
 
 
 --Invisibility
-addEvent("P", true)
+addEvent("P")
 function typeP(victim)
 	pollDidStart = nil
 
@@ -574,7 +574,7 @@ addEventHandler("P", root, typeP)
 
 
 --No Brakes
-addEvent("Z", true)
+addEvent("Z")
 function typeZ(victim)
 		pollDidStart = nil
 
@@ -591,7 +591,7 @@ end
 addEventHandler("Z", root, typeZ)
 
 --Missiles
-addEvent("Q", true)
+addEvent("Q")
 function typeQ(victim)
 		pollDidStart = nil
 
@@ -623,7 +623,7 @@ end
 addEventHandler("removePickupsEvent", root, removePickups)
 
 --Forklift
-addEvent( "ForkLiftEvent", true )
+addEvent( "ForkLiftEvent" )
 function s_Forklift(victim)
 	pollDidStart = nil
 
@@ -669,7 +669,7 @@ function s_Ravebreak()
 	setTimer(triggerClientEvent, RaveTime, 1, root, 'stopRaveBreak', root)
 	triggerClientEvent(root, "onRavebreakStart", root,RaveTime)
 end
-addEvent( "RavebreakEvent", true )
+addEvent( "RavebreakEvent")
 addEventHandler("RavebreakEvent", root, s_Ravebreak)
 
 --Nuke
@@ -698,13 +698,13 @@ function lowfps()
 	outputChatBox ( "Low fps for everyone!" )
 	triggerClientEvent ("serverLowFPS", resourceRoot)
 end
-addEvent ( "lowfps", true )
+addEvent ( "lowfps")
 addEventHandler ( "lowfps", root, lowfps )
 
 
 
 --Hunter!
-addEvent("onRandomHunter", true)
+addEvent("onRandomHunter")
 function hunterHandler(victim)
 	pollDidStart = nil
 
@@ -796,7 +796,7 @@ function fallingRocksHandler(victim)
 	,remaining*executes+10000,1)
 
 end
-addEvent ( "fallingRocksEvent", true )
+addEvent ( "fallingRocksEvent")
 addEventHandler("fallingRocksEvent",root,fallingRocksHandler)
 
 function weather()
@@ -809,7 +809,7 @@ function weather()
 	outputChatBox ( "Bad weather!" )
 	setWeather(weathers[math.random(#weathers)])
 end
-addEvent ( "weatherEvent", true )
+addEvent ( "weatherEvent" )
 addEventHandler ( "weatherEvent", root, weather )
 
 function blocker(victim)
@@ -823,7 +823,7 @@ function blocker(victim)
 		setTimer(triggerClientEvent, 10000, 1, "onClientReceiveCollisionlessTable",root,{})
 	end
 end
-addEvent ( "blockerEvent", true )
+addEvent ( "blockerEvent" )
 addEventHandler ( "blockerEvent", root, blocker )
 
 
