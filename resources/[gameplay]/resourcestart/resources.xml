@@ -46,5 +46,4 @@
     <resource priority="0" restart="0">laps</resource>
     <resource priority="0" restart="0">auto-shutdown</resource>
     <resource priority="0" restart="0">discord_rich_presence</resource>
-    <resource priority="0" restart="0">snow</resource>
 </resources>
