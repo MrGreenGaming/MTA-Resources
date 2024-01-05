@@ -176,6 +176,7 @@ function isCoremarkersMap(mapResourceName)
             end
         end
     end
+    xmlUnloadFile(meta)
     return false
 end
 
