@@ -172,6 +172,7 @@ function isCoremarkersMap(mapResourceName)
         if xmlNodeGetName(child) == 'include' then
             local includedResource = xmlNodeGetAttribute(child, 'resource')
             if includedResource == 'coremarkers' then
+                xmlUnloadFile(meta)
                 return true
             end
         end
