@@ -166,19 +166,19 @@ end
 
 function isCoremarkersMap(mapResourceName)
     local meta = xmlLoadFile(':'.. mapResourceName..'/meta.xml', true)
+    local isCoremarkers = false
 
     local children = xmlNodeGetChildren(meta)
     for _, child in ipairs(children) do
         if xmlNodeGetName(child) == 'include' then
             local includedResource = xmlNodeGetAttribute(child, 'resource')
             if includedResource == 'coremarkers' then
-                xmlUnloadFile(meta)
-                return true
+                isCoremarkers = true
             end
         end
     end
     xmlUnloadFile(meta)
-    return false
+    return isCoremarkers
 end
 
 function isCoremarkersBuyable()
