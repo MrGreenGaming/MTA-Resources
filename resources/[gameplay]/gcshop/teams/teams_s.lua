@@ -525,8 +525,29 @@ function makeowner(sender, c, playername)
         end
     end
 end
-
 addCommandHandler('makeowner', makeowner)
+
+function forceMakeOwner(admin, c, playername)
+    local player = getPlayerFromName_(playername)
+    if not player then
+        return outputChatBox('[TEAMS] Could not find ' .. tostring(playername) .. ', please type the full nickname', admin, 0, 255, 0)
+    elseif not tonumber(exports.gc:getPlayerForumID(player)) then
+        return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not logged in to GC', admin, 0, 255, 0)
+    elseif playerteams[player] and playerteams[player].status ~= 1 then
+        return outputChatBox('[TEAMS] ' .. tostring(playername) .. ' is not in a team', admin, 0, 255, 0)
+    end
+
+    dbExec(handlerConnect, [[UPDATE `team` SET `owner`=? WHERE `teamid`=?]], exports.gc:getPlayerForumID(player), playerteams[player].teamid)
+
+    for k, r in pairs(playerteams) do
+        if r.teamid == playerteams[player].teamid then
+            outputChatBox('[TEAMS] Admin ' .. getPlayerName(admin) .. ' forced ' .. getPlayerName(player) .. ' as the new team owner', k, 0, 255, 0)
+            checkPlayerTeam(k)
+        end
+    end
+    outputChatBox('[TEAMS] Admin ' .. getPlayerName(admin) .. ' forced ' .. getPlayerName(player) .. ' as the new team owner', admin, 0, 255, 0)
+end
+addCommandHandler("forcemakeowner", forceMakeOwner, true)
 
 function teamkick(sender, c, forumid)
     local ownerid = tonumber(exports.gc:getPlayerForumID(sender))
