@@ -48,6 +48,8 @@ end
 --
 ---------------------------------------------------------------------------
 function SAccount:login(username, pw, player, callback)
+    callback(false, player)
+    outputChatBox('[GC] GC Accounts are temporarily disabled!', player, 255, 0, 0)
     if not username or not pw then
         callback(false, player)
         return
@@ -113,6 +115,9 @@ end
 --
 ---------------------------------------------------------------------------
 function SAccount:loginViaForumID(givenForumID, player, callback)
+    callback(false, player)
+    outputChatBox('[GC] GC Accounts are temporarily disabled!', player, 255, 0, 0)
+
     if not givenForumID then
         callback(false, player)
         return
@@ -147,7 +152,7 @@ function SAccount:loginViaForumID(givenForumID, player, callback)
             return
         end
 
-        
+
         if not getElementData( player, 'gc.autoLoginCache') or tonumber(forumID) ~= tonumber(getElementData( player, 'gc.autoLoginCache'))  then -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
             outputDebugString( 'GC AUTOLOGIN BUG: "'..tostring(getPlayerName( player ))..'": Autologin DB forumID: '..tostring(getElementData( player, 'gc.autoLoginCache')..' - Api forumID: '..tostring(forumID) ),  3, 0, 0, 255  )
             callback(false,player)
