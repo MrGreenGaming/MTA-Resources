@@ -46,7 +46,7 @@ end
 -- pw: forum password
 function onLogin(user, pw)
     local player = source
-    triggerClientEvent(player, "onLoginFail", player, false, true)
+    triggerClientEvent(player, "onLoginFail", player, true)
 
     -- if not accounts[player] then
     --     accounts[player] = SAccount:create(player)
@@ -65,7 +65,7 @@ end
 
 
 function onAutoLogin(forumID, player)
-    triggerClientEvent(player, "onLoginFail", player, false, true)
+    triggerClientEvent(player, "onLoginFail", player, true)
     -- if not forumID then
     --     return
     -- end
