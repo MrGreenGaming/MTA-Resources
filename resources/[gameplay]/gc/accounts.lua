@@ -48,8 +48,6 @@ end
 --
 ---------------------------------------------------------------------------
 function SAccount:login(username, pw, player, callback)
-    callback(false, player)
-    outputChatBox('[GC] GC Accounts are temporarily disabled!', player, 255, 0, 0)
     if not username or not pw then
         callback(false, player)
         return
@@ -115,9 +113,6 @@ end
 --
 ---------------------------------------------------------------------------
 function SAccount:loginViaForumID(givenForumID, player, callback)
-    callback(false, player)
-    outputChatBox('[GC] GC Accounts are temporarily disabled!', player, 255, 0, 0)
-
     if not givenForumID then
         callback(false, player)
         return
