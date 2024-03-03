@@ -2,7 +2,7 @@
 	<resource priority="1" restart="0">analytics</resource>
     <resource priority="1" restart="0">controller</resource>
 	<resource priority="1" restart="1">gc</resource>
-	<!-- <resource priority="1" restart="0">mrgreen-vip</resource> -->
+	<resource priority="1" restart="0">mrgreen-vip</resource>
 	<resource priority="1" restart="0">scoreboard</resource>
 	<resource priority="1" restart="0">mapmanager</resource>
 	<resource priority="1" restart="0">votemanager</resource>
@@ -12,10 +12,10 @@
 	<resource priority="1" restart="0">messages</resource>
 	<resource priority="1" restart="0">anti</resource>
 	<resource priority="1" restart="0">race</resource>
-	<!-- <resource priority="1" restart="1">gcshop</resource> -->
+	<resource priority="1" restart="1">gcshop</resource>
 	<resource priority="0" restart="0">maptools</resource>
 	<resource priority="1" restart="0">admin</resource>
-	<!-- <resource priority="1" restart="0">nickprotection</resource> -->
+	<resource priority="1" restart="0">nickprotection</resource>
 	<resource priority="1" restart="0">gus</resource>
 	<resource priority="0" restart="0">geoloc</resource>
 	<resource priority="0" restart="0">fps</resource>
@@ -33,14 +33,14 @@
 	<resource priority="0" restart="0">helpmenu</resource>
 	<resource priority="1" restart="0">mrgreen-sidebar</resource>
 	<resource priority="1" restart="0">mrgreen-settings</resource>
-	<!-- <resource priority="1" restart="0">mrgreen-stats</resource> -->
+	<resource priority="1" restart="0">mrgreen-stats</resource>
 	<resource priority="0" restart="0">irc</resource>
-	<!-- <resource priority="0" restart="0">achievements</resource> -->
+	<resource priority="0" restart="0">achievements</resource>
 	<resource priority="0" restart="0">discord</resource>
 	<resource priority="1" restart="0">chattags</resource>
 	<resource priority="0" restart="0">playerrecord</resource>
 	<resource priority="0" restart="0">hdwheels</resource>
-	<!-- <resource priority="0" restart="0">gctransfer</resource> -->
+	<resource priority="0" restart="0">gctransfer</resource>
     <resource priority="0" restart="0">eventmanager</resource>
     <resource priority="0" restart="1">race_ghost_assist</resource>
     <resource priority="0" restart="0">laps</resource>

@@ -46,43 +46,41 @@ end
 -- pw: forum password
 function onLogin(user, pw)
     local player = source
-    triggerClientEvent(player, "onLoginFail", player, true)
 
-    -- if not accounts[player] then
-    --     accounts[player] = SAccount:create(player)
-    --     accounts[player]:login(user, pw, player, function(result, player)
-    --         if result then
-    --             onLoginSuccessfull(player)
-    --         else
-    --             onLoginFailed(player, false)
-    --         end
-    --     end)
-    -- else
-    --     onLoginFailed(player, false)
-    -- end
+    if not accounts[player] then
+        accounts[player] = SAccount:create(player)
+        accounts[player]:login(user, pw, player, function(result, player)
+            if result then
+                onLoginSuccessfull(player)
+            else
+                onLoginFailed(player, false)
+            end
+        end)
+    else
+        onLoginFailed(player, false)
+    end
 end
 
 
 
 function onAutoLogin(forumID, player)
-    triggerClientEvent(player, "onLoginFail", player, true)
-    -- if not forumID then
-    --     return
-    -- end
+    if not forumID then
+        return
+    end
 
-    -- if not accounts[player] then
-    --     accounts[player] = SAccount:create(player)
-    --     accounts[player]:loginViaForumID(forumID, player, function(result, player)
-    --         removeElementData( player,'gc.autoLoginCache') -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
-    --         if result then
-    --             onLoginSuccessfull(player)
-    --         else
-    --             onLoginFailed(player, true)
-    --         end
-    --     end)
-    -- else
-    --     onLoginFailed(player, true)
-    -- end
+    if not accounts[player] then
+        accounts[player] = SAccount:create(player)
+        accounts[player]:loginViaForumID(forumID, player, function(result, player)
+            removeElementData( player,'gc.autoLoginCache') -- Account Switch Bug TempFix - https://github.com/MrGreenGaming/MTA-Resources/issues/488
+            if result then
+                onLoginSuccessfull(player)
+            else
+                onLoginFailed(player, true)
+            end
+        end)
+    else
+        onLoginFailed(player, true)
+    end
 end
 addEvent("onGCLogin") -- broadcast event
 addEvent("onLogin", true)
