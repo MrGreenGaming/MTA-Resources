@@ -1,7 +1,18 @@
 
 g_MapInfoList = {}
 
-
+-- Change gamemode order here
+modes = {
+	'nts',
+	'shooter',
+	'race',
+	'rtf',
+    'nts',
+    'shooter',
+    'race'
+}
+math.randomseed( getTickCount() % 50000 )
+currentmode = math.random(#modes)
 
 --
 -- racemidvote_server.lua
@@ -439,17 +450,6 @@ end
 function isMapTesting()
 	return getResourceInfo(exports.mapmanager:getRunningGamemodeMap(), 'newupload') == "true"
 end
-
--- Change gamemode order here
-
-modes = {
-	'nts',
-	'shooter',
-	'race',
-	'rtf',
-}
-math.randomseed( getTickCount() % 50000 )
-currentmode = math.random(#modes)
 
 function calculateNextmap()
 
