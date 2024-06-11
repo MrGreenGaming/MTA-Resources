@@ -534,6 +534,15 @@ hornsTable = {
 	[530] = "Lois I'm coming",
 	[531] = "Lambo",
 	[532] = "OOOOOAAAAAAAAAAAAAAA",
+    [533] = "BRAZIL",
+    [534] = "DAVAY",
+    [535] = "Real Badass",
+    [536] = "Glavstroy",
+    [537] = "Mirimiri",
+    [538] = "Mma",
+    [539] = "Alo Alo",
+    [540] = "Wait wait wait",
+    [541] = "Alo",
     
  
 }
