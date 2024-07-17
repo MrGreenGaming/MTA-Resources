@@ -33,7 +33,7 @@ end
 addEvent("onRaceStateChanging",true)
 addEventHandler("onRaceStateChanging", getRootElement(),
 function ( state )
-    if (state == "GridCountdown") and (currentGamemode == "Sprint" or currentGamemode == "Never the same") then
+    if (state == "GridCountdown") and (currentGamemode == "Sprint" or currentGamemode == "Never the same" or currentGamemode == "Reach the flag") then
         if not Spawnpoints or #Spawnpoints == 1 then return end
 
 	    for i,player in ipairs(getElementsByType("player")) do
