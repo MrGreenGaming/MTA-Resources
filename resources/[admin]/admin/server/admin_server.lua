@@ -963,7 +963,12 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			end
 
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(source) .. " muted " .. getPlayerName(player) .. " for " .. secondsToTimeDesc(duration) .." (" .. reason .. ")"})
+                if not isPlayerMuted ( player ) then
+
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " muted " .. getPlayerName(player) .. " for " .. secondsToTimeDesc(duration) .." (" .. reason .. ")"})
+                else
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " unmujted " .. getPlayerName(player)})
+                end
             end
 
 			mdata = reason~="" and ( "(" .. reason .. ")" ) or ""
