@@ -273,7 +273,7 @@ function logBlockAction(playerResponsible, playerBlocked,wording,hours)
     end
     local dateTime = getRealTime().monthday.."."..tostring(getRealTime().month+1).."."..tostring(getRealTime().year+1900).." - "..getRealTime().hour..":"..getRealTime().minute
     playerResponsible = getPlayerName(playerResponsible)
-    playerBlocked = "serial: "..playerBlocked
+    playerBlocked = "serial: "..playerBlocked .. "unknown"
     local hoursString = ""
     if hours then
     	hoursString = " ("..tostring(hours).."h)"

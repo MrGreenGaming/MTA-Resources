@@ -892,7 +892,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			mdata = reason~="" and ( "(" .. reason .. ")" ) or ""
 			setTimer ( kickPlayer, 100, 1, player, source, reason )
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(source) .. " kicked " .. getPlayerName(player) .. "(" .. reason .. ")"})
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " kicked " .. getPlayerName(player) .. " (" .. reason .. ")"})
             end
 		elseif ( action == "ban" ) then
 			if player == source then return false end
@@ -913,13 +913,13 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			if bUseSerial then
 				outputChatBox ( "You banned serial " .. getPlayerSerial( player ), source, 255, 100, 70 )
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned " .. getPlayerSerial(player) .. "(" .. reason .. ")"})
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned " .. getPlayerSerial(player) .. " (" .. reason .. ")"})
                 end
 				setTimer ( addBan, 100, 1, nil, nil, getPlayerSerial(player), source, reason, seconds )
 			else
 				outputChatBox ( "You banned IP " .. getPlayerIP( player ), source, 255, 100, 70 )
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned " .. getPlayerIP(player) .. "(" .. reason .. ")"})
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned " .. getPlayerIP(player) .. " (" .. reason .. ")"})
                 end
 				setTimer ( banPlayer, 100, 1, player, true, false, false, source, reason, seconds )
 			end
@@ -963,7 +963,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			end
 
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(source) .. " muted " .. getPlayerName(player) .. "for" .. secondsToTimeDesc(duration) .."(" .. reason .. ")"})
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " muted " .. getPlayerName(player) .. " for " .. secondsToTimeDesc(duration) .." (" .. reason .. ")"})
             end
 
 			mdata = reason~="" and ( "(" .. reason .. ")" ) or ""
