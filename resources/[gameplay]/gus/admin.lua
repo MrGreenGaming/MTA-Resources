@@ -102,6 +102,10 @@ function serialBan(player, commandName, ...)
 				outputChatBox("Current map's (if existent) needs to be deleted manually", player)]]
 				-- ^ TOO LAGGY.
 				addBan ( getPlayerIP(bannedPlayer), nil, getPlayerSerial(bannedPlayer), player, reason)
+
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(player) .. " banned " ..reason})
+                end
 			else
 				arg[1] = "(Nick: "..getPlayerName(bannedPlayer)..")"
 				local fullReason = table.concat(arg, " ")
@@ -110,6 +114,10 @@ function serialBan(player, commandName, ...)
 				outputChatBox("Current map's (if existent) needs to be deleted manually", player)]]
 				-- ^ TOO LAGGY.
 				addBan(getPlayerIP(bannedPlayer), nil, getPlayerSerial(bannedPlayer), player , fullReason )
+
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(player) .. " banned " ..fullReason})
+                end
 			end
 		else
 			outputChatBox('No player matches that nickname', player, 255, 0, 0)
@@ -184,6 +192,11 @@ function blowUp(player, commandName, ...)
 			if not isPedDead(blowPlayer) and car and not isElementFrozen(car) then
 				blowVehicle(car, false)
 				outputChatBox(remcol(getPlayerName(player)).." has killed "..remcol(getPlayerName(blowPlayer)).. ". Reason: "..table.concat(arg, " ", 2), root, 255, 0, 0)
+
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(player) .. " killed " .. remcol(getPlayerName(blowPlayer)) .. ". Reason: " .. table.concat(arg, " ", 2)})
+                end
+
 				if useIRC() then
                     exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has killed "..remcol(getPlayerName(blowPlayer)).. ". Reason: "..table.concat(arg, " ", 2))
                     logKillAction(player, blowPlayer, table.concat(arg, " ", 2))
@@ -232,6 +245,9 @@ function(player,cmd,...)
 			if not theBan then outputChatBox("An error has occured. Can't ban player.", player)
 			else outputChatBox("Successfully banned.", player)
 				 outputChatBox(remcol(banPlayerName).." has been banned by "..remcol(getPlayerName(player)),root, 255,0,0)
+                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(player) .. " banned " .. remcol(banPlayerName) .. " " .. reason})
+                end
 			end
 		else outputChatBox("No player match. Try again.", player)
 		end
@@ -255,6 +271,10 @@ function(player, cmd, ...)
 		if theInfo then
 			local theSerial = theInfo.serial
 			exports.admin:serialmute(player, "", theSerial, days)
+
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(player) .. " muted " .. mutePlayerName .. " (" .. theSerial .. ")" .. "for " .. days .. " days"})
+            end
 		else outputChatBox("No player match. Try again", player)
 		end
 	end)
@@ -274,6 +294,9 @@ function(player, cmd, ...)
 		if theInfo then
 			local theSerial = theInfo.serial
 			exports.admin:serialunmute(player, "", theSerial)
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(player) .. " unmuted " .. mutePlayerName .. " (" .. theSerial .. ")"})
+            end
 		else outputChatBox("No player match. Try again", player)
 		end
 	end)

@@ -50,8 +50,12 @@ function blocker(player, _, nick, duration, timeType)
 			if added then
 				setElementData(blockPlayer , 'markedblocker', t)
 
-
 				outputChatBox(remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
+
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(player) .. " marked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker for " ..duration .. " hours"})
+                end
+
 				logBlockAction(player, blockPlayer,"marked",duration)
 				if useIRC() then
 					exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
@@ -69,6 +73,9 @@ function blocker(player, _, nick, duration, timeType)
 
 			removeBlockerFromDB(getPlayerSerial(blockPlayer))
 			logBlockAction(player, blockPlayer,"unmarked")
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(player) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+            end
 			if useIRC() then
 				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
 			end
@@ -94,6 +101,9 @@ function unblocker(player, _, nick)
 			setElementData(blockPlayer , 'markedblocker', nil)
 			removeBlockerFromDB(serial)
 			logBlockAction(player, blockPlayer,"unmarked")
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(player) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+            end
 			if useIRC() then
 				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
 			end

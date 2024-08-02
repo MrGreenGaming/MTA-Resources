@@ -891,6 +891,9 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			local reason = data or ""
 			mdata = reason~="" and ( "(" .. reason .. ")" ) or ""
 			setTimer ( kickPlayer, 100, 1, player, source, reason )
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " kicked " .. getPlayerName(player) .. "(" .. reason .. ")"})
+            end
 		elseif ( action == "ban" ) then
 			if player == source then return false end
 			local reason = data or ""
@@ -909,9 +912,15 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			end
 			if bUseSerial then
 				outputChatBox ( "You banned serial " .. getPlayerSerial( player ), source, 255, 100, 70 )
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned " .. getPlayerSerial(player) .. "(" .. reason .. ")"})
+                end
 				setTimer ( addBan, 100, 1, nil, nil, getPlayerSerial(player), source, reason, seconds )
 			else
 				outputChatBox ( "You banned IP " .. getPlayerIP( player ), source, 255, 100, 70 )
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned " .. getPlayerIP(player) .. "(" .. reason .. ")"})
+                end
 				setTimer ( banPlayer, 100, 1, player, true, false, false, source, reason, seconds )
 			end
 			setTimer( triggerEvent, 1000, 1, "aSync", _root, "bansdirty" )
@@ -952,6 +961,10 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 					outputChatBox("As a moderator you can mute someone for up to 24 hours", source, 255, 0, 0, true)
 				end
 			end
+
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " muted " .. getPlayerName(player) .. "for" .. secondsToTimeDesc(duration) .."(" .. reason .. ")"})
+            end
 
 			mdata = reason~="" and ( "(" .. reason .. ")" ) or ""
 			more = duration and ( "(" .. secondsToTimeDesc(duration) .. ")" ) or ""
@@ -1130,6 +1143,10 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 				setElementVelocity ( vehicle, vx, vy, vz )
 			end
 			mdata = getVehicleName ( vehicle )
+
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " gave " .. getPlayerName(player) .. "vehicle " .. data})
+            end
 		elseif ( action == "giveweapon" ) then
 			if ( giveWeapon ( player, data, additional, true ) ) then
 				mdata = getWeaponNameFromID ( data )
@@ -1146,6 +1163,10 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 					local x, y, z = getElementVelocity ( getPedOccupiedVehicle(player) )
 					setElementVelocity ( getPedOccupiedVehicle(player), x , y, z + 0.2 )
 					mdata = data
+
+                    if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                        exports.discord:send("admin.log", { log = getPlayerName(source) .. " slapped " .. getPlayerName(player)})
+                    end
 				else
 					action = nil
 				end
@@ -1759,6 +1780,9 @@ function serialmute(pAdmin, _, serial, days)
 		addMuteToDB( serial, false, seconds, getAccountName( getPlayerAccount(pAdmin) ) )
 	end
 	local textMuted = "Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getAccountName( getPlayerAccount(pAdmin) )
+    if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+        exports.discord:send("admin.log", { log = "Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getAccountName( getPlayerAccount(pAdmin) )})
+    end
 	outputChatBox(textMuted, root, 255, 0, 0)
 	outputServerLog(textMuted)
 end
@@ -1782,6 +1806,9 @@ function serialunmute(pAdmin, _, serial)
 	removeMuteFromDB(serial)
 	outputChatBox("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x",""), root, 255, 100, 0)
 	outputServerLog("Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x",""))
+    if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+        exports.discord:send("admin.log", { log = "Serial: " ..serial.. " has been unmuted by " ..getPlayerName(pAdmin):gsub("#%x%x%x%x%x%x","")})
+    end
 end
 addCommandHandler('serialunmute', serialunmute)
 
