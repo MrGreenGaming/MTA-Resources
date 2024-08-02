@@ -68,6 +68,9 @@ function blocker(player, _, nick, duration, timeType)
 				outputChatBox("Only admins can unmark /blocker's marked by admins",player)
 				return false
 			end
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = remcol(getPlayerName(player)) .. " has unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+            end
 			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
 			setElementData(blockPlayer , 'markedblocker', nil)
 
