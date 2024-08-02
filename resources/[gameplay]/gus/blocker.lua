@@ -97,12 +97,12 @@ function unblocker(player, _, nick)
 		local serial = getPlayerSerial(blockPlayer)
 		if getElementData(blockPlayer,"markedblocker") then
 			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = remcol(getPlayerName(player)) .. " has unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+            end
 
 			setElementData(blockPlayer , 'markedblocker', nil)
 			removeBlockerFromDB(serial)
-            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(player) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
-            end
 			logBlockAction(player, blockPlayer,"unmarked")
 			if useIRC() then
 				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
