@@ -967,7 +967,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 
                     exports.discord:send("admin.log", { log = getPlayerName(source) .. " muted " .. getPlayerName(player) .. " for " .. secondsToTimeDesc(duration) .." (" .. reason .. ")"})
                 else
-                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " unmujted " .. getPlayerName(player)})
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " unmuted " .. getPlayerName(player)})
                 end
             end
 
