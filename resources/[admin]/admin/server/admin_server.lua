@@ -1150,7 +1150,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			mdata = getVehicleName ( vehicle )
 
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(source) .. " gave " .. getPlayerName(player) .. "vehicle " .. data})
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " gave " .. getPlayerName(player) .. " vehicle " .. getVehicleNameFromModel(data)})
             end
 		elseif ( action == "giveweapon" ) then
 			if ( giveWeapon ( player, data, additional, true ) ) then
