@@ -919,7 +919,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			else
 				outputChatBox ( "You banned IP " .. getPlayerIP( player ), source, 255, 100, 70 )
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned " .. getPlayerIP(player) .. " (" .. reason .. ")"})
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned IP of" .. getPlayerNAme(player) .. " (" .. reason .. ")"})
                 end
 				setTimer ( banPlayer, 100, 1, player, true, false, false, source, reason, seconds )
 			end
@@ -1508,12 +1508,18 @@ addEventHandler ( "aBans", _root, function ( action, data )
 		local more = ""
 		if ( action == "banip" ) then
 			mdata = data
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned IP REDACTED"})
+            end
 			if ( not addBan ( data,nil,nil,source ) ) then
 				action = nil
 			end
 		elseif ( action == "banserial" ) then
 			mdata = data
 			if ( isValidSerial ( data ) ) then
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned serial " .. string.upper(data)})
+                end
 				if ( not addBan ( nil,nil, string.upper ( data ),source ) ) then
 					action = nil
 				end
@@ -1524,6 +1530,9 @@ addEventHandler ( "aBans", _root, function ( action, data )
 		elseif ( action == "unbanip" ) then
 			mdata = data
 			action = nil
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " unbanned IP REDACTED"})
+            end
 			for i,ban in ipairs(getBans ()) do
 				if getBanIP(ban) == data then
 					action = removeBan ( ban, source )
@@ -1532,6 +1541,9 @@ addEventHandler ( "aBans", _root, function ( action, data )
 		elseif ( action == "unbanserial" ) then
 			mdata = data
 			action = nil
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " unbanned serial " .. string.upper(data)})
+            end
 			for i,ban in ipairs(getBans ()) do
 				if getBanSerial(ban) == string.upper(data) then
 					action = removeBan ( ban, source )
