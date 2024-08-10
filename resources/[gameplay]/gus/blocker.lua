@@ -53,7 +53,7 @@ function blocker(player, _, nick, duration, timeType)
 				outputChatBox(remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
 
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = remcol(getPlayerName(player)) .. " marked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker for " ..duration .. " hours"})
+                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " marked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker for " ..duration .. " hours"})
                 end
 
 				logBlockAction(player, blockPlayer,"marked",duration)
@@ -69,7 +69,7 @@ function blocker(player, _, nick, duration, timeType)
 				return false
 			end
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = remcol(getPlayerName(player)) .. " has unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
             end
 			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
 			setElementData(blockPlayer , 'markedblocker', nil)
@@ -77,7 +77,7 @@ function blocker(player, _, nick, duration, timeType)
 			removeBlockerFromDB(getPlayerSerial(blockPlayer))
 			logBlockAction(player, blockPlayer,"unmarked")
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = remcol(getPlayerName(player)) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
             end
 			if useIRC() then
 				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
@@ -101,7 +101,7 @@ function unblocker(player, _, nick)
 		if getElementData(blockPlayer,"markedblocker") then
 			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = remcol(getPlayerName(player)) .. " has unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " has unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
             end
 
 			setElementData(blockPlayer , 'markedblocker', nil)
