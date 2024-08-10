@@ -104,7 +104,7 @@ function serialBan(player, commandName, ...)
 				addBan ( getPlayerIP(bannedPlayer), nil, getPlayerSerial(bannedPlayer), player, reason)
 
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " banned " ..reason})
+                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " banned " .. remcol(getPlayerName(bannedPlayer)) ..". Reason: " ..reason})
                 end
 			else
 				arg[1] = "(Nick: "..getPlayerName(bannedPlayer)..")"
@@ -116,7 +116,7 @@ function serialBan(player, commandName, ...)
 				addBan(getPlayerIP(bannedPlayer), nil, getPlayerSerial(bannedPlayer), player , fullReason )
 
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " banned " ..fullReason})
+                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " banned " .. remcol(getPlayerName(bannedPlayer)) ..fullReason})
                 end
 			end
 		else

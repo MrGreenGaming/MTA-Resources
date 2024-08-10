@@ -919,7 +919,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			else
 				outputChatBox ( "You banned IP " .. getPlayerIP( player ), source, 255, 100, 70 )
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(source)) .. " banned IP of" .. getPlayerNAme(player) .. " (" .. reason .. ")"})
+                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(source)) .. " banned IP of " .. remcol(getPlayerName(player)) .. " (" .. reason .. ")"})
                 end
 				setTimer ( banPlayer, 100, 1, player, true, false, false, source, reason, seconds )
 			end
@@ -967,7 +967,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 
                     exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(source)) .. " muted " .. remcol(getPlayerName(player)) .. " for " .. secondsToTimeDesc(duration) .." (" .. reason .. ")"})
                 else
-                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(source)) .. " unmuted " .. getPlayerName(player)})
+                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(source)) .. " unmuted " .. remcol(getPlayerName(player))})
                 end
             end
 
@@ -1150,7 +1150,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			mdata = getVehicleName ( vehicle )
 
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(source)) .. " gave " .. remcol(getPlayerName(player)) .. " vehicle " .. getVehicleNameFromModel(data)})
+                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(source)) .. " gave " .. remcol(getPlayerName(player)) .. " a '" .. getVehicleNameFromModel(data) .. "'"})
             end
 		elseif ( action == "giveweapon" ) then
 			if ( giveWeapon ( player, data, additional, true ) ) then
