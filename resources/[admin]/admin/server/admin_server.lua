@@ -892,7 +892,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			mdata = reason~="" and ( "(" .. reason .. ")" ) or ""
 			setTimer ( kickPlayer, 100, 1, player, source, reason )
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(source) .. " kicked " .. getPlayerName(player) .. " (" .. reason .. ")"})
+                exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " kicked " .. remcol(getPlayerName(player)) .. " (" .. reason .. ")"})
             end
 		elseif ( action == "ban" ) then
 			if player == source then return false end
@@ -913,13 +913,13 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			if bUseSerial then
 				outputChatBox ( "You banned serial " .. getPlayerSerial( player ), source, 255, 100, 70 )
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned " .. getPlayerSerial(player) .. " (" .. reason .. ")"})
+                    exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " banned " .. getPlayerSerial(player) .. " (" .. reason .. ")"})
                 end
 				setTimer ( addBan, 100, 1, nil, nil, getPlayerSerial(player), source, reason, seconds )
 			else
 				outputChatBox ( "You banned IP " .. getPlayerIP( player ), source, 255, 100, 70 )
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned IP of" .. getPlayerNAme(player) .. " (" .. reason .. ")"})
+                    exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " banned IP of" .. getPlayerNAme(player) .. " (" .. reason .. ")"})
                 end
 				setTimer ( banPlayer, 100, 1, player, true, false, false, source, reason, seconds )
 			end
@@ -965,9 +965,9 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
                 if not isPlayerMuted ( player ) then
 
-                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " muted " .. getPlayerName(player) .. " for " .. secondsToTimeDesc(duration) .." (" .. reason .. ")"})
+                    exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " muted " .. remcol(getPlayerName(player)) .. " for " .. secondsToTimeDesc(duration) .." (" .. reason .. ")"})
                 else
-                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " unmuted " .. getPlayerName(player)})
+                    exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " unmuted " .. getPlayerName(player)})
                 end
             end
 
@@ -1150,7 +1150,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			mdata = getVehicleName ( vehicle )
 
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(source) .. " gave " .. getPlayerName(player) .. " vehicle " .. getVehicleNameFromModel(data)})
+                exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " gave " .. remcol(getPlayerName(player)) .. " vehicle " .. getVehicleNameFromModel(data)})
             end
 		elseif ( action == "giveweapon" ) then
 			if ( giveWeapon ( player, data, additional, true ) ) then
@@ -1170,7 +1170,7 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 					mdata = data
 
                     if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                        exports.discord:send("admin.log", { log = getPlayerName(source) .. " slapped " .. getPlayerName(player)})
+                        exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " slapped " .. remcol(getPlayerName(player))})
                     end
 				else
 					action = nil
@@ -1509,7 +1509,7 @@ addEventHandler ( "aBans", _root, function ( action, data )
 		if ( action == "banip" ) then
 			mdata = data
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned IP REDACTED"})
+                exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " banned an IP"})
             end
 			if ( not addBan ( data,nil,nil,source ) ) then
 				action = nil
@@ -1518,7 +1518,7 @@ addEventHandler ( "aBans", _root, function ( action, data )
 			mdata = data
 			if ( isValidSerial ( data ) ) then
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " banned serial " .. string.upper(data)})
+                    exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " banned serial " .. string.upper(data)})
                 end
 				if ( not addBan ( nil,nil, string.upper ( data ),source ) ) then
 					action = nil
@@ -1531,7 +1531,7 @@ addEventHandler ( "aBans", _root, function ( action, data )
 			mdata = data
 			action = nil
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(source) .. " unbanned IP REDACTED"})
+                exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " unbanned an IP"})
             end
 			for i,ban in ipairs(getBans ()) do
 				if getBanIP(ban) == data then
@@ -1542,7 +1542,7 @@ addEventHandler ( "aBans", _root, function ( action, data )
 			mdata = data
 			action = nil
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getPlayerName(source) .. " unbanned serial " .. string.upper(data)})
+                exports.discord:send("admin.log", { log = remcol(getPlayerName(source)) .. " unbanned serial " .. string.upper(data)})
             end
 			for i,ban in ipairs(getBans ()) do
 				if getBanSerial(ban) == string.upper(data) then
@@ -1796,7 +1796,7 @@ function serialmute(pAdmin, _, serial, days)
 	else -- if player not online -> just add mute to DB
 		addMuteToDB( serial, false, seconds, getAccountName( getPlayerAccount(pAdmin) ) )
 	end
-	local textMuted = "Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getAccountName( getPlayerAccount(pAdmin) )
+	local textMuted = "Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getAccountName( getPlayerAccount(pAdmin))
     if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
         exports.discord:send("admin.log", { log = "Serial: " ..serial.. " has been muted for " .. days .. " days by " ..getAccountName( getPlayerAccount(pAdmin) )})
     end
@@ -1887,4 +1887,8 @@ function getPlayerFromPartialName(name)
             end
         end
     end
+end
+
+function remcol(str)
+	return string.gsub (str, '#%x%x%x%x%x%x', '' )
 end
