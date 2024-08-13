@@ -19,6 +19,7 @@
     <file src="icons/user.png" />
     <file src="icons/repeat.png" />
     <file src="icons/arrow-right.png" />
+    <file src="icons/tags.png" />
     <file src="icons/upload.png" />
 	<min_mta_version client="1.5.7"/>
 

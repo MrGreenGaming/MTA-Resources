@@ -23,12 +23,13 @@ function createNextmapWindow(tabPanel)
     tab.maps = guiCreateTab ( "All Maps", tab_panel)
     tab.qmaps = guiCreateTab ( "Queued Maps", tab_panel)
     tab.MapListSearch = guiCreateEdit ( 0.03, 0.225, 0.31, 0.05, "", true, tab.maps )
-    guiCreateStaticImage ( 0.34, 0.225, 0.035, 0.05, "nextmap/search.png", true, tab.maps )
+    guiCreateStaticImage ( 0.34, 0.225, 0.035, 0.05, "maps/search.png", true, tab.maps )
     tab.MapList = guiCreateGridList ( 0.03, 0.30, 0.94, 0.55, true, tab.maps )
     guiGridListSetSortingEnabled(tab.MapList, false)
-					  guiGridListAddColumn( tab.MapList, "Map Name", 0.45)
-					  guiGridListAddColumn( tab.MapList, "Author", 0.4)
-					  guiGridListAddColumn( tab.MapList, "Price", 0.2)
+					  guiGridListAddColumn( tab.MapList, "Map Name", 0.4)
+					  guiGridListAddColumn( tab.MapList, "Author", 0.3)
+                      guiGridListAddColumn( tab.MapList, "Tags", 0.2)
+					  guiGridListAddColumn( tab.MapList, "Price", 0.1)
 					  guiGridListAddColumn( tab.MapList, "Resource Name", 1)
 					  guiGridListAddColumn( tab.MapList, "Gamemode", 0.5)
 
@@ -82,6 +83,7 @@ function loadMaps(gamemodeMapTable, queuedList)
 				guiGridListSetItemText ( tab.MapList, row, 3, gamemode.resname, true, false )
 				guiGridListSetItemText ( tab.MapList, row, 4, gamemode.resname, true, false )
 				guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, true, false )
+                guiGridListSetItemText ( tab.MapList, row, 6, gamemode.resname, true, false )
 			else
 				for id,map in ipairs (gamemode.maps) do
 					local row = guiGridListAddRow ( tab.MapList )
@@ -90,11 +92,12 @@ function loadMaps(gamemodeMapTable, queuedList)
 					end
 
 					guiGridListSetItemText ( tab.MapList, row, 1, map.name, false, false )
+          guiGridListSetItemText ( tab.MapList, row, 3, map.tags, false, false )
 
-					guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
+					guiGridListSetItemText ( tab.MapList, row, 4, getGamemodePrice(gamemode.name), false, false )
 
-					guiGridListSetItemText ( tab.MapList, row, 4, map.resname, false, false )
-					guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 5, map.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 6, gamemode.resname, false, false )
 
 				end
 			end
@@ -142,8 +145,8 @@ function guiClickBuy(button)
             return
         end
         local mapName = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 1 )
-        local mapResName = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 4 )
-        local gamemode = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 5 )
+        local mapResName = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 5 )
+        local gamemode = guiGridListGetItemText ( tab.MapList, guiGridListGetSelectedItem( tab.MapList ), 6 )
         triggerServerEvent("sendPlayerNextmapChoice", getLocalPlayer(), { mapName, mapResName, gamemode, getPlayerName(localPlayer) })
     end
 end
@@ -168,9 +171,10 @@ function guiChanged()
 				if map.author then
 					guiGridListSetItemText ( tab.MapList, row, 2, map.author, false, false )
 				end
-				guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
-				guiGridListSetItemText ( tab.MapList, row, 4, gamemode.resname, false, false )
+                guiGridListSetItemText ( tab.MapList, row, 3, map.tags, false, false )
+				guiGridListSetItemText ( tab.MapList, row, 4, getGamemodePrice(gamemode.name), false, false )
 				guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
+				guiGridListSetItemText ( tab.MapList, row, 6, gamemode.resname, false, false )
 			else
 				for id,map in ipairs (gamemode.maps) do
 					local row = guiGridListAddRow ( tab.MapList )
@@ -178,9 +182,10 @@ function guiChanged()
 					if map.author then
 						guiGridListSetItemText ( tab.MapList, row, 2, map.author, false, false )
 					end
-					guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
-					guiGridListSetItemText ( tab.MapList, row, 4, map.resname, false, false )
-					guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
+                    guiGridListSetItemText ( tab.MapList, row, 3, map.tags, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 4, getGamemodePrice(gamemode.name), false, false )
+					guiGridListSetItemText ( tab.MapList, row, 5, map.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 6, gamemode.resname, false, false )
 				end
 			end
 		end
@@ -196,17 +201,18 @@ function guiChanged()
 					if map.author then
 						guiGridListSetItemText ( tab.MapList, row, 2, map.author, false, false )
 					end
-					guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
-					guiGridListSetItemText ( tab.MapList, row, 4, gamemode.resname, false, false )
+                    guiGridListSetItemText ( tab.MapList, row, 3, map.tags, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 4, getGamemodePrice(gamemode.name), false, false )
 					guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
+					guiGridListSetItemText ( tab.MapList, row, 6, gamemode.resname, false, false )
 					noMaps = false
 				end
 			else
 				for id,map in ipairs (gamemode.maps) do
 					if not map.author then
-						compareTo = string.lower(map.name.." "..map.resname)
+						compareTo = string.lower(map.name.." "..map.resname .. " " .. map.tags)
 					else
-						compareTo = string.lower(map.name.." "..map.resname.." "..map.author)
+						compareTo = string.lower(map.name.." "..map.resname.." "..map.author .. " " .. map.tags)
 					end
 					if string.find(compareTo, text, 1, true) then
 						local row = guiGridListAddRow ( tab.MapList )
@@ -214,9 +220,10 @@ function guiChanged()
 						if map.author then
 							guiGridListSetItemText ( tab.MapList, row, 2, map.author, false, false )
 						end
-						guiGridListSetItemText ( tab.MapList, row, 3, getGamemodePrice(gamemode.name), false, false )
-						guiGridListSetItemText ( tab.MapList, row, 4, map.resname, false, false )
-						guiGridListSetItemText ( tab.MapList, row, 5, gamemode.resname, false, false )
+                        guiGridListSetItemText ( tab.MapList, row, 3, map.tags, false, false )
+						guiGridListSetItemText ( tab.MapList, row, 4, getGamemodePrice(gamemode.name), false, false )
+						guiGridListSetItemText ( tab.MapList, row, 5, map.resname, false, false )
+						guiGridListSetItemText ( tab.MapList, row, 6, gamemode.resname, false, false )
 						noMaps = false
 					end
 				end

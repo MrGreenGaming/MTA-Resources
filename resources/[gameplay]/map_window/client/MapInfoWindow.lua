@@ -274,6 +274,11 @@ function MapInfoWindow.render()
     dxDrawRectangle(x + dims.nextmap.bgX, y + dims.nextmap.bgY, dims.nextmap.bgWidth, dims.nextmap.bgHeight, tocolor(0,0,0,100 * alphaFade))
     dxDrawLine(x + dims.nextmap.bgX, y + dims.nextmap.bgY, x + dims.nextmap.bgX + dims.window.width, y + dims.nextmap.bgY, tocolor(255, 255, 255, 100 * alphaFade), 1)
 
+    if MapData.currentMapInfo.tags then
+        dxDrawImage(x + dims.nextmap.iconX, y + dims.nextmap.iconY, dims.icons.width, dims.icons.height, "/icons/tags.png", 0, 0, 0, nextmapColor)
+        dxDrawText(MapData.currentMapInfo.tags, x + dims.nextmap.startX, y + dims.nextmap.startY, x + dims.nextmap.endX, y + dims.nextmap.endY, nextmapColor, dims.nextmap.fontSize, "default", "left", "center", true, false, false)
+    end
+
     -- -- Next map name
     -- dxDrawImage(x + dims.nextmap.iconX, y + dims.nextmap.iconY, dims.icons.width, dims.icons.height, "/icons/arrow-right.png", 0, 0, 0, nextmapColor)
     -- dxDrawText(MapData.nextMapRatings.name, x + dims.nextmap.startX, y + dims.nextmap.startY, x + dims.nextmap.endX, y + dims.nextmap.endY, nextmapColor, dims.nextmap.fontSize, "default", "left", "center", true, false, false)

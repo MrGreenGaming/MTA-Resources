@@ -192,3 +192,31 @@ function msToTime(ms)
 	end
 	return minutes, seconds, centiseconds
 end
+
+function upsertTagsToMap(playerSource, _, ...)
+    if not ... then 
+        return outputChatBox("Incorrect usage, use '/maptag tag1 tag2 tag3' to set the tags", playerSource, 255, 0, 0)
+    end
+    
+    local tags = table.concat({...}, ", ")
+
+    -- Load the meta.xml file
+    local metaXml = xmlLoadFile(":" .. currentMapRes .. "/meta.xml")
+    if metaXml then
+        -- Find the info node
+        local infoNode = xmlFindChild(metaXml, "info", 0)
+        -- Set or update the 'tags' attribute
+        xmlNodeSetAttribute(infoNode, "tags", tags)
+
+        -- Save the updated meta.xml
+        xmlSaveFile(metaXml)
+        xmlUnloadFile(metaXml)
+
+        outputChatBox("Tags '".. tags .. "' saved to " .. currentMapRes, playerSource, 0, 255, 0)
+        outputChatBox("Tags will start showing on 'server restart' or 'map replay' due to technical limitations.", playerSource, 255, 100, 0)
+    else
+        outputChatBox("Error: Unable to load meta.xml.", playerSource, 255, 0, 0)
+    end
+end
+addCommandHandler("maptag", upsertTagsToMap, true, false)
+addCommandHandler("maptags", upsertTagsToMap, true, false)

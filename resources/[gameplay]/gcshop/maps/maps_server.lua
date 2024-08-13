@@ -70,7 +70,12 @@ function getServerMaps ()
 				tableOut[name].maps = {}
 			end
 
-            table.insert(tableOut[name]["maps"] ,{name = getResourceInfo(map, "name") or getResourceName(map), resname = getResourceName(map), author = getResourceInfo ( map, "author" )})
+            table.insert(tableOut[name]["maps"] ,{
+                name = getResourceInfo(map, "name") or getResourceName(map),
+                resname = getResourceName(map),
+                author = getResourceInfo ( map, "author" ),
+                tags = getResourceInfo(map, "tags") or ""
+            })
         end
 
 		for name, mode in pairs(tableOut) do
@@ -532,14 +537,19 @@ function mapstop100_insert(p, maps100)
         local maps = call(getResourceFromName("mapmanager"), "getMapsCompatibleWithGamemode" , gamemode)
         for _,map in ipairs (maps) do
 			local name = getResourceInfo(map, "racemode") or "race"
-			if (not tableOut[name]) then
-				tableOut[name] = {}
-				tableOut[name].name = name
-				tableOut[name].resname = getResourceName(gamemode)
-				tableOut[name].maps = {}
-			end
+            if (not tableOut[name]) then
+                tableOut[name] = {}
+                tableOut[name].name = name
+                tableOut[name].resname = getResourceName(gamemode)
+                tableOut[name].maps = {}
+            end
 
-            table.insert(tableOut[name]["maps"] ,{name = getResourceInfo(map, "name") or getResourceName(map), resname = getResourceName(map), author = getResourceInfo ( map, "author" )})
+            table.insert(tableOut[name]["maps"] ,{
+                name = getResourceInfo(map, "name") or getResourceName(map),
+                resname = getResourceName(map),
+                author = getResourceInfo ( map, "author" ),
+                tags = getResourceInfo(map, "tags") or ""
+            })
         end
 
 		for name, mode in pairs(tableOut) do

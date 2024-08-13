@@ -11,7 +11,8 @@ function Broadcaster.broadcastCurrentMapInfo(map)
         author = getResourceInfo(mapRes, "author") or "",
         description = getResourceInfo(mapRes, "description") or "",
         lastTimePlayed = false,
-        uploadDate = getResourceInfo(mapRes, "uploadtick") or false
+        uploadDate = getResourceInfo(mapRes, "uploadtick") or false,
+        tags = getResourceInfo(mapRes, "tags") or false
     }
 
     -- This should be async!!!

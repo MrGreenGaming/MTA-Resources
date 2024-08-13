@@ -22,6 +22,7 @@ MapData.currentMapInfo = {
     description = "",
     lastTimePlayed = false,
     uploadDate = false,
+    tags = false,
 }
 
 MapData.mapRoundsInfo = {
