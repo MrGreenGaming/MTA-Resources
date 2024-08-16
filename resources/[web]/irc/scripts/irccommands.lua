@@ -73,7 +73,7 @@ local function ircGetUserLevel (...)
 		for _, role in pairs(discordRoles) do
 			if role == "Admins" then
 				return 3
-			elseif role == "Managers" or role == "Top" then
+			elseif role == "MTA Managers" or role == "Top" then
 				return 6
 			end
 		end
