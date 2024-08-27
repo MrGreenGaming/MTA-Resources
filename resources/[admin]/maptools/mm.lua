@@ -540,7 +540,7 @@ function restoreMap(map)
         local theRes = getResourceFromName(map.resname)
         if not theRes then outputChatBox("Error: map can not be restored (can't find map resource)",client,255,0,0) return end
 
-        -- local properName = string.gsub(map.resname,"_deleted","")
+        local properName = string.gsub(map.resname,"_deleted","")
 
         -- local raceMode = getResourceInfo(theRes,"racemode")
         -- if not raceMode then raceMode = "[maps]/[dd]" else raceMode = "[maps]/["..raceMode.."]" end
@@ -564,7 +564,7 @@ function restoreMap(map)
 			local toptimesDeleteQuery  = "DELETE FROM toptimes_deleted WHERE mapname = ? AND delete_reason = ?"
 
 			dbExec ( handlerConnect, toptimesQuery, map.resname, "Map Deletion")
-			dbExec ( handlerConnect, toptimesDeleteQuery, map.resname, "Map Deletion")
+			dbExec ( handlerConnect, toptimesDeleteQuery, properName, "Map Deletion")
 			dbExec ( handlerConnect, query,getResourceInfo(theRes, "name") or map.resname,getResourceInfo(theRes,"author") or "N/A",tostring(getAccountName(getPlayerAccount(client))),map.resname)
 		end
 
