@@ -7,9 +7,4 @@
 
 	<export function="newMap" http="true" />
 	<export function="informNewMap" http="true" />
-
-    <aclrequest>
-		<right name="function.deleteResource" access="true" />
-	</aclrequest>
-
 </meta>

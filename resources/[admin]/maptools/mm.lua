@@ -114,7 +114,11 @@ function handlemap(p, c, resname, ...)
 		-- local newRes = copyResource(res, resname, uploadedfolder)
 		setResourceInfo(res, "newupload", "false")
     elseif c == "declinemap" then
-        deleteResource(mapname)
+        setResourceInfo(res,"gamemodes","race_deleted")
+        setResourceInfo(res,"deleted","true")
+        setResourceInfo(res, "newupload", "false")
+        setResourceInfo(res,"deleteReason","MAP DECLINED DURING TESTING: "..g_Reason)
+        setResourceInfo(res,"deletedBy",g_AccName)
 	end
 	local query = "INSERT INTO uploaded_maps (mapname, resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?,?)"
 	local theExec = dbExec ( handlerConnect, query, mapname, resname, mta_name, comment, manager, status)
