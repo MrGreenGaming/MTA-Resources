@@ -117,7 +117,7 @@ function handlemap(p, c, resname, ...)
         setResourceInfo(res,"gamemodes","race_deleted")
         setResourceInfo(res,"deleted","true")
         setResourceInfo(res, "newupload", "false")
-        setResourceInfo(res,"deleteReason","MAP DECLINED DURING TESTING: "..g_Reason)
+        setResourceInfo(res,"deleteReason","MAP DECLINED DURING TESTING: "..comment)
         setResourceInfo(res,"deletedBy",g_AccName)
 	end
 	local query = "INSERT INTO uploaded_maps (mapname, resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?,?)"
