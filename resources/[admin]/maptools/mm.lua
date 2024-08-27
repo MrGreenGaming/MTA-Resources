@@ -107,13 +107,15 @@ function handlemap(p, c, resname, ...)
 	end
 
 	if c == "acceptmap" then
-		if getResourceFromName(resname) then
-			deleteResource(getResourceFromName(resname))
-		end
-		local newRes = copyResource(res, resname, uploadedfolder)
-		setResourceInfo(newRes, "newupload", "false")
+        --! Due to architectural change of server it is no longer possible to rename folders/resources
+		-- if getResourceFromName(resname) then
+		-- 	deleteResource(getResourceFromName(resname))
+		-- end
+		-- local newRes = copyResource(res, resname, uploadedfolder)
+		setResourceInfo(res, "newupload", "false")
+    elseif c == "declinemap" then
+        deleteResource(mapname)
 	end
-	deleteResource(mapname)
 	local query = "INSERT INTO uploaded_maps (resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?)"
 	local theExec = dbExec ( handlerConnect, query, resname, mta_name, comment, manager, status)
 
@@ -210,23 +212,23 @@ function onNewMapStart()
     local authorForumId = getResourceInfo( theRes, 'forumid' )
 
     -- Check if copied deleted resource exists, if so then delete first.
-    if getResourceFromName( resname.."_deleted" ) then
-    	deleteResource( resname.."_deleted" )
-    end
+    -- if getResourceFromName( resname.."_deleted" ) then
+    -- 	deleteResource( resname.."_deleted" )
+    -- end
 
-    copyResource(map,resname.."_deleted",deletedMapsPath)
+    -- copyResource(map,resname.."_deleted",deletedMapsPath)
 
-    local delete = deleteResource(resname)
-    if not delete then
-        if isElement(g_P) then outputChatBox("Error: Map cannot be deleted.", g_P) end
-        canUseCommand = true
-        g_Map = nil
-        g_P = nil
-        g_Reason = nil
-		g_AccName = nil
-        removeEventHandler('onMapStarting', root, onNewMapStart)
-        return
-    end
+    -- local delete = deleteResource(resname)
+    -- if not delete then
+    --     if isElement(g_P) then outputChatBox("Error: Map cannot be deleted.", g_P) end
+    --     canUseCommand = true
+    --     g_Map = nil
+    --     g_P = nil
+    --     g_Reason = nil
+	-- 	g_AccName = nil
+    --     removeEventHandler('onMapStarting', root, onNewMapStart)
+    --     return
+    -- end
     if isElement(g_P) then
         outputChatBox("Map deleted: "..name, g_P)
     end
@@ -534,24 +536,24 @@ function restoreMap(map)
         local theRes = getResourceFromName(map.resname)
         if not theRes then outputChatBox("Error: map can not be restored (can't find map resource)",client,255,0,0) return end
 
-        local properName = string.gsub(map.resname,"_deleted","")
+        -- local properName = string.gsub(map.resname,"_deleted","")
 
-        local raceMode = getResourceInfo(theRes,"racemode")
-        if not raceMode then raceMode = "[maps]/[dd]" else raceMode = "[maps]/["..raceMode.."]" end
+        -- local raceMode = getResourceInfo(theRes,"racemode")
+        -- if not raceMode then raceMode = "[maps]/[dd]" else raceMode = "[maps]/["..raceMode.."]" end
 
-        local theCopy
-        local sn = string.lower(getServerName())
-        if string.find(sn,"mix") then -- looks if mix or race server
-            theCopy = copyResource(theRes,properName,raceMode)
-        else
-            theCopy = copyResource(theRes,properName,"[maps]")
-        end
+        -- local theCopy
+        -- local sn = string.lower(getServerName())
+        -- if string.find(sn,"mix") then -- looks if mix or race server
+        --     theCopy = copyResource(theRes,properName,raceMode)
+        -- else
+        --     theCopy = copyResource(theRes,properName,"[maps]")
+        -- end
 
-        if not theCopy then outputChatBox("Can't copy map, resource may already exist",client,255,0,0) return end
-        deleteResource(theRes)
+        -- if not theCopy then outputChatBox("Can't copy map, resource may already exist",client,255,0,0) return end
+        -- deleteResource(theRes)
 
-        setResourceInfo(theCopy,"gamemodes","race")
-        setResourceInfo(theCopy,"deleted","false")
+        setResourceInfo(theRes,"gamemodes","race")
+        setResourceInfo(theRes,"deleted","false")
 		if handlerConnect then -- if there is db connection, else save in local db file
 			local query = "INSERT INTO uploaded_maps (mapname, uploadername, manager, resname, status) VALUES (?,?,?,?,'Restored')"
 			local toptimesQuery = "INSERT IGNORE INTO toptimes (`forumid`, `mapname`, `pos`, `value`, `date`, `racemode`) SELECT a.forumid, a.mapname, a.pos, a.value, a.date, a.racemode FROM toptimes_deleted a WHERE a.mapname = ? AND a.delete_reason = ?"
@@ -559,14 +561,14 @@ function restoreMap(map)
 
 			dbExec ( handlerConnect, toptimesQuery, properName, "Map Deletion")
 			dbExec ( handlerConnect, toptimesDeleteQuery, properName, "Map Deletion")
-			dbExec ( handlerConnect, query,getResourceInfo(theCopy, "name") or properName,getResourceInfo(theCopy,"author") or "N/A",tostring(getAccountName(getPlayerAccount(client))),properName)
+			dbExec ( handlerConnect, query,getResourceInfo(theRes, "name") or properName,getResourceInfo(theRes,"author") or "N/A",tostring(getAccountName(getPlayerAccount(client))),properName)
 		end
 
-		if getResourceInfo(theCopy, 'forumid') then
-			notifyMapAction(getResourceInfo(theCopy, "name"), '', getAccountName(getPlayerAccount(client)), map.resname, 'restored', getResourceInfo(theCopy, 'forumid'))
+		if getResourceInfo(theRes, 'forumid') then
+			notifyMapAction(getResourceInfo(theRes, "name"), '', getAccountName(getPlayerAccount(client)), map.resname, 'restored', getResourceInfo(theRes, 'forumid'))
 		end
 
-        outputChatBox("Map '".. getResourceName(theCopy) .."' restored!",client)
+        outputChatBox("Map '".. getResourceName(theRes) .."' restored!",client)
         refreshResources()
         fetchMaps(client)
     end
