@@ -103,7 +103,7 @@ function handlemap(p, c, resname, ...)
 	local status = (c == "acceptmap" and "Accepted" or "Declined")
 
 	if res and getResourceInfo(res, 'forumid') then
-		notifyMapAction(getResourceInfo(res, "name"), '', manager, resname, string.lower(status), getResourceInfo(res, 'forumid'))
+		notifyMapAction(getResourceInfo(res, "name"), comment, manager, resname, string.lower(status), getResourceInfo(res, 'forumid'))
 	end
 
 	if c == "acceptmap" then
@@ -116,8 +116,8 @@ function handlemap(p, c, resname, ...)
     elseif c == "declinemap" then
         deleteResource(mapname)
 	end
-	local query = "INSERT INTO uploaded_maps (resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?)"
-	local theExec = dbExec ( handlerConnect, query, resname, mta_name, comment, manager, status)
+	local query = "INSERT INTO uploaded_maps (mapname, resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?)"
+	local theExec = dbExec ( handlerConnect, query, mapname, resname, mta_name, comment, manager, status)
 
 	outputChatBox(c..': done ' .. resname, p)
 	fetchMaps(p)
