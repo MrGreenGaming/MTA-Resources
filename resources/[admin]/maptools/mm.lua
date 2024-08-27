@@ -209,7 +209,7 @@ function onNewMapStart()
     setResourceInfo(map,"deleteReason",g_Reason)
     setResourceInfo(map,"deletedBy",g_AccName)
     setResourceInfo(map,"deleteTimeStamp",tostring(getRealTime().timestamp))
-    local authorForumId = getResourceInfo( theRes, 'forumid' )
+    local authorForumId = getResourceInfo( map, 'forumid' )
 
     -- Check if copied deleted resource exists, if so then delete first.
     -- if getResourceFromName( resname.."_deleted" ) then
