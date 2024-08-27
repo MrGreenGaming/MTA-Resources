@@ -630,7 +630,7 @@ addEventHandler("cmm_deleteMap",root,deleteMapFromGUI)
 addEvent("nextmap",true)
 function nextMapFromGUI(map) -- Admin next upload map via the gui
     if hasObjectPermissionTo(client,"command.nextmap",false) then
-        executeCommandHandler("nextmap", client, map.."_newupload")
+        executeCommandHandler("nextmap", client, map)
     end
 end
 addEventHandler("nextmap",root,nextMapFromGUI)
