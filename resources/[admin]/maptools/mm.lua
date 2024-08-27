@@ -118,7 +118,7 @@ function handlemap(p, c, resname, ...)
         setResourceInfo(res,"deleted","true")
         setResourceInfo(res, "newupload", "false")
         setResourceInfo(res,"deleteReason","MAP DECLINED DURING TESTING: "..comment)
-        setResourceInfo(res,"deletedBy",g_AccName)
+        setResourceInfo(res,"deletedBy",manager)
 	end
 	local query = "INSERT INTO uploaded_maps (mapname, resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?,?)"
 	local theExec = dbExec ( handlerConnect, query, mapname, resname, mta_name, comment, manager, status)
