@@ -86,7 +86,7 @@ end
 
 function handlemap(p, c, resname, ...)
 	if not handlerConnect or not resname then return false end
-	local mapname = resname .. '_newupload'
+	local mapname = resname
 	local res = getResourceFromName(mapname)
 	if not res then
 		return outputChatBox(c..': could not find res ' .. resname, p)
@@ -580,48 +580,46 @@ addEvent("cmm_deleteMap",true)
 function deleteMapFromGUI(map,reason) -- Admin deleted map via the gui
 
     if hasObjectPermissionTo(client,"command.deletemap",false) then
-        if map == exports.mapmanager:getRunningGamemodeMap() then
-            outputChatBox("The map you are trying to delete is currently playing, use /deletemap instead!",client,255,0,0)
-            return
-        end
+        outputChatBox("Deleting through the UI is no longer possible. Start the map and use /deletemap instead.", client, 255, 0, 0)
+        outputChatBox("If for some reason the map can't be started then contact Nick_026 for manual deletion instead.", client, 255, 0, 0)
+        -- if map == exports.mapmanager:getRunningGamemodeMap() then
+        --     outputChatBox("The map you are trying to delete is currently playing, use /deletemap instead!",client,255,0,0)
+        --     return
+        -- end
 
-        local theRes = getResourceFromName(map.resname)
-        if not theRes then
-            outputChatBox("error: Can't find map resource!",client,255,0,0)
-        end
+        -- local theRes = getResourceFromName(map.resname)
+        -- if not theRes then
+        --     outputChatBox("error: Can't find map resource!",client,255,0,0)
+        -- end
 
-        local adminAccName = getAccountName(getPlayerAccount(client))
-        if not adminAccName then outputChatBox("Error: Unable to retrieve account name, contact a developer if this keeps happening.", client,255,0,0) return end
-
-
-        setResourceInfo(theRes,"gamemodes","race_deleted")
-        setResourceInfo(theRes,"deleted","true")
-        setResourceInfo(theRes,"deleteReason",reason)
-        setResourceInfo(theRes,"deletedBy",adminAccName)
-        setResourceInfo(theRes,"deleteTimeStamp",tostring(getRealTime().timestamp))
-        local authorForumId = getResourceInfo( theRes, 'forumid' )
-
-		-- Check if copied deleted resource exists, if so then delete first.
-		if getResourceFromName( map.resname.."_deleted" ) then
-			deleteResource( map.resname.."_deleted" )
-		end
-
-        copyResource(theRes,map.resname.."_deleted",deletedMapsPath)
-        local delete = deleteResource(map.resname)
-        if not delete and isElement(client) then
-            outputChatBox("Error: Map cannot be deleted.",client,255,0,0)
-            return
-        end
-
-        if isElement(client) then
-            outputChatBox("Map deleted: "..tostring(map.name),client)
-        end
-        addMapDeletionRecord(map.name,map.author,reason,adminAccName,map.resname,authorForumId)
+        -- local adminAccName = getAccountName(getPlayerAccount(client))
+        -- if not adminAccName then outputChatBox("Error: Unable to retrieve account name, contact a developer if this keeps happening.", client,255,0,0) return end
 
 
+        -- setResourceInfo(theRes,"gamemodes","race_deleted")
+        -- setResourceInfo(theRes,"deleted","true")
+        -- setResourceInfo(theRes,"deleteReason",reason)
+        -- setResourceInfo(theRes,"deletedBy",adminAccName)
+        -- setResourceInfo(theRes,"deleteTimeStamp",tostring(getRealTime().timestamp))
+        -- local authorForumId = getResourceInfo( theRes, 'forumid' )
 
-        refreshResources()
-        fetchMaps(client)
+		-- -- Check if copied deleted resource exists, if so then delete first.
+		-- -- if getResourceFromName( map.resname.."_deleted" ) then
+		-- -- 	deleteResource( map.resname.."_deleted" )
+		-- -- end
+
+        -- -- copyResource(theRes,map.resname.."_deleted",deletedMapsPath)
+        -- -- local delete = deleteResource(map.resname)
+        -- -- if not delete and isElement(client) then
+        -- --     outputChatBox("Error: Map cannot be deleted.",client,255,0,0)
+        -- --     return
+        -- -- end
+
+        -- outputChatBox("Map deleted: "..tostring(map.name),client)
+        -- addMapDeletionRecord(map.name,map.author,reason,adminAccName,map.resname,authorForumId)
+
+        -- refreshResources()
+        -- fetchMaps(client)
     end
 
 end
