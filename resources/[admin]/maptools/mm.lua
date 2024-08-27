@@ -116,7 +116,7 @@ function handlemap(p, c, resname, ...)
     elseif c == "declinemap" then
         deleteResource(mapname)
 	end
-	local query = "INSERT INTO uploaded_maps (mapname, resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?)"
+	local query = "INSERT INTO uploaded_maps (mapname, resname, uploadername, comment, manager, status) VALUES (?,?,?,?,?,?)"
 	local theExec = dbExec ( handlerConnect, query, mapname, resname, mta_name, comment, manager, status)
 
 	outputChatBox(c..': done ' .. resname, p)
