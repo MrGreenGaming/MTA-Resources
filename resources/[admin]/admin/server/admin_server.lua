@@ -1416,6 +1416,9 @@ addEventHandler ( "aServer", _root, function ( action, data, data2 )
 				action = nil
 				outputChatBox ( "Error setting weather.", source, 255, 0, 0 )
 			end
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " changed weather to " .. getWeatherNameFromID ( tonumber ( data ) )})
+            end
 		elseif ( action == "setgamespeed" ) then
 			if ( not setGameSpeed ( tonumber ( data ) ) ) then
 				action = nil
@@ -1451,6 +1454,8 @@ addEventHandler ( "aServer", _root, function ( action, data, data2 )
 			if ( not setFPSLimit ( tonumber ( data ) ) ) then
 				action = nil
 				outputChatBox ( "Error setting FPS Limit.", source, 255, 0, 0 )
+            else
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " changed global FPS limit to " .. tonumber ( data )})
 			end
 		else
 			action = nil
