@@ -1005,6 +1005,9 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 					action = nil
 				end
 				mdata = health
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " changed " .. getPlayerName(player).. "'s healt to " .. health})
+                end
 			else
 				action = nil
 			end
