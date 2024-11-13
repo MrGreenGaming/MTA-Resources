@@ -975,6 +975,10 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 			more = duration and ( "(" .. secondsToTimeDesc(duration) .. ")" ) or ""
 			aSetPlayerMuted ( player, not isPlayerMuted ( player ), duration, source )
 		elseif ( action == "freeze" )  then
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " froze " .. getPlayerName(player)})
+            end
+
 			if ( isPlayerFrozen ( player ) ) then action = "un"..action end
 			aSetPlayerFrozen ( player, not isPlayerFrozen ( player ) )
 		elseif ( action == "setnick" )  then
@@ -1242,6 +1246,9 @@ addEventHandler ( "aVehicle", _root, function ( player, action, data )
 		if ( vehicle ) then
 			local mdata = ""
 			if ( action == "repair" ) then
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " fixed " .. getPlayerName(player) .. "'s vehicle"})
+                end
 				fixVehicle ( vehicle )
 				local rx, ry, rz = getVehicleRotation ( vehicle )
 				if ( rx > 110 ) and ( rx < 250 ) then
@@ -1282,8 +1289,14 @@ addEventHandler ( "aVehicle", _root, function ( player, action, data )
 						action = nil
 					end
 			elseif ( action == "blowvehicle" ) then
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " blew up " .. getPlayerName(player) .. "'s vehicle"})
+                end
 				setTimer ( blowVehicle, 100, 1, vehicle )
 			elseif ( action == "destroyvehicle" ) then
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " destroyed " .. getPlayerName(player) .. "'s vehicle"})
+                end
 				setTimer ( destroyElement, 100, 1, vehicle )
 			else
 				action = nil
@@ -1355,6 +1368,9 @@ addEventHandler ( "aServer", _root, function ( action, data, data2 )
 				action = nil
 				outputChatBox ( "Error setting map name.", source, 255, 0, 0 )
 			end
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " set map to " .. tostring(data)})
+            end
 			triggerEvent ( "aSync", source, "server" )
 		elseif ( action == "setwelcome" ) then
 			if ( ( not data ) or ( data == "" ) ) then
@@ -1388,6 +1404,9 @@ addEventHandler ( "aServer", _root, function ( action, data, data2 )
 				action = nil
 				outputChatBox ( "Error setting weather.", source, 255, 0, 0 )
 			end
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " changed weather to " .. getWeatherNameFromID ( tonumber ( data ) )})
+            end
 			mdata = data.." "..getWeatherNameFromID ( tonumber ( data ) )
 		elseif ( action == "blendweather" ) then
 			if ( not setWeatherBlended ( tonumber ( data ) ) ) then
@@ -1398,6 +1417,10 @@ addEventHandler ( "aServer", _root, function ( action, data, data2 )
 			if ( not setGameSpeed ( tonumber ( data ) ) ) then
 				action = nil
 				outputChatBox ( "Error setting game speed.", source, 255, 0, 0 )
+            else
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " changed game speed to " .. tonumber(data)})
+                end
 			end
 		elseif ( action == "setgravity" ) then
 			if ( setGravity ( tonumber ( data ) ) ) then
@@ -1408,11 +1431,17 @@ addEventHandler ( "aServer", _root, function ( action, data, data2 )
 				action = nil
 				outputChatBox ( "Error setting gravity.", source, 255, 0, 0 )
 			end
+            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                exports.discord:send("admin.log", { log = getPlayerName(source) .. " changed gravity to ".. tonumber(data)})
+            end
 		elseif ( action == "setwaveheight" ) then
 			if ( not setWaveHeight ( data ) ) then
 				outputChatBox ( "Error setting wave height.", source, 255, 0, 0 )
 				action = nil
 			else
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+                    exports.discord:send("admin.log", { log = getPlayerName(source) .. " changed wave height to " .. tonumber(data)})
+                end
 				mdata = data
 			end
 		elseif ( action == "setfpslimit" ) then
