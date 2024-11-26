@@ -1648,6 +1648,10 @@ function checkClient(checkAccess,player,...)
 		local ipAddress = getPlayerIP(client)
 		outputDebugString( "Admin security - Client/player mismatch from " .. tostring(ipAddress) .. " (" .. tostring(desc) .. ")", 1 )
 		cancelEvent()
+		if g_Prefs.clientcheckkick then
+			local reason = "[Admin] client mismatch (" .. tostring(desc) .. ")"
+			kickPlayer(client, reason)
+		end
 		if g_Prefs.clientcheckban then
 			local reason = "admin checkClient (" .. tostring(desc) .. ")"
 			addBan ( ipAddress, nil, nil, getRootElement(), reason )

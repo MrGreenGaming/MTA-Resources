@@ -97,6 +97,8 @@ function cacheGameOptions()
 	g_GameOptions.defaultrespawntime	= getNumber('race.respawntime',5) * 1000
 	g_GameOptions.defaultduration		= getNumber('race.duration',6000) * 1000
 	g_GameOptions.ghostmode				= getBool('race.ghostmode',false)
+	g_GameOptions.clientcheckkick = getBool('race.clientcheckkick',false)
+	g_GameOptions.clientcheckban = getBool('race.clientcheckban', false)
 	g_GameOptions.ghostalpha			= getBool('race.ghostalpha',false)
 	g_GameOptions.randommaps			= getBool('race.randommaps',false)
 	g_GameOptions.statskey				= getString('race.statskey','name')
@@ -1604,6 +1606,10 @@ function checkClient(checkAccess,player,...)
 		local ipAddress = getPlayerIP(client)
 		outputDebugString( "Race security - Client/player mismatch from " .. tostring(ipAddress) .. " (" .. tostring(desc) .. ")", 1 )
 		cancelEvent()
+		if g_GameOptions.clientcheckkick then
+			local reason = "[Race] client mismatch (" .. tostring(desc) .. ")"
+			kickPlayer(client, reason)
+		end
 		if g_GameOptions.clientcheckban then
 			local reason = "race checkClient (" .. tostring(desc) .. ")"
 			addBan ( ipAddress, nil, nil, getRootElement(), reason )
