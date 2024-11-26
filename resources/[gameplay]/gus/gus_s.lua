@@ -50,7 +50,7 @@ addEventHandler("onElementDataChange", root,
         -- Check data is coming from a client
         if client and getElementType(source) == 'player' and client ~= source then
 			-- Report
-			outputConsole( "Possible rouge client!"
+			outputDebugString( "Possible rogue client!"
 					.. " client:" .. tostring(getPlayerName(client))
 					.. " dataName:" .. tostring(dataName)
 					.. " oldValue:" .. tostring(oldValue)

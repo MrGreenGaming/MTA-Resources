@@ -1649,8 +1649,11 @@ function checkClient(checkAccess,player,...)
 		outputDebugString( "Admin security - Client/player mismatch from " .. tostring(ipAddress) .. " (" .. tostring(desc) .. ")", 1 )
 		cancelEvent()
 		if g_Prefs.clientcheckkick then
-			local reason = "[Admin] client mismatch (" .. tostring(desc) .. ")"
+			local reason = "[Admin] client mismatch. Please reconnect"
 			kickPlayer(client, reason)
+			if player then
+				kickPlayer(player, reason)
+			end
 		end
 		if g_Prefs.clientcheckban then
 			local reason = "admin checkClient (" .. tostring(desc) .. ")"

@@ -1607,8 +1607,11 @@ function checkClient(checkAccess,player,...)
 		outputDebugString( "Race security - Client/player mismatch from " .. tostring(ipAddress) .. " (" .. tostring(desc) .. ")", 1 )
 		cancelEvent()
 		if g_GameOptions.clientcheckkick then
-			local reason = "[Race] client mismatch (" .. tostring(desc) .. ")"
+			local reason = "[Race] client mismatch. Please reconnect"
 			kickPlayer(client, reason)
+			if player then
+				kickPlayer(player, reason)
+			end
 		end
 		if g_GameOptions.clientcheckban then
 			local reason = "race checkClient (" .. tostring(desc) .. ")"
