@@ -1,5 +1,4 @@
 admins = {
-	{ name = "Mateoryt", title="MTA Manager", accountName = "mateoryt"},
     { name = "Z3ITM4NN", title = "MTA Manager", accountName = "Z3ITM4NN"},
     { name = "Nick_026", title = "Developer", accountName = "Nick_026" },
 	{ name = "Haxardous", title = "Developer", accountName = "Axa" },
