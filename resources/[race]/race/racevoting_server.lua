@@ -499,13 +499,17 @@ function()
 		times[currentMap] = 0
 	end
 	_nextMap = calculateNextmap()
-    times[currentMap] = times[currentMap] + 1
+  times[currentMap] = times[currentMap] + 1
 
-    triggerEvent("onRoundCountChange",root,times[currentMap],maxPlayAgain)
-    triggerClientEvent(root, "onClientRoundCountChange", root, times[currentMap], maxPlayAgain)
+	triggerEvent("onRoundCountChange",root,times[currentMap],maxPlayAgain)
+	triggerClientEvent(root, "onClientRoundCountChange", root, times[currentMap], maxPlayAgain)
 end
 )
 
+function resetRoundCounter()
+	local currentMap = exports.mapmanager:getRunningGamemodeMap()
+	times[currentMap] = 0
+end
 
 
 --[[ debugging purposes
@@ -574,6 +578,9 @@ addEventHandler('nextMapVoteResult', getRootElement(),
 					isCurrentMapPremium = true
 					outputChatBox("[Maps-Center] Starting queued map for " .. var:gsub( '#%x%x%x%x%x%x', '' ), root, 0, 255, 0)
 					triggerEvent("data_onGCShopMapStart", root, map)
+
+					-- Force reset the rounds. Fixes issue #809
+					resetRoundCounter()
 				end
 				skipMapQueue = map
 			end
