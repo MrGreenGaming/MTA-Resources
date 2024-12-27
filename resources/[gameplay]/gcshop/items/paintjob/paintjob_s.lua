@@ -189,7 +189,7 @@ function receiveImage ( image, pid )
 			fileWrite(file, image)
 			fileClose(file)
 			sendPaintjobs ( {player}, player, pid )
-			sendAPICustomPaintjob(player, forumID .. '-' .. pid, base64Encode(image))
+			sendAPICustomPaintjob(player, forumID .. '-' .. pid, encodeString("base64", image))
 		end
 
 
