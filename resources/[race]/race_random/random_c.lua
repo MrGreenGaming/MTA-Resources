@@ -377,7 +377,7 @@ addEventHandler( "serverLowFPS", resourceRoot, serverLowFPS )
 function serverHunter()
 	local veh = getPedOccupiedVehicle(localPlayer)
 	if veh then
-		setHelicopterRotorSpeed(veh,0.2)
+		setVehicleRotorSpeed(veh,0.2)
 	end
 end
 addEvent("onServerVotedHunter", true)

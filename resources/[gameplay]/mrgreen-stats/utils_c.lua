@@ -5,7 +5,7 @@ function getPlayerAvatarString(player)
         local file = fileOpen(avatar.src)
         if not file then return false end
         local data = fileRead(file, fileGetSize(file)) 
-        local avatarString = base64Encode(data)
+        local avatarString = encodeString("base64", data)
         fileClose(file)
         return avatarString
     end 

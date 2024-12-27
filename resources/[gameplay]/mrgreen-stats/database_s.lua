@@ -279,6 +279,7 @@ function getStat(idOrPlayer, statCat, statName)
     return playerStats[forumid] and playerStats[forumid][catIndex] and playerStats[forumid][catIndex].items[statIndex].value or false
 end
 
+-- Causes deprecated warning in console. False positive due to custom implementation
 function getPlayerStat(...)
     return getStat(unpack({...}))
 end

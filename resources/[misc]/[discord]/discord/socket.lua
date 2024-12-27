@@ -81,7 +81,7 @@ end
 
 function Socket:write(data)
     if self:isConnected() then
-        sockWrite(self.handle, base64Encode(data) .. "\r\n")
+        sockWrite(self.handle, encodeString("base64", data) .. "\r\n")
     end
 end
 
@@ -148,7 +148,7 @@ addEventHandler("onSockData", root,
 
             if lines then
                 for index, line in ipairs(lines) do
-                    line = base64Decode(line)
+                    line = decodeString("base64", line)
                     local json = fromJSON(line)
 
                     if type(json) == "table" then
