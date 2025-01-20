@@ -1,4 +1,4 @@
-digital = dxCreateFont( "digital.ttf", 20 )
+digital = dxCreateFont( "digital.ttf", 20 ) or "default"
 
 local offsetxSetting = 0
 local offsetySetting = 0
