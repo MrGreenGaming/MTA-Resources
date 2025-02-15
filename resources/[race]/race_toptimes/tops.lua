@@ -211,7 +211,7 @@ function updatePlayerTop(player, rank, value)
 		end
 	end
 
-	if not score[exports.race:getRaceMode()] and rank == 1 and not (monthtTopTime and monthtTopTime.month ~= getRealTime().month+1) and (not monthtTopTime or (not times.kills and value < monthtTopTime.value) or (times.kills and value > monthtTopTime.value)) then
+	if not score[exports.race:getRaceMode()] and not (monthtTopTime and monthtTopTime.month ~= getRealTime().month+1) and (not monthtTopTime or (not times.kills and value < monthtTopTime.value) or (times.kills and value > monthtTopTime.value)) then
 		local oldTime = monthtTopTime and monthtTopTime.value or nil
 
 		-- dont reward first monthly top for a map
