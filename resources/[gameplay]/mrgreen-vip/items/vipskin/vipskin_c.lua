@@ -28,8 +28,8 @@ local vipSkins = {
 	[21] = {name = "Crysis", file = "crysis", customVoice = false},
 	[21] = {name = "Random Guy 2", file = "randomguy2", customVoice = false},
 	[22] = {name = "Furry Wolf", file = "furry", customVoice = false},
-	[23] = {name = "Squid Game - Frontman", file = "Frontman", customVoice = false},
-	[24] = {name = "Squid Game - Circle Soldier", file = "SoldierCircle", customVoice = false},
+	[23] = {name = "Geralt of Rivia", file = "GeraltOfRivia", customVoice = false},
+	[24] = {name = "Ciri", file = "Ciri", customVoice = false},
 	[25] = {name = "Deadpool", file = "deadpool", customVoice = false}
 }
 
