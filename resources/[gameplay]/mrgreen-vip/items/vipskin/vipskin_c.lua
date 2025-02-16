@@ -78,22 +78,9 @@ local loadedSkins = {
 }
 
 function handleVipSkins()
-	-- Get used vip skins from player element data
-	local usedSkins = {}
 	for i, p in ipairs(getElementsByType('player')) do 
 		local theId = getElementData(p, 'vip.skin')
 		if theId and tonumber(theId) then
-			-- Check if id is already added to usedSkins
-			local doInsert = true
-			for i, v in ipairs(usedSkins) do
-				if v == theId then
-					doInsert = false
-				end
-			end
-			-- If skin id is not added, add it 
-			if doInsert then
-				table.insert(usedSkins, theId)
-			end
 			-- Set female voice for female peds
 			if vipSkins[tonumber(theId)] and vipSkins[tonumber(theId)].customVoice then
 				-- There doesnt seem to be any female 'death' noises, so disable the voice for female peds
@@ -101,30 +88,17 @@ function handleVipSkins()
 			end
 		end
 	end
+
+	
 	-- Check for skins that should be unloaded, then load the new skins
-	for i, _ in pairs(loadedSkins) do
-		local id = string.gsub(i, 'skin_', '')
-		if id then id = tonumber(id) end
-		if id and not tableIncludes(usedSkins, id) then
-			-- Not used anymore, restore model
-			engineRestoreModel(skinIds[id])
-			loadedSkins[i] = nil
-		end
-	end
 	local path = "items/vipskin/skins/"
-	local dffEx = ".dff"
-	local txdEx = ".txd"
 
 	-- Start downloading the skins
-	for i, id in ipairs(usedSkins) do
-		if not vipSkins[id] then
-			outputDebugString('VIP Skins: ID '..id..' is not added to the vipSkins table, failed loading.',3,255,0,0)
-		else
+	for id, vipSkin in ipairs(vipSkins) do
 			-- Download files, completedVipSkinDownload() will handle it further
-			local fileName = vipSkins[id].file
+			local fileName = vipSkin.file
 			downloadFile(path..fileName..'.txd')
 			downloadFile(path..fileName..'.dff')
-		end
 	end
 end
 addEvent('onClientMapStarting', true)
