@@ -119,7 +119,7 @@ local increasing = true
 
 function blink()
     setElementAlpha(getPedOccupiedVehicle(localPlayer), currentAlpha)
-    setElementAlpha(localPlayer, currentAlpha)
+    setElementAlpha(localPlayer, 255)
 
     if increasing then
         currentAlpha = currentAlpha + alphaStep
@@ -160,10 +160,10 @@ function()
 						local distance = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
 						if distance <= 20 then
 							setElementAlpha(pedCar, 10)
-							setElementAlpha(player, 10)
+							setElementAlpha(player, 255)
 						else
 							setElementAlpha(pedCar, 180)
-							setElementAlpha(player, 180)
+							setElementAlpha(player, 255)
 						end
 					end
 				end

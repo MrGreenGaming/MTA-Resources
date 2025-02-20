@@ -25,8 +25,8 @@ function GhostPlayback:create( recording, ped, vehicle )
 	setElementCollisionsEnabled( result.ped, false )
 	setElementCollisionsEnabled( result.vehicle, false )
 	setElementFrozen( result.vehicle, true )
-	setElementAlpha( result.ped, 100 )
-	setElementAlpha( result.vehicle, 100 )
+	setElementAlpha( result.ped, 255 )
+	setElementAlpha( result.vehicle, 0 )
 	return setmetatable( result, self )
 end
 
