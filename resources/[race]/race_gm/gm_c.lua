@@ -159,7 +159,7 @@ function()
 						local cx,cy,cz = getElementPosition(pedCar)
 						local distance = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
 						if distance <= 20 then
-							setElementAlpha(pedCar, 10)
+							setElementAlpha(pedCar, 0)
 							setElementAlpha(player, 255)
 						else
 							setElementAlpha(pedCar, 180)
