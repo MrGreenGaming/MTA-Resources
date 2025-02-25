@@ -25,12 +25,12 @@ local vipSkins = {
 	[18] = {name = "Marshmello Spec Ops", file = "specopsmarshmello", customVoice = false},
 	[19] = {name = "Bugs Bunny", file = "bugsbunny", customVoice = false},
 	[20] = {name = "Lifeguard Female", file = "femalelifeguard", customVoice = {'woman1.mp3', 'woman2.mp3'}},
-	[21] = {name = "Crysis", file = "crysis", customVoice = false},
-	[21] = {name = "Random Guy 2", file = "randomguy2", customVoice = false},
-	[22] = {name = "Furry Wolf", file = "furry", customVoice = false},
+	[21] = {name = "Nick's Fursona (shirtless)", file = "randomguy2", customVoice = false},
+	[22] = {name = "Nick's Fursona", file = "furry", customVoice = false},
 	[23] = {name = "Geralt of Rivia", file = "GeraltOfRivia", customVoice = false},
 	[24] = {name = "Ciri", file = "Ciri", customVoice = false},
-	[25] = {name = "Deadpool", file = "deadpool", customVoice = false}
+	[25] = {name = "Deadpool", file = "deadpool", customVoice = false},
+	[26] = {name = "Crysis", file = "crysis", customVoice = false}
 }
 
 -- Reserved skin ID's for VIP skin. If more are needed, please check unbought GC shop skins via database and remove them from there
