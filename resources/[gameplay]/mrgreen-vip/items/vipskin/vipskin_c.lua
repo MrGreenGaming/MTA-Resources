@@ -25,7 +25,7 @@ local vipSkins = {
 	[18] = {name = "Marshmello Spec Ops", file = "specopsmarshmello", customVoice = false},
 	[19] = {name = "Bugs Bunny", file = "bugsbunny", customVoice = false},
 	[20] = {name = "Lifeguard Female", file = "femalelifeguard", customVoice = {'woman1.mp3', 'woman2.mp3'}},
-	[21] = {name = "Nick's Fursona (shirtless)", file = "randomguy2", customVoice = false},
+	[21] = {name = "Nick's Fursona (shirtless)", file = "furryShirtless", customVoice = false},
 	[22] = {name = "Nick's Fursona", file = "furry", customVoice = false},
 	[23] = {name = "Geralt of Rivia", file = "GeraltOfRivia", customVoice = false},
 	[24] = {name = "Ciri", file = "Ciri", customVoice = false},
