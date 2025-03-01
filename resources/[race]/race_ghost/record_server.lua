@@ -34,6 +34,12 @@ addEventHandler( "onGhostDataReceive", g_Root,
 			if info then
 				currentBestTime = tonumber( xmlNodeGetAttribute( info, "t" ) ) or math.huge
 			end
+
+			if currentBestTime < bestTime then -- not a new record. Fix for issue #813
+				xmlUnloadFile( ghost )
+				outputDebugString("Received ghost data from " .. racer .. ". Time: " .. bestTime .. ". Current best time: " .. currentBestTime .. ". Ignoring.")
+				return
+			end
 		
 			-- if currentBestTime ~= math.huge and currentBestTime - bestTime >= SUSPECT_CHEATER_LIMIT then -- Cheater?
 				outputDebug( "Creating a backup file for " .. mapName .. ".backup" )
