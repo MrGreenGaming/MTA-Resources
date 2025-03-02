@@ -104,7 +104,8 @@ local exceptions = {
  "Commit",
  "modsay",
  "adsay",
- "teamsay"
+ "teamsay",
+ "colorify"
 }
 --
  
