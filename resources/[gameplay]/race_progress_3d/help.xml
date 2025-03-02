@@ -1,0 +1,16 @@
+<help title="Race Minimap 2D">The Race Minimap shows the course of the current race track in a simplified way. The line draws a windrose path from checkpoint to checkpoint, and the dots each represent a player and their position on said track. The larger dot indicates your own position.
+
+Commands
+------------------------
+/minimap - Opens/closes the settings GUI
+/minimap_toggle - Toggles the Minimap itself
+
+Tip: Use "/bind k minimap_toggle" to bind the command to the "k" key
+
+Predefined Keys
+------------------------
+F6 (short press) - Toggles the Race Minimap
+F6 (long press) - Opens/closes the settings GUI
+
+(The key may have been changed by the serveradmin.)
+</help>
