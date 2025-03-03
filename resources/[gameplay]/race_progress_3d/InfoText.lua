@@ -16,7 +16,7 @@
 
 InfoText = {}
 InfoText.fadeTime = 200
-InfoText.displayTime = 60*1000
+InfoText.displayTime = 300*1000
 InfoText.started = nil
 InfoText.showAsap = false
 InfoText.drawFunction = nil

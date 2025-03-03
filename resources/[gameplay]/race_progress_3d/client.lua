@@ -962,6 +962,6 @@ function checkKeyInfo(force)
 end
 
 keyInfo.drawFunction = function(fade)
-	drawText("Use /minimap to disable or to modify settings.", g_left, g_top + g_size + 5, tocolor(255,255,255), tocolor(0,0,0,120), true)
+	drawText("Use /minimap to disable or to modify minimap settings.", g_left, g_top + g_size + 5, tocolor(255,255,255), tocolor(0,0,0,120), true)
 end
 
