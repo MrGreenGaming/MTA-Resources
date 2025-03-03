@@ -18,6 +18,7 @@
 		<data name="color" type="color" description="color (#RRGGBBAA hex string)" default="#00F9" />
 		<data name="size" type="number" description="marker size" default="2.25" />
 		<data name="nextid" type="element:checkpoint" description="The next checkpoint after this one" required="false" default="" />
+		<data name="blipsize" type="integer" default="2" description="The size of this checkpoint's blip on the radar. 0 for invisible." />
 		<data name="vehicle" type="vehicleID" required="false"/>
 		<marker color="!color!" type="!type!" size="!size!"/>
 	</element>
