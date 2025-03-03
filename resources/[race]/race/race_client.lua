@@ -1467,7 +1467,9 @@ function createCheckpoint(i)
 		return
 	end
 	local pos = checkpoint.position
+	local blipSize = checkpoint.blipsize or 2
 	local color = checkpoint.color or { 0, 0, 255 }
+	local alpha = blipSize <= 0 and 0 or 255
 
 	if checkpoint.type == "corona" then
 		custommarker = exports.custom_coronas:createCorona(pos[1], pos[2], pos[3], checkpoint.size+0.1, color[1], color[2], color[3], color[4] or 255)
@@ -1487,11 +1489,11 @@ function createCheckpoint(i)
 	end
 	-- Edit #9, finish icon for last checkpoint
 	if #g_Checkpoints == 1 then
-		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 53, isCurrent and 2 or 1, color[1], color[2], color[3])
+		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 53, isCurrent and blipSize or 1, color[1], color[2], color[3], alpha)
 	elseif (i == (#g_Checkpoints)) then
-		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 53, isCurrent and 2 or 1, color[1], color[2], color[3])
+		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 53, isCurrent and blipSize or 1, color[1], color[2], color[3], alpha)
 	else
-		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and 2 or 1, color[1], color[2], color[3])
+		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and blipSize or 1, color[1], color[2], color[3], alpha)
 	end
 
 	setBlipOrdering(checkpoint.blip, 1)
@@ -1501,12 +1503,14 @@ end
 function makeCheckpointCurrent(i,bOtherPlayer)
 	local checkpoint = g_Checkpoints[i]
 	local pos = checkpoint.position
+	local blipSize = checkpoint.blipsize or 2
 	local color = checkpoint.color or { 255, 0, 0 }
+	local alpha = blipSize == 0 and 0 or 255
 	if not checkpoint.blip then
-		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, 2, color[1], color[2], color[3])
+		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, blipSize, color[1], color[2], color[3], alpha)
 		setBlipOrdering(checkpoint.blip, 1)
 	else
-		setBlipSize(checkpoint.blip, 2)
+		setBlipSize(checkpoint.blip, blipSize)
 	end
 
 	if not checkpoint.type or checkpoint.type == 'checkpoint' then

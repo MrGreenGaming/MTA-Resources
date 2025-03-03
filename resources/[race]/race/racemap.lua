@@ -1,6 +1,6 @@
 g_MapObjAttrs = {
 	spawnpoint = { 'position', 'rotation', 'vehicle', 'paintjob', 'upgrades', 'team' },
-	checkpoint = { 'id', 'nextid', 'position', 'size', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'nts' , 'models'},
+	checkpoint = { 'id', 'nextid', 'position', 'size', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'nts' , 'models', 'blipsize'},
 	object = { 'position', 'rotation', 'model' },
 	pickup = { 'position', 'type', 'vehicle', 'paintjob', 'upgrades', 'respawn' }
 }
