@@ -493,7 +493,7 @@ function mapRestart ( mapInfo, mapOptions, gameOptions )
 		end
 	end
 	if not map_allows_shop then
-		setTimer(outputChatBox, 1500, 1, 'This map has it\'s own custom upgrades, modshop upgrades are disabled')
+		setTimer(outputChatBox, 1500, 1, 'This map has its own custom upgrades. Modshop upgrades are disabled')
 	end
 end
 addEventHandler ( "onMapStarting", root, mapRestart )
