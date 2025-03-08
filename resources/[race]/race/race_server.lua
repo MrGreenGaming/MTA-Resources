@@ -256,6 +256,13 @@ function cacheMapOptions(map, bDontUseMode)
 	if mode.classicchangez ~= nil and not mode.classicchangez_map_can_override == true then
 		g_MapOptions.classicchangez = mode.classicchangez
 	end
+	if not bDontUseMode and map.classicchangez and g_GameOptions.classicchangez_warning_if_map_override and g_MapOptions.classicchangez ~= (mode.classicchangez ~= nil and mode.classicchangez or g_GameOptions.classicchangez) then
+		if g_MapOptions.classicchangez then
+			outputChatBox( 'Notice: Classic \'bouncy\' vehicle change is enabled on this map' )
+		else
+			outputChatBox( 'Notice: Classic \'bounce\' vehicle change is disabled on this map' )
+		end
+	end
 
 	-- Set hunterminigun from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.hunterminigun or not g_GameOptions.hunterminigun_map_can_override then
