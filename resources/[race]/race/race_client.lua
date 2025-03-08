@@ -579,6 +579,8 @@ function vehicleChanging( changez, newModel )
 	local x, y, z = getElementPosition(g_Vehicle)
 	if g_PrevVehicleHeight and newVehicleHeight > g_PrevVehicleHeight then
 		z = z - g_PrevVehicleHeight + newVehicleHeight
+	elseif g_PrevVehicleHeight and newVehicleHeight < g_PrevVehicleHeight then
+		z = z + newVehicleHeight - g_PrevVehicleHeight
 	end
 	if changez then
 		z = z + 1
