@@ -41,7 +41,7 @@ function theTool()
 		end
 	end
 end
-addEventHandler("onClientVehicleEnter", root, theTool)
+setTimer( theTool, 50, 0)
 
 function onClientExplosion()
 	if not (mode == "Sprint" or mode == "Never the same") or getElementData(localPlayer, 'markedblocker') then return end
