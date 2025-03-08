@@ -577,6 +577,7 @@ function vehicleChanging( changez, newModel )
 	end
 	local newVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
 	local x, y, z = getElementPosition(g_Vehicle)
+	local rx, ry, rz = getElementRotation(g_Vehicle)
 	if g_PrevVehicleHeight and newVehicleHeight > g_PrevVehicleHeight then
 		z = z - g_PrevVehicleHeight + newVehicleHeight
 	elseif g_PrevVehicleHeight and newVehicleHeight < g_PrevVehicleHeight then
@@ -586,6 +587,7 @@ function vehicleChanging( changez, newModel )
 		z = z + 1
 	end
 	setElementPosition(g_Vehicle, x, y, z)
+	setElementRotation(g_Vehicle, rx, ry, rz)
 	g_PrevVehicleHeight = nil
 	updateVehicleWeapons()
 	checkVehicleIsHelicopter()
