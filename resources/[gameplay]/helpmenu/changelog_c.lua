@@ -83,3 +83,11 @@ function makeCurrentDatetime()
 	local second = fillDigits(time.second)
 	return year.."-"..month.."-"..day.." "..hour..":"..minute..":"..second
 end
+
+function fillDigits(text, min)
+	if min == nil then
+		min = 2
+	end
+	local text = tostring(text)
+	return string.rep( "0", min - text:len() )..text
+end
