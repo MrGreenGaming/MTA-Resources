@@ -128,7 +128,7 @@ function TitleScreen.update()
 end
 
 function TitleScreen.getTicksRemaining()
-    return math.max( 0, TitleScreen.startTime - TitleScreen.bringForward + 20000 - getTickCount() )
+    return math.max( 0, TitleScreen.startTime - TitleScreen.bringForward + 7000 - getTickCount() )
 end
 
 -- Start the fadeout as soon as possible
@@ -576,6 +576,9 @@ function vehicleChanging( changez, newModel )
 		outputConsole( "Vehicle change model mismatch (" .. tostring(getElementModel(g_Vehicle)) .. "/" .. tostring(newModel) .. ")" )
 	end
 	local newVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
+	if newModel == 557 or newModel == 556 or newModel == 444 then
+		newVehicleHeight = newVehicleHeight + 1
+	end
 	local x, y, z = getElementPosition(g_Vehicle)
 	if g_PrevVehicleHeight and newVehicleHeight > g_PrevVehicleHeight then
 		z = z - g_PrevVehicleHeight + newVehicleHeight
@@ -907,6 +910,10 @@ function checkpointReached(elem, matchingDimension)
 
 	--if g_Checkpoints[g_CurrentCheckpoint].vehicle and g_Checkpoints[g_CurrentCheckpoint].vehicle ~= getElementModel(g_Vehicle) then
 		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
+		-- Bounce fix for Monster
+		if getElementModel(g_Vehicle) == 557 or getElementModel(g_Vehicle) == 556 or getElementModel(g_Vehicle) == 444 then
+			g_PrevVehicleHeight = g_PrevVehicleHeight + 1
+		end
 		--alignVehicleWithUp()
 		--setElementModel(g_Vehicle, g_Checkpoints[g_CurrentCheckpoint].vehicle)
 		--vehicleChanging(g_MapOptions.classicchangez, g_Checkpoints[g_CurrentCheckpoint].vehicle)
