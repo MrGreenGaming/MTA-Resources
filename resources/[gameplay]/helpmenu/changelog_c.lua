@@ -69,6 +69,17 @@ function updateChangelogString()
 	xmlUnloadFile(logNode)
 end
 
-requestBrowserDomains({ "github.com" })
+requestBrowserDomains({ "github.com", "mrgreengaming.com", "forums.mrgreengaming.com" })
 startChangelogDownload()
 setTimer(startChangelogDownload, 5*60*1000, 0)
+
+function makeCurrentDatetime()
+	local time = getRealTime()
+	local year = time.year + 1900
+	local month = fillDigits(time.month + 1)
+	local day = fillDigits(time.monthday)
+	local hour = fillDigits(time.hour)
+	local minute = fillDigits(time.minute)
+	local second = fillDigits(time.second)
+	return year.."-"..month.."-"..day.." "..hour..":"..minute..":"..second
+end
