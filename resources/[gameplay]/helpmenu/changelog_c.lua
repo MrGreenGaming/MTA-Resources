@@ -83,6 +83,7 @@ function updateChangelogString()
 	end
 	
 	changelog = string.gsub(changelog, "Last 20 changes at ", "Last " ..changesCounter.. " changes at ")
+	triggerEvent("receiveChangelog", root, changelog, changelogLastUpdate)
 	xmlUnloadFile(logNode)
 end
 
