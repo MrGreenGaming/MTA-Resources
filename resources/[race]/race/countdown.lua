@@ -160,7 +160,9 @@ function Countdown:destroy()
 		if self.countitem		then textDestroyTextItem(self.countitem)		self.countitem		= nil end
 		if self.singleitem		then textDestroyTextItem(self.singleitem)		self.singleitem		= nil end
 	end
-	Countdown.instances[self.id] = nil
+	if Countdown.instances[self.id] then
+		Countdown.instances[self.id] = nil
+	end
 	if self.timer then
 		-- Edit #1, warning fix
 		if isTimer(self.timer) then killTimer(self.timer) end
