@@ -33,7 +33,6 @@ end
 
 function showhideGUI()
 	if not guiGetVisible(MainWindow) then
-		triggerServerEvent('requestChangelog', resourceRoot)
 		triggerServerEvent('requestAdmins', resourceRoot)
 		guiSetVisible(MainWindow, true)
 		showCursor(true)
