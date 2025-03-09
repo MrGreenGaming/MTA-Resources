@@ -256,6 +256,7 @@
 
         <setting name="*ghostmode_warning_if_map_override" friendlyname="Ghost mode override warning" group="Gameplay" value="true" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting" />
         <setting name="*vehicleweapons_warning_if_map_override" friendlyname="Vehicle weapons override warning" group="Gameplay" value="true" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting" />
+        <setting name="*classicchangez_warning_if_map_override" friendlyname="Classic change Z override warning" group="_Advanced" value="true" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting" />
 
         <setting name="*clientcheckban" value="false"
 					friendlyname="clientcheckban"

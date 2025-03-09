@@ -131,6 +131,7 @@ function cacheGameOptions()
 	g_GameOptions.classicchangez_map_can_override	= getBool('race.classicchangez_map_can_override',true)
 	g_GameOptions.ghostmode_warning_if_map_override			= getBool('race.ghostmode_warning_if_map_override',true)
 	g_GameOptions.vehicleweapons_warning_if_map_override	= getBool('race.vehicleweapons_warning_if_map_override',true)
+	g_GameOptions.classicchangez_warning_if_map_override	= getBool('race.classicchangez_warning_if_map_override',true)
 	g_GameOptions.hunterminigun_map_can_override	= getBool('race.hunterminigun_map_can_override',true)
 	if g_GameOptions.statskey ~= 'name' and g_GameOptions.statskey ~= 'serial' then
 		outputWarning( "statskey is not set to 'name' or 'serial'" )
