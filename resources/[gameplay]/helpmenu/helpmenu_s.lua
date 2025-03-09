@@ -1,22 +1,5 @@
 ﻿local onlineAdmins = {}
 
--- HTML Code Cleaner https://gist.github.com/HoraceBury/9001099
--- Edited by AleksCore
--- list of strings to replace (the order is important to avoid conflicts)
-local cleaner = {
-	{ "&amp;", "" }, --decode ampersands
-	{ "&#39;", "'" }, --single quote
-	{ "quot;", "\"" }, --double quote
-	{ "<br ?/?>", "\n" }, --all <br> tags whether terminated or not (<br> <br/> <br />) become new lines
-	{ "</p>", "\n" }, --ends of paragraphs become new lines
-	{ "(%b<>)", "" }, --all other html elements are completely removed (must be done last)
-	{ "\r", "\n" }, --return carriage become new lines
-	{ "[\n\n]+", "\n" }, --reduce all multiple new lines with a single new line
-	{ "^\n*", "" }, --trim new lines from the start...
-	{ "\n*$", "" }, --... and end
-	{ '&"', '"' },
-}
-
 motdText, changelog = '', false
 motdVersion, changelogLastUpdate = 0, ""
 	
