@@ -69,5 +69,6 @@ function updateChangelogString()
 	xmlUnloadFile(logNode)
 end
 
+requestBrowserDomains({ "github.com" })
 startChangelogDownload()
 setTimer(startChangelogDownload, 5*60*1000, 0)
