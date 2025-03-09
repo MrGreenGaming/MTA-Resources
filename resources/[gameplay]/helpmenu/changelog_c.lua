@@ -68,3 +68,6 @@ function updateChangelogString()
 	changelog = string.gsub(changelog, "Last 20 changes at ", "Last " ..changesCounter.. " changes at ")
 	xmlUnloadFile(logNode)
 end
+
+startChangelogDownload()
+setTimer(startChangelogDownload, 5*60*1000, 0)
