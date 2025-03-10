@@ -6,10 +6,15 @@ local newGMCheckpoint
 local modes = {}
 modes['Sprint'] = true
 modes['Never the same'] = true
+local ddGmTimer = nil;
 
 local DDGhostModeStartTime = 10 -- seconds
 
 function onMapStarting(mapInfo, mapOptions, gameOptions)
+	if ddGmTimer then
+		killTimer(ddGmTimer)
+		ddGmTimer = nil
+	end
 	--Only use gm in allowed modes
 	if not modes[exports.race:getRaceMode()] then
 		return false
@@ -144,7 +149,7 @@ function(new, old)
 		elseif new == "Running" and old ~= "MidMapVote" then
 			triggerEvent( 'startddgmTimer', root, true,DDGhostModeStartTime)
 
-			setTimer(function()
+			ddGmTimer = setTimer(function()
 				triggerClientEvent('onCheckCollisions', root)
 				for _,plr in pairs(getElementsByType('player')) do
 					onGMoff() -- This overrides the onCheckCollisions check, so only reset alpha

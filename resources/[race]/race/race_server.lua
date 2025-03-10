@@ -131,6 +131,7 @@ function cacheGameOptions()
 	g_GameOptions.classicchangez_map_can_override	= getBool('race.classicchangez_map_can_override',true)
 	g_GameOptions.ghostmode_warning_if_map_override			= getBool('race.ghostmode_warning_if_map_override',true)
 	g_GameOptions.vehicleweapons_warning_if_map_override	= getBool('race.vehicleweapons_warning_if_map_override',true)
+	g_GameOptions.classicchangez_warning_if_map_override	= getBool('race.classicchangez_warning_if_map_override',true)
 	g_GameOptions.hunterminigun_map_can_override	= getBool('race.hunterminigun_map_can_override',true)
 	if g_GameOptions.statskey ~= 'name' and g_GameOptions.statskey ~= 'serial' then
 		outputWarning( "statskey is not set to 'name' or 'serial'" )
@@ -255,6 +256,13 @@ function cacheMapOptions(map, bDontUseMode)
 	end
 	if mode.classicchangez ~= nil and not mode.classicchangez_map_can_override == true then
 		g_MapOptions.classicchangez = mode.classicchangez
+	end
+	if not bDontUseMode and map.classicchangez and g_GameOptions.classicchangez_warning_if_map_override and g_MapOptions.classicchangez ~= (mode.classicchangez ~= nil and mode.classicchangez or g_GameOptions.classicchangez) then
+		if g_MapOptions.classicchangez then
+			outputChatBox( 'Notice: Classic \'bouncy\' vehicle change is enabled on this map' )
+		else
+			outputChatBox( 'Notice: Classic \'bounce\' vehicle change is disabled on this map' )
+		end
 	end
 
 	-- Set hunterminigun from g_GameOptions if not defined in the map, or map override not allowed
