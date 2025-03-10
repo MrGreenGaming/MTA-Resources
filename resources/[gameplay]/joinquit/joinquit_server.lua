@@ -332,3 +332,10 @@ function redirectAll(source, _, ip, port)
 
 end
 addCommandHandler('redirectAll', redirectAll, true, false)
+
+function redirectToEvent(source, _)
+    outputChatBox('Redirecting to event server...', source, 255, 100, 100)
+    outputChatBox(getPlayerName(source) .. '#ff6464 is redirecting to the event server using /eventServer', g_Root, 255, 100, 100, true)
+    redirectPlayer(source, '54.36.140.148', 22003)
+end
+addCommandHandler('eventServer', redirectToEvent, false, false)
