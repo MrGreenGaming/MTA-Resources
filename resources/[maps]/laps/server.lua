@@ -220,3 +220,44 @@ function upsertTagsToMap(playerSource, _, ...)
 end
 addCommandHandler("maptag", upsertTagsToMap, true, false)
 addCommandHandler("maptags", upsertTagsToMap, true, false)
+
+function toggleClassicVehicleSetting(playerSource)
+    local metaXml = xmlLoadFile(":" .. currentMapRes .. "/meta.xml")
+    if metaXml then
+        local settingsNode = xmlFindChild(metaXml, "settings", 0)
+        if not settingsNode then
+            settingsNode = xmlCreateChild(metaXml, "settings")
+        end
+
+        local settingNode
+        local existingSettings = xmlNodeGetChildren(settingsNode)
+        for _, node in ipairs(existingSettings) do
+            if xmlNodeGetAttribute(node, "name") == "#classicchangez" then
+                settingNode = node
+                break
+            end
+        end
+
+        if settingNode then
+            -- Toggle the boolean value
+            local currentValue = xmlNodeGetAttribute(settingNode, "value")
+            local newValue = (currentValue == "true") and "false" or "true"
+            xmlNodeSetAttribute(settingNode, "value", newValue)
+            outputChatBox("Toggled '#classicchangez' setting to: " .. newValue .." for " .. currentMapRes .. ". Starts working next time map is started.", playerSource, 0, 255, 0)
+        else
+            -- Create the setting if it doesn't exist
+            settingNode = xmlCreateChild(settingsNode, "setting")
+            xmlNodeSetAttribute(settingNode, "name", "#classicchangez")
+            xmlNodeSetAttribute(settingNode, "value", "true")
+            outputChatBox("Created '#classicchangez' setting with value: true for " .. currentMapRes .. ". Starts working next time map is started.", playerSource, 0, 255, 0)
+        end
+
+        -- Save the updated meta.xml
+        xmlSaveFile(metaXml)
+        xmlUnloadFile(metaXml)
+    else
+        outputChatBox("Error: Unable to load meta.xml.", playerSource, 255, 0, 0)
+    end
+end
+addCommandHandler("classicVehicleChange", toggleClassicVehicleSetting, true, false)
+addCommandHandler("cvc", toggleClassicVehicleSetting, true, false)
