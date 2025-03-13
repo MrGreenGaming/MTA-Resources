@@ -117,7 +117,7 @@ if isEditor() then
 				local checkpoint = i>0 and g_Checkpoints[i] or g_Spawnpoints[1]
 				if checkpoint.vehicle then
 					if getElementModel(vehicle) ~= tonumber(checkpoint.vehicle) then
-						clientCall(source, 'alignVehicleWithUp')
+						clientCall(source, 'alignVehicleWithUp', g_MapOptions.classicchangez)
 						setVehicleID(vehicle, checkpoint.vehicle)
 						clientCall(source, 'vehicleChanging', g_MapOptions.classicchangez, tonumber(checkpoint.vehicle))
 						if checkpoint.paintjob or checkpoint.upgrades then

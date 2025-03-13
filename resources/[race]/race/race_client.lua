@@ -1631,9 +1631,16 @@ function directionToRotation2D( x, y )
 	return rem( math.atan2( y, x ) * (360/6.28) - 90, 360 )
 end
 
-function alignVehicleWithUp()
+function alignVehicleWithUp(classicChangeZ)
 	local vehicle = g_Vehicle
 	if not vehicle then return end
+
+	if not classicChangeZ then
+		if isVehicleWheelOnGround(vehicle, 0) or isVehicleWheelOnGround(vehicle, 1) or isVehicleWheelOnGround(vehicle, 2) or isVehicleWheelOnGround(vehicle, 3) then
+			return
+		end
+	end
+
 
 	local matrix = getElementMatrix( vehicle )
 	local Right = Vector3D:new( matrix[1][1], matrix[1][2], matrix[1][3] )

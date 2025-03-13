@@ -725,7 +725,7 @@ addEventHandler('onPlayerReachCheckpointInternal', g_Root,
 		if checkpoint.vehicle then
 			if getElementModel(vehicle) ~= tonumber(checkpoint.vehicle) then
 				if checkpointNum < #g_Checkpoints then
-					clientCall(source, 'alignVehicleWithUp')
+					clientCall(source, 'alignVehicleWithUp', g_MapOptions.classicchangez)
 				end
 				setVehicleID(vehicle, checkpoint.vehicle)
 				if nitroLevel then
