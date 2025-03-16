@@ -136,8 +136,8 @@ function startMidMapVoteForRandomMap(player)
 
 	-- Actual vote started here
 	local pollDidStart = exports.votemanager:startPoll {
-		title = 'Start a new (random) map?',
-		percentage = 100,
+		title = 'Start a new (random) map? 75% needs to vote yes to change the map.',
+		percentage = 75,
 		timeout = 20,
 		allowchange = true,
 		visibleTo = getRootElement(),
