@@ -84,26 +84,33 @@ local minPlayersForVote = 7
 function startMidMapVoteForRandomMap(player)
 	-- Check state and race time left
 	-- if not stateAllowsRandomMapVote() or g_CurrentRaceMode:getTimeRemaining() < 30000 then
+
+	if not player then return false end
 	if not stateAllowsRandomMapVote() then
-		if player then
-			outputRace("It's not possible to vote for a new map currently, " .. getPlayerName(player) .. ".", player)
-		end
+		outputRace("It's not possible to vote for a new map currently, " .. getPlayerName(player) .. ".", player)
 		return
 	end
 
+	local isPlayerStaff = hasObjectPermissionTo ( player, "command.ban" )
+
 	if isCurrentMapPremium then
-		if player then
+		if isPlayerStaff then
+			outputRace("/New is disabled for premium maps, but as a staff member you can still start a vote.", player)
+		else
 			outputRace("Premium maps (bought, event etc.) can't be skipped", player)
+			return
 		end
-		return
 	end
+
 
 	-- Check if there are enough players for non-admins to start the vote
 	if getPlayerCount() > minPlayersForVote then
-		if player then
+		if isPlayerStaff then
+			outputRace("/New is disabled when there are " .. minPlayersForVote + 1 .. " or more players online, but as a staff member you can still start a vote.", player)
+		else
 			outputRace("You can only start a vote when there are " .. minPlayersForVote .. " or fewer players online.", player)
+			return
 		end
-		return
 	end
 
     -- Check if the global cooldown is still active
@@ -113,21 +120,23 @@ function startMidMapVoteForRandomMap(player)
         local remainingMinutes = math.ceil((voteDelay - timeElapsed) / 60)
         local timeMessage = remainingMinutes > 1 and "minutes" or "minute"
 
-        if player then
-            outputRace("You must wait " .. remainingMinutes .. " " .. timeMessage .. " before starting a new vote.", player)
+        if isPlayerStaff then
+					outputRace("/New is in cooldown, but as a staff member you can still start a vote.", player)
+				else
+					outputRace("You must wait " .. remainingMinutes .. " " .. timeMessage .. " before starting a new vote.", player)
+					return
         end
-        return
     end
 
-    -- Record the current time as the new global vote time
-    prevVoteTime = getRealTime().timestamp
+  -- Record the current time as the new global vote time
+  prevVoteTime = getRealTime().timestamp
 
 	displayHilariarseMessage(player)
 	exports.votemanager:stopPoll()
 
 	-- Actual vote started here
 	local pollDidStart = exports.votemanager:startPoll {
-		title = 'Start a new map?',
+		title = 'Start a new (random) map?',
 		percentage = 100,
 		timeout = 20,
 		allowchange = true,
