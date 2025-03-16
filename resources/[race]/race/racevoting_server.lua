@@ -91,7 +91,7 @@ function startMidMapVoteForRandomMap(player)
 		return
 	end
 
-	local isPlayerStaff = hasObjectPermissionTo ( player, "command.ban" )
+	local isPlayerStaff = hasObjectPermissionTo ( player, "command.mute" )
 
 	if isCurrentMapPremium then
 		if isPlayerStaff then
