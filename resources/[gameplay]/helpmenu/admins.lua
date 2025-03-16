@@ -7,5 +7,5 @@ admins = {
 	{ name = "Military", title ="Admin", accountName = "mili"},
 	{ name = "Sandro", title="Admin", accountName = "Patogjeniii"},
 	{ name = "Mekuar", title="Admin", accountName = "Mekuar1"},
-    { name = "Witchy", title="Admin", accountName = "Witchy"}
+    { name = "Auriz", title="Admin", accountName = "Auriz"}
 }
