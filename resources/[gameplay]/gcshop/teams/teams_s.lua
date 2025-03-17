@@ -301,45 +301,54 @@ function checkPlayerTeam2(qh, player, bLogin)
         outputConsole('[TEAMS] Team days left: ' .. r.age, player)
     end
 
-    if not r then
-        playerteams[player] = nil
-        return leaveTeam(player)
-    elseif r.status ~= 1 then
-        return leaveTeam(player)
-    end
+	dbQuery(
+        function(qh)
+            local nicks = dbPoll(qh, 0)
+            sendClientData(nicks, result, player, r)
+            --triggerClientEvent('teamsData', resourceRoot, result, player, r)
 
-    -- Check team age
-    local age = (r.renew_timestamp - getRealTime().timestamp)
-    outputConsole('[TEAMS] Team days left: ' .. r.age, player)
-    if age < 0 then
-        if bLogin then
-            outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
-        end
-        return
-    end
+            -- Check if player is in a team
+            if not r then
+                playerteams[player] = nil
+                return leaveTeam(player)
+            elseif r.status ~= 1 then
+                return leaveTeam(player)
+            end
 
-    -- Create team element if it doesn't exist yet
-    local tr, tg, tb = getColorFromString(r.colour)
-    if not teams[r.teamid] then
-        teams[r.teamid] = createTeam(r.tag .. ' ' .. r.name, tr, tg, tb)
-        setElementData(teams[r.teamid], 'gcshop.teamid', r.teamid)
-        setElementData(teams[r.teamid], 'gcshop.owner', r.owner)
-    end
-    -- Don't use team elements in CTF or if CW is running
-    if not (exports.race:getRaceMode() == "Capture the flag" or (getResourceState(getResourceFromName("cw_script")) == "running" and not exports.cw_script:areGcShopTeamsAllowed())) then
-        setPlayerTeam(player, teams[r.teamid])
-        -- Colored blips for default radar by AleksCore
-        local blips = getElementsByType("blip")
-        for _, blip in pairs(blips) do
-            if getElementAttachedTo(blip) == player then
-                setBlipColor(blip, tr, tg, tb, 255)
+            -- Check team age
+            local age = (r.renew_timestamp - getRealTime().timestamp)
+            outputConsole('[TEAMS] Team days left: ' .. r.age, player)
+            if age < 0 then
+                if bLogin then
+                    outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
+                end
+                return
+            end
+
+            -- Create team element if it doesn't exist yet
+            local tr, tg, tb = getColorFromString(r.colour)
+            if not teams[r.teamid] then
+                teams[r.teamid] = createTeam(r.tag .. ' ' .. r.name, tr, tg, tb)
+                setElementData(teams[r.teamid], 'gcshop.teamid', r.teamid)
+                setElementData(teams[r.teamid], 'gcshop.owner', r.owner)
+            end
+            -- Don't use team elements in CTF or if CW is running
+            if not (exports.race:getRaceMode() == "Capture the flag" or (getResourceState(getResourceFromName("cw_script")) == "running" and not exports.cw_script:areGcShopTeamsAllowed())) then
+                setPlayerTeam(player, teams[r.teamid])
+				-- Colored blips for default radar by AleksCore
+				local blips = getElementsByType("blip")
+				for _, blip in pairs(blips) do
+					if getElementAttachedTo(blip) == player then
+						setBlipColor(blip, tr, tg, tb, 255)
+					end
+				end
+            end
+            -- Show personal team message
+            if r.message and bLogin then
+                outputChatBox('#00FF00[TEAMS] ' .. r.message, player, tr, tg, tb, true)
             end
         end
-    end
-    -- Show personal team message
-    if r.message and bLogin then
-        outputChatBox('#00FF00[TEAMS] ' .. r.message, player, tr, tg, tb, true)
-    end
+    ,handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], forumid)
 end
 
 -- Makes sure a player is not in a team, and if he was his team will be destroyed if it will be empty
