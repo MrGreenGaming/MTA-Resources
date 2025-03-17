@@ -42,7 +42,7 @@ guiSetProperty(GUIEditor.btnLeave, "NormalTextColour", "FFAAAAAA")
 GUIEditor.label[5] = guiCreateLabel(46, 225, 83, 28, "Welcome msg", false, GUIEditor.tab[1])
 guiLabelSetVerticalAlign(GUIEditor.label[5], "center")
 
-GUIEditor.tab[2] = guiCreateTab("Teams", GUIEditor.tabpanel[1])
+-- GUIEditor.tab[2] = guiCreateTab("Teams", GUIEditor.tabpanel[1])
 
 GUIEditor.gridlist[1] = guiCreateGridList(48, 40, 608, 304, false, GUIEditor.tab[2])
 guiGridListAddColumn(GUIEditor.gridlist[1], "Team", 0.5)
