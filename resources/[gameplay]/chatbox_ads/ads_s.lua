@@ -44,7 +44,7 @@ function outputAd()
 			if outputAmount <= 1 then
 				outputChatBox(prefix.." "..s,root,0,255,0,true)
 			else
-				outputChatBox(s,root,0,255,0,true)
+				outputChatBox("#FFFFFF" .. s,root,0,255,0,true)
 			end
 		end
 	else
