@@ -20,13 +20,13 @@ function saveHighCPUResources()
                     for player in pairs(g_Listener) do
                         if isElement(player) then
                             player:outputChat(("[IPB WARNING] Resource %q is using %s CPU"):format(row[1], row[2]), 255, 100, 100, true)
-                            if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' and exports.discord.send then
-                                exports.discord:send("admin.log", { log = ("[IPB WARNING] Resource %q is using %s CPU"):format(row[1], row[2]) })
-                            end
                         else
                             g_Listener[player] = nil
                         end
                     end
+                end
+                if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' and exports.discord.send then
+                    exports.discord:send("admin.log", { log = ("[IPB WARNING] Resource %q is using %s CPU"):format(row[1], row[2]) })
                 end
             end
 
