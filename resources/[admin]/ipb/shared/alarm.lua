@@ -6,7 +6,7 @@ function saveHighCPUResources()
         return
     end
 
-    local columns, rows = getPerformanceStats("Lua timing")
+    local columns, rows = getPerformanceStats("Lua timing", "d")
     local saveHighCPUResourcesAmount = tonumber(g_Settings["SaveHighCPUResourcesAmount"]) or 10
 
     for index, row in pairs(rows) do
