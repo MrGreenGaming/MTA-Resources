@@ -255,21 +255,25 @@ end
 addEvent('getForumDetails')
 addEventHandler('getForumDetails', root,
 function(resp, res, r, player)
-	local result = res
-	if not resp then
-		triggerClientEvent('teamsData', resourceRoot, result, player, r)
-	else
-		-- for _, p in ipairs(resp) do
-		-- 	for _, row in ipairs(result) do
-		-- 		if row.forumid == p.forumid then
-		-- 			row.mta_name = p.name
-		-- 			break
-		-- 		end
-		-- 	end
-		-- end
-		triggerClientEvent('teamsData', resourceRoot, result, player, r)
-	end
+    local result = res
+    if not resp then
+        triggerClientEvent('teamsData', resourceRoot, result, player, r)
+    else
+        local forumIdToName = {}
+        for _, p in ipairs(resp) do
+            forumIdToName[p.forumid] = p.name
+        end
+
+        for _, row in ipairs(result) do
+            if forumIdToName[row.forumid] then
+                row.mta_name = forumIdToName[row.forumid]
+            end
+        end
+
+        triggerClientEvent('teamsData', resourceRoot, result, player, r)
+    end
 end)
+
 
 function checkPlayerTeam2(qh, player, bLogin)
     local result = dbPoll(qh, 0)
