@@ -259,14 +259,14 @@ function(resp, res, r, player)
 	if not resp then
 		triggerClientEvent('teamsData', resourceRoot, result, player, r)
 	else
-		for _, p in ipairs(resp) do
-			for _, row in ipairs(result) do
-				if row.forumid == p.forumid then
-					row.mta_name = p.name
-					break
-				end
-			end
-		end
+		-- for _, p in ipairs(resp) do
+		-- 	for _, row in ipairs(result) do
+		-- 		if row.forumid == p.forumid then
+		-- 			row.mta_name = p.name
+		-- 			break
+		-- 		end
+		-- 	end
+		-- end
 		triggerClientEvent('teamsData', resourceRoot, result, player, r)
 	end
 end)
