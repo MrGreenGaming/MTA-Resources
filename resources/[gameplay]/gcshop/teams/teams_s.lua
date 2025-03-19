@@ -260,13 +260,18 @@ function(resp, res, r, player)
         triggerClientEvent('teamsData', resourceRoot, result, player, r)
     else
         local forumIdToName = {}
-        for _, p in ipairs(resp) do
+        local respCount = #resp
+        for i = 1, respCount do
+            local p = resp[i]
             forumIdToName[p.forumid] = p.name
         end
 
-        for _, row in ipairs(result) do
-            if forumIdToName[row.forumid] then
-                row.mta_name = forumIdToName[row.forumid]
+        local resultCount = #result
+        for i = 1, resultCount do
+            local row = result[i]
+            local name = forumIdToName[row.forumid]
+            if name then
+                row.mta_name = name
             end
         end
 
