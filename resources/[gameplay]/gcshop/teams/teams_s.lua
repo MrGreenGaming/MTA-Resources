@@ -260,21 +260,14 @@ function(resp, res, r, player)
         triggerClientEvent('teamsData', resourceRoot, result, player, r)
     else
         local beforems = getTickCount()
-        local forumIdToName = {}
-        local respCount = #resp
-        for i = 1, respCount do
-            local p = resp[i]
-            forumIdToName[p.forumid] = p.name
-        end
-
-        local resultCount = #result
-        for i = 1, resultCount do
-            local row = result[i]
-            local name = forumIdToName[row.forumid]
-            if name then
-                row.mta_name = name
-            end
-        end
+		for _, p in ipairs(resp) do
+			for _, row in ipairs(result) do
+				if row.forumid == p.forumid then
+					row.mta_name = p.name
+					break
+				end
+			end
+		end
         local afterms = getTickCount()
         outputDebugString('getForumDetails took ' .. (afterms - beforems) .. 'ms')
 
