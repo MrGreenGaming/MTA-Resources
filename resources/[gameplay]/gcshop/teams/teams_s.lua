@@ -222,37 +222,39 @@ function checkPlayerTeam(player, bLogin)
 end
 
 function sendClientData(nicks, res, player, r)
-	local result = res
-	local fid
-	local c = false
-	local forumNameTable = {}
-    local before = getTickCount()
-	for i, row in ipairs(result) do
-		fid = row.forumid
+    local result = res
+    local forumNameTable = {}
 
-		if nicks then
-			for j, ro in ipairs(nicks) do
-				if row.forumid == ro.forumid then
-					row.mta_name = ro.name:gsub("#%x%x%x%x%x%x", "")
-					c = true
-					break
-				end
-			end
-		end
+    if nicks then
+        local forumIdToName = {}
+        local nicksCount = #nicks
+        for i = 1, nicksCount do
+            local ro = nicks[i]
+            forumIdToName[ro.forumid] = ro.name:gsub("#%x%x%x%x%x%x", "")
+        end
 
-		if not c then
-			table.insert(forumNameTable, {userId=fid})
-		end
-		c = false
-	end
+        local resultCount = #result
+        for i = 1, resultCount do
+            local row = result[i]
+            local name = forumIdToName[row.forumid]
+            if name then
+                row.mta_name = name
+            else
+                forumNameTable[#forumNameTable + 1] = { userId = row.forumid }
+            end
+        end
+    else
+        local resultCount = #result
+        for i = 1, resultCount do
+            forumNameTable[#forumNameTable + 1] = { userId = result[i].forumid }
+        end
+    end
 
-    local after = getTickCount()
-    outputDebugString('Took ' .. (after - before) .. 'ms to prepare forumNameTable')
-	if #forumNameTable > 0 then
-		exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, player, 'getForumDetails')
-	else
-		triggerClientEvent('teamsData', resourceRoot, result, player, r)
-	end
+    if #forumNameTable > 0 then
+        exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, player, 'getForumDetails')
+    else
+        triggerClientEvent('teamsData', resourceRoot, result, player, r)
+    end
 end
 
 
