@@ -224,7 +224,6 @@ end
 function sendClientData(nicks, res, player, r)
     local result = res
     local forumNameTable = {}
-    local before = getTickCount()
 
     if nicks then
         -- Create a lookup table for forumid -> name mapping
@@ -253,8 +252,6 @@ function sendClientData(nicks, res, player, r)
             forumNameTable[#forumNameTable + 1] = { userId = result[i].forumid }
         end
     end
-    local after = getTickCount()
-    outputDebugString('Took ' .. (after - before) .. 'ms to collect forumNameTable')
 
     -- Call the appropriate function based on collected forumNameTable
     if #forumNameTable > 0 then
