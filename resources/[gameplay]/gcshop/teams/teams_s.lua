@@ -222,35 +222,48 @@ function checkPlayerTeam(player, bLogin)
 end
 
 function sendClientData(nicks, res, player, r)
-	local result = res
-	local fid
-	local c = false
-	local forumNameTable = {}
-	for i, row in ipairs(result) do
-		fid = row.forumid
+    local result = res
+    local forumNameTable = {}
+    local before = getTickCount()
 
-		if nicks then
-			for j, ro in ipairs(nicks) do
-				if row.forumid == ro.forumid then
-					row.mta_name = ro.name:gsub("#%x%x%x%x%x%x", "")
-					c = true
-					break
-				end
-			end
-		end
+    if nicks then
+        -- Create a lookup table for forumid -> name mapping
+        local forumIdToName = {}
+        local nicksCount = #nicks
+        for i = 1, nicksCount do
+            local ro = nicks[i]
+            forumIdToName[ro.forumid] = ro.name:gsub("#%x%x%x%x%x%x", "")
+        end
 
-		if not c then
-			table.insert(forumNameTable, {userId=fid})
-		end
-		c = false
-	end
+        -- Iterate through result and update names
+        local resultCount = #result
+        for i = 1, resultCount do
+            local row = result[i]
+            local name = forumIdToName[row.forumid]
+            if name then
+                row.mta_name = name
+            else
+                forumNameTable[#forumNameTable + 1] = { userId = row.forumid }
+            end
+        end
+    else
+        -- If `nicks` is nil, collect all forum IDs
+        local resultCount = #result
+        for i = 1, resultCount do
+            forumNameTable[#forumNameTable + 1] = { userId = result[i].forumid }
+        end
+    end
+    local after = getTickCount()
+    outputDebugString('Took ' .. (after - before) .. 'ms to collect forumNameTable')
 
-	if #forumNameTable > 0 then
-		exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, player, 'getForumDetails')
-	else
-		triggerClientEvent('teamsData', resourceRoot, result, player, r)
-	end
+    -- Call the appropriate function based on collected forumNameTable
+    if #forumNameTable > 0 then
+        exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, player, 'getForumDetails')
+    else
+        triggerClientEvent('teamsData', resourceRoot, result, player, r)
+    end
 end
+
 
 addEvent('getForumDetails')
 addEventHandler('getForumDetails', root,
@@ -259,17 +272,21 @@ function(resp, res, r, player)
     if not resp then
         triggerClientEvent('teamsData', resourceRoot, result, player, r)
     else
-        local beforems = getTickCount()
-		for _, p in ipairs(resp) do
-			for _, row in ipairs(result) do
-				if row.forumid == p.forumid then
-					row.mta_name = p.name
-					break
-				end
-			end
-		end
-        local afterms = getTickCount()
-        outputDebugString('getForumDetails took ' .. (afterms - beforems) .. 'ms')
+        local forumIdToName = {}
+        local respCount = #resp
+        for i = 1, respCount do
+            local p = resp[i]
+            forumIdToName[p.forumid] = p.name
+        end
+
+        local resultCount = #result
+        for i = 1, resultCount do
+            local row = result[i]
+            local name = forumIdToName[row.forumid]
+            if name then
+                row.mta_name = name
+            end
+        end
 
         triggerClientEvent('teamsData', resourceRoot, result, player, r)
     end
@@ -306,49 +323,54 @@ function checkPlayerTeam2(qh, player, bLogin)
         outputConsole('[TEAMS] Team days left: ' .. r.age, player)
     end
 
-    sendClientData(nil, result, player, r)
-    --triggerClientEvent('teamsData', resourceRoot, result, player, r)
+	dbQuery(
+        function(qh)
+            local nicks = dbPoll(qh, 0)
+            sendClientData(nicks, result, player, r)
+            --triggerClientEvent('teamsData', resourceRoot, result, player, r)
 
-    -- Check if player is in a team
-    if not r then
-        playerteams[player] = nil
-        return leaveTeam(player)
-    elseif r.status ~= 1 then
-        return leaveTeam(player)
-    end
+            -- Check if player is in a team
+            if not r then
+                playerteams[player] = nil
+                return leaveTeam(player)
+            elseif r.status ~= 1 then
+                return leaveTeam(player)
+            end
 
-    -- Check team age
-    local age = (r.renew_timestamp - getRealTime().timestamp)
-    outputConsole('[TEAMS] Team days left: ' .. r.age, player)
-    if age < 0 then
-        if bLogin then
-            outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
-        end
-        return
-    end
+            -- Check team age
+            local age = (r.renew_timestamp - getRealTime().timestamp)
+            outputConsole('[TEAMS] Team days left: ' .. r.age, player)
+            if age < 0 then
+                if bLogin then
+                    outputChatBox('[TEAMS] Your 30 days team has expired, go to the gcshop to renew it', player, 0, 255, 0)
+                end
+                return
+            end
 
-    -- Create team element if it doesn't exist yet
-    local tr, tg, tb = getColorFromString(r.colour)
-    if not teams[r.teamid] then
-        teams[r.teamid] = createTeam(r.tag .. ' ' .. r.name, tr, tg, tb)
-        setElementData(teams[r.teamid], 'gcshop.teamid', r.teamid)
-        setElementData(teams[r.teamid], 'gcshop.owner', r.owner)
-    end
-    -- Don't use team elements in CTF or if CW is running
-    if not (exports.race:getRaceMode() == "Capture the flag" or (getResourceState(getResourceFromName("cw_script")) == "running" and not exports.cw_script:areGcShopTeamsAllowed())) then
-        setPlayerTeam(player, teams[r.teamid])
-        -- Colored blips for default radar by AleksCore
-        local blips = getElementsByType("blip")
-        for _, blip in pairs(blips) do
-            if getElementAttachedTo(blip) == player then
-                setBlipColor(blip, tr, tg, tb, 255)
+            -- Create team element if it doesn't exist yet
+            local tr, tg, tb = getColorFromString(r.colour)
+            if not teams[r.teamid] then
+                teams[r.teamid] = createTeam(r.tag .. ' ' .. r.name, tr, tg, tb)
+                setElementData(teams[r.teamid], 'gcshop.teamid', r.teamid)
+                setElementData(teams[r.teamid], 'gcshop.owner', r.owner)
+            end
+            -- Don't use team elements in CTF or if CW is running
+            if not (exports.race:getRaceMode() == "Capture the flag" or (getResourceState(getResourceFromName("cw_script")) == "running" and not exports.cw_script:areGcShopTeamsAllowed())) then
+                setPlayerTeam(player, teams[r.teamid])
+				-- Colored blips for default radar by AleksCore
+				local blips = getElementsByType("blip")
+				for _, blip in pairs(blips) do
+					if getElementAttachedTo(blip) == player then
+						setBlipColor(blip, tr, tg, tb, 255)
+					end
+				end
+            end
+            -- Show personal team message
+            if r.message and bLogin then
+                outputChatBox('#00FF00[TEAMS] ' .. r.message, player, tr, tg, tb, true)
             end
         end
-    end
-    -- Show personal team message
-    if r.message and bLogin then
-        outputChatBox('#00FF00[TEAMS] ' .. r.message, player, tr, tg, tb, true)
-    end
+    ,handlerConnect, [[SELECT * FROM gc_nickcache WHERE forumid=?]], forumid)
 end
 
 -- Makes sure a player is not in a team, and if he was his team will be destroyed if it will be empty
