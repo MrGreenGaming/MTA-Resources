@@ -222,43 +222,37 @@ function checkPlayerTeam(player, bLogin)
 end
 
 function sendClientData(nicks, res, player, r)
-    local result = res
-    local forumNameTable = {}
+	local result = res
+	local fid
+	local c = false
+	local forumNameTable = {}
+    local before = getTickCount()
+	for i, row in ipairs(result) do
+		fid = row.forumid
 
-    if nicks then
-        -- Create a lookup table for forumid -> name mapping
-        local forumIdToName = {}
-        local nicksCount = #nicks
-        for i = 1, nicksCount do
-            local ro = nicks[i]
-            forumIdToName[ro.forumid] = ro.name:gsub("#%x%x%x%x%x%x", "")
-        end
+		if nicks then
+			for j, ro in ipairs(nicks) do
+				if row.forumid == ro.forumid then
+					row.mta_name = ro.name:gsub("#%x%x%x%x%x%x", "")
+					c = true
+					break
+				end
+			end
+		end
 
-        -- Iterate through result and update names
-        local resultCount = #result
-        for i = 1, resultCount do
-            local row = result[i]
-            local name = forumIdToName[row.forumid]
-            if name then
-                row.mta_name = name
-            else
-                forumNameTable[#forumNameTable + 1] = { userId = row.forumid }
-            end
-        end
-    else
-        -- If `nicks` is nil, collect all forum IDs
-        local resultCount = #result
-        for i = 1, resultCount do
-            forumNameTable[#forumNameTable + 1] = { userId = result[i].forumid }
-        end
-    end
+		if not c then
+			table.insert(forumNameTable, {userId=fid})
+		end
+		c = false
+	end
 
-    -- Call the appropriate function based on collected forumNameTable
-    if #forumNameTable > 0 then
-        exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, player, 'getForumDetails')
-    else
-        triggerClientEvent('teamsData', resourceRoot, result, player, r)
-    end
+    local after = getTickCount()
+    outputDebugString('Took ' .. (after - before) .. 'ms to prepare forumNameTable')
+	if #forumNameTable > 0 then
+		exports.gc:getForumAccountDetailsMultiple(forumNameTable, result, r, player, 'getForumDetails')
+	else
+		triggerClientEvent('teamsData', resourceRoot, result, player, r)
+	end
 end
 
 
