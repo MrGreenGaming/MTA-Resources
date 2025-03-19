@@ -677,6 +677,9 @@ end
 addEventHandler ( "onMapStarting", root, mapRestart )
 
 function callSpawn ( player )
+
+	local vipIsRunning = getResourceState( getResourceFromName( "mrgreen-vip" ) ) == "running";
+	local isPlayerVip =  vipIsRunning and exports['mrgreen-vip']:isPlayerVIP(player);
 	if #allSpawnpoints == 0 then
 		return false
 	end
@@ -691,7 +694,7 @@ function callSpawn ( player )
         exports.cw_script:outputInfoForPlayer(player, "You can't change spawns during events")
         return false
 	elseif not spawnIndex[player] then
-		if gcshopBuyItem ( player, items.Spawn.price, 'Spawn' ) then
+		if isPlayerVip or gcshopBuyItem ( player, items.Spawn.price, 'Spawn' ) then
 			elementID, distance, index = changeSpawn(player)
 			outputChatBox('[GC] Use shift+3 to go back to a previous spawnpoint', player, 0,255,0)
 		end

@@ -259,6 +259,7 @@ function(resp, res, r, player)
     if not resp then
         triggerClientEvent('teamsData', resourceRoot, result, player, r)
     else
+        local beforems = getTickCount()
         local forumIdToName = {}
         local respCount = #resp
         for i = 1, respCount do
@@ -274,6 +275,8 @@ function(resp, res, r, player)
                 row.mta_name = name
             end
         end
+        local afterms = getTickCount()
+        outputDebugString('getForumDetails took ' .. (afterms - beforems) .. 'ms')
 
         triggerClientEvent('teamsData', resourceRoot, result, player, r)
     end
