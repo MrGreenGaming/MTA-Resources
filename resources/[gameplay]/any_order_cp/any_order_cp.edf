@@ -1,0 +1,12 @@
+<def name="Any Order Checkpoints">
+	<element name="checkpoint_any_order" friendlyname="Checkpoint (Any Order)" icon="CP.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="type" type="selection:checkpoint,ring,corona" default="ring" />
+		<data name="color" type="color" description="color (#RRGGBBAA hex string)" default="#F0F9" />
+		<data name="blipcolor" type="color" description="blip color (#RRGGBBFF hex string)" default="#F0F9" />
+		<data name="size" type="number" description="marker size" default="1" />
+		<!-- <data name="extracolshapesize" type="integer" default="0" description="How much bigger the checkpoint's hitbox is compared to its visual appearance. Standard race gamemode value is 4." required="false"/> -->
+		<data name="blipsize" type="number" description="blip size" default="1" />
+		<marker color="!color!" type="!type!" size="!size!"/>
+	</element>
+</def>
