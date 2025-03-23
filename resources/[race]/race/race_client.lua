@@ -576,20 +576,20 @@ function vehicleChanging( changez, newModel )
 		outputConsole( "Vehicle change model mismatch (" .. tostring(getElementModel(g_Vehicle)) .. "/" .. tostring(newModel) .. ")" )
 	end
 	local newVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
-	if newModel == 557 or newModel == 556 or newModel == 444 then
+	if newModel == 557 or newModel == 556 or newModel == 444 or newModel == 406 then
 		newVehicleHeight = newVehicleHeight + 1
 	end
 	local x, y, z = getElementPosition(g_Vehicle)
 	if g_PrevVehicleHeight and newVehicleHeight > g_PrevVehicleHeight then
 		z = z - g_PrevVehicleHeight + newVehicleHeight
-	elseif g_PrevVehicleHeight and newVehicleHeight < g_PrevVehicleHeight then
+	elseif not changez and g_PrevVehicleHeight and newVehicleHeight < g_PrevVehicleHeight then
 		z = z + newVehicleHeight - g_PrevVehicleHeight
 	end
 	if changez then
 		z = z + 1
 	end
 	setElementPosition(g_Vehicle, x, y, z)
-	g_PrevVehicleHeight = nil
+	g_PrevVehicleHeight = newVehicleHeight
 	updateVehicleWeapons()
 	checkVehicleIsHelicopter()
 end
@@ -911,7 +911,7 @@ function checkpointReached(elem, matchingDimension)
 	--if g_Checkpoints[g_CurrentCheckpoint].vehicle and g_Checkpoints[g_CurrentCheckpoint].vehicle ~= getElementModel(g_Vehicle) then
 		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
 		-- Bounce fix for Monster
-		if getElementModel(g_Vehicle) == 557 or getElementModel(g_Vehicle) == 556 or getElementModel(g_Vehicle) == 444 then
+		if getElementModel(g_Vehicle) == 557 or getElementModel(g_Vehicle) == 556 or getElementModel(g_Vehicle) == 444 or getElementModel(g_Vehicle) == 406 then
 			g_PrevVehicleHeight = g_PrevVehicleHeight + 1
 		end
 		--alignVehicleWithUp()
