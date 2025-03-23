@@ -38,5 +38,11 @@
 			accept="[true|false]"
 			value="false"
 			/>
+            <setting name="*showTopics"
+                friendlyName="Show amount of event topics. 0 is disabled."
+                group="Event"
+                accept="0-9"
+                value="1"
+            />
 	</settings>
 </meta>

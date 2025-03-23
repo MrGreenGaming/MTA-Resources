@@ -2,8 +2,7 @@
 	Script that fetches the recent forum posts from forum and shows them in chat
 --]]
 
-local url = "https://mrgreengaming.com/forums/forum/31-multi-theft-auto.xml";
-local showTopics = 4;
+local url = "https://forums.mrgreengaming.com/forum/99-mta-events.xml";
 local interval = 3 * 60 * 60 * 1000;
 local chatDelay = 10 * 1000;
 
@@ -36,11 +35,15 @@ function fetchCallback ( data, errno, ... )
 		return error();
 	end
 
-	outputChatBox("Recent MTA subforum topics on Mr.Green", root, 0, 255, 0 );
+	outputChatBox("Check out the latest events on the Forums/Discord:", root, 0, 255, 0 );
+	local showTopics = getNumber('gus.showTopics', 1);
 	if data then
 		local f = fileCreate'recent.xml'
 		fileWrite(f, data)
 		fileClose(f)
+
+		if showTopics < 1 then return end
+
 		local x = xmlLoadFile'recent.xml'
 		if x then
 			local c = xmlFindChild(x, 'channel', 0)
@@ -62,4 +65,13 @@ function fetchCallback ( data, errno, ... )
 	else
 		outputDebugString'recent forum topics error'
 	end
+end
+
+
+function getNumber(var,default)
+	local result = get(var)
+	if not result then
+			return default
+	end
+	return tonumber(result)
 end
