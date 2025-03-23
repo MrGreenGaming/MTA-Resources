@@ -3,7 +3,7 @@ local rerollIntervalTime = 10000 -- time between rerolls in ms
 local rerollPlayer = {}
 
 local playerRolledAmount = {} -- [player] = amount
-local maxRollsPerMap = 99
+local maxRollsPerMap = 1
 
 local vehroll_firstcheckpoint = false -- don't allow before first checkpoint reached
 local vehroll_firstCheckpointPlayer = {}
