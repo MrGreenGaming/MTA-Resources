@@ -3,26 +3,12 @@
 --]]
 
 local url = "https://forums.mrgreengaming.com/forum/99-mta-events.xml";
-local interval = 3 * 60 * 60 * 1000;
-local chatDelay = 10 * 1000;
+local interval = 30 * 60 * 1000;
 
-local fetchTimer, chatDelayTimer = nil;
 function onStart()
-	fetchTimer = setTimer(getReadyForFetch, interval, 0);
+	setTimer(fetch, interval, 0);
 end
 addEventHandler ( 'onResourceStart', resourceRoot, onStart);
-
-function getReadyForFetch()
-	chatDelayTimer = setTimer ( fetch, chatDelay, 1 );
-end
-
-function delayFetch()
-	if ( isTimer(chatDelayTimer) ) then
-		resetTimer(chatDelayTimer);
-		resetTimer(fetchTimer);
-	end
-end
-addEventHandler('onPlayerChat', root, delayFetch);
 
 function fetch()
 	fetchRemote ( url , fetchCallback );
