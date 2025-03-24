@@ -203,6 +203,13 @@ function updatePlayerTop(player, rank, value)
 	local forumid = exports.gc:getPlayerForumID(player)
 	local toptime = nil
 	if isMapTesting() or not forumid then return end
+
+	-- check for people marked as Ghost
+	if (exports.race.getRaceMode() == "Sprint" or exports.race.getRaceMode() == "Never the same") and getElementData(player,"markedblocker") then
+		outputChatBox("You are marked as a ghost, your time will not be saved.",player,255,0,0)
+		return
+	end
+
 	for i, row in ipairs(times) do
 		if forumid == row.forumid then
 			row.player = player

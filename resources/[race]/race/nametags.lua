@@ -181,7 +181,7 @@ function nametagHandler()
 						end
 					end
 					if player and getElementData(player, 'markedblocker') then
-						name = name .. ' #FFFFFF[BLOCKER]'
+						name = name .. ' #FFFFFF[GHOST]'
 					end
 					if player and getElementData(player, 'markedlagger') then
 						name = name .. ' #FFFFFF[LAGGER]'

@@ -11,7 +11,7 @@ function blocker(player, _, nick, duration, timeType)
 		outputChatBox("No player found", player, 0, 255,0)
 	else
 
-		outputChatBox("Marking " .. getPlayerName(blockPlayer) .. "#FF0000 as blocker for " .. (duration or "1") .. " " .. (timeType or "hours"), player, 255, 0, 0 , true)
+		outputChatBox("Marking " .. getPlayerName(blockPlayer) .. "#FF0000 as Ghost for " .. (duration or "1") .. " " .. (timeType or "hours"), player, 255, 0, 0 , true)
 		if not getElementData(blockPlayer,"markedblocker") then
 			duration = tonumber(duration)
 			if not duration then
@@ -53,12 +53,12 @@ function blocker(player, _, nick, duration, timeType)
 				outputChatBox(remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
 
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " marked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker for " ..duration .. " hours"})
+                    exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " marked " .. remcol(getPlayerName(blockPlayer)) .. " as Ghost for " ..duration .. " hours"})
                 end
 
 				logBlockAction(player, blockPlayer,"marked",duration)
 				if useIRC() then
-					exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
+					exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a Ghost.")
 				end
 			else
 				outputChatBox("Something went wrong, please contact a developer. 'blocker() add'",player)
@@ -69,18 +69,18 @@ function blocker(player, _, nick, duration, timeType)
 				return false
 			end
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as Ghost"})
             end
-			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
+			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a Ghost.", root, 255, 0, 0)
 			setElementData(blockPlayer , 'markedblocker', nil)
 
 			removeBlockerFromDB(getPlayerSerial(blockPlayer))
 			logBlockAction(player, blockPlayer,"unmarked")
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as Ghost"})
             end
 			if useIRC() then
-				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
+				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a Ghost.")
 			end
 		end
 	end
@@ -101,14 +101,14 @@ function unblocker(player, _, nick)
 		if getElementData(blockPlayer,"markedblocker") then
 			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " has unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as blocker"})
+                exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " has unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as Ghost"})
             end
 
 			setElementData(blockPlayer , 'markedblocker', nil)
 			removeBlockerFromDB(serial)
 			logBlockAction(player, blockPlayer,"unmarked")
 			if useIRC() then
-				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.")
+				exports.irc:outputIRC("05** "..remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a Ghost.")
 			end
 
 		end
@@ -144,7 +144,7 @@ function unserialblocker(player, _, serial)
 	else
 		removeBlockerFromDB(serial)
 		logBlockAction(player, serial,"unmarked")
-		outputChatBox("Unmarked "..serial.. " as a blocker", player, 255, 0, 0)
+		outputChatBox("Unmarked "..serial.. " as a Ghost", player, 255, 0, 0)
 	end
 end
 addCommandHandler('unserialblocker', unserialblocker, true, true)
@@ -166,14 +166,14 @@ function dispBlockers(source)
 
 			t[#t+1] = remcol(getPlayerName(player)) .. ' (' .. duration .. ' by: '..byAdmin..')'
 
-			outputConsole("Blocker: "..getPlayerName(player).." ("..duration..") by: "..byAdmin)
+			outputConsole("Ghost: "..getPlayerName(player).." ("..duration..") by: "..byAdmin)
 
 		end
 	end
 	if #t < 1 then
-		outputChatBox('No blockers online at the moment!', source, 255, 0, 0)
+		outputChatBox('No Ghosts online at the moment!', source, 255, 0, 0)
 	else
-		local chatboxLines = splitStringforChatBox('Blockers online: ' .. table.concat(t, ', '))
+		local chatboxLines = splitStringforChatBox('Ghosts online: ' .. table.concat(t, ', '))
 		for _,line in ipairs(chatboxLines) do
 			outputChatBox(line,source,255,0,0)
 		end
@@ -210,7 +210,7 @@ function checkBlockerJoin(thePlayer)
 
 
 
-						outputChatBox("You have been marked as a blocker by "..t.byAdmin..", you will be unmarked in "..expireReadable,player,255,0,0)
+						outputChatBox("You have been marked as a Ghost by "..t.byAdmin..", you will be unmarked in "..expireReadable,player,255,0,0)
 					else
 						removeBlockerFromDB(getPlayerSerial(player))
 					end
@@ -251,7 +251,7 @@ function checkBlockerExpire()
 			if timeleft < 1 then
 				removeBlockerFromDB(getPlayerSerial(player))
 				setElementData(player,"markedblocker",nil)
-				outputChatBox("You are no longer marked as a blocker.",player,255,0,0)
+				outputChatBox("You are no longer marked as a Ghost.",player,255,0,0)
 			end
 		end
 	end
@@ -282,7 +282,7 @@ function logBlockAction(playerResponsible, playerBlocked,wording,hours)
     	hoursString = " ("..tostring(hours).."h)"
     end
 
-    local fullString = dateTime.." "..playerResponsible.." "..wording.." as blocker "..playerBlocked..hoursString
+    local fullString = dateTime.." "..playerResponsible.." "..wording.." as Ghost "..playerBlocked..hoursString
     fileSetPos(file, fileGetSize(file))
     fileWrite(file, "\n"..fullString)
     fileClose(file)

@@ -100,7 +100,11 @@ function onPlayerReachCheckpoint(cp)
 		exports.messages:outputGameMessage("Ghostmode will be disabled", source, 1.5, 255, 255, 0, true)
 	elseif cp == changeCheckpoint then
 		-- Trigger the client checking before ghostmode can be disabled and stop drawing the sign
-		triggerClientEvent(source, 'checkGmCanWorkOk', root)
+
+		-- Don't remove ghostmode for marked blockers / Ghosts
+		if not getElementData(source, "markedblocker") then
+			triggerClientEvent(source, 'checkGmCanWorkOk', root)
+		end
 		triggerClientEvent(source, "drawSign", root, false)
 	end
 end
