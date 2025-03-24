@@ -50,7 +50,7 @@ function blocker(player, _, nick, duration, timeType)
 			if added then
 				setElementData(blockPlayer , 'markedblocker', t)
 
-				outputChatBox(remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
+				outputChatBox(remcol(getPlayerName(player)).." has marked "..remcol(getPlayerName(blockPlayer)).. " as a Ghost.", root, 255, 0, 0)
 
                 if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
                     exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " marked " .. remcol(getPlayerName(blockPlayer)) .. " as Ghost for " ..duration .. " hours"})
@@ -99,7 +99,7 @@ function unblocker(player, _, nick)
 
 		local serial = getPlayerSerial(blockPlayer)
 		if getElementData(blockPlayer,"markedblocker") then
-			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a blocker.", root, 255, 0, 0)
+			outputChatBox(remcol(getPlayerName(player)).." has unmarked "..remcol(getPlayerName(blockPlayer)).. " as a Ghost.", root, 255, 0, 0)
             if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
                 exports.discord:send("admin.log", { log = getAccountName( getPlayerAccount(player)) .. " has unmarked " .. remcol(getPlayerName(blockPlayer)) .. " as Ghost"})
             end
@@ -129,7 +129,7 @@ function serialblocker(player, _, serial, duration)
 			if expireTimestamp then
 				addBlockerToDB(serial,"",expireTimestamp,getPlayerName(player):gsub("#%x%x%x%x%x%x",""),tostring( not hasObjectPermissionTo ( player, "command.serialblocker", false ) ) )
 				logBlockAction(player, serial, "marked", duration)
-				outputChatBox("Marked "..serial.. " as a blocker for " .. math.round(((tonumber(duration) or 24) * 1000 * 60 * 60 * 1) / (60*60*1000), 1, ceil) .. 'hr', player, 255, 0, 0)
+				outputChatBox("Marked "..serial.. " as a Ghost for " .. math.round(((tonumber(duration) or 24) * 1000 * 60 * 60 * 1) / (60*60*1000), 1, ceil) .. 'hr', player, 255, 0, 0)
 			else
 				outputChatBox("Something went wrong, contact a developer please. 'serialblocker()' ",player)
 			end

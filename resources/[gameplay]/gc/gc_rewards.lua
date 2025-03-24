@@ -200,7 +200,7 @@ function finish(rank)
 
 		if rewarded_Players[player].finishReward > 1 then
 			if not isTournamentActive then
-				if not getElementData(player, 'blockermode') then
+				if not getElementData(player, 'markedblocker') then
 					addPlayerGreencoins(player, rewarded_Players[player].finishReward)
 					exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0, false, false, true)
 				else
