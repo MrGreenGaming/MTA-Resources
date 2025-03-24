@@ -4,6 +4,7 @@ settings = {
     ['ACL'] = { -- A bit more advanced.
         { 'bday', '#FF00FF[Happy Birthday!] ', '[Happy Birthday!]', '#FFFFFF', '%[Happy Birthday!%]' },
         { 'Developer', '#FFA500[Dev] ', '[Dev]', '#FFFFFF', '%[Dev%]' },
+        { 'ServerManager', '#00FF00[Exec]', '[Exec]', '#FFFFFF', '%[Exec%]' },
         { 'Admin', '#0099FF[Admin] ', '[Admin]', '#FFFFFF', '%[Admin%]' },
         { 'Killers', '#00FFFF[Mod] ', '[Mod]', '#FFFFFF', '%[Mod%]' },
         { 'VIP', '#FFFF00[VIP] ', '[VIP]', '#FFFFFF', '%[VIP%]' },
