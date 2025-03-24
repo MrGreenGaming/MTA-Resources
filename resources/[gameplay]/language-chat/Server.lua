@@ -10,6 +10,7 @@ local tags = { -- A bit more advanced.
 	{ 'VIP', '#FFFF00[VIP] ', '[VIP]', '#FFFFFF', '%[VIP%]' },
 	{ 'Killers', '#00FFFF[Mod] ', '[Mod]', '#FFFFFF', '%[Mod%]' },
 	{ 'Admin', '#0099FF[Admin] ', '[Admin]', '#FFFFFF', '%[Admin%]' },
+	{ 'ServerManager', '#00FF00[Exec]', '[Exec]', '#FFFFFF', '%[Exec%]' },
 	{ 'Developer', '#FFA500[Dev] ', '[Dev]', '#FFFFFF', '%[Dev%]' },
 }
 
