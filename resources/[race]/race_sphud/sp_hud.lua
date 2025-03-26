@@ -10,6 +10,8 @@ local g_Duration = nil
 g_FadedIn = true
 local sx,sy = guiGetScreenSize()
 
+local totalCheckpoints = 0
+
 -- toggling the hud --
 function showHud (hud)
 	hud = tonumber(hud)
@@ -101,6 +103,7 @@ function onStart()
 	local radar = tonumber(xmlNodeGetAttribute ( radarnode, 'enabled' ))
 	local hudnode = xmlFindChild ( g_conf, 'hud', 0)
 	local hud = tonumber(xmlNodeGetAttribute ( hudnode, 'type' ))
+	totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1) 
 	xmlUnloadFile(g_conf)
 	showHud(hud)
 	showRadar(nil, radar)
@@ -152,6 +155,7 @@ end)
 
 addEventHandler('onClientScreenFadedIn', root, function()
 	g_FadedIn = true
+	totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
 end)
 
 addEventHandler('onClientScreenFadedOut', root, function()
@@ -180,7 +184,6 @@ function drawNewHUD()
 	local rank = getElementData(target,'race rank')
 	local players = #getElementsByType('player') or 1
 	local currentCheckpoint = (getElementData(target, 'race.checkpoint') or 1) - ((getElementData(target, 'race.finished') and 0) or 1)
-	local totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
     local currentLap = (getElementData(target, 'race.lap') or nil)
     local totalLaps = (getElementData(target, "race.totalLaps") or nil)
 	local health = math.ceil((getElementHealth(g_Veh) - 250) / 7.50)
@@ -206,7 +209,6 @@ function drawNewHUD()
 			local rank = getElementData(target,'race rank')
 			local players = #getElementsByType('player') or 1
 			local currentCheckpoint = (getElementData(target, 'race.checkpoint') or 1) - ((getElementData(target, 'race.finished') and 0) or 1)
-			local totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
 			local health = math.ceil((getElementHealth(g_Veh) - 250) / 7.50)
 			local speedMode = 1
 
