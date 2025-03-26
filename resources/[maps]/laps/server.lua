@@ -31,7 +31,7 @@ function mapStarting(mapInfo, mapOptions, gameOptions)
         for i, player in ipairs(getElementsByType("player")) do
             setElementData(player, "race.totalLaps", nil, true)
         end
-        exports.scoreboard.scoreboardRemoveColumn('race.lap.text')
+        exports.scoreboard:scoreboardRemoveColumn('race.lap.text')
     end
 
     for i, player in ipairs(getElementsByType("player")) do
