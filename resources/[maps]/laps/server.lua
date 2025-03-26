@@ -36,7 +36,7 @@ function mapStarting(mapInfo, mapOptions, gameOptions)
         setElementData(player, "race.bestlap", nil, true)
         setElementData(player, "race.lap.text", "1/"..#laps + 1, true)
     end
-    exports.scoreboard:scoreboardAddColumn("race.lap.text", root, 78, "Lap", 6)
+    exports.scoreboard:scoreboardAddColumn("race.lap.text", root, 40, "Lap", 6)
 end
 
 addEvent("onMapStarting")
