@@ -34,9 +34,9 @@ function mapStarting(mapInfo, mapOptions, gameOptions)
     for i, player in ipairs(getElementsByType("player")) do
         setElementData(player, "race.lap", nil, true)
         setElementData(player, "race.bestlap", nil, true)
-        setElementData(player, "race.lap.text", "0/"..#laps + 1, true)
+        setElementData(player, "race.lap.text", "1/"..#laps + 1, true)
     end
-    exports.scoreboard:scoreboardAddColumn("race.lap.text", root, 78, "Lap", 30)
+    exports.scoreboard:scoreboardAddColumn("race.lap.text", root, 78, "Lap", 6)
 end
 
 addEvent("onMapStarting")
