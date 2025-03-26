@@ -24,19 +24,20 @@ function mapStarting(mapInfo, mapOptions, gameOptions)
 
         for i, player in ipairs(getElementsByType("player")) do
             setElementData(player, "race.totalLaps", #laps + 1, true)
+            setElementData(player, "race.lap.text", "1/"..#laps + 1, true)
         end
+        exports.scoreboard:scoreboardAddColumn("race.lap.text", root, 40, "Lap", 6)
     else
         for i, player in ipairs(getElementsByType("player")) do
             setElementData(player, "race.totalLaps", nil, true)
         end
+        exports.scoreboard.scoreboardRemoveColumn('race.lap.text')
     end
 
     for i, player in ipairs(getElementsByType("player")) do
         setElementData(player, "race.lap", nil, true)
         setElementData(player, "race.bestlap", nil, true)
-        setElementData(player, "race.lap.text", "1/"..#laps + 1, true)
     end
-    exports.scoreboard:scoreboardAddColumn("race.lap.text", root, 40, "Lap", 6)
 end
 
 addEvent("onMapStarting")
