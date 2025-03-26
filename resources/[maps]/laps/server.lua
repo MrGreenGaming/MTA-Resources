@@ -35,6 +35,8 @@ function mapStarting(mapInfo, mapOptions, gameOptions)
         setElementData(player, "race.lap", nil, true)
         setElementData(player, "race.bestlap", nil, true)
     end
+    setElementData(player, "race.lap.text", "0/"..#laps + 1, true)
+    call(getResourceFromName("scoreboard"), "scoreboardAddColumn", "race.lap.text")
 end
 
 addEvent("onMapStarting")
@@ -43,6 +45,7 @@ addEventHandler("onMapStarting", resourceRoot, mapStarting)
 addEventHandler("onPlayerJoin", root, function()
     if #laps > 0 then
         setElementData(source, "race.totalLaps", #laps + 1, true)
+        setElementData(source, "race.lap.text", "0/"..#laps + 1, true)
     end
 end)
 
@@ -53,6 +56,7 @@ addEventHandler("onPlayerReachCheckpoint", root, function(checkpoint, time_)
     if not newLap then return end
 
     setElementData(source, "race.lap", newLap + 1, true)
+    setElementData(player, "race.lap.text", newLap + 1 .."/"..#laps + 1, true)
 
     updateLapTime(time_, source, newLap)
 end)
