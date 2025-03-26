@@ -29,15 +29,25 @@ end)
 
 ---.WhiteBlue
 
+local ghostmodePlayers = {}
+
+
 addEventHandler("onMapStarting", root,
     function()
+   
         for _, player in ipairs(getElementsByType("player")) do
-            local mapType = getElementData(root, "mapType")  
+            local mapType = getElementData(root, "mapType") 
+            
             if mapType == "Race" or mapType == "Never the Same" then
+                
                 if getElementData(player, "ghostmodePurchased") == true then
+                    
                     setElementData(player, "ghostmodeEnabled", true)
-                    setElementData(player, "canEarnGreencoins", false) 
+                    setElementData(player, "canEarnGreencoins", false)  
+                    table.insert(ghostmodePlayers, player)  
+                    outputChatBox(getPlayerName(player) .. " has activated permanent Ghostmode for this round.", root)
                 else
+                
                     setElementData(player, "ghostmodeEnabled", false)
                 end
             end
@@ -45,19 +55,28 @@ addEventHandler("onMapStarting", root,
     end
 )
 
-addCommandHandler("buyghostmode",
-    function(player)
+
+addCommandHandler("buyghostmode", function(player)
+    local mapType = getElementData(root, "mapType")
+    
+
+    if mapType == "Race" or mapType == "Never the Same" then
         setElementData(player, "ghostmodePurchased", true)
         outputChatBox("You have purchased Permanent Ghostmode for this round.", player)
+    else
+        outputChatBox("Ghostmode is only available on Race or Never the Same maps.", player, 255, 0, 0)
     end
-)
+end)
 
 
 addEventHandler("onMapFinished", root,
     function()
-        for _, player in ipairs(getElementsByType("player")) do
+        for _, player in ipairs(ghostmodePlayers) do
+            
             setElementData(player, "ghostmodeEnabled", false)
-            setElementData(player, "canEarnGreencoins", true)
+            setElementData(player, "canEarnGreencoins", true)  
         end
+  
+        ghostmodePlayers = {}
     end
 )
