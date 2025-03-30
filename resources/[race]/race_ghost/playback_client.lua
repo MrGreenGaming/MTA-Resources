@@ -52,6 +52,7 @@ function GhostPlayback:create(recording, ped, vehicle, racer, time, playbackID)
 	setElementParent(result.blip, result.ped)
 	warpPedIntoVehicle(result.ped, result.vehicle)
 
+	setElementData(result.vehicle, "race.isGhostVehicle", true)
 	setElementCollisionsEnabled(result.ped, false)
 	setElementCollisionsEnabled(result.vehicle, false)
 	setElementFrozen(result.vehicle, true)
