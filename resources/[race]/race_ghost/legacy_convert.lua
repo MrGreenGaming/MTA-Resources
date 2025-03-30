@@ -34,7 +34,7 @@ function legacyConvert(input)
 	}
 
 	-- Extract name and bestTime from the <i> element using gsub
-	input = input:gsub('<i r="(.-)" t="(.-)"></i>', function(racer, bestTime)
+	input = input:gsub('<i r="(.-)" t="(.-)"[^>]*></i>', function(racer, bestTime)
 		jsonResult.racer = racer
 		jsonResult.bestTime = bestTime
 		return "" -- Remove the matched <i> element from input
