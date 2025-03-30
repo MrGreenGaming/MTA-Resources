@@ -1,0 +1,3 @@
+<def name="Race">
+	<setting name="disableraceghosts" friendlyname="Race type" type="selection:true,false" description="Whether race ghosts should be disabled on this map" default="false" required="true"/>
+</def>

@@ -1,0 +1,18 @@
+<help>Race Ghost records and plays back your runs so you can have a visual comparison of how you&apos;re doing. This version has been edited by LotsOfS to save PB (personal best) ghosts in additon to WR (world record / top) ghosts, by Discoordination to be able to customise the number of extra (other people&apos;s PBs) ghosts you see, and by Lordmau5 to use JSON format instead of XML.
+
+To use, enter /ghosts followed by a number. These numbers aren&apos;t meaningless setting IDs, they actually mean how many ghosts will load. If there is no top ghost but there is a PB ghost, it will load the PB ghost.
+
+0 - Disabled
+1 - Only top ghost
+2 - Only top and PB ghosts
+3 - Top, PB, and 1 extra ghosts
+...
+12 - Top, PB, and 10 extra ghosts
+
+Ghosts longer than 10 minutes aren&apos;t saved by default, but the maximum length may be increased or decreased by server admins.
+
+Ghosts of your PBs are stored locally on your own machine. This will lessen the load on the server and speed up map transition times when a lot of players are present.
+If you&apos;re worried about disk space, ghosts are stored in &quot;&lt;Multi Theft Auto Installation Directory&gt;\mods\deathmatch\priv\&lt;Server ID&gt;\race_ghost\ghosts&quot; and their file size is about 1 KB (kilobyte) per second of recording, or 1 MB (megabyte) per 17 minutes.
+If no local copy is found (eg. after a reformat), it will fetch a backup ghost from the server and store that on the local machine for future use.
+To get a server&apos;s ID, please ask the server owner. There is no easy way to view it for a server, so they need to check the private key file (server-id.keys).
+</help>

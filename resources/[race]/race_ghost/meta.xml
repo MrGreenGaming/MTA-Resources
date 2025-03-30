@@ -1,15 +1,79 @@
 <meta>
-	<info type="script" name="Ghost racer" description="Record/playback addon for Race" addon="race" author="Awwu" version="1.0.4" build="r1337" />
-	
+	<info type="script" name="Ghost racer" description="Record/playback addon for Race (in JSON format)" addon="race" author="Awwu, Lordmau5" version="1.1.0" build="r1337" edf:definition="edf.edf" />
+	<min_mta_version client="1.5.5-9.14060" />
+	<config src="help.xml" type="client" />
+
 	<script src="global_server.lua" type="server" />
 	<script src="record_server.lua" type="server" />
 	<script src="playback_server.lua" type="server" />
-	
+	<script src="xtra_stuff_server.lua" type="server" />
+
 	<script src="global_client.lua" type="client" />
 	<script src="record_client.lua" type="client" />
 	<script src="playback_client.lua" type="client" />
-	<script src="playback_local_client.lua" type="client" />
+	<script src="xtra_stuff_client.lua" type="client" />
 	<script src="nametags.lua" type="client" />
-	
-	<min_mta_version server="1.4" client="1.4" />
+	<script src="xmlconvert_client.lua" type="client" />
+
+	<script src="legacy_convert.lua" type="shared" />
+
+	<settings>
+		<!-- *****************************************************
+			 All these settings are adjustable in the Admin Panel:
+				1. start admin
+				2. press 'p'
+				3. select Resources tab
+				4. double click on 'race_ghost'
+			 ***************************************************** -->
+
+		<setting name="*fillplayerslots" value="15"
+					friendlyname="Fill player slots"
+					group="General"
+					accept="0-65535"
+					desc="If there are fewer than this number of players in the server, add extra ghosts to act as 'pretend players'."
+					/>
+
+		<setting name="*verboselog" value="false"
+					friendlyname="Verbose log"
+					group="General"
+					accept="false,true"
+					desc="Set to true for 'useful' messages in the server log."
+					/>
+
+		<setting name="*validatespawn" value="false"
+					friendlyname="Validate ghost spawn area"
+					group="General"
+					accept="false,true"
+					desc="Set to true to validate ghost files for whether the ghost spawns at an actual spawnpoint. False is recommended if the server has maps with scripted teleports at the start."
+					/>
+
+		<setting name="*validatetime" value="false"
+					friendlyname="Validate ghost finish time"
+					group="General"
+					accept="false,true"
+					desc="Set to true to validate ghost files for whether the ghost's time matches the actual time gotten by the runner. False is recommended if the server has maps that unfreeze the vehicle before the countdown ends."
+					/>
+
+		<setting name="*hideatstart" value="false"
+					friendlyname="Hide ghost at spawn"
+					group="General"
+					accept="false,true"
+					desc="Set to true to make the ghost invisible at the start of the race if it's inside a player."
+					/>
+
+		<setting name="*admingroup" value="Admin"
+					friendlyname="Admin group list"
+					group="_Advanced"
+					accept="*"
+					examples="Admin,Moderator,SuperModerator"
+					desc="To issue certain commands, the player must belong to one of the groups listed."
+					/>
+
+		<setting name="*maxghosttime" value="30"
+					friendlyname="Max. ghost time"
+					group="General"
+					accept="1-65535"
+					desc="Max. ghost time in minutes."
+					/>
+	</settings>
 </meta>

@@ -1,76 +1,101 @@
-newghostForumid, newghostMapname = nil, nil
-addCommandHandler('deleteghost', function(client)
-	local forumid = exports.gc:getPlayerForumID(client)
-	-- if (forumid and playback.forumid == forumid) or hasObjectPermissionTo(client, "function.banPlayer", false) then
-	if (forumid and playback.forumid == forumid)  then
-		fileDelete( "ghosts/" .. playback.mapName .. ".ghost" )
-		outputChatBox('Ghost record for ' .. playback.mapName .. ' deleted!', client, 255,0,0)
-	elseif (forumid and newghostForumid == forumid)  then
-		fileDelete( "ghosts/" .. newghostMapname .. ".ghost" )
-		outputChatBox('Ghost record for ' .. newghostMapname .. ' deleted!', client, 255,0,0)
-	else
-		outputChatBox('You have no access to this ghost record!', client, 255,0,0)
-	end
-end)
+addEvent( "onGhostDataReceive", true )
 
 function isMapTesting()
 	return getResourceInfo(exports.mapmanager:getRunningGamemodeMap(), 'newupload') == "true"
 end
 
-addEvent( "onGhostDataReceive", true )
-addEventHandler( "onGhostDataReceive", g_Root,
-	function( recording, bestTime, racer, mapName )
+addEventHandler( "onGhostDataReceive", root,
+	function( recording, bestTime, racer, mapName, top, pb )
+		if bestTime > g_GameOptions.maxghosttime then
+			return
+		end
+
 		local forumid = exports.gc:getPlayerForumID(client)
 		if isMapTesting() or not forumid then return end
-		-- May be inaccurate, if recording is still being sent when map changes
-		--[[local currentMap = exports.mapmanager:getRunningGamemodeMap()
-		local mapName = getResourceName( currentMap )--]]
-		
-		-- Create a backup in case of a cheater run
-		local ghost = xmlLoadFile( "ghosts/" .. mapName .. ".ghost" )
-		if ghost then
-			local info = xmlFindChild( ghost, "i", 0 )
-			local currentBestTime = math.huge
-			if info then
-				currentBestTime = tonumber( xmlNodeGetAttribute( info, "t" ) ) or math.huge
-			end
 
-			if currentBestTime < bestTime then -- not a new record. Fix for issue #813
-				xmlUnloadFile( ghost )
-				outputDebugString("Received ghost data from " .. racer .. ". Time: " .. bestTime .. ". Current best time: " .. currentBestTime .. ". Ignoring.")
-				return
-			end
-		
-			-- if currentBestTime ~= math.huge and currentBestTime - bestTime >= SUSPECT_CHEATER_LIMIT then -- Cheater?
-				outputDebug( "Creating a backup file for " .. mapName .. ".backup" )
-				copyFile( "ghosts/" .. mapName .. ".ghost", "ghosts/" .. mapName .. ".backup" )
-			-- end
-			xmlUnloadFile( ghost )
+		-- if (top == true) then
+		-- 	iprint("[Race Ghost S] Received a new TOP ghost. Data: ", bestTime, racer, mapName, top, pb)
+		-- end
+
+		recording = fromJSON(recording)
+
+		if not isBesttimeValidForRecording( recording, bestTime ) then
+			outputDebugServer( "Received an invalid ghost recording", mapName, racer, " (Besttime not valid for recording. Error: " .. getRecordingBesttimeError( recording, bestTime ) .. ")" )
+			return
 		end
-		
-		local ghost = xmlCreateFile( "ghosts/" .. mapName .. ".ghost", "ghost" )
-		if ghost then
-			local info = xmlCreateChild( ghost, "i" )
-			if info then
-				xmlNodeSetAttribute( info, "r", tostring( racer ) )
-				xmlNodeSetAttribute( info, "t", tostring( bestTime ) )
-				xmlNodeSetAttribute( info, "timestamp", tostring( getRealTime().timestamp ) )
-				xmlNodeSetAttribute( info, "forumid", tostring( forumid ) )
-			end
-		
-			for _, info in ipairs( recording ) do
-				local node = xmlCreateChild( ghost, "n" )
-				for k, v in pairs( info ) do
-					xmlNodeSetAttribute( node, tostring( k ), tostring( v ) )
+
+		outputDebugServer( "Saving ghost file", mapName, racer, " (Besttime dif: " .. getRecordingBesttimeError( recording, bestTime ) .. ")" )
+
+		local fileName = "ghosts/" .. mapName .. "_" .. racer:gsub('[%p%c%s]', '') .. "_" .. tostring( bestTime ) .. ".ghost"
+		local file = fileCreate(fileName)
+		if file then
+			local saveJSON = {
+				racer = racer,
+				bestTime = bestTime,
+				recording = recording,
+				forumid = forumid,
+			}
+
+			fileWrite(file, toJSON(saveJSON, true))
+			fileClose(file)
+		else
+			outputDebug( "Client Local Storage: Failed to create a ghost file!" )
+		end
+		-- Legacy code to write to XML. Let's not...
+		-- ghost = xmlCreateFile( fileName, "ghost" )
+		-- if ghost then
+		-- 	local info = xmlCreateChild( ghost, "i" )
+		-- 	if info then
+		-- 		xmlNodeSetAttribute( info, "r", tostring( racer ) )
+		-- 		xmlNodeSetAttribute( info, "t", tostring( bestTime ) )
+		-- 	end
+
+		-- 	for _, info2 in ipairs( recording ) do
+		-- 		local node = xmlCreateChild( ghost, "n" )
+		-- 		for k, v in pairs( info2 ) do
+		-- 			if type(v) == "number" then
+		-- 				xmlNodeSetAttribute( node, tostring( k ), math.floor(v * 10000 + 0.5) / 10000 )
+		-- 			else
+		-- 				xmlNodeSetAttribute( node, tostring( k ), tostring( v ) )
+		-- 			end
+		-- 		end
+		-- 	end
+		-- 	xmlSaveFile( ghost )
+		-- 	xmlUnloadFile( ghost )
+		-- else
+		-- 	outputDebug( "Failed to create a ghost file!" )
+		-- end
+
+		if (not top and not pb) then return end
+
+		local toc = xmlLoadFile( "ghosts/" .. mapName .. ".toc", "toc")
+		if not toc then
+			toc = xmlCreateFile( "ghosts/" .. mapName .. ".toc", "toc")
+		end
+
+		if toc then
+			if top then
+				local topNode = xmlFindChild( toc, "top", 0 )
+				if not topNode then
+					topNode = xmlCreateChild( toc, "top" )
+				end
+				if (topNode) then
+					xmlNodeSetAttribute( topNode, "f", tostring( fileName ))
 				end
 			end
-			xmlSaveFile( ghost )
-			xmlUnloadFile( ghost )
-			outputChatBox("Congratulations, you made a new ghost record! Use /deleteghost if you want to remove it", client, 0,255,0)
-			newghostForumid = forumid
-			newghostMapname = mapName
+			if pb then
+				local pbNode = xmlFindChild( toc, "pb_" .. racer:gsub('[%p%c%s]', ''), 0 )
+				if not pbNode then
+					pbNode = xmlCreateChild( toc, "pb_" .. racer:gsub('[%p%c%s]', '') )
+				end
+				if (pbNode) then
+					xmlNodeSetAttribute( pbNode, "f", tostring( fileName ))
+				end
+			end
+			xmlSaveFile(toc)
+			xmlUnloadFile(toc)
 		else
-			outputDebug( "Failed to create a ghost file!" )
+			outputDebug( "Failed to create toc file!" )
 		end
 	end
 )
