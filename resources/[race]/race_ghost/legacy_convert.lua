@@ -34,9 +34,10 @@ function legacyConvert(input)
 	}
 
 	-- Extract name and bestTime from the <i> element using gsub
-	input = input:gsub('<i r="(.-)" t="(.-)"[^>]*></i>', function(racer, bestTime)
+	input = input:gsub('<i r="(.-)" t="(.-)"[^>]*forumid="(.-)"[^>]*></i>', function(racer, bestTime, forumID)
 		jsonResult.racer = racer
 		jsonResult.bestTime = bestTime
+		jsonResult.forumid = forumID
 		return "" -- Remove the matched <i> element from input
 	end)
 
