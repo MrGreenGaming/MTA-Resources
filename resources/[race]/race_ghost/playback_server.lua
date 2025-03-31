@@ -158,12 +158,14 @@ function GhostPlayback:loadGhost(ghostResourceName, mapName)
 				self.ped = { p = v.p, x = v.x, y = v.y, z = v.z }
 				self.vehicle = { m = v.m, x = v.x, y = v.y, z = v.z, rx = v.rX, ry = v.rY, rz = v.rZ }
 				outputDebugServer( "Found a valid ghost", self.racer, nil, " (Besttime dif: " .. getRecordingBesttimeError( self.recording, self.bestTime ) .. ")" )
+				self.recordingParsed = toJSON(self.recording, true)
 				self.hasGhost = true
 				return true
 			end
 		end
 	end
 
+	self.recordingParsed = ""
 	outputDebugServer( "No ghost file", mapName, nil )
 	return false
 end
@@ -186,6 +188,7 @@ function GhostPlayback:loadGhost_Legacy(ghostResourceName, mapName)
 		local index = 0
 		local node = xmlFindChild( ghost, "n", index )
 		self.recording = {}
+		self.recordingParsed = ""
 		while (node) do
 			if type( node ) ~= "userdata" then
 				outputDebugString( "race_ghost - playback_server.lua: Invalid node data while loading ghost: " .. type( node ) .. ":" .. tostring( node ), 1 )
@@ -230,6 +233,7 @@ function GhostPlayback:loadGhost_Legacy(ghostResourceName, mapName)
 			return false
 		end
 
+		
 		-- Create the ped & vehicle
 		for _, v in ipairs( self.recording ) do
 			if v.ty == "st" then
@@ -252,18 +256,21 @@ function GhostPlayback:loadGhost_Legacy(ghostResourceName, mapName)
 				self.ped = { p = v.p, x = v.x, y = v.y, z = v.z }
 				self.vehicle = { m = v.m, x = v.x, y = v.y, z = v.z, rx = v.rX, ry = v.rY, rz = v.rZ }
 				outputDebugServer( "Found a valid ghost", self.racer, nil, " (Besttime dif: " .. getRecordingBesttimeError( self.recording, self.bestTime ) .. ")" )
+				self.recordingParsed = toJSON(self.recording, true)
 				self.hasGhost = true
 				return true
 			end
 		end
 	end
+
+	self.recordingParsed = ""
 	outputDebugServer( "No ghost file", mapName, nil )
 	return false
 end
 
 function GhostPlayback:sendGhostData( target, playbackID )
 	if self.hasGhost then
-		triggerClientEvent( target or root, "onClientGhostDataReceive", root, toJSON(self.recording, true), self.bestTime, self.racer, self.ped, self.vehicle, playbackID )
+		triggerClientEvent( target or root, "onClientGhostDataReceive", root, self.recordingParsed, self.bestTime, self.racer, self.ped, self.vehicle, playbackID )
 	end
 end
 
