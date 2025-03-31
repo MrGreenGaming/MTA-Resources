@@ -165,7 +165,7 @@ function GhostPlayback:loadGhost(ghostResourceName, mapName)
 		end
 	end
 
-	self.recordingParsed = ""
+	self.recordingParsed = "{}"
 	outputDebugServer( "No ghost file", mapName, nil )
 	return false
 end
@@ -263,7 +263,7 @@ function GhostPlayback:loadGhost_Legacy(ghostResourceName, mapName)
 		end
 	end
 
-	self.recordingParsed = ""
+	self.recordingParsed = "{}"
 	outputDebugServer( "No ghost file", mapName, nil )
 	return false
 end
