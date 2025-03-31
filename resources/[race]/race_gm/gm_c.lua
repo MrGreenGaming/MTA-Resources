@@ -119,7 +119,7 @@ local increasing = true
 
 function blink()
     setElementAlpha(getPedOccupiedVehicle(localPlayer), currentAlpha)
-    setElementAlpha(localPlayer, 255)
+    setElementAlpha(localPlayer, currentAlpha)
 
     if increasing then
         currentAlpha = currentAlpha + alphaStep
@@ -149,22 +149,20 @@ addEventHandler('onClientRender', root,
 function()
 	local car = getPedOccupiedVehicle(localPlayer)
 	if car then
-		if getElementAlpha(car) ~= 255 then
-			local players = getElementsByType('player')
-			for _, player in ipairs(players) do
-				if player ~= localPlayer and getElementData(localPlayer, "dim") == getElementData(player, "dim") then
-					local pedCar = getPedOccupiedVehicle(player)
-					if pedCar and getElementAlpha(pedCar) ~= 255 then
-						local x,y,z = getElementPosition(car)
-						local cx,cy,cz = getElementPosition(pedCar)
-						local distance = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
-						if distance <= 20 then
-							setElementAlpha(pedCar, 0)
-							setElementAlpha(player, 255)
-						else
-							setElementAlpha(pedCar, 180)
-							setElementAlpha(player, 255)
-						end
+		local players = getElementsByType('player')
+		for _, player in ipairs(players) do
+			if player ~= localPlayer and getElementData(localPlayer, "dim") == getElementData(player, "dim") then
+				local pedCar = getPedOccupiedVehicle(player)
+				if pedCar and getElementAlpha(pedCar) ~= 255 then
+					local x,y,z = getElementPosition(car)
+					local cx,cy,cz = getElementPosition(pedCar)
+					local distance = getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)
+					if distance <= 20 then
+						setElementAlpha(pedCar, 10)
+						setElementAlpha(player, 80)
+					else
+						setElementAlpha(pedCar, 180)
+						setElementAlpha(player, 255)
 					end
 				end
 			end

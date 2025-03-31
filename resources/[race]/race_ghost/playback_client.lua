@@ -56,8 +56,8 @@ function GhostPlayback:create(recording, ped, vehicle, racer, time, playbackID)
 	setElementCollisionsEnabled(result.ped, false)
 	setElementCollisionsEnabled(result.vehicle, false)
 	setElementFrozen(result.vehicle, true)
-	setElementAlpha(result.ped, 255)
-	setElementAlpha(result.vehicle, 0)
+	setElementAlpha(result.ped, 80)
+	setElementAlpha(result.vehicle, 10)
 	setHeliBladeCollisionsEnabled(result.vehicle, false)
 
 	ghostsCreated = ghostsCreated + 1
