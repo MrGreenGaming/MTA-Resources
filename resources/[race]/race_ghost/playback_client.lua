@@ -327,6 +327,11 @@ addEventHandler("onClientGhostDataReceive", root,
 			-- This should no longer occur since PB ghosts are handled differently now (We send the raw XML instead of Ghost Data)
 			globalInfo.personalBest = time
 
+			if (globalInfo.racer == removeColorCoding(getPlayerName(localPlayer))) then
+				-- This ghost is of ourselves, which we'll already be showing by means of Top. Remove it as duplicate
+				return
+			end
+
 			-- Hide local ghost (PB) if 'Local playback' is disabled
 			if not localPlaybackEnabled then
 				-- hide serverside ped and vehicle
