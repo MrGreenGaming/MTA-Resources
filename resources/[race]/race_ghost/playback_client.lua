@@ -326,27 +326,21 @@ addEventHandler("onClientGhostDataReceive", root,
 				-- return
 			end
 
-			-- Hide best ghost if "Best Playback" is disabled
+			-- Don't create ghost if "Best Ghost" is disabled
 			if not bestPlaybackEnabled then
-				-- hide serverside ped and vehicle
-				setElementDimension(ped, 20)
-				setElementDimension(vehicle, 20)
 				return
 			end
 		elseif (playbackID == "PB") then
 			-- This should no longer occur since PB ghosts are handled differently now (We send the raw XML instead of Ghost Data)
 			globalInfo.personalBest = time
 
-			if (globalInfo.racer == removeColorCoding(getPlayerName(localPlayer))) then
+			if (globalInfo.racer == removeColorCoding(getPlayerName(localPlayer))) and bestPlaybackEnabled then
 				-- This ghost is of ourselves, which we'll already be showing by means of Top. Remove it as duplicate
 				return
 			end
 
-			-- Hide local ghost (PB) if 'Local playback' is disabled
+			-- Don't create ghost if "Local Ghost" is disabled
 			if not localPlaybackEnabled then
-				-- hide serverside ped and vehicle
-				setElementDimension(ped, 20)
-				setElementDimension(vehicle, 20)
 				return
 			end
 		else
@@ -355,11 +349,8 @@ addEventHandler("onClientGhostDataReceive", root,
 				return
 			end
 
-			-- Hide ghosts if "Extra ghosts playback" is disabled
+			-- Don't create ghost if "Extra Ghosts" is disabled
 			if not extraPlaybackEnabled then
-				-- hide serverside ped and vehicle
-				setElementDimension(ped, 20)
-				setElementDimension(vehicle, 20)
 				return
 			end
 		end
