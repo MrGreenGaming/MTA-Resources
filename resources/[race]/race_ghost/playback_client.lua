@@ -36,7 +36,7 @@ end)
 
 addEvent 'toggleExtraGhosts'
 addEventHandler('toggleExtraGhosts', root, function(b)
-	extraPlaybackEnabled = not extraPlaybackEnabled
+	extraPlaybackEnabled = not not b
 end)
 
 
