@@ -121,6 +121,12 @@ function hideRaceHUD(hide)
 	end
 end
 
+addEventHandler('onRaceStateChanging', root,
+function(new, old)
+	totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
+end
+)
+
 addEvent('onClientMapStarting'); addEvent('onClientMapStopping'); addEvent('onClientMapLaunched'); addEvent('onClientMapTimeLeft');
 addEvent('onClientCall_race', true);
 addEvent('onClientMapTimeLeft');
@@ -129,8 +135,7 @@ addEventHandler('onClientMapStarting', root, function(mapinfo, mapoptions)
 	g_StartTick = nil
 	g_Duration = nil
 
-	totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
-	
+
 	if g_NewHudEnabled then
 		-- outputChatBox('hiding default hud')
 		setTimer(hideRaceHUD, 50, 1, true)
