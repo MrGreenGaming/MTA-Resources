@@ -99,13 +99,16 @@ local screenW, screenH = guiGetScreenSize()
         setTooltip(GUIEditor.label["recordghost"],"This enables the recording of your cars, so that it can be viewed later on.")
 
         GUIEditor.checkbox["localghost"] = guiCreateCheckBox(36, 274, 15, 15, "", false, false, GUIEditor.tab[1])
-        GUIEditor.label["localghost"] = guiCreateLabel(72, 274, 209, 14, "Enable Local Ghost", false, GUIEditor.tab[1])
+        GUIEditor.label["localghost"] = guiCreateLabel(72, 274, 209, 14, "Local Ghost", false, GUIEditor.tab[1])
         setTooltip(GUIEditor.label["localghost"],"This makes a ghost car appear, driving your best time on the map.")
 
         GUIEditor.checkbox["bestghost"] = guiCreateCheckBox(36, 299, 15, 15, "", false, false, GUIEditor.tab[1])
-        GUIEditor.label["bestghost"] = guiCreateLabel(72, 299, 209, 14, "Enable Best Ghost", false, GUIEditor.tab[1])
-        setTooltip(GUIEditor.label["bestghost"],"This makes a ghost car appear, driving the top 1 time on the map.")
+        GUIEditor.label["bestghost"] = guiCreateLabel(72, 299, 100, 14, "Best Ghost", false, GUIEditor.tab[1])
+        setTooltip(GUIEditor.label["bestghost"],"This makes a ghost car appear, driving the best recording on the map.")
 
+        GUIEditor.checkbox["extraghosts"] = guiCreateCheckBox(150, 299, 15, 15, "", false, false, GUIEditor.tab[1])
+        GUIEditor.label["extraghosts"] = guiCreateLabel(186, 299, 100, 14, "Extra Ghosts", false, GUIEditor.tab[1])
+        setTooltip(GUIEditor.label["extraghosts"],"This will show random ghosts on the map, filling the player slots.")
 
         GUIEditor.checkbox["dof"] = guiCreateCheckBox(292, 75, 15, 15, "", false, false, GUIEditor.tab[1])
         GUIEditor.label["dof"] = guiCreateLabel(324, 75, 209, 14, "Enable Depth of Field", false, GUIEditor.tab[1])

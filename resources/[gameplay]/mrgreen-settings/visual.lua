@@ -42,6 +42,7 @@ visual = { -- Standard Settings, 0 = off --
 	["recordghost"] = 1, -- 1 = "Record Ghost on"
 	["localghost"] = 1, -- 1 = "local ghost on"
 	["bestghost"] = 1, -- 1 = "best ghost on"
+	["extraghosts"] = 1, -- 1 = "Extra ghosts on"
 	["NOSMode"] = 1, -- 0 = "Old", 1 = "Hybrid", 2= "NFS"
 	["nitrocolor"] = "0078FF",
 	["lodrange"] = 0,
@@ -245,6 +246,17 @@ function visualCheckBoxHandler()
 			triggerEvent("bestghost",root,false)
 			v_setSaveTimer()
 			visual["bestghost"] = 0
+		end
+
+	elseif source == GUIEditor.checkbox["extraghosts"] then
+		if guiCheckBoxGetSelected( GUIEditor.checkbox["extraghosts"] ) then
+			triggerEvent("toggleExtraGhosts", root, true)
+			v_setSaveTimer()
+			visual["extraghosts"] = 1
+		else
+			triggerEvent("toggleExtraGhosts", root, false)
+			v_setSaveTimer()
+			visual["extraghosts"] = 0
 		end
 
 		--nitro--
@@ -789,6 +801,13 @@ function setVisualGUI()
 				triggerEvent("bestghost",root,false)
 			end
 
+		elseif f == "extraghosts" then
+			if u == 1 then
+				guiCheckBoxSetSelected( GUIEditor.checkbox["extraghosts"], true )
+				triggerEvent("toggleExtraGhosts", root, true)
+			else
+				triggerEvent("toggleExtraGhosts", root, false)
+			end
 		elseif f == "drawdistance" then
 			if u >= 100 and u <= 10000 then
 				guiSetText( GUIEditor.edit["drawdistance"], u )

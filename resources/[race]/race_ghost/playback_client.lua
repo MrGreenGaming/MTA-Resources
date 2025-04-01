@@ -29,6 +29,16 @@ addEventHandler('localghost', root, function(b)
 	localPlaybackEnabled = not not b
 end)
 
+local extraPlaybackEnabled = true
+addCommandHandler('extraghosts', function()
+	extraPlaybackEnabled = not extraPlaybackEnabled
+end)
+
+addEvent 'toggleExtraGhosts'
+addEventHandler('toggleExtraGhosts', root, function(b)
+	extraPlaybackEnabled = not extraPlaybackEnabled
+end)
+
 
 function GhostPlayback:create(recording, ped, vehicle, racer, time, playbackID)
 	local result = {
@@ -345,8 +355,8 @@ addEventHandler("onClientGhostDataReceive", root,
 				return
 			end
 
-			-- Hide ghosts if "Best Playpack" is disabled
-			if not bestPlaybackEnabled then
+			-- Hide ghosts if "Extra ghosts playback" is disabled
+			if not extraPlaybackEnabled then
 				-- hide serverside ped and vehicle
 				setElementDimension(ped, 20)
 				setElementDimension(vehicle, 20)
