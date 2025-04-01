@@ -128,6 +128,9 @@ addEventHandler('onClientMapStarting', root, function(mapinfo, mapoptions)
 	g_MapRunning = true
 	g_StartTick = nil
 	g_Duration = nil
+
+	totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
+	
 	if g_NewHudEnabled then
 		-- outputChatBox('hiding default hud')
 		setTimer(hideRaceHUD, 50, 1, true)
@@ -155,7 +158,6 @@ end)
 
 addEventHandler('onClientScreenFadedIn', root, function()
 	g_FadedIn = true
-	totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
 end)
 
 addEventHandler('onClientScreenFadedOut', root, function()
