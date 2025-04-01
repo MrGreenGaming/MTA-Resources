@@ -103,7 +103,7 @@ function onStart()
 	local radar = tonumber(xmlNodeGetAttribute ( radarnode, 'enabled' ))
 	local hudnode = xmlFindChild ( g_conf, 'hud', 0)
 	local hud = tonumber(xmlNodeGetAttribute ( hudnode, 'type' ))
-	totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1) 
+	totalCheckpoints = #exports.race:getCheckPoints() or 1;
 	xmlUnloadFile(g_conf)
 	showHud(hud)
 	showRadar(nil, radar)
@@ -121,12 +121,6 @@ function hideRaceHUD(hide)
 	end
 end
 
-addEventHandler('onRaceStateChanging', root,
-function(new, old)
-	totalCheckpoints = (#(exports.race:getCheckPoints() or {}) or 1)
-end
-)
-
 addEvent('onClientMapStarting'); addEvent('onClientMapStopping'); addEvent('onClientMapLaunched'); addEvent('onClientMapTimeLeft');
 addEvent('onClientCall_race', true);
 addEvent('onClientMapTimeLeft');
@@ -134,8 +128,7 @@ addEventHandler('onClientMapStarting', root, function(mapinfo, mapoptions)
 	g_MapRunning = true
 	g_StartTick = nil
 	g_Duration = nil
-
-
+	totalCheckpoints = #exports.race:getCheckPoints() or 1;
 	if g_NewHudEnabled then
 		-- outputChatBox('hiding default hud')
 		setTimer(hideRaceHUD, 50, 1, true)
@@ -151,6 +144,7 @@ addEventHandler('onClientMapLaunched', root, function(start, duration)
 	if g_NewHudEnabled == true and g_Duration > 60 * 1000 then
 		triggerEvent('onClientCall_race', getResourceRootElement( getResourceFromName('race')), 'hideGUIComponents', 'timeleftbg', 'timeleft')
 	end
+	totalCheckpoints = #exports.race:getCheckPoints() or 1;
 end)
 
 addEventHandler('onClientMapTimeLeft', root, function( duration)
@@ -163,6 +157,7 @@ end)
 
 addEventHandler('onClientScreenFadedIn', root, function()
 	g_FadedIn = true
+	totalCheckpoints = #exports.race:getCheckPoints() or 1;
 end)
 
 addEventHandler('onClientScreenFadedOut', root, function()
