@@ -1,0 +1,25 @@
+<meta>
+	<info author = "Puma" version = "1.0" name = "Puma's Incredible Marker Plug-in EDF" description = "Marker plug-in for the editor" type = "script" edf:definition = "pimp.edf" />
+	
+	<script src="pimp_server.lua" type="server"/>
+	<script src="pimp_client.lua" type="client"/>
+
+	<file src="img/2dtext.png"/>
+	<file src="img/3dtext.png"/>
+	<file src="img/blip.png"/>
+	<file src="img/blowvehicle.png"/>
+	<file src="img/boost.png"/>
+	<file src="img/cameraposition.png"/>
+	<file src="img/cameratargetplayer.png"/>
+	<file src="img/enablecheat.png"/>
+	<file src="img/fixvehicle.png"/>
+	<file src="img/setgamespeed.png"/>
+	<file src="img/setrotation.png"/>
+	<file src="img/setvehicledamageproof.png"/>
+	<file src="img/setvehiclehandling.png"/>
+	<file src="img/resetvehiclehandling.png"/>
+	<file src="img/setworldgravity.png"/>
+	<file src="img/teleport.png"/>
+	<file src="img/setvehiclegravity.png"/>
+	<file src="img/setvehiclemodel.png"/>
+</meta>

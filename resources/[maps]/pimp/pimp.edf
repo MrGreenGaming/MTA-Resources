@@ -1,0 +1,211 @@
+<def name = "Puma's Incredible Marker Plug-in EDF">
+
+	<element name = "pimp2dText" friendlyname = "PIMP: 2D-text" icon = "img/2dtext.png">
+		<data name="text" type="string" description="Text to display" default="Enter your text here, use #N for a new line" />
+		<data name="time" type="natural" description="How long the text should be displayed (milliseconds)" default="3000" />
+		<data name="fadeTime" type="natural" description="Fade-in/fade-out time (milliseconds)" default="500" />
+		<data name="size" type="number" description="Text size" default="2" />
+		<data name="font" type="selection:Tahoma,Tahoma Bold,Verdana,Arial,Microsoft Sans Serif,Pricedown,Bank Gothic Medium,Diploma Regular,Beckett Regular" description="Font the text is written in" default="Tahoma" />
+		<data name="color" type="color" description="Text color and transparancy" default="#ffffffff" />
+		<data name="shadow" type="selection:true,false" description="Add shadow to the text" default="true" />
+		<data name="alignX" type="selection:left,center,right" description="To which side the text is horizontally aligned" default="center" />
+		<data name="alignY" type="selection:top,center,bottom" description="To which side the text is vertically aligned" default="center" />
+		<data name="screenX" type="number" description="Horizontal position on the screen between 0 and 1, where 0 is left and 1 is right" default="0.5" />
+		<data name="screenY" type="number" description="Vertical position on the screen between 0 and 1, where 0 is top and 1 is bottom" default="0.5" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="true" />
+	</element>
+
+	<element name = "pimp3dText" friendlyname = "PIMP: 3D-text" icon = "img/3dtext.png">
+		<data name="text" type="string" description="Text to display" default="Enter your text here, use #N for a new line" />
+		<data name="maxDistance" type="number" description="From how far away the text should be visible" default="50" />
+		<data name="scaling" type="selection:true,false" description="Scale the text smaller when further away" default="true" />
+		<data name="fading" type="selection:true,false" description="Fade the text when further away" default="true" />
+		<data name="size" type="number" description="Text size" default="2" />
+		<data name="font" type="selection:Tahoma,Tahoma Bold,Verdana,Arial,Microsoft Sans Serif,Pricedown,Bank Gothic Medium,Diploma Regular,Beckett Regular" description="Font the text is written in" default="Tahoma" />
+		<data name="color" type="color" description="Text color and transparancy" default="#ffffffff" />
+		<data name="shadow" type="selection:true,false" description="Add shadow to the text" default="true" />
+		<data name="alignX" type="selection:left,center,right" description="To which side the text is horizontally aligned" default="center" />
+		<data name="alignY" type="selection:top,center,bottom" description="To which side the text is vertically aligned" default="center" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="true" />
+	</element>
+
+	<element name = "pimpTeleport" friendlyname = "PIMP: Teleport" icon = "img/teleport.png">
+		<data name="teleportTo" type="element:vehicle" description="Vehicle to which position/rotation should be telepoted" />
+		<data name="velocity" type="selection:keep old velocity,change (fill in below)" description="Velocity of the vehicle after telepotation" default="change (fill in below)" />
+		<data name="velocityX" type="number" description="X-velocity after telepotation" required="false" default="0"/>
+		<data name="velocityY" type="number" description="Y-velocity after telepotation" required="false" default="0" />
+		<data name="velocityZ" type="number" description="Z-velocity after telepotation" required="false" default="0" />
+		<data name="turnVelocity" type="selection:keep old turnvelocity,change (fill in below)" description="Turnvelocity of the vehicle after telepotation" default="change (fill in below)" />
+		<data name="turnVelX" type="number" description="X-turnvelocity after telepotation" required="false" default="0" />
+		<data name="turnVelY" type="number" description="Y-turnvelocity after telepotation" required="false" default="0" />
+		<data name="turnVelZ" type="number" description="Z-turnvelocity after telepotation" required="false" default="0" />
+		<data name="changeModel" type="selection:change to posElement-model,don't change model" description="Change vehiclemodel to the model of the posElement-vehicle or don't change" default="don't change model" />
+		<data name="freezeTime" type="natural" description="Time to remain frozen after teleportation (milliseconds)" default="0"/>
+		<data name="fadeScreen" type="selection:true,false" description="Fade to black screen and back before and after teleportation" default="true" />
+		<data name="fadeTime" type="natural" description="If fadeScreen is TRUE, fill in the time the fade should take (milliseconds)" default="200"/>
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpBoost" friendlyname = "PIMP: Boost" icon = "img/boost.png">
+		<data name="type" type="selection:along world's axes,along vehicle's axes" description="Boost vehicle along what axes?" default="along world's axes" />
+		<data name="velocityX" type="number" description="X-velocity" default="0"/>
+		<data name="velocityY" type="number" description="Y-velocity" default="0"/>
+		<data name="velocityZ" type="number" description="Z-velocity" default="0"/>
+		<data name="turnVelocity" type="selection:keep old turnvelocity,change (fill in below)" description="Turnvelocity of the vehicle" default="keep old turnvelocity" />
+		<data name="turnVelX" type="number" description="X-turnvelocity" required="false" default="0" />
+		<data name="turnVelY" type="number" description="Y-turnvelocity" required="false" default="0" />
+		<data name="turnVelZ" type="number" description="Z-turnvelocity" required="false" default="0" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpSetVehicleGravity" friendlyname = "PIMP: Set Vehicle Gravity" icon = "img/setvehiclegravity.png">
+		<data name="gravityX" type="number" description="X-gravity" default="0"/>
+		<data name="gravityY" type="number" description="Y-gravity" default="0"/>
+		<data name="gravityZ" type="number" description="Z-gravity" default="-1"/>
+		<data name="doFor" type="selection:player,all other players,everyone" description="Set vehiclegravity for the player, all other players or for everyone" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpBlip" friendlyname = "PIMP: Blip" icon = "img/blip.png">
+		<data name="type" type="selection:attach to player,attach to marker" description="Attach marker to player that hit the marker, or permanently attach blip to the marker" default="attach to player (after markerhit)" />
+		<data name="iconID" type="natural" description="Icon ID, see http://wiki.multitheftauto.com/wiki/CreateBlip" default="0"/>
+		<data name="size" type="number" description="Size (only for 'marker' icon (id 0)" default="1"/>
+		<data name="color" type="color" description="Text color and transparancy" default="#ffffffff" />
+		<data name="distance" type="number" description="Visible distance (0 = always visible)" default="0"/>
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpCameraPosition" friendlyname = "PIMP: Camera Position" icon = "img/cameraposition.png">
+		<data name="posElement" type="element:marker" description="This marker is the position of the camera" />
+		<data name="lookAt" type="selection:player,marker" description="Follow a player or look at a marker" default="marker" />
+		<data name="lookAtMarker" type="element:marker" description="If lookAt = 'marker', choose marker to look at" required="false"/>
+		<data name="rollAngle" type="number" description="Camera rotation" default="0" required="false" />
+		<data name="fov" type="number" description="Field of view = zoom" default="70" required="false" />
+		<data name="time" type="natural" description="Time to look at target (milliseconds) (0 = forever or until player hits cameraTargetPlayer-marker)" default="3000" required="false" />
+		<data name="fadeScreen" type="selection:true,false" description="Fade camera before setting cameraposition" default="false" />
+		<data name="fadeTime" type="natural" description="If fadeScreen is TRUE, fill in the time the fade should take (milliseconds)" default="200"/>
+		<data name="doFor" type="selection:player,everyone" description="Change camera position only for the player or for everyone" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="true" />
+	</element>
+
+	<element name = "pimpCameraTargetPlayer" friendlyname = "PIMP: Camera Target Player" icon = "img/cameratargetplayer.png">
+		<data name="wait" type="natural" description="Time to wait before targetting player (milliseconds)" default="0" />
+		<data name="doFor" type="selection:player,everyone" description="Set player itself as target for the player's camera or do this for everyone" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="true" />
+	</element>
+
+	<element name = "pimpSetRotation" friendlyname = "PIMP: Set Rotation" icon = "img/setrotation.png">
+		<data name="type" type="selection:add to current rotation,set as new rotation" description="What to do with the rotation" default="add to current rotation" />
+		<data name="Xrot" type="natural" description="X-rotation" required="false" default=""/>
+		<data name="Yrot" type="natural" description="Y-rotation" required="false" default=""/>
+		<data name="Zrot" type="natural" description="Z-rotation" required="false" default=""/>
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpSetVehicleModel" friendlyname="PIMP: Set Vehicle Model" icon="img/setvehiclemodel.png">
+		<data name="modelID" type="vehicleID" description="Model ID to change to" default="411" />
+		<data name="offsetZ" type="natural" description="Offset on Z-axis (for example, Dumper will get stuck in the ground if you change into it from a Kart)." required="false" default="0"/>
+		<data name="doFor" type="selection:player,all other players,everyone" description="Change player's vehiclemodel, change all vehiclemodels but not the player's one or change all vehiclemodels" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpEnableCheat" friendlyname = "PIMP: Enable Cheat" icon = "img/enablecheat.png">
+		<data name="type" type="selection:aircars,hovercars,extrabunny" description="Aircars = fly with cars, hovercars = drive on water, extrabunny = jump very high with bicycle" default="aircars" />
+		<data name="enabled" type="selection:true,false" description="True = cheat on, false = cheat off" default="true" />
+		<data name="time" type="natural" description="Time before shutting off (if enabled = true) (milliseconds) (0 = don't shut off)" default="0" required="false" />
+		<data name="doFor" type="selection:player,everyone" description="Enable cheat for player only or for everyone" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpBlowVehicle" friendlyname = "PIMP: Blow Vehicle" icon = "img/blowvehicle.png">
+		<data name="explode" type="selection:true,false" description="True = with explosion, false = without explosion" default="true" />
+		<data name="doFor" type="selection:player,all other players,everyone" description="Blow player's vehicle, blow all vehicles but not the player's one or blow all vehicles" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpFixVehicle" friendlyname = "PIMP: Fix Vehicle" icon = "img/fixvehicle.png">
+		<data name="health" type="natural" description="Set health (0-100)" default="100" />
+		<data name="doFor" type="selection:player,everyone" description="Fix only the player or everyone" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpSetDamageProof" friendlyname = "PIMP: Set Vehicle Damageproof" icon = "img/setvehicledamageproof.png">
+		<data name="enabled" type="selection:true,false" description="True = damageproof, false = not damageproof" default="true" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpSetGameSpeed" friendlyname = "PIMP: Set Gamespeed" icon = "img/setgamespeed.png">
+		<data name="speed" type="number" description="Gamespeed" default="1" />
+		<data name="doFor" type="selection:player,everyone" description="Set gamespeed only to the player or to everyone" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpSetWorldGravity" friendlyname = "PIMP: Set Worldgravity" icon = "img/setworldgravity.png">
+		<data name="gravity" type="number" description="Gravity" default="0.008" />
+		<data name="doFor" type="selection:player,everyone" description="Set gravity only to the player or to everyone" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+	</element>
+
+	<element name = "pimpSetVehicleHandling" friendlyname = "PIMP: Set Vehicle Handling" icon = "img/setvehiclehandling.png">
+		<data name="doFor" type="selection:player,all other players,everyone" description="Set handling for player only, all other players or for everyone" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+		<data name="mass" type="number" description="Mass (1.0-100000.0)" required="false" default=""/>
+		<data name="turnMass" type="number" description="Turning-mass (0.0-1000000.0)" required="false" default="" />
+		<data name="dragCoeff" type="number" description="Drag Coefficient (-200.0-200.0)" required="false" default="" />
+		<data name="COMX" type="number" description="Center of mass X (-10.0-10.0)" required="false" default="" />
+		<data name="COMY" type="number" description="Center of mass Y (-10.0-10.0)" required="false" default="" />
+		<data name="COMZ" type="number" description="Center of mass Z (-10.0-10.0)" required="false" default="" />
+		<data name="percSubmerged" type="natural" description="Percent submerged (1-99999)" required="false" default="" />
+		<data name="tracMultiplier" type="number" description="Traction (-100000.0-100000.0)" required="false" default="" />
+		<data name="tracLoss" type="number" description="Traction loss (0.0-100.0)" required="false" default="" />
+		<data name="tracBias" type="number" description="Traction bias (0.0-1.0)" required="false" default="" />
+		<data name="gears" type="natural" description="Number of gears (1-5)" required="false" default="" />
+		<data name="maxVelocity" type="number" description="Maximum velocity (0.1-200000.0)" required="false" default="" />
+		<data name="acceleration" type="number" description="Engine acceleration (0.0-100000.0)" required="false" default="" />
+		<data name="engInertia" type="number" description="Engine inertia (-1000.0-1000.0)" required="false" default="" />
+		<data name="driveType" type="selection:don't change,frontwheeldrive,rearwheeldrive,fourwheeldrive" description="Drive type" required="false" default="don't change" />
+		<data name="engineType" type="selection:don't change,petrol,diesel,electric" description="Engine type" required="false" default="don't change"/>
+		<data name="brakeDeceleration" type="number" description="Brake deceleration (0.1-100000.0)" required="false" default="" />
+		<data name="brakeBias" type="number" description="Brake bias (0.0-1.0)" required="false" default="" />
+		<data name="steeringLock" type="number" description="Steering lock angle (0.0-360.0)" required="false" default="" />
+		<data name="susForLevel" type="number" description="Suspension force level (0.0-100.0)" required="false" default="" />
+		<data name="susDamping" type="number" description="Suspension damping (0.0-100.0)" required="false" default="" />
+		<data name="susHiSpeDamping" type="number" description="Suspension high-speed damping (0.0-600.0)" required="false" default="" />
+		<data name="susUpLimit" type="number" description="Suspension upper limit (-50.0-50.0)" required="false" default="" />
+		<data name="susLoLimit" type="number" description="Suspension lower limit (-50.0-50.0)" required="false" default="" />
+		<data name="susFrReBias" type="number" description="Suspension front-rear bias (0.0-1.0)" required="false" default="" />
+		<data name="susAnDiMultiplier" type="number" description="Suspension anti-dive multiplier (0.0-30.0)" required="false" default="" />
+		<data name="colDamMultiplier" type="number" description="Collision damage-multiplier (0.0-10.0)" required="false" default="" />
+	</element>
+
+	<element name = "pimpResetVehicleHandling" friendlyname = "PIMP: Reset Vehicle Handling" icon = "img/resetvehiclehandling.png">
+		<data name="doFor" type="selection:player,all other players,everyone" description="Reset handling for player only, all other players or for everyone" default="player" />
+		<data name="hideMarkers" type="selection:true,false" description="Hide marker" default="false" />
+		<data name="mass" type="selection:true,false" description="Mass" default="true" />
+		<data name="turnMass" type="selection:true,false" description="Turning-mass" default="true"/>
+		<data name="dragCoeff" type="selection:true,false" description="Drag Coefficient" default="true" />
+		<data name="centOfMass" type="selection:true,false" description="Center of mass X" default="true" />
+		<data name="percSubmerged" type="selection:true,false" description="Percent submerged" default="true" />
+		<data name="tracMultiplier" type="selection:true,false" description="Traction" default="true" />
+		<data name="tracLoss" type="selection:true,false" description="Traction loss" default="true" />
+		<data name="tracBias" type="selection:true,false" description="Traction bias" default="true" />
+		<data name="gears" type="selection:true,false" description="Number of gears" default="true" />
+		<data name="maxVelocity" type="selection:true,false" description="Maximum velocity" default="true" />
+		<data name="acceleration" type="selection:true,false" description="Engine acceleration" default="true" />
+		<data name="engInertia" type="selection:true,false" description="Engine inertia" default="true" />
+		<data name="driveType" type="selection:true,false" description="Drive type" default="true" />
+		<data name="engineType" type="selection:true,false" description="Engine type" default="true" />
+		<data name="brakeDeceleration" type="selection:true,false" description="Brake deceleration" default="true" />
+		<data name="brakeBias" type="selection:true,false" description="Brake bias" default="true" />
+		<data name="steeringLock" type="selection:true,false" description="Steering lock angle" default="true" />
+		<data name="susForLevel" type="selection:true,false" description="Suspension force level" default="true" />
+		<data name="susDamping" type="selection:true,false" description="Suspension damping" default="true" />
+		<data name="susHiSpeDamping" type="selection:true,false" description="Suspension high-speed damping" default="true" />
+		<data name="susUpLimit" type="selection:true,false" description="Suspension upper limit" default="true" />
+		<data name="susLoLimit" type="selection:true,false" description="Suspension lower limit" default="true" />
+		<data name="susFrReBias" type="selection:true,false" description="Suspension front-rear bias" default="true" />
+		<data name="susAnDiMultiplier" type="selection:true,false" description="Suspension anti-dive multiplier" default="true" />
+		<data name="colDamMultiplier" type="selection:true,false" description="Collision damage-multiplier" default="true" />
+	</element>
+
+</def>
