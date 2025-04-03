@@ -34,19 +34,17 @@ handlingProperties = {
 blips = {}
 	
 function checkMapForPimpElements ( resource )
-	if getResourceState ( getResourceFromName("editor") ) ~= "running" then
-		for i, string in pairs ( pimpElementNames ) do
-			local elementType = "pimp" .. string
-			if #getElementsByType ( elementType ) > 0 then
-				for j, element in pairs ( getElementsByType ( elementType ) ) do
-					local hideMarker = getElementData ( element, "hideMarkers" )
-					local parent = getElementParent ( element )
-					if parent and hideMarker and hideMarker == "true" then
-						setElementAlpha ( parent, 0 )
-					end
+	for i, string in pairs ( pimpElementNames ) do
+		local elementType = "pimp" .. string
+		if #getElementsByType ( elementType ) > 0 then
+			for j, element in pairs ( getElementsByType ( elementType ) ) do
+				local hideMarker = getElementData ( element, "hideMarkers" )
+				local parent = getElementParent ( element )
+				if parent and hideMarker and hideMarker == "true" then
+					setElementAlpha ( parent, 0 )
 				end
 			end
-		end					
+		end			
 	end
 	
 	local outputMessage = false
@@ -81,9 +79,7 @@ function checkMapForPimpElements ( resource )
 			local rx, ry, rz = getElementRotation ( teleportToElement )
 			local model = getElementModel ( teleportToElement )
 			setElementData ( teleport, "teleportToPos", { x, y, z, rx, ry, rz, model } )
-			if getResourceState ( getResourceFromName("editor") ) ~= "running" then
-				destroyElement ( teleportToElement )
-			end
+			destroyElement ( teleportToElement )
 		end
 	end
 	
@@ -106,7 +102,7 @@ function checkMapForPimpElements ( resource )
 		end
 	end
 	
-	if outputMessage and getResourceState ( getResourceFromName("editor") ) ~= "running" then
+	if outputMessage then
 		-- PLEASE DO NOT REMOVE THOSE LINES, GIVE ME SOME CREDIT FOR MY WORK :)
 		outputChatBox ( "#ffe615>> #97ffb2Marker actions #00fa41are done by #ffe615PIMP", getRootElement(), 255, 255, 255, true )
 		outputChatBox ( "#ffe615>> #97ffb2P#00fa41uma's #97ffb2I#00fa41ncredible #97ffb2M#00fa41arker #97ffb2P#00fa41lug-in", getRootElement(), 255, 255, 255, true )
@@ -134,13 +130,8 @@ end
 addEvent ( "onGamemodeMapStop", true )
 addEventHandler ( "onGamemodeMapStop", getRootElement(), gamemodeMapStop )
 
-if getResourceFromName("editor_test") and getResourceRootElement(getResourceFromName("editor_test")) then
-	addEventHandler ( "onResourceStart", getResourceRootElement(getResourceFromName("editor_test")), function()setTimer(checkMapForPimpElements,1000,1)end )
-	addEventHandler ( "onResourceStop", getResourceRootElement(getResourceFromName("editor_test")), gamemodeMapStop )
-end
-
 function resourceStart ()
-	if ( exports.mapmanager:getRunningGamemodeMap() and getResourceState ( getResourceFromName("editor") ) ~= "running" ) or getResourceState ( getResourceFromName("editor_test") ) == "running" then
+	if ( exports.mapmanager:getRunningGamemodeMap() )then
 		checkMapForPimpElements()
 	end
 end
