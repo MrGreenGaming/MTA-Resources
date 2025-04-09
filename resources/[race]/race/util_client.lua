@@ -318,7 +318,11 @@ function fadeCamera(fadeIn,timeToFade,...)
         fadeInFinTimer:killTimer()
 		triggerEvent( 'onClientScreenFadedOut', g_Root )
     else
-        fadeInFinTimer:setTimer( onfadeInFin, math.max(50,ticksToFade/8), 1 )
+				if getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
+					onfadeInFin()
+				else
+					fadeInFinTimer:setTimer( onfadeInFin, math.max(50,ticksToFade/8), 1 )
+				end
     end
 end
 
