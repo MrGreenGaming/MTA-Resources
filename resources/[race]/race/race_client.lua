@@ -340,10 +340,8 @@ function checkMapLoaded ()
 	delay = delay + math.max( 0, TitleScreen.getTicksRemaining() - 1500 )
 
 	-- Do fadeup and then tell server client is ready
-	if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
-		setTimer(fadeCamera, delay + 750, 1, true, 10.0)
-		setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
-	end
+	setTimer(fadeCamera, delay + 750, 1, true, 10.0)
+	setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
 	setTimer( function() triggerServerEvent('onNotifyPlayerReady', g_Me) end, delay + 3500, 1 )
 	outputDebug( 'MISC', 'initRace end' )
 	setTimer( function() setCameraBehindVehicle( g_Vehicle ) end, delay + 300, 1 )
