@@ -875,8 +875,11 @@ addEventHandler('onGamemodeMapStop', g_Root,
 		for i,player in ipairs(getElementsByType"player") do
 			setElementData ( player, "race rank", "" )
 			setElementData ( player, "checkpoint", "" )
+
+			if getPlayerSerial(player) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+        fadeCamera ( player, false, 0.0, 0,0, 0 )
+			end
 		end
-        fadeCamera ( g_RootPlayers, false, 0.0, 0,0, 0 )
         gotoState('NoMap')
 		unloadAll()
 	end

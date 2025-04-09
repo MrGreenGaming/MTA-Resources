@@ -207,8 +207,10 @@ local loadingMapResourceName = nil
 -- Called from server
 function notifyLoadingMap( mapName, authorName, mapresname )
 	-- outputDebugString( 'notifyLoadingMap ' .. mapresname )
+	if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
     fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
-    TravelScreen.show( mapName, authorName )
+	end
+  TravelScreen.show( mapName, authorName )
 	loadedClientMap = false
 	loadingMapResourceName = mapresname
 end
@@ -338,9 +340,10 @@ function checkMapLoaded ()
 	delay = delay + math.max( 0, TitleScreen.getTicksRemaining() - 1500 )
 
 	-- Do fadeup and then tell server client is ready
-	setTimer(fadeCamera, delay + 750, 1, true, 10.0)
-	setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
-
+	if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+		setTimer(fadeCamera, delay + 750, 1, true, 10.0)
+		setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
+	end
 	setTimer( function() triggerServerEvent('onNotifyPlayerReady', g_Me) end, delay + 3500, 1 )
 	outputDebug( 'MISC', 'initRace end' )
 	setTimer( function() setCameraBehindVehicle( g_Vehicle ) end, delay + 300, 1 )
