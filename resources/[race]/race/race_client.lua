@@ -16,7 +16,9 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 	function()
 		g_Players = getElementsByType('player')
 
-        fadeCamera(false,0.0)
+		if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+			fadeCamera(false,0.0)
+		end
 		-- create GUI
 		local screenWidth, screenHeight = guiGetScreenSize()
 		g_dxGUI = {
@@ -313,7 +315,9 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 		launchRace(duration)
 	end
 
-	fadeCamera( false, 0.0 )
+	if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+		fadeCamera( false, 0.0 )
+	end
 
 	checkMapLoaded()
 end
@@ -1394,7 +1398,9 @@ end
 -----------------------------------------------------------------------
 function remoteStopSpectateAndBlack()
 	Spectate.stop('auto')
-	fadeCamera(false,0.0, 0,0,0)			-- Instant black
+	if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+		fadeCamera(false,0.0, 0,0,0)			-- Instant black
+	end
 end
 
 function remoteSoonFadeIn( bNoCameraMove )
