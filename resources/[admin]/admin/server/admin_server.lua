@@ -1193,7 +1193,9 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
  	   				x = x - math.sin ( math.rad ( r ) ) * 2
 					y = y + math.cos ( math.rad ( r ) ) * 2
    					setTimer ( setElementPosition, 1000, 1, p, x, y, z + 1 )
-					fadeCamera ( p, false, 1, 0, 0, 0 )
+						if getPlayerSerial(p) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+							fadeCamera ( p, false, 1, 0, 0, 0 )
+						end
 					setElementDimension ( p, getElementDimension ( to ) )
 					setElementInterior ( p, getElementInterior ( to ) )
 					setTimer ( fadeCamera, 1000, 1, p, true, 1 )
@@ -1205,7 +1207,9 @@ addEventHandler ( "aPlayer", _root, function ( player, action, data, additional,
 					while ( i < seats ) do
 						if ( not getVehicleOccupant ( vehicle, i ) ) then
    							setTimer ( warpPedIntoVehicle, 1000, 1, p, vehicle, i )
-							fadeCamera ( p, false, 1, 0, 0, 0 )
+								if getPlayerSerial(p) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+									fadeCamera ( p, false, 1, 0, 0, 0 )
+								end
 							setTimer ( fadeCamera, 1000, 1, p, true, 1 )
 							break
 						end
