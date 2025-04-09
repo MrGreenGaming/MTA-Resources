@@ -1,10 +1,10 @@
 -- Traffic Light Addon by Nick_026
 -- See for state references: https://wiki.multitheftauto.com/wiki/Traffic_light_states
 
--- Before countdown: Disabled
+-- Before countdown: Flashing Red
 -- During 3 & 2: Red
 -- During 1: Yellow
--- During Go: Green for 5 seconds => Disabled for 3 seconds => Back to vanilla
+-- Go: Green for 5 seconds => Disabled for 3 seconds => Back to vanilla
 
 local GoToOffTimer
 local OffToVanillaTimer
@@ -13,6 +13,7 @@ local FlashRedTimer
 function MapLoaded()
 	if isTimer(GoToOffTimer) then killTimer(GoToOffTimer) end
 	if isTimer(OffToVanillaTimer) then killTimer(OffToVanillaTimer) end
+	if isTimer(FlashRedTimer) then killTimer(FlashRedTimer) end
 
 	setTrafficLightsLocked(true)
 	FlashRedTimer = setTimer(FlashRedLights, 500, 0)
