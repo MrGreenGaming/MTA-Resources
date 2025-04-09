@@ -210,7 +210,6 @@ local loadingMapResourceName = nil
 function notifyLoadingMap( mapName, authorName, mapresname )
 	-- outputDebugString( 'notifyLoadingMap ' .. mapresname )
 	if not getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
-		outputDebugString("Fading camera")
     fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
 	end
   TravelScreen.show( mapName, authorName )
