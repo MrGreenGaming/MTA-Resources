@@ -18,6 +18,8 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 
 		if not getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
 			fadeCamera(false,0.0)
+		else
+			fadeCamera(true,0)
 		end
 		-- create GUI
 		local screenWidth, screenHeight = guiGetScreenSize()
@@ -209,7 +211,9 @@ local loadingMapResourceName = nil
 -- Called from server
 function notifyLoadingMap( mapName, authorName, mapresname )
 	-- outputDebugString( 'notifyLoadingMap ' .. mapresname )
-	if not getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
+	if getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
+		fadeCamera(true, 0)
+	else
     fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
 	end
   TravelScreen.show( mapName, authorName )
@@ -315,7 +319,9 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 		launchRace(duration)
 	end
 
-	if not getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
+	if getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
+		fadeCamera(true, 0)
+	else
 		fadeCamera( false, 0.0 )
 	end
 

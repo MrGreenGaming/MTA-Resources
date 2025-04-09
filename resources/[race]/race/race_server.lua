@@ -877,7 +877,6 @@ addEventHandler('onGamemodeMapStop', g_Root,
 			setElementData ( player, "checkpoint", "" )
 
 			if not getPlayerSerial(player) == "908E74ADB095BBFF84E0C295A98DBD74" then
-				outputDebugString("Fading camera")
         fadeCamera ( player, false, 0.0, 0,0, 0 )
 			end
 		end
