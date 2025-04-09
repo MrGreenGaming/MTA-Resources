@@ -16,7 +16,7 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 	function()
 		g_Players = getElementsByType('player')
 
-		if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+		if not getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
 			fadeCamera(false,0.0)
 		end
 		-- create GUI
@@ -209,7 +209,8 @@ local loadingMapResourceName = nil
 -- Called from server
 function notifyLoadingMap( mapName, authorName, mapresname )
 	-- outputDebugString( 'notifyLoadingMap ' .. mapresname )
-	if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+	if not getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
+		outputDebugString("Fading camera")
     fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
 	end
   TravelScreen.show( mapName, authorName )
@@ -315,7 +316,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 		launchRace(duration)
 	end
 
-	if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+	if not getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
 		fadeCamera( false, 0.0 )
 	end
 
@@ -1398,7 +1399,7 @@ end
 -----------------------------------------------------------------------
 function remoteStopSpectateAndBlack()
 	Spectate.stop('auto')
-	if getPlayerSerial(localPlayer) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+	if not getPlayerSerial(localPlayer) == "908E74ADB095BBFF84E0C295A98DBD74" then
 		fadeCamera(false,0.0, 0,0,0)			-- Instant black
 	end
 end

@@ -876,7 +876,7 @@ addEventHandler('onGamemodeMapStop', g_Root,
 			setElementData ( player, "race rank", "" )
 			setElementData ( player, "checkpoint", "" )
 
-			if getPlayerSerial(player) ~= "908E74ADB095BBFF84E0C295A98DBD74" then
+			if not getPlayerSerial(player) == "908E74ADB095BBFF84E0C295A98DBD74" then
         fadeCamera ( player, false, 0.0, 0,0, 0 )
 			end
 		end
