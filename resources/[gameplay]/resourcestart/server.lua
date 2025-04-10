@@ -28,7 +28,7 @@ function startResources()
 		resourceDisabledForEvent = tonumber(xmlNodeGetAttribute(r, 'disableForEvent')) or 0
 
 		if resourceDisabledForEvent == 1 then
-			table.insert(disabledForEvent, resourceName)
+			disabledForEvent[resourceName] = true
 		end
 
 		if resourceDelayed == 1 then
@@ -45,7 +45,7 @@ function startResources()
 	end
 
 	local function tryStartResource(r, reason)
-		if isEvent and table.contains(disabledForEvent, r) then
+		if isEvent and disabledForEvent[r]  then
 			outputDebugString(string.format('[Resource start] Skipping resource %s (disabled for event).', r))
 			return
 		end
