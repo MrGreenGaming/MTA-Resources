@@ -6,7 +6,7 @@ function startResources()
 	end
 
 	local resources = xmlNodeGetChildren(rootNode)
-	local isEvent = getBool('resourcestart.isEvent', false)
+	local isEvent = (get('resourcestart.isEvent') or false) == true
 
 	local resourceName
 	local resourcePriority
@@ -87,11 +87,3 @@ function startResources()
 end
 
 addEventHandler('onResourceStart', resourceRoot, startResources)
-
-function getBool(var, default)
-	local result = get(var)
-	if not result then
-		return default
-	end
-	return result == 'true'
-end
