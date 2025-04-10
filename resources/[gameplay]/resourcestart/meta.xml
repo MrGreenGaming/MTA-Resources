@@ -2,4 +2,7 @@
 	<info author="Mihoje" name="Resource starter" description="A script that starts resources instead of the config so we can change what starts and what doesn't with the server over GitHub." type="script" />
 	
 	<script src="server.lua" type="server"/>
+	<settings>
+		<setting name="isEvent" type="bool" friendlyname="Is this server event server?" default="false" description="Set to true if this is the event server. This will disable some resources that are not compatible with the event server."/>
+	</settings>
 </meta>
