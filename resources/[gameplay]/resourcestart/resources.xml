@@ -44,7 +44,7 @@
 	<resource priority="0" restart="0" delayed="0" disableForEvent="0">eventmanager</resource>
 	<resource priority="0" restart="1" delayed="0" disableForEvent="0">race_ghost_assist</resource>
 	<resource priority="0" restart="0" delayed="0" disableForEvent="0">laps</resource>
-	<resource priority="0" restart="0" delayed="0" disableForEvent="0">auto-shutdown</resource>
+	<resource priority="0" restart="0" delayed="0" disableForEvent="1">auto-shutdown</resource>
 	<resource priority="0" restart="0" delayed="0" disableForEvent="0">discord_rich_presence</resource>
 	<resource priority="0" restart="0" delayed="0" disableForEvent="0">race_progress_3d</resource>
 	<resource priority="0" restart="0" delayed="1" disableForEvent="1">ipb</resource>
