@@ -6,7 +6,7 @@ function startResources()
 	end
 
 	local resources = xmlNodeGetChildren(rootNode)
-	local isEvent = getBool('isEvent', false)
+	local isEvent = getBool('resourcestart.isEvent', false)
 
 	local resourceName
 	local resourcePriority
