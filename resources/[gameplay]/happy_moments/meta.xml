@@ -1,0 +1,27 @@
+<meta>
+    <info author="Nick_026" version="1.0" type="script" />
+
+
+    <!-- <export function="areTeamsSet" type="server" />
+    <export function="areGcShopTeamsAllowed" type="server" />
+    <export function="areModShopModificationsAllowed" type="server" />
+
+    <export function="getEventData" type="server" />
+    <export function="outputInfoForPlayer" type="server" />
+
+    <export function="getEventMode" type="client" /> -->
+
+		<export function="endMoment" type="server" />
+		<export function="getHappyMomentArg" type="server" />
+
+		<script src="server.lua" type="server" />
+
+    <aclrequest>
+        <right name="function.stopResource" access="true" />
+				<right name="function.startResource" access="true" />
+    </aclrequest>
+		
+	<settings>
+		<setting name="*isRace" value="true" accept="true|false" friendlyname="Is this server Race server?" desc="Set to true if this is the Race server. It will set proper Happy moments based on the server"/>
+	</settings>
+</meta>

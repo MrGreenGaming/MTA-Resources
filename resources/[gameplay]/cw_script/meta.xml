@@ -23,6 +23,8 @@
 
     <export function="getEventMode" type="client" />
 
+    <export function="triggerHappyMoment" type="server" />
+
     <aclrequest>
         <right name="function.stopResource" access="true" />
     </aclrequest>

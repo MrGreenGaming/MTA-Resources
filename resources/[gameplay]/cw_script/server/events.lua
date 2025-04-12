@@ -29,7 +29,7 @@ function startRound(mapInfo)
 
 	for i,player in ipairs(getElementsByType('player')) do
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
-        clientCall(player, 'updateEventMetadata', eventName, nextMapName)
+        clientCall(player, 'updateEventMetadata', eventName, nextMapName, happyMomentSubtitle)
 	end
 	round_ended = false
 end
@@ -53,7 +53,7 @@ function playerFinished(player, rank)
 
             updateScoreData(player)
 
-            if p_score > 0 then
+            if p_score > 0 and not isResourceStartedByHappyMoments then
                 exports.messages:outputGameMessage(getPlayerName( player ).. ' earned ' ..p_score.. ' points!', root, 2.5, 0,255,0, false, false,  true)
             end
 		end
