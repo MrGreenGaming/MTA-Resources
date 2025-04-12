@@ -15,6 +15,9 @@ isWarEnded  = false
 eventName = false
 nextMapName = false
 
+isResourceStartedByHappyMoments = false
+happyMomentSubtitle = nil
+
 CurrentGamemode = "Sprint"
 
 -----------------
@@ -52,14 +55,23 @@ function outputInfoForPlayer(player, info)
 end
 
 function areTeamsSet()
+    if isResourceStartedByHappyMoments then
+        return false
+    end
     return isElement(teams[1]) and isElement(teams[2]) and isElement(teams[3])
 end
 
 function areGcShopTeamsAllowed()
+    if isResourceStartedByHappyMoments then
+        return true
+    end
     return not areTeamsSet() or (ffa_mode == "FFA" and ffa_keep_gcshop_teams)
 end
 
 function areModShopModificationsAllowed()
+    if isResourceStartedByHappyMoments then
+        return true
+    end
     return not areTeamsSet() or (ffa_mode == "FFA" and ffa_keep_modshop)
 end
 
@@ -87,19 +99,24 @@ function endFreeForAll()
     local t1t = getTeamFromName(t1)
     local t1Players = getPlayersInTeamSortedByScore(t1t)
 
-    if t1Players[1] then
+    if getResourceState(getResourceFromName("happy_moments")) == "running" and isResourceStartedByHappyMoments then
+        outputDebugString("Sending player data to happy_moments resource.")
+        exports.happy_moments:endMoment(t1Players)
+    end
+
+    if t1Players[1] and not isResourceStartedByHappyMoments then
         local score = getElementData(t1Players[1], 'Score')
         local playerName = getElementData( t1Players[1], "vip.colorNick" ) or getPlayerName( t1Players[1] )
         outputChatBox("#FFD700In 1st place with " .. score .. " points: " .. playerName, root, 255, 255, 255, true)
     end
 
-    if t1Players[2] then
+    if t1Players[2] and not isResourceStartedByHappyMoments then
         local score = getElementData(t1Players[2], 'Score')
         local playerName = getElementData( t1Players[2], "vip.colorNick" ) or getPlayerName( t1Players[2] )
         outputChatBox("#C0C0C0In 2nd place with " .. score .. " points: " .. playerName, root, 255, 255, 255, true)
     end
 
-    if t1Players[3] then
+    if t1Players[3] and not isResourceStartedByHappyMoments then
         local score = getElementData(t1Players[3], 'Score')
         local playerName = getElementData( t1Players[3], "vip.colorNick" ) or getPlayerName( t1Players[3] )
         outputChatBox("#CD7F32In 3rd place with " .. score .. " points: " .. playerName, root, 255, 255, 255, true)
@@ -203,7 +220,7 @@ end
 -------------------
 -- FROM ADMIN PANEL
 -------------------
-function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m, keep_gcshop_teams, keep_modshop)
+function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m, keep_gcshop_teams, keep_modshop, name)
 	destroyTeams()
     tags[1] = t1tag
     tags[2] = t2tag
@@ -229,7 +246,11 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m,
 	c_round = 0
 	call(getResourceFromName("scoreboard"), "scoreboardAddColumn", "Score")
 
-    eventName = exports.eventmanager:getEventName()
+    if name then
+        eventName = name 
+    else
+        eventName = exports.eventmanager:getEventName()
+    end
     nextMapName = exports.eventmanager:getNextMapName()
     if not nextMapName then
         nextMapName = exports.gcshop:getQueuedMapName()
@@ -237,7 +258,7 @@ function startWar(team1name, team2name, t1tag, t2tag, r1, g1, b1, r2, g2, b2, m,
 
 	for i, player in ipairs(getElementsByType('player')) do
 		clientCall(player, 'updateTeamData', teams[1], teams[2], teams[3])
-        clientCall(player, 'updateEventMetadata', eventName, nextMapName)
+        clientCall(player, 'updateEventMetadata', eventName, nextMapName, happyMomentSubtitle)
 		clientCall(player, 'updateTagData', tags[1], tags[2])
 		clientCall(player, 'updateRoundData', c_round, rounds, f_round)
         clientCall(player, 'updateModeData', ffa_mode, ffa_keep_gcshop_teams, ffa_keep_modshop)
@@ -272,6 +293,19 @@ function sincAP()
 	for i,player in ipairs(getElementsByType('player')) do
 		clientCall(player, 'updateAdminPanelText')
 	end
+end
+
+function triggerHappyMoment(name, subtitle, nRounds)
+    isResourceStartedByHappyMoments = true
+    happyMomentSubtitle = subtitle
+    ffa_mode = "FFA"
+    ffa_keep_gcshop_teams = true
+    ffa_keep_modshop = true
+    rounds = nRounds
+    c_round = 0
+    round_ended = false
+
+    startWar("Free-for-All", "-", "-", "-", 52, 110, 68, 0, 0, 0, "FFA", true, true, name)
 end
 
 --------------------

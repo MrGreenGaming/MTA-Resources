@@ -10,8 +10,6 @@ local compareToTopPos = 5
 local fetchToptimesTimer = false
 local fetchToptimeRetries = 5
 
-local isTournamentActive = false
-
 function resetMap(mapInfo, mapOptions, gameOptions)
 	rewarded_Players = {}
 	topTime, modename, mapname = nil, nil, nil
@@ -199,18 +197,20 @@ function finish(rank)
 		if isHoliday() then rewarded_Players[player].finishReward = rewarded_Players[player].finishReward * 2 end
 
 		if rewarded_Players[player].finishReward > 1 then
-			if not isTournamentActive then
-				if not getElementData(player, 'markedblocker') then
-					addPlayerGreencoins(player, rewarded_Players[player].finishReward)
+			if not getElementData(player, 'markedblocker') then
+				addPlayerGreencoins(player, rewarded_Players[player].finishReward)
+				if not isTournamentActive() then
 					exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning ".. rewarded_Players[player].finishReward .." GC", getRootElement(), nil, 0, 255, 0, false, false, true)
-				else
+				end
+			else
+				if not isTournamentActive() then
 					exports.messages:outputGameMessage(getPlayerName(player) .."#00FF00 finished ".. tostring(rank) .. suffix .." earning 0 GC due to being a Ghost.", getRootElement(), nil, 255, 0, 0, false, false, true)
 				end
 			end
 			return
 		end
 	end
-	if not isTournamentActive then
+	if not isTournamentActive() then
 		exports.messages:outputGameMessage(getPlayerName(player) .." finished ".. tostring(rank) .. suffix, getRootElement(), nil, nil, nil, nil, false, false, true)
 	end
 end
@@ -410,7 +410,7 @@ function shooterFinish(rank)
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
 	addPlayerGreencoins(source, reward)
-	if not isTournamentActive then
+	if not isTournamentActive() then
 		outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	end
 end
@@ -429,7 +429,7 @@ function onShooterPlayerKill()
 	local reward = rewardKill
 	if isHoliday() then reward = reward * 2 end
 	addPlayerGreencoins(player, reward)
-	if not isTournamentActive then
+	if not isTournamentActive() then
 		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
 	end
 end
@@ -498,7 +498,7 @@ function ddFinish(rank)
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
 	addPlayerGreencoins(source, reward)
-	if not isTournamentActive then
+	if not isTournamentActive() then
 		outputChatBox(prefix .. getPlayerName(source) .. '#00FF00 has earned ' .. reward .. ' GC for finishing ' .. rank .. str, root, 0, 255, 0, true)
 	end
 end
@@ -517,7 +517,7 @@ function onDDPlayerKill()
 	local reward = rewardKill
 	if isHoliday() then reward = reward * 2 end
 	addPlayerGreencoins(player, reward)
-	if not isTournamentActive then
+	if not isTournamentActive() then
 		outputChatBox(prefix .. 'You earned ' .. reward .. ' GC for a kill', player, 0, 255, 0, true)
 	end
 end
@@ -538,7 +538,7 @@ function RTFfinish( rank, time )
 	if isHoliday() then reward = reward * 2 end
 	reward = getRewardAmount(reward)
 	addPlayerGreencoins(player, reward)
-	if not isTournamentActive then
+	if not isTournamentActive() then
 		outputChatBox(prefix..getPlayerName(player)..'#00FF00 has earned '.. reward .. ' GC for reaching the flag first! ', root, 0, 255, 0, true)
 	end
 end
@@ -677,25 +677,9 @@ function vipRewardMult(player, theReward)
 	return theReward
 end
 
-
-function onTournamentStart(resource)
-	if getResourceName(resource) ~= "cw_script" then return end
-	isTournamentActive = true
+function isTournamentActive()
+	return getResourceState(getResourceFromName("cw_script")) == "running" and exports.cw_script:areTeamsSet()
 end
-addEventHandler("onResourceStart", getRootElement(), onTournamentStart)
-
-function onTournamentStop(resource)
-	if getResourceName(resource) ~= "cw_script" then return end
-	isTournamentActive = false
-end
-addEventHandler("onResourceStop", getRootElement(), onTournamentStop)
-
-function onTournamentMapChange()
-	if not getResourceFromName('cw_script') or getResourceState(getResourceFromName('cw_script')) ~= 'running' then
-		isTournamentActive = false
-	end
-end
-addEventHandler("onMapStarting", getRootElement(), onTournamentMapChange)
 
 function toboolean( bool )
     bool = tostring( bool )

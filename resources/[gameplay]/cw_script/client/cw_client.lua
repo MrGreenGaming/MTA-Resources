@@ -14,6 +14,7 @@ compact = false
 
 c_eventName = false
 c_nextMapName = false
+c_subtitle = false
 
 function outputInfoClient(info)
     outputChatBox('[Event] #ffffff' ..info, 155, 155, 255, true)
@@ -88,11 +89,12 @@ function updateScoringData(newScoring)
     updateAdminPanelText()
 end
 
-function updateEventMetadata(_eventName, _nextMapName)
+function updateEventMetadata(_eventName, _nextMapName, _subtitle)
     if _eventName then
         c_eventName = _eventName
     end
     c_nextMapName = _nextMapName
+		c_subtitle = _subtitle
 end
 
 function updateNextMapNameIfNotSet(_nextMapName)

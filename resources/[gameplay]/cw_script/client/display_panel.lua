@@ -152,7 +152,11 @@ function updateDisplay()
             end
 			dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
             dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
-            dxDrawText("#bababaNext: " .. (c_nextMapName or "N/A"), wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+            if (c_subtitle) then
+                dxDrawText("#bababa" .. c_subtitle, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+            else
+                dxDrawText("#bababaNext: " .. (c_nextMapName or "N/A"), wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+            end
 			dxDrawText(t1, wX + margin, wY + (rowHeight*2), wX+windowSizeX-margin, wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, "default-bold", "left", "center", false, false, false, true, false)
 			dxDrawText(t1Score, wX + rankWidth + nickWidth, wY + (rowHeight*2), wX+(nickWidth + rankWidth + ptsWidth), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, "default-bold", "center", "center", false, false, false, true, false)
             local isLocalPlayerInView = false
@@ -211,7 +215,11 @@ function updateDisplay()
                 end
                 dxDrawText(sColor..state, wX, wY, wX+windowSizeX, wY+rowHeight, tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
                 dxDrawText("Round "..c_round.."/"..m_round, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
-                dxDrawText("#bababaNext: " .. (c_nextMapName or "N/A"), wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+                if (c_subtitle) then
+                    dxDrawText("#bababa" .. c_subtitle, wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+                else
+                    dxDrawText("#bababaNext: " .. (c_nextMapName or "N/A"), wX, wY+rowHeight, wX+windowSizeX, wY+(rowHeight*2), tocolor(255, 255, 255, 255), 1, "default-bold", "center", "center", false, false, true, true, false)
+                end
                 dxDrawText(t1c..t1tag.."   "..t1Score.."  #ffffff-  "..t2c..t2Score.."   "..t2tag, wX + margin, wY + (rowHeight*2), wX+windowSizeX-(margin*2), wY+(rowHeight*3), tocolor(r1, g1, b1, 255), 1, "default-bold", "center", "center", false, false, false, true, false)
 		else
 			dxDrawRoundedRectangle(1,1,1,1, 0, tocolor(0, 0, 0, 0), false, false)
