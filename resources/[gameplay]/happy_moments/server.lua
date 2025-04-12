@@ -14,7 +14,7 @@ function rollDice()
 	if activeMoment then return end
 	local dice = math.random(1, 100)
 
-	if dice ~= 14 or dice ~= 27 or dice ~= 42 or dice ~= 69 then 
+	if dice ~= 14 and dice ~= 27 and dice ~= 42 and dice ~= 69 then
 		logToConsole("No Happy Moment! Dice rolled: " .. dice)
 		return
 	end
