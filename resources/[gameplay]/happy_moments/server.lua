@@ -2,12 +2,12 @@ local activeMoment = nil
 
 local raceMoments = {
 	-- 1
-	{ name = "Best Race Player", task = "Finish to earn points.", rounds = 10, args = {}},
+	{ name = "Best Race Player", task = "Finish to earn points.", rounds = 5, args = {}},
 }
 
 local mixMoments = {
 	--1 
-	{ name = "Best NTS Player", task = "Finish to earn points. (Only NTS maps will spawn!)", rounds = 10, args = { gamemode = "nts" }},
+	{ name = "Best NTS Player", task = "Finish to earn points. (Only NTS maps will spawn!)", rounds = 5, args = { gamemode = "nts" }},
 }
 
 function rollDice()
