@@ -7,7 +7,7 @@ local raceMoments = {
 
 local mixMoments = {
 	--1 
-	{ name = "Best NTS Player", task = "Finish to earn points. Only NTS maps will spawn!", rounds = 10, args = { gamemode = "nts" }},
+	{ name = "Best NTS Player", task = "Finish to earn points. (Only NTS maps will spawn!)", rounds = 10, args = { gamemode = "nts" }},
 }
 
 function rollDice()
@@ -102,11 +102,8 @@ function triggerMoment(moment)
 end
 
 function endMoment(players)
-	outputDebugString("Received end moment data")
 	if not activeMoment then return end
 	if not players or #players == 0 then return end
-
-	outputDebugString("Received player data")
 
 	local moment = activeMoment
 	activeMoment = nil
