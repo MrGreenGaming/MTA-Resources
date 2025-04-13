@@ -1,5 +1,9 @@
 local activeMoment = nil
 
+-- Amount of maps ago the moment was last triggered
+local nMapsNeeded = 10
+local nMapsAgo = nMapsNeeded
+
 local raceMoments = {
 	-- 1
 	{ name = "Best Race Player", task = "Finish to earn points.", rounds = 5, args = {}},
@@ -12,9 +16,16 @@ local mixMoments = {
 
 function rollDice()
 	if activeMoment then return end
+
+	if nMapsAgo <= 10 then
+		logToConsole("Happy Moment not triggered. Last moment was " .. nMapsAgo .. " maps ago. At least " .. nMapsNeeded .. " maps needed.")
+		nMapsAgo = nMapsAgo + 1
+		return
+	end
+
 	local dice = math.random(1, 100)
 
-	if dice ~= 14 and dice ~= 27 and dice ~= 42 and dice ~= 69 then
+	if dice ~= 27 and dice ~= 42 and dice ~= 69 then
 		logToConsole("No Happy Moment! Dice rolled: " .. dice)
 		return
 	end
@@ -107,6 +118,7 @@ function endMoment(players)
 
 	local moment = activeMoment
 	activeMoment = nil
+	nMapsAgo = 0
 
 	local nPlayers = #players
 
