@@ -534,7 +534,7 @@ function handleHitPickup(pickup)
 			return
 		end
 		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
-		alignVehicleWithUp()
+		alignVehicleWithUp(g_MapOptions.classicchangez)
 		setElementModel(g_Vehicle, pickup.vehicle)
 		if nitroLevel then
 			addVehicleUpgrade(g_Vehicle, 1010)
