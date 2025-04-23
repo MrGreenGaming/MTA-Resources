@@ -7,7 +7,7 @@ addEvent("disableGhostsForThisMap", true)
 
 NO_GHOST                  = false
 ghostsCreated             = 0
-ghostsAmount              = 12 -- default value
+ghostsAmount              = 7 -- default value
 
 local bestPlaybackEnabled = true
 addCommandHandler('bestghost', function()
