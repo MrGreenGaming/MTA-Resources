@@ -22,9 +22,9 @@ A non-dramatic 'The MIT License' applies. See `LICENSE` file for details.
 
 ## Past Contributors
 * AfuSensi (KaliBwoy)
+* Haxardous
 * Mihail (Mihoje)
 * EsDeKa (SDK)
-* AfuSensi (KaliBwoy)
 * Alexey Yakubovskii (AleksCore)
 * Hans Swart (Bierbuikje)
 * Ywa
