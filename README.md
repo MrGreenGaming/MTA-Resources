@@ -17,18 +17,18 @@ Everyone is encouraged to contribute. Make sure your changes correspond with the
 A non-dramatic 'The MIT License' applies. See `LICENSE` file for details.
 
 # Credits
-## Project team
-* Cena1 (Cena)
+## Active Contributors
 * Nick S. (Nick_026)
 
 ## Past Contributors
 * AfuSensi (KaliBwoy)
+* Haxardous
 * Mihail (Mihoje)
 * EsDeKa (SDK)
-* AfuSensi (KaliBwoy)
 * Alexey Yakubovskii (AleksCore)
 * Hans Swart (Bierbuikje)
 * Ywa
+* Cena1 (Cena)
 
 ## Additional implementation
 * Stijn Lindeman (Puma) - Pickup icons
