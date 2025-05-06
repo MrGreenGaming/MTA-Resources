@@ -29,14 +29,10 @@ function clientCreateExplosion(fPX, fPY, fPZ, iType)
 		if(getElementType(source) == "player") then
 			if(tblRegularExplosions[source]) then
 				tblRegularExplosions[source] = tblRegularExplosions[source] + 1;
-				
+
 				if tblRegularExplosions[source] >= iRegularExplosionThreshold then
 					outputDebugString("Cancelled Explosion from "..getPlayerName(source).." - Type: "..tostring(iType).." - Count: "..tostring(tblRegularExplosions[source]), 1, 255, 0, 0);
 					cancelEvent();
-				end
-
-				if tblRegularExplosions[source] >= iRegularExplosionBanTest then
-					banPlayer(source, true, false, true, "Too much boom, you're out. Appeal at forums.mrgreengaming.com or on Discord", "Explosive Inspector", 0)
 				end
 			else
 				tblRegularExplosions[source] = 1;
@@ -76,6 +72,12 @@ setTimer(function()
 				exports.discord:send("admin.log", { log = remcol(getPlayerName(uPlayer)).." has exceeded regular explosions threshold "..tostring(iRegularExplosionThreshold).." - Count: "..tostring(iCounter) .. "\nSerial: " .. getPlayerSerial(uPlayer)} )
 			end
 		end
+
+		if (iCounter >= iRegularExplosionBanTest) then
+			if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+				exports.discord:send("admin.log", { log = remcol(getPlayerName(uPlayer)).." has been banned by the Explosion Inspector"} )
+				banPlayer(uPlayer, true, false, true, "Explosion Inspector", "Too many booms, you're out! Appeal at forums.mrgreengaming.com or on Discord", 0)
+			end
 	end
 	
 	for uPlayer, iCounter in pairs(tblVehicleExplosions) do
