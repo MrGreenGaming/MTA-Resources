@@ -78,6 +78,7 @@ setTimer(function()
 				exports.discord:send("admin.log", { log = remcol(getPlayerName(uPlayer)).." has been banned by the Explosion Inspector"} )
 				banPlayer(uPlayer, true, false, true, "Explosion Inspector", "Too many booms, you're out! Appeal at forums.mrgreengaming.com or on Discord", 0)
 			end
+		end
 	end
 	
 	for uPlayer, iCounter in pairs(tblVehicleExplosions) do
