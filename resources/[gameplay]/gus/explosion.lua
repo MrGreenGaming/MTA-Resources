@@ -29,11 +29,6 @@ function clientCreateExplosion(fPX, fPY, fPZ, iType)
 		if(getElementType(source) == "player") then
 			if(tblRegularExplosions[source]) then
 				tblRegularExplosions[source] = tblRegularExplosions[source] + 1;
-
-				if tblRegularExplosions[source] >= iRegularExplosionThreshold then
-					outputDebugString("Cancelled Explosion from "..getPlayerName(source).." - Type: "..tostring(iType).." - Count: "..tostring(tblRegularExplosions[source]), 1, 255, 0, 0);
-					cancelEvent();
-				end
 			else
 				tblRegularExplosions[source] = 1;
 			end
