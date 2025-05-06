@@ -7,6 +7,7 @@ local tblVehicleExplosions 			= {};	-- store players sending vehicle explosion s
 local iPlayerProjectileThreshold 	= 5;	-- the threshold when we consider client suspicious for projectile creations
 local iRegularExplosionThreshold 	= 5;	-- the threshold when we consider client suspicious for regular explosions
 local iVehicleExplosionThreshold 	= 5;	-- the threshold when we consider client suspicious for vehicle explosions
+local iRegularExplosionBanTest	= 5;	-- the threshold when we ban the client for suspicious regular explosions
 
 -- https://wiki.multitheftauto.com/wiki/OnPlayerProjectileCreation
 -- gets triggered when a player creates a projectile sync packets (eg. shoots a weapon, vehicle weapon or via createProjectile)
@@ -28,9 +29,14 @@ function clientCreateExplosion(fPX, fPY, fPZ, iType)
 		if(getElementType(source) == "player") then
 			if(tblRegularExplosions[source]) then
 				tblRegularExplosions[source] = tblRegularExplosions[source] + 1;
+				
 				if tblRegularExplosions[source] >= iRegularExplosionThreshold then
 					outputDebugString("Cancelled Explosion from "..getPlayerName(source).." - Type: "..tostring(iType).." - Count: "..tostring(tblRegularExplosions[source]), 1, 255, 0, 0);
 					cancelEvent();
+				end
+
+				if tblRegularExplosions[source] >= iRegularExplosionBanTest then
+					banPlayer(source, true, false, true, "Too much boom, you're out. Appeal at forums.mrgreengaming.com or on Discord", "Explosive Inspector", 0)
 				end
 			else
 				tblRegularExplosions[source] = 1;
