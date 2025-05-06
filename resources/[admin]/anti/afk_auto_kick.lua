@@ -36,7 +36,7 @@ function StartAfkTimer(player)
         local afkTime = get("anti.afkTimeBeforeKick") or 120
         if (not afkTimers[player]) then
             afkTimers[player] = setTimer(function()
-                kickPlayer(player, "You were kicked automatically for being AFK too long.")
+                kickPlayer(player, "FastFurKick", "AFK? We race, not nap!")
             end, afkTime * 60 * 1000, 1)
         end
     end
