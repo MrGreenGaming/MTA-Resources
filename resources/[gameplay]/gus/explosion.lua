@@ -4,10 +4,10 @@ local iExplosionCheckInterval 		= 5000;	-- the interval in ms to check for playe
 local tblPlayerProjectiles 			= {};	-- store players sending projectile sync packets
 local tblRegularExplosions 			= {};	-- store players sending regular explosion sync packets
 local tblVehicleExplosions 			= {};	-- store players sending vehicle explosion sync packets
-local iPlayerProjectileThreshold 	= 5;	-- the threshold when we consider client suspicious for projectile creations
-local iRegularExplosionThreshold 	= 5;	-- the threshold when we consider client suspicious for regular explosions
-local iVehicleExplosionThreshold 	= 5;	-- the threshold when we consider client suspicious for vehicle explosions
-local iRegularExplosionBanTest	= 40;	-- the threshold when we ban the client for suspicious regular explosions
+local iPlayerProjectileThreshold 	= 10;	-- the threshold when we consider client suspicious for projectile creations
+local iRegularExplosionThreshold 	= 10;	-- the threshold when we consider client suspicious for regular explosions
+local iVehicleExplosionThreshold 	= 10;	-- the threshold when we consider client suspicious for vehicle explosions
+local iRegularExplosionBanTest	= 50;	-- the threshold when we ban the client for suspicious regular explosions
 
 -- https://wiki.multitheftauto.com/wiki/OnPlayerProjectileCreation
 -- gets triggered when a player creates a projectile sync packets (eg. shoots a weapon, vehicle weapon or via createProjectile)
