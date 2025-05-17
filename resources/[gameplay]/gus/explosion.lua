@@ -8,6 +8,7 @@ local iPlayerProjectileThreshold 	= 10;	-- the threshold when we consider client
 local iRegularExplosionThreshold 	= 10;	-- the threshold when we consider client suspicious for regular explosions
 local iVehicleExplosionThreshold 	= 10;	-- the threshold when we consider client suspicious for vehicle explosions
 local iRegularExplosionBanTest	= 50;	-- the threshold when we ban the client for suspicious regular explosions
+local tblRegularExplosionBanHits = {}; -- Store player timestamp of explosion ban hits (Twice in 1 minute = ban)
 
 -- https://wiki.multitheftauto.com/wiki/OnPlayerProjectileCreation
 -- gets triggered when a player creates a projectile sync packets (eg. shoots a weapon, vehicle weapon or via createProjectile)
@@ -69,9 +70,34 @@ setTimer(function()
 		end
 
 		if (iCounter >= iRegularExplosionBanTest) then
-			if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-				exports.discord:send("admin.log", { log = remcol(getPlayerName(uPlayer)).." has been banned by the Explosion Inspector"} )
-				banPlayer(uPlayer, true, false, true, "Explosion Inspector", "Too many booms, you're out! Appeal at forums.mrgreengaming.com or on Discord", 0)
+			local now = getTickCount()
+		
+			-- Initialize table if not present
+			if not tblRegularExplosionBanHits[uPlayer] then
+				tblRegularExplosionBanHits[uPlayer] = {}
+			end
+		
+			-- Add the current hit timestamp
+			table.insert(tblRegularExplosionBanHits[uPlayer], now)
+		
+			-- Filter out timestamps older than 60 seconds
+			local newHits = {}
+			for _, ts in ipairs(tblRegularExplosionBanHits[uPlayer]) do
+				if now - ts <= 60000 then
+					table.insert(newHits, ts)
+				end
+			end
+			tblRegularExplosionBanHits[uPlayer] = newHits
+		
+			-- Check if they hit the 50+ threshold twice within a minute
+			if #tblRegularExplosionBanHits[uPlayer] >= 2 then
+				if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+					exports.discord:send("admin.log", {
+						log = remcol(getPlayerName(uPlayer)).." has been banned by the Explosion Inspector (Triggered 50+ explosions twice in 1 min)"
+					})
+				end
+				banPlayer(uPlayer, true, false, true, "Explosion Inspector", "Too many explosions in a short time. Appeal at forums.mrgreengaming.com or on Discord", 0)
+				tblRegularExplosionBanHits[uPlayer] = nil -- clear history on ban
 			end
 		end
 	end
