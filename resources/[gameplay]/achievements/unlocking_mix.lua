@@ -60,6 +60,7 @@ achievementListMix = {
 	{ s = "NTS: Finish the map [NTS] Marathon", 							id = 21,	reward = 75 },
 	{ s = "NTS: Win the map [NTS] Marathon", 								id = 22,	reward = 200 },
 	{ s = "NTS: Finish the map [NTS] Sunday on a sunday", 				id = 23,	reward = 100 },
+	{ s = "NTS: Finish the map [NTS]A quite random trip through San Andreas", id = 65, reward = 250 },
 	{ s = "NTS: Finish 20 times", 										id = 24,	reward = 100,	max = 20 },
 	{ s = "NTS: Finish 200 times", 										id = 25,	reward = 300,	max = 200 },
 	{ s = "NTS: Finish 500 times", 										id = 47,	reward = 500,	max = 500 },
@@ -333,6 +334,8 @@ function NTSfinish( rank, time )
 		if rank == 1 then
 			addPlayerAchievementMix ( source, 22 )
 		end
+	elseif resname == "NTS-A-quite-random-trip-through-San-Andreas" then
+		addPlayerAchievementMix ( source, 65 )
 	elseif resname == 'nts-sunday' and getRealTime().weekday == 0 then
 		addPlayerAchievementMix ( source, 23 )
 	end
