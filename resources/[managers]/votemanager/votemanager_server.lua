@@ -410,7 +410,6 @@ addEventHandler("onClientSendVote", rootElement,
 			activePoll.votedOption[getPlayerUserNameSafe(client)] = nil
 			activePoll.playersWhoVoted = activePoll.playersWhoVoted - 1
 			activePoll[previousVote].votes = activePoll[previousVote].votes - 1
-			recheckVotes()
 			return
 		end
 
