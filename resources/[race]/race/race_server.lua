@@ -721,7 +721,7 @@ addEventHandler('onPlayerReachCheckpointInternal', g_Root,
             return
         end
 		local vehicle = g_Vehicles[source]
-		local checkpoint = g_CurrentRaceMode:getCheckpoint(checkpointNum)
+		local checkpoint = g_CurrentRaceMode:getCheckpoint(checkpointNum, vehicle)
 		if checkpoint.vehicle then
 			if getElementModel(vehicle) ~= tonumber(checkpoint.vehicle) then
 				if checkpointNum < #g_Checkpoints then

@@ -65,13 +65,13 @@ function NTS:playerUnfreeze(player, bDontFix)
 	addVehicleUpgrade(vehicle, 1010)
 end
 
-function NTS:getCheckpoint(i)
+function NTS:getCheckpoint(i, vehicle)
 	local realcheckpoint = g_Checkpoints[i]
 	local checkpoint = {}
 	for k,v in pairs(realcheckpoint) do
 		checkpoint[k] = v
 	end
-	checkpoint.vehicle = self:getRandomVehicle(checkpoint)
+	checkpoint.vehicle = self:getRandomVehicle(checkpoint, vehicle)
 	return checkpoint
 end
 
@@ -91,7 +91,7 @@ end
 
 
 
-function NTS:getRandomVehicle(checkpoint)
+function NTS:getRandomVehicle(checkpoint, vehicle)
 	if checkpoint.nts == 'boat' then
 		list = NTS._boats
 	elseif checkpoint.nts == 'air' then
@@ -126,7 +126,21 @@ function NTS:getRandomVehicle(checkpoint)
 	else
 		return false
 	end
-	return list[betterRandom(1, #list)]
+
+	if #list < 2 then
+		return list[betterRandom(1, #list)]
+	end
+	
+	local playerVehicleID = getElementModel(vehicle)
+	
+	local filteredList = {}
+	for _, model in ipairs(list) do
+		if model ~= playerVehicleID then
+			table.insert(filteredList, model)
+		end
+	end
+
+	return filteredList[betterRandom(1, #filteredList)]
 end
 
 NTS._cars = { 602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585,

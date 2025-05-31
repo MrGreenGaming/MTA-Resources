@@ -38,7 +38,7 @@ function RaceMode.getCheckpoints()
 	return g_Checkpoints
 end
 
-function RaceMode:getCheckpoint(i)
+function RaceMode:getCheckpoint(i, vehicle)
 	return g_Checkpoints[i]
 end
 
