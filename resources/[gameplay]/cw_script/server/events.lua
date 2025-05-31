@@ -22,9 +22,11 @@ function startRound(mapInfo)
         f_round = true
     end
 
-    -- sets next map to Lobby for CW's
+-- sets next map to Lobby for CW's
     if mapInfo.resname ~= lobbyResName and c_round ~= rounds and ffa_mode == "CW" then
-        triggerEvent("onEventSetNextMapLobby", root, lobbyResName)
+        setTimer(function()
+            triggerEvent("onEventSetNextMapLobby", root, lobbyResName)
+        end, 2500, 1)
     end
 
 	for i,player in ipairs(getElementsByType('player')) do
