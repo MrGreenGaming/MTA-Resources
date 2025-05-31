@@ -1651,7 +1651,7 @@ function alignVehicleWithUp(classicChangeZ)
 	if not classicChangeZ then
 		if isVehicleWheelOnGround(vehicle, 0) or isVehicleWheelOnGround(vehicle, 1) or isVehicleWheelOnGround(vehicle, 2) or isVehicleWheelOnGround(vehicle, 3) then
 			local vehicleId = getElementModel(vehicle)
-			if vehicleId == 581 or vehicleId == 523 or vehicleId == 509 or vehicleId == 481 or vehicleId == 462 or vehicleId == 521 or vehicleId == 463 or vehicleId == 510 or vehicleId == 522 or vehicleId == 461 or vehicleId == 448 or vehicleId == 468 or vehicleId == 586 then
+			if vehicleId == 581 or vehicleId == 523 or vehicleId == 509 or vehicleId == 481 or vehicleId == 462 or vehicleId == 521 or vehicleId == 463 or vehicleId == 510 or vehicleId == 522 or vehicleId == 461 or vehicleId == 448 or vehicleId == 468 or vehicleId == 586 or vehicleId == 471 then
 			-- Old vehicle is bike, new vehicle needs to be rotated so vehicles don't get stuck in ground due to player doing wheelies.
 			else
 				return
