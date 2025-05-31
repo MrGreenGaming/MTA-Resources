@@ -13,12 +13,12 @@ function loadGCTrials( bool, settings )
 	if bool then
 		if not settings.dont_flip then
 			-- Keep bike straight when flipping
-			-- loadFlip()
+			loadFlip()
 		end
 		-- Animation tricks in the air
 		loadTricks()
 	else
-		-- unloadFlip()
+		unloadFlip()
 		unloadTricks()
 	end
 end
@@ -28,10 +28,10 @@ addEventHandler( 'loadGCTrials', localPlayer, loadGCTrials)
 
 function settingGCTrials ( settings )
 	if not settings.dont_flip then
-		-- loadFlip()
+		loadFlip()
 		loadTricks()
 	else
-		-- unloadFlip()
+		unloadFlip()
 		unloadTricks()
 	end
 end
