@@ -240,6 +240,7 @@ function updatePlayerTop(player, rank, value)
 		monthtTopTime.kills = score[info.modename]
 		monthtTopTime.formatDate = FormatDate(monthtTopTime.date)
 		monthtTopTime.player = player
+		monthtTopTime.teamcolor = getPlayerTeamHexColor(player)
 		monthtTopTime.mta_name = getPlayerName(player)
 		monthtTopTime.country = exports.geoloc:getPlayerCountry(player)
 		monthtTopTime.rewarded = oldRewarded
@@ -266,7 +267,7 @@ function updatePlayerTop(player, rank, value)
 					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname`, `racemode` ) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE date=VALUES(date), value=VALUES(value);
 					INSERT INTO `maps`( `resname`,`mapname`, `racemode` ) VALUES (?,?,?) ON DUPLICATE KEY UPDATE resname=resname;
 				]]
-			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), country = exports.geoloc:getPlayerCountry(player), new=true})
+			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), teamcolor=getPlayerTeamHexColor(player), country = exports.geoloc:getPlayerCountry(player), new=true})
 			-- outputDebugString('new top for ' .. getPlayerName(player))
 			dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, racemode, mapname, mapnameFull, racemode)
 		elseif (not times.kills and value < toptime.value) or (times.kills and value > toptime.value) then
@@ -1050,6 +1051,25 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 		end
 	end
 )
+
+function getPlayerTeamHexColor(player)
+	local playerTeam = getPlayerTeam(player)
+	if playerTeam then
+		return RGBToHex(getTeamColor(playerTeam))
+	end
+	return nil
+end
+
+function RGBToHex(red, green, blue, alpha)
+	if ((red < 0 or red > 255 or green < 0 or green > 255 or blue < 0 or blue > 255) or (alpha and (alpha < 0 or alpha > 255))) then
+		return nil
+	end
+	if alpha then
+		return string.format("#%.2X%.2X%.2X%.2X", red, green, blue, alpha)
+	else
+		return string.format("#%.2X%.2X%.2X", red, green, blue)
+	end
+end
 
 -------------------------
 --- Exported function ---
