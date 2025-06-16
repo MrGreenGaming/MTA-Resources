@@ -7,7 +7,7 @@ local tblVehicleExplosions 			= {};	-- store players sending vehicle explosion s
 local iPlayerProjectileThreshold 	= 10;	-- the threshold when we consider client suspicious for projectile creations
 local iRegularExplosionThreshold 	= 10;	-- the threshold when we consider client suspicious for regular explosions
 local iVehicleExplosionThreshold 	= 10;	-- the threshold when we consider client suspicious for vehicle explosions
-local iRegularExplosionBanTest	= 50;	-- the threshold when we ban the client for suspicious regular explosions
+local iRegularExplosionBanTest	= 10;	-- the threshold when we ban the client for suspicious regular explosions
 local tblRegularExplosionBanHits = {}; -- Store player timestamp of explosion ban hits (Twice in 1 minute = ban)
 
 -- https://wiki.multitheftauto.com/wiki/OnPlayerProjectileCreation
@@ -90,10 +90,10 @@ setTimer(function()
 			tblRegularExplosionBanHits[uPlayer] = newHits
 		
 			-- Check if they hit the 50+ threshold twice within a minute
-			if #tblRegularExplosionBanHits[uPlayer] >= 2 then
+			if #tblRegularExplosionBanHits[uPlayer] >= 3 then
 				if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
 					exports.discord:send("admin.log", {
-						log = remcol(getPlayerName(uPlayer)).." has been banned by the Explosion Inspector (Triggered 50+ explosions twice in 1 min)"
+						log = remcol(getPlayerName(uPlayer)).." has been banned by the Explosion Inspector (Triggered 10+ explosions twice in 1 min, 3 times)"
 					})
 				end
 				banPlayer(uPlayer, true, false, true, "Explosion Inspector", "Too many explosions in a short time. Appeal at forums.mrgreengaming.com or on Discord", 0)
