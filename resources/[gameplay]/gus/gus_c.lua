@@ -242,6 +242,7 @@ function light.toggleDaylight()
     end
 end
 addCommandHandler("daylight", light.toggleDaylight)
+addCommandHandler("day", light.toggleDaylight)
 
 function light.toggleNightlight()
     if light.mode ~= "night" then
@@ -259,6 +260,7 @@ function light.toggleNightlight()
     end
 end
 addCommandHandler("nightlight", light.toggleNightlight)
+addCommandHandler("night", light.toggleNightlight)
 
 function light.apply(fromCache)
     if not fromCache then
