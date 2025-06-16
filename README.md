@@ -18,7 +18,7 @@ A non-dramatic 'The MIT License' applies. See `LICENSE` file for details.
 
 # Credits
 ## Active Contributors
-* Nick S. (Nick_026)
+* Nick S. (VulpyWags)
 
 ## Past Contributors
 * AfuSensi (KaliBwoy)
