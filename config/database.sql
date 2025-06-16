@@ -1,4 +1,4 @@
---- Make sure to rename `your_database` with the name of your database
+-- Make sure to rename `your_database` with the name of your database
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -238,7 +238,7 @@ CREATE TABLE `team` (
 	PRIMARY KEY (`teamid`), 
 	KEY `teamname` (`name`) USING BTREE, 
 	KEY `teamtag` (`tag`) USING BTREE, 
-	KEY `teamowner` (`owner`) USING BTREE, 
+	KEY `teamowner` (`owner`) USING BTREE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 CREATE TABLE `team_members` (

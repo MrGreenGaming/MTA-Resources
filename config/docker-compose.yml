@@ -1,0 +1,14 @@
+services:
+  db:
+    image: mysql:5.7
+    container_name: mrgreen_mtasrvs
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: your_database # Make sure it is the same as your_database name in database.sql
+    volumes:
+      - mrgreen_mtasrvs:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql:ro
+    ports:
+      - "3306:3306"
+volumes:
+  mrgreen_mtasrvs:
