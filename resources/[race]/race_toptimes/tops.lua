@@ -61,9 +61,6 @@ addEventHandler('onResourceStart', resourceRoot,
 	end
 )
 
-local topsTick = 0
-local monthlyTick = 0
-
 function queryMapTimes (mapInfo, bStart)
 	times = {}
 	monthtimes = {}
@@ -72,12 +69,10 @@ function queryMapTimes (mapInfo, bStart)
 	mapnameFull = mapInfo.name
 	racemode = racemodes[ exports.race:getRaceMode() ] or "(NULL)"
 	info = mapInfo
-	topsTick = getTickCount()
-	local q = "SELECT t.forumid, t.mapname, t.pos, t.value, t.date, n.name, v.options as supernick, h.country FROM toptimes t LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 WHERE t.mapname = ? ORDER BY t.pos"
+	local q = "SELECT t.forumid, t.mapname, t.pos, t.value, t.date, n.name, v.options as supernick, h.country, tm.colour AS teamcolor FROM toptimes t LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 LEFT JOIN team_members tmemb ON t.forumid = tmemb.forumid AND tmemb.status = 1 LEFT JOIN team tm ON tmemb.teamid = tm.teamid WHERE t.mapname = ? ORDER BY t.pos"
 	dbQuery(maptimes, {mapInfo, bStart}, handlerConnect, q, mapname)
 	if not score[exports.race:getRaceMode()] then
-		monthlyTick = getTickCount()
-		local q = "SELECT t.forumid, t.mapname, t.value, t.date, t.month,v.options as supernick, n.name, h.country FROM toptimes_month t LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 WHERE t.mapname = ? ORDER BY date DESC"
+		local q = "SELECT t.forumid, t.mapname, t.value, t.date, t.month,v.options as supernick, n.name, h.country, tm.colour AS teamcolor FROM toptimes_month t LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 LEFT JOIN team_members tmemb ON t.forumid = tmemb.forumid AND tmemb.status = 1 LEFT JOIN team tm ON tmemb.teamid = tm.teamid WHERE t.mapname = ? ORDER BY date DESC"
 		dbQuery(monthlytime, {mapInfo, bStart}, handlerConnect, q, mapname, getRealTime().month+1)
 	else
 		sendMonthTime()	-- send empty month time
@@ -99,8 +94,6 @@ function maptimes(qh, mapInfo, bStart)
 	else
 		-- outputDebugString('new map ' .. mapInfo.resname)
 	end
-
-	outputDebugString('toptimes for ' .. mapInfo.resname .. ' loaded in ' .. (getTickCount() - topsTick) .. 'ms')
 
 	times.resname = mapInfo.resname
 	times.mapname = mapInfo.name
@@ -137,7 +130,6 @@ function monthlytime(qh, mapInfo, bStart)
 		if mapInfo.resname ~= mapname then
 			return outputDebugString('toptimes mismatch ' .. mapname .. ' ' .. mapInfo.resname, 2)
 		else
-			outputDebugString('monthlytime for ' .. mapInfo.resname .. ' loaded in ' .. (getTickCount() - monthlyTick) .. 'ms')
 			monthtimes = result
 			if result[1].month == getRealTime().month+1 then
 				monthtTopTime = result[1]
@@ -248,6 +240,7 @@ function updatePlayerTop(player, rank, value)
 		monthtTopTime.kills = score[info.modename]
 		monthtTopTime.formatDate = FormatDate(monthtTopTime.date)
 		monthtTopTime.player = player
+		monthtTopTime.teamcolor = getPlayerTeamHexColor(player)
 		monthtTopTime.mta_name = getPlayerName(player)
 		monthtTopTime.country = exports.geoloc:getPlayerCountry(player)
 		monthtTopTime.rewarded = oldRewarded
@@ -274,7 +267,7 @@ function updatePlayerTop(player, rank, value)
 					INSERT INTO `toptimes`( `value`,`date`, `forumid`, `mapname`, `racemode` ) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE date=VALUES(date), value=VALUES(value);
 					INSERT INTO `maps`( `resname`,`mapname`, `racemode` ) VALUES (?,?,?) ON DUPLICATE KEY UPDATE resname=resname;
 				]]
-			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), country = exports.geoloc:getPlayerCountry(player), new=true})
+			table.insert(times, {forumid=forumid,mapname=mapname, value=value, date=getRealTime().timestamp, formatDate = FormatDate(getRealTime().timestamp), player=player, mta_name=getPlayerName(player), teamcolor=getPlayerTeamHexColor(player), country = exports.geoloc:getPlayerCountry(player), new=true})
 			-- outputDebugString('new top for ' .. getPlayerName(player))
 			dbExec(handlerConnect, q, value, getRealTime().timestamp, forumid, mapname, racemode, mapname, mapnameFull, racemode)
 		elseif (not times.kills and value < toptime.value) or (times.kills and value > toptime.value) then
@@ -1058,6 +1051,25 @@ addEventHandler('onRaceStateChanging', getRootElement(),
 		end
 	end
 )
+
+function getPlayerTeamHexColor(player)
+	local playerTeam = getPlayerTeam(player)
+	if playerTeam then
+		return RGBToHex(getTeamColor(playerTeam))
+	end
+	return nil
+end
+
+function RGBToHex(red, green, blue, alpha)
+	if ((red < 0 or red > 255 or green < 0 or green > 255 or blue < 0 or blue > 255) or (alpha and (alpha < 0 or alpha > 255))) then
+		return nil
+	end
+	if alpha then
+		return string.format("#%.2X%.2X%.2X%.2X", red, green, blue, alpha)
+	else
+		return string.format("#%.2X%.2X%.2X", red, green, blue)
+	end
+end
 
 -------------------------
 --- Exported function ---

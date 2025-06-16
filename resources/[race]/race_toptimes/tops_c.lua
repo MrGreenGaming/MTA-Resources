@@ -99,8 +99,12 @@ function updateTexture()
 	local i = 1
 	for k, r in ipairs(times) do
 		local textColor = r.player == localPlayer and selfTextColor or textColor
+		
 		-- Name handling
 		local playerName = r.name or r.mta_name or "Unknown Player"
+		if r.teamcolor then
+			playerName = r.teamcolor .. playerName
+		end
 		if r.supernick and type(r.supernick) == "string" then
 			local sn = fromJSON( r.supernick )
 			if sn.supernick then
@@ -132,6 +136,9 @@ function updateTexture()
 	end
 	if monthlyTopTime then
 		local monthlyTopPlayerName = monthlyTopTime.name or monthlyTopTime.mta_name
+		if monthlyTopTime.teamcolor then
+			monthlyTopPlayerName = monthlyTopTime.teamcolor .. monthlyTopPlayerName
+		end
 		if monthlyTopTime.supernick and type(monthlyTopTime.supernick) == "string" and fromJSON(monthlyTopTime.supernick) then
 			local sn = fromJSON(monthlyTopTime.supernick)
 			if sn.supernick then
