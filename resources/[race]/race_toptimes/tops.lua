@@ -61,6 +61,9 @@ addEventHandler('onResourceStart', resourceRoot,
 	end
 )
 
+local topsTick = 0
+local monthlyTick = 0
+
 function queryMapTimes (mapInfo, bStart)
 	times = {}
 	monthtimes = {}
@@ -69,10 +72,13 @@ function queryMapTimes (mapInfo, bStart)
 	mapnameFull = mapInfo.name
 	racemode = racemodes[ exports.race:getRaceMode() ] or "(NULL)"
 	info = mapInfo
+  topsTick = getTickCount()
 	local q = "SELECT t.forumid, t.mapname, t.pos, t.value, t.date, n.name, v.options as supernick, h.country, tm.colour AS teamcolor FROM toptimes t LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 LEFT JOIN team_members tmemb ON t.forumid = tmemb.forumid AND tmemb.status = 1 LEFT JOIN team tm ON tmemb.teamid = tm.teamid WHERE t.mapname = ? ORDER BY t.pos"
 	dbQuery(maptimes, {mapInfo, bStart}, handlerConnect, q, mapname)
 	if not score[exports.race:getRaceMode()] then
+    monthlyTick = getTickCount()
 		local q = "SELECT t.forumid, t.mapname, t.value, t.date, t.month,v.options as supernick, n.name, h.country, tm.colour AS teamcolor FROM toptimes_month t LEFT JOIN country h ON t.forumid = h.forum_id LEFT JOIN gc_nickcache n ON t.forumid = n.forumid LEFT JOIN vip_items v ON t.forumid = v.forumid and v.item = 2 LEFT JOIN team_members tmemb ON t.forumid = tmemb.forumid AND tmemb.status = 1 LEFT JOIN team tm ON tmemb.teamid = tm.teamid WHERE t.mapname = ? ORDER BY date DESC"
+
 		dbQuery(monthlytime, {mapInfo, bStart}, handlerConnect, q, mapname, getRealTime().month+1)
 	else
 		sendMonthTime()	-- send empty month time
@@ -94,6 +100,8 @@ function maptimes(qh, mapInfo, bStart)
 	else
 		-- outputDebugString('new map ' .. mapInfo.resname)
 	end
+
+	outputDebugString('toptimes for ' .. mapInfo.resname .. ' loaded in ' .. (getTickCount() - topsTick) .. 'ms')
 
 	times.resname = mapInfo.resname
 	times.mapname = mapInfo.name
@@ -130,6 +138,7 @@ function monthlytime(qh, mapInfo, bStart)
 		if mapInfo.resname ~= mapname then
 			return outputDebugString('toptimes mismatch ' .. mapname .. ' ' .. mapInfo.resname, 2)
 		else
+			outputDebugString('monthlytime for ' .. mapInfo.resname .. ' loaded in ' .. (getTickCount() - monthlyTick) .. 'ms')
 			monthtimes = result
 			if result[1].month == getRealTime().month+1 then
 				monthtTopTime = result[1]
