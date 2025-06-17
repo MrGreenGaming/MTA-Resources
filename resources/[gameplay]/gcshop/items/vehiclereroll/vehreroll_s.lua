@@ -147,7 +147,7 @@ function rerollPlayerVehicle(player)
 			playerRolledAmount[player] = 1
 		end
 		-- output for root
-		local playerName = getElementData(player, 'vip.colorNick') or getPlayerName(player)
+		local playerName = getFullPlayerName(player)
 		local outputString = playerName.." #22FF00has rerolled his vehicle from " .. getVehicleNameFromModel(vehicleID) .. " to "..getVehicleName(vehicle)..". (Reroll GC perk) "
 		if string.len(outputString) > 256 then
 			outputString = getPlayerName(player).." #22FF00has rerolled his vehicle from " .. getVehicleNameFromModel(vehicleID) .. " to "..getVehicleName(vehicle)..". (Reroll GC perk) "
@@ -282,12 +282,15 @@ function disableReRoll()
 	isRerollAllowed = false
 end
 
-function getPlayerTeamHexColor(player)
-	local playerTeam = getPlayerTeam(player)
-	if playerTeam then
-		return RGBToHex(getTeamColor(playerTeam))
+function getFullPlayerName(player)
+	local playerName = getElementData( player, "vip.colorNick" ) or getPlayerName( player )
+	local teamColor = "#FFFFFF"
+	local team = getPlayerTeam(player)
+	if (team) then
+		r,g,b = getTeamColor(team)
+		teamColor = string.format("#%.2X%.2X%.2X", r, g, b)
 	end
-	return nil
+	return "" .. teamColor .. playerName
 end
 
 function RGBToHex(red, green, blue, alpha)
