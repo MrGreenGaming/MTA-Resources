@@ -57,9 +57,9 @@ setTimer(function()
 			if #validExplosions >= iExplosionThreshold then
 				exports.discord:send("admin.log", {
 					log = remcol(getPlayerName(player)) ..
-						" has triggered " .. #validExplosions .. "explosions" ..
-						" killing " .. #validKills .. " players.\n" ..
-						" Serial: " .. getPlayerSerial(player)
+						" has triggered " .. #validExplosions .. " explosions" ..
+						" killing " .. #validKills .. " players." ..
+						"\nSerial: " .. getPlayerSerial(player)
 				})
 			end
 
@@ -71,10 +71,10 @@ setTimer(function()
 				if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
 					exports.discord:send("admin.log", {
 						log = playerName ..
-								" has been **banned** for triggering " ..
+								" has been **banned by VulpyScript** for triggering " ..
 								#validExplosions ..
 								" explosions and causing " ..
-								#validKills .. " deaths in " .. (iCombinedCheckWindow / 1000) .. "s\nSerial: " .. serial
+								#validKills .. " deaths.\nSerial: " .. serial
 					})
 				end
 
