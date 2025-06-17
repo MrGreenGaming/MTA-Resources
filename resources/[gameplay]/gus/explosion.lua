@@ -1,121 +1,96 @@
+local iExplosionCheckInterval = 2000 -- how often to check for illegality in milliseconds
+local iCombinedCheckWindow = 5000    -- how far into the past to check for explosions and kills in milliseconds
+local iExplosionThreshold = 10
+local iKillThreshold = 5
 
--- used to check how many explosion/projectile sync packets a client sends overtime
-local iExplosionCheckInterval 		= 5000;	-- the interval in ms to check for players sending too many explosion and projectile sync packets
-local tblPlayerProjectiles 			= {};	-- store players sending projectile sync packets
-local tblRegularExplosions 			= {};	-- store players sending regular explosion sync packets
-local tblVehicleExplosions 			= {};	-- store players sending vehicle explosion sync packets
-local iPlayerProjectileThreshold 	= 10;	-- the threshold when we consider client suspicious for projectile creations
-local iRegularExplosionThreshold 	= 10;	-- the threshold when we consider client suspicious for regular explosions
-local iVehicleExplosionThreshold 	= 10;	-- the threshold when we consider client suspicious for vehicle explosions
-local iRegularExplosionBanTest	= 10;	-- the threshold when we ban the client for suspicious regular explosions
-local tblRegularExplosionBanHits = {}; -- Store player timestamp of explosion ban hits (Twice in 1 minute = ban)
-
--- https://wiki.multitheftauto.com/wiki/OnPlayerProjectileCreation
--- gets triggered when a player creates a projectile sync packets (eg. shoots a weapon, vehicle weapon or via createProjectile)
-function clientCreateProjectile(iWeaponType, fPX, fPY, fPZ, fForce, uTarget, fRX, fRY, fRZ, fVX, fVY, fVZ)
-	if(isElement(source)) then
-		if(tblPlayerProjectiles[source]) then
-			tblPlayerProjectiles[source] = tblPlayerProjectiles[source] + 1;
-		else
-			tblPlayerProjectiles[source] = 1;
-		end
-	end
-end
-addEventHandler("onPlayerProjectileCreation", root, clientCreateProjectile);
-
--- https://wiki.multitheftauto.com/wiki/OnExplosion
--- gets triggered when an explosion occurs, either via server script or client sync packet
-function clientCreateExplosion(fPX, fPY, fPZ, iType)
-	if(isElement(source)) then
-		if(getElementType(source) == "player") then
-			if(tblRegularExplosions[source]) then
-				tblRegularExplosions[source] = tblRegularExplosions[source] + 1;
-			else
-				tblRegularExplosions[source] = 1;
-			end
-		end
-	end
-end
-addEventHandler("onExplosion", root, clientCreateExplosion);
-
--- https://wiki.multitheftauto.com/wiki/OnVehicleExplode
--- gets triggered when a vehicle explodes, either via server script or client sync packet
-function clientCreateVehicleExplosion(bWithExplosion, uPlayer)
-	if(isElement(uPlayer)) then
-		if(tblVehicleExplosions[uPlayer]) then
-			tblVehicleExplosions[uPlayer] = tblVehicleExplosions[uPlayer] + 1;
-		else
-			tblVehicleExplosions[uPlayer] = 1;
-		end
-	end
-end
-addEventHandler("onVehicleExplode", root, clientCreateVehicleExplosion);
-
--- setup a timer with specified interval above and check if any client sent too many sync packets in the given time
--- thresholds need to be adjusted for your need and actions taken!
-setTimer(function()
-	for uPlayer, iCounter in pairs(tblPlayerProjectiles) do
-		if(iCounter >= iPlayerProjectileThreshold) then
-			if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-				exports.discord:send("admin.log", { log = remcol(getPlayerName(uPlayer)).." has exceeded projectile threshold "..tostring(iPlayerProjectileThreshold).." - Count: "..tostring(iCounter) .. "\nSerial: " .. getPlayerSerial(uPlayer)} )
-		end
-		end
-	end
-	
-	for uPlayer, iCounter in pairs(tblRegularExplosions) do
-		if(iCounter >= iRegularExplosionThreshold) then
-			if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-				exports.discord:send("admin.log", { log = remcol(getPlayerName(uPlayer)).." has exceeded regular explosions threshold "..tostring(iRegularExplosionThreshold).." - Count: "..tostring(iCounter) .. "\nSerial: " .. getPlayerSerial(uPlayer)} )
-			end
-		end
-
-		if (iCounter >= iRegularExplosionBanTest) then
-			local now = getTickCount()
-		
-			-- Initialize table if not present
-			if not tblRegularExplosionBanHits[uPlayer] then
-				tblRegularExplosionBanHits[uPlayer] = {}
-			end
-		
-			-- Add the current hit timestamp
-			table.insert(tblRegularExplosionBanHits[uPlayer], now)
-		
-			-- Filter out timestamps older than 60 seconds
-			local newHits = {}
-			for _, ts in ipairs(tblRegularExplosionBanHits[uPlayer]) do
-				if now - ts <= 60000 then
-					table.insert(newHits, ts)
-				end
-			end
-			tblRegularExplosionBanHits[uPlayer] = newHits
-		
-			-- Check if they hit the 50+ threshold twice within a minute
-			if #tblRegularExplosionBanHits[uPlayer] >= 3 then
-				if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-					exports.discord:send("admin.log", {
-						log = remcol(getPlayerName(uPlayer)).." has been banned by the Explosion Inspector (Triggered 10+ explosions twice in 1 min, 3 times)"
-					})
-				end
-				banPlayer(uPlayer, true, false, true, "Explosion Inspector", "Too many explosions in a short time. Appeal at forums.mrgreengaming.com or on Discord", 0)
-				tblRegularExplosionBanHits[uPlayer] = nil -- clear history on ban
-			end
-		end
-	end
-	
-	for uPlayer, iCounter in pairs(tblVehicleExplosions) do
-		if(iCounter >= iVehicleExplosionThreshold) then
-			if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
-				exports.discord:send("admin.log", { log = remcol(getPlayerName(uPlayer)).." has exceeded vehicle explosions threshold "..tostring(iVehicleExplosionThreshold).." - Count: "..tostring(iCounter) .. "\nSerial: " .. getPlayerSerial(uPlayer)} )
-			end
-		end
-	end
-	
-	tblPlayerProjectiles = {};
-	tblRegularExplosions = {};
-	tblVehicleExplosions = {};
-	
-end, iExplosionCheckInterval, 0);
+local tblRecentExplosions = {}
+local tblRecentKills = {}
 
 function remcol(str)
-	return string.gsub (str, '#%x%x%x%x%x%x', '' )
+	return string.gsub(str, '#%x%x%x%x%x%x', '')
 end
+
+-- Collect explosions
+addEventHandler("onExplosion", root, function()
+	if isElement(source) and getElementType(source) == "player" then
+		tblRecentExplosions[source] = tblRecentExplosions[source] or {}
+		table.insert(tblRecentExplosions[source], getTickCount())
+	end
+end)
+
+-- Collect kills
+addEventHandler("onPlayerWasted", root, function(_, killer)
+	if isElement(killer) and getElementType(killer) == "player" then
+		tblRecentKills[killer] = tblRecentKills[killer] or {}
+		table.insert(tblRecentKills[killer], getTickCount())
+	end
+end)
+
+-- The actual check for illegality
+setTimer(function()
+	local now = getTickCount()
+
+	for player, explosions in pairs(tblRecentExplosions) do
+		if not isElement(player) then
+			tblRecentExplosions[player] = nil
+			tblRecentKills[player] = nil
+		else
+			-- Clean old explosion timestamps
+			local validExplosions = {}
+			for _, t in ipairs(explosions) do
+				if now - t <= iCombinedCheckWindow then
+					table.insert(validExplosions, t)
+				end
+			end
+			tblRecentExplosions[player] = validExplosions
+
+			-- Clean old kill timestamps
+			local kills = tblRecentKills[player] or {}
+			local validKills = {}
+			for _, t in ipairs(kills) do
+				if now - t <= iCombinedCheckWindow then
+					table.insert(validKills, t)
+				end
+			end
+			tblRecentKills[player] = validKills
+
+			if #validExplosions >= iExplosionThreshold then
+				exports.discord:send("admin.log", {
+					log = remcol(getPlayerName(player)) ..
+						" has triggered " .. #validExplosions ..
+						" killing " .. #validKills .. " players."
+				})
+			end
+
+			-- Check thresholds and ban
+			if #validExplosions >= iExplosionThreshold and #validKills >= iKillThreshold then
+				local playerName = remcol(getPlayerName(player))
+				local serial = getPlayerSerial(player)
+
+				if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+					exports.discord:send("admin.log", {
+						log = playerName ..
+								" has been **banned** for triggering " ..
+								#validExplosions ..
+								" explosions and causing " ..
+								#validKills .. " deaths in " .. (iCombinedCheckWindow / 1000) .. "s\nSerial: " .. serial
+					})
+				end
+
+				banPlayer(player, true, false, true, "VulpyScript",
+					"Suspicious activity. Contact VulpyWags or appeal if false positive.", 900)
+
+				tblRecentExplosions[player] = nil
+				tblRecentKills[player] = nil
+			end
+		end
+	end
+end, iExplosionCheckInterval, 0)
+
+
+addEventHandler("onPlayerQuit", root,
+	function(quitType)
+		tblRecentExplosions[source] = nil
+		tblRecentKills[source] = nil
+	end
+)
