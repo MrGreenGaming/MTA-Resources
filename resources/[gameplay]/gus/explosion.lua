@@ -57,8 +57,9 @@ setTimer(function()
 			if #validExplosions >= iExplosionThreshold then
 				exports.discord:send("admin.log", {
 					log = remcol(getPlayerName(player)) ..
-						" has triggered " .. #validExplosions ..
-						" killing " .. #validKills .. " players."
+						" has triggered " .. #validExplosions .. "explosions" ..
+						" killing " .. #validKills .. " players.\n" ..
+						" Serial: " .. getPlayerSerial(player)
 				})
 			end
 
