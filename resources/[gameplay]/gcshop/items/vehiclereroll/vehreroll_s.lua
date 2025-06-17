@@ -147,7 +147,7 @@ function rerollPlayerVehicle(player)
 			playerRolledAmount[player] = 1
 		end
 		-- output for root
-		local playerName = getElementData(player, 'vip.colorNick') or getPlayerTeamHexColor(player) .. getPlayerName(player)
+		local playerName = getElementData(player, 'vip.colorNick') or getPlayerName(player)
 		local outputString = playerName.." #22FF00has rerolled his vehicle from " .. getVehicleNameFromModel(vehicleID) .. " to "..getVehicleName(vehicle)..". (Reroll GC perk) "
 		if string.len(outputString) > 256 then
 			outputString = getPlayerName(player).." #22FF00has rerolled his vehicle from " .. getVehicleNameFromModel(vehicleID) .. " to "..getVehicleName(vehicle)..". (Reroll GC perk) "
