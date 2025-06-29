@@ -39,6 +39,11 @@ end
 function restartServer()
     notifyPlayers()
     setTimer(function()
+        for _, player in ipairs(getElementsByType("player")) do
+            triggerEvent('onRequestRedirect', root, player)
+        end
+     end, 3000, 1)
+    setTimer(function()
         shutdown("AUTOMATED SERVER RESTART")
-    end, 5000, 1)
+    end, 10000, 1)
 end

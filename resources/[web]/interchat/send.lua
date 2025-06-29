@@ -37,8 +37,13 @@ outputDebugString("Interchat " .. other_ipandport .. " " ..other_port .. " " .. 
 -- F2 redirect --
 -----------------
 
-function redirect()
-	local player = client
+function redirect(playerArg)
+	local player
+	if not playerArg or not isElement(playerArg) or not getElementType(playerArg) == "player" then
+		player = client -- called from client
+	else
+		player = playerArg -- called from server
+	end
 	local tick, hoursPlayed = getElementData(player, 'jointick'), getElementData(player, 'hoursPlayed')
 	callRemote ( other_ipandport, "default", resourceName, "playerRedirect", function(response)
 		if response == nil or response == "ERROR" then
