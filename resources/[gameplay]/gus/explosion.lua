@@ -71,7 +71,7 @@ setTimer(function()
 				if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
 					exports.discord:send("admin.log", {
 						log = playerName ..
-								" has been **banned (15 minutes) by VulpyScript** for triggering " ..
+								" has been banned (15 minutes) by VulpyScript for triggering " ..
 								#validExplosions ..
 								" explosions and causing " ..
 								#validKills .. " deaths.\nSerial: " .. serial
