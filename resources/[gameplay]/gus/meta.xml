@@ -17,6 +17,7 @@
     <script src="blocker_c.lua" type="client" />
 	<script src="settings.lua" />
     <script src="explosion.lua" type="server" />
+    <script src="events.lua" type="server" />
 
     <export function="chatDisabled" type="server" />
     <file src="chat.png" />
