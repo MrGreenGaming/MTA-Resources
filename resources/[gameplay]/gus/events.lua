@@ -42,7 +42,7 @@ function checkIllegality()
 				if getResourceFromName("discord") and getResourceState(getResourceFromName("discord")) == "running" then
 					exports.discord:send("admin.log", {
 						log = remcol(getPlayerName(player)) ..
-								"has been banned by VulpyScript for triggering " .. #invalidEvents .. " invalid events.\n"
+								"has been **banned (15 minutes) by VulpyScript** for triggering " .. #invalidEvents .. " invalid events.\n"
 								.. "Events:\n" .. eventList
 					})
 				end
