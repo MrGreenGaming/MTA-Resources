@@ -33,12 +33,17 @@ function checkIllegality()
 			tblRecentInvalidEvents[player] = invalidEvents
 
 			if #invalidEvents >= iInvalidEventThreshold then
+				local eventNames = {}
+				for _, e in ipairs(invalidEvents) do
+					table.insert(eventNames, e.eventName)
+				end
+				local eventList = table.concat(eventNames, "\n")
+
 				if getResourceFromName("discord") and getResourceState(getResourceFromName("discord")) == "running" then
 					exports.discord:send("admin.log", {
 						log = remcol(getPlayerName(player)) ..
 								"has been banned by VulpyScript for triggering " .. #invalidEvents .. " invalid events.\n"
-								.. "Events:\n" .. table.concat(
-									table.map(invalidEvents, function(e) return e.eventName end), "\n")
+								.. "Events:\n" .. eventList
 					})
 				end
 				banPlayer(player, true, false, true, "VulpyScript",
