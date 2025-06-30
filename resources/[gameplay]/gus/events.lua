@@ -33,9 +33,6 @@ function checkIllegality()
 			tblRecentInvalidEvents[player] = invalidEvents
 
 			if #invalidEvents >= iInvalidEventThreshold then
-				banPlayer(player, true, false, true, "VulpyScript",
-					"Suspicious activity. Contact VulpyWags or appeal if false positive", 900)
-
 				if getResourceFromName("discord") and getResourceState(getResourceFromName("discord")) == "running" then
 					exports.discord:send("admin.log", {
 						log = remcol(getPlayerName(player)) ..
@@ -44,6 +41,8 @@ function checkIllegality()
 									table.map(invalidEvents, function(e) return e.eventName end), "\n")
 					})
 				end
+				banPlayer(player, true, false, true, "VulpyScript",
+					"Suspicious activity. Contact VulpyWags or appeal if false positive", 900)
 			end
 		end
 	end
