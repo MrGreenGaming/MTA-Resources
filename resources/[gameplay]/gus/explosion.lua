@@ -1,3 +1,7 @@
+-- Automatically bans players who trigger too many explosions and kills in a short time.
+-- 10 explosions and 5 kills in 5 seconds will result in a 15 minute ban.
+-- This is likely caused by a malicious player.
+
 local iExplosionCheckInterval = 2000 -- how often to check for illegality in milliseconds
 local iCombinedCheckWindow = 5000    -- how far into the past to check for explosions and kills in milliseconds
 local iExplosionThreshold = 10

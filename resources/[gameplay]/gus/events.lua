@@ -1,3 +1,6 @@
+-- Automatically bans (15 minutes) people who trigger invalid events too many times.
+-- This is likely caused by a malicious player.
+
 local iInvalidEventThreshold = 5
 local iCheckWindow = 5000 -- how far into the past to check for invalid events in milliseconds
 
