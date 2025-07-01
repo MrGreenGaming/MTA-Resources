@@ -57,14 +57,11 @@ addEventHandler("onPostFinish", root, function()
 			end
 		end
 
-		if (totalCheckpoints < 5) then
-			cpInfo = {}
-			return
+		if (totalCheckpoints >= 5) then
+			local flyingPercentage = flyingCount / totalCheckpoints
+			flyingPercentages[player] = flyingPercentage
 		end
 
-		local flyingPercentage = flyingCount / totalCheckpoints
-
-		flyingPercentages[player] = flyingPercentage
 	end
 
 	if (#finishedPlayers <= 1) then
