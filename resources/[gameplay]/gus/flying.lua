@@ -95,10 +95,12 @@ addEventHandler("onPostFinish", root, function()
 		local diff = topPercent - secondTopPercent
 
 		if diff >= 0.60 and isElement(topPlayer) then
-			exports.discord:send("admin.log", {
-				log = getPlayerName(topPlayer) .. " has been banned (15 minutes) by VulpyScript for flying " ..
-						math.floor(topPercent * 100) .. "% of the time.\nSerial: " .. getPlayerSerial(topPlayer)
-			})
+			if getResourceFromName("discord") and getResourceState(getResourceFromName("discord")) == "running" then
+				exports.discord:send("admin.log", {
+					log = getPlayerName(topPlayer) .. " has been banned (15 minutes) by VulpyScript for flying " ..
+							math.floor(topPercent * 100) .. "% of the time.\nSerial: " .. getPlayerSerial(topPlayer)
+				})
+			end
 
 			banPlayer(topPlayer, true, false, true, "VulpyScript",
 				"Suspicious activity. Contact VulpyWags or appeal if false positive.", 900)
