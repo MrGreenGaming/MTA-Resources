@@ -47,6 +47,9 @@ addEventHandler("onPostFinish", root, function()
 		local totalCheckpoints = 0
 		local flyingCount = 0
 
+		if (cpInfo[player] == nil) then
+			cpInfo[player] = {}
+		end
 		for _, wasFlying in pairs(cpInfo[player]) do
 			totalCheckpoints = totalCheckpoints + 1
 			if wasFlying then
