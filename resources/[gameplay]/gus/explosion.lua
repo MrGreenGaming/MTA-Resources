@@ -24,10 +24,7 @@ end)
 
 -- Collect kills
 addEventHandler("onPlayerWasted", root, function(_, killer)
-	if isElement(killer) and getElementType(killer) == "player" then
-		tblRecentKills[killer] = tblRecentKills[killer] or {}
-		table.insert(tblRecentKills[killer], getTickCount())
-	end
+	table.insert(tblRecentKills, getTickCount())
 end)
 
 -- The actual check for illegality
@@ -37,7 +34,6 @@ setTimer(function()
 	for player, explosions in pairs(tblRecentExplosions) do
 		if not isElement(player) then
 			tblRecentExplosions[player] = nil
-			tblRecentKills[player] = nil
 		else
 			-- Clean old explosion timestamps
 			local validExplosions = {}
@@ -49,21 +45,21 @@ setTimer(function()
 			tblRecentExplosions[player] = validExplosions
 
 			-- Clean old kill timestamps
-			local kills = tblRecentKills[player] or {}
+			local kills = tblRecentKills or {}
 			local validKills = {}
 			for _, t in ipairs(kills) do
 				if now - t <= iCombinedCheckWindow then
 					table.insert(validKills, t)
 				end
 			end
-			tblRecentKills[player] = validKills
+			tblRecentKills = validKills
 
 			if #validExplosions >= iExplosionThreshold then
 				exports.discord:send("admin.log", {
 					log = remcol(getPlayerName(player)) ..
-						" has triggered " .. #validExplosions .. " explosions" ..
-						" killing " .. #validKills .. " players." ..
-						"\nSerial: " .. getPlayerSerial(player)
+							" has triggered " .. #validExplosions .. " explosions." ..
+							#validKills .. " players died during the same time." ..
+							"\nSerial: " .. getPlayerSerial(player)
 				})
 			end
 
@@ -77,8 +73,8 @@ setTimer(function()
 						log = playerName ..
 								" has been banned (15 minutes) by VulpyScript for triggering " ..
 								#validExplosions ..
-								" explosions and causing " ..
-								#validKills .. " deaths.\nSerial: " .. serial
+								" explosions." ..
+								#validKills .. " players died during the same time.\nSerial: " .. serial
 					})
 				end
 
