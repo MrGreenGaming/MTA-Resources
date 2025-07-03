@@ -18,7 +18,7 @@ addEventHandler("onPlayerReachCheckpoint", root, function(cp)
 	local vehicle = getPedOccupiedVehicle(source)
 	if not vehicle then return end
 
-	if getVehicleType(vehicle) == "Helicopter" or getVehicleType(vehicle) == "Plane" then
+	if getVehicleType(vehicle) == "Helicopter" or getVehicleType(vehicle) == "Plane" or getVehicleType(vehicle) == "Boat" then
 		return
 	end
 
