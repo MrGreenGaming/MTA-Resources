@@ -472,15 +472,15 @@ function isMapTesting()
 	return getResourceInfo(exports.mapmanager:getRunningGamemodeMap(), 'newupload') == "true"
 end
 
-function calculateNextmap()
+function calculateNextmap(oldestPercentage)
 
 	local respectCycle = getBool("race.respect_cycle", true)
 
 	local compatibleMaps
 	if respectCycle then
-		compatibleMaps = getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, getHappyMomentGamemode() or modes[currentmode] )
+		compatibleMaps = getRandomMapCompatibleWithGamemode( getThisResource(), oldestPercentage or 1, 0, false, getHappyMomentGamemode() or modes[currentmode] )
 	else
-		compatibleMaps = getRandomMapCompatibleWithGamemode( getThisResource(), 1, 0, false, getHappyMomentGamemode() or modes[math.random(#modes)])
+		compatibleMaps = getRandomMapCompatibleWithGamemode( getThisResource(), oldestPercentage or 1, 0, false, getHappyMomentGamemode() or modes[math.random(#modes)])
 	end
 
 	if compatibleMaps then
@@ -491,7 +491,7 @@ function calculateNextmap()
 		if currentmode > #modes then
 			currentmode = 1
 		end
-		return calculateNextmap()
+		return calculateNextmap(100)
 	end
 end
 addEvent('onNextmapSettingChange', true)
@@ -782,7 +782,9 @@ addEventHandler('onResourceStop', getRootElement(),
 
 
 function getRandomMapCompatibleWithGamemode( gamemode, oldestPercentage, minSpawnCount, bestRated, nextmode )
-	oldestPercentage = 4   --TEST to get more maps @ cutoff
+	if not oldestPercentage then
+		oldestPercentage = 4
+	end
 	-- Get all relevant maps
 	local compatibleMaps = exports.mapmanager:getMapsCompatibleWithGamemode( gamemode )
 	if #compatibleMaps == 0 then
