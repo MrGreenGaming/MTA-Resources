@@ -822,6 +822,9 @@ function getRandomMapCompatibleWithGamemode( gamemode, oldestPercentage, minSpaw
 
 	-- Use the bottom n% of maps as the initial selection pool
 	local cutoff = #sortList - math.ceil( #sortList * (oldestPercentage / 100))
+	if cutoff < 1 then -- Cutoff can never be less than 1 (indexing starts at 1)
+		cutoff = 1
+	end
 
 	outputDebug( 'RANDMAP', 'getRandomMapCompatibleWithGamemode' )
 	outputDebug( 'RANDMAP', ''
