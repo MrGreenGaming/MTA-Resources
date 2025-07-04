@@ -318,7 +318,7 @@ function startNextMapVote()
 		-- Tries finding a non-duplicated map 3 times.
 		while endWhile == false and nTry <= 3 do
 			nTry = nTry + 1
-			local map = calculateNextmap()
+			local map = calculateNextmap(100)
 			local isMapInList = false
 			for index, value in ipairs(otherMaps) do
 				if value == map then isMapInList = true end
@@ -491,7 +491,7 @@ function calculateNextmap(oldestPercentage)
 		if currentmode > #modes then
 			currentmode = 1
 		end
-		return calculateNextmap(100)
+		return calculateNextmap()
 	end
 end
 addEvent('onNextmapSettingChange', true)
