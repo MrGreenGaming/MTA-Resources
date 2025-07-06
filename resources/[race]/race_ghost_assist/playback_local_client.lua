@@ -127,11 +127,41 @@ function loadGhost(mapName)
 		return false
 	end
 
-	-- local ghosts are in the "race_ghost" resource!!!
-	local ghost = xmlLoadFile(":race_ghost/ghosts/" .. mapName .. ".ghost")
-	outputDebug("@loadGhost: " .. inspect(ghost)) -- DEBUG
+	local newGhostFileName = "@:race_ghost/ghosts/" .. mapName .. "_" .. getPlayerName(localPlayer):gsub("#%x%x%x%x%x%x", ""):gsub("[%p%c%s]", "") .. "_PB.ghost"
+	local oldGhostFileName = ":race_ghost/ghosts/" .. mapName .. ".ghost"
+	
+	local isNewGhost = fileExists(newGhostFileName)
+	local isOldGhost = fileExists(oldGhostFileName)
 
-	if ghost then
+	if isNewGhost then -- JSON
+    local ghostFile = fileOpen(newGhostFileName, true)
+    if not ghostFile then
+        outputDebugString("[Racing Assist] Failed to open ghost JSON file.")
+        return false
+    end
+
+    local ghostData = fileRead(ghostFile, fileGetSize(ghostFile))
+    fileClose(ghostFile)
+
+    local parsed = fromJSON(ghostData)
+
+		if not parsed then
+			outputDebugString("[Racing Assist] Failed to parse ghost JSON data.")
+			return false
+		end
+
+
+    local recording = {}
+    for _, row in ipairs(parsed.recording) do
+        if row.ty == "po" then
+            table.insert(recording, row)
+        end
+    end
+
+    return recording
+	elseif isOldGhost then -- XML
+		local ghost = xmlLoadFile(oldGhostFileName)
+		outputDebug("@loadGhost: " .. inspect(ghost)) -- DEBUG
 
 		-- Construct a table
 		local index = 0
@@ -159,15 +189,7 @@ function loadGhost(mapName)
 
 			index = index + 1
 			node = xmlFindChild(ghost, "n", index)
-		end -- while
-
-		-- Retrieve info about the ghost
-		-- outputDebug("Found a valid local ghost for " .. mapName)
-		-- local info = xmlFindChild(ghost, "i", 0)
-		-- outputChatBox("* Race assist loaded. (" ..xmlNodeGetAttribute(info, "r").. ") " ..FormatDate(xmlNodeGetAttribute(info, "timestamp")), 0, 255, 0)
-
--- TODO: exports.messages:outputGameMessage("Racing assist loaded", g_Root, 2, 230, 220, 180, true)
-		-- outputChatBox("* Racing assist loaded.", 230, 220, 180)
+		end
 
 		xmlUnloadFile(ghost)
 		return recording
@@ -191,10 +213,9 @@ addEventHandler("onClientMapStarting", g_Root,
 
 		-- !!!
 		if IsEnabled then
-			-- disable for NTS
 			local currentGameMode = string.upper(mapInfo.modename)
-			if currentGameMode ~= "SPRINT" then
-				return
+			if currentGameMode ~= "SPRINT" and currentGameMode ~= "NEVER THE SAME" then
+					return
 			end
 
 			-- !!!
