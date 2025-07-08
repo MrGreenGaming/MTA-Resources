@@ -510,7 +510,7 @@ addEventHandler("onClientMapStarting", root, function()
 	end
 end)
 
-addEventHandler("onPlayerQuit", root, function()
+addEventHandler("onClientPlayerQuit", root, function()
 	if playerAvatars[source] then
 		destroyElement(playerAvatars[source])
 		playerAvatars[source] = nil
