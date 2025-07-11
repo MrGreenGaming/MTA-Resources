@@ -27,6 +27,9 @@ addEventHandler( "onGhostDataReceive", root,
 		outputDebugServer( "Saving ghost file", mapName, racer, " (Besttime dif: " .. getRecordingBesttimeError( recording, bestTime ) .. ")" )
 
 		local fileName = "ghosts/" .. mapName .. "_" .. racer:gsub('[%p%c%s]', '') .. ".ghost"
+		if fileExists(fileName) then
+			fileDelete(fileName)
+		end
 		local file = fileCreate(fileName)
 		if file then
 			local saveJSON = {
