@@ -14,6 +14,10 @@
 
 local cpInfo = {}
 
+addEventHandler("onMapStarting", root, function()
+	cpInfo = {}
+end)
+
 addEventHandler("onPlayerReachCheckpoint", root, function(cp)
 	local vehicle = getPedOccupiedVehicle(source)
 	if not vehicle then return end
