@@ -451,6 +451,7 @@ addEvent('onClientRequestsStats', true)
 addEventHandler('onClientRequestsStats', resourceRoot, sendStatsToClient)
 
 function sendTopTimeMapsToClient(forumid, raceMode, position)
+    outputChatBox('sendTopTimeMapsToClient forumId before handling: '..toJSON(forumid)..''..type(forumid))
     if isElement(forumid) and getElementType(forumid) == 'player' then
         forumid = getPlayerID(forumid)
         if not forumid then
@@ -460,7 +461,7 @@ function sendTopTimeMapsToClient(forumid, raceMode, position)
         triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
         return false
     end
-
+    outputChatBox('sendTopTimeMapsToClient forumId after handling: '..toJSON(forumid)..''..type(forumid))
     local validRacemodes = {
         ['nts'] = true,
         ['race'] = true,
@@ -615,7 +616,7 @@ function fetchTopTimeMaps(forumid)
                         resname = row.resname,
                         date = row.date,
                         value = row.value,
-                        disabled = exports.mapmanager:isMapCompatibleWithGamemode(row.resname, row.racemode)
+                        disabled = not getResourceFromName(row.resname)
                     })
                 end
             end
