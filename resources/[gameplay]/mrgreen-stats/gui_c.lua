@@ -176,8 +176,7 @@ addEvent('extrenalRequestStats', true)
 addEventHandler('extrenalRequestStats', root, requestStats)
 
 function requestTopTimeMaps(forumid, raceMode, position)
-    local player = (forumid and tonumber(forumid) ~= 0) and forumid or localPlayer
-    triggerServerEvent('onClientRequestsTopTimeMaps', resourceRoot, player, raceMode, position)
+    triggerServerEvent('onClientRequestsTopTimeMaps', resourceRoot, forumid or localPlayer, raceMode, position)
 end
 
 addEvent('browserRequestTopTimeMaps')

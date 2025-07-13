@@ -210,17 +210,8 @@
                                                             :footer-props="topTimeMapsTableFooterProps" dense :search="topTimeMapsSearch" :items-per-page="5"
                                                             class="mr-2 ml-2">
                                                             <template v-slot:item.actions="{ item }">
-                                                                <v-tooltip top :disabled="!item.disabled">
-                                                                    <template v-slot:activator="{ on, attrs }">
-                                                                        <div v-on="on" v-bind="attrs" style="display: inline-block;">
-                                                                            <v-btn small rounded color="primary" :disabled="item.disabled" ripple="false"
-                                                                                class="mt-1 mb-1" @mousedown.prevent>
-                                                                                Buy
-                                                                            </v-btn>
-                                                                        </div>
-                                                                    </template>
-                                                                    <span>This map isn't compatible with your server's mode.</span>
-                                                                </v-tooltip>
+                                                                <v-btn small rounded @click="buyMap(item.resname, item.mapname)" color="primary" ripple="false"
+                                                                    @mousedown.prevent class="mt-1 mb-1">Buy</v-btn>
                                                             </template>
                                                             <template v-slot:item.date="{ item }">
                                                                 {{ parseDate(item.date) }}

@@ -150,8 +150,7 @@ local playerTopTimeMaps = {
     --                 mapname = 'Map Name',
     --                 resname = 'Map Res Name',
     --                 date = 'Top Time',
-    --                 value = 'Top Value',
-    --                 disabled = true
+    --                 value = 'Top Value'
     --             },
     --             ...
     --         }
@@ -615,7 +614,6 @@ function fetchTopTimeMaps(forumid)
                         resname = row.resname,
                         date = row.date,
                         value = row.value,
-                        disabled = exports.mapmanager:isMapCompatibleWithGamemode(row.resname, row.racemode)
                     })
                 end
             end
