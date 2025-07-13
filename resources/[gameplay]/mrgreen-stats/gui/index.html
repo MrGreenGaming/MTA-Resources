@@ -418,7 +418,7 @@
                     window.VuexStore.commit('setLoading', true)
                     window.VuexStore.commit('setTopTimeMaps', null)
                     if (window.mta) {
-                        window.mta.triggerEvent('browserRequestTopTimeMaps', this.dialog_chosenPlayer, code, pos)
+                        window.mta.triggerEvent('browserRequestTopTimeMaps', this.dialog_chosenPlayer && this.dialog_chosenPlayer.id, code, pos)
                     } else {
                         setTimeout(function () {
                             window.VuexStore.commit('setLoading', false)
