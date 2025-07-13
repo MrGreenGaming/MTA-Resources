@@ -451,7 +451,6 @@ addEvent('onClientRequestsStats', true)
 addEventHandler('onClientRequestsStats', resourceRoot, sendStatsToClient)
 
 function sendTopTimeMapsToClient(forumid, raceMode, position)
-    outputChatBox('sendTopTimeMapsToClient forumId before handling: '..toJSON(forumid)..''..type(forumid))
     if isElement(forumid) and getElementType(forumid) == 'player' then
         forumid = getPlayerID(forumid)
         if not forumid then
