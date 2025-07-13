@@ -460,7 +460,7 @@ function sendTopTimeMapsToClient(forumid, raceMode, position)
         triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
         return false
     end
-    outputChatBox('sendTopTimeMapsToClient forumId after handling: '..toJSON(forumid)..''..type(forumid))
+
     local validRacemodes = {
         ['nts'] = true,
         ['race'] = true,
