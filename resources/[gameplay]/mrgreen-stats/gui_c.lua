@@ -175,6 +175,20 @@ addEventHandler('browserRequestStats', resourceRoot, requestStats)
 addEvent('extrenalRequestStats', true)
 addEventHandler('extrenalRequestStats', root, requestStats)
 
+function requestTopTimeMaps(forumid, raceMode, position)
+    triggerServerEvent('onClientRequestsTopTimeMaps', resourceRoot, forumid or localPlayer, raceMode, position)
+end
+
+addEvent('browserRequestTopTimeMaps')
+addEventHandler('browserRequestTopTimeMaps', resourceRoot, requestTopTimeMaps)
+
+function buyMap(resname, mapname)
+    triggerServerEvent("sendPlayerNextmapChoice", localPlayer, { mapname, resname })
+end
+
+addEvent('browserRequestBuyMap')
+addEventHandler('browserRequestBuyMap', resourceRoot, buyMap)
+
 function receiveStats(stats, player)
     if stats then
         local avatar = getPlayerAvatarString(player)
@@ -232,6 +246,20 @@ function receiveStats(stats, player)
 end
 addEvent('onServerSendsStats', true)
 addEventHandler('onServerSendsStats', localPlayer, receiveStats)
+
+function receiveTopTimeMaps(list)
+    if list and list.items and type(list.items) == 'table' and #list.items > 0 then
+        local mapListString = toJSON(list)
+        if mapListString then
+            executeBrowserJavascript(browserElement,
+                "window.VuexStore.commit('setTopTimeMaps', '" .. mapListString .. "')")
+            return
+        end
+    end
+    executeBrowserJavascript(browserElement, "window.VuexStore.commit('setTopTimeMaps', false)")
+end
+addEvent('onServerSendsTopTimeMaps', true)
+addEventHandler('onServerSendsTopTimeMaps', localPlayer, receiveTopTimeMaps)
 
 function requestPlayerList()
     triggerServerEvent('onClientRequestsStatsPlayerList', resourceRoot)

@@ -5,6 +5,7 @@ const vuexStore = {
         monthlyTopsAmount: 500,
         playerTops: [],
         playerStats: [],
+        topTimeMaps: [],
         vip: false,
         name: false,
         gc: 0,
@@ -39,6 +40,9 @@ const vuexStore = {
         playerStats: state => {
             return state.playerStats
         },
+        topTimeMaps: state => {
+            return state.topTimeMaps
+        },
         gc: state => {
             return state.gc
         },
@@ -60,6 +64,7 @@ const vuexStore = {
             state.gc = 0
             state.avatar = false
             state.playerList = []
+            state.topTimeMaps = []
         },
         setPlayerStats(state, string) {
             if (typeof string == 'string') {
@@ -77,6 +82,18 @@ const vuexStore = {
 
             }
             
+        },
+        setTopTimeMaps(state, string) {
+            if (typeof string === 'string') {
+                const statsObject = JSON.parse(string)
+                if (typeof statsObject === 'object') {
+                    state.topTimeMaps = statsObject[0]
+                } else {
+                    state.topTimeMaps = []
+                }
+            } else {
+                state.topTimeMaps = []
+            }
         },
         setPlayerList(state, string) {
             if (typeof string === 'string') {
