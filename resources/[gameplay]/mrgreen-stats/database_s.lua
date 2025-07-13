@@ -615,7 +615,7 @@ function fetchTopTimeMaps(forumid)
                         resname = row.resname,
                         date = row.date,
                         value = row.value,
-                        disabled = exports.mapmanager:isMapCompatibleWithGamemode(row.resname, row.racemode)
+                        disabled = not getResourceFromName(row.resname)
                     })
                 end
             end
