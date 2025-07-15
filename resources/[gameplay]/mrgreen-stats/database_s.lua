@@ -140,6 +140,25 @@ local playerTopTimes = {
     --     }}
     -- }
 }
+local playerTopTimeMaps = {
+    -- [forumid] = {
+    --     {
+    --         racemode = 'nts',
+    --         pos = '3',
+    --         items = {
+    --             {
+    --                 mapname = 'Map Name',
+    --                 resname = 'Map Res Name',
+    --                 date = 'Top Time',
+    --                 value = 'Top Value',
+    --                 disabled = true
+    --             },
+    --             ...
+    --         }
+    --     },
+    --     ...
+    -- }
+}
 local playerMonthlyTopTimes = {
     -- TABLE STRUCTURE
     -- [forumid] = 0,
@@ -178,6 +197,7 @@ function loadPlayerStats(forumid)
             end
             triggerEvent('onPlayerStatsLoaded', resourceRoot, forumid)
             fetchTopTimes(forumid)
+            fetchTopTimeMaps(forumid)
             fetchMonthlyTops(forumid)
         end, 
     handlerConnect, queryString, forumid)
@@ -185,6 +205,7 @@ end
 addEvent('onGCLogin')
 addEventHandler('onGCLogin', root, function(id)
     playerTopTimes[id] = {}
+    playerTopTimeMaps[id] = {}
     playerMonthlyTopTimes[id] = 0
     loadPlayerStats(id)
     forumidPlayerMap[id] = source
@@ -196,6 +217,9 @@ addEventHandler('onGCLogout', root, function(id)
     end
     if forumidPlayerMap[id] then
         forumidPlayerMap[id] = nil 
+    end
+    if playerTopTimeMaps[id] then
+        playerTopTimeMaps[id] = nil
     end
     if playerTopTimes[id] then
         playerTopTimes[id] = nil
@@ -329,6 +353,7 @@ function sendServerPlayerStats()
             obj[id].stats = stats
             obj[id].server = currentServer
             obj[id].tops = playerTopTimes[id] or {}
+            obj[id].topTimeMaps = playerTopTimeMaps[id] or {}
             obj[id].monthlyTops = playerMonthlyTopTimes[id] or 0
         end
     end
@@ -403,6 +428,7 @@ local function sendStatsToClient(forumid)
         sendObj.vip = getVipDays(exports.gc:getPlayerVip(player)) or false
         sendObj.stats = specialFormat(table.copy(playerStats[forumid]))
         sendObj.tops = playerTopTimes[forumid] or {}
+        sendObj.topTimeMaps = playerTopTimeMaps[forumid] or {}
         sendObj.monthlyTops = playerMonthlyTopTimes[forumid] or 0
         triggerClientEvent(client, 'onServerSendsStats', client, sendObj, player)
     elseif otherServerPlayerStats[tostring(forumid)] then
@@ -423,6 +449,37 @@ local function sendStatsToClient(forumid)
 end
 addEvent('onClientRequestsStats', true)
 addEventHandler('onClientRequestsStats', resourceRoot, sendStatsToClient)
+
+function sendTopTimeMapsToClient(forumid, raceMode, position)
+    if isElement(forumid) and getElementType(forumid) == 'player' then
+        forumid = getPlayerID(forumid)
+        if not forumid then
+            triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
+        end
+    elseif not forumid then
+        triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
+        return false
+    end
+
+    local validRacemodes = {
+        ['nts'] = true,
+        ['race'] = true,
+        ['rtf'] = true,
+        ['dl'] = true,
+        ['sh'] = true,
+        ['dd'] = true
+    }
+    if not raceMode or not tonumber(position) or not validRacemodes[raceMode] then
+        triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
+        return false
+    end
+
+    triggerClientEvent(client, 'onServerSendsTopTimeMaps', client,
+        playerTopTimeMaps[forumid][raceMode]['pos' .. position] or {})
+end
+
+addEvent('onClientRequestsTopTimeMaps', true)
+addEventHandler('onClientRequestsTopTimeMaps', resourceRoot, sendTopTimeMapsToClient)
 
 -----------
 -- Other --
@@ -506,6 +563,64 @@ function fetchMonthlyTops(id)
             end
         end,
     handlerConnect, fetchMonthTopsString, id, currentMonth, timeStampMinimum)
+end
+
+function fetchTopTimeMaps(forumid)
+    if not handlerConnect or not forumid or not tonumber(forumid) then return end
+
+    local fetchTopTimeMapsString = [[
+        SELECT
+            `m`.`mapname`,
+            `m`.`resname`,
+            `tt`.`date`,
+            `tt`.`value`,
+            `tt`.`pos`,
+            `tt`.`racemode`
+        FROM
+            `toptimes` tt
+        INNER JOIN `maps` m ON `m`.`resname` = `tt`.`mapname`
+        WHERE
+            `tt`.`forumid` = ? AND
+            `tt`.`pos` > 0 AND
+            `tt`.`pos` < 11
+        ORDER BY `tt`.`date` DESC;
+    ]]
+    dbQuery(
+        function(qh)
+            local res = dbPoll(qh, 0)
+            playerTopTimeMaps[forumid] = playerTopTimeMaps[forumid] or {}
+            for _, row in ipairs(res) do
+                if type(row.mapname) == 'string' and type(row.resname) == 'string' and type(row.date) == 'number' and
+                    type(row.value) == 'number' and type(row.pos) == 'number' and type(row.racemode) == 'string' then
+                    local fullNames = {
+                        ['nts'] = 'Never The Same',
+                        ['race'] = 'Race',
+                        ['rtf'] = 'Reach The Flag',
+                        ['dl'] = 'DeadLine',
+                        ['sh'] = 'Shooter',
+                        ['dd'] = 'Destruction Derby'
+                    }
+                    local positionWithPrefix = 'pos' .. row.pos
+
+                    playerTopTimeMaps[forumid][row.racemode] = playerTopTimeMaps[forumid][row.racemode] or {}
+                    playerTopTimeMaps[forumid][row.racemode][positionWithPrefix] =
+                        playerTopTimeMaps[forumid][row.racemode][positionWithPrefix] or {
+                            racemode = fullNames[row.racemode],
+                            pos = row.pos,
+                            items = {}
+                        }
+
+                    table.insert(playerTopTimeMaps[forumid][row.racemode][positionWithPrefix].items, {
+                        mapname = row.mapname,
+                        resname = row.resname,
+                        date = row.date,
+                        value = row.value,
+                        disabled = not getResourceFromName(row.resname)
+                    })
+                end
+            end
+        end,
+        handlerConnect, fetchTopTimeMapsString, forumid)
 end
 
 function fetchTopTimes(id)
@@ -597,6 +712,7 @@ setTimer(
             setTopOnes(id)
             setTotalRanking(id)
             fetchTopTimes(id)
+            fetchTopTimeMaps(id)
             fetchMonthlyTops(id)
         end
     end, 

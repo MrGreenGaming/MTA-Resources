@@ -158,6 +158,11 @@
                                                 <v-card color="primary" max-width="200" class="mx-auto mb-5 mt-3 px-3 py-3 text-center" style="font-size: 13px;">
                                                     Current Monthly Tops: <b>{{monthlyTopsAmount || 0}} </b>
                                                 </v-card>
+
+                                                <!-- can be removed after a while -->
+                                                <v-card color="primary" max-width="400" block class="mx-auto mb-3 mt-3 py-1 text-center" style="font-size: 13px;">
+                                                    Tip: You can now view and buy maps by clicking on tops.
+                                                </v-card>
                                                 <v-data-iterator
                                                 :items="playerTops"
                                                 hide-default-footer
@@ -180,7 +185,8 @@
                                                             <v-card tile hover>
                                                                 <v-card flat tile color="primary" class="text-center statsTitle px-3 py-1 font-weight-bold">{{ item.name }}</v-card>
                                                                 <v-list color="grey darken-4" dense>
-                                                                    <v-list-item :link="true" v-for="stat in item.items" :key="stat.name">
+                                                                    <v-list-item :link="true" v-for="stat in item.items" :key="stat.name"
+                                                                     @click="requestTopTimeMaps(stat.name, item.name, stat.value)">
                                                                         <v-list-item-content class="statName">{{stat.name}}</v-list-item-content>
                                                                         <v-list-item-content :class="{'topValue': stat.value > 0, 'noTopValue': stat.value === 0}" class="statValue">{{ stat.value }}</v-list-item-content>
                                                                     </v-list-item>
@@ -190,6 +196,45 @@
                                                         </v-row>
                                                     </template>
                                                 </v-data-iterator>
+
+                                                <v-dialog v-model="topTimeMapsModal" hide-overlay scrollable max-width="85%">
+                                                    <v-card>
+                                                        <v-card-title>
+                                                            Maps of the {{ordinalSuffix(topTimeMaps.pos)}} position in {{topTimeMaps.racemode}} mode
+                                                        </v-card-title>
+                                                        <v-divider></v-divider>
+                                                        <v-card-title class="mt-0 pt-0">
+                                                            <v-text-field v-model="topTimeMapsSearch" label="Search" single-line hide-details></v-text-field>
+                                                        </v-card-title>
+                                                        <v-data-table :items="topTimeMaps.items" :loading="isLoading" :headers="topTimeMapsTableHeaders"
+                                                            :footer-props="topTimeMapsTableFooterProps" dense :search="topTimeMapsSearch" :items-per-page="5"
+                                                            class="mr-2 ml-2">
+                                                            <template v-slot:item.actions="{ item }">
+                                                                <v-tooltip top :disabled="!item.disabled">
+                                                                    <template v-slot:activator="{ on, attrs }">
+                                                                        <div v-on="on" v-bind="attrs" style="display: inline-block;">
+                                                                            <v-btn small rounded color="primary" :disabled="item.disabled" ripple="false"
+                                                                                class="mt-1 mb-1" @click="buyMap(item.resname, item.mapname)" @mousedown.prevent>
+                                                                                Buy
+                                                                            </v-btn>
+                                                                        </div>
+                                                                    </template>
+                                                                    <span>Map is not present in this server.</span>
+                                                                </v-tooltip>
+                                                            </template>
+                                                            <template v-slot:item.date="{ item }">
+                                                                {{ parseDate(item.date) }}
+                                                            </template>
+                                                            <template v-slot:item.value="{ item }">
+                                                                {{ getFormattedValue(item.value) }}
+                                                            </template>
+                                                        </v-data-table>
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn color="primary" text @click="topTimeMapsModal = false">Close</v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
                                             </v-tab-item>
                                         </v-tabs-items>
                                     </v-container>
@@ -224,6 +269,20 @@
                 text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
                 dialog: false,
                 dialog_chosenPlayer: false,
+                topTimeMapsModal: false,
+                topTimeMapsSearch: '',
+                topTimeMapsTableHeaders: [
+                    { text: 'Map', value: 'mapname' },
+                    { text: 'Time/Kills', value: 'value', filterable: false },
+                    { text: 'Date', value: 'date', filterable: false },
+                    { text: 'Actions', value: 'actions', sortable: false, filterable: false }
+                ],
+                topTimeMapsTableFooterProps: {
+                    disableItemsPerPage: true,
+                    itemsPerPageOptions: [5],
+                    prevIcon: '<',
+                    nextIcon: '>'
+                },
                 defaultAvatar: 'iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAYAAACAvzbMAAAKjElEQVR4nOzYXahldf3H8d9ae53j6Pj/KzOZM3ImK5wctXIoL2aaQCuK6EGCPAeiIvBGCCLwypsYgjC6iAi66S4QpOZYQXrTRUUiiWVP2IxJDz4gjfkAmmXqzNkr9jCE1E185pzvHrevF+y5/fzOmrXXe+/dN/hvh1tro5fXK15H5n1TcvYREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAREAAiw7wPsABW532AzXb+7guuPP+SC0u2uknNZ5iu71rXdSVbrWtlW1XX74Wnnl955sHjC3evt9bW532AV7Oid9RCG+d9gM122Uevbnuv31+yNWxbKtnpl4bWV8Vq0rV+qNkati2X7Dx290PtZ1+6q2SrmGfgGfATFgARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICACRbt4H2CJj1dB1X7mhZKfruzYsDzVbQ9/6YVKytXTecslOvzS0flLzeambdK0farYmVfdE37V+qeaemCwvlezM3Hbo1qqp9dbaWtVYFd9AAIgICAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICACRrnBrtbV2pGLo3Yevr5g5Zdi2VLLz5AOPt2O331eyVenD37qxZGeyNLR+UvN5qRv61g81W9/92DdKdip96u5byra6onvi0R8/2O7+wvdLtiqf676BABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAZ5n2ArTCOY9nWkw88XrLz0nP/bK+/ek/JVtd1rfVdydbxnz9csrNz3+523uv+r2Tr+ceeaX8//lzJ1sqhvSU7rZvdFzVTj/7k9zVDrbVL33tFyU7lM6nSQgak0rHb7yvZmcXjbZ95V8lWP0xOvSr88LO3lexc87n3tXN3bC/ZevyeP7SHvverkq3VOz9fsjMLSD/U/GDxnQ9+rWRn5g3XXl6yM04XMyB+wgIgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgMrTWDlcMnbtz+1U7Lt9VMdXG6ViyM3Ppe/aV7GzffUHZ3zVOp22cdiVbl33k6pKd7bvqrt/OKy5p+26o+Ww23ZiW7HRda2NXc09c9ckDJTut8Pr9/54d7a2fPliy9bvb7i15ps/M7oiSd9WOt1zc9l6/v2KqTZaXSnZmhm01W92ka/3ypGSrH/rWDzVbk+WhZKdfGlo/qXmoz3Zm17Bkq+ie6Lqu7J7oiv6f2ul7fdF8+wNfLdtavKsHQAkBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIAJGhamgcW5tuTEu27rv1rpIdgP/FyqG97eAtH5r3MTadbyAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARIaypXFs48ZYNlflyJEj8z7Cppv9TXfccUfZFrm1tbWSnQMHDrSbb765ZKtS1fUbp9O28fLJkq1KdQGZWbx+tNXV1XkfYdMdPXq0LCCLeP0W0Z49e/xfnaFxungPQD9hARAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAZqobGcWzjdFo1B3DWGKdjm57cmPcxNl1ZQNrpiAC81syefYsYED9hARAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAZypamrU1PTMvmAM4W48a0nXzxxLyPsel8AwEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgMrTW1iuGXv7HSyvP/vmpgxVbF775ooqZU9bXSy5fW1lZaQcPllw+mKuq99TMxfv3lOycc8G57fj9j5RsVT3T2+mArFUMvfDk31Yf+dGxkifg/puurZg5ZW2t5PK11dVVAeE1oeo9NfP+r3+iZOevv36s/eabPy3ZqnqmNz9hAZASEAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAZ5n2ArTA9cbJsa/9N15bs/OJPR1vXdSVb8J/W19fL7r/rvvzxkp2ZEy+eKNk5eWKjZKeabyAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgEg37wNskbFq6O03HqoZ6rrWD5OSqSfuf6Q98ctHS7Z4ddh55e6274ZrSra6ru6xdM8Xf1A1td5aW6saq+IbCAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICACRYd4H2CLrVUPPPvz0aslQ17W+L+r92NqFb7qoZqvoT+q6rmbo1Ni//9n6qaI/a2n7Oe3pY38p2eqKrt1pVc+Ke4t2SpX+Ty2ocd4H2Gy73nFp2/XON5Zs9Us1Ben6vi4i/WyvZquf1Fy/Zx56ov3xzt+WbBXzDDwDfsICICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBADbN4dba6OX1iteRed+UnH18AwEgIiAARAQEgIiAABAREAAiAgJAREAAiAgIABEBASAiIABEBASAiIAAEBEQACICAkBEQACICAgAEQEBICIgAEQEBICIgAAQERAAIgICQERAAIgICAARAQEgIiAARP4VAAD//wRXD9H7uaUBAAAAAElFTkSuQmCC'
             },
             computed: {
@@ -237,6 +296,7 @@
                     'isLoggedIn',
                     'isLoading',
                     'playerTops',
+                    'topTimeMaps',
                     'monthlyTopsAmount',
                     'country'
 
@@ -263,6 +323,7 @@
                     }
                 },
                 requestMyStats() {
+                    dialog_chosenPlayer = false;
                     window.VuexStore.commit('setLoading', true)
                     if (window.mta) {
                         window.mta.triggerEvent('requestMyStats')
@@ -336,6 +397,71 @@
                 onResize() {
                     this.setHeight()
                     this.fitTextWidth(document.getElementById('playerName'), 22, 11)
+                },
+                requestTopTimeMaps(statName, raceMode, statValue) {
+                    if (statValue === 0 || raceMode === 'Total' || statName === 'Total') {
+                        return;
+                    }
+
+                    const raceModeCodes = {
+                        'Total': 'total',
+                        'Never The Same': 'nts',
+                        'Race': 'race',
+                        'Reach The Flag': 'rtf',
+                        'DeadLine': 'dl',
+                        'Shooter': 'sh',
+                        'Destruction Derby': 'dd'
+                    };
+
+                    const code = raceModeCodes[raceMode];
+                    const pos = statName.split(' ')[1];
+
+                    window.VuexStore.commit('setLoading', true)
+                    window.VuexStore.commit('setTopTimeMaps', null)
+                    if (window.mta) {
+                        window.mta.triggerEvent('browserRequestTopTimeMaps', (this.dialog_chosenPlayer && this.dialog_chosenPlayer.id) || false, code, pos)
+                    } else {
+                        setTimeout(function () {
+                            window.VuexStore.commit('setLoading', false)
+                        }, 1000)
+                    }
+                    this.topTimeMapsModal = true;
+                },
+                buyMap(resname, mapname) {
+                    if (!resname || !mapname) {
+                        return;
+                    }
+
+                    window.mta.triggerEvent('browserRequestBuyMap', resname, mapname)
+                },
+                getFormattedValue(value) {
+                    const timeMode = {
+                        'Race': true,
+                        'Never The Same': true,
+                        'Reach The Flag': true
+                    }
+
+                    if (timeMode[this.topTimeMaps.racemode]) {
+                        return this.msToTime(value)
+                    } else {
+                        return value + ' kills'
+                    }
+                },
+                msToTime(duration) {
+                    return new Date(duration).toISOString().slice(14, -1)
+                },
+                parseDate(date) {
+                    const d = new Date(0)
+                    d.setUTCSeconds(date)
+                    return d.toLocaleDateString()
+                },
+                ordinalSuffix(n) {
+                    const suffixes = {
+                        1: 'st',
+                        2: 'nd',
+                        3: 'rd'
+                    };
+                    return n + (suffixes[n] || 'th');
                 }
             },
             mounted() {
@@ -347,6 +473,9 @@
                     setTimeout(this.fitTextWidth,2,document.getElementById('playerName'), 22, 11)
                 },
                 playerStats() {
+                    window.VuexStore.commit('setLoading', false)
+                },
+                topTimeMaps() {
                     window.VuexStore.commit('setLoading', false)
                 }
             },

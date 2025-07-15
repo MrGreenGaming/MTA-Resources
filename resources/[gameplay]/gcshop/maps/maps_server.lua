@@ -131,6 +131,7 @@ end
 addEvent('sendPlayerNextmapChoice', true)
 addEventHandler('sendPlayerNextmapChoice', root,
 function(choice)
+    if not getResourceFromName(choice[2]) then return end
     local isFreeMap = isPlayerStaff(source)
     if not isFreeMap and isDailyLimitReached(tostring(choice[2])) then return end -- Check for map bought amount if not admin
 	local racemode = getResourceInfo(getResourceFromName(choice[2]), "racemode") or "race"
