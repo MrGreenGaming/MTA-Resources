@@ -42,6 +42,7 @@ defaultSettings = {
 	["showInfo"] = true,
 	["preferNear"] = false,
 	["sortMode"] = "length",
+	["avatars"] = true,  -- Show player avatars on the minimap
 }
 
 

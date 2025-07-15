@@ -565,7 +565,7 @@ function drawMap()
 		local localPlayerX = localPlayerValue[3]
 		local localPlayerY = localPlayerValue[4]
 		local localPlayerColor = tocolor(localPlayerValue[5], localPlayerValue[6], localPlayerValue[7], 245)
-		if playerAvatars[localPlayer] then
+		if s("avatars") and playerAvatars[localPlayer] then
 			dxDrawImage(localPlayerX - 10, localPlayerY - 10, 20, 20, playerAvatars[localPlayer])
 		else
 			dxDrawCircle(localPlayerX, localPlayerY, 12, 0.0, 360.0, tocolor(0, 0, 0, 220), tocolor(0, 0, 0, 220), 32)
@@ -582,7 +582,7 @@ function drawMap()
 		local playerY = value[4]
 		local playerColor = tocolor(value[5], value[6], value[7], 245)
 		if playerElement ~= getLocalPlayer() then
-			if playerAvatars[playerElement] then
+			if s("avatars") and playerAvatars[playerElement] then
 				dxDrawImage(playerX - 8, playerY - 8, 16, 16, playerAvatars[playerElement])
 			else
 				dxDrawCircle(playerX, playerY, 7, 0.0, 360.0, tocolor(0, 0, 0, 220), tocolor(0, 0, 0, 220), 32)
@@ -794,7 +794,7 @@ function createGui()
 		value = s("size",
 			"default")
 	})
-
+	
 	guiCreateLabel(24, 140, 60, 20, "Position:", false, gui.tabGeneral)
 
 	gui.top = guiCreateEdit(140, 140, 60, 20, tostring(s("top")), false, gui.tabGeneral)
@@ -824,6 +824,9 @@ function createGui()
 	addEditButton(280, 240, 60, 20, "bigger", false, gui.tabGeneral, { mode = "add", edit = gui.updateinterval, add = 0.1 })
 	addEditButton(350, 240, 60, 20, "default", false, gui.tabGeneral,
 		{ mode = "set", edit = gui.updateinterval, value = s("updateinterval", "default") })
+
+	gui.avatars = guiCreateCheckBox(24, 270, 280, 20, "Show player avatars", s("avatars"), false, gui.tabGeneral)
+	addHelp("Show the avatars of players on the minimap, if available.", gui.avatars)
 
 	-- gui.preferNear = guiCreateCheckBox(24,300,280,20,"Prefer players behind or in front of you",s("preferNear"),false,gui.tabGeneral)
 	-- addHelp("Draws players directly before or in front of you on top of the other players, so you know who you race against. If you have this enabled, the shuffle or sorting functions have no effect for those players affected by this setting.",gui.preferNear)
