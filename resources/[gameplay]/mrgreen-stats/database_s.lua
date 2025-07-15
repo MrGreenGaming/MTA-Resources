@@ -474,6 +474,16 @@ function sendTopTimeMapsToClient(forumid, raceMode, position)
         return false
     end
 
+    forumid = 'f' .. forumid
+    if not playerTopTimeMaps[forumid] or not playerTopTimeMaps[forumid][raceMode]
+        or not playerTopTimeMaps[forumid][raceMode]['pos' .. position] then
+        outputDebugString("Missing or undefined top time data (forumid: " .. tostring(forumid) ..
+            ", raceMode: " .. tostring(raceMode) ..
+            ", position: " .. tostring(position) .. ")", 1)
+        triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
+        return false
+    end
+
     triggerClientEvent(client, 'onServerSendsTopTimeMaps', client,
         playerTopTimeMaps[forumid][raceMode]['pos' .. position] or {})
 end
@@ -588,7 +598,8 @@ function fetchTopTimeMaps(forumid)
     dbQuery(
         function(qh)
             local res = dbPoll(qh, 0)
-            playerTopTimeMaps[forumid] = playerTopTimeMaps[forumid] or {}
+            local forumidWithPrefix = 'f' .. forumid
+            local tempTable = {}
             for _, row in ipairs(res) do
                 if type(row.mapname) == 'string' and type(row.resname) == 'string' and type(row.date) == 'number' and
                     type(row.value) == 'number' and type(row.pos) == 'number' and type(row.racemode) == 'string' then
@@ -602,15 +613,14 @@ function fetchTopTimeMaps(forumid)
                     }
                     local positionWithPrefix = 'pos' .. row.pos
 
-                    playerTopTimeMaps[forumid][row.racemode] = playerTopTimeMaps[forumid][row.racemode] or {}
-                    playerTopTimeMaps[forumid][row.racemode][positionWithPrefix] =
-                        playerTopTimeMaps[forumid][row.racemode][positionWithPrefix] or {
-                            racemode = fullNames[row.racemode],
-                            pos = row.pos,
-                            items = {}
-                        }
+                    tempTable[row.racemode] = tempTable[row.racemode] or {}
+                    tempTable[row.racemode][positionWithPrefix] = tempTable[row.racemode][positionWithPrefix] or {
+                        racemode = fullNames[row.racemode],
+                        pos = row.pos,
+                        items = {}
+                    }
 
-                    table.insert(playerTopTimeMaps[forumid][row.racemode][positionWithPrefix].items, {
+                    table.insert(tempTable[row.racemode][positionWithPrefix].items, {
                         mapname = row.mapname,
                         resname = row.resname,
                         date = row.date,
@@ -619,6 +629,8 @@ function fetchTopTimeMaps(forumid)
                     })
                 end
             end
+
+            playerTopTimeMaps[forumidWithPrefix] = tempTable
         end,
         handlerConnect, fetchTopTimeMapsString, forumid)
 end
