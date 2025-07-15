@@ -324,7 +324,7 @@
                     }
                 },
                 requestMyStats() {
-                    dialog_chosenPlayer = false;
+                    this.dialog_chosenPlayer = false;
                     window.VuexStore.commit('setLoading', true)
                     if (window.mta) {
                         window.mta.triggerEvent('requestMyStats')
