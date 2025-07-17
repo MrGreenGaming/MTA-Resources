@@ -75,11 +75,12 @@
                                             <v-divider></v-divider>
                                             <v-card-text style="height: 300px;">
                                                     <v-list>
-                                                        <v-list-item-group v-model="dialog_chosenPlayer">
+                                                        <v-list-item-group v-model="dialog_chosenPlayer" mandatory>
                                                             <v-list-item
                                                             @click="requestStats(item.id)"
                                                             v-for="(item, i) in playerList"
                                                             :key="i"
+                                                            :value="item.id"
                                                             >
                                                                 <v-list-item-content>
                                                                     <v-list-item-title><v-chip small color="primary" class="mr-2">{{item.server}}</v-chip>{{item.name}}</v-list-item-title>
@@ -323,7 +324,7 @@
                     }
                 },
                 requestMyStats() {
-                    dialog_chosenPlayer = false;
+                    this.dialog_chosenPlayer = false;
                     window.VuexStore.commit('setLoading', true)
                     if (window.mta) {
                         window.mta.triggerEvent('requestMyStats')
@@ -419,7 +420,7 @@
                     window.VuexStore.commit('setLoading', true)
                     window.VuexStore.commit('setTopTimeMaps', null)
                     if (window.mta) {
-                        window.mta.triggerEvent('browserRequestTopTimeMaps', (this.dialog_chosenPlayer && this.dialog_chosenPlayer.id) || false, code, pos)
+                        window.mta.triggerEvent('browserRequestTopTimeMaps', this.dialog_chosenPlayer || false, code, pos)
                     } else {
                         setTimeout(function () {
                             window.VuexStore.commit('setLoading', false)

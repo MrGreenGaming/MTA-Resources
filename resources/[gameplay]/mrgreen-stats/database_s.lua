@@ -205,7 +205,7 @@ end
 addEvent('onGCLogin')
 addEventHandler('onGCLogin', root, function(id)
     playerTopTimes[id] = {}
-    playerTopTimeMaps[id] = {}
+    playerTopTimeMaps[tostring(id)] = {}
     playerMonthlyTopTimes[id] = 0
     loadPlayerStats(id)
     forumidPlayerMap[id] = source
@@ -218,8 +218,8 @@ addEventHandler('onGCLogout', root, function(id)
     if forumidPlayerMap[id] then
         forumidPlayerMap[id] = nil 
     end
-    if playerTopTimeMaps[id] then
-        playerTopTimeMaps[id] = nil
+    if playerTopTimeMaps[tostring(id)] then
+        playerTopTimeMaps[tostring(id)] = nil
     end
     if playerTopTimes[id] then
         playerTopTimes[id] = nil
@@ -353,7 +353,7 @@ function sendServerPlayerStats()
             obj[id].stats = stats
             obj[id].server = currentServer
             obj[id].tops = playerTopTimes[id] or {}
-            obj[id].topTimeMaps = playerTopTimeMaps[id] or {}
+            obj[id].topTimeMaps = playerTopTimeMaps[tostring(id)] or {}
             obj[id].monthlyTops = playerMonthlyTopTimes[id] or 0
         end
     end
@@ -428,7 +428,7 @@ local function sendStatsToClient(forumid)
         sendObj.vip = getVipDays(exports.gc:getPlayerVip(player)) or false
         sendObj.stats = specialFormat(table.copy(playerStats[forumid]))
         sendObj.tops = playerTopTimes[forumid] or {}
-        sendObj.topTimeMaps = playerTopTimeMaps[forumid] or {}
+        sendObj.topTimeMaps = playerTopTimeMaps[tostring(forumid)] or {}
         sendObj.monthlyTops = playerMonthlyTopTimes[forumid] or 0
         triggerClientEvent(client, 'onServerSendsStats', client, sendObj, player)
     elseif otherServerPlayerStats[tostring(forumid)] then
@@ -439,6 +439,7 @@ local function sendStatsToClient(forumid)
         sendObj.vip = otherServerPlayerStats[tostring(forumid)].vip
         sendObj.stats = specialFormat(table.copy(otherServerPlayerStats[tostring(forumid)].stats))
         sendObj.tops = otherServerPlayerStats[tostring(forumid)].tops
+        sendObj.topTimeMaps = otherServerPlayerStats[tostring(forumid)].topTimeMaps or {}
         sendObj.monthlyTops = otherServerPlayerStats[tostring(forumid)].monthlyTops
         triggerClientEvent(client, 'onServerSendsStats', client, sendObj)
     else
@@ -474,8 +475,33 @@ function sendTopTimeMapsToClient(forumid, raceMode, position)
         return false
     end
 
-    triggerClientEvent(client, 'onServerSendsTopTimeMaps', client,
-        playerTopTimeMaps[forumid][raceMode]['pos' .. position] or {})
+    forumid = tostring(forumid)
+    position = tostring(position)
+
+    if playerTopTimeMaps[forumid] then
+        if not playerTopTimeMaps[forumid][raceMode] or not playerTopTimeMaps[forumid][raceMode][position] then
+            outputDebugString("Missing or undefined top time data (forumid: " .. forumid ..
+                ", raceMode: " .. tostring(raceMode) ..
+                ", position: " .. tostring(position) .. ")", 1)
+            triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
+            return false
+        end
+
+        triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, playerTopTimeMaps[forumid][raceMode][position])
+    elseif otherServerPlayerStats[forumid] then
+        if not otherServerPlayerStats[forumid].topTimeMaps[raceMode] or not otherServerPlayerStats[forumid].topTimeMaps[raceMode][position] then
+            outputDebugString("Missing or undefined top time data (forumid: " .. forumid ..
+                ", raceMode: " .. tostring(raceMode) ..
+                ", position: " .. tostring(position) .. ")", 1)
+            triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
+            return false
+        end
+
+        triggerClientEvent(client, 'onServerSendsTopTimeMaps', client,
+            otherServerPlayerStats[forumid].topTimeMaps[raceMode][position])
+    else
+        triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
+    end
 end
 
 addEvent('onClientRequestsTopTimeMaps', true)
@@ -588,7 +614,7 @@ function fetchTopTimeMaps(forumid)
     dbQuery(
         function(qh)
             local res = dbPoll(qh, 0)
-            playerTopTimeMaps[forumid] = playerTopTimeMaps[forumid] or {}
+            local tempTable = {}
             for _, row in ipairs(res) do
                 if type(row.mapname) == 'string' and type(row.resname) == 'string' and type(row.date) == 'number' and
                     type(row.value) == 'number' and type(row.pos) == 'number' and type(row.racemode) == 'string' then
@@ -600,17 +626,16 @@ function fetchTopTimeMaps(forumid)
                         ['sh'] = 'Shooter',
                         ['dd'] = 'Destruction Derby'
                     }
-                    local positionWithPrefix = 'pos' .. row.pos
 
-                    playerTopTimeMaps[forumid][row.racemode] = playerTopTimeMaps[forumid][row.racemode] or {}
-                    playerTopTimeMaps[forumid][row.racemode][positionWithPrefix] =
-                        playerTopTimeMaps[forumid][row.racemode][positionWithPrefix] or {
-                            racemode = fullNames[row.racemode],
-                            pos = row.pos,
-                            items = {}
-                        }
+                    local position = tostring(row.pos)
+                    tempTable[row.racemode] = tempTable[row.racemode] or {}
+                    tempTable[row.racemode][position] = tempTable[row.racemode][position] or {
+                        racemode = fullNames[row.racemode],
+                        pos = row.pos,
+                        items = {}
+                    }
 
-                    table.insert(playerTopTimeMaps[forumid][row.racemode][positionWithPrefix].items, {
+                    table.insert(tempTable[row.racemode][position].items, {
                         mapname = row.mapname,
                         resname = row.resname,
                         date = row.date,
@@ -619,6 +644,8 @@ function fetchTopTimeMaps(forumid)
                     })
                 end
             end
+
+            playerTopTimeMaps[tostring(forumid)] = tempTable
         end,
         handlerConnect, fetchTopTimeMapsString, forumid)
 end
