@@ -399,7 +399,7 @@ function visual_ButtonHandler()
 		local nr = tonumber(guiGetText( GUIEditor.edit["fpslimit"] ))
 
 		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
-		if nr > 100 or nr < 25 then outputChatBox("[SETTINGS] FPS limit must be inbetween 25 and 100.",255) return end
+		if nr > 144 or nr < 25 then outputChatBox("[SETTINGS] FPS limit must be inbetween 25 and 100.",255) return end
 
 		setFPSLimit(nr)
 		visual["fpslimit"] = nr
@@ -409,7 +409,7 @@ function visual_ButtonHandler()
 		local nr = tonumber(guiGetText( GUIEditor.edit["fpslimitboats"] ))
 
 		if not nr then outputChatBox("[SETTINGS] Please insert a number before clicking ok.",255) return end
-		if nr > 100 or nr < 25 then outputChatBox("[SETTINGS] FPS limit must be inbetween 25 and 100.",255) return end
+		if nr > 144 or nr < 25 then outputChatBox("[SETTINGS] FPS limit must be inbetween 25 and 100.",255) return end
 
 		setElementData(localPlayer, "fpslimitboats", nr)
 		visual["fpslimitboats"] = nr
