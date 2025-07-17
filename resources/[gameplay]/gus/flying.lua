@@ -46,7 +46,8 @@ addEventHandler("onPostFinish", root, function()
 	end
 
 	local flyingPercentages = {}
-
+	local flyingPercentagesCount = 0
+	
 	for _, player in pairs(finishedPlayers) do
 		local totalCheckpoints = 0
 		local flyingCount = 0
@@ -64,12 +65,12 @@ addEventHandler("onPostFinish", root, function()
 		if (totalCheckpoints >= 5) then
 			local flyingPercentage = flyingCount / totalCheckpoints
 			flyingPercentages[player] = flyingPercentage
+			flyingPercentagesCount = flyingPercentagesCount + 1
 		end
-
 	end
 
-	if (#finishedPlayers <= 1) then
-		if #finishedPlayers == 1 then
+	if (flyingPercentagesCount <= 1) then
+		if flyingPercentagesCount == 1 then
 			for player, percent in pairs(flyingPercentages) do
 				if percent >= 0.6 and isElement(player) and getResourceFromName("discord") and getResourceState(getResourceFromName("discord")) == "running" then
 					exports.discord:send("admin.log", {
@@ -102,7 +103,10 @@ addEventHandler("onPostFinish", root, function()
 			if getResourceFromName("discord") and getResourceState(getResourceFromName("discord")) == "running" then
 				exports.discord:send("admin.log", {
 					log = getPlayerName(topPlayer) .. " has been banned (15 minutes) by VulpyScript for flying " ..
-							math.floor(topPercent * 100) .. "% of the time.\nSerial: " .. getPlayerSerial(topPlayer)
+							math.floor(topPercent * 100) .. "% of the time.\nSerial: " .. getPlayerSerial(topPlayer) ..
+							"\nOther players had " ..
+							math.floor(secondTopPercent * 100) .. "% airborne.\nDifference: " .. 
+							math.floor(diff * 100) .. "%"
 				})
 			end
 
