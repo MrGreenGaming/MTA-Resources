@@ -468,7 +468,7 @@ local settingApplier = {
 	locked_time = function(value) if value then setMinuteDuration(2147483647) else setMinuteDuration(1000) end end,
 	weather = function(value) setWeather(tonumber(value)) end,
 	waveheight = function(value) setWaveHeight(tonumber(value)) end,
-	fpslimit = function(value) setFPSLimit(value); if value ~= defaultSettings.fpslimit then outputMapManager("Map fpslimit: " .. value .. ".") end end
+	-- fpslimit = function(value) setFPSLimit(value); if value ~= defaultSettings.fpslimit then outputMapManager("Map fpslimit: " .. value .. ".") end end
 }
 
 function applyMapSettings( map )
