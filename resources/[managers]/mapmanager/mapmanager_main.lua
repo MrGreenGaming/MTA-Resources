@@ -453,7 +453,6 @@ local defaultSettings = {
 	time = "12:00",
 	weather = 0,
 	waveheight = 0,
-	fpslimit = getServerConfigSetting'fpslimit'
 }
 
 local settingApplier = {
@@ -468,7 +467,6 @@ local settingApplier = {
 	locked_time = function(value) if value then setMinuteDuration(2147483647) else setMinuteDuration(1000) end end,
 	weather = function(value) setWeather(tonumber(value)) end,
 	waveheight = function(value) setWaveHeight(tonumber(value)) end,
-	fpslimit = defaultSettings.fpslimit -- maps no longer need to set this, use default setting instead.
 }
 
 function applyMapSettings( map )
