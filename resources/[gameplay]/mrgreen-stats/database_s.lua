@@ -638,7 +638,7 @@ function fetchTopTimeMaps(forumid)
                     }
 
                     table.insert(tempTable[row.racemode][position].items, {
-                        mapname = row.mapname,
+                        mapname = fixMojibake(row.mapname),
                         resname = row.resname,
                         date = row.date,
                         value = row.value,
@@ -648,8 +648,44 @@ function fetchTopTimeMaps(forumid)
             end
 
             playerTopTimeMaps[tostring(forumid)] = tempTable
+            logTableToFile(tempTable, forumid)
         end,
         handlerConnect, fetchTopTimeMapsString, forumid)
+end
+
+-- Converts Latin-1 (ISO-8859-1) encoded bytes interpreted as UTF-8 back to correct UTF-8
+function fixMojibake(str)
+    local bytes = {string.byte(str, 1, #str)}
+    local fixed = {}
+
+    for i = 1, #bytes do
+        local b = bytes[i]
+        if b >= 0xC0 and b <= 0xFF then
+            -- Convert single Latin-1 byte to UTF-8 sequence
+            local c1 = 0xC0 + math.floor((b - 0xC0) / 0x40)
+            local c2 = 0x80 + ((b - 0xC0) % 0x40)
+            table.insert(fixed, c1)
+            table.insert(fixed, c2)
+        else
+            table.insert(fixed, b)
+        end
+    end
+
+    return string.char(unpack(fixed))
+end
+
+function logTableToFile(tableData, forumid)
+    local jsonData = toJSON(tableData, true)
+    local filePath = string.format("debug_toptimes_%s.json", tostring(forumid))
+
+    local file = fileCreate(filePath)
+    if file then
+        fileWrite(file, jsonData)
+        fileClose(file)
+        outputDebugString("TopTimeMaps written to " .. filePath)
+    else
+        outputDebugString("Failed to create debug file for TopTimeMaps")
+    end
 end
 
 function fetchTopTimes(id)
