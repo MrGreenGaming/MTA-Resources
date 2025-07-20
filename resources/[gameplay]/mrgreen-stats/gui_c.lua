@@ -191,7 +191,7 @@ addEvent('browserRequestBuyMap')
 addEventHandler('browserRequestBuyMap', resourceRoot, buyMap)
 
 function receiveStats(stats, player)
-    if stats then
+    if stats and stats.forumid then
         local avatar = getPlayerAvatarString(player)
         if avatar then
             avatar = '`'..avatar..'`'
@@ -214,6 +214,7 @@ function receiveStats(stats, player)
         end
         executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerInfo', `"..toJSON(playerObj).."`)")
         executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerAvatar', "..avatar..")")
+        executeBrowserJavascript(browserElement, "window.VuexStore.commit('setDialogChosenPlayer', "..stats.forumid..")")
         
         -- Set safe strings
         for catIndex, row in ipairs(stats.stats) do
@@ -255,6 +256,8 @@ function receiveStats(stats, player)
     end
     executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerStats', false)")
     executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerTops', false)")
+    executeBrowserJavascript(browserElement, "window.VuexStore.commit('setTopTimeMaps', false)")
+    executeBrowserJavascript(browserElement, "window.VuexStore.commit('setDialogChosenPlayer', false)")
 end
 addEvent('onServerSendsStats', true)
 addEventHandler('onServerSendsStats', localPlayer, receiveStats)
