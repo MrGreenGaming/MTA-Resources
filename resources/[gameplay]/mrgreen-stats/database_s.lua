@@ -638,7 +638,7 @@ function fetchTopTimeMaps(forumid)
                     }
 
                     table.insert(tempTable[row.racemode][position].items, {
-                        mapname = row.mapname.gsub("'", "’"),
+                        mapname = string.gsub(row.mapname, "'", "’"),
                         resname = row.resname,
                         date = row.date,
                         value = row.value,
