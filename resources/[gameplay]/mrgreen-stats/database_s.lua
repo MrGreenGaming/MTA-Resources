@@ -598,38 +598,28 @@ function fetchTopTimeMaps(forumid)
 
     local fetchTopTimeMapsString = [[
         SELECT
-            `tt`.`mapname` AS tt_mapname,
-            `m`.`resname` AS m_resname,
-            `m`.`mapname` AS m_mapname,
+            `m`.`mapname`,
+            `m`.`resname`,
             `tt`.`date`,
             `tt`.`value`,
             `tt`.`pos`,
             `tt`.`racemode`
         FROM
             `toptimes` tt
-        LEFT JOIN `maps` m ON `m`.`resname` = `tt`.`mapname`
+        INNER JOIN `maps` m ON `m`.`resname` = `tt`.`mapname`
         WHERE
             `tt`.`forumid` = ? AND
             `tt`.`pos` > 0 AND
             `tt`.`pos` < 11
         ORDER BY `tt`.`date` DESC;
     ]]
-
     dbQuery(
         function(qh)
             local res = dbPoll(qh, 0)
             local tempTable = {}
-
             for _, row in ipairs(res) do
-                -- Debug logging for mismatched rows
-                if not row.m_resname then
-                    outputDebugString("[DEBUG] Map mismatch for toptime entry: tt.mapname = " .. tostring(row.tt_mapname))
-                end
-
-                if type(row.tt_mapname) == 'string' and type(row.date) == 'number' and
-                   type(row.value) == 'number' and type(row.pos) == 'number' and
-                   type(row.racemode) == 'string' then
-                    
+                if type(row.mapname) == 'string' and type(row.resname) == 'string' and type(row.date) == 'number' and
+                    type(row.value) == 'number' and type(row.pos) == 'number' and type(row.racemode) == 'string' then
                     local fullNames = {
                         ['nts'] = 'Never The Same',
                         ['race'] = 'Race',
@@ -648,20 +638,19 @@ function fetchTopTimeMaps(forumid)
                     }
 
                     table.insert(tempTable[row.racemode][position].items, {
-                        mapname = row.m_mapname or row.tt_mapname,
-                        resname = row.m_resname or row.tt_mapname,
+                        mapname = row.mapname,
+                        resname = row.resname,
                         date = row.date,
                         value = row.value,
-                        disabled = not getResourceFromName(row.m_resname or row.tt_mapname)
+                        disabled = not getResourceFromName(row.resname)
                     })
                 end
             end
 
             playerTopTimeMaps[tostring(forumid)] = tempTable
         end,
-    handlerConnect, fetchTopTimeMapsString, forumid)
+        handlerConnect, fetchTopTimeMapsString, forumid)
 end
-
 
 function fetchTopTimes(id)
     if not handlerConnect or not id or not tonumber(id) then return end
