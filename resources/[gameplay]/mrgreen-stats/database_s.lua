@@ -638,7 +638,7 @@ function fetchTopTimeMaps(forumid)
                     }
 
                     table.insert(tempTable[row.racemode][position].items, {
-                        mapname = cleanStringReplaceWithQuestionMark(row.mapname),
+                        mapname = row.mapname,
                         resname = row.resname,
                         date = row.date,
                         value = row.value,
@@ -650,22 +650,6 @@ function fetchTopTimeMaps(forumid)
             playerTopTimeMaps[tostring(forumid)] = tempTable
         end,
         handlerConnect, fetchTopTimeMapsString, forumid)
-end
-
-function cleanStringReplaceWithQuestionMark(str)
-    local bytes = {string.byte(str, 1, #str)}
-    local cleaned = {}
-
-    for i = 1, #bytes do
-        local b = bytes[i]
-        if b >= 0xC0 and b <= 0xFF then
-            table.insert(cleaned, 63) -- ASCII '?'
-        else
-            table.insert(cleaned, b)
-        end
-    end
-
-    return string.char(unpack(cleaned))
 end
 
 function fetchTopTimes(id)
