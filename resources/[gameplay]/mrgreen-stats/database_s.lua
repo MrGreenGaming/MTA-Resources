@@ -598,20 +598,20 @@ function fetchTopTimeMaps(forumid)
 
     local fetchTopTimeMapsString = [[
         SELECT
-            `m`.`mapname`,
-            `m`.`resname`,
-            `tt`.`date`,
-            `tt`.`value`,
-            `tt`.`pos`,
-            `tt`.`racemode`
+            REGEXP_REPLACE(m.mapname, '[^ -~]', '?') AS mapname,
+            m.resname,
+            tt.date,
+            tt.value,
+            tt.pos,
+            tt.racemode
         FROM
-            `toptimes` tt
-        INNER JOIN `maps` m ON `m`.`resname` = `tt`.`mapname`
+            toptimes tt
+        INNER JOIN maps m ON m.resname = tt.mapname
         WHERE
-            `tt`.`forumid` = ? AND
-            `tt`.`pos` > 0 AND
-            `tt`.`pos` < 11
-        ORDER BY `tt`.`date` DESC;
+            tt.forumid = ? AND
+            tt.pos > 0 AND
+            tt.pos < 11
+        ORDER BY tt.date DESC;
     ]]
     dbQuery(
         function(qh)
@@ -638,7 +638,7 @@ function fetchTopTimeMaps(forumid)
                     }
 
                     table.insert(tempTable[row.racemode][position].items, {
-                        mapname = fixMojibake(row.mapname),
+                        mapname = row.mapname,
                         resname = row.resname,
                         date = row.date,
                         value = row.value,
@@ -651,27 +651,6 @@ function fetchTopTimeMaps(forumid)
         end,
         handlerConnect, fetchTopTimeMapsString, forumid)
 end
-
--- Converts Latin-1 (ISO-8859-1) encoded bytes interpreted as UTF-8 back to correct UTF-8
-function fixMojibake(str)
-    local bytes = {string.byte(str, 1, #str)}
-    local fixed = {}
-
-    for i = 1, #bytes do
-        local b = bytes[i]
-        if b >= 0xC0 and b <= 0xFF then
-            local c1 = 0xC0 + math.floor((b - 0xC0) / 0x40)
-            local c2 = 0x80 + ((b - 0xC0) % 0x40)
-            table.insert(fixed, c1)
-            table.insert(fixed, c2)
-        else
-            table.insert(fixed, b)
-        end
-    end
-
-    return string.char(unpack(fixed))
-end
-
 
 function fetchTopTimes(id)
     if not handlerConnect or not id or not tonumber(id) then return end
