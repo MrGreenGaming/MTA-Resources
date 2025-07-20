@@ -660,7 +660,6 @@ function fixMojibake(str)
     for i = 1, #bytes do
         local b = bytes[i]
         if b >= 0xC0 and b <= 0xFF then
-            -- Convert single Latin-1 byte to UTF-8 sequence
             local c1 = 0xC0 + math.floor((b - 0xC0) / 0x40)
             local c2 = 0x80 + ((b - 0xC0) % 0x40)
             table.insert(fixed, c1)
@@ -670,7 +669,7 @@ function fixMojibake(str)
         end
     end
 
-    return string.char(table.unpack(fixed))
+    return string.char(unpack(fixed))
 end
 
 
