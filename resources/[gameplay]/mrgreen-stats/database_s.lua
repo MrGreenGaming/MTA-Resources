@@ -648,6 +648,7 @@ function fetchTopTimeMaps(forumid)
             end
 
             playerTopTimeMaps[tostring(forumid)] = tempTable
+            outputDebugString("TopTimeMaps for forumid " .. forumid .. ": " .. toJSON(tempTable))
         end,
         handlerConnect, fetchTopTimeMapsString, forumid)
 end
