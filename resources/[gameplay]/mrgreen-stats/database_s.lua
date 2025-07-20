@@ -648,9 +648,23 @@ function fetchTopTimeMaps(forumid)
             end
 
             playerTopTimeMaps[tostring(forumid)] = tempTable
-            outputDebugString("TopTimeMaps for forumid " .. forumid .. ": " .. toJSON(tempTable))
+            logTableToFile(tempTable, forumid)
         end,
         handlerConnect, fetchTopTimeMapsString, forumid)
+end
+
+function logTableToFile(tableData, forumid)
+    local jsonData = toJSON(tableData, true) -- pretty print for readability
+    local filePath = string.format("debug_toptimes_%s.json", tostring(forumid))
+
+    local file = fileCreate(filePath)
+    if file then
+        fileWrite(file, jsonData)
+        fileClose(file)
+        outputDebugString("TopTimeMaps written to " .. filePath)
+    else
+        outputDebugString("Failed to create debug file for TopTimeMaps")
+    end
 end
 
 function fetchTopTimes(id)
