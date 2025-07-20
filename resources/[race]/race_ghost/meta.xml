@@ -76,4 +76,8 @@
 					desc="Max. ghost time in minutes."
 					/>
 	</settings>
+
+	<acl>
+		<right name="function.fileDelete" allow="true" />
+	</acl>
 </meta>
