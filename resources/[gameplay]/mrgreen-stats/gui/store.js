@@ -12,7 +12,8 @@ const vuexStore = {
         avatar: false,
         country: false,
         playerList: [],
-        isLoading: true
+        isLoading: true,
+        dialogChosenPlayer: false
     },
 
     getters: {
@@ -51,8 +52,10 @@ const vuexStore = {
         },
         avatar: state => {
             return state.avatar
+        },
+        dialogChosenPlayer: state => {
+            return state.dialogChosenPlayer
         }
-       
     },
 
     mutations: {
@@ -65,6 +68,7 @@ const vuexStore = {
             state.avatar = false
             state.playerList = []
             state.topTimeMaps = []
+            state.dialogChosenPlayer = false
         },
         setPlayerStats(state, string) {
             if (typeof string == 'string') {
@@ -148,6 +152,9 @@ const vuexStore = {
         },
         setLoading(state, bool) {
             state.isLoading = bool && bool || false
+        },
+        setDialogChosenPlayer(state, value) {
+            state.dialogChosenPlayer = value || false
         },
         setPlayerCountry(state, countryString) {
             const countryObj = JSON.parse(countryString)

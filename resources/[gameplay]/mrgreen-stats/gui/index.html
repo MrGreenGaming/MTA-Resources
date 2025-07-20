@@ -75,7 +75,7 @@
                                             <v-divider></v-divider>
                                             <v-card-text style="height: 300px;">
                                                     <v-list>
-                                                        <v-list-item-group v-model="dialog_chosenPlayer" mandatory>
+                                                        <v-list-item-group v-model="dialogChosenPlayerProxy" mandatory>
                                                             <v-list-item
                                                             @click="requestStats(item.id)"
                                                             v-for="(item, i) in playerList"
@@ -269,7 +269,6 @@
                 tabs: null,
                 text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
                 dialog: false,
-                dialog_chosenPlayer: false,
                 topTimeMapsModal: false,
                 topTimeMapsSearch: '',
                 topTimeMapsTableHeaders: [
@@ -299,9 +298,17 @@
                     'playerTops',
                     'topTimeMaps',
                     'monthlyTopsAmount',
-                    'country'
-
-                ])
+                    'country',
+                    'dialogChosenPlayer'
+                ]),
+                dialogChosenPlayerProxy: {
+                    get() {
+                        return this.dialogChosenPlayer;
+                    },
+                    set(value) {
+                        window.VuexStore.commit('setDialogChosenPlayer', value);
+                    }
+                }
             },
             methods: {
                 calculateRatio(statObject) {
@@ -324,7 +331,6 @@
                     }
                 },
                 requestMyStats() {
-                    this.dialog_chosenPlayer = false;
                     window.VuexStore.commit('setLoading', true)
                     if (window.mta) {
                         window.mta.triggerEvent('requestMyStats')
@@ -420,7 +426,7 @@
                     window.VuexStore.commit('setLoading', true)
                     window.VuexStore.commit('setTopTimeMaps', null)
                     if (window.mta) {
-                        window.mta.triggerEvent('browserRequestTopTimeMaps', this.dialog_chosenPlayer || false, code, pos)
+                        window.mta.triggerEvent('browserRequestTopTimeMaps', this.dialogChosenPlayer || false, code, pos)
                     } else {
                         setTimeout(function () {
                             window.VuexStore.commit('setLoading', false)

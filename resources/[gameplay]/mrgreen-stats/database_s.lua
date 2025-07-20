@@ -423,6 +423,7 @@ local function sendStatsToClient(forumid)
         -- Is in current server
         local player = forumidPlayerMap[forumid]
         local sendObj = {}
+        sendObj.forumid = forumid
         sendObj.name = getPlayerName(player):gsub("#%x%x%x%x%x%x","")
         sendObj.gc = exports.gc:getPlayerGreencoins(player) or 0
         sendObj.vip = getVipDays(exports.gc:getPlayerVip(player)) or false
@@ -434,6 +435,7 @@ local function sendStatsToClient(forumid)
     elseif otherServerPlayerStats[tostring(forumid)] then
         -- Is player in other server
         local sendObj = {}
+        sendObj.forumid = forumid
         sendObj.name = otherServerPlayerStats[tostring(forumid)].name
         sendObj.gc = otherServerPlayerStats[tostring(forumid)].gc
         sendObj.vip = otherServerPlayerStats[tostring(forumid)].vip
