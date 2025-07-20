@@ -230,7 +230,7 @@
                                                                 {{ getFormattedValue(item.value) }}
                                                             </template>
                                                             <template v-slot:item.mapname="{ item }">
-                                                                {{ item.mapname }}
+                                                                {{ item.mapname}}
                                                             </template>
                                                         </v-data-table>
                                                         <v-card-actions>
@@ -275,7 +275,7 @@
                 topTimeMapsModal: false,
                 topTimeMapsSearch: '',
                 topTimeMapsTableHeaders: [
-                    { text: 'Map', value: 'mapname', filterable: false },
+                    { text: 'Map', value: 'mapname' },
                     { text: 'Time/Kills', value: 'value', filterable: false },
                     { text: 'Date', value: 'date', filterable: false },
                     { text: 'Actions', value: 'actions', sortable: false, filterable: false }
