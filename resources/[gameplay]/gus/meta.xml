@@ -19,6 +19,7 @@
     <script src="explosion.lua" type="server" />
     <script src="events.lua" type="server" />
     <script src="flying.lua" type="server" />
+    <script src="glitches.lua" type="server" />
 
     <export function="chatDisabled" type="server" />
     <file src="chat.png" />
