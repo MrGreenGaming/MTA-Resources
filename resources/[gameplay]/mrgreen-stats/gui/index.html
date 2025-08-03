@@ -439,7 +439,7 @@
                         return;
                     }
 
-                    window.mta.triggerEvent('browserRequestBuyMap', resname, mapname)
+                    window.mta.triggerEvent('browserRequestBuyMap', resname.replace('’', '\'').replace('”', '"'), mapname)
                 },
                 getFormattedValue(value) {
                     const timeMode = {

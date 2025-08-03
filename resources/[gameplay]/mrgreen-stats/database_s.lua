@@ -435,7 +435,7 @@ local function sendStatsToClient(forumid)
     elseif otherServerPlayerStats[tostring(forumid)] then
         -- Is player in other server
         local sendObj = {}
-        sendObj.forumid = forumid
+        sendObj.forumid = tostring(forumid)
         sendObj.name = otherServerPlayerStats[tostring(forumid)].name
         sendObj.gc = otherServerPlayerStats[tostring(forumid)].gc
         sendObj.vip = otherServerPlayerStats[tostring(forumid)].vip
@@ -482,7 +482,7 @@ function sendTopTimeMapsToClient(forumid, raceMode, position)
 
     if playerTopTimeMaps[forumid] then
         if not playerTopTimeMaps[forumid][raceMode] or not playerTopTimeMaps[forumid][raceMode][position] then
-            outputDebugString("Missing or undefined top time data (forumid: " .. forumid ..
+            outputDebugString("Missing or undefined top time data (playerTopTimeMaps) (forumid: " .. forumid ..
                 ", raceMode: " .. tostring(raceMode) ..
                 ", position: " .. tostring(position) .. ")", 1)
             triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
@@ -490,9 +490,9 @@ function sendTopTimeMapsToClient(forumid, raceMode, position)
         end
 
         triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, playerTopTimeMaps[forumid][raceMode][position])
-    elseif otherServerPlayerStats[forumid] then
-        if not otherServerPlayerStats[forumid].topTimeMaps[raceMode] or not otherServerPlayerStats[forumid].topTimeMaps[raceMode][position] then
-            outputDebugString("Missing or undefined top time data (forumid: " .. forumid ..
+    elseif otherServerPlayerStats[tostring(forumid)] then
+        if not otherServerPlayerStats[tostring(forumid)].topTimeMaps[raceMode] or not otherServerPlayerStats[tostring(forumid)].topTimeMaps[raceMode][position] then
+            outputDebugString("Missing or undefined top time data (otherServerPlayerStats) (forumid: " .. forumid ..
                 ", raceMode: " .. tostring(raceMode) ..
                 ", position: " .. tostring(position) .. ")", 1)
             triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
@@ -500,7 +500,7 @@ function sendTopTimeMapsToClient(forumid, raceMode, position)
         end
 
         triggerClientEvent(client, 'onServerSendsTopTimeMaps', client,
-            otherServerPlayerStats[forumid].topTimeMaps[raceMode][position])
+            otherServerPlayerStats[tostring(forumid)].topTimeMaps[raceMode][position])
     else
         triggerClientEvent(client, 'onServerSendsTopTimeMaps', client, false)
     end
@@ -638,8 +638,8 @@ function fetchTopTimeMaps(forumid)
                     }
 
                     table.insert(tempTable[row.racemode][position].items, {
-                        mapname = string.gsub(row.mapname, "'", "’"),
-                        resname = row.resname,
+                        mapname = row.mapname:gsub([[']], [[’]]):gsub([["]], [[”]]),
+                        resname = row.resname:gsub([[']], [[’]]):gsub([["]], [[”]]),
                         date = row.date,
                         value = row.value,
                         disabled = not getResourceFromName(row.resname)
