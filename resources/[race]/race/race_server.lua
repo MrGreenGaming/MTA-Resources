@@ -1592,6 +1592,7 @@ function export_setPlayerVehicle(player,vehicleID) -- Used in gc perk: reroll ve
 				clientCall(root, 'setVehicleNitroActivated', vehicle, true)
 			end
 		end
+		clientCall(player, 'alignVehicleWithUp', g_MapOptions.classicchangez)
 		clientCall(player, 'vehicleChanging', g_MapOptions.classicchangez, vehicleID)
 		
 		return not not isset
