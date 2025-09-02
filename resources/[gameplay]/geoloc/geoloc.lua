@@ -1,4 +1,5 @@
 local cache = {}		--	{ [IP] = {cc = "countryCode", country = "countryName"}, ... }
+local apiAddress = 'http://ip-api.com/json'
 
 -- checks cache for loc data, request via api if not available
 -- sets element data asap
@@ -14,9 +15,9 @@ function checkIP(player)
 			setElementData(player, 'fullCountryName', cache[IP].country)
 		elseif split(IP,'.')[1] == "192" or split(IP,'.')[1] == "172" or split(IP,'.')[1] == "10" or split(IP,'.')[1] == "127" then
 			-- fetch our own IP for local adresses
-			fetchRemote('http://www.geoplugin.net/json.gp', "ip" , receiveIPdata, '', false, IP, getPlayerName(player))
+			fetchRemote(apiAddress, "ip" , receiveIPdata, '', false, IP, getPlayerName(player))
 		else
-			fetchRemote('http://www.geoplugin.net/json.gp?ip=' .. IP, "ip" ,  receiveIPdata, '', false, IP, getPlayerName(player))
+			fetchRemote(apiAddress..'/' .. IP, "ip" ,  receiveIPdata, '', false, IP, getPlayerName(player))
 		end
 -- 	else ignore
 	end
@@ -24,7 +25,7 @@ end
 
 function fetchip(p, cmd, IP)
 	if #split(IP,'.') == 4 then
-		fetchRemote('http://www.geoplugin.net/json.gp?ip=' .. IP, "ip", receiveIPdata, '', false, IP, '')
+		fetchRemote(apiAddress..'/' .. IP, "ip", receiveIPdata, '', false, IP, '')
 		--if p then
 			outputChatBox( "Fetching geoloc for " .. IP , p)
 		--end
@@ -41,20 +42,20 @@ function receiveIPdata(json, err, IP, nick)
 
 	--check for parsing errors
 	local table = fromJSON('['..json..']')
-	if not (type(table) == 'table' and type(table.geoplugin_countryCode) == 'string' and #table.geoplugin_countryCode > 0) then
+	if not (type(table) == 'table' and type(table.countryCode) == 'string' and #table.countryCode > 0) then
 		outputDebugString( "geoloc: receiveIPdata parse failed, err=" .. tostring(err) .. ', json=' .. tostring(json) .. ', IP=' .. tostring(IP) .. ', nick=' .. tostring(nick))
 		return
 	end
 
 	-- store data in cache
-	cache[IP] = {cc = table.geoplugin_countryCode, country = table.geoplugin_countryName}
+	cache[IP] = {cc = table.countryCode, country = table.country}
 
 	-- if player is online (connecting or online), set element data
 	local player = getPlayerFromName( nick )
 	if player then
-		setElementData(player, 'country', table.geoplugin_countryCode)
-		setElementData(player, 'flag-country', {type = "flag-country", flag = ":admin/client/images/flags_new/"..string.lower(table.geoplugin_countryCode)..".png", country = table.geoplugin_countryCode} )
-		setElementData(player, 'fullCountryName', table.geoplugin_countryName)
+		setElementData(player, 'country', table.countryCode)
+		setElementData(player, 'flag-country', {type = "flag-country", flag = ":admin/client/images/flags_new/"..string.lower(table.countryCode)..".png", country = table.countryCode} )
+		setElementData(player, 'fullCountryName', table.country)
 	end
 end
 
