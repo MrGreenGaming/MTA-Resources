@@ -739,7 +739,7 @@ function changeSpawn (player)
 			-- spawn 1 -> 2, dist: 0		bad
 			-- spawn 2 -> 3, dist: 0		bad
 			-- spawn 3 -> 4, dist: 1.5		ok
-			if distance > 0.5 then
+			if distance > 0.05 then
 				break
 			end
 
