@@ -1,6 +1,6 @@
 local shopTabPanel, modshopTab, modshop_gui
 
-local modshop_upgrades, current_vehicle, vehicle_price = {}, nil, 550
+local modshop_upgrades, current_vehicle, vehicle_price = {}, nil, 200
 local neons = {}
 local player_perks
 
@@ -44,7 +44,7 @@ function modshopLogin ( price, modshop_table )
 		modshopTab = guiCreateTab ( 'Modshop', shopTabPanel )
 		if modshopTab then
 			modshop_gui = build_modshopWidget( modshopTab, 35, 10 )
-			guiSetText(modshop_gui['labelPrice'], 'Current price for one vehicle: ' .. (tostring(vehicle_price) or 550) .. ' GC\n\nAll upgrades are free for bought vehicles')
+			guiSetText(modshop_gui['labelPrice'], 'Current price for one vehicle: ' .. (tostring(vehicle_price) or 200) .. ' GC\n\nAll upgrades are free for bought vehicles')
 			addEventHandler( 'onClientGUIClick', modshop_gui["carsTable"], vehicleSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["upgradeTable"], upgradeSelected, false)
 			addEventHandler( 'onClientGUIClick', modshop_gui["tabelPaintjob"], paintjobSelected, false)

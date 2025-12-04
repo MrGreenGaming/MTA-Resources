@@ -24,7 +24,7 @@ function onShopInit ( tabPanel )
 
 	GUIEditor.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 20/40/60 days, but everyone in the team can refresh the team duration (Up to 60 days). Clan owners can transfer ownership with /makeowner PlayerName with color code.", false, GUIEditor.tab[1])
 	guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
-	GUIEditor.btnBuyTeam = guiCreateButton(46, 263, 165, 50, "Create team\n2750 GC / 20 days", false, GUIEditor.tab[1])
+	GUIEditor.btnBuyTeam = guiCreateButton(46, 263, 165, 50, "Create team\n500 GC / 20 days", false, GUIEditor.tab[1])
 	guiSetProperty(GUIEditor.btnBuyTeam, "Disabled", "True")
 	guiSetProperty(GUIEditor.btnBuyTeam, "NormalTextColour", "FFAAAAAA")
 	GUIEditor.btnUpdateTeam = guiCreateButton(212, 263, 165, 50, "Save changes\n100 GC", false, GUIEditor.tab[1])
@@ -125,7 +125,7 @@ addEvent("teamLogout", true)
 addEventHandler("teamLogout", root, function()
 	-- Reset GUI
 	guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "True")
-	guiSetText(teamGUI.btnBuyTeam, "Create team\n2750 GC / 20 days")
+	guiSetText(teamGUI.btnBuyTeam, "Create team\n500 GC / 20 days")
 	guiSetVisible(teamGUI.btnUpdateTeam, false)
 	guiSetProperty(teamGUI.teamname, "Disabled", "True")
 	guiSetText(teamGUI.teamname, "");
@@ -170,7 +170,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 		end
 	end
 	if t.status == 1 then
-		guiSetText(teamGUI.btnBuyTeam, "Renew team\n2750 GC / 20 days")
+		guiSetText(teamGUI.btnBuyTeam, "Renew team\n500 GC / 20 days")
 		if tonumber(t.age) == 60 then
 			guiSetProperty(teamGUI.btnBuyTeam, "Disabled", "True")
 		else
@@ -192,7 +192,7 @@ addEventHandler("teamsData", root, function(teams, player, t)
 		guiSetVisible(teamGUI.btnInvite, t.forumid == t.owner)
 		guiSetVisible(teamGUI.btnKick, t.forumid == t.owner)
 	else
-		guiSetText(teamGUI.btnBuyTeam, "Buy team\n2750 GC / 20 days")
+		guiSetText(teamGUI.btnBuyTeam, "Buy team\n500 GC / 20 days")
 		
 		guiSetVisible(teamGUI.btnUpdateTeam, false)
 		guiSetEnabled(teamGUI.teamname, true)

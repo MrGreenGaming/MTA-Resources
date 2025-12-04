@@ -28,7 +28,7 @@ function build_modshopWidget(parent, offsetX, offsetY)
 		addEventHandler("onClientGUIClick", gui["buyVehicleButton"], on_buyVehicleButton_clicked, false)
 	end
 	
-	gui["labelPrice"] = guiCreateLabel(380, 10, 241, 76, "Current price for one vehicle: 550 GC\n\nAll upgrades are free for bought vehicles", false, gui["tabBuyVehicle"])
+	gui["labelPrice"] = guiCreateLabel(380, 10, 241, 76, "Current price for one vehicle: 200 GC\n\nAll upgrades are free for bought vehicles", false, gui["tabBuyVehicle"])
 	guiLabelSetHorizontalAlign(gui["labelPrice"], "left", false)
 	guiLabelSetVerticalAlign(gui["labelPrice"], "center")
 	

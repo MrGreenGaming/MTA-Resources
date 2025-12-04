@@ -1,4 +1,4 @@
-local team_price = 2750
+local team_price = 500
 local team_update_price = 100
 local teams = {} -- [teamid] = <teamelement>
 local teamwars = {} -- i = {player element challenger, player element victim}

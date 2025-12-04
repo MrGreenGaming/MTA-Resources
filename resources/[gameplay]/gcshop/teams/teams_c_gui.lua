@@ -11,7 +11,7 @@ GUIEditor.tab[1] = guiCreateTab("Your team", GUIEditor.tabpanel[1])
 
 GUIEditor.label[1] = guiCreateLabel(46, 22, 634, 55, "Create your own team! You will be able to set a team name, tag, colour, welcome message and invite players to your team. Teams expire after 30/60 days, but everyone in the team can refresh the team duration (Up to 60 days). You can only own one team or be in one team.", false, GUIEditor.tab[1])
 guiLabelSetHorizontalAlign(GUIEditor.label[1], "left", true)
-GUIEditor.btnBuyTeam = guiCreateButton(46, 263, 165, 50, "Create team\n2750 GC / 20 days", false, GUIEditor.tab[1])
+GUIEditor.btnBuyTeam = guiCreateButton(46, 263, 165, 50, "Create team\n500 GC / 20 days", false, GUIEditor.tab[1])
 guiSetProperty(GUIEditor.btnBuyTeam, "Disabled", "True")
 guiSetProperty(GUIEditor.btnBuyTeam, "NormalTextColour", "FFAAAAAA")
 GUIEditor.label[2] = guiCreateLabel(46, 111, 73, 28, "Team name", false, GUIEditor.tab[1])

@@ -16,8 +16,8 @@
 
 gcMods = {}
 
-local vehicle_price = 550
-local extras_price = 550
+local vehicle_price = 200
+local extras_price = 200
 local prev_vehid = {}
 local neons = {
     green =     { "modshop/drug_green.dff",     2055},
