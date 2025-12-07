@@ -152,7 +152,7 @@ function CTF:restorePlayer(id, player, bNoFade, bDontFix)
 	local bkp = {}
 	local spawnpoint = self:pickFreeSpawnpoint(player)
 	bkp.position = spawnpoint.position
-	bkp.rotation = {0, 0, spawnpoint.rotation}
+	bkp.rotation = spawnpoint.rotation
 	bkp.geardown = true                 -- Fix landing gear state
 	bkp.vehicle = spawnpoint.vehicle    -- Fix spawn'n'blow
 	--setVehicleID(self.getPlayerVehicle(player), spawnpoint.vehicle)
