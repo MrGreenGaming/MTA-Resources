@@ -48,5 +48,4 @@
 	<resource priority="0" restart="0" delayed="0" disableForEvent="0">discord_rich_presence</resource>
 	<resource priority="0" restart="0" delayed="0" disableForEvent="0">race_progress_3d</resource>
 	<resource priority="0" restart="0" delayed="0" disableForEvent="1">happy_moments</resource>
-	<resource priority="0" restart="0" delayed="0" disableForEvent="0">snow</resource>
 </resources>
