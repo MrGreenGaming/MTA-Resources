@@ -104,10 +104,12 @@ function onShopInit ( tabPanel )
 	addEventHandler('onClientGUIClick', GUIEditor.btnKick, kickTeam, false)
 	addEventHandler('onClientGUIClick', GUIEditor.btnLeave, leaveTeam, false)
 	addEventHandler('onClientGUIClick', GUIEditor.btnInvite, inviteTeam, false)
-	addEventHandler("onClientGUIClick", GUIEditor.btnTWAdd, addMaps, false)
-	addEventHandler("onClientGUIClick", GUIEditor.btnTWRemove, removeMaps, false)
-	addEventHandler("onClientGUIClick", GUIEditor.btnTWSelect, selectMaps, false)
-	addEventHandler("onClientGUIChanged", GUIEditor.edit[1], handleSearches)
+
+    -- team wars
+	--addEventHandler("onClientGUIClick", GUIEditor.btnTWAdd, addMaps, false)
+	--addEventHandler("onClientGUIClick", GUIEditor.btnTWRemove, removeMaps, false)
+	--addEventHandler("onClientGUIClick", GUIEditor.btnTWSelect, selectMaps, false)
+	--addEventHandler("onClientGUIChanged", GUIEditor.edit[1], handleSearches)
 end
 addEvent('onShopInit', true)
 addEventHandler('onShopInit', root, onShopInit )
