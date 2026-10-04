@@ -4,8 +4,8 @@
 
 local iExplosionCheckInterval = 2000 -- how often to check for illegality in milliseconds
 local iCombinedCheckWindow = 5000    -- how far into the past to check for explosions and kills in milliseconds
-local iExplosionThreshold = 10
-local iKillThreshold = 5
+local iExplosionThreshold = 16
+local iKillThreshold = 2
 
 local tblRecentExplosions = {}
 local tblRecentKills = {}
