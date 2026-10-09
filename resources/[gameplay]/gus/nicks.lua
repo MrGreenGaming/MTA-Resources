@@ -2,6 +2,28 @@
 ---   Used to keep the different nicknames acceptable
 --------------------------------------------------------
 
+illegalNames = {
+	"discord."
+}
+
+function onPlayerConnect(nick)
+	-- if name contains illegal name, refuse connection
+	for _, illegalName in ipairs(illegalNames) do
+		if string.find(string.lower(nick), illegalName) then
+			outputDebugString("VulpyScript: Player tried to connect with illegal nickname: " .. nick, 1)
+			if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+				exports.discord:send("admin.log",
+				{ log = "Connection refused for player : " .. nick .. " (illegal nickname)"})
+			end
+
+			-- refuse connection
+			cancelEvent(true, "VulpyScript: Your nickname is invalid. Reconnect with a different nickname")
+			return
+		end
+	end
+end
+addEventHandler("onPlayerConnect", root, onPlayerConnect, true, "high+4")
+
 
 function joinPlayer ( )
 	local joinedPlayerName = getPlayerName ( source )
