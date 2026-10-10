@@ -24,6 +24,22 @@ function onPlayerConnect(nick)
 end
 addEventHandler("onPlayerConnect", root, onPlayerConnect, true, "high+4")
 
+function onPlayerChangeNick(oldNick, newNick)
+	for _, illegalName in ipairs(illegalNames) do
+		if string.find(string.lower(newNick), illegalName) then
+			outputDebugString("VulpyScript: Player tried to change nickname to illegal nickname: " .. newNick, 1)
+			if getResourceFromName('discord') and getResourceState(getResourceFromName('discord')) == 'running' then
+				exports.discord:send("admin.log",
+				{ log = "Nickname change refused for player : " .. oldNick .. " (illegal nickname: " .. newNick .. ")"})
+			end
+
+			cancelEvent()
+			outputChatBox("VulpyScript: Your new nickname is invalid. Name has not been changed.", source, 255, 0, 0)
+			return
+		end
+	end
+end
+addEventHandler("onPlayerChangeNick", root, nickChangeHandler, true, "high+4")
 
 function joinPlayer ( )
 	local joinedPlayerName = getPlayerName ( source )
