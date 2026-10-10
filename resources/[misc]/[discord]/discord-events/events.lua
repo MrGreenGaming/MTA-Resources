@@ -68,6 +68,9 @@ addEventHandler("onPlayerQuit", root,
 
 addEventHandler("onPlayerChangeNick", root,
     function (previous, nick)
+        if wasEventCancelled() then
+            return
+        end
         exports.discord:send("player.nickchange", { player = nick:monochrome(), previous = previous:monochrome() })
     end
 , true, "low")
