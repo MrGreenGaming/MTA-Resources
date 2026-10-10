@@ -39,7 +39,7 @@ function onPlayerChangeNick(oldNick, newNick)
 		end
 	end
 end
-addEventHandler("onPlayerChangeNick", root, nickChangeHandler, true, "high+4")
+addEventHandler("onPlayerChangeNick", root, onPlayerChangeNick, true, "high+4")
 
 function joinPlayer ( )
 	local joinedPlayerName = getPlayerName ( source )
