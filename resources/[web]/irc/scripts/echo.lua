@@ -55,10 +55,9 @@ addEventHandler("onPlayerQuit",root,
 
 addEventHandler("onPlayerChangeNick",root,
         function (oldNick,newNick)
-                if (not wasEventCancelled()) then
-                        outputIRC("13* "..oldNick.." is now known as "..newNick)
-                end
+                outputIRC("13* "..oldNick.." is now known as `"..newNick .. "`")
         end
+, true, "low"
 )
 --[[
 addEventHandler("onPlayerMute",root,
