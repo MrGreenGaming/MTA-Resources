@@ -66,10 +66,17 @@ addEventHandler("onPlayerQuit", root,
     end
 )
 
+illegalNames = {
+	"discord."
+}
+
 addEventHandler("onPlayerChangeNick", root,
     function (previous, nick)
-        if wasEventCancelled() then
-            return
+        for _, illegalName in ipairs(illegalNames) do
+            if string.find(string.lower(nick), illegalName) then
+                -- don't want discord invite links generating in discord logs (lazy solution)
+                return
+            end
         end
         exports.discord:send("player.nickchange", { player = nick:monochrome(), previous = previous:monochrome() })
     end
