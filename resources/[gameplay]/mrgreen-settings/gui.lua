@@ -275,6 +275,9 @@ local screenW, screenH = guiGetScreenSize()
         customNameTagsCheckBox = guiCreateCheckBox(309, 245, 15, 15, "", false, false, GUIEditor.tab[3])
         customNameTagsLabel = guiCreateLabel(346, 245, 141, 15, "Enable Custom NameTags", false, GUIEditor.tab[3])
 
+        GUIEditor.checkbox[19] = guiCreateCheckBox(309, 270, 15, 15, "", false, false, GUIEditor.tab[3])
+        GUIEditor.label[41] = guiCreateLabel(346, 270, 141, 15, "Enable Spectator List", false, GUIEditor.tab[3])
+
         GUIEditor.button[3] = guiCreateButton(505, 475, 71, 23, "Close", false, GUIEditor.window[1])
         guiSetProperty(GUIEditor.button[3], "NormalTextColour", "FFAAAAAA")
         GUIEditor.label[33] = guiCreateLabel(9, 467, 262, 21, "Settings for the Mr. Green Servers.", false, GUIEditor.window[1])
