@@ -1,0 +1,10 @@
+<meta>
+    <info name="Spectator List" description="Shows a list of spectators in the top-right corner" author="MrGreen" type="script" addon="race" version="1.0.0" />
+
+    <script src="client.lua" type="client" />
+
+    <!-- Exports for mrgreen-settings -->
+    <export function="showSpectatorList" type="client" />
+    <export function="hideSpectatorList" type="client" />
+</meta>
+

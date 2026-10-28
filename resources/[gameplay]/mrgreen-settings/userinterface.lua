@@ -54,6 +54,11 @@ Exp_Funct = { -- Exported functions
 		["true"] = 'CustomNameTags_on',
 		["false"] = 'CustomNameTags_off'},
 
+	["spectatorlist"] = {
+		res = "race_spectators",
+		["true"] = 'exports["race_spectators"].showSpectatorList()',
+		["false"] = 'exports["race_spectators"].hideSpectatorList()'},
+
 	["speed-o-metermode"] = {
 		res = "speed-o-meter",
 		[1] = 'exports["speed-o-meter"].setKMH()',
@@ -70,7 +75,7 @@ Exp_Funct = { -- Exported functions
 -- Reapply settings when one of these resources (re)starts
 local UI_reApplyTimer = false
 -- Add resource name here when used
-local resetResource = {"race_sphud","speed-o-meter","fps","race_sphud","messages","gus","race_delay_indicator","mapratings","race_traffic_sensor","race_rank","race"}
+local resetResource = {"race_sphud","speed-o-meter","fps","race_sphud","messages","gus","race_delay_indicator","mapratings","race_traffic_sensor","race_rank","race_spectators","race"}
 addEventHandler("onClientResourceStart",root,
 	function(res)
 		local resName = getResourceName(res)
@@ -96,6 +101,7 @@ UI = { -- Default settings--
 	["floatingmessages"] = true ,
 	["fpscounter"] = false ,
 	["customnametags"] = true ,
+	["spectatorlist"] = true ,
 	["speed-o-metermode"] = 3 ,
 	["hudmode"] = 1 ,
 	["radar"] = true,
@@ -258,6 +264,19 @@ function ui_ClickHandler()
 			UI["timeleft"] = false
 		end
 
+	-- Toggle Spectator List
+	elseif source == GUIEditor.checkbox[19] then
+		saveTime()
+		if guiCheckBoxGetSelected( source ) then
+			exports["race_spectators"].showSpectatorList()
+
+			UI["spectatorlist"] = true
+		else
+			exports["race_spectators"].hideSpectatorList()
+
+			UI["spectatorlist"] = false
+		end
+
 	end
 end
 addEventHandler("onClientGUIClick", resourceRoot, ui_ClickHandler)
@@ -392,6 +411,10 @@ function loadUISettings()
 
 	for f, u in pairs(UI) do -- load settings to UI table
 		local theChild = xmlFindChild( UIxml, f, 0 )
+		if not theChild then
+			theChild = xmlCreateChild( UIxml, tostring(f) )
+			xmlNodeSetValue( theChild, tostring(u) )
+		end
 		local theValue = xmlNodeGetValue( theChild )
 
 		if isBoolean(theValue) then
@@ -518,6 +541,12 @@ function updateUIgui() -- Updates the GUI to the settings that loaded --
 				guiCheckBoxSetSelected(customNameTagsCheckBox,true)
 			else
 				guiCheckBoxSetSelected(customNameTagsCheckBox,false)
+			end
+		elseif f == "spectatorlist" then
+			if toBoolean(u) then
+				guiCheckBoxSetSelected( GUIEditor.checkbox[19], true )
+			else
+				guiCheckBoxSetSelected( GUIEditor.checkbox[19], false )
 			end
 
 		elseif f == "speed-o-metermode" then

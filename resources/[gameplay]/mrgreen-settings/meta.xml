@@ -12,6 +12,7 @@
 	<include resource="race_traffic_sensor"/>
 	<include resource="race_rank"/>
 	<include resource="race_progress"/>
+	<include resource="race_spectators"/>
 
     <!-- Include Shader Resources, all prefixed by -shaders- -->
     <include resource="-shaders-bloom_fix"/>
