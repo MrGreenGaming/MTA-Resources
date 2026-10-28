@@ -154,7 +154,7 @@ const vuexStore = {
             state.isLoading = bool && bool || false
         },
         setDialogChosenPlayer(state, value) {
-            state.dialogChosenPlayer = value || false
+            state.dialogChosenPlayer = Number(value) || false
         },
         setPlayerCountry(state, countryString) {
             const countryObj = JSON.parse(countryString)

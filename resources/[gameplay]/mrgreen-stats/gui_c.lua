@@ -240,16 +240,6 @@ function receiveStats(stats, player)
             executeBrowserJavascript(browserElement, "window.VuexStore.commit('setPlayerTops', false)")
         end
 
-        if stats.topTimeMaps then
-            local mapListString = toJSON(stats.topTimeMaps)
-            if mapListString then
-                executeBrowserJavascript(browserElement,
-                    "window.VuexStore.commit('setTopTimeMaps', '" .. mapListString .. "')")
-            end
-        else
-            executeBrowserJavascript(browserElement, "window.VuexStore.commit('setTopTimeMaps', false)")
-        end
-
         stats.monthlyTops = tonumber(stats.monthlyTops) and stats.monthlyTops or 0
         executeBrowserJavascript(browserElement, "window.VuexStore.commit('setMonthlyTopAmount', "..stats.monthlyTops..")")
         return

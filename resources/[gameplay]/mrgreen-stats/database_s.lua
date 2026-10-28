@@ -429,19 +429,17 @@ local function sendStatsToClient(forumid)
         sendObj.vip = getVipDays(exports.gc:getPlayerVip(player)) or false
         sendObj.stats = specialFormat(table.copy(playerStats[forumid]))
         sendObj.tops = playerTopTimes[forumid] or {}
-        sendObj.topTimeMaps = playerTopTimeMaps[tostring(forumid)] or {}
         sendObj.monthlyTops = playerMonthlyTopTimes[forumid] or 0
         triggerClientEvent(client, 'onServerSendsStats', client, sendObj, player)
     elseif otherServerPlayerStats[tostring(forumid)] then
         -- Is player in other server
         local sendObj = {}
-        sendObj.forumid = tostring(forumid)
+        sendObj.forumid = forumid
         sendObj.name = otherServerPlayerStats[tostring(forumid)].name
         sendObj.gc = otherServerPlayerStats[tostring(forumid)].gc
         sendObj.vip = otherServerPlayerStats[tostring(forumid)].vip
         sendObj.stats = specialFormat(table.copy(otherServerPlayerStats[tostring(forumid)].stats))
         sendObj.tops = otherServerPlayerStats[tostring(forumid)].tops
-        sendObj.topTimeMaps = otherServerPlayerStats[tostring(forumid)].topTimeMaps or {}
         sendObj.monthlyTops = otherServerPlayerStats[tostring(forumid)].monthlyTops
         triggerClientEvent(client, 'onServerSendsStats', client, sendObj)
     else

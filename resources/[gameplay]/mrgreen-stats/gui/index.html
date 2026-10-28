@@ -80,7 +80,7 @@
                                                             @click="requestStats(item.id)"
                                                             v-for="(item, i) in playerList"
                                                             :key="i"
-                                                            :value="item.id"
+                                                            :value="Number(item.id)"
                                                             >
                                                                 <v-list-item-content>
                                                                     <v-list-item-title><v-chip small color="primary" class="mr-2">{{item.server}}</v-chip>{{item.name}}</v-list-item-title>
