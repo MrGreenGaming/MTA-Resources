@@ -102,7 +102,8 @@ CREATE TABLE `gc_autologin` (
   `forumid` int(11) DEFAULT NULL,
   `last_serial` varchar(250) NOT NULL DEFAULT '',
   `last_login` varchar(250) NOT NULL DEFAULT '',
-  `last_ip` varchar(250) NOT NULL DEFAULT ''
+  `last_ip` varchar(250) NOT NULL DEFAULT '',
+  `token` varchar(250) NOT NULL DEFAULT ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `gc_autologin2` (
@@ -129,9 +130,15 @@ CREATE TABLE `gc_items` (
   `options` varchar(45) DEFAULT '[ [ ] ]'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `gc_nickcache` (
+  `forumid` int(11) NOT NULL,
+  `name` varchar(250) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `gc_nickprotection` (
   `pNick` varchar(50) NOT NULL,
-  `accountID` text NOT NULL
+  `accountID` varchar(250) NOT NULL DEFAULT '',
+  `forumId` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `gc_nickprotection_amount` (
@@ -139,10 +146,25 @@ CREATE TABLE `gc_nickprotection_amount` (
   `amount` int(11) NOT NULL DEFAULT '3'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `gc_deadlinecolor` (
+  `forumid` int(11) NOT NULL,
+  `color` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `gc_rocketcolor` (
   `forumid` int(11) NOT NULL,
   `color` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `leaderboards` (
+  `forumid` int(11) NOT NULL,
+  `race` int(11) NOT NULL DEFAULT '0',
+  `nts` int(11) NOT NULL DEFAULT '0',
+  `dl` int(11) NOT NULL DEFAULT '0',
+  `sh` int(11) NOT NULL DEFAULT '0',
+  `rtf` int(11) NOT NULL DEFAULT '0',
+  `dd` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `mapratings` (
   `forumid` int(11) DEFAULT NULL,
@@ -195,6 +217,13 @@ CREATE TABLE `playersettings` (
   `mainlang` varchar(10) NOT NULL,
   `languages` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='LanguageChat table';
+
+CREATE TABLE `player_stats` (
+  `forumid` int(11) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `statName` varchar(100) NOT NULL,
+  `statVal` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `serialsDB` (
   `serialid` int(11) NOT NULL,
@@ -253,8 +282,22 @@ CREATE TABLE `toptimes` (
   `mapname` varchar(255) NOT NULL,
   `pos` mediumint(9) DEFAULT NULL,
   `value` bigint(20) NOT NULL,
-  `date` bigint(20) NOT NULL
+  `date` bigint(20) NOT NULL,
+  `racemode` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `toptimes_deleted` (
+  `id` int(11) NOT NULL,
+  `forumid` int(11) NOT NULL,
+  `mapname` varchar(255) NOT NULL,
+  `pos` mediumint(9) DEFAULT NULL,
+  `value` bigint(20) NOT NULL,
+  `date` bigint(20) NOT NULL,
+  `racemode` varchar(255) DEFAULT NULL,
+  `delete_reason` text,
+  `delete_admin` varchar(100) DEFAULT NULL,
+  `delete_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `toptimes_month` (
   `forumid` int(11) NOT NULL,
@@ -268,27 +311,42 @@ CREATE TABLE `toptimes_month` (
 CREATE TABLE `uploaded_maps` (
   `uploadid` int(11) NOT NULL,
   `forumid` int(11) NOT NULL DEFAULT '0',
-  `uploadername` varchar(50) NOT NULL,
+  `uploadername` varchar(50) NOT NULL DEFAULT '',
   `resname` varchar(255) NOT NULL,
   `mapname` varchar(255) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `comment` text,
-  `status` varchar(20) NOT NULL,
-  `manager` varchar(50) NOT NULL
+  `status` varchar(20) NOT NULL DEFAULT '',
+  `manager` varchar(50) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `votestop100` (
   `id` int(11) NOT NULL,
   `forumid` int(10) UNSIGNED NOT NULL,
-  `choice1` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
-  `choice2` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
-  `choice3` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
-  `choice4` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
-  `choice5` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL
+  `choice1` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
+  `choice2` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
+  `choice3` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
+  `choice4` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT '',
+  `choice5` varchar(70) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `vip_horns` (
+  `forumid` int(11) NOT NULL,
+  `hornid` int(11) NOT NULL,
+  `boundkey` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `vip_items` (
+  `forumid` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `options` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 ALTER TABLE `achievements`
+  ADD PRIMARY KEY (`forumID`,`achievementID`);
+
+ALTER TABLE `achievements_race`
   ADD PRIMARY KEY (`forumID`,`achievementID`);
 
 ALTER TABLE `blockers`
@@ -318,11 +376,26 @@ ALTER TABLE `gc_horns`
 ALTER TABLE `gc_items`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `gc_nickcache`
+  ADD PRIMARY KEY (`forumid`);
+
 ALTER TABLE `gc_nickprotection`
   ADD PRIMARY KEY (`pNick`);
 
+ALTER TABLE `gc_nickprotection_amount`
+  ADD PRIMARY KEY (`forumID`);
+
+ALTER TABLE `gc_deadlinecolor`
+  ADD UNIQUE KEY `forumid` (`forumid`);
+
 ALTER TABLE `gc_rocketcolor`
   ADD UNIQUE KEY `forumid` (`forumid`);
+
+ALTER TABLE `leaderboards`
+  ADD PRIMARY KEY (`forumid`);
+
+ALTER TABLE `mapratings`
+  ADD UNIQUE KEY `forumid_map` (`forumid`,`mapresourcename`);
 
 ALTER TABLE `maps`
   ADD PRIMARY KEY (`mapId`),
@@ -342,6 +415,9 @@ ALTER TABLE `mute`
 ALTER TABLE `playersettings`
   ADD PRIMARY KEY (`serial`);
 
+ALTER TABLE `player_stats`
+  ADD PRIMARY KEY (`forumid`,`category`,`statName`);
+
 ALTER TABLE `serialsDB`
   ADD PRIMARY KEY (`serialid`),
   ADD KEY `playername` (`playername`),
@@ -357,6 +433,11 @@ ALTER TABLE `team_members`
 ALTER TABLE `toptimes`
   ADD PRIMARY KEY (`forumid`,`mapname`);
 
+ALTER TABLE `toptimes_deleted`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `forumid` (`forumid`),
+  ADD KEY `mapname` (`mapname`);
+
 ALTER TABLE `toptimes_month`
   ADD PRIMARY KEY (`mapname`,`month`);
 
@@ -365,6 +446,12 @@ ALTER TABLE `uploaded_maps`
 
 ALTER TABLE `votestop100`
   ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `vip_horns`
+  ADD PRIMARY KEY (`forumid`,`hornid`);
+
+ALTER TABLE `vip_items`
+  ADD PRIMARY KEY (`forumid`,`item`);
 
 
 ALTER TABLE `gc_items`
@@ -384,6 +471,9 @@ ALTER TABLE `serialsDB`
 
 ALTER TABLE `team`
   MODIFY `teamid` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `toptimes_deleted`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `uploaded_maps`
   MODIFY `uploadid` int(11) NOT NULL AUTO_INCREMENT;
