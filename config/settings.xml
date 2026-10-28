@@ -1,0 +1,11 @@
+<settings>
+    <setting name="*race.addons" value='[&quot;race_progress,race_toptimes,race_ghost_assist,race_gm,eventmanager,race_rank,race_delay_indicator,race_ghost,race_sphud,race_voicepack,race_traffic_sensor,race_fix,race_spectators&quot;]' />
+    <setting name="*gcshop.host" value='[&quot;127.0.0.1&quot;]' />
+     <!-- Make sure it is the same as your_database name in database.sql -->
+    <setting name="*gcshop.dbname" value='[&quot;your_database&quot;]' />
+    <setting name="*gcshop.user" value='[&quot;root&quot;]' />
+    <setting name="*gcshop.pass" value='[&quot;root&quot;]' />
+    <setting name="*race.classicchangez" value='[&quot;false&quot;]'></setting>
+    <setting name="*race.clouds" value='[&quot;false&quot;]'></setting>
+    <setting name="*race.blur" value='[&quot;0&quot;]'></setting>
+</settings>
