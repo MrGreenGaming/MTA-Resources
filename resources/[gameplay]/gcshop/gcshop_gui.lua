@@ -52,38 +52,95 @@ function build_mainGCShopWindow()
 	
 	gui["tab_login"] = guiCreateTab("Register / Login", gui["shopTabs"])
 	
-	gui["label_step2"] = guiCreateLabel(180, 40, 351, 131, '1. Register an account on our Forums ( https://mrgreengaming.com/forums )\n\n\n2. Log in using your Forums account:', false, gui["tab_login"])
+	gui["authTabs"] = guiCreateTabPanel(15, 15, 700, 405, false, gui["tab_login"])
+	
+	gui["tab_sub_login"] = guiCreateTab("Login", gui["authTabs"])
+	
+	gui["label_step2"] = guiCreateLabel(165, 30, 380, 110, '1. Don\'t have an account yet? Open the "Register" tab above to create one in-game, or register at https://mrgreengaming.com\n\n\n2. Log in using your Mr. Green account:', false, gui["tab_sub_login"])
 	guiLabelSetHorizontalAlign(gui["label_step2"], "left", true)
 	guiLabelSetVerticalAlign(gui["label_step2"], "top")
 	
-	gui["labelLoginInfo"] = guiCreateLabel(200, 280, 361, 101, "", false, gui["tab_login"])
+	gui["labelLoginInfo"] = guiCreateLabel(185, 255, 361, 101, "", false, gui["tab_sub_login"])
 	guiLabelSetHorizontalAlign(gui["labelLoginInfo"], "left", true)
 	guiLabelSetVerticalAlign(gui["labelLoginInfo"], "center")
 	
-	gui["edit_pass_gc"] = guiCreateEdit(340, 250, 113, 20, "", false, gui["tab_login"])
+	gui["edit_pass_gc"] = guiCreateEdit(325, 225, 140, 22, "", false, gui["tab_sub_login"])
 	guiEditSetMaxLength(gui["edit_pass_gc"], 32767)
 	guiEditSetMasked(gui["edit_pass_gc"], true)
 	
-	gui["buttonLink"] = guiCreateButton(340, 190, 91, 23, "Login", false, gui["tab_login"])
+	gui["buttonLink"] = guiCreateButton(325, 165, 91, 23, "Login", false, gui["tab_sub_login"])
 	if on_buttonLink_clicked then
 		addEventHandler("onClientGUIClick", gui["buttonLink"], on_buttonLink_clicked, false)
 	end
 
-	gui["edit_user_gc"] = guiCreateEdit(340, 220, 113, 20, "", false, gui["tab_login"])
+	gui["edit_user_gc"] = guiCreateEdit(325, 195, 140, 22, "", false, gui["tab_sub_login"])
 	guiEditSetMaxLength(gui["edit_user_gc"], 32767)
 	
-	gui["label_user_gc"] = guiCreateLabel(200, 220, 121, 16, "Username or email:", false, gui["tab_login"])
+	gui["label_user_gc"] = guiCreateLabel(185, 195, 121, 20, "Username or email:", false, gui["tab_sub_login"])
 	guiLabelSetHorizontalAlign(gui["label_user_gc"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_user_gc"], "center")
 	
-	gui["label_pass_gc"] = guiCreateLabel(200, 250, 121, 16, "Password:", false, gui["tab_login"])
+	gui["label_pass_gc"] = guiCreateLabel(185, 225, 121, 20, "Password:", false, gui["tab_sub_login"])
 	guiLabelSetHorizontalAlign(gui["label_pass_gc"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_pass_gc"], "center")
 	
-	gui["label_Web"] = guiCreateLabel(200, 190, 151, 16, "mrgreengaming.com", false, gui["tab_login"])
+	gui["label_Web"] = guiCreateLabel(185, 165, 151, 20, "mrgreengaming.com", false, gui["tab_sub_login"])
 	guiSetFont(gui["label_Web"], "default-bold-small")
 	guiLabelSetHorizontalAlign(gui["label_Web"], "left", false)
 	guiLabelSetVerticalAlign(gui["label_Web"], "center")
+	
+	gui["tab_sub_register"] = guiCreateTab("Register", gui["authTabs"])
+	
+	gui["label_reg_header"] = guiCreateLabel(140, 25, 440, 45, "Create a new Mr. Green account to save your GreenCoins, stats and items across all servers.", false, gui["tab_sub_register"])
+	guiLabelSetHorizontalAlign(gui["label_reg_header"], "left", true)
+	guiLabelSetVerticalAlign(gui["label_reg_header"], "top")
+	
+	gui["label_reg_user"] = guiCreateLabel(140, 80, 130, 22, "Username:", false, gui["tab_sub_register"])
+	guiLabelSetHorizontalAlign(gui["label_reg_user"], "left", false)
+	guiLabelSetVerticalAlign(gui["label_reg_user"], "center")
+	
+	gui["edit_reg_user"] = guiCreateEdit(275, 80, 160, 22, "", false, gui["tab_sub_register"])
+	guiEditSetMaxLength(gui["edit_reg_user"], 150)
+	
+	gui["label_reg_user_hint"] = guiCreateLabel(445, 80, 230, 22, "3+ chars (letters, numbers, _)", false, gui["tab_sub_register"])
+	guiLabelSetColor(gui["label_reg_user_hint"], 160, 160, 160)
+	guiLabelSetVerticalAlign(gui["label_reg_user_hint"], "center")
+	
+	gui["label_reg_email"] = guiCreateLabel(140, 112, 130, 22, "Email address:", false, gui["tab_sub_register"])
+	guiLabelSetHorizontalAlign(gui["label_reg_email"], "left", false)
+	guiLabelSetVerticalAlign(gui["label_reg_email"], "center")
+	
+	gui["edit_reg_email"] = guiCreateEdit(275, 112, 160, 22, "", false, gui["tab_sub_register"])
+	guiEditSetMaxLength(gui["edit_reg_email"], 150)
+	
+	gui["label_reg_pass"] = guiCreateLabel(140, 144, 130, 22, "Password:", false, gui["tab_sub_register"])
+	guiLabelSetHorizontalAlign(gui["label_reg_pass"], "left", false)
+	guiLabelSetVerticalAlign(gui["label_reg_pass"], "center")
+	
+	gui["edit_reg_pass"] = guiCreateEdit(275, 144, 160, 22, "", false, gui["tab_sub_register"])
+	guiEditSetMaxLength(gui["edit_reg_pass"], 150)
+	guiEditSetMasked(gui["edit_reg_pass"], true)
+	
+	gui["label_reg_pass_hint"] = guiCreateLabel(445, 144, 240, 22, "8+ chars, A-Z, a-z, 0-9 / symbol", false, gui["tab_sub_register"])
+	guiLabelSetColor(gui["label_reg_pass_hint"], 160, 160, 160)
+	guiLabelSetVerticalAlign(gui["label_reg_pass_hint"], "center")
+	
+	gui["label_reg_pass2"] = guiCreateLabel(140, 176, 130, 22, "Confirm password:", false, gui["tab_sub_register"])
+	guiLabelSetHorizontalAlign(gui["label_reg_pass2"], "left", false)
+	guiLabelSetVerticalAlign(gui["label_reg_pass2"], "center")
+	
+	gui["edit_reg_pass2"] = guiCreateEdit(275, 176, 160, 22, "", false, gui["tab_sub_register"])
+	guiEditSetMaxLength(gui["edit_reg_pass2"], 150)
+	guiEditSetMasked(gui["edit_reg_pass2"], true)
+	
+	gui["buttonRegister"] = guiCreateButton(275, 215, 110, 25, "Register", false, gui["tab_sub_register"])
+	if on_buttonRegister_clicked then
+		addEventHandler("onClientGUIClick", gui["buttonRegister"], on_buttonRegister_clicked, false)
+	end
+	
+	gui["labelRegisterInfo"] = guiCreateLabel(140, 255, 440, 100, "", false, gui["tab_sub_register"])
+	guiLabelSetHorizontalAlign(gui["labelRegisterInfo"], "left", true)
+	guiLabelSetVerticalAlign(gui["labelRegisterInfo"], "top")
 	
 	gui["labelGreencoinsShadow1"] = guiCreateLabel(550.5, 24.5, 191, 41, "", false, gui["_root"])
 	guiLabelSetHorizontalAlign(gui["labelGreencoinsShadow1"], "right", false)

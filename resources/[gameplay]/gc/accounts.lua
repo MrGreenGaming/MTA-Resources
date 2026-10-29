@@ -107,6 +107,50 @@ end
 
 ---------------------------------------------------------------------------
 --
+-- SAccount:register( username, password, email, ip, serial, player, callback )
+--
+--
+--
+---------------------------------------------------------------------------
+function SAccount:register(username, pw, email, ip, serial, player, callback)
+    if not username or not pw or not email or not ip or not serial then
+        callback(false, player, "Missing registration details.")
+        return
+    end
+
+    if self.gcRecord[1] then
+        callback(false, player, "You are already logged in.")
+        return
+    end
+
+    registerPlayerAccount(username, pw, email, ip, serial, function(forumID, name, emailAddress, profile, joinTimestamp, gcAmount, vipTimestamp)
+        if not forumID then
+            local errorMessage = name
+            callback(false, player, errorMessage)
+            return
+        end
+
+        if self.gcRecord[1] then
+            callback(true, player)
+            return
+        end
+
+        self.gcRecord[1] = tonumber(forumID)
+        self.gcRecord[2] = nil
+        self.gcRecord[3] = tonumber(gcAmount) or 0
+        self.gcRecord[4] = 0 -- earned gc this session
+        self.gcRecord[5] = name
+        self.gcRecord[6] = emailAddress
+        self.gcRecord[7] = profile
+        self.gcRecord[8] = joinTimestamp
+        self.gcRecord[9] = vipTimestamp
+        triggerEvent('onGreencoinsLogin', self.player)
+        callback(true, player)
+    end)
+end
+
+---------------------------------------------------------------------------
+--
 -- SAccount:loginViaForumID( forumid, player, callback )
 --
 --

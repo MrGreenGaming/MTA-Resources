@@ -65,6 +65,65 @@ function getPlayerLoginInfo(email, pw, callback)
     end)
 end
 
+function registerPlayerAccount(username, pw, email, ip, serial, callback)
+    if not username or not pw or not email or not ip or not serial then
+        outputDebugString("registerPlayerAccount: Missing details", 1)
+        callback(false, "Missing registration details.")
+        return
+    end
+
+    if devMode then
+        local forumID = math.random(1000, 99999)
+        callback(forumID, username, email, "", getRealTime().timestamp, 9999, getRealTime().timestamp + 1000)
+        return
+    end
+
+    local fetchOptions = {
+        queueName = "API",
+        connectionAttempts = 3,
+        connectTimeout = 8000,
+        method = "POST",
+        postData = toJSON({
+            username = username,
+            password = pw,
+            email = email,
+            ip = ip,
+            serial = serial,
+            appId = get("appId"),
+            appSecret = get("appSecretPass")
+        }, true),
+        headers = {
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
+        }
+    }
+
+    fetchRemote("https://mrgreengaming.com/api/account/register", fetchOptions, function(res, info)
+        if not info.success or not res then
+            if not res then
+                res = "EMPTY"
+            end
+            outputDebugString("registerPlayerAccount: invalid response (status " .. tostring(info.statusCode) .. "). Res: " .. res, 1)
+            callback(false, "Could not connect to the registration server. Please try again later.")
+            return
+        end
+
+        local result = fromJSON(res)
+        if not result then
+            outputDebugString("registerPlayerAccount: invalid JSON response. Res: " .. tostring(res), 1)
+            callback(false, "Invalid response from the registration server.")
+            return
+        end
+
+        if result.error then
+            callback(false, result.errorMessage or ("Registration failed (Error " .. tostring(result.error) .. ")."))
+            return
+        end
+
+        callback(result.userId, result.name, result.emailAddress or email, result.profile, result.joinTimestamp, result.coinsBalance, result.vip)
+    end)
+end
+
 function getForumAccountDetails(forumID, callback)
     if devMode then
         callback(forumID)

@@ -86,6 +86,63 @@ addEvent("onGCLogin") -- broadcast event
 addEvent("onLogin", true)
 addEventHandler("onLogin", root, onLogin)
 
+local registerCooldowns = {}
+
+function onRegister(username, pw, email)
+    local player = client
+    if not isElement(player) or getElementType(player) ~= "player" then
+        return
+    end
+
+    if type(username) ~= "string" or type(pw) ~= "string" or type(email) ~= "string" then
+        triggerClientEvent(player, "onRegisterFail", player, "Invalid registration details.")
+        return
+    end
+
+    if accounts[player] then
+        if accounts[player]:getForumID() then
+            triggerClientEvent(player, "onRegisterFail", player, "You are already logged into an account.")
+        else
+            triggerClientEvent(player, "onRegisterFail", player, "A login or registration request is already in progress.")
+        end
+        return
+    end
+
+    local serial = getPlayerSerial(player)
+    local ip = getPlayerIP(player)
+    if not serial or not ip then
+        triggerClientEvent(player, "onRegisterFail", player, "Could not verify player details.")
+        return
+    end
+
+    local now = getTickCount()
+    if registerCooldowns[serial] and (now - registerCooldowns[serial] < 5000) then
+        triggerClientEvent(player, "onRegisterFail", player, "Please wait a few seconds before trying again.")
+        return
+    end
+    registerCooldowns[serial] = now
+
+    accounts[player] = SAccount:create(player)
+    accounts[player]:register(username, pw, email, ip, serial, player, function(result, player, errorMessage)
+        if not isElement(player) then
+            return
+        end
+        if result then
+            outputChatBox("[GC] Account registered successfully! Welcome, " .. tostring(accounts[player]:getForumName()) .. "!", player, 0, 255, 0)
+            onLoginSuccessfull(player)
+        else
+            if accounts[player] then
+                accounts[player]:destroy()
+                accounts[player] = nil
+            end
+            triggerClientEvent(player, "onRegisterFail", player, errorMessage or "Registration failed. Please try again.")
+        end
+    end)
+end
+
+addEvent("onRegister", true)
+addEventHandler("onRegister", root, onRegister)
+
 -------------
 -- avatars --
 -------------
