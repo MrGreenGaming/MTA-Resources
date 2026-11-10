@@ -96,6 +96,10 @@
     <script src="teams\teams_c.lua" type="client" />
     <script src="teams\teams_s.lua" type="server" />
 
+    <!-- Rankboard -->
+    <script src="rankboard\rankboard_c.lua" type="client" />
+    <script src="rankboard\rankboard_s.lua" type="server" />
+
     <!-- Skins by BinSlayer    -->
 
     <script src="skin\skins_client.lua" type="client" />
