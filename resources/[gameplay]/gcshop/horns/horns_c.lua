@@ -555,7 +555,7 @@ function onShopInit(tabPanel)
     if isElement(hornsTab) then return end
 
     --// Tab Panels //--
-    hornsTab = guiCreateTab("Custom Horns", shopTabPanel)
+    hornsTab = guiCreateTab("Horns", shopTabPanel)
     buyHornsTabPanel = guiCreateTabPanel(35, 20, 641, 391, false, hornsTab)
     buyHornsTab = guiCreateTab("Buy horns", buyHornsTabPanel)
     perkTab = guiCreateTab("Horn Perks", buyHornsTabPanel)

@@ -127,7 +127,7 @@ end
 function onShopInit ( tabPanel )
 	shopTabPanel = tabPanel
 	--triggerServerEvent('getSkinPurchases', getLocalPlayer())
-	skinTab = guiCreateTab("Buy skins", shopTabPanel)
+	skinTab = guiCreateTab("Skins", shopTabPanel)
 	skinGrid = guiCreateGridList(0.01,0.02,0.40,0.97, true, skinTab)
 	guiGridListSetSortingEnabled(skinGrid, false)
 	local colName = guiGridListAddColumn(skinGrid, "Skin", 0.7)
